@@ -302,7 +302,7 @@ public class FVector extends CoreObject implements IFVector {
     }
 
     @Override
-    public IFVector importFromJSON() {
+    public IFVector importFromJSON(String json) {
         return null;
     }
 
@@ -315,7 +315,7 @@ public class FVector extends CoreObject implements IFVector {
     public double getPolarAngle() {
 
         originShift(this);
-        double polar = terminal.getPolarAngle();
+        double polar = terminal.getInclination();
         originRestore(this);
 
         return polar;
@@ -324,9 +324,9 @@ public class FVector extends CoreObject implements IFVector {
     @Override
     public IFVector setPolarAngle(double polar) {
 
-        originShift(this);
-        terminal.setSphericalCoordinates(polar, getAzimuthalAngle(), getRadius());
-        originRestore(this);
+//        originShift(this);
+//        terminal.setSphere(polar, getAzimuthalAngle(), getRadius());
+//        originRestore(this);
 
         return this;
     }
@@ -335,7 +335,7 @@ public class FVector extends CoreObject implements IFVector {
     public double getAzimuthalAngle() {
 
         originShift(this);
-        double azimuthal = terminal.getAzimuthalAngle();
+        double azimuthal = terminal.getAzimuth();
         originRestore(this);
 
         return azimuthal;
@@ -344,9 +344,9 @@ public class FVector extends CoreObject implements IFVector {
     @Override
     public IFVector setAzimuthalAngle(double azimuthal) {
 
-        originShift(this);
-        terminal.setSphericalCoordinates(getPolarAngle(), azimuthal, getRadius());
-        originRestore(this);
+//        originShift(this);
+//        terminal.setSphere(getPolarAngle(), azimuthal, getRadius());
+//        originRestore(this);
 
         return this;
     }

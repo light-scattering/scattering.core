@@ -4,5 +4,5 @@ public class Configuration {
 
     private Configuration() { }
 
-    public static double maxError = 1E-10;
+    public static double jitter = 1E-10;
 }

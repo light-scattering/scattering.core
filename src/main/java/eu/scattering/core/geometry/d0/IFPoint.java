@@ -16,4 +16,5 @@ public interface IFPoint extends IPointAdvanced, IBaseAlgebra<IFPoint> , IBaseOb
 
     double getZ();
     IFPoint setZ(double z);
+
 }

@@ -10,7 +10,7 @@ public interface IBaseObject<T> {
 
     String exportToJSON();
 
-    T importFromJSON();
+    T importFromJSON(String json);
 
     T copy();
 

@@ -4,18 +4,19 @@ import eu.scattering.core.exception.SamePositionException;
 
 public interface IPointAdvanced {
 
-    IFPoint setSphericalCoordinates(double polar, double azimuthal, double radius);
-    IFPoint randomize(double radius);
+    IFPoint setSphere(double polar, double azimuthal);
+    IFPoint setRandom(IFPoint ...exclude);
+
     IFPoint normalize();
     IFPoint reflect();
 
-    double getPolarAngle();
-    IFPoint setPolarAngle(double polar);
+    double getInclination();
+    IFPoint setInclination(double polar);
 
-    double getAzimuthalAngle();
-    IFPoint setAzimuthalAngle(double azimuthal);
+    double getAzimuth();
+    IFPoint setAzimuth(double azimuthal);
 
     double getRadius();
-    IFPoint setRadius(double distance) throws SamePositionException;
+    IFPoint setRadius(double radius) throws SamePositionException;
 
 }
