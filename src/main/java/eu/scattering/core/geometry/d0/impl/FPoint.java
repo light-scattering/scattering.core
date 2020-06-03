@@ -340,10 +340,10 @@ public class FPoint extends CoreObject implements IFPoint {
 //--------------------------------------------------
 
     @Override
-    public IFPoint setSphere(double polar, double azimuthal) {
-        origin[2] = Math.sin(azimuthal) * Math.sin(polar);
-        origin[1] = Math.cos(polar);
-        origin[0] = Math.cos(azimuthal) * Math.sin(polar);
+    public IFPoint setSphericalCoordinates(double inclination, double azimuth) {
+        origin[2] = Math.sin(azimuth) * Math.sin(inclination);
+        origin[1] = Math.cos(inclination);
+        origin[0] = Math.cos(azimuth) * Math.sin(inclination);
 
         return this;
     }
@@ -394,7 +394,7 @@ public class FPoint extends CoreObject implements IFPoint {
     public IFPoint setInclination(double polar) {
         double radius = getRadius();
 
-        return setSphere(polar, getAzimuth()).setRadius(radius);
+        return setSphericalCoordinates(polar, getAzimuth()).setRadius(radius);
     }
 
     @Override
@@ -419,7 +419,7 @@ public class FPoint extends CoreObject implements IFPoint {
     public IFPoint setAzimuth(double azimuthal) {
         double radius = getRadius();
 
-        return setSphere(getInclination(), azimuthal).setRadius(radius);
+        return setSphericalCoordinates(getInclination(), azimuthal).setRadius(radius);
     }
 
     @Override
