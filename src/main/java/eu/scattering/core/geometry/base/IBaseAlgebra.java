@@ -1,6 +1,6 @@
-package eu.scattering.core.geometry;
+package eu.scattering.core.geometry.base;
 
-import eu.scattering.core.geometry.d0.IFPoint;
+import eu.scattering.core.geometry.base.point.IFPoint;
 
 import java.util.List;
 

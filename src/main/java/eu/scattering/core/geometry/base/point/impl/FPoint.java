@@ -1,9 +1,9 @@
-package eu.scattering.core.geometry.d0.impl;
+package eu.scattering.core.geometry.base.point.impl;
 
 import eu.scattering.core.Configuration;
 import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.CoreObject;
-import eu.scattering.core.geometry.d0.IFPoint;
+import eu.scattering.core.geometry.base.point.IFPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -63,11 +63,11 @@ public class FPoint extends CoreObject implements IFPoint {
 
     @Override
     public FPoint importFromJSON(String json) {
-        JSONArray array = new JSONObject(json).getJSONArray("origin");
+        JSONArray structure = new JSONObject(json).getJSONArray("origin");
 
-        origin[0] = array.getDouble(0);
-        origin[1] = array.getDouble(1);
-        origin[2] = array.getDouble(2);
+        origin[0] = structure.getDouble(0);
+        origin[1] = structure.getDouble(1);
+        origin[2] = structure.getDouble(2);
 
         return this;
     }
@@ -340,7 +340,7 @@ public class FPoint extends CoreObject implements IFPoint {
 //--------------------------------------------------
 
     @Override
-    public IFPoint setSphericalCoordinates(double inclination, double azimuth) {
+    public FPoint setSphericalCoordinates(double inclination, double azimuth) {
         origin[2] = Math.sin(azimuth) * Math.sin(inclination);
         origin[1] = Math.cos(inclination);
         origin[0] = Math.cos(azimuth) * Math.sin(inclination);
@@ -349,7 +349,7 @@ public class FPoint extends CoreObject implements IFPoint {
     }
 
     @Override
-    public IFPoint setRandom(IFPoint... exclude) {
+    public FPoint setRandom(IFPoint... exclude) {
 
         mainLoop:
         while (true) {
@@ -381,8 +381,13 @@ public class FPoint extends CoreObject implements IFPoint {
     }
 
     @Override
-    public IFPoint normalize() {
+    public FPoint normalize() {
         return setRadius(1);
+    }
+
+    @Override
+    public FPoint reflect() {
+        return set(-origin[0], -origin[1], -origin[2]);
     }
 
     @Override
@@ -391,7 +396,7 @@ public class FPoint extends CoreObject implements IFPoint {
     }
 
     @Override
-    public IFPoint setInclination(double polar) {
+    public FPoint setInclination(double polar) {
         double radius = getRadius();
 
         return setSphericalCoordinates(polar, getAzimuth()).setRadius(radius);
@@ -416,7 +421,7 @@ public class FPoint extends CoreObject implements IFPoint {
     }
 
     @Override
-    public IFPoint setAzimuth(double azimuthal) {
+    public FPoint setAzimuth(double azimuthal) {
         double radius = getRadius();
 
         return setSphericalCoordinates(getInclination(), azimuthal).setRadius(radius);
@@ -442,7 +447,8 @@ public class FPoint extends CoreObject implements IFPoint {
     }
 
     @Override
-    public FPoint reflect() {
-        return set(-origin[0], -origin[1], -origin[2]);
+    public boolean isZero() {
+        return false;
     }
+
 }

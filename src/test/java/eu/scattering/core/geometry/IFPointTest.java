@@ -2,7 +2,7 @@ package eu.scattering.core.geometry;
 
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.exception.SamePositionException;
-import eu.scattering.core.geometry.d0.IFPoint;
+import eu.scattering.core.geometry.base.point.IFPoint;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -23,7 +23,7 @@ public class IFPointTest {
 
     @Nested
     @Tag("Basic")
-    @DisplayName("Functionality - Basic")
+    @DisplayName("Functionality")
     class IFPointBase {
 
         private double refX, refY, refZ;
@@ -527,8 +527,8 @@ public class IFPointTest {
     }
 
     @Nested
-    @DisplayName("Object")
-    class IBaseObject {
+    @DisplayName("Core features")
+    class ICoreFeatures {
 
         private double refX, refY, refZ;
 
@@ -651,7 +651,7 @@ public class IFPointTest {
     }
 
     @Nested
-    @DisplayName("Common algebra")
+    @DisplayName("Base algebra")
     class IBaseAlgebra {
 
         private double refX, refY, refZ;

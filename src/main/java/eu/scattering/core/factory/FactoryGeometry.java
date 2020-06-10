@@ -1,7 +1,7 @@
 package eu.scattering.core.factory;
 
-import eu.scattering.core.geometry.d0.IFPoint;
-import eu.scattering.core.geometry.d0.impl.FPoint;
+import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.point.impl.FPoint;
 
 public class FactoryGeometry {
 
@@ -14,4 +14,5 @@ public class FactoryGeometry {
     public static IFPoint getIFPoint(double x, double y, double z) {
         return FPoint.create().set(x, y, z);
     }
+
 }

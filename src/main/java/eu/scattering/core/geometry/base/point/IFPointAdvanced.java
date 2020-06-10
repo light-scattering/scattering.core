@@ -1,8 +1,8 @@
-package eu.scattering.core.geometry.d0;
+package eu.scattering.core.geometry.base.point;
 
 import eu.scattering.core.exception.SamePositionException;
 
-public interface IPointAdvanced {
+public interface IFPointAdvanced {
 
     IFPoint setSphericalCoordinates(double inclination, double azimuth);
     IFPoint setRandom(IFPoint ...exclude);
@@ -14,9 +14,10 @@ public interface IPointAdvanced {
     IFPoint setRadius(double radius) throws SamePositionException;
 
     double getInclination();
-    IFPoint setInclination(double polar);
+    IFPoint setInclination(double inclination);
 
     double getAzimuth();
-    IFPoint setAzimuth(double azimuthal);
+    IFPoint setAzimuth(double azimuth);
 
+    boolean isZero();
 }
