@@ -26,24 +26,6 @@ public class FVector extends CoreObject implements IFVector {
         return fVector;
     }
 
-    public static FVector create(IFPoint head) {
-        FVector fVector = new FVector();
-
-        fVector.origin[0] = FactoryGeometry.getIFPoint();
-        fVector.origin[1] = head;
-
-        return fVector;
-    }
-
-    public static FVector create(IFPoint base, IFPoint head) {
-        FVector fVector = new FVector();
-
-        fVector.origin[0] = base;
-        fVector.origin[1] = head;
-
-        return fVector;
-    }
-
 //--------------------------------------------------
 
     @Override
@@ -146,6 +128,19 @@ public class FVector extends CoreObject implements IFVector {
 
     @Override
     public IFVector setRef(IFPoint baseRef, IFPoint headRef) {
+
+        if (baseRef == null) {
+            throw new NullPointerException(" The base IFPoint must not be null");
+        }
+
+        if (headRef == null) {
+            throw new NullPointerException(" The head IFPoint must not be null");
+        }
+
+        if (baseRef == headRef) {
+            throw new IllegalArgumentException("The base/head IFPoints must not be the same instances");
+        }
+
         origin[0] = baseRef;
         origin[1] = headRef;
 
@@ -167,6 +162,15 @@ public class FVector extends CoreObject implements IFVector {
 
     @Override
     public IFVector setBaseRef(IFPoint baseRef) {
+
+        if (baseRef == null) {
+            throw new NullPointerException(" The base IFPoint must not be null");
+        }
+
+        if (baseRef == origin[1]) {
+            throw new IllegalArgumentException("The base/head IFPoints must not be the same instances");
+        }
+
         origin[0] = baseRef;
 
         return this;
@@ -186,6 +190,15 @@ public class FVector extends CoreObject implements IFVector {
 
     @Override
     public IFVector setHeadRef(IFPoint headRef) {
+
+        if (headRef == null) {
+            throw new NullPointerException(" The head IFPoint must not be null");
+        }
+
+        if (headRef == origin[0]) {
+            throw new IllegalArgumentException("The base/head IFPoints must not be the same instances");
+        }
+
         origin[1] = headRef;
 
         return this;

@@ -1,6 +1,8 @@
 package eu.scattering.core.helper;
 
 import eu.scattering.core.Configuration;
+import eu.scattering.core.factory.FactoryGeometry;
+import eu.scattering.core.geometry.base.point.IFPoint;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -10,6 +12,8 @@ public final class HelperRandom {
 
     private static final double valueMax = 10000;
     private static final double valueMin = -valueMax;
+
+    private static final IFPoint fPointZero = FactoryGeometry.getIFPoint();
 
     public static double getTestValue(double... exclude) {
         double value = 0;
@@ -26,6 +30,23 @@ public final class HelperRandom {
         }
 
         return value;
+    }
+
+    public static IFPoint getTestPoint(IFPoint... exclude) {
+        IFPoint fPoint = FactoryGeometry.getIFPoint();
+
+        mainLoop:
+        while (fPoint.isSimilar(fPointZero)) {
+            fPoint = FactoryGeometry.getIFPoint(getTestValue(), getTestValue(), getTestValue());
+
+            for (IFPoint singularity : exclude) {
+                if (fPoint.isSimilar(singularity)) {
+                    continue mainLoop;
+                }
+            }
+        }
+
+        return fPoint;
     }
 
 }

@@ -50,8 +50,36 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Constructor with parameters")
-        void constructWithParameters() {
+        @DisplayName("Construct with X")
+        void constructWithX() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint(refX);
+
+            assertNotNull(fPoint, "The instance is null");
+
+            assertAll("Updated values are incorrect",
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(0, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(0, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with XY")
+        void constructWithXY() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY);
+
+            assertNotNull(fPoint, "The instance is null");
+
+            assertAll("Updated values are incorrect",
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(0, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with XYZ")
+        void constructWithXYZ() {
             IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
 
             assertNotNull(fPoint, "The instance is null");
@@ -60,6 +88,22 @@ public class IFPointTest {
                     () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
                     () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
                     () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with IFPoint")
+        void constructWithIFPoint() {
+            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
+            IFPoint fPoint = FactoryGeometry.getIFPoint(fPointRef);
+
+            assertNotSame(fPointRef, fPoint, "References to the two created IFPoints should be different");
+            assertNotNull(fPointRef, "The instance is null");
+
+            assertAll("Updated values are incorrect",
+                    () -> assertEquals(fPointRef.getX(), fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(fPointRef.getY(), fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(fPointRef.getZ(), fPoint.getZ(), "The Z value is incorrect")
             );
         }
 
@@ -80,15 +124,17 @@ public class IFPointTest {
         @Test
         @DisplayName("Set values with an IFPoint")
         void setWithIFPoint() {
-            IFPoint fPointRef = FactoryGeometry.getIFPoint();
-            IFPoint destination = FactoryGeometry.getIFPoint(refX, refY, refZ);
+            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            fPointRef.set(destination);
+            fPoint.set(fPointRef);
+
+            assertNotSame(fPointRef, fPoint, "References to the two created IFPoints should be different");
 
             assertAll("Validate IFPoint values",
-                    () -> assertEquals(refX, fPointRef.getX(), "The X value is incorrect"),
-                    () -> assertEquals(refY, fPointRef.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(refZ, fPointRef.getZ(), "The Z value is incorrect")
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
             );
         }
 
@@ -269,7 +315,7 @@ public class IFPointTest {
             double refY = HelperRandom.getTestValue();
             double refZ = HelperRandom.getTestValue();
 
-            fPoint = FactoryGeometry.getIFPoint().set(refX, refY, refZ);
+            fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
             double magnitudeCurrent = fPoint.getRadius();
 
             double magnitudeExpected = Math.abs(HelperRandom.getTestValue(magnitudeCurrent));
@@ -300,19 +346,23 @@ public class IFPointTest {
         @Test
         @DisplayName("Set random position (validate vector magnitude)")
         void setRandomPositionValidateMagnitude() {
-            IFPoint fPointRef = FactoryGeometry.getIFPoint().setRandom();
+            double radius = Math.abs(HelperRandom.getTestValue());
+
+            IFPoint fPointRef = FactoryGeometry.getIFPoint(radius).setRandom();
 
             assertNotNull(fPointRef, "The instance is null");
 
-            assertEquals(1, fPointRef.getRadius(),
+            assertEquals(radius, fPointRef.getRadius(),
                     jitter, "The radius is invalid");
         }
 
         @Test
         @DisplayName("Set random position (validate correctness)")
         void setRandomPositionValidateCorrectness() {
-            IFPoint fPointRefA = FactoryGeometry.getIFPoint().setRandom();
-            IFPoint fPointRefB = FactoryGeometry.getIFPoint().setRandom(fPointRefA);
+            double radius = Math.abs(HelperRandom.getTestValue());
+
+            IFPoint fPointRefA = FactoryGeometry.getIFPoint(radius).setRandom();
+            IFPoint fPointRefB = FactoryGeometry.getIFPoint(radius).setRandom(fPointRefA);
 
             assertNotEquals(fPointRefA, fPointRefB, "Two randomly generated points should be different");
         }
@@ -509,10 +559,12 @@ public class IFPointTest {
         @Test
         @DisplayName("Set spherical coordinates")
         void setSphericalCoordinates() {
+            double radius = Math.abs(HelperRandom.getTestValue());
+
             double inclination = Math.abs(HelperRandom.getTestValue()) % Math.PI;
             double azimuth = Math.abs(HelperRandom.getTestValue()) % Math.PI;
 
-            IFPoint fPointRef = FactoryGeometry.getIFPoint().setSphericalCoordinates(inclination, azimuth);
+            IFPoint fPointRef = FactoryGeometry.getIFPoint(radius).setSphericalCoordinates(inclination, azimuth);
 
             assertNotNull(fPointRef, "The instance is null");
 
@@ -522,6 +574,24 @@ public class IFPointTest {
                     () -> assertEquals(azimuth, fPointRef.getAzimuth(),
                             jitter, "The azimuth is incorrect")
             );
+        }
+
+        @Test
+        @DisplayName("Is zero")
+        void isZeroTrue() {
+            assertTrue(FactoryGeometry.getIFPoint().isZero(), "The reference point should be zero");
+        }
+
+        @Test
+        @DisplayName("Is not zero")
+        void isZeroFalse() {
+            double refX = HelperRandom.getTestValue();
+            double refY = HelperRandom.getTestValue();
+            double refZ = HelperRandom.getTestValue();
+
+            IFPoint fPointRef = FactoryGeometry.getIFPoint().set(refX, refY, refZ);
+
+            assertFalse(fPointRef.isZero(), "The reference point should not be zero");
         }
 
     }
@@ -636,14 +706,14 @@ public class IFPointTest {
         @DisplayName("Make copy")
         void copy() {
             IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
-            IFPoint fPointOp = fPointRef.copy();
+            IFPoint fPoint = fPointRef.copy();
 
             assertAll("Validate similarity",
-                    () -> assertNotSame(fPointRef, fPointOp,
+                    () -> assertNotSame(fPointRef, fPoint,
                             "FPoints represent different objects"),
-                    () -> assertEquals(fPointRef, fPointOp,
+                    () -> assertEquals(fPointRef, fPoint,
                             "FPoints should have the same values"),
-                    () -> assertNotEquals(fPointRef, fPointOp.add(fPointRef),
+                    () -> assertNotEquals(fPointRef, fPoint.add(fPointRef),
                             "FPoints should have different values")
             );
         }

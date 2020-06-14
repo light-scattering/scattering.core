@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/IFVector.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/IFVectorAdvanced.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/factory/FactoryGeometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/factory/FactoryGeometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/IBaseAlgebra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/IBaseAlgebra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/IBaseObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/ICoreFeatures.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/d0/IFPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/IFPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/d0/IPointAdvanced.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/IFPointAdvanced.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/d0/impl/FPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/impl/FPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/d1/fvector/IFVector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/d1/fvector/IFVectorAdvanced.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/d1/fvector/impl/FVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/impl/FVector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/impl/FPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/impl/FPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/impl/FVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/impl/FVector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/geometry/IFPointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/eu/scattering/core/geometry/IFPointTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/geometry/IFVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/eu/scattering/core/geometry/IFVectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/helper/HelperRandom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/eu/scattering/core/helper/HelperRandom.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +90,11 @@
         <option value="Krzysztof Skorupski" />
       </list>
     </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1cRlGEZFSzjf2Hl2zGBNaXRALeN" />
@@ -92,82 +110,88 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="add_unversioned_files" value="true&#10;/home/krzysztof/Desktop/git/scattering.core/build/reports/tests/test/index.html" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/build.gradle" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
     <property name="show.unlinked.gradle.project.popup" value="true" />
   </component>
-  <component name="RunManager" selected="JUnit.IFPointTest">
-    <configuration name="scattering.core [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="All in core.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.test" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="IFPointTest$IFPointAdvanced.setRadius" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.IFVectorTest$IFVectorAdvanced.setSphericalCoordinates">
+    <configuration name="IFVectorTest$IFVectorAdvanced.setSphericalCoordinates" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="core.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="eu.scattering.core.geometry.base.*" />
+          <option name="PATTERN" value="eu.scattering.core.geometry.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
-      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFPointTest$IFPointAdvanced" />
-      <option name="METHOD_NAME" value="setRadius" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="IFPointTest$IFPointAdvanced.setSphericalCoordinates" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="eu.scattering.core.geometry.base.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
-      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFPointTest$IFPointAdvanced" />
+      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFVectorTest$IFVectorAdvanced" />
       <option name="METHOD_NAME" value="setSphericalCoordinates" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="IFPointTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="IFVectorTest$IFVectorBase.constructWithHeadValidateReference" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="core.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="eu.scattering.core.geometry.base.*" />
+          <option name="PATTERN" value="eu.scattering.core.geometry.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
-      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFPointTest" />
+      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFVectorTest$IFVectorBase" />
+      <option name="METHOD_NAME" value="constructWithHeadValidateReference" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IFVectorTest$IFVectorBase.setIFVector" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="eu.scattering.core.geometry.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
+      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFVectorTest$IFVectorBase" />
+      <option name="METHOD_NAME" value="setIFVector" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IFVectorTest$IFVectorBase.setIFVectorThrowNullPointerException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="eu.scattering.core.geometry.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
+      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFVectorTest$IFVectorBase" />
+      <option name="METHOD_NAME" value="setIFVectorThrowNullPointerException" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IFVectorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="eu.scattering.core.geometry.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
+      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFVectorTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -175,11 +199,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.IFPointTest" />
-        <item itemvalue="JUnit.All in core.test" />
-        <item itemvalue="JUnit.IFPointTest$IFPointAdvanced.setRadius" />
-        <item itemvalue="JUnit.IFPointTest$IFPointAdvanced.setSphericalCoordinates" />
-        <item itemvalue="Gradle.scattering.core [test]" />
+        <item itemvalue="JUnit.IFVectorTest$IFVectorAdvanced.setSphericalCoordinates" />
+        <item itemvalue="JUnit.IFVectorTest$IFVectorBase.constructWithHeadValidateReference" />
+        <item itemvalue="JUnit.IFVectorTest" />
+        <item itemvalue="JUnit.IFVectorTest$IFVectorBase.setIFVectorThrowNullPointerException" />
+        <item itemvalue="JUnit.IFVectorTest$IFVectorBase.setIFVector" />
       </list>
     </recent_temporary>
   </component>
@@ -208,15 +232,20 @@
       <option name="project" value="LOCAL" />
       <updated>1591205727401</updated>
     </task>
-    <task id="LOCAL-00003" summary="update">
-      <created>1591222737435</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1591222737435</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update" />
@@ -239,41 +268,49 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="661" y="341" width="588" height="396" key="#com.intellij.fileTypes.FileTypeChooser/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1590926553241" />
-    <state x="768" y="246" width="374" height="585" key="#com.intellij.ide.util.MemberChooser" timestamp="1591528175059">
+    <state x="768" y="246" width="374" height="585" key="#com.intellij.ide.util.MemberChooser" timestamp="1590843862219">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="768" y="246" width="374" height="585" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591528175059" />
-    <state x="444" y="463" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1591274637196">
+    <state x="768" y="246" width="374" height="585" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1590843862219" />
+    <state x="636" y="210" width="638" height="657" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1591017952921">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="444" y="463" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591274637196" />
-    <state x="636" y="210" width="638" height="657" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1591284548350">
+    <state x="636" y="210" width="638" height="657" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591017952921" />
+    <state x="499" y="87" width="912" height="904" key="CommitChangelistDialog2" timestamp="1591205727263">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="636" y="210" width="638" height="657" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591284548350" />
-    <state x="499" y="87" width="912" height="904" key="CommitChangelistDialog2" timestamp="1591222737241">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="499" y="87" width="912" height="904" key="CommitChangelistDialog2/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591205727263" />
+    <state width="1493" height="201" key="GridCell.Tab.0.bottom" timestamp="1592143470992">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="499" y="87" width="912" height="904" key="CommitChangelistDialog2/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222737241" />
-    <state width="1874" height="216" key="GridCell.Tab.0.bottom" timestamp="1591284845489">
-      <screen x="0" y="27" width="1920" height="1053" />
-    </state>
-    <state width="1874" height="216" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591284845489" />
+    <state width="2517" height="372" key="GridCell.Tab.0.bottom/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
+    <state width="1493" height="223" key="GridCell.Tab.0.bottom/0.0.1536.864/-3840.-381.2560.1440@0.0.1536.864" timestamp="1591874881529" />
+    <state width="1493" height="201" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
+    <state width="1874" height="216" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1807" height="336" key="GridCell.Tab.0.bottom/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
-    <state width="1874" height="216" key="GridCell.Tab.0.center" timestamp="1591284845489">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1493" height="201" key="GridCell.Tab.0.center" timestamp="1592143470992">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1874" height="216" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591284845489" />
+    <state width="2517" height="372" key="GridCell.Tab.0.center/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
+    <state width="1493" height="223" key="GridCell.Tab.0.center/0.0.1536.864/-3840.-381.2560.1440@0.0.1536.864" timestamp="1591874881529" />
+    <state width="1493" height="201" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
+    <state width="1874" height="216" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1807" height="336" key="GridCell.Tab.0.center/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
-    <state width="1874" height="216" key="GridCell.Tab.0.left" timestamp="1591284845489">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1493" height="201" key="GridCell.Tab.0.left" timestamp="1592143470992">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1874" height="216" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591284845489" />
+    <state width="2517" height="372" key="GridCell.Tab.0.left/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
+    <state width="1493" height="223" key="GridCell.Tab.0.left/0.0.1536.864/-3840.-381.2560.1440@0.0.1536.864" timestamp="1591874881528" />
+    <state width="1493" height="201" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
+    <state width="1874" height="216" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1807" height="336" key="GridCell.Tab.0.left/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
-    <state width="1874" height="216" key="GridCell.Tab.0.right" timestamp="1591284845489">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1493" height="201" key="GridCell.Tab.0.right" timestamp="1592143470992">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state width="1874" height="216" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591284845489" />
+    <state width="2517" height="372" key="GridCell.Tab.0.right/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
+    <state width="1493" height="223" key="GridCell.Tab.0.right/0.0.1536.864/-3840.-381.2560.1440@0.0.1536.864" timestamp="1591874881529" />
+    <state width="1493" height="201" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
+    <state width="1874" height="216" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1807" height="336" key="GridCell.Tab.0.right/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
     <state width="1874" height="354" key="GridCell.Tab.1.bottom" timestamp="1590791800335">
       <screen x="0" y="27" width="1920" height="1053" />
@@ -291,21 +328,31 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state width="1874" height="354" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1590791800335" />
-    <state x="443" y="116" width="1024" height="845" key="SettingsEditor" timestamp="1591171076210">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="38" y="0" key="MergeDialog" timestamp="1591874872642">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
+    <state x="38" y="0" key="MergeDialog/0.0.1536.864/-3840.-381.2560.1440@0.0.1536.864" timestamp="1591874872642" />
+    <state x="354" y="73" width="914" height="707" key="SettingsEditor" timestamp="1591874691304">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="354" y="73" width="914" height="707" key="SettingsEditor/0.0.1536.864/-3840.-381.2560.1440@0.0.1536.864" timestamp="1591874691304" />
     <state x="443" y="116" width="1024" height="845" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591171076210" />
-    <state x="555" y="275" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1591222743457">
+    <state x="555" y="275" width="800" height="528" key="Vcs.Push.Dialog.v2" timestamp="1591205735106">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="555" y="275" width="800" height="528" key="Vcs.Push.Dialog.v2/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222743457" />
+    <state x="555" y="275" width="800" height="528" key="Vcs.Push.Dialog.v2/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591205735106" />
     <state x="648" y="386" width="618" height="694" key="find.popup" timestamp="1591201181401">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="648" y="386" width="618" height="694" key="find.popup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591201181401" />
-    <state x="623" y="237" width="672" height="678" key="search.everywhere.popup" timestamp="1591100078243">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="550" y="145" key="git4idea.branch.GitSmartOperationDialog" timestamp="1591874788400">
+      <screen x="0" y="0" width="1536" height="864" />
     </state>
+    <state x="550" y="145" key="git4idea.branch.GitSmartOperationDialog/0.0.1536.864/-3840.-381.2560.1440@0.0.1536.864" timestamp="1591874788400" />
+    <state x="-3009" y="-94" width="896" height="928" key="search.everywhere.popup" timestamp="1592088155475">
+      <screen x="-3840" y="-381" width="2560" height="1440" />
+    </state>
+    <state x="-3009" y="-94" width="896" height="928" key="search.everywhere.popup/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592088155475" />
     <state x="623" y="237" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591100078243" />
   </component>
 </project>
