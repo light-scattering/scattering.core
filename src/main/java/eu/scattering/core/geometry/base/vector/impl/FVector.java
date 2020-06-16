@@ -556,7 +556,7 @@ public class FVector extends CoreObject implements IFVector {
 
         originShift(fVector);
         cProd = dProd(fVector);
-        magAB = getMagnitude() + fVector.getMagnitude();
+        magAB = getHead().getRadius() + fVector.getHead().getRadius();
         angle = Math.acos(cProd / magAB);
         originRestore(fVector);
 
