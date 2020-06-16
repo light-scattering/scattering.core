@@ -420,7 +420,12 @@ public class FVector extends CoreObject implements IFVector {
 
     @Override
     public IFVector relocateHead(IFPoint head) {
-        return null;
+        IFPoint translation = FactoryGeometry.getIFPoint().set(head).sub(origin[1]);
+
+        origin[0].add(translation);
+        origin[1].set(head);
+
+        return this;
     }
 
     @Override

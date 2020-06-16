@@ -531,12 +531,19 @@ public class IFVectorTest {
         @DisplayName("Set spherical coordinates")
         void setSphericalCoordinates() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 1, 0);
-            IFPoint fPointHead = FactoryGeometry.getIFPoint(2, 2, 0);
+            IFPoint fPointHead = FactoryGeometry.getIFPoint(2, 1, 0);
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
             fVector.setSphericalCoordinates(Math.PI * 0.5, Math.PI * 0.5);
 
-            assertNotSame(fVector.getBase(), fVector.getHead(), "IFPoints should have different references");
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(1, fVector.getBase().getX(),
@@ -552,8 +559,217 @@ public class IFVectorTest {
                     () -> assertEquals(1, fVector.getHead().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
+        }
 
+        @Test
+        @DisplayName("Random position")
+        void setRandomPosition() {
+            IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 1, 0);
+            IFPoint fPointHead = FactoryGeometry.getIFPoint(2, 1, 0);
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
+            fVector.setRandom(fPointHead);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
+
+            assertAll("Validate IFPoint values",
+                    () -> assertTrue(FactoryGeometry.getIFPoint(1, 1, 0).isExact(fVector.getBase()),
+                    "The base IFPoint is erroneous"),
+                    () -> assertFalse(FactoryGeometry.getIFPoint(2, 1, 0).isExact(fVector.getHead()),
+                    "The head IFPoint has not been randomized")
+            );
+        }
+
+        @Test
+        @DisplayName("Relocate base")
+        void relocateBase() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
+
+            IFPoint fPointRel = HelperRandom.getTestPoint(fPointBase,fPointHead);
+            IFPoint fPointRef = fPointHead.copy().add(fPointRel.copy().sub(fPointBase));
+
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            fVector.relocateBase(fPointRel);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(fPointRel.getX(), fVector.getBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(fPointRel.getY(), fVector.getBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(fPointRel.getZ(), fVector.getBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Relocate base (throw NullPointerException")
+        void relocateBaseThrowNullPointerException() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
+
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            assertThrows(NullPointerException.class, () -> fVector.relocateBase(null),
+                    "The reference IFVector must not be null");
+        }
+
+        @Test
+        @DisplayName("Relocate head")
+        void relocateHead() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
+
+            IFPoint fPointRel = HelperRandom.getTestPoint(fPointBase, fPointHead);
+            IFPoint fPointRef = fPointBase.copy().add(fPointRel.copy().sub(fPointHead));
+
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            fVector.relocateHead(fPointRel);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(fPointRef.getX(), fVector.getBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(fPointRef.getY(), fVector.getBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(fPointRel.getX(), fVector.getHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(fPointRel.getY(), fVector.getHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(fPointRel.getZ(), fVector.getHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Relocate head (throw NullPointerException")
+        void relocateHeadThrowNullPointerException() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
+
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            assertThrows(NullPointerException.class, () -> fVector.relocateHead(null),
+                    "The reference IFVector must not be null");
+        }
+
+        @Test
+        @DisplayName("Add IFVector")
+        void addIFVector() {
+            IFVector fVectorSum = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+            IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+
+            IFPoint fPointRef = fVector.getHead().copy().add(fVectorSum.getHead().copy().sub(fVectorSum.getBase()));
+
+            fVector.add(fVectorSum);
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(fVector.getBase().getX(), fVector.getBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(fVector.getBase().getY(), fVector.getBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(fVector.getBase().getZ(), fVector.getBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub IFVector")
+        void subIFVector() {
+            IFVector fVectorSub = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+            IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+
+            IFPoint fPointRef = fVector.getHead().copy().sub(fVectorSub.getHead().copy().sub(fVectorSub.getBase()));
+
+            fVector.sub(fVectorSub);
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(fVector.getBase().getX(), fVector.getBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(fVector.getBase().getY(), fVector.getBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(fVector.getBase().getZ(), fVector.getBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get dimension X")
+        void getDimX() {
+            IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+
+            assertEquals(Math.abs(fVector.getHead().getX() - fVector.getBase().getX()), fVector.getDimX(),
+                    "The X dimension is incorrect");
+            assertEquals(Math.abs(fVector.getBase().getX() - fVector.getHead().getX()), fVector.getDimX(),
+                    "The X dimension is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get dimension Y")
+        void getDimY() {
+            IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+
+            assertEquals(Math.abs(fVector.getHead().getY() - fVector.getBase().getY()), fVector.getDimY(),
+                    "The Y dimension is incorrect");
+            assertEquals(Math.abs(fVector.getBase().getY() - fVector.getHead().getY()), fVector.getDimY(),
+                    "The Y dimension is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get dimension Z")
+        void getDimZ() {
+            IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+
+            assertEquals(Math.abs(fVector.getHead().getZ() - fVector.getBase().getZ()), fVector.getDimZ(),
+                    "The Z dimension is incorrect");
+            assertEquals(Math.abs(fVector.getBase().getZ() - fVector.getHead().getZ()), fVector.getDimZ(),
+                    "The Z dimension is incorrect");
         }
 
     }

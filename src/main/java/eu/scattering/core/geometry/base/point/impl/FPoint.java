@@ -309,6 +309,11 @@ public class FPoint extends CoreObject implements IFPoint {
     public FPoint setRandom(IFPoint... exclude) {
         double radius = getRadius();
 
+        IFPoint[] excludeList = new IFPoint[exclude.length];
+        for (int i = 0 ; i < exclude.length ; i++ ) {
+            excludeList[i] = exclude[i].copy();
+        }
+
         mainLoop:
         while (true) {
             double x1 = 0, x2 = 0, f = 10;
@@ -319,19 +324,15 @@ public class FPoint extends CoreObject implements IFPoint {
                 f = x1 * x1 + x2 * x2;
             }
 
-            double candidateX = 2 * x1 * Math.sqrt(1 - f);
-            double candidateY = 2 * x2 * Math.sqrt(1 - f);
-            double candidateZ = 1 - 2 * f;
+            setX(2 * x1 * Math.sqrt(1 - f));
+            setY(2 * x2 * Math.sqrt(1 - f));
+            setZ(1 - 2 * f);
 
-            for (IFPoint singularity : exclude) {
+            for (IFPoint singularity : excludeList) {
                 if (isSimilar(singularity)) {
                     continue mainLoop;
                 }
             }
-
-            setX(candidateX);
-            setY(candidateY);
-            setZ(candidateZ);
 
             return setRadius(radius);
         }

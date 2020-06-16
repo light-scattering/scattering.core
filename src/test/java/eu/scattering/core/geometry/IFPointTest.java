@@ -6,6 +6,7 @@ import eu.scattering.core.geometry.base.point.IFPoint;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -365,6 +366,15 @@ public class IFPointTest {
             IFPoint fPointRefB = FactoryGeometry.getIFPoint(radius).setRandom(fPointRefA);
 
             assertNotEquals(fPointRefA, fPointRefB, "Two randomly generated points should be different");
+        }
+
+        @Test
+        @DisplayName("Set random position (validate timeout)")
+        void setRandomPositionValidateTimeout() {
+            double radius = Math.abs(HelperRandom.getTestValue());
+            IFPoint fPoint = FactoryGeometry.getIFPoint(radius);
+
+            assertTimeoutPreemptively(Duration.ofSeconds(1), () -> fPoint.setRandom(fPoint));
         }
 
         @Test
