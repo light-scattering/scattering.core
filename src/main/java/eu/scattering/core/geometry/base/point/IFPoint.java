@@ -1,9 +1,9 @@
 package eu.scattering.core.geometry.base.point;
 
 import eu.scattering.core.geometry.base.IBaseAlgebra;
-import eu.scattering.core.geometry.ICoreFeatures;
+import eu.scattering.core.ICoreObjectFeatures;
 
-public interface IFPoint extends IFPointAdvanced, IBaseAlgebra<IFPoint>, ICoreFeatures<IFPoint> {
+public interface IFPoint extends IFPointAdvanced, IBaseAlgebra<IFPoint>, ICoreObjectFeatures<IFPoint> {
 
     IFPoint set(IFPoint fPoint);
 

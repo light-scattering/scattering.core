@@ -485,10 +485,10 @@ public class FVector extends CoreObject implements IFVector {
 
     @Override
     public IFVector invert() {
-        IFPoint container = origin[1];
+        IFPoint container = origin[1].copy();
 
-        origin[1] = origin[0];
-        origin[0] = container;
+        origin[1].set(origin[0]);
+        origin[0].set(container);
 
         return this;
     }

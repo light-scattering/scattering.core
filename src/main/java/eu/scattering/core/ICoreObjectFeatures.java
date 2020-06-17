@@ -1,6 +1,6 @@
-package eu.scattering.core.geometry;
+package eu.scattering.core;
 
-public interface ICoreFeatures<T> {
+public interface ICoreObjectFeatures<T> {
 
     boolean isExact(T element);
 

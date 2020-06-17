@@ -1,10 +1,10 @@
 package eu.scattering.core.geometry.base.vector;
 
 import eu.scattering.core.geometry.base.IBaseAlgebra;
-import eu.scattering.core.geometry.ICoreFeatures;
+import eu.scattering.core.ICoreObjectFeatures;
 import eu.scattering.core.geometry.base.point.IFPoint;
 
-public interface IFVector extends IFVectorAdvanced, IBaseAlgebra<IFVector>, ICoreFeatures<IFVector> {
+public interface IFVector extends IFVectorAdvanced, IBaseAlgebra<IFVector>, ICoreObjectFeatures<IFVector> {
 
     IFVector set(IFVector fVector);
 
