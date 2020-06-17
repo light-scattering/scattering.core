@@ -1,7 +1,7 @@
 package eu.scattering.core.geometry.base.point.impl;
 
 import eu.scattering.core.exception.SamePositionException;
-import eu.scattering.core.CoreObject;
+import eu.scattering.core.geometry.PresetGeometry;
 import eu.scattering.core.geometry.base.point.IFPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static eu.scattering.core.Configuration.*;
 
-public class FPoint extends CoreObject implements IFPoint {
+public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -80,22 +80,46 @@ public class FPoint extends CoreObject implements IFPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isExact(IFPoint fPoint) {
+    public boolean isExact(Object object) {
 
-        if (this == fPoint) {
+        if (object == null) {
+            throw new NullPointerException("The reference IFPoint cannot be null");
+        }
+
+        if (this == object) {
             return true;
         }
 
-        return getX() == fPoint.getX() && getY() == fPoint.getY() && getZ() == fPoint.getZ();
+        if (object instanceof IFPoint) {
+            IFPoint fPoint = (IFPoint) object;
+            return getX() == fPoint.getX() && getY() == fPoint.getY() && getZ() == fPoint.getZ();
+        }
+
+        return false;
     }
 
     @Override
-    public boolean isSimilar(IFPoint fPoint) {
-        double distanceX = Math.abs(getX() - fPoint.getX());
-        double distanceY = Math.abs(getY() - fPoint.getY());
-        double distanceZ = Math.abs(getZ() - fPoint.getZ());
+    public boolean isSimilar(Object object) {
 
-        return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
+        if (object == null) {
+            throw new NullPointerException("The reference IFPoint cannot be null");
+        }
+
+        if (this == object) {
+            return true;
+        }
+
+        if (object instanceof IFPoint) {
+            IFPoint fPoint = (IFPoint) object;
+
+            double distanceX = Math.abs(getX() - fPoint.getX());
+            double distanceY = Math.abs(getY() - fPoint.getY());
+            double distanceZ = Math.abs(getZ() - fPoint.getZ());
+
+            return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
+        }
+
+        return false;
     }
 
     @Override
@@ -139,28 +163,8 @@ public class FPoint extends CoreObject implements IFPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean equals(Object object) {
-
-        if (!(object instanceof IFPoint)) {
-            return false;
-        }
-
-        return isExact((IFPoint) object);
-    }
-
-    @Override
-    public int hashCode() {
-        return getHashCode();
-    }
-
-    @Override
     public String toString() {
         return "FPoint [" + getX() + "," + getY() +"," + getZ() + "]";
-    }
-
-    @Override
-    public FPoint clone() {
-        return copy();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -171,6 +175,11 @@ public class FPoint extends CoreObject implements IFPoint {
         fPointList.add(this);
 
         return fPointList;
+    }
+
+    @Override
+    public IFPoint self() {
+        return this;
     }
 
     @Override

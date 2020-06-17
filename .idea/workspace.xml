@@ -19,15 +19,16 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
+      <change afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/PresetGeometry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/ICoreFeatures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/ICoreObjectFeatures.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/CoreObject.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/ICoreObjectFeatures.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/IGeometryBase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/IBaseAlgebra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/IGeometryAlgebra.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/IFPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/IFPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/impl/FPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/point/impl/FPoint.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/IFVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/IFVector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/impl/FVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/eu/scattering/core/geometry/base/vector/impl/FVector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/geometry/IFVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/eu/scattering/core/geometry/IFVectorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/geometry/IFVectorTest2.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,8 +119,16 @@
     <property name="settings.editor.selected.configurable" value="project.propCompiler" />
     <property name="show.unlinked.gradle.project.popup" value="true" />
   </component>
-  <component name="RunManager" selected="JUnit.All in core.test (1)">
-    <configuration name="All in core.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.All in core.test (3)">
+    <configuration name="All in core.test (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in core.test (3)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="core.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -135,23 +144,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="IFVectorTest$IFVectorAdvanced.getInclination" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="eu.scattering.core.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
-      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFVectorTest$IFVectorAdvanced" />
-      <option name="METHOD_NAME" value="getInclination" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="IFVectorTest$IFVectorAdvanced.normalizeThrowSamePositionException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="IFPointTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="core.test" />
       <extension name="coverage">
         <pattern>
@@ -160,9 +153,8 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="eu.scattering.core.geometry" />
-      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFVectorTest$IFVectorAdvanced" />
-      <option name="METHOD_NAME" value="normalizeThrowSamePositionException" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.geometry.IFPointTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -171,7 +163,7 @@
       <module name="core.test" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="eu.scattering.core.*" />
+          <option name="PATTERN" value="eu.scattering.core.geometry.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -184,11 +176,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.All in core.test (1)" />
-        <item itemvalue="JUnit.IFVectorTest$IFVectorAdvanced.normalizeThrowSamePositionException" />
-        <item itemvalue="JUnit.All in core.test" />
+        <item itemvalue="JUnit.All in core.test (3)" />
+        <item itemvalue="JUnit.IFPointTest" />
         <item itemvalue="JUnit.IFVectorTest" />
-        <item itemvalue="JUnit.IFVectorTest$IFVectorAdvanced.getInclination" />
+        <item itemvalue="JUnit.All in core.test (2)" />
+        <item itemvalue="JUnit.All in core.test" />
       </list>
     </recent_temporary>
   </component>
@@ -224,7 +216,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592309315201</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update">
+      <created>1592380180005</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1592380180005</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -260,21 +259,23 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="661" y="341" width="588" height="396" key="#com.intellij.fileTypes.FileTypeChooser/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1590926553241" />
-    <state x="768" y="246" width="374" height="585" key="#com.intellij.ide.util.MemberChooser" timestamp="1590843862219">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="2688" y="225" width="374" height="585" key="#com.intellij.ide.util.MemberChooser" timestamp="1592401896367">
+      <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="768" y="246" width="374" height="585" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1590843862219" />
-    <state x="2556" y="188" width="638" height="657" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1592380011472">
+    <state x="2688" y="225" width="374" height="585" key="#com.intellij.ide.util.MemberChooser/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592401896367" />
+    <state x="2556" y="27" width="980" height="1053" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1592402784106">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="636" y="210" width="638" height="657" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591017952921" />
-    <state x="2556" y="188" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592380011472" />
-    <state x="499" y="87" width="912" height="904" key="CommitChangelistDialog2" timestamp="1592309315007">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="2556" y="27" width="980" height="1053" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592402784106" />
+    <state x="2419" y="62" width="912" height="904" key="CommitChangelistDialog2" timestamp="1592403680201">
+      <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="499" y="87" width="912" height="904" key="CommitChangelistDialog2/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591205727263" />
     <state x="499" y="87" key="CommitChangelistDialog2/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1592309315007" />
-    <state width="1807" height="209" key="GridCell.Tab.0.bottom" timestamp="1592380074218">
+    <state x="2419" y="62" width="912" height="904" key="CommitChangelistDialog2/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592403680201" />
+    <state width="1807" height="209" key="GridCell.Tab.0.bottom" timestamp="1592403680321">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="2517" height="372" key="GridCell.Tab.0.bottom/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
@@ -282,9 +283,9 @@
     <state width="1493" height="201" key="GridCell.Tab.0.bottom/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
     <state width="1874" height="216" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1874" height="354" key="GridCell.Tab.0.bottom/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1592310902161" />
-    <state width="1807" height="209" key="GridCell.Tab.0.bottom/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592380074218" />
+    <state width="1807" height="209" key="GridCell.Tab.0.bottom/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592403680321" />
     <state width="1807" height="336" key="GridCell.Tab.0.bottom/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
-    <state width="1807" height="209" key="GridCell.Tab.0.center" timestamp="1592380074217">
+    <state width="1807" height="209" key="GridCell.Tab.0.center" timestamp="1592403680321">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="2517" height="372" key="GridCell.Tab.0.center/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
@@ -292,9 +293,9 @@
     <state width="1493" height="201" key="GridCell.Tab.0.center/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
     <state width="1874" height="216" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1874" height="354" key="GridCell.Tab.0.center/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1592310902160" />
-    <state width="1807" height="209" key="GridCell.Tab.0.center/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592380074217" />
+    <state width="1807" height="209" key="GridCell.Tab.0.center/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592403680321" />
     <state width="1807" height="336" key="GridCell.Tab.0.center/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
-    <state width="1807" height="209" key="GridCell.Tab.0.left" timestamp="1592380074217">
+    <state width="1807" height="209" key="GridCell.Tab.0.left" timestamp="1592403680321">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="2517" height="372" key="GridCell.Tab.0.left/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
@@ -302,9 +303,9 @@
     <state width="1493" height="201" key="GridCell.Tab.0.left/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
     <state width="1874" height="216" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1874" height="354" key="GridCell.Tab.0.left/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1592310902160" />
-    <state width="1807" height="209" key="GridCell.Tab.0.left/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592380074217" />
+    <state width="1807" height="209" key="GridCell.Tab.0.left/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592403680321" />
     <state width="1807" height="336" key="GridCell.Tab.0.left/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
-    <state width="1807" height="209" key="GridCell.Tab.0.right" timestamp="1592380074217">
+    <state width="1807" height="209" key="GridCell.Tab.0.right" timestamp="1592403680321">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="2517" height="372" key="GridCell.Tab.0.right/0.0.1536.864/-3840.-381.2560.1440@-3840.-381.2560.1440" timestamp="1592089139083" />
@@ -312,7 +313,7 @@
     <state width="1493" height="201" key="GridCell.Tab.0.right/0.0.1536.864@0.0.1536.864" timestamp="1592143470992" />
     <state width="1874" height="216" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1591222618122" />
     <state width="1874" height="354" key="GridCell.Tab.0.right/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1592310902160" />
-    <state width="1807" height="209" key="GridCell.Tab.0.right/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592380074217" />
+    <state width="1807" height="209" key="GridCell.Tab.0.right/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1592403680321" />
     <state width="1807" height="336" key="GridCell.Tab.0.right/1920.0.1920.1080/67.27.1853.1053@67.27.1853.1053" timestamp="1591020535326" />
     <state width="1874" height="354" key="GridCell.Tab.1.bottom" timestamp="1592310902161">
       <screen x="0" y="27" width="1920" height="1053" />

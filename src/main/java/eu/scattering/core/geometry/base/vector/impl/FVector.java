@@ -1,6 +1,6 @@
 package eu.scattering.core.geometry.base.vector.impl;
 
-import eu.scattering.core.CoreObject;
+import eu.scattering.core.geometry.PresetGeometry;
 import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.base.point.IFPoint;
@@ -8,10 +8,9 @@ import eu.scattering.core.geometry.base.vector.IFVector;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class FVector extends CoreObject implements IFVector {
+public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     private IFPoint[] origin = new IFPoint[2];
 
@@ -29,13 +28,34 @@ public class FVector extends CoreObject implements IFVector {
 //--------------------------------------------------
 
     @Override
-    public boolean isExact(IFVector fVector) {
-        return origin[0].isExact(fVector.getBase()) && origin[1].isExact(fVector.getHead());
+    public boolean isExact(Object object) {
+
+        if (this == object) {
+            return true;
+        }
+
+        if (object instanceof IFVector) {
+            IFVector fVector = (IFVector) object;
+
+            return origin[0].isExact(fVector.getBase()) && origin[1].isExact(fVector.getHead());
+        }
+
+        return false;
     }
 
     @Override
-    public boolean isSimilar(IFVector fVector) {
-        return origin[0].isSimilar(fVector.getBase()) && origin[1].isSimilar(fVector.getHead());
+    public boolean isSimilar(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (object instanceof IFVector) {
+            IFVector fVector = (IFVector) object;
+
+            return origin[0].isSimilar(fVector.getBase()) && origin[1].isSimilar(fVector.getHead());
+        }
+
+        return false;
     }
 
     @Override
@@ -80,32 +100,12 @@ public class FVector extends CoreObject implements IFVector {
 //--------------------------------------------------
 
     @Override
-    public boolean equals(Object object) {
-
-        if (!(object instanceof IFVector)) {
-            return false;
-        }
-
-        return isExact((IFVector) object);
-    }
-
-    @Override
-    public int hashCode() {
-        return getHashCode();
-    }
-
-    @Override
     public String toString() {
         return
                 "FVector { " +
                     "Base [" + origin[0].getX() + "," + origin[0].getY() + "," + origin[0].getZ() + "], " +
                     "Head [" + origin[1].getX() + "," + origin[1].getY() + "," + origin[1].getZ() + "], " +
                 "}";
-    }
-
-    @Override
-    public FVector clone() {
-        return copy();
     }
 
 //--------------------------------------------------
@@ -216,44 +216,49 @@ public class FVector extends CoreObject implements IFVector {
     }
 
     @Override
-    public IFVector add(IFPoint fPoint) {
-        origin[0].add(fPoint);
-        origin[1].add(fPoint);
-
+    public IFVector self() {
         return this;
     }
 
-    @Override
-    public IFVector add(double x, double y, double z) {
-        origin[0].add(x, y, z);
-        origin[1].add(x, y, z);
-
-        return this;
-    }
-
-    @Override
-    public IFVector addX(double x) {
-        origin[0].addX(x);
-        origin[1].addX(x);
-
-        return null;
-    }
-
-    @Override
-    public IFVector addY(double y) {
-        origin[0].addY(y);
-        origin[1].addY(y);
-
-        return this;
-    }
-
-    @Override
-    public IFVector addZ(double z) {
-        origin[0].addZ(z);
-        origin[1].addZ(z);
-
-        return this;
-    }
+//    @Override
+//    public IFVector add(IFPoint fPoint) {
+//        origin[0].add(fPoint);
+//        origin[1].add(fPoint);
+//
+//        return this;
+//    }
+//
+//    @Override
+//    public IFVector add(double x, double y, double z) {
+//        origin[0].add(x, y, z);
+//        origin[1].add(x, y, z);
+//
+//        return this;
+//    }
+//
+//    @Override
+//    public IFVector addX(double x) {
+//        origin[0].addX(x);
+//        origin[1].addX(x);
+//
+//        return null;
+//    }
+//
+//    @Override
+//    public IFVector addY(double y) {
+//        origin[0].addY(y);
+//        origin[1].addY(y);
+//
+//        return this;
+//    }
+//
+//    @Override
+//    public IFVector addZ(double z) {
+//        origin[0].addZ(z);
+//        origin[1].addZ(z);
+//
+//        return this;
+//    }
 
     @Override
     public IFVector sub(IFPoint fPoint) {

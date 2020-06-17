@@ -1,12 +1,13 @@
-package eu.scattering.core.geometry.base;
+package eu.scattering.core.geometry;
 
 import eu.scattering.core.geometry.base.point.IFPoint;
 
 import java.util.List;
 
-public interface IBaseAlgebra<T> {
+public interface IGeometryAlgebra<T> {
 
     List<IFPoint> getIFPoints();
+    T self();
 
     T add(IFPoint fPoint);
     T add(double x, double y, double z);
