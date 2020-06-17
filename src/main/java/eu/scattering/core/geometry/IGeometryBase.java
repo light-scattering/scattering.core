@@ -2,11 +2,9 @@ package eu.scattering.core.geometry;
 
 public interface IGeometryBase<T> {
 
-    boolean isExact(Object element);
+    boolean isExact(T element);
 
-    boolean isSimilar(Object element);
-
-    int getHashCode();
+    boolean isSimilar(T element);
 
     String exportToJSON();
 

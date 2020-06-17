@@ -5,8 +5,6 @@ import eu.scattering.core.geometry.IGeometryBase;
 
 public interface IFPoint extends IFPointAdvanced, IGeometryAlgebra<IFPoint>, IGeometryBase<IFPoint> {
 
-    IFPoint set(IFPoint fPoint);
-
     IFPoint set(double x, double y, double z);
 
     double getX();

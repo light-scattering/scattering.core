@@ -28,44 +28,48 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 //--------------------------------------------------
 
     @Override
-    public boolean isExact(Object object) {
+    public boolean isExact(IFVector fVector) {
 
-        if (this == object) {
+        if (this == fVector) {
             return true;
         }
 
-        if (object instanceof IFVector) {
-            IFVector fVector = (IFVector) object;
-
-            return origin[0].isExact(fVector.getBase()) && origin[1].isExact(fVector.getHead());
-        }
-
-        return false;
+        return origin[0].isExact(fVector.getBase()) && origin[1].isExact(fVector.getHead());
     }
 
     @Override
-    public boolean isSimilar(Object object) {
-        if (this == object) {
+    public boolean isSimilar(IFVector fVector) {
+
+        if (this == fVector) {
             return true;
         }
 
-        if (object instanceof IFVector) {
-            IFVector fVector = (IFVector) object;
-
-            return origin[0].isSimilar(fVector.getBase()) && origin[1].isSimilar(fVector.getHead());
-        }
-
-        return false;
+        return origin[0].isSimilar(fVector.getBase()) && origin[1].isSimilar(fVector.getHead());
     }
 
     @Override
-    public int getHashCode() {
+    public int hashCode() {
         int hashCode = 7;
 
-        hashCode = 31 * hashCode + origin[0].getHashCode();
-        hashCode = 31 * hashCode + origin[1].getHashCode();
+        hashCode = 31 * hashCode + origin[0].hashCode();
+        hashCode = 31 * hashCode + origin[1].hashCode();
 
         return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof IFVector) {
+            return isExact((IFVector) object);
+        }
+
+        return false;
+    }
+
+    @Override
+    public Object clone() {
+        return copy();
     }
 
     @Override

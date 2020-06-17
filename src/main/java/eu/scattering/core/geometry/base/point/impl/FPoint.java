@@ -80,57 +80,35 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isExact(Object object) {
+    public boolean isExact(IFPoint fPoint) {
 
-        if (object == null) {
+        if (fPoint == null) {
             throw new NullPointerException("The reference IFPoint cannot be null");
         }
 
-        if (this == object) {
+        if (this == fPoint) {
             return true;
         }
 
-        if (object instanceof IFPoint) {
-            IFPoint fPoint = (IFPoint) object;
-            return getX() == fPoint.getX() && getY() == fPoint.getY() && getZ() == fPoint.getZ();
-        }
-
-        return false;
+        return getX() == fPoint.getX() && getY() == fPoint.getY() && getZ() == fPoint.getZ();
     }
 
     @Override
-    public boolean isSimilar(Object object) {
+    public boolean isSimilar(IFPoint fPoint) {
 
-        if (object == null) {
+        if (fPoint == null) {
             throw new NullPointerException("The reference IFPoint cannot be null");
         }
 
-        if (this == object) {
+        if (this == fPoint) {
             return true;
         }
 
-        if (object instanceof IFPoint) {
-            IFPoint fPoint = (IFPoint) object;
+        double distanceX = Math.abs(getX() - fPoint.getX());
+        double distanceY = Math.abs(getY() - fPoint.getY());
+        double distanceZ = Math.abs(getZ() - fPoint.getZ());
 
-            double distanceX = Math.abs(getX() - fPoint.getX());
-            double distanceY = Math.abs(getY() - fPoint.getY());
-            double distanceZ = Math.abs(getZ() - fPoint.getZ());
-
-            return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
-        }
-
-        return false;
-    }
-
-    @Override
-    public int getHashCode() {
-        int hashCode = 7;
-
-        hashCode = 31 * hashCode + (int) (getX() * 100);
-        hashCode = 31 * hashCode + (int) (getY() * 100);
-        hashCode = 31 * hashCode + (int) (getZ() * 100);
-
-        return hashCode;
+        return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
     }
 
     @Override
@@ -154,13 +132,36 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     @Override
     public FPoint copy() {
-        FPoint point = new FPoint();
-        point.set(this);
-
-        return point;
+        return new FPoint().set(this);
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public int hashCode() {
+        int hashCode = 7;
+
+        hashCode = 31 * hashCode + (int) (getX() * 100);
+        hashCode = 31 * hashCode + (int) (getY() * 100);
+        hashCode = 31 * hashCode + (int) (getZ() * 100);
+
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof IFPoint) {
+            return isExact((IFPoint) object);
+        }
+
+        return false;
+    }
+
+    @Override
+    public Object clone() {
+        return copy();
+    }
 
     @Override
     public String toString() {

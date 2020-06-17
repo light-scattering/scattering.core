@@ -699,7 +699,7 @@ public class IFPointTest {
             IFPoint fPointRefA = FactoryGeometry.getIFPoint(refX, refY, refZ);
             IFPoint fPointRefB = FactoryGeometry.getIFPoint(refX, refY, refZ);
 
-            assertEquals(fPointRefA.getHashCode(), fPointRefB.getHashCode(),
+            assertEquals(fPointRefA.hashCode(), fPointRefB.hashCode(),
                     "Two identical points should have the same hash code");
         }
 
@@ -708,7 +708,7 @@ public class IFPointTest {
         void getHashCodeNegative() {
             IFPoint fPointRefA = FactoryGeometry.getIFPoint(refX, refY, refZ);
 
-            assertNotEquals(fPointRefA.getHashCode(), FactoryGeometry.getIFPoint().getHashCode(),
+            assertNotEquals(fPointRefA.hashCode(), FactoryGeometry.getIFPoint().hashCode(),
                     "The different points should not have the same hash code");
         }
 

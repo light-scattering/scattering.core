@@ -6,8 +6,7 @@ import java.util.List;
 
 public interface IGeometryAlgebra<T> {
 
-    List<IFPoint> getIFPoints();
-    T self();
+    T set(T geometry);
 
     T add(IFPoint fPoint);
     T add(double x, double y, double z);
@@ -39,4 +38,5 @@ public interface IGeometryAlgebra<T> {
 
     T scale(double scaleFactor);
 
+    List<IFPoint> getIFPoints();
 }

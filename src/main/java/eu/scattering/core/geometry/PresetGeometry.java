@@ -2,52 +2,54 @@ package eu.scattering.core.geometry;
 
 import eu.scattering.core.geometry.base.point.IFPoint;
 
-public abstract class PresetGeometry<T> implements IGeometryBase<T>, IGeometryAlgebra<T> {
+public abstract class PresetGeometry<T> implements IGeometryAlgebra<T> {
 
     @Override
-    public boolean equals(Object object) {
-        return isExact(object);
-    }
+    public abstract int hashCode();
 
     @Override
-    public int hashCode() {
-        return getHashCode();
-    }
+    public abstract boolean equals(Object object);
 
     @Override
-    public String toString() {
-        return exportToJSON();
-    }
+    public abstract Object clone();
 
     @Override
-    public T clone() {
-        return copy();
-    }
+    public abstract String toString();
 
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
     public T add(IFPoint fPoint) {
         getIFPoints().forEach(e -> e.add(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
         return self();
     }
 
+    @Override
     public T add(double x, double y, double z) {
         getIFPoints().forEach(e -> e.addX(x).addY(y).addZ(z));
         return self();
     }
 
+    @Override
     public T addX(double x) {
         getIFPoints().forEach(e -> e.setX(e.getX() + x));
         return self();
     }
 
+    @Override
     public T addY(double y) {
         getIFPoints().forEach(e -> e.setY(e.getY() + y));
         return self();
     }
 
+    @Override
     public T addZ(double z) {
         getIFPoints().forEach(e -> e.setZ(e.getZ() + z));
         return self();
     }
 
+    // -------------------------------------------------------------------------------------------------
+
+    protected abstract T self();
 
 }
