@@ -12,4 +12,6 @@ public interface IGeometryBase<T> {
 
     T copy();
 
+    T self();
+
 }

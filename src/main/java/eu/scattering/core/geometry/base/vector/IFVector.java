@@ -2,9 +2,11 @@ package eu.scattering.core.geometry.base.vector;
 
 import eu.scattering.core.geometry.IGeometryAlgebra;
 import eu.scattering.core.geometry.IGeometryBase;
+import eu.scattering.core.geometry.IGeometryDebug;
 import eu.scattering.core.geometry.base.point.IFPoint;
 
-public interface IFVector extends IFVectorAdvanced, IGeometryAlgebra<IFVector>, IGeometryBase<IFVector> {
+public interface IFVector
+        extends IFVectorAdvanced, IGeometryBase<IFVector>, IGeometryDebug<IFVector>, IGeometryAlgebra<IFVector> {
 
     IFVector set(IFPoint base, IFPoint head);
     IFVector setRef(IFPoint baseRef, IFPoint headRef);

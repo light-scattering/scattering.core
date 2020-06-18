@@ -22,7 +22,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     private FPoint() { }
 
-    public static FPoint create() {
+    public static IFPoint create() {
         return new FPoint();
     }
 
@@ -32,7 +32,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint setX(double x) {
+    public IFPoint setX(double x) {
         origin[0] = x;
 
         return this;
@@ -44,7 +44,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint setY(double y) {
+    public IFPoint setY(double y) {
         origin[1] = y;
 
         return this;
@@ -56,7 +56,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint setZ(double z) {
+    public IFPoint setZ(double z) {
         origin[2] = z;
 
         return this;
@@ -68,12 +68,12 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FPoint set(IFPoint fPoint) {
+    public IFPoint set(IFPoint fPoint) {
         return set(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public FPoint set(double x, double y, double z) {
+    public IFPoint set(double x, double y, double z) {
         return setX(x).setY(y).setZ(z);
     }
 
@@ -120,7 +120,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint importFromJSON(String json) {
+    public IFPoint importFromJSON(String json) {
         JSONArray structure = new JSONObject(json).getJSONArray("origin");
 
         setX(structure.getDouble(0));
@@ -131,8 +131,13 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint copy() {
+    public IFPoint copy() {
         return new FPoint().set(this);
+    }
+
+    @Override
+    public IFPoint self() {
+        return this;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -163,11 +168,6 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
         return copy();
     }
 
-    @Override
-    public String toString() {
-        return "FPoint [" + getX() + "," + getY() +"," + getZ() + "]";
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -179,97 +179,92 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint self() {
-        return this;
-    }
-
-    @Override
-    public FPoint add(IFPoint fPoint) {
+    public IFPoint add(IFPoint fPoint) {
         return add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public FPoint add(double x, double y, double z) {
+    public IFPoint add(double x, double y, double z) {
         return addX(x).addY(y).addZ(z);
     }
 
     @Override
-    public FPoint addX(double x) {
+    public IFPoint addX(double x) {
         return setX(getX() + x);
     }
 
     @Override
-    public FPoint addY(double y) {
+    public IFPoint addY(double y) {
         return setY(getY() + y);
     }
 
     @Override
-    public FPoint addZ(double z) {
+    public IFPoint addZ(double z) {
         return setZ(getZ() + z);
     }
 
     @Override
-    public FPoint sub(IFPoint fPoint) {
+    public IFPoint sub(IFPoint fPoint) {
         return sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public FPoint sub(double x, double y, double z) {
+    public IFPoint sub(double x, double y, double z) {
         return subX(x).subY(y).subZ(z);
     }
 
     @Override
-    public FPoint subX(double x) {
+    public IFPoint subX(double x) {
         return setX(getX() - x);
     }
 
     @Override
-    public FPoint subY(double y) {
+    public IFPoint subY(double y) {
         return setY(getY() - y);
     }
 
     @Override
-    public FPoint subZ(double z) {
+    public IFPoint subZ(double z) {
         return setZ(getZ() - z);
     }
 
     @Override
-    public FPoint mul(IFPoint fPoint) {
+    public IFPoint mul(IFPoint fPoint) {
         return mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public FPoint mul(double x, double y, double z) {
+    public IFPoint mul(double x, double y, double z) {
         return mulX(x).mulY(y).mulZ(z);
     }
 
     @Override
-    public FPoint mulX(double x) {
+    public IFPoint mulX(double x) {
         return setX(getX() * x);
     }
 
     @Override
-    public FPoint mulY(double y) {
+    public IFPoint mulY(double y) {
         return setY(getY() * y);
     }
 
     @Override
-    public FPoint mulZ(double z) {
+    public IFPoint mulZ(double z) {
         return setZ(getZ() * z);
     }
 
     @Override
-    public FPoint div(IFPoint fPoint) {
+    public IFPoint div(IFPoint fPoint) {
         return div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public FPoint div(double x, double y, double z) {
+    public IFPoint div(double x, double y, double z) {
         return divX(x).divY(y).divZ(z);
     }
 
     @Override
-    public FPoint divX(double x) {
+    public IFPoint divX(double x) {
 
         if (x == 0) {
             throw new ArithmeticException("Division by zero");
@@ -279,7 +274,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint divY(double y) {
+    public IFPoint divY(double y) {
 
         if (y == 0) {
             throw new ArithmeticException("Division by zero");
@@ -288,7 +283,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint divZ(double z) {
+    public IFPoint divZ(double z) {
 
         if (z == 0) {
             throw new ArithmeticException("Division by zero");
@@ -298,14 +293,14 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint scale(double scaleFactor) {
+    public IFPoint scale(double scaleFactor) {
         return mul(scaleFactor, scaleFactor, scaleFactor);
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FPoint setSphericalCoordinates(double inclination, double azimuth) {
+    public IFPoint setSphericalCoordinates(double inclination, double azimuth) {
         double radius = getRadius();
 
         setX(Math.cos(azimuth) * Math.sin(inclination));
@@ -316,7 +311,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint setRandom(IFPoint... exclude) {
+    public IFPoint setRandom(IFPoint... exclude) {
         double radius = getRadius();
 
         IFPoint[] excludeList = new IFPoint[exclude.length];
@@ -350,12 +345,12 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint normalize() {
+    public IFPoint normalize() {
         return setRadius(1);
     }
 
     @Override
-    public FPoint reflect() {
+    public IFPoint reflect() {
         return set(-getX(), -getY(), -getZ());
     }
 
@@ -365,7 +360,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint setInclination(double polar) {
+    public IFPoint setInclination(double polar) {
         double radius = getRadius();
 
         return setSphericalCoordinates(polar, getAzimuth()).setRadius(radius);
@@ -390,7 +385,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint setAzimuth(double azimuthal) {
+    public IFPoint setAzimuth(double azimuthal) {
         double radius = getRadius();
 
         return setSphericalCoordinates(getInclination(), azimuthal).setRadius(radius);
@@ -402,7 +397,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public FPoint setRadius(double radius) throws SamePositionException {
+    public IFPoint setRadius(double radius) throws SamePositionException {
 
         if (radius <= 0) {
             throw new IllegalArgumentException("The requested radius must be positive");
