@@ -36,8 +36,8 @@ public interface IFVectorAdvanced {
     double dProd(IFVector fVector);
     IFVector cProd(IFVector fVector);
 
-    double isParallel(IFVector fVector);
-    double isOrthogonal(IFVector fVector);
+    boolean isParallel(IFVector fVector);
+    boolean isOrthogonal(IFVector fVector);
     
     boolean isZero();
 }

@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static eu.scattering.core.Configuration.jitter;
+
 public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     private IFPoint[] origin = new IFPoint[2];
@@ -429,13 +431,21 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public double isParallel(IFVector fVector) {
-        return 0;
+    public boolean isParallel(IFVector fVector) {
+        double conX, conY, conZ;
+
+        originShift(fVector);
+        conX = getHead().getX() / fVector.getHead().getX();
+        conY = getHead().getY() / fVector.getHead().getY();
+        conZ = getHead().getZ() / fVector.getHead().getZ();
+        originRestore(fVector);
+
+        return Math.abs(conX - conY) < jitter && Math.abs(conX - conZ) < jitter;
     }
 
     @Override
-    public double isOrthogonal(IFVector fVector) {
-        return 0;
+    public boolean isOrthogonal(IFVector fVector) {
+        return false;
     }
 
     @Override
