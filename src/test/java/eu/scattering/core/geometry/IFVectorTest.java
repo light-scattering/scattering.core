@@ -1326,13 +1326,16 @@ public class IFVectorTest {
         @Test
         @DisplayName("Get angle")
         void getAngle() {
-            IFPoint fPointBaseA = FactoryGeometry.getIFPoint(1, 1, 1);
-            IFPoint fPointHeadA = FactoryGeometry.getIFPoint(2, 2, 2);
+            IFPoint fPointBaseA = FactoryGeometry.getIFPoint();
+            IFPoint fPointHeadA = FactoryGeometry.getIFPoint(2, 2, 0);
             IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
 
-            IFPoint fPointBaseB = FactoryGeometry.getIFPoint(1, -1, 1);
-            IFPoint fPointHeadB = FactoryGeometry.getIFPoint(2, -2, 2);
+            IFPoint fPointBaseB = FactoryGeometry.getIFPoint();
+            IFPoint fPointHeadB = FactoryGeometry.getIFPoint(4, -4, 0);
             IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
+
+            fVectorA.relocateBase(HelperRandom.getTestPoint());
+            fVectorB.relocateBase(HelperRandom.getTestPoint());
 
             assertAll("Validate results",
                     () -> assertEquals(Math.PI * 0.5, fVectorA.getAngle(fVectorB),
@@ -1340,6 +1343,32 @@ public class IFVectorTest {
                     () -> assertEquals(Math.PI * 0.5, fVectorB.getAngle(fVectorA),
                             jitter, "The angle is incorrect")
             );
+        }
+
+        @Test
+        @DisplayName("Get angle (parallel)")
+        void getAngleParallel() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(2, 2, 2));
+            IFVector fVectorB = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(4, 4, 4));
+
+            fVectorA.relocateBase(HelperRandom.getTestPoint());
+            fVectorB.relocateBase(HelperRandom.getTestPoint());
+
+            assertEquals(0, fVectorA.getAngle(fVectorB),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get angle (orthogonal)")
+        void getAngleOrthogonal() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(0, 1, 0));
+            IFVector fVectorB = FactoryGeometry.getIFVector(HelperRandom.getTestPoint().setY(0));
+
+            fVectorA.relocateBase(HelperRandom.getTestPoint());
+            fVectorB.relocateBase(HelperRandom.getTestPoint());
+
+            assertEquals(Math.PI * 0.5, fVectorA.getAngle(fVectorB),
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1352,6 +1381,8 @@ public class IFVectorTest {
             IFPoint fPointBaseB = FactoryGeometry.getIFPoint(1, -1, 1);
             IFPoint fPointHeadB = FactoryGeometry.getIFPoint(2, -2, 2);
             IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
+
+            fVectorA.getAngle(fVectorB);
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(1, fVectorA.getBase().getX(),
@@ -1379,6 +1410,44 @@ public class IFVectorTest {
                     () -> assertEquals(2, fVectorB.getHead().getZ(),
                             "Head B - The Z value is incorrect")
             );
+        }
+
+        @Test
+        @DisplayName("Get angle (validate references)")
+        void getAngleValidateReferences() {
+            IFPoint fPointBaseA = HelperRandom.getTestPoint();
+            IFPoint fPointHeadA = HelperRandom.getTestPoint(fPointBaseA);
+            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
+
+            IFPoint fPointBaseB = HelperRandom.getTestPoint(fPointBaseA, fPointHeadA);
+            IFPoint fPointHeadB = HelperRandom.getTestPoint(fPointBaseA, fPointHeadA, fPointBaseB);
+            IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
+
+            fVectorA.getAngle(fVectorB);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVectorA.getBase(), fVectorA.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBaseA, fVectorA.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHeadA, fVectorA.getHead(),
+                            "The head IFPoint should not change"),
+                    () -> assertNotSame(fVectorB.getBase(), fVectorB.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBaseB, fVectorB.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHeadB, fVectorB.getHead(),
+                            "The head IFPoint should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get angle (throw NullPointerException)")
+        void getAngleThrowNullPointerException() {
+            IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint());
+
+            assertThrows(NullPointerException.class, () -> fVector.getAngle(null),
+                    "The reference IFVector must not be null");
         }
 
         @Test
@@ -1561,15 +1630,10 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Check if two IFVectors are parallel (true)")
-        void isParallelTrue() {
-            IFPoint fPointBaseA = FactoryGeometry.getIFPoint(1, 1, 1);
-            IFPoint fPointHeadA = FactoryGeometry.getIFPoint(5, 5, 5);
-            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
-
-            IFPoint fPointBaseB = FactoryGeometry.getIFPoint(1, 1, 1);
-            IFPoint fPointHeadB = FactoryGeometry.getIFPoint(5, 5, 5);
-            IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
+        @DisplayName("Check if two IFVectors are parallel")
+        void isParallel() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(2, 2, 2));
+            IFVector fVectorB = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(4, 4, 4));
 
             fVectorA.relocateBase(HelperRandom.getTestPoint());
             fVectorB.relocateBase(HelperRandom.getTestPoint());
@@ -1578,20 +1642,60 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Check if two IFVectors are parallel (false)")
-        void isParallelFalse() {
-            IFPoint fPointBaseA = FactoryGeometry.getIFPoint();
-            IFPoint fPointHeadA = FactoryGeometry.getIFPoint(5, 5, 5);
-            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
+        @DisplayName("Check if two IFVectors are (anti)parallel")
+        void isAntiparallel() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(2, 2, 2));
+            IFVector fVectorB = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(-4, -4, -4));
 
-            IFPoint fPointBaseB = FactoryGeometry.getIFPoint();
-            IFPoint fPointHeadB = FactoryGeometry.getIFPoint(5, 5, 5);
-            IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
+            fVectorA.relocateBase(HelperRandom.getTestPoint());
+            fVectorB.relocateBase(HelperRandom.getTestPoint());
+
+            assertTrue(fVectorA.isParallel(fVectorB), "The two IFVectors should be parallel");
+        }
+
+        @Test
+        @DisplayName("Check if two IFVectors are parallel (fail)")
+        void isParallelFail() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(HelperRandom.getTestPoint());
+            IFVector fVectorB = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(fVectorA.getHead()));
 
             fVectorA.relocateBase(HelperRandom.getTestPoint());
             fVectorB.relocateBase(HelperRandom.getTestPoint());
 
             assertFalse(fVectorA.isParallel(fVectorB), "The two IFVectors should not be parallel");
         }
+
+        @Test
+        @DisplayName("Check if two IFVectors are parallel (throw NullPointerException)")
+        void isParallelThrowNullPointerException() {
+            IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint());
+
+            assertThrows(NullPointerException.class, () -> fVector.isParallel(null),
+                    "The reference IFVector must not be null");
+        }
+
+        @Test
+        @DisplayName("Check if two IFVectors are orthogonal")
+        void isOrthogonal() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(0, 1, 0));
+            IFVector fVectorB = FactoryGeometry.getIFVector(HelperRandom.getTestPoint().setY(0));
+
+            fVectorA.relocateBase(HelperRandom.getTestPoint());
+            fVectorB.relocateBase(HelperRandom.getTestPoint());
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
+        }
+
+//        @Test
+//        @DisplayName("Check if two IFVectors are orthogonal (fail)")
+//        void isOrthogonalFail() {
+//            IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(0, 1, 0));
+//            IFVector fVectorB = FactoryGeometry.getIFVector(HelperRandom.getTestPoint().setY(0));
+//
+//            fVectorA.relocateBase(HelperRandom.getTestPoint());
+//            fVectorB.relocateBase(HelperRandom.getTestPoint());
+//
+//            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
+//        }
     }
 }

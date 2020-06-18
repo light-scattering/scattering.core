@@ -2,6 +2,7 @@ package eu.scattering.core;
 
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.vector.IFVector;
 import org.junit.jupiter.api.Test;
 
 public class PlaygroundTest {
@@ -12,7 +13,12 @@ public class PlaygroundTest {
         FactoryGeometry.getIFVector().devDescribe();
 
         IFPoint store = FactoryGeometry.getIFPoint();
-        FactoryGeometry.getIFPoint(1, 2, 3).devStore(store).set(4, 5, 6).devDescribe();
+        FactoryGeometry.getIFPoint(1, 2, 3).imprint(store).set(4, 5, 6).devDescribe();
         store.devDescribe();
+
+        IFVector vecA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(10));
+        IFVector vecB = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(10,1));
+
+        System.out.println(vecA.getAngle(vecB));
     }
 }

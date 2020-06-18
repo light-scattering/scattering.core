@@ -171,7 +171,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public List<IFPoint> getIFPoints() {
+    public List<IFPoint> disassemble() {
         List<IFPoint> fPointList = new ArrayList<>();
         fPointList.add(this);
 

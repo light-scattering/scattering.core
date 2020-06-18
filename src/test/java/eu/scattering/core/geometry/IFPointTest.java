@@ -1116,7 +1116,7 @@ public class IFPointTest {
         @Test
         @DisplayName("Get IFPoint list")
         void getIFPoints() {
-            List<IFPoint> list = fPointRef.getIFPoints();
+            List<IFPoint> list = fPointRef.disassemble();
 
             assertAll("Validate IFPoint list",
                     () -> assertEquals(1, list.size(), "The Size of the list is incorrect"),

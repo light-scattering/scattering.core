@@ -202,7 +202,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 //--------------------------------------------------
 
     @Override
-    public List<IFPoint> getIFPoints() {
+    public List<IFPoint> disassemble() {
         List<IFPoint> fPointList = new ArrayList<>();
         fPointList.add(origin[0]);
         fPointList.add(origin[1]);
@@ -391,15 +391,15 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public double getAngle(IFVector fVector) {
-        double angle, cProd, magAB;
+        double angle, dProd, magAB;
 
+        dProd = dProd(fVector);
         originShift(fVector);
-        cProd = dProd(fVector);
-        magAB = getHead().getRadius() + fVector.getHead().getRadius();
-        angle = Math.acos(cProd / magAB);
+        magAB = getHead().getRadius() * fVector.getHead().getRadius();
+        angle = Math.acos(dProd / magAB);
         originRestore(fVector);
 
-        return angle;
+        return Double.isNaN(angle) ? 0 : angle;
     }
 
     @Override
@@ -445,7 +445,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public boolean isOrthogonal(IFVector fVector) {
-        return false;
+        return Math.abs(dProd(fVector)) < jitter;
     }
 
     @Override

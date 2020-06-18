@@ -36,8 +36,10 @@ public interface IGeometryAlgebra<T> {
 
     T scale(double scaleFactor);
 
-    List<IFPoint> getIFPoints();
+    List<IFPoint> disassemble();
 
     T set(T element);
+    T imprint(T element);
+//    T swap(T element);
 
 }

@@ -6,6 +6,4 @@ public interface IGeometryDebug<T> {
 
     T devDescribe(String message);
 
-    T devStore(T element);
-
 }
