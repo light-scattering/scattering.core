@@ -77,6 +77,16 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
         return setX(x).setY(y).setZ(z);
     }
 
+    @Override
+    public IFPoint swap(IFPoint element) {
+        IFPoint store = copy();
+
+        set(element);
+        element.set(store);
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -112,16 +122,19 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public String exportToJSON() {
+    public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
-        json.put("origin", new double[]{getX(), getY(), getZ()});
 
-        return json.toString();
+        json.append("origin", getX());
+        json.append("origin", getY());
+        json.append("origin", getZ());
+
+        return json;
     }
 
     @Override
-    public IFPoint importFromJSON(String json) {
-        JSONArray structure = new JSONObject(json).getJSONArray("origin");
+    public IFPoint importFromJSON(JSONObject json) {
+        JSONArray structure = json.getJSONArray("origin");
 
         setX(structure.getDouble(0));
         setY(structure.getDouble(1));

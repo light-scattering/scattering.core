@@ -17,7 +17,7 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
 
     @Override
     public String toString() {
-        return exportToJSON();
+        return exportToJSON().toString();
     }
 
     @Override

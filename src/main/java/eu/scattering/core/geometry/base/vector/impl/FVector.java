@@ -5,6 +5,7 @@ import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.base.point.IFPoint;
 import eu.scattering.core.geometry.base.vector.IFVector;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -75,20 +76,20 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public String exportToJSON() {
+    public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
-        json.put("base", origin[0].exportToJSON());
-        json.put("head", origin[1].exportToJSON());
+        json.append("assembly", origin[0].exportToJSON());
+        json.append("assembly", origin[1].exportToJSON());
 
-        return json.toString();
+        return json;
     }
 
     @Override
-    public IFVector importFromJSON(String json) {
-        JSONObject structure = new JSONObject(json);
+    public IFVector importFromJSON(JSONObject json) {
+        JSONArray structure = json.getJSONArray("assembly");
 
-        origin[0] = FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject("base").toString());
-        origin[1] = FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject("head").toString());
+        origin[0] = FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(0));
+        origin[1] = FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(1));
 
         return this;
     }
@@ -109,6 +110,15 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public FVector set(IFVector fVector) {
         origin[0].set(fVector.getBase());
         origin[1].set(fVector.getHead());
+
+        return this;
+    }
+
+    @Override
+    public IFVector swap(IFVector element) {
+
+        getBase().swap(element.getBase());
+        getHead().swap(element.getHead());
 
         return this;
     }
@@ -243,6 +253,11 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
+    public IFVector relocateBase(double x, double y, double z) {
+        return relocateBase(FactoryGeometry.getIFPoint(x, y, z));
+    }
+
+    @Override
     public IFVector relocateBase(IFPoint base) {
         IFPoint translation = FactoryGeometry.getIFPoint().set(base).sub(origin[0]);
 
@@ -250,6 +265,11 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         origin[1].add(translation);
 
         return this;
+    }
+
+    @Override
+    public IFVector relocateHead(double x, double y, double z) {
+        return relocateHead(FactoryGeometry.getIFPoint(x, y, z));
     }
 
     @Override
@@ -450,7 +470,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public boolean isZero() {
-        return false;
+        return getBase().equals(getHead());
     }
 
 //--------------------------------------------------

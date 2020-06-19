@@ -713,7 +713,7 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Make copy")
+        @DisplayName("Copy")
         void copy() {
             IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
             IFPoint fPoint = fPointRef.copy();
@@ -1126,6 +1126,75 @@ public class IFPointTest {
             );
         }
 
+        @Test
+        @DisplayName("Swap")
+        void swap() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint(opX, opY, opZ);
+
+            fPoint.swap(fPointRef);
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(refX, fPoint.getX(), "The reference X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The reference Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The reference Z value is incorrect"),
+                    () -> assertEquals(opX, fPointRef.getX(), "The X value is incorrect"),
+                    () -> assertEquals(opY, fPointRef.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(opZ, fPointRef.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Swap (validate references)")
+        void swapValidateReferences() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint(opX, opY, opZ);
+
+            fPoint.swap(fPointRef);
+
+            assertNotSame(fPointRef, fPoint, "IFPoint references should be different");
+        }
+
+        @Test
+        @DisplayName("Swap (throw NullPointerException)")
+        void swapThrowNullPointerException() {
+
+            assertThrows(NullPointerException.class, () -> fPointRef.swap(null),
+                    "The reference IFPoint must not be null");
+        }
+
+        @Test
+        @DisplayName("Imprint")
+        void imprint() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
+
+            fPointRef.imprint(fPoint);
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(refX, fPointRef.getX(), "The reference X value is incorrect"),
+                    () -> assertEquals(refY, fPointRef.getY(), "The reference Y value is incorrect"),
+                    () -> assertEquals(refZ, fPointRef.getZ(), "The reference Z value is incorrect"),
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Imprint (validate references()")
+        void imprintValidateReferences() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
+
+            fPointRef.imprint(fPoint);
+
+            assertNotSame(fPointRef, fPoint, "IFPoint references should be different");
+        }
+
+        @Test
+        @DisplayName("Imprint (throw NullPointerException)")
+        void imprintThrowNullPointerException() {
+
+            assertThrows(NullPointerException.class, () -> fPointRef.imprint(null),
+                    "The reference IFPoint must not be null");
+        }
     }
 
 }

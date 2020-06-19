@@ -8,7 +8,9 @@ public interface IFVectorAdvanced {
     IFVector setSphericalCoordinates(double polar, double azimuthal);
     IFVector setRandom(IFPoint...exclude);
 
+    IFVector relocateBase(double x, double y, double z);
     IFVector relocateBase(IFPoint base);
+    IFVector relocateHead(double x, double y, double z);
     IFVector relocateHead(IFPoint head);
 
     IFVector add(IFVector fVector);
@@ -40,4 +42,5 @@ public interface IFVectorAdvanced {
     boolean isOrthogonal(IFVector fVector);
     
     boolean isZero();
+
 }

@@ -1,14 +1,16 @@
 package eu.scattering.core.geometry;
 
+import org.json.JSONObject;
+
 public interface IGeometryBase<T> {
 
     boolean isExact(T element);
 
     boolean isSimilar(T element);
 
-    String exportToJSON();
+    JSONObject exportToJSON();
 
-    T importFromJSON(String json);
+    T importFromJSON(JSONObject json);
 
     T copy();
 

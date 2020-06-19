@@ -36,6 +36,10 @@ public class FactoryGeometry {
 
     public static IFPoint getIFPoint(IFPoint fPoint) { return getIFPoint().set(fPoint); }
 
+    public static IFVector getIFVector(double x, double y, double z) {
+        return getIFVector().setHeadRef(getIFPoint(x, y, z));
+    }
+
     public static IFVector getIFVector(IFPoint head) {
         return getIFVector().setHeadRef(head);
     }

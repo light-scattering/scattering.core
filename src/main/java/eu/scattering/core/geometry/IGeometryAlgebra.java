@@ -40,6 +40,6 @@ public interface IGeometryAlgebra<T> {
 
     T set(T element);
     T imprint(T element);
-//    T swap(T element);
+    T swap(T element);
 
 }
