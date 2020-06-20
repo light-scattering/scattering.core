@@ -4,6 +4,8 @@ import eu.scattering.core.geometry.base.point.IFPoint;
 import eu.scattering.core.geometry.base.point.impl.FPoint;
 import eu.scattering.core.geometry.base.vector.IFVector;
 import eu.scattering.core.geometry.base.vector.impl.FVector;
+import eu.scattering.core.geometry.support.line.IFLine;
+import eu.scattering.core.geometry.support.line.impl.FLine;
 
 public class FactoryGeometry {
 
@@ -20,6 +22,8 @@ public class FactoryGeometry {
     public static IFVector getIFVector() {
         return FVector.create();
     }
+
+    public static IFLine getIFLine() { return FLine.create(); }
 
     // -------------------------------------------------------------------------------------------------
     // The following section contains methods which should be considered as helpers.

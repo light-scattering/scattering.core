@@ -2,9 +2,10 @@ package eu.scattering.core.geometry;
 
 import eu.scattering.core.geometry.base.point.IFPoint;
 
-import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public interface IGeometryAlgebra<T> {
+public interface IGeometryAlgebra<T> extends IGeometryAssembly {
 
     T add(IFPoint fPoint);
     T add(double x, double y, double z);
@@ -36,10 +37,15 @@ public interface IGeometryAlgebra<T> {
 
     T scale(double scaleFactor);
 
-    List<IFPoint> disassemble();
-
     T set(T element);
-    T imprint(T element);
     T swap(T element);
+    T imprint(T element);
 
+    T fun(Consumer<T> exp);
+    double funNumber(Function<T, Double> exp);
+    boolean funLogical(Function<T, Boolean> exp);
+
+    T ext(Consumer<IGeometryAssembly> exp);
+    double extNumber(Function<IGeometryAssembly, Double> exp);
+    boolean extLogical(Function<IGeometryAssembly, Boolean> exp);
 }

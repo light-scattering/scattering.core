@@ -1119,7 +1119,7 @@ public class IFPointTest {
             List<IFPoint> list = fPointRef.disassemble();
 
             assertAll("Validate IFPoint list",
-                    () -> assertEquals(1, list.size(), "The Size of the list is incorrect"),
+                    () -> assertEquals(1, list.size(), "The size of the list is incorrect"),
                     () -> assertEquals(refX, list.get(0).getX(), "The X value is incorrect"),
                     () -> assertEquals(refY, list.get(0).getY(), "The Y value is incorrect"),
                     () -> assertEquals(refZ, list.get(0).getZ(), "The Z value is incorrect")
@@ -1179,7 +1179,7 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Imprint (validate references()")
+        @DisplayName("Imprint (validate references")
         void imprintValidateReferences() {
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
@@ -1194,6 +1194,69 @@ public class IFPointTest {
 
             assertThrows(NullPointerException.class, () -> fPointRef.imprint(null),
                     "The reference IFPoint must not be null");
+        }
+
+        @Test
+        @DisplayName("Custom function - chain")
+        void fun() {
+
+            fPointRef.fun(e -> e.addX(opX).addY(opY).addZ(opZ));
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(refX + opX, fPointRef.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY + opY, fPointRef.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ + opZ, fPointRef.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Custom function - chain (validate references)")
+        void funValidateReferences() {
+            IFPoint ref = fPointRef.fun(e -> e.addX(opX).addY(opY).addZ(opZ));
+
+            assertSame(ref, fPointRef, "The IFPoint reference is erroneous");
+
+        }
+
+        @Test
+        @DisplayName("Custom function - chain (throw NullPointerException)")
+        void funThrowNullPointerException() {
+
+            assertThrows(NullPointerException.class, () -> fPointRef.fun(null),
+                    "The reference expression must not be null");
+        }
+
+        @Test
+        @DisplayName("Custom function - number")
+        void funNumber() {
+
+            assertEquals(refX + refY + refZ, fPointRef.funNumber(e -> e.getX() + e.getY() + e.getZ()),
+                    "The resulting value is erroneous");
+        }
+
+
+        @Test
+        @DisplayName("Custom function - number (throw NullPointerException)")
+        void funNumberThrowNullPointerException() {
+
+            assertThrows(NullPointerException.class, () -> fPointRef.funNumber(null),
+                    "The reference expression must not be null");
+        }
+
+        @Test
+        @DisplayName("Custom function - logical")
+        void funLogical() {
+
+            assertTrue(fPointRef.funLogical(e -> e.disassemble().size() == 1),
+                    "The resulting value is erroneous");
+        }
+
+        @Test
+        @DisplayName("Custom function - logical (throw NullPointerException)")
+        void funLogicalThrowNullPointerException() {
+
+            assertThrows(NullPointerException.class, () -> fPointRef.funLogical(null),
+                    "The reference expression must not be null");
         }
     }
 

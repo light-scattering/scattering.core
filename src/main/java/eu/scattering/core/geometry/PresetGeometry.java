@@ -2,6 +2,9 @@ package eu.scattering.core.geometry;
 
 import eu.scattering.core.geometry.base.point.IFPoint;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import static eu.scattering.core.Configuration.debugPrintStream;
 
 public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
@@ -189,6 +192,38 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     public T imprint(T element) {
         element.set(self());
         return self();
+    }
+
+    @Override
+    public T fun(Consumer<T> exp) {
+        exp.accept(self());
+        return self();
+    }
+
+    @Override
+    public double funNumber(Function<T, Double> exp) {
+        return exp.apply(self());
+    }
+
+    @Override
+    public boolean funLogical(Function<T, Boolean> exp) {
+        return exp.apply(self());
+    }
+
+    @Override
+    public T ext(Consumer<IGeometryAssembly> exp) {
+        exp.accept(self());
+        return self();
+    }
+
+    @Override
+    public double extNumber(Function<IGeometryAssembly, Double> exp) {
+        return exp.apply(self());
+    }
+
+    @Override
+    public boolean extLogical(Function<IGeometryAssembly, Boolean> exp) {
+        return exp.apply(self());
     }
 
     // -------------------------------------------------------------------------------------------------

@@ -7,6 +7,8 @@ import eu.scattering.core.geometry.base.vector.IFVector;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
+
 import static eu.scattering.core.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -1440,6 +1442,19 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Get angle (antiparallel)")
+        void getAngleAntiparallel() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(2, 2, 2));
+            IFVector fVectorB = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(-4, -4, -4));
+
+            fVectorA.relocateBase(HelperRandom.getTestPoint());
+            fVectorB.relocateBase(HelperRandom.getTestPoint());
+
+            assertEquals(0, fVectorA.getAngle(fVectorB),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
         @DisplayName("Get angle (orthogonal)")
         void getAngleOrthogonal() {
             IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(0, 1, 0));
@@ -1723,15 +1738,15 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Is (anti)parallel")
-        void isAntiparallel() {
+        @DisplayName("Is parallel (opposite direction")
+        void isParallelOppositeDirection() {
             IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(2, 2, 2));
             IFVector fVectorB = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(-4, -4, -4));
 
             fVectorA.relocateBase(HelperRandom.getTestPoint());
             fVectorB.relocateBase(HelperRandom.getTestPoint());
 
-            assertTrue(fVectorA.isParallel(fVectorB), "The two IFVectors should be parallel");
+            assertTrue(fVectorA.isParallel(fVectorB), "The IFVectors should be parallel");
         }
 
         @Test
@@ -1743,7 +1758,7 @@ public class IFVectorTest {
             fVectorA.relocateBase(HelperRandom.getTestPoint());
             fVectorB.relocateBase(HelperRandom.getTestPoint());
 
-            assertFalse(fVectorA.isParallel(fVectorB), "The two IFVectors should not be parallel");
+            assertFalse(fVectorA.isParallel(fVectorB), "The IFVectors should not be parallel");
         }
 
         @Test
@@ -1829,7 +1844,7 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Exactness")
+        @DisplayName("Is exact")
         void isExact() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = HelperRandom.getTestPoint();
@@ -1841,7 +1856,7 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Exactness (fail)")
+        @DisplayName("Is exact (fail)")
         void isExactFail() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = HelperRandom.getTestPoint();
@@ -1853,7 +1868,7 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Exactness (throw NullPointerException)")
+        @DisplayName("Is exact (throw NullPointerException)")
         void isExactThrowNullPointerException() {
             IFVector fVector = FactoryGeometry.getIFVector();
 
@@ -1862,7 +1877,7 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Similarity")
+        @DisplayName("Is similar")
         void isSimilar() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = HelperRandom.getTestPoint();
@@ -1874,7 +1889,7 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Similarity (fail)")
+        @DisplayName("Is similar (fail)")
         void isSimilarFail() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = HelperRandom.getTestPoint();
@@ -1886,7 +1901,7 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Similarity (throw NullPointerException)")
+        @DisplayName("Is similar (throw NullPointerException)")
         void isSimilarThrowNullPointerException() {
             IFVector fVector = FactoryGeometry.getIFVector();
 
@@ -1939,15 +1954,538 @@ public class IFVectorTest {
         }
     }
 
+    @Nested
+    @DisplayName("Base algebra")
     class IBaseAlgebra {
 
         @Test
         @DisplayName("Add IFPoint")
         void addIFPoint() {
             IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
             IFPoint fPoint = HelperRandom.getTestPoint();
 
             fVector.add(fPoint);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().add(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().add(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Add primitives")
+        void addPrimitives() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().add(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().add(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Add X")
+        void addX() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.addX(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().addX(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().addX(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Add Y")
+        void addY() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.addY(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().addY(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().addY(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Add Z")
+        void addZ() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.addZ(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().addZ(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().addZ(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub IFPoint")
+        void subIFPoint() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.sub(fPoint);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().sub(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().sub(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub primitives")
+        void subPrimitives() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().sub(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().sub(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub X")
+        void subX() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.subX(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().subX(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().subX(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub Y")
+        void subY() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.subY(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().subY(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().subY(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub Z")
+        void subZ() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.subZ(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().subZ(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().subZ(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Mul IFPoint")
+        void mulIFPoint() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.mul(fPoint);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().mul(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().mul(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Mul IFPoint (throw NullPointerException)")
+        void mulIFPointThrowNullPointerException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertThrows(NullPointerException.class,
+                    () -> fVector.mul(null), "The operand cannot be null");
+        }
+
+        @Test
+        @DisplayName("Mul primitives")
+        void mulPrimitives() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().mul(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().mul(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Mul X")
+        void mulX() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.mulX(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().mulX(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().mulX(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Mul Y")
+        void mulY() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.mulY(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().mulY(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().mulY(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Mul Z")
+        void mulZ() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.mulZ(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().mulZ(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().mulZ(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Div IFPoint")
+        void divIFPoint() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.div(fPoint);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().div(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().div(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Div IFPoint (throw ArithmeticException)")
+        void divIFPointThrowArithmeticException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertAll("Division by zero",
+                    () -> assertThrows(ArithmeticException.class,
+                            () -> fVector.div(FactoryGeometry.getIFPoint(0, 1, 1)),
+                            "The X value is zero"),
+                    () -> assertThrows(ArithmeticException.class,
+                            () -> fVector.div(FactoryGeometry.getIFPoint(1, 0, 1)),
+                            "The Y value is zero"),
+                    () -> assertThrows(ArithmeticException.class,
+                            () -> fVector.div(FactoryGeometry.getIFPoint(0, 1, 1)),
+                            "The Z value is zero")
+            );
+        }
+
+        @Test
+        @DisplayName("Div IFPoint (throw NullPointerException)")
+        void divIFPointThrowNullPointerException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertThrows(NullPointerException.class,
+                    () -> fVector.div(null), "The operand cannot be null");
+        }
+
+        @Test
+        @DisplayName("Div primitives")
+        void divPrimitives() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().div(fPoint),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().div(fPoint),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Div primitives (throw ArithmeticException)")
+        void divPrimitivesThrowArithmeticException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertAll("Division by zero",
+                    () -> assertThrows(ArithmeticException.class,
+                            () -> fVector.div(0, 1, 1), "The X value is zero"),
+                    () -> assertThrows(ArithmeticException.class,
+                            () -> fVector.div(1, 0, 1), "The Y value is zero"),
+                    () -> assertThrows(ArithmeticException.class,
+                            () -> fVector.div(0, 1, 1), "The Z value is zero")
+            );
+        }
+
+        @Test
+        @DisplayName("Div X")
+        void divX() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+
+            double value = HelperRandom.getTestValue();
+
+            fVector.divX(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().divX(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().divX(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Div X (throw ArithmeticException)")
+        void divXThrowArithmeticException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertThrows(ArithmeticException.class, () -> fVector.divX(0), "The X value is zero");
+        }
+
+        @Test
+        @DisplayName("Div Y")
+        void divY() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.divY(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().divY(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().divY(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Div Y (throw ArithmeticException)")
+        void divYThrowArithmeticException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertThrows(ArithmeticException.class, () -> fVector.divY(0), "The Y value is zero");
+        }
+
+        @Test
+        @DisplayName("Div Z")
+        void divZ() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.divZ(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().divZ(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().divZ(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Div Z (ArithmeticException)")
+        void divZThrowArithmeticException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertThrows(ArithmeticException.class, () -> fVector.divZ(0), "The Z value is zero");
+        }
+
+        @Test
+        @DisplayName("Scale")
+        void scale() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFVector fVectorRef = fVector.copy();
+            double value = HelperRandom.getTestValue();
+
+            fVector.scale(value);
+
+            assertAll("Validate IFPoints",
+                    () -> assertEquals(fVector.getBase(), fVectorRef.getBase().copy().scale(value),
+                            "The base IFPoint is erroneous"),
+                    () -> assertEquals(fVector.getHead(), fVectorRef.getHead().copy().scale(value),
+                            "The head IFPoint is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get IFPoint list")
+        void getIFPoints() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            List<IFPoint> list = fVector.disassemble();
+
+            assertAll("Validate IFPoint list",
+                    () -> assertEquals(2, list.size(), "The size of the list is incorrect"),
+                    () -> assertSame(fVector.getBase(), list.get(0), "The base IFPoint is incorrect"),
+                    () -> assertSame(fVector.getHead(), list.get(1), "The head IFPoint is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Swap")
+        void swap() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorRefA = fVectorA.copy();
+            IFVector fVectorB = HelperRandom.getTestVector();
+            IFVector fVectorRefB = fVectorB.copy();
+
+            fVectorA.swap(fVectorB);
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(fVectorRefA, fVectorB, "The reference X value is incorrect"),
+                    () -> assertEquals(fVectorRefB, fVectorA, "The reference Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Swap (validate references)")
+        void swapValidateReferences() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint();
+
+            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+            IFVector fVectorB = HelperRandom.getTestVector();
+
+            fVectorA.swap(fVectorB);
+
+            fPointBase.set(1, 2, 3);
+
+            assertEquals(FactoryGeometry.getIFPoint(1, 2, 3), fVectorA.getBase(),
+                    "The reference X value is incorrect");
+        }
+
+        @Test
+        @DisplayName("Swap (throw NullPointerException)")
+        void swapThrowNullPointerException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertThrows(NullPointerException.class, () -> fVector.swap(null),
+                    "The reference IFVector must not be null");
+        }
+
+        @Test
+        @DisplayName("Imprint")
+        void imprint() {
+            IFVector fVectorRef = HelperRandom.getTestVector();
+            IFVector fVector = FactoryGeometry.getIFVector();
+
+            fVectorRef.imprint(fVector);
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(fVector.getBase(), fVector.getBase(), "The base IFPoint is incorrect"),
+                    () -> assertEquals(fVector.getHead(), fVector.getHead(), "The head IFPoint is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Imprint (validate references")
+        void imprintValidateReferences() {
+            IFVector fVectorRef = HelperRandom.getTestVector();
+            IFVector fVector = HelperRandom.getTestVector();
+
+            fVectorRef.imprint(fVector);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVectorRef, fVector,
+                            "IFVectors should point to different objects"),
+                    () -> assertNotSame(fVectorRef.getBase(), fVector.getBase(),
+                            "The base IFPoint reference is incorrect"),
+                    () -> assertNotSame(fVectorRef.getHead(), fVector.getHead(),
+                            "The head IFPoint reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Imprint (throw NullPointerException)")
+        void imprintThrowNullPointerException() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            assertThrows(NullPointerException.class, () -> fVector.imprint(null),
+                    "The reference IFVector must not be null");
         }
 
     }
