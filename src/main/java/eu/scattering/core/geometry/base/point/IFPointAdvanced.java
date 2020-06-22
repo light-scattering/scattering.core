@@ -12,13 +12,18 @@ public interface IFPointAdvanced {
     IFPoint reflect();
 
     double getRadius();
-    IFPoint setRadius(double radius) throws SamePositionException;
+    IFPoint setRadius(double radius) throws SamePositionException, IllegalArgumentException;
 
     double getInclination();
     IFPoint setInclination(double inclination);
 
     double getAzimuth();
     IFPoint setAzimuth(double azimuth);
+
+    double getAngle(IFPoint fPoint);
+
+    double getDistance(IFPoint fPoint);
+    IFPoint setDistance(IFPoint fPoint, double distance) throws SamePositionException, IllegalArgumentException;
 
     double dProd(IFPoint fPoint);
     IFPoint cProd(IFPoint fPoint);

@@ -24,8 +24,8 @@ public interface IFVectorAdvanced {
     IFVector reflect();
     IFVector invert();
 
-    double getMagnitude();
-    IFVector setMagnitude(double magnitude) throws SamePositionException;
+    double getRadius();
+    IFVector setRadius(double radius) throws SamePositionException;
 
     double getInclination();
     IFVector setInclination(double inclination);

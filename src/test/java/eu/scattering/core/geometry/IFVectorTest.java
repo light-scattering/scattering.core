@@ -1055,28 +1055,28 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get magnitude")
-        void getMagnitude() {
+        @DisplayName("Get radius")
+        void getRadius() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 1, 1);
             IFPoint fPointHead = FactoryGeometry.getIFPoint(2, 2, 2);
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            assertEquals(Math.sqrt(3), fVector.getMagnitude(), jitter, "The magnitude is erroneous");
+            assertEquals(Math.sqrt(3), fVector.getRadius(), jitter, "The radius is erroneous");
         }
 
         @Test
-        @DisplayName("Get magnitude (zero)")
-        void getMagnitudeZero() {
+        @DisplayName("Get radius (zero)")
+        void getRadiusZero() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint();
             IFPoint fPointHead = FactoryGeometry.getIFPoint();
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            assertEquals(0, fVector.getMagnitude(), jitter, "The magnitude should be zero");
+            assertEquals(0, fVector.getRadius(), jitter, "The radius should be zero");
         }
 
         @Test
-        @DisplayName("Get magnitude (random)")
-        void getMagnitudeRandom() {
+        @DisplayName("Get radius (random)")
+        void getRadiusRandom() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFPoint fPointHead = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
@@ -1084,19 +1084,19 @@ public class IFVectorTest {
             double dimX = fVector.getDimX() * fVector.getDimX();
             double dimY = fVector.getDimY() * fVector.getDimY();
             double dimZ = fVector.getDimZ() * fVector.getDimZ();
-            double magnitude = Math.sqrt(dimX + dimY + dimZ);
+            double radius = Math.sqrt(dimX + dimY + dimZ);
 
-            assertEquals(magnitude, fVector.getMagnitude(), jitter, "The magnitude is erroneous");
+            assertEquals(radius, fVector.getRadius(), jitter, "The radius is erroneous");
         }
 
         @Test
-        @DisplayName("Set magnitude")
-        void setMagnitude() {
+        @DisplayName("Set radius")
+        void setRadius() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(3, 3, 3);
             IFPoint fPointHead = FactoryGeometry.getIFPoint(5, 5, 5);
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            fVector.setMagnitude(Math.sqrt(3));
+            fVector.setRadius(Math.sqrt(3));
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(3, fVector.getBase().getX(),
@@ -1115,24 +1115,24 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Set magnitude (random)")
-        void setMagnitudeRandom() {
+        @DisplayName("Set radius (random)")
+        void setRadiusRandom() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFPoint fPointHead = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            fVector.setMagnitude(1);
+            fVector.setRadius(1);
 
-            assertEquals(1, fVector.getMagnitude(), jitter, "The magnitude is erroneous");
+            assertEquals(1, fVector.getRadius(), jitter, "The radius is erroneous");
         }
 
         @Test
-        @DisplayName("Set magnitude (throw IllegalArgumentException)")
-        void setMagnitudeThrowIllegalArgumentException() {
+        @DisplayName("Set radius (throw IllegalArgumentException)")
+        void setRadiusThrowIllegalArgumentException() {
             IFVector fVector = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(), FactoryGeometry.getIFPoint());
 
-            assertThrows(IllegalArgumentException.class, () -> fVector.setMagnitude(-1),
-                    "The magnitude must be a positive value");
+            assertThrows(IllegalArgumentException.class, () -> fVector.setRadius(-1),
+                    "The radius must be a positive value");
         }
 
         @Test
@@ -1144,7 +1144,7 @@ public class IFVectorTest {
 
             fVector.normalize();
 
-            assertEquals(1, fVector.getMagnitude(), jitter, "The magnitude is incorrect");
+            assertEquals(1, fVector.getRadius(), jitter, "The magnitude is incorrect");
         }
 
         @Test

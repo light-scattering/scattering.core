@@ -3,6 +3,7 @@ package eu.scattering.core.geometry;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.vector.IFVector;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -199,14 +200,20 @@ public class IFPointTest {
         @Test
         @DisplayName("Normalize")
         void normalize() {
-            double refX = HelperRandom.getTestValue();
-            double refY = HelperRandom.getTestValue();
-            double refZ = HelperRandom.getTestValue();
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
+            assertEquals(1, fPoint.normalize().getRadius(),
+                    jitter, "The magnitude of the normalized vector should be equal to one");
+        }
 
-            assertEquals(1, fPointRef.normalize().getRadius(),
-                    jitter, "The magnitude of the normalized vector should be one");
+        @Test
+        @DisplayName("Normalize (validate references)")
+        void normalizeValidateReferences() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            IFPoint fPointRef = fPoint.normalize();
+
+            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
         }
 
         @Test
@@ -216,13 +223,23 @@ public class IFPointTest {
             double refY = HelperRandom.getTestValue();
             double refZ = HelperRandom.getTestValue();
 
-            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ).reflect();
+            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ).reflect();
 
             assertAll("Validate IFPoint values",
-                    () -> assertEquals(-refX, fPointRef.getX(), "The X value is incorrect"),
-                    () -> assertEquals(-refY, fPointRef.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(-refZ, fPointRef.getZ(), "The Z value is incorrect")
+                    () -> assertEquals(-refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(-refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(-refZ, fPoint.getZ(), "The Z value is incorrect")
             );
+        }
+
+        @Test
+        @DisplayName("Reflect (validate references)")
+        void reflectValidateReferences() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            IFPoint fPointRef = fPoint.reflect();
+
+            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
         }
 
         @Test
@@ -254,29 +271,29 @@ public class IFPointTest {
             double expected = Math.abs(ref * Math.sqrt(2));
 
             assertAll("Validate radius",
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, 0).getRadius(),
                             jitter, "The magnitude is invalid [X, Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, -ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, 0).getRadius(),
                             jitter, "The magnitude is invalid [X, -Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, 0).getRadius(),
                             jitter, "The magnitude is invalid [-X, Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, -ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, 0).getRadius(),
                             jitter, "The magnitude is invalid [-X, -Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, 0, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, 0, ref).getRadius(),
                             jitter, "The magnitude is invalid [X, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, 0, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, 0, -ref).getRadius(),
                             jitter, "The magnitude is invalid [X, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, 0, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, 0, ref).getRadius(),
                             jitter, "The magnitude is invalid [-X, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, 0, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, 0, -ref).getRadius(),
                             jitter, "The magnitude is invalid [-X, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(0, ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, ref, ref).getRadius(),
                             jitter, "The magnitude is invalid [Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(0, ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, ref, -ref).getRadius(),
                             jitter, "The magnitude is invalid [Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(0, -ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, -ref, ref).getRadius(),
                             jitter, "The magnitude is invalid [-Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(0, -ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, -ref, -ref).getRadius(),
                             jitter, "The magnitude is invalid [-Y, -Z]")
             );
         }
@@ -288,22 +305,40 @@ public class IFPointTest {
             double expected = Math.abs(ref * Math.sqrt(3));
 
             assertAll("Validate radius",
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, ref).getRadius(),
                             jitter, "The magnitude is invalid [X, Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, -ref).getRadius(),
                             jitter, "The magnitude is invalid [X, Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, -ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, ref).getRadius(),
                             jitter, "The magnitude is invalid [X, -Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(ref, -ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, -ref).getRadius(),
                             jitter, "The magnitude is invalid [X, -Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, ref).getRadius(),
                             jitter, "The magnitude is invalid [-X, Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, -ref).getRadius(),
                             jitter, "The magnitude is invalid [-X, Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, -ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, ref).getRadius(),
                             jitter, "The magnitude is invalid [-X, -Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().set(-ref, -ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, -ref).getRadius(),
                             jitter, "The magnitude is invalid [-X, -Y, -Z]")
+            );
+        }
+
+        @Test
+        @DisplayName("Get radius (validate positions)")
+        void getRadiusValidatePositions() {
+            double refX = HelperRandom.getTestValue();
+            double refY = HelperRandom.getTestValue();
+            double refZ = HelperRandom.getTestValue();
+
+            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
+
+            fPoint.getRadius();
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
             );
         }
 
@@ -317,9 +352,9 @@ public class IFPointTest {
             double refZ = HelperRandom.getTestValue();
 
             fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
-            double magnitudeCurrent = fPoint.getRadius();
+            double magnitude = fPoint.getRadius();
 
-            double magnitudeExpected = Math.abs(HelperRandom.getTestValue(magnitudeCurrent));
+            double magnitudeExpected = Math.abs(HelperRandom.getTestValue(magnitude));
             fPoint.setRadius(magnitudeExpected);
 
             assertEquals(magnitudeExpected, fPoint.getRadius(),
@@ -341,9 +376,19 @@ public class IFPointTest {
 
             assertThrows(SamePositionException.class,
                     () -> FactoryGeometry.getIFPoint().setRadius(1),
-                    "The position of the IFPoint must not be zero (the vector points to an unknown direction");
+                    "The position of the reference IFPoint must not be zero");
         }
 
+        @Test
+        @DisplayName("Set radius (validate references)")
+        void setRadiusValidateReferences() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            IFPoint fPointRef = fPoint.setRadius(Math.abs(HelperRandom.getTestValue()));
+
+            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
+        }
+//------------------------------------------------------------------------------------------------------------------------------
         @Test
         @DisplayName("Set random position (validate vector magnitude)")
         void setRandomPositionValidateMagnitude() {
@@ -715,6 +760,93 @@ public class IFPointTest {
                     "The reference IFVector must not be null");
         }
 
+        @Test
+        @DisplayName("Get angle")
+        void getAngle() {
+            IFPoint fPointA = FactoryGeometry.getIFPoint(2, 2, 0);
+            IFPoint fPointB = FactoryGeometry.getIFPoint(4, -4, 0);
+
+            assertAll("Validate results",
+                    () -> assertEquals(Math.PI * 0.5, fPointA.getAngle(fPointB),
+                            jitter, "The angle is incorrect"),
+                    () -> assertEquals(Math.PI * 0.5, fPointB.getAngle(fPointA),
+                            jitter, "The angle is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get angle (parallel)")
+        void getAngleParallel() {
+            IFPoint fPointA = FactoryGeometry.getIFPoint(2, 2, 2);
+            IFPoint fPointB = FactoryGeometry.getIFPoint(4, 4, 4);
+
+            assertEquals(0, fPointA.getAngle(fPointB),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get angle (antiparallel)")
+        void getAngleAntiparallel() {
+            IFPoint fPointA = FactoryGeometry.getIFPoint(2, 2, 2);
+            IFPoint fPointB = FactoryGeometry.getIFPoint(-4, -4, -4);
+
+            assertEquals(0, fPointA.getAngle(fPointB),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get angle (orthogonal)")
+        void getAngleOrthogonal() {
+            IFPoint fPointA = FactoryGeometry.getIFPoint(0, 1, 0);
+            IFPoint fPointB = HelperRandom.getTestPoint().setY(0);
+
+            assertEquals(Math.PI * 0.5, fPointA.getAngle(fPointB),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get angle (validate positions)")
+        void getAngleValidatePositions() {
+            IFPoint fPointA = FactoryGeometry.getIFPoint(1, 2, 3);
+            IFPoint fPointB = FactoryGeometry.getIFPoint(4, 5, 6);
+
+            fPointA.getAngle(fPointB);
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(1, fPointA.getX(),
+                            "IFPoint A - The X value is incorrect"),
+                    () -> assertEquals(2, fPointA.getY(),
+                            "IFPoint A - The Y value is incorrect"),
+                    () -> assertEquals(3, fPointA.getZ(),
+                            "IFPoint A - The Z value is incorrect"),
+                    () -> assertEquals(4, fPointB.getX(),
+                            "IFPoint B - The X value is incorrect"),
+                    () -> assertEquals(5, fPointB.getY(),
+                            "IFPoint B - The Y value is incorrect"),
+                    () -> assertEquals(6, fPointB.getZ(),
+                            "IFPoint B - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get angle (validate references)")
+        void getAngleValidateReferences() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint();
+
+            fPointA.getAngle(fPointB);
+
+            assertNotSame(fPointA, fPointB, "IFPoints should point to different objects");
+        }
+
+        @Test
+        @DisplayName("Get angle (throw NullPointerException)")
+        void getAngleThrowNullPointerException() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            assertThrows(NullPointerException.class, () -> fPoint.getAngle(null),
+                    "The reference IFVector cannot be null");
+        }
     }
 
     @Nested

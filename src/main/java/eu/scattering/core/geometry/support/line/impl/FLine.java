@@ -42,19 +42,12 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     @Override
     public Consumer<IGeometryAssembly> project() {
         // https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.
-        return (e) -> {
-            e.disassemble().forEach(p -> {
-                IFPoint d = FactoryGeometry.getIFPoint(origin.getHead())
-                        .sub(origin.getBase())
-                        .div(origin.getMagnitude());
+        return (e) -> e.disassemble().forEach(p -> {
+            IFPoint opA = FactoryGeometry.getIFPoint(origin.getHead()).sub(origin.getBase()).div(origin.getRadius());
+            IFPoint opB = FactoryGeometry.getIFPoint(p).sub(origin.getBase());
 
-                IFPoint v = FactoryGeometry.getIFPoint(p)
-                        .sub(origin.getBase());
-
-                p.set(origin.getBase().copy().add(d.mul(v.dProd(d))));
-            });
-
-        };
+            p.set(origin.getBase().copy().add(opA.mul(opB.dProd(opA))));
+        });
     }
 
     @Override

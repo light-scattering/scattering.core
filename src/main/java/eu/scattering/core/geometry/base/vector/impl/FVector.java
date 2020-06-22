@@ -344,7 +344,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public double getMagnitude() {
+    public double getRadius() {
 
         double distanceX = getHead().getX() - getBase().getX();
         double distanceY = getHead().getY() - getBase().getY();
@@ -354,7 +354,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector setMagnitude(double magnitude) throws SamePositionException {
+    public IFVector setRadius(double magnitude) throws SamePositionException {
 
         originShift();
         getHead().setRadius(magnitude);

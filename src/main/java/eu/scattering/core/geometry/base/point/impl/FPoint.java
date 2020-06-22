@@ -420,6 +420,40 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
+    public double getAngle(IFPoint fPoint) {
+        double angle, dProd, magAB;
+
+        dProd = dProd(fPoint);
+        magAB = getRadius() * fPoint.getRadius();
+        angle = Math.acos(dProd / magAB);
+
+        return Double.isNaN(angle) ? 0 : angle;
+    }
+
+    @Override
+    public double getDistance(IFPoint fPoint) {
+        double dimX = fPoint.getX() - getX();
+        double dimY = fPoint.getY() - getY();
+        double dimZ = fPoint.getZ() - getZ();
+
+        return Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
+    }
+
+    @Override
+    public IFPoint setDistance(IFPoint fPoint, double distance) throws SamePositionException, IllegalArgumentException {
+
+        if (distance < 0) {
+            throw new IllegalArgumentException("The distance between IFPoints cannot be lower than zero");
+        }
+
+        if (this.equals(fPoint)) {
+            throw new SamePositionException("IFPoints must not be on the same position");
+        }
+
+        return this.sub(fPoint).setRadius(distance).add(fPoint);
+    }
+
+    @Override
     public double dProd(IFPoint fPoint) {
         double dProd, dimX, dimY, dimZ;
 
