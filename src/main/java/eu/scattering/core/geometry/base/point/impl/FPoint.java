@@ -202,6 +202,11 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
+    public IFPoint add(double factor) {
+        return add(factor, factor, factor);
+    }
+
+    @Override
     public IFPoint addX(double x) {
         return setX(getX() + x);
     }
@@ -224,6 +229,11 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     @Override
     public IFPoint sub(double x, double y, double z) {
         return subX(x).subY(y).subZ(z);
+    }
+
+    @Override
+    public IFPoint sub(double factor) {
+        return sub(factor, factor, factor);
     }
 
     @Override
@@ -252,6 +262,11 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
+    public IFPoint mul(double factor) {
+        return mul(factor, factor, factor);
+    }
+
+    @Override
     public IFPoint mulX(double x) {
         return setX(getX() * x);
     }
@@ -274,6 +289,11 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     @Override
     public IFPoint div(double x, double y, double z) {
         return divX(x).divY(y).divZ(z);
+    }
+
+    @Override
+    public IFPoint div(double factor) {
+        return div(factor, factor, factor);
     }
 
     @Override
@@ -303,11 +323,6 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
         }
 
         return setZ(getZ() / z);
-    }
-
-    @Override
-    public IFPoint scale(double scaleFactor) {
-        return mul(scaleFactor, scaleFactor, scaleFactor);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -405,6 +420,30 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
+    public double dProd(IFPoint fPoint) {
+        double dProd, dimX, dimY, dimZ;
+
+        dimX = getX() * fPoint.getX();
+        dimY = getY() * fPoint.getY();
+        dimZ = getZ() * fPoint.getZ();
+        dProd = dimX + dimY + dimZ;
+
+        return dProd;
+    }
+
+    @Override
+    public IFPoint cProd(IFPoint fPoint) {
+        double dimX, dimY, dimZ;
+
+        dimX = (getY() * fPoint.getZ()) - (getZ() * fPoint.getY());
+        dimY = (getZ() * fPoint.getX()) - (getX() * fPoint.getZ());
+        dimZ = (getX() * fPoint.getY()) - (getY() * fPoint.getX());
+        set(dimX, dimY, dimZ);
+
+        return this;
+    }
+
+    @Override
     public double getRadius() {
         return Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
     }
@@ -420,7 +459,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
             throw new SamePositionException("The origin is at the same position as the given point");
         }
 
-        return scale(radius / getRadius());
+        return mul(radius / getRadius());
     }
 
     @Override

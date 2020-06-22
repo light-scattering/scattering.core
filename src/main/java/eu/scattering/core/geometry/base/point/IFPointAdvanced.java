@@ -1,6 +1,7 @@
 package eu.scattering.core.geometry.base.point;
 
 import eu.scattering.core.exception.SamePositionException;
+import eu.scattering.core.geometry.base.vector.IFVector;
 
 public interface IFPointAdvanced {
 
@@ -19,5 +20,9 @@ public interface IFPointAdvanced {
     double getAzimuth();
     IFPoint setAzimuth(double azimuth);
 
+    double dProd(IFPoint fPoint);
+    IFPoint cProd(IFPoint fPoint);
+
     boolean isZero();
+
 }

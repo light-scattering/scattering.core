@@ -23,7 +23,7 @@ public class FactoryGeometry {
         return FVector.create();
     }
 
-    public static IFLine getIFLine() { return FLine.create(); }
+    public static IFLine getIFLine(IFVector fVector) { return FLine.create(fVector); }
 
     // -------------------------------------------------------------------------------------------------
     // The following section contains methods which should be considered as helpers.

@@ -4,6 +4,7 @@ import eu.scattering.core.geometry.base.point.IFPoint;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
 
@@ -51,6 +52,12 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
+    public T add(double factor) {
+        disassemble().forEach(e -> e.add(factor, factor, factor));
+        return self();
+    }
+
+    @Override
     public T addX(double x) {
         disassemble().forEach(e -> e.setX(e.getX() + x));
         return self();
@@ -77,6 +84,12 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     @Override
     public T sub(double x, double y, double z) {
         disassemble().forEach(e -> e.subX(x).subY(y).subZ(z));
+        return self();
+    }
+
+    @Override
+    public T sub(double factor) {
+        disassemble().forEach(e -> e.sub(factor, factor, factor));
         return self();
     }
 
@@ -111,6 +124,12 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
+    public T mul(double factor) {
+        disassemble().forEach(e -> e.mul(factor, factor, factor));
+        return self();
+    }
+
+    @Override
     public T mulX(double x) {
         disassemble().forEach(e -> e.setX(e.getX() * x));
         return self();
@@ -137,6 +156,12 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     @Override
     public T div(double x, double y, double z) {
         disassemble().forEach(e -> e.divX(x).divY(y).divZ(z));
+        return self();
+    }
+
+    @Override
+    public T div(double factor) {
+        disassemble().forEach(e -> e.div(factor, factor, factor));
         return self();
     }
 
@@ -183,12 +208,6 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
-    public T scale(double scaleFactor) {
-        disassemble().forEach(e -> e.mul(scaleFactor, scaleFactor, scaleFactor));
-        return self();
-    }
-
-    @Override
     public T imprint(T element) {
         element.set(self());
         return self();
@@ -201,12 +220,7 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
-    public double funNumber(Function<T, Double> exp) {
-        return exp.apply(self());
-    }
-
-    @Override
-    public boolean funLogical(Function<T, Boolean> exp) {
+    public double funValue(Function<T, Double> exp) {
         return exp.apply(self());
     }
 
@@ -217,13 +231,13 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
-    public double extNumber(Function<IGeometryAssembly, Double> exp) {
+    public double ext(Function<IGeometryAssembly, Double> exp) {
         return exp.apply(self());
     }
 
     @Override
-    public boolean extLogical(Function<IGeometryAssembly, Boolean> exp) {
-        return exp.apply(self());
+    public boolean ext(Predicate<IGeometryAssembly> exp) {
+        return exp.test(self());
     }
 
     // -------------------------------------------------------------------------------------------------

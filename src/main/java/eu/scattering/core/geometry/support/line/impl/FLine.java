@@ -1,8 +1,10 @@
 package eu.scattering.core.geometry.support.line.impl;
 
+import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.IGeometryAssembly;
 import eu.scattering.core.geometry.PresetGeometry;
 import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.vector.IFVector;
 import eu.scattering.core.geometry.support.line.IFLine;
 import org.json.JSONObject;
 
@@ -12,24 +14,56 @@ import java.util.function.Function;
 
 public class FLine extends PresetGeometry<IFLine> implements IFLine {
 
+    IFVector origin;
+
     private FLine() { }
 
-    public static IFLine create() {
-        return new FLine();
+    public static IFLine create(IFVector fVector) {
+        return new FLine().setOrigin(fVector);
+    }
+
+    @Override
+    public IFVector getOrigin() {
+        return origin;
+    }
+
+    @Override
+    public IFLine setOrigin(IFVector fVector) {
+
+        if (fVector == null) {
+            throw new NullPointerException("The reference IFVector cannot be null");
+        }
+
+        origin = fVector;
+
+        return this;
     }
 
     @Override
     public Consumer<IGeometryAssembly> project() {
-        return null;
+        // https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.
+        return (e) -> {
+            e.disassemble().forEach(p -> {
+                IFPoint d = FactoryGeometry.getIFPoint(origin.getHead())
+                        .sub(origin.getBase())
+                        .div(origin.getMagnitude());
+
+                IFPoint v = FactoryGeometry.getIFPoint(p)
+                        .sub(origin.getBase());
+
+                p.set(origin.getBase().copy().add(d.mul(v.dProd(d))));
+            });
+
+        };
     }
 
     @Override
     public Consumer<IGeometryAssembly> reflect() {
-        return null;
-    }
-
-    @Override
-    public Consumer<IGeometryAssembly> rotate() {
+//        return (e) -> {
+//            e.disassemble().forEach(p -> {
+//                IFPoint projection = project().accept(e);
+//            });
+//        }
         return null;
     }
 

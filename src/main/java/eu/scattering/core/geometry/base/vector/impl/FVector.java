@@ -15,6 +15,10 @@ import static eu.scattering.core.Configuration.jitter;
 
 public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
+    // -------------------------------------------------------------------------------------------------
+    // The following fields must be redefined while extending the class.
+    // -------------------------------------------------------------------------------------------------
+
     private IFPoint[] origin = new IFPoint[2];
 
     private FVector() { }
@@ -28,7 +32,101 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         return fVector;
     }
 
-//--------------------------------------------------
+    @Override
+    public IFPoint getBase() {
+        return origin[0];
+    }
+
+    @Override
+    public IFVector setBaseRef(IFPoint baseRef) {
+
+        if (baseRef == null) {
+            throw new NullPointerException(" The base IFPoint must not be null");
+        }
+
+        if (baseRef == getHead()) {
+            throw new IllegalArgumentException("The base/head IFPoints must not point to the same instance");
+        }
+
+        origin[0] = baseRef;
+
+        return this;
+    }
+
+    @Override
+    public IFPoint getHead() {
+        return origin[1];
+    }
+
+    @Override
+    public IFVector setHeadRef(IFPoint headRef) {
+
+        if (headRef == null) {
+            throw new NullPointerException(" The head IFPoint must not be null");
+        }
+
+        if (headRef == getBase()) {
+            throw new IllegalArgumentException("The base/head IFPoints must not point to the same instance");
+        }
+
+        origin[1] = headRef;
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+    // The following fields do not have to modified while extending the class.
+    // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FVector setBase(IFPoint base) {
+        getBase().set(base);
+
+        return this;
+    }
+
+    @Override
+    public IFVector setHead(IFPoint head) {
+        getHead().set(head);
+
+        return this;
+    }
+
+    @Override
+    public FVector set(IFVector fVector) {
+        setBase(fVector.getBase());
+        setHead(fVector.getHead());
+
+        return this;
+    }
+
+    @Override
+    public FVector set(IFPoint base, IFPoint head) {
+        setBase(base);
+        setHead(head);
+
+        return this;
+    }
+
+    @Override
+    public IFVector setRef(IFPoint baseRef, IFPoint headRef) {
+        setBaseRef(baseRef);
+        setHeadRef(headRef);
+
+        return this;
+    }
+
+    @Override
+    public IFVector swap(IFVector element) {
+
+        getBase().swap(element.getBase());
+        getHead().swap(element.getHead());
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isExact(IFVector fVector) {
@@ -37,7 +135,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
             return true;
         }
 
-        return origin[0].isExact(fVector.getBase()) && origin[1].isExact(fVector.getHead());
+        return getBase().isExact(fVector.getBase()) && getHead().isExact(fVector.getHead());
     }
 
     @Override
@@ -47,15 +145,51 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
             return true;
         }
 
-        return origin[0].isSimilar(fVector.getBase()) && origin[1].isSimilar(fVector.getHead());
+        return getBase().isSimilar(fVector.getBase()) && getHead().isSimilar(fVector.getHead());
     }
+
+    @Override
+    public JSONObject exportToJSON() {
+        JSONObject json = new JSONObject();
+        json.append("assembly", getBase().exportToJSON());
+        json.append("assembly", getHead().exportToJSON());
+
+        return json;
+    }
+
+    @Override
+    public IFVector importFromJSON(JSONObject json) {
+        JSONArray structure = json.getJSONArray("assembly");
+
+        setBaseRef(FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(0)));
+        setHeadRef(FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(1)));
+
+        return this;
+    }
+
+    @Override
+    public FVector copy() {
+        FVector fVector = new FVector();
+
+        fVector.setBaseRef(FactoryGeometry.getIFPoint(getBase()));
+        fVector.setHeadRef(FactoryGeometry.getIFPoint(getHead()));
+
+        return fVector;
+    }
+
+    @Override
+    public IFVector self() {
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
         int hashCode = 7;
 
-        hashCode = 31 * hashCode + origin[0].hashCode();
-        hashCode = 31 * hashCode + origin[1].hashCode();
+        hashCode = 31 * hashCode + getBase().hashCode();
+        hashCode = 31 * hashCode + getHead().hashCode();
 
         return hashCode;
     }
@@ -75,162 +209,24 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         return copy();
     }
 
-    @Override
-    public JSONObject exportToJSON() {
-        JSONObject json = new JSONObject();
-        json.append("assembly", origin[0].exportToJSON());
-        json.append("assembly", origin[1].exportToJSON());
-
-        return json;
-    }
-
-    @Override
-    public IFVector importFromJSON(JSONObject json) {
-        JSONArray structure = json.getJSONArray("assembly");
-
-        origin[0] = FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(0));
-        origin[1] = FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(1));
-
-        return this;
-    }
-
-    @Override
-    public FVector copy() {
-        FVector fVector = new FVector();
-
-        fVector.origin[0] = FactoryGeometry.getIFPoint().set(origin[0]);
-        fVector.origin[1] = FactoryGeometry.getIFPoint().set(origin[1]);
-
-        return fVector;
-    }
-
-//--------------------------------------------------
-
-    @Override
-    public FVector set(IFVector fVector) {
-        origin[0].set(fVector.getBase());
-        origin[1].set(fVector.getHead());
-
-        return this;
-    }
-
-    @Override
-    public IFVector swap(IFVector element) {
-
-        getBase().swap(element.getBase());
-        getHead().swap(element.getHead());
-
-        return this;
-    }
-
-    @Override
-    public FVector set(IFPoint base, IFPoint head) {
-        origin[0].set(base);
-        origin[1].set(head);
-
-        return this;
-    }
-
-    @Override
-    public IFVector setRef(IFPoint baseRef, IFPoint headRef) {
-
-        if (baseRef == null) {
-            throw new NullPointerException(" The base IFPoint must not be null");
-        }
-
-        if (headRef == null) {
-            throw new NullPointerException(" The head IFPoint must not be null");
-        }
-
-        if (baseRef == headRef) {
-            throw new IllegalArgumentException("The base/head IFPoints must not be the same instances");
-        }
-
-        origin[0] = baseRef;
-        origin[1] = headRef;
-
-        return this;
-    }
-
-
-    @Override
-    public IFPoint getBase() {
-        return origin[0];
-    }
-
-    @Override
-    public FVector setBase(IFPoint base) {
-        origin[0].set(base);
-
-        return this;
-    }
-
-    @Override
-    public IFVector setBaseRef(IFPoint baseRef) {
-
-        if (baseRef == null) {
-            throw new NullPointerException(" The base IFPoint must not be null");
-        }
-
-        if (baseRef == origin[1]) {
-            throw new IllegalArgumentException("The base/head IFPoints must not be the same instances");
-        }
-
-        origin[0] = baseRef;
-
-        return this;
-    }
-
-    @Override
-    public IFPoint getHead() {
-        return origin[1];
-    }
-
-    @Override
-    public IFVector setHead(IFPoint head) {
-        origin[1].set(head);
-
-        return this;
-    }
-
-    @Override
-    public IFVector setHeadRef(IFPoint headRef) {
-
-        if (headRef == null) {
-            throw new NullPointerException(" The head IFPoint must not be null");
-        }
-
-        if (headRef == origin[0]) {
-            throw new IllegalArgumentException("The base/head IFPoints must not be the same instances");
-        }
-
-        origin[1] = headRef;
-
-        return this;
-    }
-
 //--------------------------------------------------
 
     @Override
     public List<IFPoint> disassemble() {
         List<IFPoint> fPointList = new ArrayList<>();
-        fPointList.add(origin[0]);
-        fPointList.add(origin[1]);
+        fPointList.add(getBase());
+        fPointList.add(getHead());
 
         return fPointList;
     }
 
-    @Override
-    public IFVector self() {
-        return this;
-    }
 //--------------------------------------------------
 
     @Override
     public IFVector setSphericalCoordinates(double polar, double azimuthal) {
 
         originShift();
-        origin[1].setSphericalCoordinates(polar, azimuthal);
+        getHead().setSphericalCoordinates(polar, azimuthal);
         originRestore();
 
         return this;
@@ -242,11 +238,11 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         IFPoint[] excludeShift = new IFPoint[exclude.length];
 
         for (int i = 0 ; i < exclude.length ; i++ ) {
-            excludeShift[i] = exclude[i].copy().sub(origin[0]);
+            excludeShift[i] = exclude[i].copy().sub(getBase());
         }
 
         originShift();
-        origin[1].setRandom(excludeShift);
+        getHead().setRandom(excludeShift);
         originRestore();
 
         return this;
@@ -259,10 +255,10 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector relocateBase(IFPoint base) {
-        IFPoint translation = FactoryGeometry.getIFPoint().set(base).sub(origin[0]);
+        IFPoint translation = FactoryGeometry.getIFPoint().set(base).sub(getBase());
 
-        origin[0].set(base);
-        origin[1].add(translation);
+        getBase().set(base);
+        getHead().add(translation);
 
         return this;
     }
@@ -274,10 +270,10 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector relocateHead(IFPoint head) {
-        IFPoint translation = FactoryGeometry.getIFPoint().set(head).sub(origin[1]);
+        IFPoint translation = FactoryGeometry.getIFPoint().set(head).sub(getHead());
 
-        origin[0].add(translation);
-        origin[1].set(head);
+        getBase().add(translation);
+        getHead().set(head);
 
         return this;
     }
@@ -286,7 +282,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public IFVector add(IFVector fVector) {
 
         originShift(fVector);
-        origin[1].add(fVector.getHead());
+        getHead().add(fVector.getHead());
         originRestore(fVector);
 
         return this;
@@ -296,7 +292,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public IFVector sub(IFVector fVector) {
 
         originShift(fVector);
-        origin[1].sub(fVector.getHead());
+        getHead().sub(fVector.getHead());
         originRestore(fVector);
 
         return this;
@@ -304,24 +300,24 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public double getDimX() {
-        return Math.abs(origin[1].getX() - origin[0].getX());
+        return Math.abs(getHead().getX() - getBase().getX());
     }
 
     @Override
     public double getDimY() {
-        return Math.abs(origin[1].getY() - origin[0].getY());
+        return Math.abs(getHead().getY() - getBase().getY());
     }
 
     @Override
     public double getDimZ() {
-        return Math.abs(origin[1].getZ() - origin[0].getZ());
+        return Math.abs(getHead().getZ() - getBase().getZ());
     }
 
     @Override
     public IFVector normalize() {
 
         originShift();
-        origin[1].normalize();
+        getHead().normalize();
         originRestore();
 
         return this;
@@ -331,7 +327,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public IFVector reflect() {
 
         originShift();
-        origin[1].reflect();
+        getHead().reflect();
         originRestore();
 
         return this;
@@ -339,10 +335,10 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector invert() {
-        IFPoint container = origin[1].copy();
+        IFPoint container = getHead().copy();
 
-        origin[1].set(origin[0]);
-        origin[0].set(container);
+        getHead().set(getBase());
+        getBase().set(container);
 
         return this;
     }
@@ -350,9 +346,9 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     @Override
     public double getMagnitude() {
 
-        double distanceX = origin[1].getX() - origin[0].getX();
-        double distanceY = origin[1].getY() - origin[0].getY();
-        double distanceZ = origin[1].getZ() - origin[0].getZ();
+        double distanceX = getHead().getX() - getBase().getX();
+        double distanceY = getHead().getY() - getBase().getY();
+        double distanceZ = getHead().getZ() - getBase().getZ();
 
         return Math.sqrt((distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ));
     }
@@ -361,7 +357,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public IFVector setMagnitude(double magnitude) throws SamePositionException {
 
         originShift();
-        origin[1].setRadius(magnitude);
+        getHead().setRadius(magnitude);
         originRestore();
 
         return this;
@@ -372,7 +368,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         double inclination;
 
         originShift();
-        inclination = origin[1].getInclination();
+        inclination = getHead().getInclination();
         originRestore();
 
         return inclination;
@@ -382,7 +378,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public IFVector setInclination(double inclination) {
 
         originShift();
-        origin[1].setInclination(inclination);
+        getHead().setInclination(inclination);
         originRestore();
 
         return this;
@@ -393,7 +389,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         double azimuth;
 
         originShift();
-        azimuth = origin[1].getAzimuth();
+        azimuth = getHead().getAzimuth();
         originRestore();
 
         return azimuth;
@@ -403,7 +399,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public IFVector setAzimuth(double azimuth) {
 
         originShift();
-        origin[1].setAzimuth(azimuth);
+        getHead().setAzimuth(azimuth);
         originRestore();
 
         return this;
@@ -424,13 +420,10 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public double dProd(IFVector fVector) {
-        double dProd, dimX, dimY, dimZ;
+        double dProd;
 
         originShift(fVector);
-        dimX = origin[1].getX() * fVector.getHead().getX();
-        dimY = origin[1].getY() * fVector.getHead().getY();
-        dimZ = origin[1].getZ() * fVector.getHead().getZ();
-        dProd = dimX + dimY + dimZ;
+        dProd = getHead().dProd(fVector.getHead());
         originRestore(fVector);
 
         return dProd;
@@ -438,13 +431,9 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector cProd(IFVector fVector) {
-        double dimX, dimY, dimZ;
 
         originShift(fVector);
-        dimX = (origin[1].getY() * fVector.getHead().getZ()) - (origin[1].getZ() * fVector.getHead().getY());
-        dimY = (origin[1].getZ() * fVector.getHead().getX()) - (origin[1].getX() * fVector.getHead().getZ());
-        dimZ = (origin[1].getX() * fVector.getHead().getY()) - (origin[1].getY() * fVector.getHead().getX());
-        origin[1].set(dimX, dimY, dimZ);
+        getHead().cProd(fVector.getHead());
         originRestore(fVector);
 
         return this;
@@ -476,7 +465,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 //--------------------------------------------------
 
     private void originShift() {
-        origin[1].sub(origin[0]);
+        getHead().sub(getBase());
     }
 
     private IFPoint originShift(IFVector fVector) {
@@ -486,7 +475,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     private void originRestore() {
-        origin[1].add(origin[0]);
+        getHead().add(getBase());
     }
 
     private IFPoint originRestore(IFVector fVector) {
