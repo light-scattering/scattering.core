@@ -16,43 +16,68 @@ public class FactoryGeometry {
     // -------------------------------------------------------------------------------------------------
 
     public static IFPoint getIFPoint() {
+
         return FPoint.create();
     }
 
     public static IFVector getIFVector() {
+
         return FVector.create();
     }
 
-    public static IFLine getIFLine(IFVector fVector) { return FLine.create(fVector); }
+    public static IFLine getIFLine() {
+
+        return FLine.create();
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following section contains methods which should be considered as helpers.
     // All of them base on the previous section and should be independent of the used implementation.
     // -------------------------------------------------------------------------------------------------
 
-    public static IFPoint getIFPoint(double x) { return getIFPoint().setX(x); }
+    public static IFPoint getIFPoint(double x) {
 
-    public static IFPoint getIFPoint(double x, double y) { return getIFPoint().setX(x).setY(y); }
+        return getIFPoint().setX(x);
+    }
+
+    public static IFPoint getIFPoint(double x, double y) {
+
+        return getIFPoint().setX(x).setY(y);
+    }
 
     public static IFPoint getIFPoint(double x, double y, double z) {
+
         return getIFPoint().set(x, y, z);
     }
 
-    public static IFPoint getIFPoint(IFPoint fPoint) { return getIFPoint().set(fPoint); }
+    public static IFPoint getIFPoint(IFPoint fPoint) {
+
+        return getIFPoint().set(fPoint);
+    }
 
     public static IFVector getIFVector(double x, double y, double z) {
+
         return getIFVector().setHeadRef(getIFPoint(x, y, z));
     }
 
     public static IFVector getIFVector(IFPoint head) {
+
         return getIFVector().setHeadRef(head);
     }
 
     public static IFVector getIFVector(IFPoint base, IFPoint head) {
+
         return getIFVector().setRef(base, head);
     }
 
     public static IFVector getIFVector(IFVector fVector) {
+
         return getIFVector().set(fVector);
     }
+
+    public static IFLine getIFLine(IFVector fVector) {
+
+        return FLine.create().setOriginRef(fVector);
+    }
+
 }

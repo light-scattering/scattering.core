@@ -145,11 +145,13 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     @Override
     public IFPoint copy() {
+
         return new FPoint().set(this);
     }
 
     @Override
     public IFPoint self() {
+
         return this;
     }
 

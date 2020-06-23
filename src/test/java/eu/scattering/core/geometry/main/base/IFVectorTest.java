@@ -1826,6 +1826,7 @@ public class IFVectorTest {
     }
 
     @Nested
+    @Tag("Core")
     @DisplayName("Core features")
     class IFCoreFeatures {
 
@@ -1955,6 +1956,7 @@ public class IFVectorTest {
     }
 
     @Nested
+    @Tag("Algebra")
     @DisplayName("Base algebra")
     class IBaseAlgebra {
 

@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public interface IGeometrySupport<T> {
 
-    T setOrigin(IFVector origin);
+    T setOriginRef(IFVector origin);
 
     IFVector getOrigin();
 

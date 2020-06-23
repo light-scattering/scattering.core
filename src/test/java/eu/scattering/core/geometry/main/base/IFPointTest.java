@@ -37,7 +37,7 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Constructor")
+        @DisplayName("Construct")
         void construct() {
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
@@ -1108,6 +1108,7 @@ public class IFPointTest {
     }
 
     @Nested
+    @Tag("Core")
     @DisplayName("Core features")
     class ICoreFeatures {
 
@@ -1142,6 +1143,18 @@ public class IFPointTest {
             assertAll("Check combinations",
                     () -> assertTrue(fPointRef.isExact(fPointOp), "IFPoints should be equal"),
                     () -> assertTrue(fPointOp.isExact(fPointRef), "IFPoints should be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (fail)")
+        void isExactFail() {
+            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
+            IFPoint fPointOp = FactoryGeometry.getIFPoint(refX, refY, refZ).add(0.5 * jitter);
+
+            assertAll("Check combinations",
+                    () -> assertFalse(fPointRef.isExact(fPointOp), "IFPoints should not be equal"),
+                    () -> assertFalse(fPointOp.isExact(fPointRef), "IFPoints should not be equal")
             );
         }
 
@@ -1207,7 +1220,7 @@ public class IFPointTest {
             IFPoint fPointRefB = FactoryGeometry.getIFPoint(refX, refY, refZ);
 
             assertEquals(fPointRefA.hashCode(), fPointRefB.hashCode(),
-                    "Two identical points should have the same hash code");
+                    "Two identical IFPoints should have the same hash code");
         }
 
         @Test
@@ -1216,7 +1229,7 @@ public class IFPointTest {
             IFPoint fPointRefA = FactoryGeometry.getIFPoint(refX, refY, refZ);
 
             assertNotEquals(fPointRefA.hashCode(), FactoryGeometry.getIFPoint().hashCode(),
-                    "The different points should not have the same hash code");
+                    "The different IFPoints should not have the same hash code");
         }
 
         @Test
@@ -1225,7 +1238,7 @@ public class IFPointTest {
             IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
             IFPoint fPoint = fPointRef.copy();
 
-            assertAll("Validate similarity",
+            assertAll("Validate copy",
                     () -> assertNotSame(fPointRef, fPoint,
                             "FPoints represent different objects"),
                     () -> assertEquals(fPointRef, fPoint,
@@ -1238,6 +1251,7 @@ public class IFPointTest {
     }
 
     @Nested
+    @Tag("Algebra")
     @DisplayName("Base algebra")
     class IBaseAlgebra {
 
