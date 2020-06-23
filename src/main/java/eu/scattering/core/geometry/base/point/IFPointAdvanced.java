@@ -9,7 +9,9 @@ public interface IFPointAdvanced {
     IFPoint setRandom(IFPoint ...exclude);
 
     IFPoint normalize();
+
     IFPoint reflect();
+    IFPoint reflect(IFPoint fPoint);
 
     double getRadius();
     IFPoint setRadius(double radius) throws SamePositionException, IllegalArgumentException;

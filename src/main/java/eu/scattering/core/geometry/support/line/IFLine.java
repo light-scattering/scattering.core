@@ -6,8 +6,10 @@ import eu.scattering.core.geometry.IGeometryDebug;
 import eu.scattering.core.geometry.IGeometryAssembly;
 import eu.scattering.core.geometry.base.vector.IFVector;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public interface IFLine extends IGeometryBase<IFLine>, IGeometryDebug<IFLine>, IGeometryAlgebra<IFLine> {
 
@@ -19,11 +21,7 @@ public interface IFLine extends IGeometryBase<IFLine>, IGeometryDebug<IFLine>, I
 
     Consumer<IGeometryAssembly> reflect();
 
-//    Consumer<IGeometryAssembly> rotate();
+    Function<IGeometryAssembly, List<Double>> getDistance();
 
-    Function<IGeometryAssembly, Double> getDistance();
-
-    Function<IGeometryAssembly, Boolean> belongsTo();
-
-    Function<IGeometryAssembly, Boolean> isCloseTo();
+    Function<IGeometryAssembly, List<Boolean>> isCloseTo();
 }

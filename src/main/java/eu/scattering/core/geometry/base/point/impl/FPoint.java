@@ -383,6 +383,11 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
+    public IFPoint reflect(IFPoint fPoint) {
+        return sub(fPoint).reflect().add(fPoint);
+    }
+
+    @Override
     public double getInclination() {
         return Math.acos(getY() / Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ())));
     }

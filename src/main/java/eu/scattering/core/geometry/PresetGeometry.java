@@ -2,6 +2,7 @@ package eu.scattering.core.geometry;
 
 import eu.scattering.core.geometry.base.point.IFPoint;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -220,8 +221,13 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
-    public double funValue(Function<T, Double> exp) {
+    public double funVal(Function<T, Double> exp) {
         return exp.apply(self());
+    }
+
+    @Override
+    public boolean funLog(Predicate<T> exp) {
+        return exp.test(self());
     }
 
     @Override
@@ -231,13 +237,13 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
-    public double ext(Function<IGeometryAssembly, Double> exp) {
+    public List<Double> extVal(Function<IGeometryAssembly, List<Double>> exp) {
         return exp.apply(self());
     }
 
     @Override
-    public boolean ext(Predicate<IGeometryAssembly> exp) {
-        return exp.test(self());
+    public List<Boolean> extLog(Function<IGeometryAssembly, List<Boolean>> exp) {
+        return exp.apply(self());
     }
 
     // -------------------------------------------------------------------------------------------------

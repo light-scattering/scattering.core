@@ -11,7 +11,11 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import static eu.scattering.core.Configuration.jitter;
+
+// https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.
 public class FLine extends PresetGeometry<IFLine> implements IFLine {
 
     IFVector origin;
@@ -41,48 +45,44 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
 
     @Override
     public Consumer<IGeometryAssembly> project() {
-        // https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.
-        return (e) -> e.disassemble().forEach(p -> {
-            IFPoint opA = FactoryGeometry.getIFPoint(origin.getHead()).sub(origin.getBase()).div(origin.getRadius());
-            IFPoint opB = FactoryGeometry.getIFPoint(p).sub(origin.getBase());
 
-            p.set(origin.getBase().copy().add(opA.mul(opB.dProd(opA))));
-        });
+        return (e) -> e.disassemble()
+                .forEach(p -> projectIFPoint(p));
     }
 
     @Override
     public Consumer<IGeometryAssembly> reflect() {
-//        return (e) -> {
-//            e.disassemble().forEach(p -> {
-//                IFPoint projection = project().accept(e);
-//            });
-//        }
-        return null;
+
+        return (e) -> e.disassemble()
+                .forEach(p -> p.reflect(projectIFPoint(p.copy())));
     }
 
     @Override
-    public Function<IGeometryAssembly, Double> getDistance() {
-        return (e) -> (double) e.disassemble().size();
+    public Function<IGeometryAssembly, List<Double>> getDistance() {
+
+        return (e) -> e.disassemble().stream()
+                .map(p -> p.getDistance(projectIFPoint(p.copy())))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Function<IGeometryAssembly, Boolean> belongsTo() {
-        return null;
-    }
+    public Function<IGeometryAssembly, List<Boolean>> isCloseTo() {
 
-    @Override
-    public Function<IGeometryAssembly, Boolean> isCloseTo() {
-        return null;
+        return (e) -> e.disassemble().stream()
+                .map(p -> p.getDistance(projectIFPoint(p.copy())) < jitter)
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean isExact(IFLine element) {
-        return false;
+
+        return getOrigin().isExact(element.getOrigin());
     }
 
     @Override
     public boolean isSimilar(IFLine element) {
-        return false;
+
+        return getOrigin().isSimilar(element.getOrigin());
     }
 
     @Override
@@ -107,7 +107,8 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
 
     @Override
     public Object clone() {
-        return null;
+
+        return this;
     }
 
     @Override
@@ -132,11 +133,22 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
 
     @Override
     public IFLine swap(IFLine element) {
-        return null;
+
+        getOrigin().swap(element.getOrigin());
+
+        return this;
     }
 
     @Override
     public List<IFPoint> disassemble() {
-        return null;
+
+        return getOrigin().disassemble();
+    }
+
+    private IFPoint projectIFPoint(IFPoint fPoint) {
+        IFPoint opA = FactoryGeometry.getIFPoint(origin.getHead()).sub(origin.getBase()).div(origin.getRadius());
+        IFPoint opB = FactoryGeometry.getIFPoint(fPoint).sub(origin.getBase());
+
+        return fPoint.set(origin.getBase().copy().add(opA.mul(opB.dProd(opA))));
     }
 }
