@@ -1,27 +1,26 @@
 package eu.scattering.core.geometry.support.line;
 
-import eu.scattering.core.geometry.IGeometryAlgebra;
+import eu.scattering.core.geometry.main.IGeometryAlgebra;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.geometry.IGeometryDebug;
-import eu.scattering.core.geometry.IGeometryAssembly;
-import eu.scattering.core.geometry.base.vector.IFVector;
+import eu.scattering.core.geometry.main.IGeometryAssembly;
+import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.geometry.support.IGeometrySupport;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
-public interface IFLine extends IGeometryBase<IFLine>, IGeometryDebug<IFLine>, IGeometryAlgebra<IFLine> {
+public interface IFLine extends IGeometryBase<IFLine>, IGeometryDebug<IFLine>, IGeometrySupport<IFLine> {
 
-    IFVector getOrigin();
+    enum Mode {LINE, RAY, SEGMENT}
 
-    IFLine setOrigin(IFVector fVector);
+    Consumer<IGeometryAssembly> project(Mode mode);
 
-    Consumer<IGeometryAssembly> project();
+    Consumer<IGeometryAssembly> reflect(Mode mode);
 
-    Consumer<IGeometryAssembly> reflect();
+    Function<IGeometryAssembly, List<Double>> getDistance(Mode mode);
 
-    Function<IGeometryAssembly, List<Double>> getDistance();
+    Function<IGeometryAssembly, List<Boolean>> isCloseTo(Mode mode);
 
-    Function<IGeometryAssembly, List<Boolean>> isCloseTo();
 }

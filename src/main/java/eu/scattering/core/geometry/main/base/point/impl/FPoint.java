@@ -1,8 +1,8 @@
-package eu.scattering.core.geometry.base.point.impl;
+package eu.scattering.core.geometry.main.base.point.impl;
 
 import eu.scattering.core.exception.SamePositionException;
-import eu.scattering.core.geometry.PresetGeometry;
-import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.main.PresetGeometry;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

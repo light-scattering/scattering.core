@@ -1,12 +1,11 @@
 package eu.scattering.core.geometry.support.line.impl;
 
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.IGeometryAssembly;
-import eu.scattering.core.geometry.PresetGeometry;
-import eu.scattering.core.geometry.base.point.IFPoint;
-import eu.scattering.core.geometry.base.vector.IFVector;
+import eu.scattering.core.geometry.main.IGeometryAssembly;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.geometry.support.PresetGeometry;
 import eu.scattering.core.geometry.support.line.IFLine;
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -46,27 +45,37 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     @Override
     public Consumer<IGeometryAssembly> project() {
 
+        return project(Mode.LINE);
+    }
+
+    @Override
+    public Consumer<IGeometryAssembly> project(Mode mode) {
+
         return (e) -> e.disassemble()
-                .forEach(p -> projectIFPoint(p));
+                .forEach(this::projectIFPoint);
     }
 
     @Override
     public Consumer<IGeometryAssembly> reflect() {
+
+        return reflect(Mode.LINE);
+    }
+
+    @Override
+    public Consumer<IGeometryAssembly> reflect(Mode mode) {
 
         return (e) -> e.disassemble()
                 .forEach(p -> p.reflect(projectIFPoint(p.copy())));
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Double>> getDistance() {
+    public Function<IGeometryAssembly, List<Boolean>> isCloseTo() {
 
-        return (e) -> e.disassemble().stream()
-                .map(p -> p.getDistance(projectIFPoint(p.copy())))
-                .collect(Collectors.toList());
+        return isCloseTo(Mode.LINE);
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Boolean>> isCloseTo() {
+    public Function<IGeometryAssembly, List<Boolean>> isCloseTo(Mode mode) {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectIFPoint(p.copy())) < jitter)
@@ -74,75 +83,44 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     }
 
     @Override
-    public boolean isExact(IFLine element) {
+    public Function<IGeometryAssembly, List<Double>> getDistance() {
 
-        return getOrigin().isExact(element.getOrigin());
+        return getDistance(Mode.LINE);
     }
 
     @Override
-    public boolean isSimilar(IFLine element) {
+    public Function<IGeometryAssembly, List<Double>> getDistance(Mode mode) {
 
-        return getOrigin().isSimilar(element.getOrigin());
-    }
-
-    @Override
-    public JSONObject exportToJSON() {
-        return null;
-    }
-
-    @Override
-    public IFLine importFromJSON(JSONObject json) {
-        return null;
+        return (e) -> e.disassemble().stream()
+                .map(p -> p.getDistance(projectIFPoint(p.copy())))
+                .collect(Collectors.toList());
     }
 
     @Override
     public IFLine copy() {
+
         return null;
     }
 
     @Override
     public IFLine self() {
-        return null;
+
+        return this;
     }
 
     @Override
     public Object clone() {
-
-        return this;
+        return null;
     }
 
     @Override
     public boolean equals(Object object) {
+
+        if (object instanceof IFLine) {
+            return isExact((IFLine) object);
+        }
+
         return false;
-    }
-
-    @Override
-    public IFLine devDescribe() {
-        return null;
-    }
-
-    @Override
-    public IFLine devDescribe(String message) {
-        return null;
-    }
-
-    @Override
-    public IFLine set(IFLine element) {
-        return null;
-    }
-
-    @Override
-    public IFLine swap(IFLine element) {
-
-        getOrigin().swap(element.getOrigin());
-
-        return this;
-    }
-
-    @Override
-    public List<IFPoint> disassemble() {
-
-        return getOrigin().disassemble();
     }
 
     private IFPoint projectIFPoint(IFPoint fPoint) {
@@ -151,4 +129,5 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
 
         return fPoint.set(origin.getBase().copy().add(opA.mul(opB.dProd(opA))));
     }
+
 }

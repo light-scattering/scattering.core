@@ -1,7 +1,6 @@
-package eu.scattering.core.geometry.base.point;
+package eu.scattering.core.geometry.main.base.point;
 
 import eu.scattering.core.exception.SamePositionException;
-import eu.scattering.core.geometry.base.vector.IFVector;
 
 public interface IFPointAdvanced {
 

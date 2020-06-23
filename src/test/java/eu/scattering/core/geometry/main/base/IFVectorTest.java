@@ -1,9 +1,9 @@
-package eu.scattering.core.geometry;
+package eu.scattering.core.geometry.main.base;
 
 import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.base.point.IFPoint;
-import eu.scattering.core.geometry.base.vector.IFVector;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 

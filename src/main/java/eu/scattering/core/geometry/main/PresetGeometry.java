@@ -1,6 +1,10 @@
-package eu.scattering.core.geometry;
+package eu.scattering.core.geometry.main;
 
-import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.IGeometryBase;
+import eu.scattering.core.geometry.IGeometryDebug;
+import eu.scattering.core.geometry.main.IGeometryAlgebra;
+import eu.scattering.core.geometry.main.IGeometryAssembly;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,6 +26,7 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
 
     @Override
     public String toString() {
+
         return exportToJSON().toString();
     }
 
@@ -42,132 +47,175 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
 
     @Override
     public T add(IFPoint fPoint) {
+
         disassemble().forEach(e -> e.add(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+
         return self();
     }
 
     @Override
     public T add(double x, double y, double z) {
+
         disassemble().forEach(e -> e.addX(x).addY(y).addZ(z));
+
         return self();
     }
 
     @Override
     public T add(double factor) {
+
         disassemble().forEach(e -> e.add(factor, factor, factor));
+
         return self();
     }
 
     @Override
     public T addX(double x) {
+
         disassemble().forEach(e -> e.setX(e.getX() + x));
+
         return self();
     }
 
     @Override
     public T addY(double y) {
+
         disassemble().forEach(e -> e.setY(e.getY() + y));
+
         return self();
     }
 
     @Override
     public T addZ(double z) {
+
         disassemble().forEach(e -> e.setZ(e.getZ() + z));
+
         return self();
     }
 
     @Override
     public T sub(IFPoint fPoint) {
+
         disassemble().forEach(e -> e.sub(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+
         return self();
     }
 
     @Override
     public T sub(double x, double y, double z) {
+
         disassemble().forEach(e -> e.subX(x).subY(y).subZ(z));
+
         return self();
     }
 
     @Override
     public T sub(double factor) {
+
         disassemble().forEach(e -> e.sub(factor, factor, factor));
+
         return self();
     }
 
     @Override
     public T subX(double x) {
+
         disassemble().forEach(e -> e.setX(e.getX() - x));
+
         return self();
     }
 
     @Override
     public T subY(double y) {
+
         disassemble().forEach(e -> e.setY(e.getY() - y));
+
         return self();
     }
 
     @Override
     public T subZ(double z) {
+
         disassemble().forEach(e -> e.setZ(e.getZ() - z));
+
         return self();
     }
 
     @Override
     public T mul(IFPoint fPoint) {
+
         disassemble().forEach(e -> e.mul(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+
         return self();
     }
 
     @Override
     public T mul(double x, double y, double z) {
+
         disassemble().forEach(e -> e.mulX(x).mulY(y).mulZ(z));
+
         return self();
     }
 
     @Override
     public T mul(double factor) {
+
         disassemble().forEach(e -> e.mul(factor, factor, factor));
+
         return self();
     }
 
     @Override
     public T mulX(double x) {
+
         disassemble().forEach(e -> e.setX(e.getX() * x));
+
         return self();
     }
 
     @Override
     public T mulY(double y) {
+
         disassemble().forEach(e -> e.setY(e.getY() * y));
+
         return self();
     }
 
     @Override
     public T mulZ(double z) {
+
         disassemble().forEach(e -> e.setZ(e.getZ() * z));
+
         return self();
     }
 
     @Override
     public T div(IFPoint fPoint) {
+
         disassemble().forEach(e -> e.div(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+
         return self();
     }
 
     @Override
     public T div(double x, double y, double z) {
+
         disassemble().forEach(e -> e.divX(x).divY(y).divZ(z));
+
         return self();
     }
 
     @Override
     public T div(double factor) {
+
         disassemble().forEach(e -> e.div(factor, factor, factor));
+
         return self();
     }
 
     @Override
     public T divX(double x) {
+
         disassemble().forEach(e -> {
 
             if (x == 0) {
@@ -182,6 +230,7 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
 
     @Override
     public T divY(double y) {
+
         disassemble().forEach(e -> {
 
             if (y == 0) {
@@ -196,6 +245,7 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
 
     @Override
     public T divZ(double z) {
+
         disassemble().forEach(e -> {
 
             if (z == 0) {
@@ -210,39 +260,49 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
 
     @Override
     public T imprint(T element) {
+
         element.set(self());
+
         return self();
     }
 
     @Override
     public T fun(Consumer<T> exp) {
+
         exp.accept(self());
+
         return self();
     }
 
     @Override
     public double funVal(Function<T, Double> exp) {
+
         return exp.apply(self());
     }
 
     @Override
     public boolean funLog(Predicate<T> exp) {
+
         return exp.test(self());
     }
 
     @Override
     public T ext(Consumer<IGeometryAssembly> exp) {
+
         exp.accept(self());
+
         return self();
     }
 
     @Override
     public List<Double> extVal(Function<IGeometryAssembly, List<Double>> exp) {
+
         return exp.apply(self());
     }
 
     @Override
     public List<Boolean> extLog(Function<IGeometryAssembly, List<Boolean>> exp) {
+
         return exp.apply(self());
     }
 
@@ -250,13 +310,17 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
 
     @Override
     public T devDescribe() {
+
         debugPrintStream.println(toString());
+
         return self();
     }
 
     @Override
     public T devDescribe(String message) {
+
         debugPrintStream.println(message + " - " + toString());
+
         return self();
     }
 

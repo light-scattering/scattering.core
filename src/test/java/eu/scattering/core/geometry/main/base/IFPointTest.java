@@ -1,8 +1,8 @@
-package eu.scattering.core.geometry;
+package eu.scattering.core.geometry.main.base;
 
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.exception.SamePositionException;
-import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -1386,7 +1386,7 @@ public class IFPointTest {
         @Test
         @DisplayName("Add Y (validate references)")
         void addYValidateReferences() {
-            IFPoint fPointRef = fPoint.addY(opX);
+            IFPoint fPointRef = fPoint.addY(opY);
 
             assertSame(fPointRef, fPoint, "The reference should remain unchanged");
         }
@@ -1540,7 +1540,7 @@ public class IFPointTest {
         @Test
         @DisplayName("Sub Y (validate references)")
         void subYValidateReferences() {
-            IFPoint fPointRef = fPoint.subY(opX);
+            IFPoint fPointRef = fPoint.subY(opY);
 
             assertSame(fPointRef, fPoint, "The reference should remain unchanged");
         }
@@ -1694,7 +1694,7 @@ public class IFPointTest {
         @Test
         @DisplayName("Mul Y (validate references)")
         void mulYValidateReferences() {
-            IFPoint fPointRef = fPoint.mulY(opX);
+            IFPoint fPointRef = fPoint.mulY(opY);
 
             assertSame(fPointRef, fPoint, "The reference should remain unchanged");
         }
@@ -1894,7 +1894,7 @@ public class IFPointTest {
         @Test
         @DisplayName("Div Y (validate references)")
         void divYValidateReferences() {
-            IFPoint fPointRef = fPoint.divY(opX);
+            IFPoint fPointRef = fPoint.divY(opY);
 
             assertSame(fPointRef, fPoint, "The reference should remain unchanged");
         }
@@ -2073,8 +2073,7 @@ public class IFPointTest {
         @DisplayName("Custom function - value")
         void funLog() {
 
-            assertEquals(true, fPoint.funLog(e -> e.getX() != 0),
-                    "The resulting value is erroneous");
+            assertTrue(fPoint.funLog(e -> e.getX() != 0), "The resulting value is erroneous");
         }
 
         @Test
