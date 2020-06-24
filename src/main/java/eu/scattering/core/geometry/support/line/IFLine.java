@@ -1,7 +1,7 @@
 package eu.scattering.core.geometry.support.line;
 
 import eu.scattering.core.geometry.IGeometryBase;
-import eu.scattering.core.geometry.IGeometryDebug;
+import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.IGeometryAssembly;
 import eu.scattering.core.geometry.support.IGeometrySupport;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface IFLine extends IGeometryBase<IFLine>, IGeometryDebug<IFLine>, IGeometrySupport<IFLine> {
+public interface IFLine extends IGeometryBase<IFLine>, IDebug<IFLine>, IGeometrySupport<IFLine> {
 
     enum Mode {LINE, RAY, SEGMENT}
 

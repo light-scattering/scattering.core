@@ -2,14 +2,14 @@ package eu.scattering.core.geometry.support;
 
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.IGeometryBase;
-import eu.scattering.core.geometry.IGeometryDebug;
+import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import org.json.JSONObject;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
 
 public abstract class PresetGeometry<T extends IGeometrySupport<T>>
-        implements IGeometrySupport<T>, IGeometryBase<T>, IGeometryDebug<T> {
+        implements IGeometrySupport<T>, IGeometryBase<T>, IDebug<T> {
 
     @Override
     public abstract Object clone();

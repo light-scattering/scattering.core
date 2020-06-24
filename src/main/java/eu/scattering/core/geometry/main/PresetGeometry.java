@@ -1,9 +1,7 @@
 package eu.scattering.core.geometry.main;
 
 import eu.scattering.core.geometry.IGeometryBase;
-import eu.scattering.core.geometry.IGeometryDebug;
-import eu.scattering.core.geometry.main.IGeometryAlgebra;
-import eu.scattering.core.geometry.main.IGeometryAssembly;
+import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.function.Predicate;
 import static eu.scattering.core.Configuration.debugPrintStream;
 
 public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
-        implements IGeometryBase<T>, IGeometryDebug<T>, IGeometryAlgebra<T> {
+        implements IGeometryBase<T>, IDebug<T>, IGeometryAlgebra<T> {
 
     @Override
     public abstract Object clone();
