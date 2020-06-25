@@ -5,6 +5,7 @@ import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.helper.HelperAngle;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -223,22 +224,22 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 //--------------------------------------------------
 
     @Override
-    public IFVector setSphericalCoordinates(double polar, double azimuthal) {
+    public IFVector setSphericalCoordinates(double inclination, double azimuth) {
 
         originShift();
-        getHead().setSphericalCoordinates(polar, azimuthal);
+        getHead().setSphericalCoordinates(inclination, azimuth);
         originRestore();
 
         return this;
     }
 
     @Override
-    public IFVector setRandom(IFPoint ...exclude) {
+    public IFVector setRandom(IFPoint ... exclusion) {
 
-        IFPoint[] excludeShift = new IFPoint[exclude.length];
+        IFPoint[] excludeShift = new IFPoint[exclusion.length];
 
-        for (int i = 0 ; i < exclude.length ; i++ ) {
-            excludeShift[i] = exclude[i].copy().sub(getBase());
+        for (int i = 0; i < exclusion.length ; i++ ) {
+            excludeShift[i] = exclusion[i].copy().sub(getBase());
         }
 
         originShift();
@@ -254,8 +255,8 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector relocateBase(double x, double y, double z) {
-        return relocateBase(FactoryGeometry.getIFPoint(x, y, z));
+    public IFVector relocateBase(double bX, double bY, double bZ) {
+        return relocateBase(FactoryGeometry.getIFPoint(bX, bY, bZ));
     }
 
     @Override
@@ -274,8 +275,8 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector relocateHead(double x, double y, double z) {
-        return relocateHead(FactoryGeometry.getIFPoint(x, y, z));
+    public IFVector relocateHead(double hX, double hY, double hZ) {
+        return relocateHead(FactoryGeometry.getIFPoint(hX, hY, hZ));
     }
 
     @Override
@@ -417,6 +418,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public double getAngle(IFPoint fPoint) {
+
         return getAngle(FactoryGeometry.getIFVector(getBase(), fPoint));
     }
 
@@ -443,8 +445,6 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public double dProd(IFVector fVector) {
         IFVector fCopyLocal = copy().relocateBase();
         IFVector fCopyExternal = fVector.copy().relocateBase();
-
-        fCopyLocal.getHead().dProd(fCopyExternal.getHead());
 
         return fCopyLocal.getHead().dProd(fCopyExternal.getHead());
     }
@@ -498,7 +498,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     @Override
     public boolean isOrthogonal(IFVector fVector) {
 
-        return Math.abs(dProd(fVector)) < jitter;
+        return Math.abs((Math.PI * 0.5) - getAngle(fVector)) < jitter;
     }
 
     @Override

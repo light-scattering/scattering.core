@@ -4,6 +4,7 @@ import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.helper.HelperAngle;
 import eu.scattering.core.helper.HelperNull;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
@@ -2298,11 +2299,11 @@ public class IFVectorTest {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector();
 
-            while (Math.abs(fVectorA.getAngle(fVectorB) - (Math.PI * 0.5)) < jitter) {
-                fVectorB = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
+            while (Math.abs((Math.PI * 0.5) - fVectorA.getAngle(fVectorB))  <  jitter) {
+                fVectorB = HelperRandom.getTestVector();
             }
 
-            assertFalse(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should not be orthogonal");
+            assertFalse(fVectorA.isOrthogonal(fVectorB), "IFVectors should not be orthogonal");
         }
 
         @Test

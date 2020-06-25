@@ -5,14 +5,14 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 public interface IFVectorAdvanced {
 
-    IFVector setSphericalCoordinates(double polar, double azimuthal);
-    IFVector setRandom(IFPoint... exclude);
+    IFVector setSphericalCoordinates(double inclination, double azimuth);
+    IFVector setRandom(IFPoint... exclusion);
 
     IFVector relocateBase();
-    IFVector relocateBase(double x, double y, double z);
+    IFVector relocateBase(double bX, double bY, double bZ);
     IFVector relocateBase(IFPoint base);
     IFVector relocateHead();
-    IFVector relocateHead(double x, double y, double z);
+    IFVector relocateHead(double hX, double hY, double hZ);
     IFVector relocateHead(IFPoint head);
 
     IFVector add(IFVector fVector);

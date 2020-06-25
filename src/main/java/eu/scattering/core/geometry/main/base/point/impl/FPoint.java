@@ -23,11 +23,13 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     private FPoint() { }
 
     public static IFPoint create() {
+
         return new FPoint();
     }
 
     @Override
     public double getX() {
+
         return origin[0];
     }
 
@@ -69,11 +71,13 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     @Override
     public IFPoint set(IFPoint fPoint) {
+
         return set(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
     public IFPoint set(double x, double y, double z) {
+
         return setX(x).setY(y).setZ(z);
     }
 
@@ -195,106 +199,127 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     @Override
     public IFPoint add(IFPoint fPoint) {
+
         return add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
     public IFPoint add(double x, double y, double z) {
+
         return addX(x).addY(y).addZ(z);
     }
 
     @Override
     public IFPoint add(double factor) {
+
         return add(factor, factor, factor);
     }
 
     @Override
     public IFPoint addX(double x) {
+
         return setX(getX() + x);
     }
 
     @Override
     public IFPoint addY(double y) {
+
         return setY(getY() + y);
     }
 
     @Override
     public IFPoint addZ(double z) {
+
         return setZ(getZ() + z);
     }
 
     @Override
     public IFPoint sub(IFPoint fPoint) {
+
         return sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
     public IFPoint sub(double x, double y, double z) {
+
         return subX(x).subY(y).subZ(z);
     }
 
     @Override
     public IFPoint sub(double factor) {
+
         return sub(factor, factor, factor);
     }
 
     @Override
     public IFPoint subX(double x) {
+
         return setX(getX() - x);
     }
 
     @Override
     public IFPoint subY(double y) {
+
         return setY(getY() - y);
     }
 
     @Override
     public IFPoint subZ(double z) {
+
         return setZ(getZ() - z);
     }
 
     @Override
     public IFPoint mul(IFPoint fPoint) {
+
         return mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
     public IFPoint mul(double x, double y, double z) {
+
         return mulX(x).mulY(y).mulZ(z);
     }
 
     @Override
     public IFPoint mul(double factor) {
+
         return mul(factor, factor, factor);
     }
 
     @Override
     public IFPoint mulX(double x) {
+
         return setX(getX() * x);
     }
 
     @Override
     public IFPoint mulY(double y) {
+
         return setY(getY() * y);
     }
 
     @Override
     public IFPoint mulZ(double z) {
+
         return setZ(getZ() * z);
     }
 
     @Override
     public IFPoint div(IFPoint fPoint) {
+
         return div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
     public IFPoint div(double x, double y, double z) {
+
         return divX(x).divY(y).divZ(z);
     }
 
     @Override
     public IFPoint div(double factor) {
+
         return div(factor, factor, factor);
     }
 
@@ -376,21 +401,25 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     @Override
     public IFPoint normalize() {
+
         return setRadius(1);
     }
 
     @Override
     public IFPoint reflect() {
+
         return set(-getX(), -getY(), -getZ());
     }
 
     @Override
     public IFPoint reflect(IFPoint fPoint) {
+
         return sub(fPoint).reflect().add(fPoint);
     }
 
     @Override
     public double getInclination() {
+
         return Math.acos(getY() / Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ())));
     }
 
@@ -486,6 +515,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     @Override
     public double getRadius() {
+
         return Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
     }
 
@@ -505,6 +535,7 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
 
     @Override
     public boolean isZero() {
+
         return getX() == 0 && getY() == 0 && getZ() == 0;
     }
 
