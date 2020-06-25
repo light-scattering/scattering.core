@@ -6,10 +6,12 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 public interface IFVectorAdvanced {
 
     IFVector setSphericalCoordinates(double polar, double azimuthal);
-    IFVector setRandom(IFPoint...exclude);
+    IFVector setRandom(IFPoint... exclude);
 
+    IFVector relocateBase();
     IFVector relocateBase(double x, double y, double z);
     IFVector relocateBase(IFPoint base);
+    IFVector relocateHead();
     IFVector relocateHead(double x, double y, double z);
     IFVector relocateHead(IFPoint head);
 
@@ -33,13 +35,22 @@ public interface IFVectorAdvanced {
     double getAzimuth();
     IFVector setAzimuth(double azimuth);
 
+    double getAngle(IFPoint fPoint);
     double getAngle(IFVector fVector);
 
-    double dProd(IFVector fVector);
-    IFVector cProd(IFVector fVector);
+    double dProd(IFPoint fPoint);                           // Ok
+    double dProd(IFVector fVector);                         // Ok
+
+    IFVector cProd(IFPoint fPoint);                         // Ok
+    IFVector cProd(IFVector fVector);                       // Ok
 
     boolean isParallel(IFVector fVector);
+    IFVector setParallel(IFPoint base, IFPoint head);
+    IFVector setParallel(IFVector fVector);
+
     boolean isOrthogonal(IFVector fVector);
+    IFVector setOrthogonal(IFPoint headA, IFPoint headB);
+    IFVector setOrthogonal(IFVector fVector);
     
     boolean isZero();
 

@@ -55,14 +55,11 @@ public class FactoryGeometry {
         return getIFPoint().set(fPoint);
     }
 
-    public static IFVector getIFVector(double x, double y, double z) {
+    // -------------------------------------------------------------------------------------------------
 
-        return getIFVector().setHeadRef(getIFPoint(x, y, z));
-    }
+    public static IFVector getIFVector(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
-    public static IFVector getIFVector(IFPoint head) {
-
-        return getIFVector().setHeadRef(head);
+        return getIFVector().setRef(getIFPoint(bX, bY, bZ), getIFPoint(hX, hY, hZ));
     }
 
     public static IFVector getIFVector(IFPoint base, IFPoint head) {
@@ -70,10 +67,32 @@ public class FactoryGeometry {
         return getIFVector().setRef(base, head);
     }
 
+    public static IFVector getIFVector(double hX, double hY, double hZ) {
+
+        return getIFVector().setHeadRef(getIFPoint(hX, hY, hZ));
+    }
+
+    public static IFVector getIFVector(IFPoint head) {
+
+        return getIFVector().setHeadRef(head);
+    }
+
+    public static IFVector getIFVector(IFPoint base, double hX, double hY, double hZ) {
+
+        return getIFVector().setBaseRef(base).setHeadRef(getIFPoint(hX, hY, hZ));
+    }
+
+    public static IFVector getIFVector(double bX, double bY, double bZ, IFPoint head) {
+
+        return getIFVector().setBaseRef(getIFPoint(bX, bY, bZ)).setHeadRef(head);
+    }
+
     public static IFVector getIFVector(IFVector fVector) {
 
         return getIFVector().set(fVector);
     }
+
+    // -------------------------------------------------------------------------------------------------
 
     public static IFLine getIFLine(IFVector fVector) {
 

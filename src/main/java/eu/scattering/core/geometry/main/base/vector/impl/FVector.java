@@ -249,6 +249,11 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
+    public IFVector relocateBase() {
+        return relocateBase(FactoryGeometry.getIFPoint());
+    }
+
+    @Override
     public IFVector relocateBase(double x, double y, double z) {
         return relocateBase(FactoryGeometry.getIFPoint(x, y, z));
     }
@@ -261,6 +266,11 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         getHead().add(translation);
 
         return this;
+    }
+
+    @Override
+    public IFVector relocateHead() {
+        return relocateHead(FactoryGeometry.getIFPoint());
     }
 
     @Override
@@ -406,6 +416,11 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
+    public double getAngle(IFPoint fPoint) {
+        return getAngle(FactoryGeometry.getIFVector(getBase(), fPoint));
+    }
+
+    @Override
     public double getAngle(IFVector fVector) {
         double angle, dProd, magAB;
 
@@ -419,46 +434,96 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
+    public double dProd(IFPoint fPoint) {
+
+        return dProd(FactoryGeometry.getIFVector(getBase(), fPoint));
+    }
+
+    @Override
     public double dProd(IFVector fVector) {
-        double dProd;
+        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyExternal = fVector.copy().relocateBase();
 
-        originShift(fVector);
-        dProd = getHead().dProd(fVector.getHead());
-        originRestore(fVector);
+        fCopyLocal.getHead().dProd(fCopyExternal.getHead());
 
-        return dProd;
+        return fCopyLocal.getHead().dProd(fCopyExternal.getHead());
+    }
+
+    @Override
+    public IFVector cProd(IFPoint fPoint) {
+
+        return cProd(FactoryGeometry.getIFVector(getBase(), fPoint));
     }
 
     @Override
     public IFVector cProd(IFVector fVector) {
+        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyExternal = fVector.copy().relocateBase();
 
-        originShift(fVector);
-        getHead().cProd(fVector.getHead());
-        originRestore(fVector);
+        fCopyLocal.getHead().cProd(fCopyExternal.getHead());
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public boolean isParallel(IFVector fVector) {
         double conX, conY, conZ;
+        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyExternal = fVector.copy().relocateBase();
 
-        originShift(fVector);
-        conX = getHead().getX() / fVector.getHead().getX();
-        conY = getHead().getY() / fVector.getHead().getY();
-        conZ = getHead().getZ() / fVector.getHead().getZ();
-        originRestore(fVector);
+        conX = fCopyLocal.getHead().getX() / fCopyExternal.getHead().getX();
+        conY = fCopyLocal.getHead().getY() / fCopyExternal.getHead().getY();
+        conZ = fCopyLocal.getHead().getZ() / fCopyExternal.getHead().getZ();
 
         return Math.abs(conX - conY) < jitter && Math.abs(conX - conZ) < jitter;
     }
 
     @Override
+    public IFVector setParallel(IFPoint base, IFPoint head) {
+        double magnitude = getRadius();
+        IFPoint baseCopy = getBase().copy();
+
+        return set(base, head).setRadius(magnitude).relocateBase(baseCopy);
+    }
+
+    @Override
+    public IFVector setParallel(IFVector fVector) {
+        double magnitude = getRadius();
+        IFPoint baseCopy = getBase().copy();
+
+        return set(fVector).setRadius(magnitude).relocateBase(baseCopy);
+    }
+
+    @Override
     public boolean isOrthogonal(IFVector fVector) {
+
         return Math.abs(dProd(fVector)) < jitter;
     }
 
     @Override
+    public IFVector setOrthogonal(IFPoint headA, IFPoint headB) {
+        double magnitude = getRadius();
+        IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), headB.copy());
+
+        setHead(headA);
+
+        return cProd(fVectorRef).setRadius(magnitude);
+    }
+
+    @Override
+    public IFVector setOrthogonal(IFVector fVector) {
+        double magnitude = getRadius();
+        IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), fVector.getHead().copy());
+
+        setHead(fVector.getBase());
+
+        return cProd(fVectorRef.copy()).setRadius(magnitude);
+    }
+
+    @Override
     public boolean isZero() {
+
         return getBase().equals(getHead());
     }
 
