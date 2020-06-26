@@ -6,6 +6,8 @@ import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.main.base.vector.impl.FVector;
 import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.line.impl.FLine;
+import eu.scattering.core.geometry.support.plane.IFPlane;
+import eu.scattering.core.geometry.support.plane.impl.FPlane;
 
 public class FactoryGeometry {
 
@@ -28,6 +30,11 @@ public class FactoryGeometry {
     public static IFLine getIFLine() {
 
         return FLine.create();
+    }
+
+    public static IFPlane getIFPlane() {
+
+        return FPlane.create();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -96,7 +103,14 @@ public class FactoryGeometry {
 
     public static IFLine getIFLine(IFVector fVector) {
 
-        return FLine.create().setOriginRef(fVector);
+        return getIFLine().setOriginRef(fVector);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    public static IFPlane getIFPlane(IFVector fVector) {
+
+        return getIFPlane().setOriginRef(fVector);
     }
 
 }

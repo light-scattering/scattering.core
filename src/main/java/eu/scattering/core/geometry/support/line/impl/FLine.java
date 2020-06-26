@@ -56,7 +56,7 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     @Override
     public IFLine copy() {
 
-        return FactoryGeometry.getIFLine(origin.copy());
+        return FactoryGeometry.getIFLine(getOrigin().copy());
     }
 
     @Override
@@ -142,8 +142,12 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     // -------------------------------------------------------------------------------------------------
 
     private IFPoint projectIFPoint(IFPoint fPoint, Mode mode) {
-        IFPoint opA = FactoryGeometry.getIFPoint(origin.getHead()).sub(origin.getBase()).div(origin.getRadius());
-        IFPoint opB = FactoryGeometry.getIFPoint(fPoint).sub(origin.getBase());
+        IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
+                .sub(getOrigin().getBase())
+                .div(getOrigin().getRadius());
+
+        IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
+                .sub(getOrigin().getBase());
 
         fPoint.set(origin.getBase().copy().add(opA.mul(opB.dProd(opA))));
 

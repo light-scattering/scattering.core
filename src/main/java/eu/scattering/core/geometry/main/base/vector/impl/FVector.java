@@ -1,11 +1,10 @@
 package eu.scattering.core.geometry.main.base.vector.impl;
 
-import eu.scattering.core.geometry.main.PresetGeometry;
 import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
+import eu.scattering.core.geometry.main.PresetGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.helper.HelperAngle;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,6 +34,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFPoint getBase() {
+
         return origin[0];
     }
 
@@ -56,6 +56,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFPoint getHead() {
+
         return origin[1];
     }
 
@@ -180,6 +181,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector self() {
+
         return this;
     }
 
@@ -207,6 +209,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public Object clone() {
+
         return copy();
     }
 
@@ -225,16 +228,17 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector setSphericalCoordinates(double inclination, double azimuth) {
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        getHead().setSphericalCoordinates(inclination, azimuth);
-        originRestore();
+        fCopyLocal.getHead().setSphericalCoordinates(inclination, azimuth);
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public IFVector setRandom(IFPoint ... exclusion) {
+        IFVector fCopyLocal = copy().relocateBase();
 
         IFPoint[] excludeShift = new IFPoint[exclusion.length];
 
@@ -242,20 +246,21 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
             excludeShift[i] = exclusion[i].copy().sub(getBase());
         }
 
-        originShift();
-        getHead().setRandom(excludeShift);
-        originRestore();
+        fCopyLocal.getHead().setRandom(excludeShift);
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public IFVector relocateBase() {
+
         return relocateBase(FactoryGeometry.getIFPoint());
     }
 
     @Override
     public IFVector relocateBase(double bX, double bY, double bZ) {
+
         return relocateBase(FactoryGeometry.getIFPoint(bX, bY, bZ));
     }
 
@@ -271,11 +276,13 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector relocateHead() {
+
         return relocateHead(FactoryGeometry.getIFPoint());
     }
 
     @Override
     public IFVector relocateHead(double hX, double hY, double hZ) {
+
         return relocateHead(FactoryGeometry.getIFPoint(hX, hY, hZ));
     }
 
@@ -291,57 +298,62 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector add(IFVector fVector) {
+        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyExternal = fVector.copy().relocateBase();
 
-        originShift(fVector);
-        getHead().add(fVector.getHead());
-        originRestore(fVector);
+        fCopyLocal.getHead().add(fCopyExternal.getHead());
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public IFVector sub(IFVector fVector) {
+        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyExternal = fVector.copy().relocateBase();
 
-        originShift(fVector);
-        getHead().sub(fVector.getHead());
-        originRestore(fVector);
+        fCopyLocal.getHead().sub(fCopyExternal.getHead());
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public double getDimX() {
+
         return Math.abs(getHead().getX() - getBase().getX());
     }
 
     @Override
     public double getDimY() {
+
         return Math.abs(getHead().getY() - getBase().getY());
     }
 
     @Override
     public double getDimZ() {
+
         return Math.abs(getHead().getZ() - getBase().getZ());
     }
 
     @Override
     public IFVector normalize() {
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        getHead().normalize();
-        originRestore();
+        fCopyLocal.getHead().normalize();
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public IFVector reflect() {
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        getHead().reflect();
-        originRestore();
+        fCopyLocal.getHead().reflect();
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
@@ -366,54 +378,46 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector setRadius(double magnitude) throws SamePositionException {
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        getHead().setRadius(magnitude);
-        originRestore();
+        fCopyLocal.getHead().setRadius(magnitude);
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public double getInclination() {
-        double inclination;
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        inclination = getHead().getInclination();
-        originRestore();
-
-        return inclination;
+        return fCopyLocal.getHead().getInclination();
     }
 
     @Override
     public IFVector setInclination(double inclination) {
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        getHead().setInclination(inclination);
-        originRestore();
+        fCopyLocal.getHead().setInclination(inclination);
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
     public double getAzimuth() {
-        double azimuth;
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        azimuth = getHead().getAzimuth();
-        originRestore();
-
-        return azimuth;
+        return fCopyLocal.getHead().getAzimuth();
     }
 
     @Override
     public IFVector setAzimuth(double azimuth) {
+        IFVector fCopyLocal = copy().relocateBase();
 
-        originShift();
-        getHead().setAzimuth(azimuth);
-        originRestore();
+        fCopyLocal.getHead().setAzimuth(azimuth);
+        fCopyLocal.relocateBase(getBase());
 
-        return this;
+        return set(fCopyLocal);
     }
 
     @Override
@@ -425,12 +429,12 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     @Override
     public double getAngle(IFVector fVector) {
         double angle, dProd, magAB;
+        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyExternal = fVector.copy().relocateBase();
 
-        dProd = dProd(fVector);
-        originShift(fVector);
-        magAB = getHead().getRadius() * fVector.getHead().getRadius();
+        dProd = fCopyLocal.dProd(fCopyExternal);
+        magAB = fCopyLocal.getHead().getRadius() * fCopyExternal.getHead().getRadius();
         angle = Math.acos(dProd / magAB);
-        originRestore(fVector);
 
         return Double.isNaN(angle) ? 0 : angle;
     }
@@ -525,28 +529,6 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     public boolean isZero() {
 
         return getBase().equals(getHead());
-    }
-
-//--------------------------------------------------
-
-    private void originShift() {
-        getHead().sub(getBase());
-    }
-
-    private IFPoint originShift(IFVector fVector) {
-        originShift();
-
-        return fVector.getHead().sub(fVector.getBase());
-    }
-
-    private void originRestore() {
-        getHead().add(getBase());
-    }
-
-    private IFPoint originRestore(IFVector fVector) {
-        originRestore();
-
-        return fVector.getHead().add(fVector.getBase());
     }
 
 }

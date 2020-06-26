@@ -228,7 +228,7 @@ public class IFLineTest {
             IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy());
 
             assertEquals(fLineA.hashCode(), fLineB.hashCode(),
-                    "Two identical IFPoints should have the same hash code");
+                    "Two identical IFLines should have the same hash code");
         }
 
         @Test
@@ -255,7 +255,7 @@ public class IFLineTest {
                     () -> assertEquals(fLineA, fLineB,
                             "IFLines should have the same values"),
                     () -> assertNotEquals(fLineA, fLineB.getOrigin().add(jitter),
-                            "FIFLines should have different values")
+                            "IFLines should have different values")
             );
         }
 

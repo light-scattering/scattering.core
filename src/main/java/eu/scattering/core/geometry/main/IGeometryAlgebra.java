@@ -1,6 +1,5 @@
 package eu.scattering.core.geometry.main;
 
-import eu.scattering.core.geometry.main.IGeometryAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 import java.util.List;
@@ -53,4 +52,5 @@ public interface IGeometryAlgebra<T> extends IGeometryAssembly {
     T ext(Consumer<IGeometryAssembly> exp);
     List<Double> extVal(Function<IGeometryAssembly, List<Double>> exp);
     List<Boolean> extLog(Function<IGeometryAssembly, List<Boolean>> exp);
+
 }

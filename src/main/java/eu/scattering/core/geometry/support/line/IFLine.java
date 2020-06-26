@@ -1,5 +1,6 @@
 package eu.scattering.core.geometry.support.line;
 
+import eu.scattering.core.exception.ProjectionException;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.IGeometryAssembly;
@@ -13,12 +14,12 @@ public interface IFLine extends IGeometryBase<IFLine>, IDebug<IFLine>, IGeometry
 
     enum Mode {LINE, RAY, SEGMENT}
 
-    Consumer<IGeometryAssembly> project(Mode mode);
+    Consumer<IGeometryAssembly> project(Mode mode) throws ProjectionException;
 
-    Consumer<IGeometryAssembly> reflect(Mode mode);
+    Consumer<IGeometryAssembly> reflect(Mode mode) throws ProjectionException;
 
-    Function<IGeometryAssembly, List<Boolean>> isCloseTo(Mode mode);
+    Function<IGeometryAssembly, List<Boolean>> isCloseTo(Mode mode) throws ProjectionException;
 
-    Function<IGeometryAssembly, List<Double>> getDistance(Mode mode);
+    Function<IGeometryAssembly, List<Double>> getDistance(Mode mode) throws ProjectionException;
 
 }
