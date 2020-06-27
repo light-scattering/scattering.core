@@ -8,6 +8,9 @@ public interface IFVectorAdvanced {
     IFVector setSphericalCoordinates(double inclination, double azimuth);
     IFVector setRandom(IFPoint... exclusion);
 
+//    boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
+//    boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
+
     IFVector relocateBase();
     IFVector relocateBase(double bX, double bY, double bZ);
     IFVector relocateBase(IFPoint base);
@@ -15,42 +18,44 @@ public interface IFVectorAdvanced {
     IFVector relocateHead(double hX, double hY, double hZ);
     IFVector relocateHead(IFPoint head);
 
-    IFVector add(IFVector fVector);
-    IFVector sub(IFVector fVector);
+//    IFVector moveForward(double distance);
+//    IFVector moveBackward(double distance);
 
-    double getDimX();
-    double getDimY();
-    double getDimZ();
+    IFVector add(IFVector vector);
+    IFVector sub(IFVector vector);
+
+    double getLengthX();
+    double getLengthY();
+    double getLengthZ();
+//    IFPoint getCenter();
 
     IFVector normalize();
-    IFVector reflect();
-    IFVector invert();
+//    IFVector reflectBase();
+    IFVector reflectHead();
+//    IFVector reflect(IFPoint ref)
+    IFVector invertDirection();
 
-    double getRadius();
-    IFVector setRadius(double radius) throws SamePositionException;
-
+    double getMagnitude();
+    IFVector setMagnitude(double radius) throws SamePositionException;
     double getInclination();
     IFVector setInclination(double inclination);
-
     double getAzimuth();
     IFVector setAzimuth(double azimuth);
 
-    double getAngle(IFPoint fPoint);
-    double getAngle(IFVector fVector);
+    double getAngle(IFPoint ref);
+    double getAngle(IFVector ref);
 
-    double dProd(IFPoint fPoint);                           // Ok
-    double dProd(IFVector fVector);                         // Ok
+    double getDotProduct(IFPoint ref);
+    double getDotProduct(IFVector ref);
+    IFVector getCrossProduct(IFPoint ref);
+    IFVector getCrossProduct(IFVector ref);
 
-    IFVector cProd(IFPoint fPoint);                         // Ok
-    IFVector cProd(IFVector fVector);                       // Ok
-
-    boolean isParallel(IFVector fVector);
+    boolean isParallel(IFVector ref);
     IFVector setParallel(IFPoint base, IFPoint head);
-    IFVector setParallel(IFVector fVector);
-
-    boolean isOrthogonal(IFVector fVector);
+    IFVector setParallel(IFVector ref);
+    boolean isOrthogonal(IFVector ref);
     IFVector setOrthogonal(IFPoint headA, IFPoint headB);
-    IFVector setOrthogonal(IFVector fVector);
+    IFVector setOrthogonal(IFVector ref);
     
     boolean isZero();
 

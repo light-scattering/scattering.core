@@ -6,4 +6,10 @@ public interface IDebug<T> {
 
     T devDescribe(String message);
 
+//    T devLog();
+
+//    T devLog(String message);
+
+    // devAssert?
+
 }

@@ -17,4 +17,5 @@ public interface IFPoint extends IFPointAdvanced,
 
     double getZ();
     IFPoint setZ(double z);
+
 }

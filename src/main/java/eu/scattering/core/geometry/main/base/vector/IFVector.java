@@ -18,4 +18,5 @@ public interface IFVector extends IFVectorAdvanced,
     IFPoint getHead();
     IFVector setHead(IFPoint head);
     IFVector setHeadRef(IFPoint headRef);
+
 }

@@ -129,16 +129,16 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        json.append("origin", getX());
-        json.append("origin", getY());
-        json.append("origin", getZ());
+        json.append("point", getX());
+        json.append("point", getY());
+        json.append("point", getZ());
 
         return json;
     }
 
     @Override
     public IFPoint importFromJSON(JSONObject json) {
-        JSONArray structure = json.getJSONArray("origin");
+        JSONArray structure = json.getJSONArray("point");
 
         setX(structure.getDouble(0));
         setY(structure.getDouble(1));
@@ -412,9 +412,9 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint reflect(IFPoint fPoint) {
+    public IFPoint reflect(IFPoint ref) {
 
-        return sub(fPoint).reflect().add(fPoint);
+        return sub(ref).reflect().add(ref);
     }
 
     @Override
@@ -456,58 +456,58 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
     }
 
     @Override
-    public double getAngle(IFPoint fPoint) {
+    public double getAngle(IFPoint ref) {
         double angle, dProd, magAB;
 
-        dProd = dProd(fPoint);
-        magAB = getRadius() * fPoint.getRadius();
+        dProd = getDotProduct(ref);
+        magAB = getRadius() * ref.getRadius();
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
     }
 
     @Override
-    public double getDistance(IFPoint fPoint) {
-        double dimX = fPoint.getX() - getX();
-        double dimY = fPoint.getY() - getY();
-        double dimZ = fPoint.getZ() - getZ();
+    public double getDistance(IFPoint ref) {
+        double dimX = ref.getX() - getX();
+        double dimY = ref.getY() - getY();
+        double dimZ = ref.getZ() - getZ();
 
         return Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
     }
 
     @Override
-    public IFPoint setDistance(IFPoint fPoint, double distance) throws SamePositionException, IllegalArgumentException {
+    public IFPoint setDistance(IFPoint ref, double distance) throws SamePositionException, IllegalArgumentException {
 
         if (distance < 0) {
             throw new IllegalArgumentException("The distance between IFPoints cannot be lower than zero");
         }
 
-        if (this.equals(fPoint)) {
+        if (this.equals(ref)) {
             throw new SamePositionException("IFPoints must not be on the same position");
         }
 
-        return this.sub(fPoint).setRadius(distance).add(fPoint);
+        return this.sub(ref).setRadius(distance).add(ref);
     }
 
     @Override
-    public double dProd(IFPoint fPoint) {
+    public double getDotProduct(IFPoint ref) {
         double dProd, dimX, dimY, dimZ;
 
-        dimX = getX() * fPoint.getX();
-        dimY = getY() * fPoint.getY();
-        dimZ = getZ() * fPoint.getZ();
+        dimX = getX() * ref.getX();
+        dimY = getY() * ref.getY();
+        dimZ = getZ() * ref.getZ();
         dProd = dimX + dimY + dimZ;
 
         return dProd;
     }
 
     @Override
-    public IFPoint cProd(IFPoint fPoint) {
+    public IFPoint getCrossProduct(IFPoint ref) {
         double dimX, dimY, dimZ;
 
-        dimX = (getY() * fPoint.getZ()) - (getZ() * fPoint.getY());
-        dimY = (getZ() * fPoint.getX()) - (getX() * fPoint.getZ());
-        dimZ = (getX() * fPoint.getY()) - (getY() * fPoint.getX());
+        dimX = (getY() * ref.getZ()) - (getZ() * ref.getY());
+        dimY = (getZ() * ref.getX()) - (getX() * ref.getZ());
+        dimZ = (getX() * ref.getY()) - (getY() * ref.getX());
         set(dimX, dimY, dimZ);
 
         return this;

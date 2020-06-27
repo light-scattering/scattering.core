@@ -770,11 +770,11 @@ public class IFPointTest {
 
         @Test
         @DisplayName("Get dot product")
-        void dProd() {
+        void getDotProduct() {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            double result = fPointA.dProd(fPointB);
+            double result = fPointA.getDotProduct(fPointB);
 
             double dimX = fPointA.getX() * fPointB.getX();
             double dimY = fPointA.getY() * fPointB.getY();
@@ -785,18 +785,18 @@ public class IFPointTest {
 
         @Test
         @DisplayName("Get dot product (validate references)")
-        void dProdValidateReferences() {
+        void getDotProductValidateReferences() {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            fPointA.dProd(fPointB);
+            fPointA.getDotProduct(fPointB);
 
             assertNotSame(fPointA, fPointB, "IFPoints should point at different objects");
         }
 
         @Test
         @DisplayName("Get dot product (validate positions)")
-        void dProdValidatePositions() {
+        void getDotProductValidatePositions() {
             double refAX = HelperRandom.getTestValue();
             double refAY = HelperRandom.getTestValue();
             double refAZ = HelperRandom.getTestValue();
@@ -807,7 +807,7 @@ public class IFPointTest {
             double refBZ = HelperRandom.getTestValue();
             IFPoint fPointB = FactoryGeometry.getIFPoint(refBX, refBY, refBZ);
 
-            fPointA.dProd(fPointB);
+            fPointA.getDotProduct(fPointB);
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(refAX, fPointA.getX(),
@@ -827,16 +827,16 @@ public class IFPointTest {
 
         @Test
         @DisplayName("Get dot product (throw NullPointerException)")
-        void dProdThrowNullPointerException() {
+        void getDotProductThrowNullPointerException() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertThrows(NullPointerException.class, () -> fPoint.dProd(null),
+            assertThrows(NullPointerException.class, () -> fPoint.getDotProduct(null),
                     "The reference IFPoint must not be null");
         }
 
         @Test
         @DisplayName("Get cross product")
-        void cProd() {
+        void getCrossProduct() {
             double refAX = HelperRandom.getTestValue();
             double refAY = HelperRandom.getTestValue();
             double refAZ = HelperRandom.getTestValue();
@@ -847,7 +847,7 @@ public class IFPointTest {
             double refBZ = HelperRandom.getTestValue();
             IFPoint fPointB = FactoryGeometry.getIFPoint(refBX, refBY, refBZ);
 
-            IFPoint fPointRes = fPointA.copy().cProd(fPointB);
+            IFPoint fPointRes = fPointA.copy().getCrossProduct(fPointB);
 
             double dimX = (fPointA.getY() * fPointB.getZ()) - (fPointA.getZ() * fPointB.getY());
             double dimY = (fPointA.getZ() * fPointB.getX()) - (fPointA.getX() * fPointB.getZ());
@@ -860,11 +860,11 @@ public class IFPointTest {
 
         @Test
         @DisplayName("Get cross product (validate references)")
-        void cProdValidateReferences() {
+        void getCrossProductValidateReferences() {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            IFPoint fPointRef = fPointA.cProd(fPointB);
+            IFPoint fPointRef = fPointA.getCrossProduct(fPointB);
 
             assertAll("Validate references",
                     () -> assertSame(fPointRef, fPointA,
@@ -876,10 +876,10 @@ public class IFPointTest {
 
         @Test
         @DisplayName("Get cross product (throw NullPointerException")
-        void cProdThrowNullPointerException() {
+        void getCrossProductThrowNullPointerException() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertThrows(NullPointerException.class, () -> fPoint.cProd(null),
+            assertThrows(NullPointerException.class, () -> fPoint.getCrossProduct(null),
                     "The reference IFPoint must not be null");
         }
 

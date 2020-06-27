@@ -7,4 +7,5 @@ import java.util.List;
 public interface IGeometryAssembly {
 
     List<IFPoint> disassemble();
+
 }

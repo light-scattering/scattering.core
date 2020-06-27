@@ -6,7 +6,7 @@ public class Configuration {
 
     private Configuration() { }
 
-    public static double jitter = 1E-10;
+    public static final double jitter = 1E-10;
 
-    public static PrintStream debugPrintStream = System.out;
+    public static final PrintStream debugPrintStream = System.out;
 }

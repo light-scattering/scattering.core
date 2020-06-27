@@ -4,7 +4,6 @@ import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.helper.HelperAngle;
 import eu.scattering.core.helper.HelperNull;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
@@ -1249,81 +1248,81 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get dimension X")
-        void getDimX() {
+        @DisplayName("Get length X")
+        void getLengthX() {
             IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
 
-            assertEquals(Math.abs(fVector.getHead().getX() - fVector.getBase().getX()), fVector.getDimX(),
-                    "The X dimension is incorrect");
-            assertEquals(Math.abs(fVector.getBase().getX() - fVector.getHead().getX()), fVector.getDimX(),
-                    "The X dimension is incorrect");
+            assertEquals(Math.abs(fVector.getHead().getX() - fVector.getBase().getX()), fVector.getLengthX(),
+                    "The X length is incorrect");
+            assertEquals(Math.abs(fVector.getBase().getX() - fVector.getHead().getX()), fVector.getLengthX(),
+                    "The X length is incorrect");
         }
 
         @Test
-        @DisplayName("Get dimension Y")
-        void getDimY() {
+        @DisplayName("Get length Y")
+        void getLengthY() {
             IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
 
-            assertEquals(Math.abs(fVector.getHead().getY() - fVector.getBase().getY()), fVector.getDimY(),
-                    "The Y dimension is incorrect");
-            assertEquals(Math.abs(fVector.getBase().getY() - fVector.getHead().getY()), fVector.getDimY(),
-                    "The Y dimension is incorrect");
+            assertEquals(Math.abs(fVector.getHead().getY() - fVector.getBase().getY()), fVector.getLengthY(),
+                    "The Y length is incorrect");
+            assertEquals(Math.abs(fVector.getBase().getY() - fVector.getHead().getY()), fVector.getLengthY(),
+                    "The Y length is incorrect");
         }
 
         @Test
-        @DisplayName("Get dimension Z")
-        void getDimZ() {
+        @DisplayName("Get length Z")
+        void getLengthZ() {
             IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
 
-            assertEquals(Math.abs(fVector.getHead().getZ() - fVector.getBase().getZ()), fVector.getDimZ(),
-                    "The Z dimension is incorrect");
-            assertEquals(Math.abs(fVector.getBase().getZ() - fVector.getHead().getZ()), fVector.getDimZ(),
-                    "The Z dimension is incorrect");
+            assertEquals(Math.abs(fVector.getHead().getZ() - fVector.getBase().getZ()), fVector.getLengthZ(),
+                    "The Z length is incorrect");
+            assertEquals(Math.abs(fVector.getBase().getZ() - fVector.getHead().getZ()), fVector.getLengthZ(),
+                    "The Z length is incorrect");
         }
 
         @Test
-        @DisplayName("Get radius")
-        void getRadius() {
+        @DisplayName("Get magnitude")
+        void getMagnitude() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 1, 1);
             IFPoint fPointHead = FactoryGeometry.getIFPoint(2, 2, 2);
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            assertEquals(Math.sqrt(3), fVector.getRadius(), jitter, "The radius is erroneous");
+            assertEquals(Math.sqrt(3), fVector.getMagnitude(), jitter, "The radius is erroneous");
         }
 
         @Test
-        @DisplayName("Get radius (zero)")
-        void getRadiusZero() {
+        @DisplayName("Get magnitude (zero)")
+        void getMagnitudeZero() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint();
             IFPoint fPointHead = FactoryGeometry.getIFPoint();
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            assertEquals(0, fVector.getRadius(), jitter, "The radius should be zero");
+            assertEquals(0, fVector.getMagnitude(), jitter, "The radius should be zero");
         }
 
         @Test
-        @DisplayName("Get radius (random)")
-        void getRadiusRandom() {
+        @DisplayName("Get magnitude (random)")
+        void getMagnitudeRandom() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFPoint fPointHead = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            double dimX = fVector.getDimX() * fVector.getDimX();
-            double dimY = fVector.getDimY() * fVector.getDimY();
-            double dimZ = fVector.getDimZ() * fVector.getDimZ();
+            double dimX = fVector.getLengthX() * fVector.getLengthX();
+            double dimY = fVector.getLengthY() * fVector.getLengthY();
+            double dimZ = fVector.getLengthZ() * fVector.getLengthZ();
             double radius = Math.sqrt(dimX + dimY + dimZ);
 
-            assertEquals(radius, fVector.getRadius(), jitter, "The radius is erroneous");
+            assertEquals(radius, fVector.getMagnitude(), jitter, "The radius is erroneous");
         }
 
         @Test
-        @DisplayName("Set radius")
-        void setRadius() {
+        @DisplayName("Set magnitude")
+        void setMagnitude() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(3, 3, 3);
             IFPoint fPointHead = FactoryGeometry.getIFPoint(5, 5, 5);
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            fVector.setRadius(Math.sqrt(3));
+            fVector.setMagnitude(Math.sqrt(3));
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(3, fVector.getBase().getX(),
@@ -1342,23 +1341,23 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Set radius (random)")
-        void setRadiusRandom() {
+        @DisplayName("Set magnitude (random)")
+        void setMagnitudeRandom() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFPoint fPointHead = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            fVector.setRadius(1);
+            fVector.setMagnitude(1);
 
-            assertEquals(1, fVector.getRadius(), jitter, "The radius is erroneous");
+            assertEquals(1, fVector.getMagnitude(), jitter, "The radius is erroneous");
         }
 
         @Test
-        @DisplayName("Set radius (throw IllegalArgumentException)")
-        void setRadiusThrowIllegalArgumentException() {
+        @DisplayName("Set magnitude (throw IllegalArgumentException)")
+        void setMagnitudeThrowIllegalArgumentException() {
             IFVector fVector = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(), FactoryGeometry.getIFPoint());
 
-            assertThrows(IllegalArgumentException.class, () -> fVector.setRadius(-1),
+            assertThrows(IllegalArgumentException.class, () -> fVector.setMagnitude(-1),
                     "The radius must be a positive value");
         }
 
@@ -1371,7 +1370,7 @@ public class IFVectorTest {
 
             fVector.normalize();
 
-            assertEquals(1, fVector.getRadius(), jitter, "The magnitude is incorrect");
+            assertEquals(1, fVector.getMagnitude(), jitter, "The magnitude is incorrect");
         }
 
         @Test
@@ -1384,15 +1383,15 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Reflect")
-        void reflect() {
+        @DisplayName("Reflect head")
+        void reflectHead() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 2, 3);
             IFPoint fPointHead = HelperRandom.getTestPoint();
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
             IFPoint fPointRef = fPointHead.copy().sub(fPointBase).reflect().add(fPointBase);
 
-            fVector.reflect();
+            fVector.reflectHead();
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(1, fVector.getBase().getX(),
@@ -1411,13 +1410,13 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Reflect (validate references)")
-        void reflectValidateReferences() {
+        @DisplayName("Reflect head (validate references)")
+        void reflectHeadValidateReferences() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = HelperRandom.getTestPoint();
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            fVector.reflect();
+            fVector.reflectHead();
 
             assertAll("Validate IFPoint references",
                     () -> assertNotSame(fVector.getBase(), fVector.getHead(),
@@ -1430,13 +1429,13 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Invert")
-        void invert() {
+        @DisplayName("Invert direction")
+        void invertDirection() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 2, 3);
             IFPoint fPointHead = FactoryGeometry.getIFPoint(4, 5, 6);
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            fVector.invert();
+            fVector.invertDirection();
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(4, fVector.getBase().getX(),
@@ -1455,13 +1454,13 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Invert (validate references)")
-        void invertValidateReferences() {
+        @DisplayName("Invert direction (validate references)")
+        void invertDirectionValidateReferences() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = HelperRandom.getTestPoint();
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            fVector.invert();
+            fVector.invertDirection();
 
             assertAll("Validate IFPoint references",
                     () -> assertNotSame(fVector.getBase(), fVector.getHead(),
@@ -1833,7 +1832,7 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get dot product")
-        void dProd() {
+        void getDotProduct() {
             IFPoint fPointBaseA = HelperRandom.getTestPoint();
             IFPoint fPointHeadA = HelperRandom.getTestPoint();
             IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
@@ -1842,7 +1841,7 @@ public class IFVectorTest {
             IFPoint fPointHeadB = HelperRandom.getTestPoint();
             IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
 
-            double result = fVectorA.dProd(fVectorB);
+            double result = fVectorA.getDotProduct(fVectorB);
 
             fVectorA.relocateBase(FactoryGeometry.getIFPoint());
             fVectorB.relocateBase(FactoryGeometry.getIFPoint());
@@ -1859,17 +1858,17 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get dot product (simple)")
-        void dProdSimple() {
+        void getDotProductSimple() {
             IFVector fVectorA = FactoryGeometry.getIFVector(0, 0, 0, 1, 2, 3);
             IFVector fVectorB = FactoryGeometry.getIFVector(0, 0, 0, 4, 5, 6);
 
-            assertEquals(32, fVectorA.dProd(fVectorB),
+            assertEquals(32, fVectorA.getDotProduct(fVectorB),
                     "The resulting IFVector is erroneous");
         }
 
         @Test
         @DisplayName("Get dot product (validate references)")
-        void dProdValidateReferences() {
+        void getDotProductValidateReferences() {
             IFPoint fPointBaseA = HelperRandom.getTestPoint();
             IFPoint fPointHeadA = HelperRandom.getTestPoint();
             IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
@@ -1878,7 +1877,7 @@ public class IFVectorTest {
             IFPoint fPointHeadB = HelperRandom.getTestPoint();
             IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
 
-            fVectorA.dProd(fVectorB);
+            fVectorA.getDotProduct(fVectorB);
 
             assertAll("Validate IFPoint references",
                     () -> assertNotSame(fVectorA.getBase(), fVectorA.getHead(),
@@ -1898,7 +1897,7 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get dot product (validate positions)")
-        void dProdValidatePositions() {
+        void getDotProductValidatePositions() {
             IFPoint fPointBaseA = FactoryGeometry.getIFPoint(1, 2, 3);
             IFPoint fPointHeadA = FactoryGeometry.getIFPoint(4, 5, 6);
             IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
@@ -1907,7 +1906,7 @@ public class IFVectorTest {
             IFPoint fPointHeadB = FactoryGeometry.getIFPoint(-4, -5, -6);
             IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
 
-            fVectorA.dProd(fVectorB);
+            fVectorA.getDotProduct(fVectorB);
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(1, fVectorA.getBase().getX(),
@@ -1940,21 +1939,21 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get dot product (throw NullPointerException)")
-        void dProdThrowNullPointerException() {
+        void getDotProductThrowNullPointerException() {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperNull.getIFVector();
 
-            assertThrows(NullPointerException.class, () -> fVectorA.dProd(fVectorB),
+            assertThrows(NullPointerException.class, () -> fVectorA.getDotProduct(fVectorB),
                     "The reference IFVector must not be null");
         }
 
         @Test
         @DisplayName("Get dot product with IFPoint")
-        void dProdWithIFPoint() {
+        void getDotProductWithIFPoint() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            double result = fVector.dProd(fPoint);
+            double result = fVector.getDotProduct(fPoint);
 
             fPoint.sub(fVector.getBase());
             fVector.relocateBase();
@@ -1968,13 +1967,13 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get dot product with IFPoint (validate references)")
-        void dProductWithIFPointValidateReferences() {
+        void getDotProducttWithIFPointValidateReferences() {
             IFPoint base = FactoryGeometry.getIFPoint();
             IFPoint head = FactoryGeometry.getIFPoint(2, 2, 0);
             IFVector fVector = FactoryGeometry.getIFVector(base, head);
             IFPoint fPoint = FactoryGeometry.getIFPoint(4, -4, 0);
 
-            fVector.dProd(fPoint);
+            fVector.getDotProduct(fPoint);
 
             assertAll("Validate IFPoint references",
                     () -> assertNotSame(fVector.getBase(), fVector.getHead(),
@@ -1988,33 +1987,33 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get dot product with IFPoint (validate positions)")
-        void dProductWithIFPointValidatePositions() {
+        void getDotProductWithIFPointValidatePositions() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
             IFPoint fPointRef = fPoint.copy();
 
-            fVector.dProd(fPoint);
+            fVector.getDotProduct(fPoint);
 
             assertEquals(fPoint, fPointRef, "The IFVector value should not change");
         }
 
         @Test
         @DisplayName("Get dot product with IFPoint (throw NullPointerException)")
-        void dProductWithIFPointThrowNullPointerException() {
+        void getDotProductWithIFPointThrowNullPointerException() {
             IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint());
             IFPoint fPoint = HelperNull.getIFPoint();
 
-            assertThrows(NullPointerException.class, () -> fVector.dProd(fPoint),
+            assertThrows(NullPointerException.class, () -> fVector.getDotProduct(fPoint),
                     "The reference IFPoint must not be null");
         }
 
         @Test
         @DisplayName("Get cross product")
-        void cProd() {
+        void getCrossProduct() {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector();
 
-            IFVector fVectorRes = fVectorA.copy().cProd(fVectorB);
+            IFVector fVectorRes = fVectorA.copy().getCrossProduct(fVectorB);
 
             IFPoint fPointRel = fVectorA.getBase().copy();
 
@@ -2036,14 +2035,14 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get cross product (simple)")
-        void cProdSimple() {
+        void getCrossProductSimple() {
             IFVector fVectorA = FactoryGeometry.getIFVector(0, 0, 0, 0, 0, 1);
             IFVector fVectorB = FactoryGeometry.getIFVector(0, 0, 0, 1, 0, 0);
 
             fVectorA.relocateBase(1, 1, 1);
             fVectorB.relocateBase(-1, -1, -1);
 
-            fVectorA.cProd(fVectorB);
+            fVectorA.getCrossProduct(fVectorB);
 
             assertEquals(fVectorA, FactoryGeometry.getIFVector(1, 1, 1, 1, 2, 1),
                     "The resulting IFVector is erroneous");
@@ -2051,7 +2050,7 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get cross product (validate references)")
-        void cProdValidateReferences() {
+        void getCrossProductValidateReferences() {
             IFPoint fPointBaseA = HelperRandom.getTestPoint();
             IFPoint fPointHeadA = HelperRandom.getTestPoint();
             IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
@@ -2060,7 +2059,7 @@ public class IFVectorTest {
             IFPoint fPointHeadB = HelperRandom.getTestPoint();
             IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
 
-            IFVector fVectorRef = fVectorA.cProd(fVectorB);
+            IFVector fVectorRef = fVectorA.getCrossProduct(fVectorB);
 
             assertAll("Validate IFPoint references",
                     () -> assertSame(fVectorRef, fVectorA,
@@ -2082,33 +2081,33 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get cross product (validate positions)")
-        void cProdValidatePositions() {
+        void getCrossProductValidatePositions() {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector();
             IFVector fVectorRef = fVectorB.copy();
 
-            fVectorA.cProd(fVectorB);
+            fVectorA.getCrossProduct(fVectorB);
 
             assertEquals(fVectorB, fVectorRef, "The IFVector value should not change");
         }
 
         @Test
         @DisplayName("Get cross product (throw NullPointerException")
-        void cProdThrowNullPointerException() {
+        void getCrossProductThrowNullPointerException() {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperNull.getIFVector();
 
-            assertThrows(NullPointerException.class, () -> fVectorA.cProd(fVectorB),
+            assertThrows(NullPointerException.class, () -> fVectorA.getCrossProduct(fVectorB),
                     "The reference IFVector must not be null");
         }
 
         @Test
         @DisplayName("Get cross product with IFPoint")
-        void cProdWithIFPoint() {
+        void getCrossProductWithIFPoint() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFVector fVectorRes = fVector.copy().cProd(fPoint);
+            IFVector fVectorRes = fVector.copy().getCrossProduct(fPoint);
             IFPoint fPointRel = fVector.getBase().copy();
 
             fPoint.sub(fPointRel);
@@ -2126,12 +2125,12 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get cross product with IFPoint (validate references)")
-        void cProdWithIFPointValidateReferences() {
+        void getCrossProductWithIFPointValidateReferences() {
             IFPoint base = FactoryGeometry.getIFPoint();
             IFPoint head = HelperRandom.getTestPoint();
             IFVector fVector = FactoryGeometry.getIFVector(base, head);
 
-            IFVector fVectorRef = fVector.cProd(HelperRandom.getTestPoint());
+            IFVector fVectorRef = fVector.getCrossProduct(HelperRandom.getTestPoint());
 
             assertAll("Validate IFPoint references",
                     () -> assertSame(fVectorRef, fVector,
@@ -2147,23 +2146,23 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Get cross product with IFPoint (validate positions)")
-        void cProdWithIFPointValidatePositions() {
+        void getCrossProductWithIFPointValidatePositions() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
             IFPoint fPointRef = fPoint.copy();
 
-            fVector.cProd(fPoint);
+            fVector.getCrossProduct(fPoint);
 
             assertEquals(fPoint, fPointRef, "The IFVector value should not change");
         }
 
         @Test
         @DisplayName("Get cross product with IFPoint (throw NullPointerException)")
-        void cProdWithIFPointThrowNullPointerException() {
+        void getCrossProductWithIFPointThrowNullPointerException() {
             IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint());
             IFPoint fPoint = HelperNull.getIFPoint();
 
-            assertThrows(NullPointerException.class, () -> fVector.cProd(fPoint),
+            assertThrows(NullPointerException.class, () -> fVector.getCrossProduct(fPoint),
                     "The reference IFPoint must not be null");
         }
 

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.Configuration.jitter;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Timeout(5)
 @DisplayName("IFLine")
@@ -253,9 +252,7 @@ public class IFLineTest {
                     () -> assertNotSame(fLineA, fLineB,
                             "IFLines represent different objects"),
                     () -> assertEquals(fLineA, fLineB,
-                            "IFLines should have the same values"),
-                    () -> assertNotEquals(fLineA, fLineB.getOrigin().add(jitter),
-                            "IFLines should have different values")
+                            "IFLines should have the same values")
             );
         }
 

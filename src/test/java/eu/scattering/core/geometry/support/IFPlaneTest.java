@@ -250,9 +250,7 @@ public class IFPlaneTest {
                     () -> assertNotSame(fPlaneA, fPlaneB,
                             "IFPlanes represent different objects"),
                     () -> assertEquals(fPlaneA, fPlaneB,
-                            "IFPlanes should have the same values"),
-                    () -> assertNotEquals(fPlaneA, fPlaneB.getOrigin().add(jitter),
-                            "IFPlanes should have different values")
+                            "IFPlanes should have the same values")
             );
         }
 
@@ -419,7 +417,7 @@ public class IFPlaneTest {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFPoint fPoint = FactoryGeometry.getIFVector(1, 1, 1)
                     .mul(jitter)
-                    .reflect()
+                    .reflectHead()
                     .relocateBase(-1, 2, -1)
                     .getHead();
 
@@ -438,7 +436,7 @@ public class IFPlaneTest {
             IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
             IFPoint fPoint = FactoryGeometry.getIFVector(1, 1, 1)
                     .mul(jitter)
-                    .reflect()
+                    .reflectHead()
                     .relocateBase(-1, 2, -1)
                     .getHead();
 

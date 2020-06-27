@@ -4,6 +4,7 @@ import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -309,7 +310,9 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     @Override
     public T devDescribe() {
 
-        debugPrintStream.println(toString());
+        debugPrintStream.println(LocalTime.now().toString()
+                + " - " + self().getClass().getSimpleName()
+                + " - " + toString());
 
         return self();
     }
@@ -317,7 +320,10 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     @Override
     public T devDescribe(String message) {
 
-        debugPrintStream.println(message + " - " + toString());
+        debugPrintStream.println(message
+                + " / " + LocalTime.now().toString()
+                + " - " + self().getClass().getSimpleName()
+                + " - " + toString());
 
         return self();
     }

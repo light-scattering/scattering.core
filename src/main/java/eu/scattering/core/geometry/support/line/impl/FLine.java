@@ -7,6 +7,8 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.PresetGeometry;
 import eu.scattering.core.geometry.support.line.IFLine;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -52,6 +54,23 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     // The following fields do not have to modified while extending the class.
     // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public JSONObject exportToJSON() {
+        JSONObject json = new JSONObject();
+        json.append("line", getOrigin().exportToJSON());
+
+        return json;
+    }
+
+    @Override
+    public IFLine importFromJSON(JSONObject json) {
+        JSONArray structure = json.getJSONArray("line");
+
+        getOrigin().set(FactoryGeometry.getIFVector().importFromJSON(structure.getJSONObject(0)));
+
+        return this;
+    }
 
     @Override
     public IFLine copy() {
@@ -144,12 +163,12 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     private IFPoint projectIFPoint(IFPoint fPoint, Mode mode) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
-                .div(getOrigin().getRadius());
+                .div(getOrigin().getMagnitude());
 
         IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
                 .sub(getOrigin().getBase());
 
-        fPoint.set(origin.getBase().copy().add(opA.mul(opB.dProd(opA))));
+        fPoint.set(origin.getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         switch (mode) {
             case LINE:
@@ -164,7 +183,7 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     }
 
     private IFPoint validateProjectionOnRay(IFPoint projection) {
-        double magnitude = getOrigin().getRadius();
+        double magnitude = getOrigin().getMagnitude();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
@@ -181,7 +200,7 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     }
 
     private IFPoint validateProjectionOnSegment(IFPoint projection) {
-        double magnitude = getOrigin().getRadius();
+        double magnitude = getOrigin().getMagnitude();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);

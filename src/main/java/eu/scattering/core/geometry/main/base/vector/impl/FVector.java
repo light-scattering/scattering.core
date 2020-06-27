@@ -19,7 +19,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private IFPoint[] origin = new IFPoint[2];
+    private final IFPoint[] origin = new IFPoint[2];
 
     private FVector() { }
 
@@ -153,15 +153,15 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     @Override
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
-        json.append("assembly", getBase().exportToJSON());
-        json.append("assembly", getHead().exportToJSON());
+        json.append("vector", getBase().exportToJSON());
+        json.append("vector", getHead().exportToJSON());
 
         return json;
     }
 
     @Override
     public IFVector importFromJSON(JSONObject json) {
-        JSONArray structure = json.getJSONArray("assembly");
+        JSONArray structure = json.getJSONArray("vector");
 
         setBaseRef(FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(0)));
         setHeadRef(FactoryGeometry.getIFPoint().importFromJSON(structure.getJSONObject(1)));
@@ -297,9 +297,9 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector add(IFVector fVector) {
+    public IFVector add(IFVector vector) {
         IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = fVector.copy().relocateBase();
+        IFVector fCopyExternal = vector.copy().relocateBase();
 
         fCopyLocal.getHead().add(fCopyExternal.getHead());
         fCopyLocal.relocateBase(getBase());
@@ -308,9 +308,9 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector sub(IFVector fVector) {
+    public IFVector sub(IFVector vector) {
         IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = fVector.copy().relocateBase();
+        IFVector fCopyExternal = vector.copy().relocateBase();
 
         fCopyLocal.getHead().sub(fCopyExternal.getHead());
         fCopyLocal.relocateBase(getBase());
@@ -319,19 +319,19 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public double getDimX() {
+    public double getLengthX() {
 
         return Math.abs(getHead().getX() - getBase().getX());
     }
 
     @Override
-    public double getDimY() {
+    public double getLengthY() {
 
         return Math.abs(getHead().getY() - getBase().getY());
     }
 
     @Override
-    public double getDimZ() {
+    public double getLengthZ() {
 
         return Math.abs(getHead().getZ() - getBase().getZ());
     }
@@ -347,7 +347,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector reflect() {
+    public IFVector reflectHead() {
         IFVector fCopyLocal = copy().relocateBase();
 
         fCopyLocal.getHead().reflect();
@@ -357,7 +357,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector invert() {
+    public IFVector invertDirection() {
         IFPoint container = getHead().copy();
 
         getHead().set(getBase());
@@ -367,7 +367,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public double getRadius() {
+    public double getMagnitude() {
 
         double distanceX = getHead().getX() - getBase().getX();
         double distanceY = getHead().getY() - getBase().getY();
@@ -377,7 +377,7 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector setRadius(double magnitude) throws SamePositionException {
+    public IFVector setMagnitude(double magnitude) throws SamePositionException {
         IFVector fCopyLocal = copy().relocateBase();
 
         fCopyLocal.getHead().setRadius(magnitude);
@@ -421,18 +421,18 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public double getAngle(IFPoint fPoint) {
+    public double getAngle(IFPoint ref) {
 
-        return getAngle(FactoryGeometry.getIFVector(getBase(), fPoint));
+        return getAngle(FactoryGeometry.getIFVector(getBase(), ref));
     }
 
     @Override
-    public double getAngle(IFVector fVector) {
+    public double getAngle(IFVector ref) {
         double angle, dProd, magAB;
         IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = fVector.copy().relocateBase();
+        IFVector fCopyExternal = ref.copy().relocateBase();
 
-        dProd = fCopyLocal.dProd(fCopyExternal);
+        dProd = fCopyLocal.getDotProduct(fCopyExternal);
         magAB = fCopyLocal.getHead().getRadius() * fCopyExternal.getHead().getRadius();
         angle = Math.acos(dProd / magAB);
 
@@ -440,41 +440,41 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
-    public double dProd(IFPoint fPoint) {
+    public double getDotProduct(IFPoint ref) {
 
-        return dProd(FactoryGeometry.getIFVector(getBase(), fPoint));
+        return getDotProduct(FactoryGeometry.getIFVector(getBase(), ref));
     }
 
     @Override
-    public double dProd(IFVector fVector) {
+    public double getDotProduct(IFVector ref) {
         IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = fVector.copy().relocateBase();
+        IFVector fCopyExternal = ref.copy().relocateBase();
 
-        return fCopyLocal.getHead().dProd(fCopyExternal.getHead());
+        return fCopyLocal.getHead().getDotProduct(fCopyExternal.getHead());
     }
 
     @Override
-    public IFVector cProd(IFPoint fPoint) {
+    public IFVector getCrossProduct(IFPoint ref) {
 
-        return cProd(FactoryGeometry.getIFVector(getBase(), fPoint));
+        return getCrossProduct(FactoryGeometry.getIFVector(getBase(), ref));
     }
 
     @Override
-    public IFVector cProd(IFVector fVector) {
+    public IFVector getCrossProduct(IFVector ref) {
         IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = fVector.copy().relocateBase();
+        IFVector fCopyExternal = ref.copy().relocateBase();
 
-        fCopyLocal.getHead().cProd(fCopyExternal.getHead());
+        fCopyLocal.getHead().getCrossProduct(fCopyExternal.getHead());
         fCopyLocal.relocateBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
-    public boolean isParallel(IFVector fVector) {
+    public boolean isParallel(IFVector ref) {
         double conX, conY, conZ;
         IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = fVector.copy().relocateBase();
+        IFVector fCopyExternal = ref.copy().relocateBase();
 
         conX = fCopyLocal.getHead().getX() / fCopyExternal.getHead().getX();
         conY = fCopyLocal.getHead().getY() / fCopyExternal.getHead().getY();
@@ -485,44 +485,44 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
 
     @Override
     public IFVector setParallel(IFPoint base, IFPoint head) {
-        double magnitude = getRadius();
+        double magnitude = getMagnitude();
         IFPoint baseCopy = getBase().copy();
 
-        return set(base, head).setRadius(magnitude).relocateBase(baseCopy);
+        return set(base, head).setMagnitude(magnitude).relocateBase(baseCopy);
     }
 
     @Override
-    public IFVector setParallel(IFVector fVector) {
-        double magnitude = getRadius();
+    public IFVector setParallel(IFVector ref) {
+        double magnitude = getMagnitude();
         IFPoint baseCopy = getBase().copy();
 
-        return set(fVector).setRadius(magnitude).relocateBase(baseCopy);
+        return set(ref).setMagnitude(magnitude).relocateBase(baseCopy);
     }
 
     @Override
-    public boolean isOrthogonal(IFVector fVector) {
+    public boolean isOrthogonal(IFVector ref) {
 
-        return Math.abs((Math.PI * 0.5) - getAngle(fVector)) < jitter;
+        return Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter;
     }
 
     @Override
     public IFVector setOrthogonal(IFPoint headA, IFPoint headB) {
-        double magnitude = getRadius();
+        double magnitude = getMagnitude();
         IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), headB.copy());
 
         setHead(headA);
 
-        return cProd(fVectorRef).setRadius(magnitude);
+        return getCrossProduct(fVectorRef).setMagnitude(magnitude);
     }
 
     @Override
-    public IFVector setOrthogonal(IFVector fVector) {
-        double magnitude = getRadius();
-        IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), fVector.getHead().copy());
+    public IFVector setOrthogonal(IFVector ref) {
+        double magnitude = getMagnitude();
+        IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), ref.getHead().copy());
 
-        setHead(fVector.getBase());
+        setHead(ref.getBase());
 
-        return cProd(fVectorRef.copy()).setRadius(magnitude);
+        return getCrossProduct(fVectorRef.copy()).setMagnitude(magnitude);
     }
 
     @Override

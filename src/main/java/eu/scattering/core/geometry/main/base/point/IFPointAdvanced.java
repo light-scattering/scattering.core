@@ -7,27 +7,27 @@ public interface IFPointAdvanced {
     IFPoint setSphericalCoordinates(double inclination, double azimuth);
     IFPoint setRandom(IFPoint ...exclude);
 
-    IFPoint normalize();
+//    boolean isExact(double x, double y, double z);
+//    boolean isSimilar(double x, double y, double z);
 
+    IFPoint normalize();
     IFPoint reflect();
-    IFPoint reflect(IFPoint fPoint);
+    IFPoint reflect(IFPoint ref);
 
     double getRadius();
     IFPoint setRadius(double radius) throws SamePositionException, IllegalArgumentException;
-
     double getInclination();
     IFPoint setInclination(double inclination);
-
     double getAzimuth();
     IFPoint setAzimuth(double azimuth);
 
-    double getAngle(IFPoint fPoint);
+    double getAngle(IFPoint ref);
 
-    double getDistance(IFPoint fPoint);
-    IFPoint setDistance(IFPoint fPoint, double distance) throws SamePositionException, IllegalArgumentException;
+    double getDistance(IFPoint ref);
+    IFPoint setDistance(IFPoint ref, double distance) throws SamePositionException, IllegalArgumentException;
 
-    double dProd(IFPoint fPoint);
-    IFPoint cProd(IFPoint fPoint);
+    double getDotProduct(IFPoint ref);
+    IFPoint getCrossProduct(IFPoint ref);
 
     boolean isZero();
 

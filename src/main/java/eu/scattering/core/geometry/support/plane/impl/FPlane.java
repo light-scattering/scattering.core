@@ -6,6 +6,8 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.PresetGeometry;
 import eu.scattering.core.geometry.support.plane.IFPlane;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -51,6 +53,23 @@ public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
     // The following fields do not have to modified while extending the class.
     // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public JSONObject exportToJSON() {
+        JSONObject json = new JSONObject();
+        json.append("plane", getOrigin().exportToJSON());
+
+        return json;
+    }
+
+    @Override
+    public IFPlane importFromJSON(JSONObject json) {
+        JSONArray structure = json.getJSONArray("plane");
+
+        getOrigin().set(FactoryGeometry.getIFVector().importFromJSON(structure.getJSONObject(0)));
+
+        return this;
+    }
 
     @Override
     public IFPlane copy() {
@@ -142,13 +161,13 @@ public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
     private IFPoint projectOnPlane(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
-                .div(getOrigin().getRadius());
+                .div(getOrigin().getMagnitude());
 
         IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
                 .sub(getOrigin().getBase());
 
         IFPoint opC = FactoryGeometry.getIFPoint()
-                .set(getOrigin().getBase().copy().add(opA.mul(opB.dProd(opA))));
+                .set(getOrigin().getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         IFVector translation = FactoryGeometry.getIFVector(opC, fPoint.copy())
                 .relocateBase(getOrigin().getBase());
@@ -159,16 +178,16 @@ public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
     private IFPoint projectOnLine(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
-                .div(getOrigin().getRadius());
+                .div(getOrigin().getMagnitude());
 
         IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
                 .sub(getOrigin().getBase());
 
-        return fPoint.set(origin.getBase().copy().add(opA.mul(opB.dProd(opA))));
+        return fPoint.set(origin.getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
     }
 
     private boolean isInHalfSpace(IFPoint projection) {
-        double magnitude = getOrigin().getRadius();
+        double magnitude = getOrigin().getMagnitude();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);

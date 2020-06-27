@@ -6,6 +6,8 @@ import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import org.json.JSONObject;
 
+import java.time.LocalTime;
+
 import static eu.scattering.core.Configuration.debugPrintStream;
 
 public abstract class PresetGeometry<T extends IGeometrySupport<T>>
@@ -50,27 +52,14 @@ public abstract class PresetGeometry<T extends IGeometrySupport<T>>
         return getOrigin().isSimilar(element.getOrigin());
     }
 
-    @Override
-    public JSONObject exportToJSON() {
-
-        return getOrigin().exportToJSON();
-    }
-
-    @Override
-    public T importFromJSON(JSONObject json) {
-        T origin = copy();
-
-        origin.getOrigin().set(FactoryGeometry.getIFVector().importFromJSON(json));
-
-        return origin;
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
     public T devDescribe() {
 
-        debugPrintStream.println(toString());
+        debugPrintStream.println(LocalTime.now().toString()
+                + " - " + self().getClass().getSimpleName()
+                + " - " + toString());
 
         return self();
     }
@@ -78,7 +67,10 @@ public abstract class PresetGeometry<T extends IGeometrySupport<T>>
     @Override
     public T devDescribe(String message) {
 
-        debugPrintStream.println(message + " - " + toString());
+        debugPrintStream.println(message
+                + " / " + LocalTime.now().toString()
+                + " - " + self().getClass().getSimpleName()
+                + " - " + toString());
 
         return self();
     }
