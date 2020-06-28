@@ -1,10 +1,10 @@
 package eu.scattering.core.geometry.support.plane.impl;
 
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.main.IGeometryAssembly;
+import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.geometry.support.PresetGeometry;
+import eu.scattering.core.geometry.support.PresetSupport;
 import eu.scattering.core.geometry.support.plane.IFPlane;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static eu.scattering.core.Configuration.jitter;
 
-public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
+public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -104,21 +104,21 @@ public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Consumer<IGeometryAssembly> project() {
+    public Consumer<IBaseExtensionAssembly> project() {
 
         return (e) -> e.disassemble()
                 .forEach(this::projectOnPlane);
     }
 
     @Override
-    public Consumer<IGeometryAssembly> reflect() {
+    public Consumer<IBaseExtensionAssembly> reflect() {
 
         return (e) -> e.disassemble()
                 .forEach(p -> p.reflect(projectOnPlane(p.copy())));
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Boolean>> isCloseTo() {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo() {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectOnPlane(p.copy())) < jitter)
@@ -126,7 +126,7 @@ public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Double>> getDistance() {
+    public Function<IBaseExtensionAssembly, List<Double>> getDistance() {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectOnPlane(p.copy())))
@@ -134,7 +134,7 @@ public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Boolean>> isInHalfSpace() {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isInHalfSpace() {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> isInHalfSpace(projectOnLine(p.copy())))
@@ -144,7 +144,7 @@ public class FPlane extends PresetGeometry<IFPlane> implements IFPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isCutting(IGeometryAssembly assembly) {
+    public boolean isCutting(IBaseExtensionAssembly assembly) {
 
         List<Boolean> isInHalfSpace = assembly.disassemble().stream()
                 .map(p -> isInHalfSpace(projectOnLine(p.copy())))

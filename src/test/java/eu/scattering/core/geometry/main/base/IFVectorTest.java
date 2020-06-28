@@ -1429,6 +1429,135 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Reflect base")
+        void reflectBase() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = FactoryGeometry.getIFPoint(1, 2, 3);
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            IFPoint fPointRef = fPointBase.copy().sub(fPointHead).reflect().add(fPointHead);
+
+            fVector.reflectBase();
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(fPointRef.getX(), fVector.getBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(fPointRef.getY(), fVector.getBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(1, fVector.getHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(2, fVector.getHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(3, fVector.getHead().getZ(),
+                            "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Reflect base (simple)")
+        void reflectBaseSimple() {
+            IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, 2, 2, 2);
+
+            fVector.reflectBase();
+
+            assertAll("Validate IFPoint values",
+                    () -> assertEquals(3, fVector.getBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(3, fVector.getBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(3, fVector.getBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(2, fVector.getHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(2, fVector.getHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(2, fVector.getHead().getZ(),
+                            "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Reflect base (validate references)")
+        void reflectBaseValidateReferences() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint();
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            fVector.reflectBase();
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Reflect")
+        void reflect() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint();
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            IFVector fVectorRef = FactoryGeometry.getIFVector(fVector.getBase().copy().reflect(fPoint),
+                    fVector.getHead().copy().reflect(fPoint));
+
+            fVector.reflect(fPoint);
+
+            assertTrue(fVector.isSimilar(fVectorRef),"The reflection is erroneous");
+        }
+
+        @Test
+        @DisplayName("Reflect (simple)")
+        void reflectSimple() {
+            IFVector fVector = FactoryGeometry.getIFVector(1, 1, 0, 1, 3, 0);
+            IFPoint fPoint = FactoryGeometry.getIFPoint(2, 2, 0);
+
+            fVector.reflect(fPoint);
+
+            assertTrue(fVector.isSimilar(3, 3, 0, 3, 1, 0),
+                    "The reflection is erroneous");
+        }
+
+        @Test
+        @DisplayName("Reflect (validate positions)")
+        void reflectValidatePositions() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFPoint fPoint = HelperRandom.getTestPoint();
+            IFPoint fPointRef = fPoint.copy();
+
+            fVector.reflect(fPoint);
+
+            assertTrue(fPoint.isExact(fPointRef),"Values of the reference IFPoint should not change");
+        }
+
+        @Test
+        @DisplayName("Reflect (validate references)")
+        void reflectValidateReferences() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint();
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector.reflect(fPoint);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should point at different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Invert direction")
         void invertDirection() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 2, 3);
@@ -2468,6 +2597,38 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Is exact with parameters")
+        void isExactWithParameters() {
+            double bX = HelperRandom.getTestValue();
+            double bY = HelperRandom.getTestValue();
+            double bZ = HelperRandom.getTestValue();
+            double hX = HelperRandom.getTestValue();
+            double hY = HelperRandom.getTestValue();
+            double hZ = HelperRandom.getTestValue();
+
+            IFVector fVector = FactoryGeometry.getIFVector(bX, bY, bZ, hX, hY, hZ);
+
+            assertTrue(fVector.isExact(bX, bY, bZ, hX, hY, hZ),
+                    "IFVector values should be equal");
+        }
+
+        @Test
+        @DisplayName("Is exact with parameters (fail)")
+        void isExactWithParametersFail() {
+            double bX = HelperRandom.getTestValue();
+            double bY = HelperRandom.getTestValue();
+            double bZ = HelperRandom.getTestValue();
+            double hX = HelperRandom.getTestValue();
+            double hY = HelperRandom.getTestValue();
+            double hZ = HelperRandom.getTestValue();
+
+            IFVector fVector = FactoryGeometry.getIFVector(bX, bY, bZ, hX, hY, hZ);
+
+            assertFalse(fVector.isExact(0, 0, 0, 0, 0, 0),
+                    "IFVector values should not be equal");
+        }
+
+        @Test
         @DisplayName("Is similar")
         void isSimilar() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
@@ -2498,6 +2659,42 @@ public class IFVectorTest {
 
             assertThrows(NullPointerException.class,
                     () -> fVector.isSimilar(null), "The operand cannot be null");
+        }
+
+        @Test
+        @DisplayName("Is similar with parameters")
+        void isSimilarWithParameters() {
+            double bX = HelperRandom.getTestValue();
+            double bY = HelperRandom.getTestValue();
+            double bZ = HelperRandom.getTestValue();
+            double hX = HelperRandom.getTestValue();
+            double hY = HelperRandom.getTestValue();
+            double hZ = HelperRandom.getTestValue();
+
+            IFVector fVector = FactoryGeometry.getIFVector(
+                    bX + (0.5 * jitter), bY + (0.5 * jitter), bZ + (0.5 * jitter),
+                    hX + (0.5 * jitter), hY + (0.5 * jitter), hZ + (0.5 * jitter));
+
+            assertTrue(fVector.isSimilar(bX, bY, bZ, hX, hY, hZ),
+                    "IFVector values should be equal");
+        }
+
+        @Test
+        @DisplayName("Is similar with parameters (fail)")
+        void isSimilarWithParametersFail() {
+            double bX = HelperRandom.getTestValue();
+            double bY = HelperRandom.getTestValue();
+            double bZ = HelperRandom.getTestValue();
+            double hX = HelperRandom.getTestValue();
+            double hY = HelperRandom.getTestValue();
+            double hZ = HelperRandom.getTestValue();
+
+            IFVector fVector = FactoryGeometry.getIFVector(
+                    bX + (1.5 * jitter), bY + (1.5 * jitter), bZ + (1.5 * jitter),
+                    hX + (1.5 * jitter), hY + (1.5 * jitter), hZ + (1.5 * jitter));
+
+            assertFalse(fVector.isSimilar(bX, bY, bZ, hX, hY, hZ),
+                    "IFVector values should not be equal");
         }
 
         @Test

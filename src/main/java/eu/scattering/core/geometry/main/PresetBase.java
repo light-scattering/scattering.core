@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
 
-public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
-        implements IGeometryBase<T>, IDebug<T>, IGeometryAlgebra<T> {
+public abstract class PresetBase<T extends IBase<T>>
+        implements IGeometryBase<T>, IDebug<T>, IBase<T> {
 
     @Override
     public abstract Object clone();
@@ -286,7 +286,7 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
-    public T ext(Consumer<IGeometryAssembly> exp) {
+    public T ext(Consumer<IBaseExtensionAssembly> exp) {
 
         exp.accept(self());
 
@@ -294,13 +294,13 @@ public abstract class PresetGeometry<T extends IGeometryAlgebra<T>>
     }
 
     @Override
-    public List<Double> extVal(Function<IGeometryAssembly, List<Double>> exp) {
+    public List<Double> extVal(Function<IBaseExtensionAssembly, List<Double>> exp) {
 
         return exp.apply(self());
     }
 
     @Override
-    public List<Boolean> extLog(Function<IGeometryAssembly, List<Boolean>> exp) {
+    public List<Boolean> extLog(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
 
         return exp.apply(self());
     }

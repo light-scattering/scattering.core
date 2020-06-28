@@ -1168,6 +1168,22 @@ public class IFPointTest {
         }
 
         @Test
+        @DisplayName("Exactness with parameters")
+        void isExactWithParameters() {
+            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
+
+            assertTrue(fPointRef.isExact(refX, refY, refZ), "IFPoint values should be equal");
+        }
+
+        @Test
+        @DisplayName("Exactness with parameters (fail)")
+        void isExactWithParametersFail() {
+            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
+
+            assertFalse(fPointRef.isExact(0, 0, 0), "IFPoint values should not be equal");
+        }
+
+        @Test
         @DisplayName("Similarity")
         void isSimilar() {
             IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
@@ -1211,6 +1227,24 @@ public class IFPointTest {
                     () -> assertFalse(fPointRef.isSimilar(FactoryGeometry.getIFPoint().add(fPointRef).subZ(ref)),
                             "IFPoints should not be similar (negative Z)")
             );
+        }
+
+        @Test
+        @DisplayName("Similarity with parameters")
+        void isSimilarWithParameters() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
+
+            assertTrue(fPoint.isSimilar(refX + (0.5 * jitter), refY + (0.5 * jitter), refZ + (0.5 * jitter)),
+                    "IFPoint values should be equal");
+        }
+
+        @Test
+        @DisplayName("Similarity with parameters (fail)")
+        void isSimilarWithParametersFail() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
+
+            assertFalse(fPoint.isSimilar(refX + (1.5 * jitter), refY + (1.5 * jitter), refZ + (1.5 * jitter)),
+                    "IFPoint values should not be equal");
         }
 
         @Test

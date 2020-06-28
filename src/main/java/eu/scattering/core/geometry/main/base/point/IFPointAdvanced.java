@@ -7,8 +7,8 @@ public interface IFPointAdvanced {
     IFPoint setSphericalCoordinates(double inclination, double azimuth);
     IFPoint setRandom(IFPoint ...exclude);
 
-//    boolean isExact(double x, double y, double z);
-//    boolean isSimilar(double x, double y, double z);
+    boolean isExact(double x, double y, double z);
+    boolean isSimilar(double x, double y, double z);
 
     IFPoint normalize();
     IFPoint reflect();

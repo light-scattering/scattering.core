@@ -8,8 +8,8 @@ public interface IFVectorAdvanced {
     IFVector setSphericalCoordinates(double inclination, double azimuth);
     IFVector setRandom(IFPoint... exclusion);
 
-//    boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
-//    boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
 
     IFVector relocateBase();
     IFVector relocateBase(double bX, double bY, double bZ);
@@ -30,13 +30,13 @@ public interface IFVectorAdvanced {
 //    IFPoint getCenter();
 
     IFVector normalize();
-//    IFVector reflectBase();
+    IFVector reflectBase();
     IFVector reflectHead();
-//    IFVector reflect(IFPoint ref)
+    IFVector reflect(IFPoint ref);
     IFVector invertDirection();
 
     double getMagnitude();
-    IFVector setMagnitude(double radius) throws SamePositionException;
+    IFVector setMagnitude(double magnitude) throws SamePositionException;
     double getInclination();
     IFVector setInclination(double inclination);
     double getAzimuth();

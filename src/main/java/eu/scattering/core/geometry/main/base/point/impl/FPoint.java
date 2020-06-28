@@ -1,7 +1,8 @@
 package eu.scattering.core.geometry.main.base.point.impl;
 
 import eu.scattering.core.exception.SamePositionException;
-import eu.scattering.core.geometry.main.PresetGeometry;
+import eu.scattering.core.factory.FactoryGeometry;
+import eu.scattering.core.geometry.main.PresetBase;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static eu.scattering.core.Configuration.*;
 
-public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
+public class FPoint extends PresetBase<IFPoint> implements IFPoint {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -397,6 +398,18 @@ public class FPoint extends PresetGeometry<IFPoint> implements IFPoint {
             return setRadius(radius);
         }
 
+    }
+
+    @Override
+    public boolean isExact(double x, double y, double z) {
+
+        return isExact(FactoryGeometry.getIFPoint(x, y, z));
+    }
+
+    @Override
+    public boolean isSimilar(double x, double y, double z) {
+
+        return isSimilar(FactoryGeometry.getIFPoint(x, y, z));
     }
 
     @Override

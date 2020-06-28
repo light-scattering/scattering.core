@@ -2,10 +2,10 @@ package eu.scattering.core.geometry.support.line.impl;
 
 import eu.scattering.core.exception.ProjectionException;
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.main.IGeometryAssembly;
+import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.geometry.support.PresetGeometry;
+import eu.scattering.core.geometry.support.PresetSupport;
 import eu.scattering.core.geometry.support.line.IFLine;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static eu.scattering.core.Configuration.jitter;
 
-public class FLine extends PresetGeometry<IFLine> implements IFLine {
+public class FLine extends PresetSupport<IFLine> implements IFLine {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -105,39 +105,39 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Consumer<IGeometryAssembly> project() {
+    public Consumer<IBaseExtensionAssembly> project() {
 
         return project(Mode.LINE);
     }
 
     @Override
-    public Consumer<IGeometryAssembly> project(Mode mode) {
+    public Consumer<IBaseExtensionAssembly> project(Mode mode) {
 
         return (e) -> e.disassemble()
                 .forEach(p -> projectIFPoint(p, mode));
     }
 
     @Override
-    public Consumer<IGeometryAssembly> reflect() {
+    public Consumer<IBaseExtensionAssembly> reflect() {
 
         return reflect(Mode.LINE);
     }
 
     @Override
-    public Consumer<IGeometryAssembly> reflect(Mode mode) {
+    public Consumer<IBaseExtensionAssembly> reflect(Mode mode) {
 
         return (e) -> e.disassemble()
                 .forEach(p -> p.reflect(projectIFPoint(p.copy(), mode)));
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Boolean>> isCloseTo() {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo() {
 
         return isCloseTo(Mode.LINE);
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Boolean>> isCloseTo(Mode mode) {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo(Mode mode) {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectIFPoint(p.copy(), mode)) < jitter)
@@ -145,13 +145,13 @@ public class FLine extends PresetGeometry<IFLine> implements IFLine {
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Double>> getDistance() {
+    public Function<IBaseExtensionAssembly, List<Double>> getDistance() {
 
         return getDistance(Mode.LINE);
     }
 
     @Override
-    public Function<IGeometryAssembly, List<Double>> getDistance(Mode mode) {
+    public Function<IBaseExtensionAssembly, List<Double>> getDistance(Mode mode) {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectIFPoint(p.copy(), mode)))

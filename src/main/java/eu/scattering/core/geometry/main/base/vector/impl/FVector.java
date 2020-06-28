@@ -2,7 +2,7 @@ package eu.scattering.core.geometry.main.base.vector.impl;
 
 import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.main.PresetGeometry;
+import eu.scattering.core.geometry.main.PresetBase;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import org.json.JSONArray;
@@ -13,7 +13,7 @@ import java.util.List;
 
 import static eu.scattering.core.Configuration.jitter;
 
-public class FVector extends PresetGeometry<IFVector> implements IFVector {
+public class FVector extends PresetBase<IFVector> implements IFVector {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -253,6 +253,18 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
+    public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        return isExact(FactoryGeometry.getIFVector(bX, bY, bZ, hX, hY, hZ));
+    }
+
+    @Override
+    public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        return isSimilar(FactoryGeometry.getIFVector(bX, bY, bZ, hX, hY, hZ));
+    }
+
+    @Override
     public IFVector relocateBase() {
 
         return relocateBase(FactoryGeometry.getIFPoint());
@@ -347,6 +359,16 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
     }
 
     @Override
+    public IFVector reflectBase() {
+        IFVector fCopyLocal = copy().relocateHead();
+
+        fCopyLocal.getBase().reflect();
+        fCopyLocal.relocateHead(getHead());
+
+        return set(fCopyLocal);
+    }
+
+    @Override
     public IFVector reflectHead() {
         IFVector fCopyLocal = copy().relocateBase();
 
@@ -354,6 +376,15 @@ public class FVector extends PresetGeometry<IFVector> implements IFVector {
         fCopyLocal.relocateBase(getBase());
 
         return set(fCopyLocal);
+    }
+
+    @Override
+    public IFVector reflect(IFPoint ref) {
+
+        getBase().reflect(ref);
+        getHead().reflect(ref);
+
+        return this;
     }
 
     @Override

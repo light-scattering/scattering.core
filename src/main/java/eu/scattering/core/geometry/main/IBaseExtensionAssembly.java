@@ -4,7 +4,7 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 import java.util.List;
 
-public interface IGeometryAssembly {
+public interface IBaseExtensionAssembly {
 
     List<IFPoint> disassemble();
 
