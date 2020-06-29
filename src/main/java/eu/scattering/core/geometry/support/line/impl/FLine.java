@@ -131,13 +131,13 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     }
 
     @Override
-    public Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo() {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isPartOf() {
 
-        return isCloseTo(Mode.LINE);
+        return isPartOf(Mode.LINE);
     }
 
     @Override
-    public Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo(Mode mode) {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isPartOf(Mode mode) {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectIFPoint(p.copy(), mode)) < jitter)
@@ -156,6 +156,30 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectIFPoint(p.copy(), mode)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Consumer<IBaseExtensionAssembly> setDistance(double distance) {
+
+        return setDistance(distance, Mode.LINE);
+    }
+
+    @Override
+    public Consumer<IBaseExtensionAssembly> setDistance(double distance, Mode mode) {
+
+        return (e) -> e.disassemble().stream()
+                .map(p -> p.setDistance(projectIFPoint(p.copy(), mode), distance))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Consumer<IBaseExtensionAssembly> translate(double distance) {
+        return null;
+    }
+
+    @Override
+    public IFPoint getCuttingIFPoint() {
+        return null;
     }
 
     // -------------------------------------------------------------------------------------------------

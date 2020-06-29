@@ -1156,6 +1156,131 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Move forward")
+        void moveForward() {
+            double distance = Math.abs(HelperRandom.getTestValue());
+            IFVector fVector = HelperRandom.getTestVector();
+
+            IFVector fVectorRef = fVector.copy()
+                    .relocateBase(fVector.copy()
+                            .setMagnitude(distance)
+                            .getHead());
+
+            fVector.moveForward(distance);
+
+            assertTrue(fVector.isSimilar(fVectorRef),
+                    "The IFVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move forward (simple)")
+        void moveForwardSimple() {
+            IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, 2, 2, 2);
+
+            fVector.moveForward(Math.sqrt(3));
+
+            assertTrue(fVector.isSimilar(FactoryGeometry.getIFVector(2, 2, 2, 3, 3, 3)),
+                    "The IFVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move forward (validate references)")
+        void moveForwardValidateReferences() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            IFVector fVectorRef = fVector.moveForward(1);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertSame(fVectorRef, fVector,
+                            "The IFVector reference should not change"),
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Move forward (negative)")
+        void moveForwardNegative() {
+            double distance = Math.abs(HelperRandom.getTestValue());
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = fVectorA.copy();
+
+            fVectorA.moveForward(-distance);
+            fVectorB.moveBackward(distance);
+
+            assertTrue(fVectorA.isSimilar(fVectorB), "The two operations should have the same effect");
+        }
+
+        @Test
+        @DisplayName("Move backward")
+        void moveBackward() {
+            double distance = Math.abs(HelperRandom.getTestValue());
+            IFVector fVector = HelperRandom.getTestVector();
+
+            IFVector fVectorRef = fVector.copy()
+                    .relocateBase(fVector.copy()
+                            .setMagnitude(distance)
+                            .reflectHead()
+                            .getHead());
+
+            fVector.moveBackward(distance);
+
+            assertTrue(fVector.isSimilar(fVectorRef),
+                    "The IFVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move backward (simple)")
+        void moveBackwardSimple() {
+            IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, 2, 2, 2);
+
+            fVector.moveBackward(Math.sqrt(3));
+
+            assertTrue(fVector.isSimilar(FactoryGeometry.getIFVector(0, 0, 0, 1, 1, 1)),
+                    "The IFVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move backward (validate references)")
+        void moveBackwardValidateReferences() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            IFVector fVectorRef = fVector.moveBackward(1);
+
+            assertAll("Validate IFPoint references",
+                    () -> assertSame(fVectorRef, fVector,
+                            "The IFVector reference should not change"),
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Move backward (negative)")
+        void moveBackwardNegative() {
+            double distance = Math.abs(HelperRandom.getTestValue());
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = fVectorA.copy();
+
+            fVectorA.moveBackward(-distance);
+            fVectorB.moveForward(distance);
+
+            assertTrue(fVectorA.isSimilar(fVectorB), "The two operations should have the same effect");
+        }
+
+        @Test
         @DisplayName("Add IFVector")
         void addIFVector() {
             IFVector fVectorSum = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
@@ -1278,6 +1403,58 @@ public class IFVectorTest {
                     "The Z length is incorrect");
             assertEquals(Math.abs(fVector.getBase().getZ() - fVector.getHead().getZ()), fVector.getLengthZ(),
                     "The Z length is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get center")
+        void getCenter() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFPoint fPointRef = FactoryGeometry.getIFPoint();
+
+            fPointRef.setX(0.5 * (fVector.getHead().getX() + fVector.getBase().getX()));
+            fPointRef.setY(0.5 * (fVector.getHead().getY() + fVector.getBase().getY()));
+            fPointRef.setZ(0.5 * (fVector.getHead().getZ() + fVector.getBase().getZ()));
+
+            assertEquals(fPointRef, fVector.getCenter(), "The IFPoint position is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get center (simple)")
+        void getCenterSimple() {
+            IFVector fVector = FactoryGeometry.getIFVector(-3, -3, -3, 3, 3, 3);
+            IFPoint fPointRef = FactoryGeometry.getIFPoint();
+
+            assertEquals(fPointRef, fVector.getCenter(), "The IFPoint position is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get center (validate positions)")
+        void getCenterValidatePositions() {
+            IFVector fVector = FactoryGeometry.getIFVector(-3, -3, -3, 3, 3, 3);
+            IFVector fVectorRef = fVector.copy();
+
+            fVector.getCenter();
+
+            assertEquals(fVectorRef, fVector, "The IFVector should not change");
+        }
+
+        @Test
+        @DisplayName("Get center (validate references)")
+        void getCenterValidateReferences() {
+            IFPoint fPointBase = HelperRandom.getTestPoint();
+            IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
+            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+
+            fVector.getCenter();
+
+            assertAll("Validate IFPoint references",
+                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                            "IFPoints should be different objects"),
+                    () -> assertSame(fPointBase, fVector.getBase(),
+                            "The base IFPoint should not change"),
+                    () -> assertSame(fPointHead, fVector.getHead(),
+                            "The head IFPoint should not change")
+            );
         }
 
         @Test

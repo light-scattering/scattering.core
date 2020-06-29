@@ -17,8 +17,10 @@ public interface ISupport<T> {
 
     Consumer<IBaseExtensionAssembly> reflect();
 
-    Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo();
+    Function<IBaseExtensionAssembly, List<Boolean>> isPartOf();
 
     Function<IBaseExtensionAssembly, List<Double>> getDistance();
+
+    Consumer<IBaseExtensionAssembly> setDistance(double distance) throws IllegalArgumentException;
 
 }

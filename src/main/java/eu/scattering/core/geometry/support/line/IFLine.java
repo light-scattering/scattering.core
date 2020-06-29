@@ -4,6 +4,7 @@ import eu.scattering.core.exception.ProjectionException;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.support.ISupport;
 
 import java.util.List;
@@ -18,8 +19,15 @@ public interface IFLine extends IGeometryBase<IFLine>, IDebug<IFLine>, ISupport<
 
     Consumer<IBaseExtensionAssembly> reflect(Mode mode) throws ProjectionException;
 
-    Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo(Mode mode) throws ProjectionException;
+    Function<IBaseExtensionAssembly, List<Boolean>> isPartOf(Mode mode) throws ProjectionException;
 
     Function<IBaseExtensionAssembly, List<Double>> getDistance(Mode mode) throws ProjectionException;
+
+    Consumer<IBaseExtensionAssembly> setDistance(double distance, Mode mode)
+            throws ProjectionException, IllegalArgumentException;
+
+    Consumer<IBaseExtensionAssembly> translate(double distance);
+
+    IFPoint getCuttingIFPoint();
 
 }

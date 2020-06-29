@@ -3,6 +3,7 @@ package eu.scattering.core.geometry.support;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.plane.IFPlane;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
@@ -337,32 +338,32 @@ public class IFPlaneTest {
 
         @Test
         @DisplayName("Location")
-        void isCloseTo() {
+        void isPartOf() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFPoint fPoint = FactoryGeometry.getIFPoint(-1, 2, -1).add(0.5 * jitter);
 
-            assertTrue(fPoint.extLog(fPlane.isCloseTo()).get(0),
+            assertTrue(fPoint.extLog(fPlane.isPartOf()).get(0),
                     "The distance should be negligible");
         }
 
         @Test
         @DisplayName("Location (fail)")
-        void isCloseToFail() {
+        void isPartOfFail() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFPoint fPoint = FactoryGeometry.getIFPoint(-1, 2, -1).add(1.5 * jitter);
 
-            assertFalse(fPoint.extLog(fPlane.isCloseTo()).get(0),
+            assertFalse(fPoint.extLog(fPlane.isPartOf()).get(0),
                     "The distance should not be negligible");
         }
 
         @Test
         @DisplayName("Location (validate positions)")
-        void isCloseToValidatePositions() {
+        void isPartOfValidatePositions() {
             IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
             IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(-1, 2, -1).add(0.5 * jitter);
 
-            fPoint.extLog(fPlane.isCloseTo());
+            fPoint.extLog(fPlane.isPartOf());
 
             assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
         }
@@ -491,6 +492,16 @@ public class IFPlaneTest {
             fPlane.isCutting(fVector);
 
             assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+        }
+
+        @Test
+        @DisplayName("Get cutting IFPoint")
+        void getCuttingIFPoint() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 1, 0));
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-2, 1, 0, 1, -1, 0));
+
+            fPlane.getCuttingIFPoint(fLine).devDescribe();
+            //http://geomalgorithms.com/a05-_intersect-1.html
         }
 
     }

@@ -18,8 +18,8 @@ public interface IFVectorAdvanced {
     IFVector relocateHead(double hX, double hY, double hZ);
     IFVector relocateHead(IFPoint head);
 
-//    IFVector moveForward(double distance);
-//    IFVector moveBackward(double distance);
+    IFVector moveForward(double distance);
+    IFVector moveBackward(double distance);
 
     IFVector add(IFVector vector);
     IFVector sub(IFVector vector);
@@ -27,7 +27,7 @@ public interface IFVectorAdvanced {
     double getLengthX();
     double getLengthY();
     double getLengthZ();
-//    IFPoint getCenter();
+    IFPoint getCenter();
 
     IFVector normalize();
     IFVector reflectBase();

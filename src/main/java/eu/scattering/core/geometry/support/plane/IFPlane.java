@@ -3,7 +3,9 @@ package eu.scattering.core.geometry.support.plane;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.support.ISupport;
+import eu.scattering.core.geometry.support.line.IFLine;
 
 import java.util.List;
 import java.util.function.Function;
@@ -13,6 +15,10 @@ public interface IFPlane  extends IGeometryBase<IFPlane>, IDebug<IFPlane>, ISupp
     Function<IBaseExtensionAssembly, List<Boolean>> isInHalfSpace();
 
     boolean isCutting(IBaseExtensionAssembly assembly);
+
+    IFPoint getCuttingIFPoint(IFLine ref);
+
+    IFLine getCuttingIFLine(IFPlane ref);
 
 }
 

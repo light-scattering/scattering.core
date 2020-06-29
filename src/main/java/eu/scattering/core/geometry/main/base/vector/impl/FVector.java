@@ -309,6 +309,36 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
+    public IFVector moveForward(double distance) {
+
+        if (distance < 0) {
+            return moveBackward(-distance);
+        }
+
+        IFVector fCopyLocal = copy();
+        fCopyLocal.setMagnitude(distance);
+
+        relocateBase(fCopyLocal.getHead());
+
+        return this;
+    }
+
+    @Override
+    public IFVector moveBackward(double distance) {
+
+        if (distance < 0) {
+            return moveForward(-distance);
+        }
+
+        IFVector fCopyLocal = copy().reflectHead();
+        fCopyLocal.setMagnitude(distance);
+
+        relocateBase(fCopyLocal.getHead());
+
+        return this;
+    }
+
+    @Override
     public IFVector add(IFVector vector) {
         IFVector fCopyLocal = copy().relocateBase();
         IFVector fCopyExternal = vector.copy().relocateBase();
@@ -346,6 +376,16 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     public double getLengthZ() {
 
         return Math.abs(getHead().getZ() - getBase().getZ());
+    }
+
+    @Override
+    public IFPoint getCenter() {
+
+        double valX = 0.5 * (getHead().getX() + getBase().getX());
+        double valY = 0.5 * (getHead().getY() + getBase().getY());
+        double valZ = 0.5 * (getHead().getZ() + getBase().getZ());
+
+        return FactoryGeometry.getIFPoint(valX, valY, valZ);
     }
 
     @Override

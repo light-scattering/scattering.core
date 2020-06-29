@@ -5,6 +5,7 @@ import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.PresetSupport;
+import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.plane.IFPlane;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -118,7 +119,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     }
 
     @Override
-    public Function<IBaseExtensionAssembly, List<Boolean>> isCloseTo() {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isPartOf() {
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectOnPlane(p.copy())) < jitter)
@@ -131,6 +132,11 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectOnPlane(p.copy())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Consumer<IBaseExtensionAssembly> setDistance(double distance) {
+        return null;
     }
 
     @Override
@@ -154,6 +160,30 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
         boolean conditionFalse = isInHalfSpace.stream().anyMatch(e -> !e);
 
         return conditionTrue && conditionFalse;
+    }
+
+    @Override
+    public IFPoint getCuttingIFPoint(IFLine ref) {
+
+        if (getOrigin().isOrthogonal(ref.getOrigin())) {
+            throw new IllegalArgumentException("The cutting point is non-existent");
+        }
+
+        IFPoint vPlane = getOrigin().copy().relocateBase().normalize().getHead();
+        IFPoint vLine = ref.getOrigin().copy().relocateBase().normalize().getHead();
+
+        double dividend = vPlane.getDotProduct(getOrigin().getBase().copy().sub(ref.getOrigin().getBase()));
+        double divisor = vPlane.getDotProduct(vLine);
+        double distance = dividend / divisor;
+
+        IFVector extension = ref.getOrigin().copy().setMagnitude(distance);
+
+        return extension.getHead();
+    }
+
+    @Override
+    public IFLine getCuttingIFLine(IFPlane ref) {
+        return null;
     }
 
     // -------------------------------------------------------------------------------------------------
