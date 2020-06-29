@@ -1,6 +1,5 @@
 package eu.scattering.core.geometry.support;
 
-import eu.scattering.core.exception.ProjectionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
@@ -323,189 +322,6 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Project - Line")
-        void projectModeLine() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            fPoint.ext(fLine.project(IFLine.Mode.LINE));
-
-            assertTrue(FactoryGeometry.getIFPoint(1, 1, 1).add(relocation).isSimilar(fPoint),
-                    "The projection is erroneous");
-        }
-
-        @Test
-        @DisplayName("Project - Line (validate references)")
-        void projectModeLineValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.project(IFLine.Mode.LINE));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Project - Line (validate positions)")
-        void projectModeLineValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.project(IFLine.Mode.LINE));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Project - Line (position base)")
-        void projectModeLinePositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            fPoint.ext(fLine.project(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Project - Line (position head)")
-        void projectModeLinePositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            fPoint.ext(fLine.project(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Project - Segment")
-        void projectModeSegment() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            fPoint.ext(fLine.project(IFLine.Mode.SEGMENT));
-
-            assertTrue(FactoryGeometry.getIFPoint(1, 1, 1).add(relocation).isSimilar(fPoint),
-                    "The projection is erroneous");
-        }
-
-        @Test
-        @DisplayName("Project - Segment (validate references)")
-        void projectModeSegmentValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.project(IFLine.Mode.SEGMENT));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Project - Segment (validate positions)")
-        void projectModeSegmentValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.project(IFLine.Mode.SEGMENT));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Project - Segment (position base)")
-        void projectModeSegmentPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.project(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Project - Segment (position head)")
-        void projectModeSegmentPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.project(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Project - Ray")
-        void projectModeRay() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            fPoint.ext(fLine.project(IFLine.Mode.RAY));
-
-            assertTrue(FactoryGeometry.getIFPoint(1, 1, 1).add(relocation).isSimilar(fPoint),
-                    "The projection is erroneous");
-        }
-
-        @Test
-        @DisplayName("Project - Ray (validate references)")
-        void projectModeRayValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.project(IFLine.Mode.RAY));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Project - Ray (validate positions)")
-        void projectModeRayValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.project(IFLine.Mode.RAY));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Project - Ray (position base)")
-        void projectModeRayPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.project(IFLine.Mode.RAY)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Project - Ray (position head)")
-        void projectModeRayPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            fPoint.ext(fLine.project(IFLine.Mode.RAY));
-        }
-
-        @Test
         @DisplayName("Reflect")
         void reflect() {
             IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
@@ -561,174 +377,6 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Reflect - Line")
-        void reflectModeLine() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.LINE));
-
-            assertTrue(FactoryGeometry.getIFPoint(2, -1, 2).isSimilar(fPoint),
-                    "The reflection is erroneous");
-        }
-
-        @Test
-        @DisplayName("Reflect - Line (validate references)")
-        void reflectModeLineValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.reflect(IFLine.Mode.LINE));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect - Line (validate positions)")
-        void reflectModeLineValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.LINE));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect - Line (position base)")
-        void reflectModeLinePositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Reflect - Line (position head)")
-        void reflectModeLinePositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Reflect - Segment")
-        void reflectModeSegment() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.SEGMENT));
-
-            assertTrue(FactoryGeometry.getIFPoint(2, -1, 2).isSimilar(fPoint),
-                    "The reflection is erroneous");
-        }
-
-        @Test
-        @DisplayName("Reflect - Segment (validate references)")
-        void reflectModeSegmentValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.reflect(IFLine.Mode.SEGMENT));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect - Segment (validate positions)")
-        void reflectModeSegmentValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.SEGMENT));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect - Segment (position base)")
-        void reflectModeSegmentPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.reflect(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Reflect - Segment (position head)")
-        void reflectModeSegmentPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.reflect(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Reflect - Ray")
-        void reflectModeRay() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.RAY));
-
-            assertTrue(FactoryGeometry.getIFPoint(2, -1, 2).isSimilar(fPoint),
-                    "The reflection is erroneous");
-        }
-
-        @Test
-        @DisplayName("Reflect - Ray (validate references)")
-        void reflectModeRayValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.reflect(IFLine.Mode.RAY));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect - Ray (validate positions)")
-        void reflectModeRayValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.RAY));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect - Ray (position base)")
-        void reflectModeRayPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.reflect(IFLine.Mode.RAY)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Reflect - Ray (position head)")
-        void reflectModeRayPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            fPoint.ext(fLine.reflect(IFLine.Mode.RAY));
-        }
-
-        @Test
         @DisplayName("Location")
         void isPartOf() {
             IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
@@ -781,165 +429,6 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Location - Line")
-        void isPartOfModeLine() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(0.5 * jitter);
-
-            assertTrue(fPoint.extLog(fLine.isPartOf(IFLine.Mode.LINE)).get(0),
-                    "The distance should be negligible");
-        }
-
-        @Test
-        @DisplayName("Location - Line (fail)")
-        void isPartOfModeLineFail() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(1.5 * jitter);
-
-            assertFalse(fPoint.extLog(fLine.isPartOf(IFLine.Mode.LINE)).get(0),
-                    "The distance should not be negligible");
-        }
-
-        @Test
-        @DisplayName("Location - Line (validate positions)")
-        void isPartOfModeLineValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(0.5 * jitter);
-
-            fPoint.extLog(fLine.isPartOf(IFLine.Mode.LINE));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Location - Line (position base)")
-        void isPartOfModeLinePositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(-4, -4, -4).addY(0.5 * jitter);
-
-            fPoint.extLog(fLine.isPartOf(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Location - Line (position head)")
-        void isPartOfModeLinePositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(4, 4, 4).addY(0.5 * jitter);
-
-            fPoint.extLog(fLine.isPartOf(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Location - Segment")
-        void isPartOfModeSegment() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(0.5 * jitter);
-
-            assertTrue(fPoint.extLog(fLine.isPartOf(IFLine.Mode.SEGMENT)).get(0),
-                    "The distance should be negligible");
-        }
-
-        @Test
-        @DisplayName("Location - Segment (fail)")
-        void isPartOfModeSegmentFail() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(1.5 * jitter);
-
-            assertFalse(fPoint.extLog(fLine.isPartOf(IFLine.Mode.SEGMENT)).get(0),
-                    "The distance should not be negligible");
-        }
-
-        @Test
-        @DisplayName("Location - Segment (validate positions)")
-        void isPartOfModeSegmentValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(0.5 * jitter);
-
-            fPoint.extLog(fLine.isPartOf(IFLine.Mode.SEGMENT));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Location - Segment (position base)")
-        void isPartOfModeSegmentPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(-4, -4, -4).addY(0.5 * jitter);
-
-            assertThrows(ProjectionException.class, () -> fPoint.extLog(fLine.isPartOf(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Location - Line (position head)")
-        void isPartOfModeSegmentPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(4, 4, 4).addY(0.5 * jitter);
-
-            assertThrows(ProjectionException.class, () -> fPoint.extLog(fLine.isPartOf(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Location - Ray")
-        void isPartOfModeRay() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(0.5 * jitter);
-
-            assertTrue(fPoint.extLog(fLine.isPartOf(IFLine.Mode.RAY)).get(0),
-                    "The distance should be negligible");
-        }
-
-        @Test
-        @DisplayName("Location - Ray (fail)")
-        void isPartOfModeRayFail() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(1.5 * jitter);
-
-            assertFalse(fPoint.extLog(fLine.isPartOf(IFLine.Mode.RAY)).get(0),
-                    "The distance should not be negligible");
-        }
-
-        @Test
-        @DisplayName("Location - Ray (validate positions)")
-        void isPartOfModeRayValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(0.5 * jitter);
-
-            fPoint.extLog(fLine.isPartOf(IFLine.Mode.RAY));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Location - Ray (position base)")
-        void isPartOfModeRayPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(-4, -4, -4).addY(0.5 * jitter);
-
-            assertThrows(ProjectionException.class, () -> fPoint.extLog(fLine.isPartOf(IFLine.Mode.RAY)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Location - Ray (position head)")
-        void isPartOfModeRayPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(4, 4, 4).addY(0.5 * jitter);
-
-            fPoint.extLog(fLine.isPartOf(IFLine.Mode.RAY));
-        }
-
-        @Test
         @DisplayName("Get distance")
         void getDistance() {
             IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
@@ -984,150 +473,6 @@ public class IFLineTest {
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
             fPoint.extVal(fLine.getDistance());
-        }
-
-        @Test
-        @DisplayName("Get distance - Line")
-        void getDistanceModeLine() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            assertEquals(Math.sqrt(6), fPoint.extVal(fLine.getDistance(IFLine.Mode.LINE)).get(0),
-                    "The distance is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get distance - Line (validate positions)")
-        void getDistanceModeLineValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.extVal(fLine.getDistance(IFLine.Mode.LINE));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Get distance - Line (position base)")
-        void getDistanceModeLinePositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            fPoint.extVal(fLine.getDistance(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Get distance - Line (position head)")
-        void distanceModeLinePositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            fPoint.extVal(fLine.getDistance(IFLine.Mode.LINE));
-        }
-
-        @Test
-        @DisplayName("Get distance - Segment")
-        void getDistanceModeSegment() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            assertEquals(Math.sqrt(6), fPoint.extVal(fLine.getDistance(IFLine.Mode.SEGMENT)).get(0),
-                    "The distance is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get distance - Segment (validate positions)")
-        void getDistanceModeSegmentValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.extVal(fLine.getDistance(IFLine.Mode.SEGMENT));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Get distance - Segment (position base)")
-        void getDistanceModeSegmentPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.extVal(fLine.getDistance(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Get distance - Segment (position head)")
-        void getDistanceModeSegmentPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.extVal(fLine.getDistance(IFLine.Mode.SEGMENT)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Distance - Ray")
-        void getDistanceModeRay() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            assertEquals(Math.sqrt(6), fPoint.extVal(fLine.getDistance(IFLine.Mode.RAY)).get(0),
-                    "The distance is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get distance - Ray (validate positions)")
-        void getDistanceModeRayValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.extVal(fLine.getDistance(IFLine.Mode.RAY));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Get distance - Ray (position base)")
-        void getDistanceModeRayPositionBase() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
-
-            assertThrows(ProjectionException.class, () -> fPoint.extVal(fLine.getDistance(IFLine.Mode.RAY)),
-                    "It should not be possible to project the IFPoint");
-        }
-
-        @Test
-        @DisplayName("Get distance - Ray (position head)")
-        void getDistanceModeRayPositionHead() {
-            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
-
-           fPoint.extVal(fLine.getDistance(IFLine.Mode.RAY));
         }
 
         @Test
@@ -1201,219 +546,121 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Set distance - Line")
-        void setDistanceModeLine() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+        @DisplayName("Project on ray")
+        void isProjectableOnRay() {
+            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
+            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.LINE));
-
-            assertTrue(Math.abs(fPoint.extVal(fLine.getDistance()).get(0) - 1) < jitter,
-                    "The distance is erroneous");
+            assertTrue(fLine.isProjectableOnRay(fPoint),
+                    "It should be possible to project the IFPoint");
         }
 
         @Test
-        @DisplayName("Set distance - Line (position base)")
-        void setDistanceModeLinePositionBase() {
+        @DisplayName("Project on ray (below base)")
+        void isProjectableOnRayBelowBase() {
             IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
 
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.LINE));
+            assertFalse(fLine.isProjectableOnRay(fPoint),
+                    "It should not be possible to project the IFPoint");
         }
 
         @Test
-        @DisplayName("Set distance - Line (position head)")
-        void setDistanceModeLinePositionHead() {
+        @DisplayName("Project on ray (over head)")
+        void isProjectableOnRayOverHead() {
             IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.LINE));
+            assertTrue(fLine.isProjectableOnRay(fPoint),
+                    "It should be possible to project the IFPoint");
         }
 
         @Test
-        @DisplayName("Set distance - Line (validate positions)")
-        void setDistanceModeLineValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
+        @DisplayName("Project on segment")
+        void isProjectableOnSegment() {
+            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.LINE));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
+            assertTrue(fLine.isProjectableOnSegment(fPoint),
+                    "It should be possible to project the IFPoint");
         }
 
         @Test
-        @DisplayName("Set distance - Line (validate references)")
-        void setDistanceModeLineValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.setDistance(1, IFLine.Mode.LINE));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Set distance - Line (throw IllegalArgumentException")
-        void setDistanceModeLineThrowIllegalArgumentException() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            assertThrows(IllegalArgumentException.class,
-                    () -> fPoint.ext(fLine.setDistance(-1, IFLine.Mode.LINE)),
-                    "The distance must be positive");
-        }
-
-        @Test
-        @DisplayName("Set distance - Segment")
-        void setDistanceModeSegment() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.SEGMENT));
-
-            assertTrue(Math.abs(fPoint.extVal(fLine.getDistance()).get(0) - 1) < jitter,
-                    "The distance is erroneous");
-        }
-
-        @Test
-        @DisplayName("Set distance - Segment (position base)")
-        void setDistanceModeSegmentPositionBase() {
+        @DisplayName("Project on segment (below base)")
+        void isProjectableOnSegmentBelowBase() {
             IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
 
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.setDistance(1, IFLine.Mode.SEGMENT)),
+            assertFalse(fLine.isProjectableOnSegment(fPoint),
                     "It should not be possible to project the IFPoint");
         }
 
         @Test
-        @DisplayName("Set distance - Segment (position head)")
-        void setDistanceModeSegmentPositionHead() {
+        @DisplayName("Project on segment (over head)")
+        void isProjectableOnSegmentOverHead() {
             IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.setDistance(1, IFLine.Mode.SEGMENT)),
+            assertFalse(fLine.isProjectableOnSegment(fPoint),
                     "It should not be possible to project the IFPoint");
         }
 
         @Test
-        @DisplayName("Set distance - Segment (validate positions)")
-        void setDistanceModeSegmentValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
-            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.SEGMENT));
-
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Set distance - Segment (validate references)")
-        void setDistanceModeSegmentValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint fPointRef = fPoint.ext(fLine.setDistance(1, IFLine.Mode.SEGMENT));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Set distance - Segment (throw IllegalArgumentException")
-        void setDistanceModeSegmentThrowIllegalArgumentException() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            assertThrows(IllegalArgumentException.class,
-                    () -> fPoint.ext(fLine.setDistance(-1, IFLine.Mode.SEGMENT)),
-                    "The distance must be positive");
-        }
-
-        @Test
-        @DisplayName("Set distance - Ray")
-        void setDistanceModeRay() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            IFPoint relocation = HelperRandom.getTestPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.RAY));
-
-            assertTrue(Math.abs(fPoint.extVal(fLine.getDistance()).get(0) - 1) < jitter,
-                    "The distance is erroneous");
-        }
-
-        @Test
-        @DisplayName("Set distance - Ray (position base)")
-        void setDistanceModeRayPositionBase() {
+        @DisplayName("Move forward")
+        void moveForward() {
             IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
+            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 0, 0);
 
-            assertThrows(ProjectionException.class, () -> fPoint.ext(fLine.setDistance(1, IFLine.Mode.RAY)),
-                    "It should not be possible to project the IFPoint");
+            fPoint.ext(fLine.moveForward(Math.sqrt(3)));
+
+            assertTrue(fPoint.isSimilar(FactoryGeometry.getIFPoint(2, 1, 1)),
+                    "The translation is erroneous");
         }
 
         @Test
-        @DisplayName("Set distance - Ray (position head)")
-        void setDistanceModeRayPositionHead() {
+        @DisplayName("Move forward (negative)")
+        void moveForwardNegative() {
             IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
+            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 0, 0);
 
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.RAY));
+            fPoint.ext(fLine.moveForward(-Math.sqrt(3)));
+
+            assertTrue(fPoint.isSimilar(FactoryGeometry.getIFPoint(0, -1, -1)),
+                    "The translation is erroneous");
         }
 
         @Test
-        @DisplayName("Set distance - Ray (validate positions)")
-        void setDistanceModeRayValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 2);
+        @DisplayName("Move backward")
+        void moveBackward() {
+            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 0, 0);
 
-            fPoint.ext(fLine.setDistance(1, IFLine.Mode.RAY));
+            fPoint.ext(fLine.moveBackward(Math.sqrt(3)));
 
-            assertEquals(fVector, fLine.getOrigin(), "The origin values should remain unchanged");
+            assertTrue(fPoint.isSimilar(FactoryGeometry.getIFPoint(0, -1, -1)),
+                    "The translation is erroneous");
         }
 
         @Test
-        @DisplayName("Set distance - Ray (validate references)")
-        void setDistanceModeRayValidateReferences() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+        @DisplayName("Move backward (negative)")
+        void moveBackwardNegative() {
+            IFVector fVector = FactoryGeometry.getIFVector(4, 4, 4).sub(2);
+            IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
+            IFPoint fPoint = FactoryGeometry.getIFPoint(1, 0, 0);
 
-            IFPoint fPointRef = fPoint.ext(fLine.setDistance(1, IFLine.Mode.RAY));
+            fPoint.ext(fLine.moveBackward(-Math.sqrt(3)));
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Set distance - Ray (throw IllegalArgumentException")
-        void setDistanceModeRayThrowIllegalArgumentException() {
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            assertThrows(IllegalArgumentException.class,
-                    () -> fPoint.ext(fLine.setDistance(-1, IFLine.Mode.RAY)),
-                    "The distance must be positive");
+            assertTrue(fPoint.isSimilar(FactoryGeometry.getIFPoint(2, 1, 1)),
+                    "The translation is erroneous");
         }
 
     }

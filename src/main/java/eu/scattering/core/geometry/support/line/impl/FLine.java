@@ -1,6 +1,5 @@
 package eu.scattering.core.geometry.support.line.impl;
 
-import eu.scattering.core.exception.ProjectionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
@@ -11,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -107,84 +107,76 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     @Override
     public Consumer<IBaseExtensionAssembly> project() {
 
-        return project(Mode.LINE);
-    }
-
-    @Override
-    public Consumer<IBaseExtensionAssembly> project(Mode mode) {
-
         return (e) -> e.disassemble()
-                .forEach(p -> projectIFPoint(p, mode));
+                .forEach(this::projectIFPoint);
     }
 
     @Override
     public Consumer<IBaseExtensionAssembly> reflect() {
 
-        return reflect(Mode.LINE);
-    }
-
-    @Override
-    public Consumer<IBaseExtensionAssembly> reflect(Mode mode) {
-
         return (e) -> e.disassemble()
-                .forEach(p -> p.reflect(projectIFPoint(p.copy(), mode)));
+                .forEach(p -> p.reflect(projectIFPoint(p.copy())));
     }
 
     @Override
     public Function<IBaseExtensionAssembly, List<Boolean>> isPartOf() {
 
-        return isPartOf(Mode.LINE);
-    }
-
-    @Override
-    public Function<IBaseExtensionAssembly, List<Boolean>> isPartOf(Mode mode) {
-
         return (e) -> e.disassemble().stream()
-                .map(p -> p.getDistance(projectIFPoint(p.copy(), mode)) < jitter)
+                .map(p -> p.getDistance(projectIFPoint(p.copy())) < jitter)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Function<IBaseExtensionAssembly, List<Double>> getDistance() {
 
-        return getDistance(Mode.LINE);
-    }
-
-    @Override
-    public Function<IBaseExtensionAssembly, List<Double>> getDistance(Mode mode) {
-
         return (e) -> e.disassemble().stream()
-                .map(p -> p.getDistance(projectIFPoint(p.copy(), mode)))
+                .map(p -> p.getDistance(projectIFPoint(p.copy())))
                 .collect(Collectors.toList());
     }
 
     @Override
     public Consumer<IBaseExtensionAssembly> setDistance(double distance) {
 
-        return setDistance(distance, Mode.LINE);
-    }
-
-    @Override
-    public Consumer<IBaseExtensionAssembly> setDistance(double distance, Mode mode) {
-
         return (e) -> e.disassemble().stream()
-                .map(p -> p.setDistance(projectIFPoint(p.copy(), mode), distance))
-                .collect(Collectors.toList());
+                .forEach(p -> p.setDistance(projectIFPoint(p.copy()), distance));
     }
 
     @Override
-    public Consumer<IBaseExtensionAssembly> translate(double distance) {
-        return null;
+    public Consumer<IBaseExtensionAssembly> moveForward(double distance) {
+
+        return (e) -> e.disassemble().forEach(p -> moveForward(p, distance));
     }
 
     @Override
-    public IFPoint getCuttingIFPoint() {
-        return null;
+    public Consumer<IBaseExtensionAssembly> moveBackward(double distance) {
+
+        return (e) -> e.disassemble().forEach(p -> moveBackward(p, distance));
+    }
+
+    @Override
+    public boolean isProjectableOnRay(IBaseExtensionAssembly ref) {
+
+        return ref.disassemble().stream()
+                .map(p -> validateProjectionOnRay(projectIFPoint(p.copy())))
+                .allMatch(e -> e);
+    }
+
+    @Override
+    public boolean isProjectableOnSegment(IBaseExtensionAssembly ref) {
+
+        return ref.disassemble().stream()
+                .map(p -> validateProjectionOnSegment(projectIFPoint(p.copy())))
+                .allMatch(e -> e);
+    }
+
+    @Override
+    public Optional<IFPoint> getIntersectingIFPoint() {
+        return Optional.empty();
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private IFPoint projectIFPoint(IFPoint fPoint, Mode mode) {
+    private IFPoint projectIFPoint(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
                 .div(getOrigin().getMagnitude());
@@ -194,46 +186,39 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 
         fPoint.set(origin.getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
-        switch (mode) {
-            case LINE:
-                return fPoint;
-            case RAY:
-                return validateProjectionOnRay(fPoint);
-            case SEGMENT:
-                return validateProjectionOnSegment(fPoint);
-        }
-
-        throw new IllegalArgumentException("The mode is not defined correctly");
+        return fPoint;
     }
 
-    private IFPoint validateProjectionOnRay(IFPoint projection) {
+    private boolean validateProjectionOnRay(IFPoint projection) {
         double magnitude = getOrigin().getMagnitude();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
 
         if ((distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter)) {
-            return projection;
+            return true;
         }
 
-        if (distanceHead < distanceBase + jitter) {
-            return projection;
-        }
-
-        throw new ProjectionException("The IFPoint cannot be projected on the ray");
+        return distanceHead < distanceBase + jitter;
     }
 
-    private IFPoint validateProjectionOnSegment(IFPoint projection) {
+    private boolean validateProjectionOnSegment(IFPoint projection) {
         double magnitude = getOrigin().getMagnitude();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
 
-        if ((distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter)) {
-            return projection;
-        }
+        return (distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter);
+    }
 
-        throw new ProjectionException("The IFPoint cannot be projected on the segment");
+    private IFPoint moveForward(IFPoint ref, double distance) {
+
+        return ref.set(getOrigin().copy().relocateBase(ref).moveForward(distance).getBase());
+    }
+
+    private IFPoint moveBackward(IFPoint ref, double distance) {
+
+        return ref.set(getOrigin().copy().relocateBase(ref).moveBackward(distance).getBase());
     }
 
 }

@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -150,7 +151,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isCutting(IBaseExtensionAssembly assembly) {
+    public boolean isIntersecting(IBaseExtensionAssembly assembly) {
 
         List<Boolean> isInHalfSpace = assembly.disassemble().stream()
                 .map(p -> isInHalfSpace(projectOnLine(p.copy())))
@@ -163,10 +164,10 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     }
 
     @Override
-    public IFPoint getCuttingIFPoint(IFLine ref) {
+    public Optional<IFPoint> getIntersectingIFPoint(IFLine ref) {
 
         if (getOrigin().isOrthogonal(ref.getOrigin())) {
-            throw new IllegalArgumentException("The cutting point is non-existent");
+            return Optional.empty();
         }
 
         IFPoint vPlane = getOrigin().copy().relocateBase().normalize().getHead();
@@ -178,11 +179,11 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
 
         IFVector extension = ref.getOrigin().copy().setMagnitude(distance);
 
-        return extension.getHead();
+        return Optional.of(extension.getHead());
     }
 
     @Override
-    public IFLine getCuttingIFLine(IFPlane ref) {
+    public Optional<IFLine> getIntersectingIFLine(IFPlane ref) {
         return null;
     }
 
@@ -228,4 +229,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
 
         return distanceHead < distanceBase + jitter;
     }
+
 }
+
+// http://geomalgorithms.com/a05-_intersect-1.html

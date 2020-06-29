@@ -448,61 +448,98 @@ public class IFPlaneTest {
 
         @Test
         @DisplayName("Determine intersection A")
-        void isCuttingA() {
+        void isIntersectingA() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, -1, -1, -1);
 
-            assertTrue(fPlane.isCutting(fVector), "The IFVector should intersect with the IFPlane");
+            assertTrue(fPlane.isIntersecting(fVector), "The IFVector should intersect with the IFPlane");
         }
 
         @Test
         @DisplayName("Determine intersection B")
-        void isCuttingB() {
+        void isIntersectingB() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(-1, -1, -1, 1, 1, 1);
 
-            assertTrue(fPlane.isCutting(fVector), "The IFVector should intersect with the IFPlane");
+            assertTrue(fPlane.isIntersecting(fVector), "The IFVector should intersect with the IFPlane");
         }
 
         @Test
         @DisplayName("Determine intersection A (fail)")
-        void isCuttingAFail() {
+        void isIntersectingAFail() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, 2, 2, 2);
 
-            assertFalse(fPlane.isCutting(fVector), "The IFVector should not intersect with the IFPlane");
+            assertFalse(fPlane.isIntersecting(fVector), "The IFVector should not intersect with the IFPlane");
         }
 
         @Test
         @DisplayName("Determine intersection B (fail)")
-        void isCuttingBFail() {
+        void isCIntersectingBFail() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(-1, -1, -1, -2, -2, -2);
 
-            assertFalse(fPlane.isCutting(fVector), "The IFVector should not intersect with the IFPlane");
+            assertFalse(fPlane.isIntersecting(fVector), "The IFVector should not intersect with the IFPlane");
         }
 
         @Test
         @DisplayName("Determine intersection (validate positions)")
-        void isCuttingValidatePositions() {
+        void isCIntersectingValidatePositions() {
             IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
             IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
             IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, -1, -1, -1);
 
-            fPlane.isCutting(fVector);
+            fPlane.isIntersecting(fVector);
 
             assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
         }
 
         @Test
-        @DisplayName("Get cutting IFPoint")
-        void getCuttingIFPoint() {
+        @DisplayName("Get intersecting IFPoint")
+        void getIntersectingIFPoint() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 1, 0));
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-2, 1, 0, 1, -1, 0));
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, -1, 0));
+            IFPoint fPointRel = HelperRandom.getTestPoint();
 
-            fPlane.getCuttingIFPoint(fLine).devDescribe();
-            //http://geomalgorithms.com/a05-_intersect-1.html
+            fPlane.getOrigin().add(fPointRel);
+            fLine.getOrigin().add(fPointRel);
+
+            assertTrue(fPlane.getIntersectingIFPoint(fLine).get().isSimilar(FactoryGeometry.getIFPoint(fPointRel)),
+                    "The intersecting IFPoint is erroneous");
         }
+
+        @Test
+        @DisplayName("Get intersecting IFPoint (empty)")
+        void getIntersectingPointEmpty() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 1, 0));
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+            IFPoint fPointRel = HelperRandom.getTestPoint();
+
+            fPlane.getOrigin().add(fPointRel);
+            fLine.getOrigin().add(fPointRel);
+
+            assertTrue(fPlane.getIntersectingIFPoint(fLine).isEmpty(),
+                    "The IFLine does not intersect with the IFPlane");
+        }
+
+        @Test
+        @DisplayName("Get intersecting IFPoint (validate positions)")
+        void getIntersectingPointValidatePositions() {
+            IFVector fPlaneOrigin = FactoryGeometry.getIFVector(0, 1, 0);
+            IFPlane fPlane = FactoryGeometry.getIFPlane(fPlaneOrigin.copy());
+            IFVector fLineOrigin = FactoryGeometry.getIFVector(-1, 1, 0, 1, -1, 0);
+            IFLine fLine = FactoryGeometry.getIFLine(fLineOrigin.copy());
+
+            fPlane.getIntersectingIFPoint(fLine);
+
+            assertAll("Validate positions",
+                    () -> assertTrue(fPlane.getOrigin().isExact(fPlaneOrigin),
+                            "The IFPlane position should not change"),
+                    () -> assertTrue(fLine.getOrigin().isExact(fLineOrigin),
+                            "The IFLine position should not change")
+            );
+        }
+
 
     }
 }
