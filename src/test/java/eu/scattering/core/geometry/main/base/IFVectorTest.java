@@ -2473,13 +2473,22 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Is parallel")
-        void isParallel() {
+        @DisplayName("Is parallel A")
+        void isParallelA() {
             IFVector fVectorA = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(2, 2, 2));
             IFVector fVectorB = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint(4, 4, 4));
 
             fVectorA.relocateBase(HelperRandom.getTestPoint());
             fVectorB.relocateBase(HelperRandom.getTestPoint());
+
+            assertTrue(fVectorA.isParallel(fVectorB), "The two IFVectors should be parallel");
+        }
+
+        @Test
+        @DisplayName("Is parallel B")
+        void isParallelB() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(-1, 0, 0, 1, 0, 0);
+            IFVector fVectorB = FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0);
 
             assertTrue(fVectorA.isParallel(fVectorB), "The two IFVectors should be parallel");
         }

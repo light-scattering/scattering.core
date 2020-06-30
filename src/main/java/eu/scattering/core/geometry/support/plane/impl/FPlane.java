@@ -85,6 +85,12 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
         return this;
     }
 
+    @Override
+    public boolean isSimilar(IFPlane ref) {
+
+        return getOrigin().isParallel(ref.getOrigin()) && ref.getOrigin().extLog(isPartOf()).get(0);
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -216,7 +222,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
         IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
                 .sub(getOrigin().getBase());
 
-        return fPoint.set(origin.getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+        return fPoint.set(getOrigin().getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
     }
 
     private boolean isInHalfSpace(IFPoint projection) {

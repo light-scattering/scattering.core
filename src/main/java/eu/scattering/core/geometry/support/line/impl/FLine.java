@@ -4,8 +4,10 @@ import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.geometry.main.base.vector.impl.FVector;
 import eu.scattering.core.geometry.support.PresetSupport;
 import eu.scattering.core.geometry.support.line.IFLine;
+import eu.scattering.core.geometry.support.plane.IFPlane;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -84,6 +86,12 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
         return this;
     }
 
+    @Override
+    public boolean isSimilar(IFLine ref) {
+
+        return getOrigin().extLog(ref.isPartOf()).stream().allMatch(e -> e);
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -154,24 +162,49 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     }
 
     @Override
-    public boolean isProjectableOnRay(IBaseExtensionAssembly ref) {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isPartOfRay() {
 
-        return ref.disassemble().stream()
-                .map(p -> validateProjectionOnRay(projectIFPoint(p.copy())))
-                .allMatch(e -> e);
+        return (e) -> e.disassemble().stream()
+                .map(p -> isPartOfRay(p))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public boolean isProjectableOnSegment(IBaseExtensionAssembly ref) {
+    public Function<IBaseExtensionAssembly, List<Boolean>> isPartOfSegment() {
 
-        return ref.disassemble().stream()
-                .map(p -> validateProjectionOnSegment(projectIFPoint(p.copy())))
-                .allMatch(e -> e);
+        return (e) -> e.disassemble().stream()
+                .map(p -> isPartOfSegment(p))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<IFPoint> getIntersectingIFPoint() {
-        return Optional.empty();
+    public Optional<IFPoint> getIntersectingIFPoint(IFLine ref) {
+
+        if (isSimilar(ref)) {
+            throw new IllegalArgumentException("IFLines are parallel");
+        }
+
+        if (getOrigin().isParallel(ref.getOrigin())) {
+            return Optional.empty();
+        }
+
+        IFPlane plane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 0, 1));
+
+        IFVector u = copy().getOrigin().ext(plane.project()).normalize();
+        IFPoint uVer = u.copy().relocateBase().getHead();
+        IFVector v = ref.copy().getOrigin().ext(plane.project()).normalize();
+        IFPoint vVer = v.copy().relocateBase().getHead();
+        IFPoint vVerOrt = vVer.copy().getCrossProduct(vVer.copy().setZ(1));
+        IFVector w = FactoryGeometry.getIFVector(v.getBase().copy(), u.getBase().copy()).normalize();
+        IFPoint wVer = w.copy().relocateBase().getHead();
+
+        double dividend = vVerOrt.mul(-1).getDotProduct(wVer);
+        double divisor = vVer.getDotProduct(uVer);
+        double distance = dividend / divisor;
+
+        IFPoint res = uVer.copy().setRadius(distance);
+
+        return Optional.of(res);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -189,7 +222,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
         return fPoint;
     }
 
-    private boolean validateProjectionOnRay(IFPoint projection) {
+    private boolean isPartOfRay(IFPoint projection) {
         double magnitude = getOrigin().getMagnitude();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
@@ -202,7 +235,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
         return distanceHead < distanceBase + jitter;
     }
 
-    private boolean validateProjectionOnSegment(IFPoint projection) {
+    private boolean isPartOfSegment(IFPoint projection) {
         double magnitude = getOrigin().getMagnitude();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);

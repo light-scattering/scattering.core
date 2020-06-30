@@ -535,7 +535,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     @Override
     public IFPoint setRadius(double radius) throws SamePositionException {
 
-        if (radius <= 0) {
+        if (radius < 0) {
             throw new IllegalArgumentException("The requested radius must be positive");
         }
 

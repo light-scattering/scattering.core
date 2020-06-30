@@ -547,11 +547,14 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         IFVector fCopyLocal = copy().relocateBase();
         IFVector fCopyExternal = ref.copy().relocateBase();
 
-        conX = fCopyLocal.getHead().getX() / fCopyExternal.getHead().getX();
-        conY = fCopyLocal.getHead().getY() / fCopyExternal.getHead().getY();
-        conZ = fCopyLocal.getHead().getZ() / fCopyExternal.getHead().getZ();
+        conX = (fCopyLocal.getHead().getX() * fCopyExternal.getHead().getY()) - (fCopyLocal.getHead().getY() * fCopyExternal.getHead().getX());
+        conY = (fCopyLocal.getHead().getX() * fCopyExternal.getHead().getZ()) - (fCopyLocal.getHead().getZ() * fCopyExternal.getHead().getX());
 
-        return Math.abs(conX - conY) < jitter && Math.abs(conX - conZ) < jitter;
+//        conX = fCopyLocal.getHead().getX() / fCopyExternal.getHead().getX();
+//        conY = fCopyLocal.getHead().getY() / fCopyExternal.getHead().getY();
+//        conZ = fCopyLocal.getHead().getZ() / fCopyExternal.getHead().getZ();
+
+        return Math.abs(conX) < jitter && Math.abs(conY) < jitter;
     }
 
     @Override
