@@ -369,7 +369,7 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Distance")
+        @DisplayName("Get distance")
         void getDistance() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
@@ -384,13 +384,48 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Distance (validate positions)")
+        @DisplayName("Get distance (validate positions)")
         void getDistanceValidatePositions() {
             IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
             IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
 
             fPoint.extVal(fPlane.getDistance());
+
+            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+        }
+
+        @Test
+        @DisplayName("Set distance")
+        void setDistance() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fPoint.ext(fPlane.setDistance(1));
+
+            assertEquals(1, fPoint.extVal(fPlane.getDistance()).get(0),
+                    jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Set distance (validate references)")
+        void setDistanceValidateReferences() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            IFPoint fPointRef = fPoint.ext(fPlane.setDistance(1));
+
+            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+        }
+
+        @Test
+        @DisplayName("Set distance (validate positions)")
+        void setDistanceValidatePositions() {
+            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
+            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
+            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+
+            fPoint.ext(fPlane.setDistance(1));
 
             assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
         }
@@ -539,7 +574,6 @@ public class IFPlaneTest {
                             "The IFLine position should not change")
             );
         }
-
 
     }
 }

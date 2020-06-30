@@ -137,7 +137,9 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
 
     @Override
     public Consumer<IBaseExtensionAssembly> setDistance(double distance) {
-        return null;
+
+        return (e) -> e.disassemble().stream()
+                .forEach(p -> p.setDistance(projectOnPlane(p.copy()), distance));
     }
 
     @Override
