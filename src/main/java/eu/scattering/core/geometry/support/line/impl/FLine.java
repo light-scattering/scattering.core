@@ -191,20 +191,31 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
         IFPlane plane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 0, 1));
 
         IFVector u = copy().getOrigin().ext(plane.project()).normalize();
-        IFPoint uVer = u.copy().relocateBase().getHead();
         IFVector v = ref.copy().getOrigin().ext(plane.project()).normalize();
-        IFPoint vVer = v.copy().relocateBase().getHead();
-        IFPoint vVerOrt = vVer.copy().getCrossProduct(vVer.copy().setZ(1));
-        IFVector w = FactoryGeometry.getIFVector(v.getBase().copy(), u.getBase().copy()).normalize();
-        IFPoint wVer = w.copy().relocateBase().getHead();
+        IFVector w = FactoryGeometry.getIFVector(v.getBase().copy(), u.getBase().copy());
 
-        double dividend = vVerOrt.mul(-1).getDotProduct(wVer);
-        double divisor = vVer.getDotProduct(uVer);
+//        IFPoint uVer = u.copy().relocateBase().getHead();
+//        IFPoint vVer = v.copy().relocateBase().getHead();
+
+        IFVector vVerOrt = v.copy().getCrossProduct(FactoryGeometry.getIFVector(v.copy().getBase(), v.copy().getBase().setZ(1)));
+
+        double dividend = vVerOrt.mul(-1).getDotProduct(w);
+        double divisor = v.getDotProduct(u);
         double distance = dividend / divisor;
 
-        IFPoint res = uVer.copy().setRadius(distance);
+        IFPoint candidate;
 
-        return Optional.of(res);
+        if (distance > 0) {
+            candidate = getOrigin().copy().setMagnitude(distance).getHead().devDescribe();
+        } else {
+            candidate = getOrigin().copy().reflectHead().setMagnitude(-distance).getHead().devDescribe();
+        }
+
+        if (candidate.extLog(isPartOf()).get(0) && candidate.extLog(ref.isPartOf()).get(0)) {
+            return Optional.of(candidate);
+        } else {
+            return Optional.empty();
+        }
     }
 
     // -------------------------------------------------------------------------------------------------

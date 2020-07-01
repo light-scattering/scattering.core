@@ -8,6 +8,8 @@ import eu.scattering.core.geometry.support.plane.IFPlane;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
+import java.util.Optional;
+
 import static eu.scattering.core.Configuration.jitter;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -725,12 +727,26 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Get intersecting point")
-        void getIntersectingPoint() {
-            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 0));
-            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+        @DisplayName("Get intersecting point 2D")
+        void getIntersectingPoint2D() {
+            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 0, 0, 1, 0, 0));
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(10, -1, 0, 1, 1, 0));
 
-            fLineA.getIntersectingIFPoint(fLineB).get().devDescribe();
+            IFPoint fPointRel = HelperRandom.getTestPoint();
+
+//            fLineA.getOrigin().add(fPointRel);
+//            fLineB.getOrigin().add(fPointRel);
+
+            Optional<IFPoint> fPointRes = fLineA.getIntersectingIFPoint(fLineB);
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fPointRes.isPresent(),
+                            "IFLines should have one intersecting IFPoint"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 1"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 2")
+            );
         }
 
         @Test
