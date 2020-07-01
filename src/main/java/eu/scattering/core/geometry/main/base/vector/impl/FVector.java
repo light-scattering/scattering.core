@@ -543,15 +543,10 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
 
     @Override
     public boolean isParallel(IFVector ref) {
-        double conX, conY, conZ;
-        IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = ref.copy().relocateBase();
+        IFPoint fCopyLocal = copy().relocateBase().normalize().getHead();
+        IFPoint fCopyExternal = ref.copy().relocateBase().normalize().getHead();
 
-        conX = fCopyLocal.getHead().getX() / fCopyExternal.getHead().getX();
-        conY = fCopyLocal.getHead().getY() / fCopyExternal.getHead().getY();
-        conZ = fCopyLocal.getHead().getZ() / fCopyExternal.getHead().getZ();
-
-        return Math.abs(conX - conY) < jitter && Math.abs(conX - conZ) < jitter;
+        return fCopyLocal.isSimilar(fCopyExternal) || fCopyLocal.isSimilar(fCopyExternal.reflect());
     }
 
     @Override

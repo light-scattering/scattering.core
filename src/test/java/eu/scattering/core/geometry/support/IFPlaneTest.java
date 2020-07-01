@@ -193,11 +193,26 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Similarity")
-        void isSimilar() {
+        @DisplayName("Similarity A")
+        void isSimilarA() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPlane fPlaneA = FactoryGeometry.getIFPlane(fVector.copy());
             IFPlane fPlaneB = FactoryGeometry.getIFPlane(fVector.copy().add(0.5 * jitter));
+
+            assertAll("Validate exactness",
+                    () -> assertTrue(fPlaneA.isSimilar(fPlaneB), "IFPlanes should be similar"),
+                    () -> assertTrue(fPlaneB.isSimilar(fPlaneA), "IFPlanes should be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity B")
+        void isSimilarB() {
+            IFPlane fPlaneA = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
+            IFPlane fPlaneB = fPlaneA.copy();
+
+            fPlaneB.getOrigin().reflectHead().relocateBase(HelperRandom.getTestPoint());
+            fPlaneB.getOrigin().relocateBase(fPlaneB.copy().getOrigin().getBase().ext(fPlaneA.project()));
 
             assertAll("Validate exactness",
                     () -> assertTrue(fPlaneA.isSimilar(fPlaneB), "IFPlanes should be similar"),
@@ -210,7 +225,7 @@ public class IFPlaneTest {
         void isSimilarFail() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPlane fPlaneA = FactoryGeometry.getIFPlane(fVector.copy());
-            IFPlane fPlaneB = FactoryGeometry.getIFPlane(fVector.copy().add(1.5 * jitter));
+            IFPlane fPlaneB = FactoryGeometry.getIFPlane(fVector.copy().moveForward(1.5 * jitter));
 
             assertAll("Validate exactness",
                     () -> assertFalse(fPlaneA.isSimilar(fPlaneB), "IFPlanes should not be similar"),

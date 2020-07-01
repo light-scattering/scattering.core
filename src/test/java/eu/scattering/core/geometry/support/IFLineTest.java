@@ -4,6 +4,7 @@ import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.line.IFLine;
+import eu.scattering.core.geometry.support.plane.IFPlane;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -210,11 +211,71 @@ public class IFLineTest {
         void isSimilarFail() {
             IFVector fVector = HelperRandom.getTestVector();
             IFLine fLineA = FactoryGeometry.getIFLine(fVector.copy());
-            IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy().add(1.5 * jitter));
+            IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy().add(1.5 * jitter).setOrthogonal(fVector));
 
             assertAll("Validate exactness",
                     () -> assertFalse(fLineA.isSimilar(fLineB), "IFLines should not be similar"),
                     () -> assertFalse(fLineB.isSimilar(fLineA), "IFLines should not be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (above head)")
+        void isSimilarAboveHead() {
+            IFVector fVector = HelperRandom.getTestVector().normalize();
+            IFLine fLineA = FactoryGeometry.getIFLine(fVector.copy());
+            IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy());
+
+            fLineB.getOrigin().moveForward(10);
+
+            assertAll("Validate exactness",
+                    () -> assertTrue(fLineA.isSimilar(fLineB), "IFLines should be similar"),
+                    () -> assertTrue(fLineB.isSimilar(fLineA), "IFLines should be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (above head, invert)")
+        void isSimilarAboveHeadInvert() {
+            IFVector fVector = HelperRandom.getTestVector().normalize();
+            IFLine fLineA = FactoryGeometry.getIFLine(fVector.copy());
+            IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy());
+
+            fLineB.getOrigin().moveForward(10).reflectHead();
+
+            assertAll("Validate exactness",
+                    () -> assertTrue(fLineA.isSimilar(fLineB), "IFLines should be similar"),
+                    () -> assertTrue(fLineB.isSimilar(fLineA), "IFLines should be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (below base)")
+        void isSimilarBelowBase() {
+            IFVector fVector = HelperRandom.getTestVector().normalize();
+            IFLine fLineA = FactoryGeometry.getIFLine(fVector.copy());
+            IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy());
+
+            fLineB.getOrigin().moveBackward(10);
+
+            assertAll("Validate exactness",
+                    () -> assertTrue(fLineA.isSimilar(fLineB), "IFLines should be similar"),
+                    () -> assertTrue(fLineB.isSimilar(fLineA), "IFLines should be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (below base, invert)")
+        void isSimilarBelowBaseInvert() {
+            IFVector fVector = HelperRandom.getTestVector().normalize();
+            IFLine fLineA = FactoryGeometry.getIFLine(fVector.copy());
+            IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy());
+
+            fLineB.getOrigin().moveBackward(10).reflectHead();
+
+            assertAll("Validate exactness",
+                    () -> assertTrue(fLineA.isSimilar(fLineB), "IFLines should be similar"),
+                    () -> assertTrue(fLineB.isSimilar(fLineA), "IFLines should be similar")
             );
         }
 
@@ -552,8 +613,8 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            assertTrue(fLine.isProjectableOnRay(fPoint),
-                    "It should be possible to project the IFPoint");
+            assertTrue(fPoint.extLog(fLine.isPartOfRay()).get(0),
+                    "The IFPoint is a part of the ray");
         }
 
         @Test
@@ -563,8 +624,8 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
 
-            assertFalse(fLine.isProjectableOnRay(fPoint),
-                    "It should not be possible to project the IFPoint");
+            assertFalse(fPoint.extLog(fLine.isPartOfRay()).get(0),
+                    "The IFPoint is not a part of the ray");
         }
 
         @Test
@@ -574,8 +635,8 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
-            assertTrue(fLine.isProjectableOnRay(fPoint),
-                    "It should be possible to project the IFPoint");
+            assertTrue(fPoint.extLog(fLine.isPartOfRay()).get(0),
+                    "The IFPoint is a part of the ray");
         }
 
         @Test
@@ -585,8 +646,8 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            assertTrue(fLine.isProjectableOnSegment(fPoint),
-                    "It should be possible to project the IFPoint");
+            assertTrue(fPoint.extLog(fLine.isPartOfSegment()).get(0),
+                    "The IFPoint is a part of the segment");
         }
 
         @Test
@@ -596,8 +657,8 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
 
-            assertFalse(fLine.isProjectableOnSegment(fPoint),
-                    "It should not be possible to project the IFPoint");
+            assertFalse(fPoint.extLog(fLine.isPartOfSegment()).get(0),
+                    "The IFPoint is not a of the segment");
         }
 
         @Test
@@ -607,8 +668,8 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
-            assertFalse(fLine.isProjectableOnSegment(fPoint),
-                    "It should not be possible to project the IFPoint");
+            assertFalse(fPoint.extLog(fLine.isPartOfSegment()).get(0),
+                    "The IFPoint is not a part of the segment");
         }
 
         @Test
@@ -661,6 +722,35 @@ public class IFLineTest {
 
             assertTrue(fPoint.isSimilar(FactoryGeometry.getIFPoint(2, 1, 1)),
                     "The translation is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get intersecting point")
+        void getIntersectingPoint() {
+            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 0));
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+
+            fLineA.getIntersectingIFPoint(fLineB).get().devDescribe();
+        }
+
+        @Test
+        @DisplayName("Get intersecting point (throw IllegalArgumentException)")
+        void getIntersectingPointSameLine() {
+            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 1, 1));
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, -1, -1));
+
+            assertThrows(IllegalArgumentException.class, () -> fLineA.getIntersectingIFPoint(fLineB),
+                    "Origins form the same IFLine, an exception should be thrown");
+        }
+
+        @Test
+        @DisplayName("Get intersecting point (fail)")
+        void getIntersectingPointFail() {
+            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 0));
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+
+            assertTrue(fLineA.getIntersectingIFPoint(fLineB).isEmpty(),
+                    "The intersecting point is non-existent");
         }
 
     }

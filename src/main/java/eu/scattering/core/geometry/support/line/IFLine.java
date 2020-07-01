@@ -7,20 +7,19 @@ import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.support.ISupport;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface IFLine extends IGeometryBase<IFLine>, IDebug<IFLine>, ISupport<IFLine> {
 
     Consumer<IBaseExtensionAssembly> moveForward(double distance);
     Consumer<IBaseExtensionAssembly> moveBackward(double distance);
 
-    boolean isProjectableOnRay(IBaseExtensionAssembly ref);
-    boolean isProjectableOnSegment(IBaseExtensionAssembly ref);
+    Function<IBaseExtensionAssembly, List<Boolean>> isPartOfRay();
+    Function<IBaseExtensionAssembly, List<Boolean>> isPartOfSegment();
 
-//    boolean isPartOfRay(IBaseExtensionAssembly ref);
-//    boolean isPartOfSegment(IBaseExtensionAssembly ref);
-
-    Optional<IFPoint> getIntersectingIFPoint();
+    Optional<IFPoint> getIntersectingIFPoint(IFLine ref);
 
 }
