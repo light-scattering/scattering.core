@@ -730,17 +730,27 @@ public class IFLineTest {
             IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 0));
             IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
 
-            fLineA.getIntersectingIFPoint(fLineB);
+            fLineA.getIntersectingIFPoint(fLineB).get().devDescribe();
         }
 
         @Test
         @DisplayName("Get intersecting point (throw IllegalArgumentException)")
-        void getIntersectingPointParallel() {
+        void getIntersectingPointSameLine() {
             IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 1, 1));
             IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, -1, -1));
 
             assertThrows(IllegalArgumentException.class, () -> fLineA.getIntersectingIFPoint(fLineB),
-                    "IFLines are parallel, an exception should be thrown");
+                    "Origins form the same IFLine, an exception should be thrown");
+        }
+
+        @Test
+        @DisplayName("Get intersecting point (fail)")
+        void getIntersectingPointFail() {
+            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 0));
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+
+            assertTrue(fLineA.getIntersectingIFPoint(fLineB).isEmpty(),
+                    "The intersecting point is non-existent");
         }
 
     }
