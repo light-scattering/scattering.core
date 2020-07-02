@@ -727,7 +727,7 @@ public class IFLineTest {
                     "The translation is erroneous");
         }
 
-        @RepeatedTest(100000)
+        @RepeatedTest(1000)
         @DisplayName("Get intersecting point 2D")
         void getIntersectingPoint2D() {
             IFVector fLineAOrigin = HelperRandom.getTestVector().div(100);
@@ -758,12 +758,12 @@ public class IFLineTest {
             );
         }
 
-        @Test
+        @RepeatedTest(100)
         @DisplayName("Get intersecting point 2D (Simple)")
         void getIntersectingPoint2DSimple() {
             IFVector fLineAOrigin = FactoryGeometry.getIFVector(-0, 0, 0, 1, 0, 0);
             IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
-            IFVector fLineBOrigin = FactoryGeometry.getIFVector(-1110, -1, 0, 3, 1, 0);
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(1, -1, 0, 3, 1, 0);
             IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
 
             IFPoint fPointRel = HelperRandom.getTestPoint();

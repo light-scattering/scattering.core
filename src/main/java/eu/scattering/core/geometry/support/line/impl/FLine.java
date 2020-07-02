@@ -188,35 +188,34 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
             return Optional.empty();
         }
 
-        IFPlane plane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 0, 1));
-
-        IFVector u = getOrigin().copy();
-        IFVector v = ref.getOrigin().copy();
-        IFVector w = FactoryGeometry.getIFVector(v.getBase().copy(), u.getBase().copy());
+        IFVector u = projectOnPlaneXY(getOrigin().copy());
+        IFVector v = projectOnPlaneXY(ref.getOrigin().copy());
+        IFVector w = FactoryGeometry.getIFVector(v.getBase(), u.getBase());
 
         IFVector vOrt = v.copy().getCrossProduct(v.copy().getHead().set(v.getBase()).setZ(1));
 
-        double dividend = vOrt.copy().reflectHead().getDotProduct(w);
         double divisor = vOrt.getDotProduct(u);
+        double dividend = vOrt.reflectHead().getDotProduct(w);
         double distance = dividend / divisor;
         IFPoint candidate;
 
         if (distance > 0) {
-            candidate = getOrigin().copy().setMagnitude(getOrigin().getMagnitude() * distance).getHead().devDescribe();
+            candidate = u.copy().setMagnitude(u.getMagnitude() * distance).getHead().devDescribe();
         } else {
-            candidate = getOrigin().copy().reflectHead().setMagnitude(getOrigin().getMagnitude() * -distance).getHead().devDescribe();
+            candidate = u.copy().reflectHead().setMagnitude(u.getMagnitude() * -distance).getHead().devDescribe();
         }
-
-//        if (candidate.extLog(isPartOf()).get(0) && candidate.extLog(ref.isPartOf()).get(0)) {
-//            return Optional.of(candidate);
-//        } else {
-//            return Optional.empty();
-//        }
 
         return Optional.of(candidate);
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    private IFVector projectOnPlaneXY(IFVector ref) {
+        ref.getBase().setZ(0);
+        ref.getHead().setZ(0);
+
+        return ref;
+    }
 
     private IFPoint projectIFPoint(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
