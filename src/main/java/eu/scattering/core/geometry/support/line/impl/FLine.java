@@ -190,32 +190,30 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 
         IFPlane plane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 0, 1));
 
-        IFVector u = copy().getOrigin().ext(plane.project()).normalize();
-        IFVector v = ref.copy().getOrigin().ext(plane.project()).normalize();
+        IFVector u = getOrigin().copy();
+        IFVector v = ref.getOrigin().copy();
         IFVector w = FactoryGeometry.getIFVector(v.getBase().copy(), u.getBase().copy());
 
-//        IFPoint uVer = u.copy().relocateBase().getHead();
-//        IFPoint vVer = v.copy().relocateBase().getHead();
+        IFVector vOrt = v.copy().getCrossProduct(v.copy().getHead().set(v.getBase()).setZ(1));
 
-        IFVector vVerOrt = v.copy().getCrossProduct(FactoryGeometry.getIFVector(v.copy().getBase(), v.copy().getBase().setZ(1)));
-
-        double dividend = vVerOrt.mul(-1).getDotProduct(w);
-        double divisor = v.getDotProduct(u);
+        double dividend = vOrt.copy().reflectHead().getDotProduct(w);
+        double divisor = vOrt.getDotProduct(u);
         double distance = dividend / divisor;
-
         IFPoint candidate;
 
         if (distance > 0) {
-            candidate = getOrigin().copy().setMagnitude(distance).getHead().devDescribe();
+            candidate = getOrigin().copy().setMagnitude(getOrigin().getMagnitude() * distance).getHead().devDescribe();
         } else {
-            candidate = getOrigin().copy().reflectHead().setMagnitude(-distance).getHead().devDescribe();
+            candidate = getOrigin().copy().reflectHead().setMagnitude(getOrigin().getMagnitude() * -distance).getHead().devDescribe();
         }
 
-        if (candidate.extLog(isPartOf()).get(0) && candidate.extLog(ref.isPartOf()).get(0)) {
-            return Optional.of(candidate);
-        } else {
-            return Optional.empty();
-        }
+//        if (candidate.extLog(isPartOf()).get(0) && candidate.extLog(ref.isPartOf()).get(0)) {
+//            return Optional.of(candidate);
+//        } else {
+//            return Optional.empty();
+//        }
+
+        return Optional.of(candidate);
     }
 
     // -------------------------------------------------------------------------------------------------

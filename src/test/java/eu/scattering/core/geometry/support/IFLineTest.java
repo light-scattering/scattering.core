@@ -5,6 +5,7 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.plane.IFPlane;
+import eu.scattering.core.helper.HelperAngle;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -726,16 +727,49 @@ public class IFLineTest {
                     "The translation is erroneous");
         }
 
-        @Test
+        @RepeatedTest(100000)
         @DisplayName("Get intersecting point 2D")
         void getIntersectingPoint2D() {
-            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 0, 0, 1, 0, 0));
-            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(10, -1, 0, 1, 1, 0));
+            IFVector fLineAOrigin = HelperRandom.getTestVector().div(100);
+            IFVector fLineBOrigin = HelperRandom.getTestVector(fLineAOrigin).div(100);
+
+            while (fLineAOrigin.getAngle(fLineBOrigin) < Math.PI * 0.5) {
+                fLineAOrigin = HelperRandom.getTestVector().div(100);
+                fLineBOrigin = HelperRandom.getTestVector(fLineAOrigin).div(100);
+            }
+
+            fLineAOrigin.getBase().setZ(0);
+            fLineAOrigin.getHead().setZ(0);
+            fLineBOrigin.getBase().setZ(0);
+            fLineBOrigin.getHead().setZ(0);
+
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
+
+            Optional<IFPoint> fPointRes = fLineA.getIntersectingIFPoint(fLineB);
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fPointRes.isPresent(),
+                            "IFLines should have one intersecting IFPoint"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 1"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 2")
+            );
+        }
+
+        @Test
+        @DisplayName("Get intersecting point 2D (Simple)")
+        void getIntersectingPoint2DSimple() {
+            IFVector fLineAOrigin = FactoryGeometry.getIFVector(-0, 0, 0, 1, 0, 0);
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(-1110, -1, 0, 3, 1, 0);
+            IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
 
             IFPoint fPointRel = HelperRandom.getTestPoint();
 
-//            fLineA.getOrigin().add(fPointRel);
-//            fLineB.getOrigin().add(fPointRel);
+            fLineA.getOrigin().add(fPointRel);
+            fLineB.getOrigin().add(fPointRel);
 
             Optional<IFPoint> fPointRes = fLineA.getIntersectingIFPoint(fLineB);
 
