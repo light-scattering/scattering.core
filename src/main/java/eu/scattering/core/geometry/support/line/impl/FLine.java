@@ -178,7 +178,12 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     }
 
     @Override
-    public Optional<IFPoint> getIntersectingIFPoint(IFLine ref) {
+    public double[] getEquation() {
+        return new double[0];
+    }
+
+    @Override
+    public Optional<IFPoint> getCommonIFPoint(IFLine ref) {
 
         if (isSimilar(ref)) {
             throw new IllegalArgumentException("IFLines are parallel");
@@ -192,20 +197,39 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
         IFVector v = projectOnPlaneXY(ref.getOrigin().copy());
         IFVector w = FactoryGeometry.getIFVector(v.getBase(), u.getBase());
 
-        IFVector vOrt = v.copy().getCrossProduct(v.copy().getHead().set(v.getBase()).setZ(1));
+        v.getCrossProduct(v.getBase().copy().setZ(1));
 
-        double divisor = vOrt.getDotProduct(u);
-        double dividend = vOrt.reflectHead().getDotProduct(w);
-        double distance = dividend / divisor;
-        IFPoint candidate;
-
-        if (distance > 0) {
-            candidate = u.copy().setMagnitude(u.getMagnitude() * distance).getHead().devDescribe();
-        } else {
-            candidate = u.copy().reflectHead().setMagnitude(u.getMagnitude() * -distance).getHead().devDescribe();
-        }
+        double scaleFactor = v.copy().reflectHead().getDotProduct(w) / v.getDotProduct(u);
+        IFPoint candidate = u.copy().mul(scaleFactor).relocateBase(u.getBase()).getHead();
 
         return Optional.of(candidate);
+    }
+
+    @Override
+    public IFPoint getIFPoint(double length) {
+        IFPoint fPoint = getOrigin().getHead().copy().sub(getOrigin().getBase());
+        double tmp = length / getOrigin().getMagnitude();
+
+        fPoint.setX(getOrigin().getBase().getX() + (fPoint.getX() * tmp));
+        fPoint.setY(getOrigin().getBase().getY() + (fPoint.getY() * tmp));
+        fPoint.setZ(getOrigin().getBase().getZ() + (fPoint.getZ() * tmp));
+
+        return fPoint;
+    }
+
+    @Override
+    public Optional<IFPoint> getIFPointAtX(double x) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<IFPoint> getIFPointAtY(double y) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<IFPoint> getIFPointAtZ(double z) {
+        return Optional.empty();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -216,6 +240,8 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 
         return ref;
     }
+
+    // -------------------------------------------------------------------------------------------------
 
     private IFPoint projectIFPoint(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
@@ -265,3 +291,4 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 }
 
 // https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.
+// http://sites.science.oregonstate.edu/math/home/programs/undergrad/CalculusQuestStudyGuides/vcalc/lineplane/lineplane.html

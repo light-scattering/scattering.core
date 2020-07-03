@@ -20,6 +20,12 @@ public interface IFLine extends IGeometryBase<IFLine>, IDebug<IFLine>, ISupport<
     Function<IBaseExtensionAssembly, List<Boolean>> isPartOfRay();
     Function<IBaseExtensionAssembly, List<Boolean>> isPartOfSegment();
 
-    Optional<IFPoint> getIntersectingIFPoint(IFLine ref);
+    double[] getEquation();
 
+    IFPoint getIFPoint(double length);
+    Optional<IFPoint> getIFPointAtX(double x);
+    Optional<IFPoint> getIFPointAtY(double y);
+    Optional<IFPoint> getIFPointAtZ(double z);
+
+    Optional<IFPoint> getCommonIFPoint(IFLine ref);
 }
