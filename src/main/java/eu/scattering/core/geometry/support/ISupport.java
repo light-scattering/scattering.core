@@ -9,18 +9,14 @@ import java.util.function.Function;
 
 public interface ISupport<T> {
 
+    IFVector getOrigin();
     T setOriginRef(IFVector origin);
 
-    IFVector getOrigin();
-
     Consumer<IBaseExtensionAssembly> project();
-
     Consumer<IBaseExtensionAssembly> reflect();
-
-    Function<IBaseExtensionAssembly, List<Boolean>> isPartOf();
+    Consumer<IBaseExtensionAssembly> setDistance(double distance) throws IllegalArgumentException;
 
     Function<IBaseExtensionAssembly, List<Double>> getDistance();
 
-    Consumer<IBaseExtensionAssembly> setDistance(double distance) throws IllegalArgumentException;
-
+    Function<IBaseExtensionAssembly, List<Boolean>> isPartOf();
 }

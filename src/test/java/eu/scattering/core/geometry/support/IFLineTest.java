@@ -743,6 +743,128 @@ public class IFLineTest {
         }
 
         @Test
+        @DisplayName("Get IFPoint (validate positions)")
+        void getIFPointValidatePositions() {
+            IFVector fVectorOrigin = HelperRandom.getTestVector();
+            IFLine fLine = FactoryGeometry.getIFLine(fVectorOrigin.copy());
+
+            fLine.getIFPoint(0);
+
+            assertEquals(fVectorOrigin, fLine.getOrigin(), "The position should remain unchanged");
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at X")
+        void getIFPointAtX() {
+            IFPoint base = HelperRandom.getTestPoint();
+            IFPoint head = HelperRandom.getTestPoint(base);
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(base.copy(), head.copy()));
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fLine.getIFPointAtX(0).isPresent(),
+                            "The IFPoint should be available"),
+                    () -> assertTrue(fLine.getIFPointAtX(base.getX()).get().isSimilar(fLine.getOrigin().getBase()),
+                            "The IFPoint base is incorrect"),
+                    () -> assertTrue(fLine.getIFPointAtX(head.getX()).get().isSimilar(fLine.getOrigin().getHead()),
+                            "The IFPoint head is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at X (empty)")
+        void getIFPointAtXEmpty() {
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(0, 1, 2));
+
+            assertTrue(fLine.getIFPointAtX(0).isEmpty(),
+                    "The IFPoint should not be available");
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at X (validate positions)")
+        void getIFPointAtXValidatePositions() {
+            IFVector fVectorOrigin = HelperRandom.getTestVector();
+            IFLine fLine = FactoryGeometry.getIFLine(fVectorOrigin.copy());
+
+            fLine.getIFPointAtX(0);
+
+            assertEquals(fVectorOrigin, fLine.getOrigin(), "The position should remain unchanged");
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at Y")
+        void getIFPointAtY() {
+            IFPoint base = HelperRandom.getTestPoint();
+            IFPoint head = HelperRandom.getTestPoint(base);
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(base.copy(), head.copy()));
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fLine.getIFPointAtY(0).isPresent(),
+                            "The IFPoint should be available"),
+                    () -> assertTrue(fLine.getIFPointAtY(base.getY()).get().isSimilar(fLine.getOrigin().getBase()),
+                            "The IFPoint base is incorrect"),
+                    () -> assertTrue(fLine.getIFPointAtY(head.getY()).get().isSimilar(fLine.getOrigin().getHead()),
+                            "The IFPoint head is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at Y (empty)")
+        void getIFPointAtYEmpty() {
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 2));
+
+            assertTrue(fLine.getIFPointAtY(0).isEmpty(),
+                    "The IFPoint should not be available");
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at Y (validate positions)")
+        void getIFPointAtYValidatePositions() {
+            IFVector fVectorOrigin = HelperRandom.getTestVector();
+            IFLine fLine = FactoryGeometry.getIFLine(fVectorOrigin.copy());
+
+            fLine.getIFPointAtY(0);
+
+            assertEquals(fVectorOrigin, fLine.getOrigin(), "The position should remain unchanged");
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at Z")
+        void getIFPointAtZ() {
+            IFPoint base = HelperRandom.getTestPoint();
+            IFPoint head = HelperRandom.getTestPoint(base);
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(base.copy(), head.copy()));
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fLine.getIFPointAtZ(0).isPresent(),
+                            "The IFPoint should be available"),
+                    () -> assertTrue(fLine.getIFPointAtZ(base.getZ()).get().isSimilar(fLine.getOrigin().getBase()),
+                            "The IFPoint base is incorrect"),
+                    () -> assertTrue(fLine.getIFPointAtZ(head.getZ()).get().isSimilar(fLine.getOrigin().getHead()),
+                            "The IFPoint head is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at Z (empty)")
+        void getIFPointAtZEmpty() {
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 2, 0));
+
+            assertTrue(fLine.getIFPointAtZ(0).isEmpty(),
+                    "The IFPoint should not be available");
+        }
+
+        @Test
+        @DisplayName("Get IFPoint at Z (validate positions)")
+        void getIFPointAtZValidatePositions() {
+            IFVector fVectorOrigin = HelperRandom.getTestVector();
+            IFLine fLine = FactoryGeometry.getIFLine(fVectorOrigin.copy());
+
+            fLine.getIFPointAtZ(0);
+
+            assertEquals(fVectorOrigin, fLine.getOrigin(), "The position should remain unchanged");
+        }
+
+        @Test
         @DisplayName("Get intersecting point 2D")
         void getIntersectingPoint2D() {
             IFVector fLineAOrigin = HelperRandom.getTestVector();

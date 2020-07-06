@@ -178,11 +178,6 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     }
 
     @Override
-    public double[] getEquation() {
-        return new double[0];
-    }
-
-    @Override
     public Optional<IFPoint> getCommonIFPoint(IFLine ref) {
 
         if (isSimilar(ref)) {
@@ -219,17 +214,53 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 
     @Override
     public Optional<IFPoint> getIFPointAtX(double x) {
-        return Optional.empty();
+
+        if (getOrigin().getBase().getX() == getOrigin().getHead().getX()) {
+            return Optional.empty();
+        }
+
+        double l = getOrigin().getHead().getX() - getOrigin().getBase().getX();
+        double m = getOrigin().getHead().getY() - getOrigin().getBase().getY();
+        double n = getOrigin().getHead().getZ() - getOrigin().getBase().getZ();
+
+        double y = getOrigin().getBase().getY() + (m / l * (x - getOrigin().getBase().getX()));
+        double z = getOrigin().getBase().getZ() + (n / l * (x - getOrigin().getBase().getX()));
+
+        return Optional.of(FactoryGeometry.getIFPoint(x, y, z));
     }
 
     @Override
     public Optional<IFPoint> getIFPointAtY(double y) {
-        return Optional.empty();
+
+        if (getOrigin().getBase().getY() == getOrigin().getHead().getY()) {
+            return Optional.empty();
+        }
+
+        double l = getOrigin().getHead().getX() - getOrigin().getBase().getX();
+        double m = getOrigin().getHead().getY() - getOrigin().getBase().getY();
+        double n = getOrigin().getHead().getZ() - getOrigin().getBase().getZ();
+
+        double x = getOrigin().getBase().getX() + (l / m * (y - getOrigin().getBase().getY()));
+        double z = getOrigin().getBase().getZ() + (n / m * (y - getOrigin().getBase().getY()));
+
+        return Optional.of(FactoryGeometry.getIFPoint(x, y, z));
     }
 
     @Override
     public Optional<IFPoint> getIFPointAtZ(double z) {
-        return Optional.empty();
+
+        if (getOrigin().getBase().getZ() == getOrigin().getHead().getZ()) {
+            return Optional.empty();
+        }
+
+        double l = getOrigin().getHead().getX() - getOrigin().getBase().getX();
+        double m = getOrigin().getHead().getY() - getOrigin().getBase().getY();
+        double n = getOrigin().getHead().getZ() - getOrigin().getBase().getZ();
+
+        double x = getOrigin().getBase().getX() + (l / n * (z - getOrigin().getBase().getZ()));
+        double y = getOrigin().getBase().getY() + (m / n * (z - getOrigin().getBase().getZ()));
+
+        return Optional.of(FactoryGeometry.getIFPoint(x, y, z));
     }
 
     // -------------------------------------------------------------------------------------------------
