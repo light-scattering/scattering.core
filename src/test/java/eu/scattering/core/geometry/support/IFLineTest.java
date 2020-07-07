@@ -4,7 +4,6 @@ import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.line.IFLine;
-import eu.scattering.core.helper.HelperAngle;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -730,7 +729,7 @@ public class IFLineTest {
         @DisplayName("Get IFPoint")
         void getIFPoint() {
             IFLine fLine = FactoryGeometry.getIFLine(HelperRandom.getTestVector());
-            double length = fLine.getOrigin().getMagnitude();
+            double length = fLine.getOrigin().getLength();
 
             assertAll("Validate IFPoint",
                     () -> assertTrue(fLine.getIFPoint(0).isSimilar(fLine.getOrigin().getBase()),
@@ -909,7 +908,7 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Get common IFPoint 2D XY (Simple)")
+        @DisplayName("Get common IFPoint 2D XY (simple)")
         void getCommonIFPoint2DXYSimple() {
             IFVector fLineAOrigin = FactoryGeometry.getIFVector(0, 0, 0, 1, 0, 0);
             IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
@@ -936,8 +935,10 @@ public class IFLineTest {
         @Test
         @DisplayName("Get common IFPoint 2D XY (fail)")
         void getCommonIFPoint2DXYFail() {
-            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 0));
-            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+            IFVector fLineAOrigin = FactoryGeometry.getIFVector(1, 0, 0);
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0);
+            IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
 
             assertTrue(fLineA.getCommonIFPoint(fLineB).isEmpty(),
                     "The intersecting point is non-existent");
@@ -1041,19 +1042,21 @@ public class IFLineTest {
             );
         }
 
-        @RepeatedTest(100)
+        @RepeatedTest(1)
         @DisplayName("Get common IFPoint (fail)")
         void getCommonIFPointFail() {
             IFLine fLineA = FactoryGeometry.getIFLine(HelperRandom.getTestVector());
 
-            IFPoint fLineBOriginBase = HelperRandom.getTestPoint();
-            IFPoint fLineBOriginHead = fLineBOriginBase.copy().ext(fLineA.project()).add(10 * jitter);
-            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(fLineBOriginBase, fLineBOriginHead));
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(fLineA.getOrigin().getBase().copy(), HelperRandom.getTestPoint(fLineA.getOrigin().getHead()));
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(fLineBOrigin));
 
-            while (fLineB.getOrigin().extLog(fLineA.isPartOf()).stream().anyMatch(e -> e)) {
-                fLineBOriginBase.set(HelperRandom.getTestPoint());
-                fLineBOriginHead.set(fLineBOriginBase.copy().ext(fLineA.project()).add(10 * jitter));
-            }
+            IFVector fVectorDrift = fLineA.getOrigin().copy().setOrthogonal(fLineA.getOrigin().getHead(), fLineBOrigin.getHead()).setLength(1000000.5 * jitter);
+
+            fLineBOrigin.getBase().set(fVectorDrift.getHead());
+            System.out.println(fLineBOrigin.getBase().extVal(fLineA.getDistance()).get(0));
+            System.out.println(fLineA.getCommonIFPoint(fLineB).get());
+            System.out.println(fLineA.getCommonIFPoint(fLineB).get().extLog(fLineA.isPartOf()).get(0));
+            System.out.println(fLineA.getCommonIFPoint(fLineB).get().extLog(fLineB.isPartOf()).get(0));
 
             assertTrue(fLineA.getCommonIFPoint(fLineB).isEmpty(),
                     "The intersecting point should be non-existent");

@@ -46,7 +46,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         }
 
         if (baseRef == getHead()) {
-            throw new IllegalArgumentException("The base/head IFPoints must not point to the same instance");
+            throw new IllegalArgumentException("The base/head IFPoints cannot point to the same instance");
         }
 
         origin[0] = baseRef;
@@ -316,7 +316,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         }
 
         IFVector fCopyLocal = copy();
-        fCopyLocal.setMagnitude(distance);
+        fCopyLocal.setLength(distance);
 
         relocateBase(fCopyLocal.getHead());
 
@@ -331,7 +331,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         }
 
         IFVector fCopyLocal = copy().reflectHead();
-        fCopyLocal.setMagnitude(distance);
+        fCopyLocal.setLength(distance);
 
         relocateBase(fCopyLocal.getHead());
 
@@ -438,7 +438,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public double getMagnitude() {
+    public double getLength() {
 
         double distanceX = getHead().getX() - getBase().getX();
         double distanceY = getHead().getY() - getBase().getY();
@@ -448,10 +448,10 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector setMagnitude(double magnitude) throws SamePositionException {
+    public IFVector setLength(double length) throws SamePositionException {
         IFVector fCopyLocal = copy().relocateBase();
 
-        fCopyLocal.getHead().setRadius(magnitude);
+        fCopyLocal.getHead().setRadius(length);
         fCopyLocal.relocateBase(getBase());
 
         return set(fCopyLocal);
@@ -551,18 +551,18 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
 
     @Override
     public IFVector setParallel(IFPoint base, IFPoint head) {
-        double magnitude = getMagnitude();
+        double magnitude = getLength();
         IFPoint baseCopy = getBase().copy();
 
-        return set(base, head).setMagnitude(magnitude).relocateBase(baseCopy);
+        return set(base, head).setLength(magnitude).relocateBase(baseCopy);
     }
 
     @Override
     public IFVector setParallel(IFVector ref) {
-        double magnitude = getMagnitude();
+        double magnitude = getLength();
         IFPoint baseCopy = getBase().copy();
 
-        return set(ref).setMagnitude(magnitude).relocateBase(baseCopy);
+        return set(ref).setLength(magnitude).relocateBase(baseCopy);
     }
 
     @Override
@@ -573,22 +573,22 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
 
     @Override
     public IFVector setOrthogonal(IFPoint headA, IFPoint headB) {
-        double magnitude = getMagnitude();
+        double magnitude = getLength();
         IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), headB.copy());
 
         setHead(headA);
 
-        return getCrossProduct(fVectorRef).setMagnitude(magnitude);
+        return getCrossProduct(fVectorRef).setLength(magnitude);
     }
 
     @Override
     public IFVector setOrthogonal(IFVector ref) {
-        double magnitude = getMagnitude();
+        double magnitude = getLength();
         IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), ref.getHead().copy());
 
         setHead(ref.getBase());
 
-        return getCrossProduct(fVectorRef.copy()).setMagnitude(magnitude);
+        return getCrossProduct(fVectorRef.copy()).setLength(magnitude);
     }
 
     @Override

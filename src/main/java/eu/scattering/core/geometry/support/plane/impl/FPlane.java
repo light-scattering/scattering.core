@@ -185,7 +185,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
         double divisor = vPlane.getDotProduct(vLine);
         double distance = dividend / divisor;
 
-        IFVector extension = ref.getOrigin().copy().setMagnitude(distance);
+        IFVector extension = ref.getOrigin().copy().setLength(distance);
 
         return Optional.of(extension.getHead());
     }
@@ -200,7 +200,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     private IFPoint projectOnPlane(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
-                .div(getOrigin().getMagnitude());
+                .div(getOrigin().getLength());
 
         IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
                 .sub(getOrigin().getBase());
@@ -217,7 +217,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     private IFPoint projectOnLine(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
-                .div(getOrigin().getMagnitude());
+                .div(getOrigin().getLength());
 
         IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
                 .sub(getOrigin().getBase());
@@ -226,7 +226,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     }
 
     private boolean isInHalfSpace(IFPoint projection) {
-        double magnitude = getOrigin().getMagnitude();
+        double magnitude = getOrigin().getLength();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);

@@ -11,7 +11,7 @@ public class PlaygroundTest {
     void playground() {
        IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1);
        IFLine fLine = FactoryGeometry.getIFLine(fVector);
-       System.out.println(fVector.getMagnitude());
+       System.out.println(fVector.getLength());
        System.out.println(fLine.getIFPoint(1));
     }
 }

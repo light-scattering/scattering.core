@@ -178,7 +178,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     @Override
     public IFPoint getIFPoint(double length) {
         IFPoint fPoint = getOrigin().getHead().copy().sub(getOrigin().getBase());
-        double tmp = length / getOrigin().getMagnitude();
+        double tmp = length / getOrigin().getLength();
 
         fPoint.setX(getOrigin().getBase().getX() + (fPoint.getX() * tmp));
         fPoint.setY(getOrigin().getBase().getY() + (fPoint.getY() * tmp));
@@ -395,7 +395,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     private IFPoint projectIFPoint(IFPoint fPoint) {
         IFPoint opA = FactoryGeometry.getIFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
-                .div(getOrigin().getMagnitude());
+                .div(getOrigin().getLength());
 
         IFPoint opB = FactoryGeometry.getIFPoint(fPoint)
                 .sub(getOrigin().getBase());
@@ -406,7 +406,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     }
 
     private boolean isPartOfRay(IFPoint projection) {
-        double magnitude = getOrigin().getMagnitude();
+        double magnitude = getOrigin().getLength();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
@@ -419,7 +419,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     }
 
     private boolean isPartOfSegment(IFPoint projection) {
-        double magnitude = getOrigin().getMagnitude();
+        double magnitude = getOrigin().getLength();
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);

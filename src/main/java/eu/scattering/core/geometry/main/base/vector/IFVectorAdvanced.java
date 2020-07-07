@@ -27,6 +27,7 @@ public interface IFVectorAdvanced {
     double getLengthX();
     double getLengthY();
     double getLengthZ();
+
     IFPoint getCenter();
 
     IFVector normalize();
@@ -35,8 +36,8 @@ public interface IFVectorAdvanced {
     IFVector reflect(IFPoint ref);
     IFVector invertDirection();
 
-    double getMagnitude();
-    IFVector setMagnitude(double magnitude) throws SamePositionException;
+    double getLength();
+    IFVector setLength(double length) throws SamePositionException;
     double getInclination();
     IFVector setInclination(double inclination);
     double getAzimuth();
@@ -58,5 +59,4 @@ public interface IFVectorAdvanced {
     IFVector setOrthogonal(IFVector ref);
     
     boolean isZero();
-
 }
