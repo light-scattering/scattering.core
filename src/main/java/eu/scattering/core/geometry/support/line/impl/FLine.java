@@ -4,10 +4,8 @@ import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.geometry.main.base.vector.impl.FVector;
 import eu.scattering.core.geometry.support.PresetSupport;
 import eu.scattering.core.geometry.support.line.IFLine;
-import eu.scattering.core.geometry.support.plane.IFPlane;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -145,7 +143,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     @Override
     public Consumer<IBaseExtensionAssembly> setDistance(double distance) {
 
-        return (e) -> e.disassemble().stream()
+        return (e) -> e.disassemble()
                 .forEach(p -> p.setDistance(projectIFPoint(p.copy()), distance));
     }
 
@@ -165,7 +163,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     public Function<IBaseExtensionAssembly, List<Boolean>> isPartOfRay() {
 
         return (e) -> e.disassemble().stream()
-                .map(p -> isPartOfRay(p))
+                .map(this::isPartOfRay)
                 .collect(Collectors.toList());
     }
 
@@ -173,31 +171,8 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     public Function<IBaseExtensionAssembly, List<Boolean>> isPartOfSegment() {
 
         return (e) -> e.disassemble().stream()
-                .map(p -> isPartOfSegment(p))
+                .map(this::isPartOfSegment)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Optional<IFPoint> getCommonIFPoint(IFLine ref) {
-
-        if (isSimilar(ref)) {
-            throw new IllegalArgumentException("IFLines are parallel");
-        }
-
-        if (getOrigin().isParallel(ref.getOrigin())) {
-            return Optional.empty();
-        }
-
-        IFVector u = projectOnPlaneXY(getOrigin().copy());
-        IFVector v = projectOnPlaneXY(ref.getOrigin().copy());
-        IFVector w = FactoryGeometry.getIFVector(v.getBase(), u.getBase());
-
-        v.getCrossProduct(v.getBase().copy().setZ(1));
-
-        double scaleFactor = v.copy().reflectHead().getDotProduct(w) / v.getDotProduct(u);
-        IFPoint candidate = u.copy().mul(scaleFactor).relocateBase(u.getBase()).getHead();
-
-        return Optional.of(candidate);
     }
 
     @Override
@@ -263,13 +238,156 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
         return Optional.of(FactoryGeometry.getIFPoint(x, y, z));
     }
 
+    @Override
+    public Optional<IFPoint> getCommonIFPoint(IFLine ref) {
+
+        if (getOrigin().isParallel(ref.getOrigin())) {
+            return Optional.empty();
+        }
+
+        String dir = getProjectionType(ref.getOrigin());
+
+        IFVector u = projectOnPlane(dir, getOrigin().copy());
+        IFVector v = projectOnPlane(dir, ref.getOrigin().copy());
+        IFVector w = FactoryGeometry.getIFVector(v.getBase(), u.getBase());
+
+        v = getCrossProduct(dir, v);
+
+        double scaleFactor = v.copy().reflectHead().getDotProduct(w) / v.getDotProduct(u);
+
+        return validateCandidate(ref, getCandidate3D(dir, getCandidate2D(u, scaleFactor)));
+    }
+
     // -------------------------------------------------------------------------------------------------
 
-    private IFVector projectOnPlaneXY(IFVector ref) {
-        ref.getBase().setZ(0);
-        ref.getHead().setZ(0);
+    private String getProjectionType(IFVector ref) {
 
-        return ref;
+        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthY() > 0) &&
+                (ref.getLengthX() > 0 || ref.getLengthY() > 0)) {
+
+            return "XY";
+        }
+
+        if ((getOrigin().getLengthY() > 0 || getOrigin().getLengthZ() > 0) &&
+                (ref.getLengthY() > 0 || ref.getLengthZ() > 0)) {
+
+            return "YZ";
+        }
+
+        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthZ() > 0) &&
+                (ref.getLengthX() > 0 || ref.getLengthZ() > 0)) {
+
+            return "XZ";
+        }
+
+        throw new IllegalStateException("The projection plane cannot be determined");
+    }
+
+    private IFVector projectOnPlane(String dir, IFVector ref) {
+
+        switch (dir) {
+            case "XY":
+                ref.getBase().setZ(0);
+                ref.getHead().setZ(0);
+
+                return ref;
+            case "YZ":
+                ref.getBase().setX(0);
+                ref.getHead().setX(0);
+
+                return ref;
+            case "XZ":
+                ref.getBase().setY(0);
+                ref.getHead().setY(0);
+
+                return ref;
+        }
+
+        throw new IllegalStateException("The IFVector cannot be projected on any plane. Value " + dir);
+    }
+
+    private IFVector getCrossProduct(String dir, IFVector ref) {
+
+        switch (dir) {
+            case "XY":
+                return ref.getCrossProduct(ref.getBase().copy().setZ(1));
+            case "YZ":
+                return ref.getCrossProduct(ref.getBase().copy().setX(1));
+            case "XZ":
+                return ref.getCrossProduct(ref.getBase().copy().setY(1));
+        }
+
+        throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);
+    }
+
+    private IFPoint getCandidate2D(IFVector ref, double scaleFactor) {
+
+        return ref.copy().mul(scaleFactor).relocateBase(ref.getBase()).getHead();
+    }
+
+    private Optional<IFPoint> getCandidate3D(String dir, IFPoint ref) {
+
+        Optional<IFPoint> candidate;
+
+        switch (dir) {
+            case "XY":
+                candidate = getIFPointAtX(ref.getX());
+
+                if (candidate.isPresent()) {
+                    return candidate;
+                }
+
+                candidate = getIFPointAtY(ref.getY());
+
+                if (candidate.isPresent()) {
+                    return candidate;
+                }
+
+                throw new IllegalStateException("The IFPoint candidate cannot be calculated. Value " + dir);
+            case "YZ":
+                candidate = getIFPointAtY(ref.getY());
+
+                if (candidate.isPresent()) {
+                    return candidate;
+                }
+
+                candidate = getIFPointAtZ(ref.getZ());
+
+                if (candidate.isPresent()) {
+                    return candidate;
+                }
+
+                throw new IllegalStateException("The IFPoint candidate cannot be calculated. Value " + dir);
+            case "XZ":
+                candidate = getIFPointAtX(ref.getX());
+
+                if (candidate.isPresent()) {
+                    return candidate;
+                }
+
+                candidate = getIFPointAtZ(ref.getZ());
+
+                if (candidate.isPresent()) {
+                    return candidate;
+                }
+
+                throw new IllegalStateException("The IFPoint candidate cannot be calculated. Value " + dir);
+        }
+
+        throw new IllegalStateException("The IFPoint candidate cannot be calculated. Value " + dir);
+    }
+
+    private Optional<IFPoint> validateCandidate(IFLine ref, Optional<IFPoint> candidate) {
+
+        if (candidate.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (candidate.get().extLog(isPartOf()).get(0) && candidate.get().extLog(ref.isPartOf()).get(0)) {
+            return candidate;
+        }
+
+        return Optional.empty();
     }
 
     // -------------------------------------------------------------------------------------------------

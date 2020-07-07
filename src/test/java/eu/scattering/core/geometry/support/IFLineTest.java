@@ -865,41 +865,52 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Get intersecting point 2D")
-        void getIntersectingPoint2D() {
+        @DisplayName("Get common IFPoint 2D XY")
+        void getCommonIFPoint2DXY() {
             IFVector fLineAOrigin = HelperRandom.getTestVector();
-            IFVector fLineBOrigin = HelperRandom.getTestVector(fLineAOrigin);
-            System.out.println(HelperAngle.radToDeg(fLineAOrigin.getAngle(fLineBOrigin)));
-//            while (fLineAOrigin.getAngle(fLineBOrigin) < Math.PI * 0.25) {
-//                fLineAOrigin = HelperRandom.getTestVector();
-//                fLineBOrigin = HelperRandom.getTestVector(fLineAOrigin);
-//                System.out.println(HelperAngle.radToDeg(fLineAOrigin.getAngle(fLineBOrigin)));
-//            }
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
 
             fLineAOrigin.getBase().setZ(0);
             fLineAOrigin.getHead().setZ(0);
-            fLineBOrigin.getBase().setZ(0);
-            fLineBOrigin.getHead().setZ(0);
 
-            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            while (fLineAOrigin.isZero()) {
+                fLineAOrigin.set(HelperRandom.getTestVector());
+
+                fLineAOrigin.getBase().setZ(0);
+                fLineAOrigin.getHead().setZ(0);
+            }
+
+            IFPoint fLineBOriginBase = HelperRandom.getTestPoint();
+            IFPoint fLineBOriginHead = fLineA.getIFPoint(HelperRandom.getTestValue());
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(fLineBOriginBase, fLineBOriginHead);
             IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
 
+            fLineBOriginBase.setZ(0);
+            fLineBOriginBase.setZ(0);
+
+            while (fLineBOriginBase.extLog(fLineA.isPartOf()).get(0)) {
+                fLineBOriginBase.set(HelperRandom.getTestPoint());
+
+                fLineBOriginBase.setZ(0);
+            }
+
             Optional<IFPoint> fPointRes = fLineA.getCommonIFPoint(fLineB);
-            System.out.println(fPointRes.get().devDescribe());
 
             assertAll("Validate IFPoint",
                     () -> assertTrue(fPointRes.isPresent(),
                             "IFLines should have one intersecting IFPoint"),
                     () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
-                            "The IFPoint should be part of IFLine 1 (" + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
+                            "The IFPoint should be part of IFLine 1 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
                     () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
-                            "The IFPoint should be part of IFLine 2 (" + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+                            "The IFPoint should be part of IFLine 2 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
             );
         }
 
-        @RepeatedTest(100)
-        @DisplayName("Get intersecting point 2D (Simple)")
-        void getIntersectingPoint2DSimple() {
+        @Test
+        @DisplayName("Get common IFPoint 2D XY (Simple)")
+        void getCommonIFPoint2DXYSimple() {
             IFVector fLineAOrigin = FactoryGeometry.getIFVector(0, 0, 0, 1, 0, 0);
             IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
             IFVector fLineBOrigin = FactoryGeometry.getIFVector(1, -1, 0, 3, 1, 0);
@@ -923,18 +934,8 @@ public class IFLineTest {
         }
 
         @Test
-        @DisplayName("Get intersecting point (throw IllegalArgumentException)")
-        void getIntersectingPointSameLine() {
-            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 1, 1));
-            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, -1, -1));
-
-            assertThrows(IllegalArgumentException.class, () -> fLineA.getCommonIFPoint(fLineB),
-                    "Origins form the same IFLine, an exception should be thrown");
-        }
-
-        @Test
-        @DisplayName("Get intersecting point (fail)")
-        void getIntersectingPointFail() {
+        @DisplayName("Get common IFPoint 2D XY (fail)")
+        void getCommonIFPoint2DXYFail() {
             IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 0, 0));
             IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
 
@@ -942,5 +943,143 @@ public class IFLineTest {
                     "The intersecting point is non-existent");
         }
 
+        @Test
+        @DisplayName("Get common IFPoint")
+        void getCommonIFPoint() {
+            IFLine fLineA = FactoryGeometry.getIFLine(HelperRandom.getTestVector());
+
+            IFPoint fLineBOriginBase = HelperRandom.getTestPoint();
+            IFPoint fLineBOriginHead = fLineA.getIFPoint(HelperRandom.getTestValue());
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(fLineBOriginBase, fLineBOriginHead));
+
+            while (fLineBOriginBase.extLog(fLineA.isPartOf()).get(0)) {
+                fLineBOriginBase.set(HelperRandom.getTestPoint());
+            }
+
+            Optional<IFPoint> fPointRes = fLineA.getCommonIFPoint(fLineB);
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fPointRes.isPresent(),
+                            "IFLines should have one intersecting IFPoint"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 1 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 2 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+            );
+        }
+
+        @Test
+        @DisplayName("Get common IFPoint (static X)")
+        void getCommonIFPointStaticX() {
+            IFVector fLineAOrigin = FactoryGeometry.getIFVector(1, 1, 0, 1, 1, 1);
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(1, 0, 0, 1, 3, 0);
+            IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
+
+            Optional<IFPoint> fPointRes = fLineA.getCommonIFPoint(fLineB);
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fPointRes.isPresent(),
+                            "IFLines should have one intersecting IFPoint"),
+                    () -> assertEquals(fPointRes.get(), FactoryGeometry.getIFPoint(1, 1, 0),
+                            "The IFPoint is erroneous"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 1 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 2 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+            );
+        }
+        @Test
+        @DisplayName("Get common IFPoint (static Y)")
+        void getCommonIFPointStaticY() {
+            IFVector fLineAOrigin = FactoryGeometry.getIFVector(1, 1, 0, 1, 1, 1);
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(0, 1, 0, 3, 1, 0);
+            IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
+
+            Optional<IFPoint> fPointRes = fLineA.getCommonIFPoint(fLineB);
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fPointRes.isPresent(),
+                            "IFLines should have one intersecting IFPoint"),
+                    () -> assertEquals(fPointRes.get(), FactoryGeometry.getIFPoint(1, 1, 0),
+                            "The IFPoint is erroneous"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 1 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 2 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+            );
+        }
+
+        @Test
+        @DisplayName("Get common IFPoint (static Z)")
+        void getCommonIFPointStaticZ() {
+            IFVector fLineAOrigin = FactoryGeometry.getIFVector(0, 1, 1, 2, 1, 1);
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(1, 0, 1, 1, 2, 1);
+            IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
+
+            Optional<IFPoint> fPointRes = fLineA.getCommonIFPoint(fLineB);
+
+            assertAll("Validate IFPoint",
+                    () -> assertTrue(fPointRes.isPresent(),
+                            "IFLines should have one intersecting IFPoint"),
+                    () -> assertEquals(fPointRes.get(), FactoryGeometry.getIFPoint(1, 1, 1),
+                            "The IFPoint is erroneous"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 1 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                            "The IFPoint should be part of IFLine 2 " +
+                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+            );
+        }
+
+        @RepeatedTest(100)
+        @DisplayName("Get common IFPoint (fail)")
+        void getCommonIFPointFail() {
+            IFLine fLineA = FactoryGeometry.getIFLine(HelperRandom.getTestVector());
+
+            IFPoint fLineBOriginBase = HelperRandom.getTestPoint();
+            IFPoint fLineBOriginHead = fLineBOriginBase.copy().ext(fLineA.project()).add(10 * jitter);
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(fLineBOriginBase, fLineBOriginHead));
+
+            while (fLineB.getOrigin().extLog(fLineA.isPartOf()).stream().anyMatch(e -> e)) {
+                fLineBOriginBase.set(HelperRandom.getTestPoint());
+                fLineBOriginHead.set(fLineBOriginBase.copy().ext(fLineA.project()).add(10 * jitter));
+            }
+
+            assertTrue(fLineA.getCommonIFPoint(fLineB).isEmpty(),
+                    "The intersecting point should be non-existent");
+        }
+
+        @Test
+        @DisplayName("Get common IFPoint (fail, simple)")
+        void getCommonIFPointFailSimple() {
+            IFVector fLineAOrigin = FactoryGeometry.getIFVector(1, 0, 0);
+            IFLine fLineA = FactoryGeometry.getIFLine(fLineAOrigin);
+            IFVector fLineBOrigin = FactoryGeometry.getIFVector(0, 1, 0, 0, 0, 1);
+            IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
+
+            assertTrue(fLineA.getCommonIFPoint(fLineB).isEmpty(),
+                    "The intersecting point should be non-existent");
+        }
+
+        @Test
+        @DisplayName("Get common IFPoint (fail, same line)")
+        void getCommonIFPointFailSameLine() {
+            IFLine fLineA = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(1, 1, 1));
+            IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, -1, -1));
+
+            assertTrue(fLineA.getCommonIFPoint(fLineB).isEmpty(),
+                    "Origins form the same IFLine, the intersecting point should be non-existent");
+        }
+// validate pos, references
     }
 }
