@@ -36,7 +36,7 @@ public interface IFVectorAdvanced {
     IFVector normalize();
     IFVector reflectBase();
     IFVector reflectHead();
-    IFVector reflect(IFPoint ref);
+    IFVector reflect(IFPoint center);
     IFVector invertDirection();
 
     double getLength();
@@ -55,10 +55,8 @@ public interface IFVectorAdvanced {
     IFVector getCrossProduct(IFVector ref);
 
     boolean isParallel(IFVector ref);
-    IFVector setParallel(IFPoint base, IFPoint head);
-    IFVector setParallel(IFVector ref);
+    IFVector setParallel(IFVector ref);// tests with zero
     boolean isOrthogonal(IFVector ref);
-    IFVector setOrthogonal(IFPoint headA, IFPoint headB); // tests with zero
     IFVector setOrthogonal(IFVector ref); // tests with zero
 
 //    boolean isAntiParallel(IFVector ref);

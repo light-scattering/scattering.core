@@ -419,10 +419,10 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector reflect(IFPoint ref) {
+    public IFVector reflect(IFPoint center) {
 
-        getBase().reflect(ref);
-        getHead().reflect(ref);
+        getBase().reflect(center);
+        getHead().reflect(center);
 
         return this;
     }
@@ -550,14 +550,6 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector setParallel(IFPoint base, IFPoint head) {
-        double magnitude = getLength();
-        IFPoint baseCopy = getBase().copy();
-
-        return set(base, head).setLength(magnitude).relocateBase(baseCopy);
-    }
-
-    @Override
     public IFVector setParallel(IFVector ref) {
         double magnitude = getLength();
         IFPoint baseCopy = getBase().copy();
@@ -569,20 +561,6 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     public boolean isOrthogonal(IFVector ref) {
 
         return Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter;
-    }
-
-    @Override
-    public IFVector setOrthogonal(IFPoint headA, IFPoint headB) {
-        double magnitude = getLength();
-        IFVector fVectorRef = FactoryGeometry.getIFVector(headA.copy(), headB.copy());
-        IFVector fVectorRot = copy().getCrossProduct(fVectorRef);
-
-        fVectorRef.getCrossProduct(fVectorRot).setLength(magnitude);
-        fVectorRef.relocateBase(getBase());
-
-        set(fVectorRef);
-
-        return this;
     }
 
     @Override

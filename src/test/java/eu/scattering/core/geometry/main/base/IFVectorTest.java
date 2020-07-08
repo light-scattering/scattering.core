@@ -2561,41 +2561,6 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Set parallel with IFPoints")
-        void setParallelWithIFPoints() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorB = HelperRandom.getTestVector();
-
-            fVectorA.setParallel(fVectorB.getBase(), fVectorB.getHead());
-
-            assertTrue(fVectorA.isParallel(fVectorB), "The two IFVectors should be parallel");
-        }
-
-        @Test
-        @DisplayName("Set parallel with IFPoints (validate references)")
-        void setParallelWithIFPointsValidateReferences() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorB = HelperRandom.getTestVector();
-
-            IFVector fVectorRef = fVectorA.setParallel(fVectorB.getBase(), fVectorB.getHead());
-
-            assertSame(fVectorRef, fVectorA, "The references should not change");
-        }
-
-        @Test
-        @DisplayName("Set parallel with IFVector (validate positions)")
-        void setParallelWithIFPointsValidatePositions() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorB = HelperRandom.getTestVector();
-
-            IFVector fVectorRef = fVectorB.copy();
-
-            fVectorA.setParallel(fVectorB.getBase(), fVectorB.getHead());
-
-            assertEquals(fVectorRef, fVectorB, "The positions should not change");
-        }
-
-        @Test
         @DisplayName("Is orthogonal")
         void isOrthogonal() {
             IFVector fVectorA = FactoryGeometry.getIFVector(0, 1, 0);
@@ -2696,67 +2661,6 @@ public class IFVectorTest {
             IFVector fVectorRef = fVectorB.copy();
 
             fVectorA.setOrthogonal(fVectorB);
-
-            assertEquals(fVectorRef, fVectorB, "The positions should not change");
-        }
-
-        @Test
-        @DisplayName("Set orthogonal with IFPoints")
-        void setOrthogonalWithIFPoints() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorB = HelperRandom.getTestVector();
-
-            fVectorA.setOrthogonal(fVectorB.getBase(), fVectorB.getHead());
-
-            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
-        }
-
-        @Test
-        @DisplayName("Set orthogonal with IFPoints (same base)")
-        void setOrthogonalWithIFPointsSameBase() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-
-            IFPoint fVectorBHead = HelperRandom.getTestPoint(fVectorA.getHead());
-            IFVector fVectorB = FactoryGeometry.getIFVector(fVectorA.getBase().copy(), fVectorBHead);
-
-            fVectorA.setOrthogonal(fVectorB.getBase(), fVectorB.getHead());
-
-            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
-        }
-
-        @Test
-        @DisplayName("Set orthogonal with IFPoints (same head)")
-        void setOrthogonalWithIFPointsSameHead() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-
-            IFPoint fVectorBBase = HelperRandom.getTestPoint(fVectorA.getBase());
-            IFVector fVectorB = FactoryGeometry.getIFVector(fVectorBBase, fVectorA.getHead().copy());
-
-            fVectorA.setOrthogonal(fVectorB.getBase(), fVectorB.getHead());
-
-            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
-        }
-
-        @Test
-        @DisplayName("Set orthogonal with IFPoints (validate references)")
-        void setOrthogonalWithIFPointsValidateReferences() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorB = HelperRandom.getTestVector();
-
-            IFVector fVectorRef = fVectorA.setOrthogonal(fVectorB.getBase(), fVectorB.getHead());
-
-            assertSame(fVectorRef, fVectorA, "The references should not change");
-        }
-
-        @Test
-        @DisplayName("Set orthogonal with IFPoints (validate positions)")
-        void setOrthogonalWithIFPointsValidatePositions() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorB = HelperRandom.getTestVector();
-
-            IFVector fVectorRef = fVectorB.copy();
-
-            fVectorA.setOrthogonal(fVectorB.getBase(), fVectorB.getHead());
 
             assertEquals(fVectorRef, fVectorB, "The positions should not change");
         }

@@ -211,9 +211,8 @@ public class IFLineTest {
         @Test
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
-            IFVector fVector = HelperRandom.getTestVector();
-            IFLine fLineA = FactoryGeometry.getIFLine(fVector.copy());
-            IFLine fLineB = FactoryGeometry.getIFLine(fVector.copy().add(1.5 * jitter).setOrthogonal(fVector));
+            IFLine fLineA = FactoryGeometry.getIFLine(HelperRandom.getTestVector());
+            IFLine fLineB = FactoryGeometry.getIFLine(HelperRandom.getTestVector(fLineA.getOrigin()));
 
             assertAll("Validate exactness",
                     () -> assertFalse(fLineA.isSimilar(fLineB), "IFLines should not be similar"),

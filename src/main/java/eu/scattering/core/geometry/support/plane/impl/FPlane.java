@@ -172,7 +172,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     }
 
     @Override
-    public Optional<IFPoint> getIntersectingIFPoint(IFLine ref) {
+    public Optional<IFPoint> getCommonIFPoint(IFLine ref) {
 
         if (getOrigin().isOrthogonal(ref.getOrigin())) {
             return Optional.empty();
@@ -191,7 +191,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     }
 
     @Override
-    public Optional<IFLine> getIntersectingIFLine(IFPlane ref) {
+    public Optional<IFLine> getCommonIFLine(IFPlane ref) {
         return null;
     }
 

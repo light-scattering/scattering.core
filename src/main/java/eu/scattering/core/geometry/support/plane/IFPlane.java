@@ -17,8 +17,8 @@ public interface IFPlane  extends IGeometryBase<IFPlane>, IDebug<IFPlane>, ISupp
 
     boolean isIntersecting(IBaseExtensionAssembly assembly);
 
-    Optional<IFPoint> getIntersectingIFPoint(IFLine ref);
-    Optional<IFLine> getIntersectingIFLine(IFPlane ref);
+    Optional<IFPoint> getCommonIFPoint(IFLine ref);
+    Optional<IFLine> getCommonIFLine(IFPlane ref);
 
 }
 

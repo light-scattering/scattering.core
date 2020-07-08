@@ -554,7 +554,7 @@ public class IFPlaneTest {
             fPlane.getOrigin().add(fPointRel);
             fLine.getOrigin().add(fPointRel);
 
-            assertTrue(fPlane.getIntersectingIFPoint(fLine).get().isSimilar(FactoryGeometry.getIFPoint(fPointRel)),
+            assertTrue(fPlane.getCommonIFPoint(fLine).get().isSimilar(FactoryGeometry.getIFPoint(fPointRel)),
                     "The intersecting IFPoint is erroneous");
         }
 
@@ -568,7 +568,7 @@ public class IFPlaneTest {
             fPlane.getOrigin().add(fPointRel);
             fLine.getOrigin().add(fPointRel);
 
-            assertTrue(fPlane.getIntersectingIFPoint(fLine).isEmpty(),
+            assertTrue(fPlane.getCommonIFPoint(fLine).isEmpty(),
                     "The IFLine does not intersect with the IFPlane");
         }
 
@@ -580,7 +580,7 @@ public class IFPlaneTest {
             IFVector fLineOrigin = FactoryGeometry.getIFVector(-1, 1, 0, 1, -1, 0);
             IFLine fLine = FactoryGeometry.getIFLine(fLineOrigin.copy());
 
-            fPlane.getIntersectingIFPoint(fLine);
+            fPlane.getCommonIFPoint(fLine);
 
             assertAll("Validate positions",
                     () -> assertTrue(fPlane.getOrigin().isExact(fPlaneOrigin),
