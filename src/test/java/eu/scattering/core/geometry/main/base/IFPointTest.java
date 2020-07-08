@@ -201,7 +201,7 @@ public class IFPointTest {
         void normalize() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertEquals(1, fPoint.normalize().getRadius(),
+            assertEquals(1, fPoint.normalize().getLength(),
                     jitter, "The magnitude of the normalized vector should be equal to one");
         }
 
@@ -297,97 +297,97 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get radius (axes: 1)")
-        void getRadiusAxes1() {
+        @DisplayName("Get length (axes: 1)")
+        void getLengthAxes1() {
             double ref = HelperRandom.getTestValue();
             double expected = Math.abs(ref);
 
             assertAll("Validate radius",
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setX(ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setX(ref).getLength(),
                             jitter, "The magnitude is invalid [X]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setX(-ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setX(-ref).getLength(),
                             jitter, "The magnitude is invalid [-X]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setY(ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setY(ref).getLength(),
                             jitter, "The magnitude is invalid [Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setY(-ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setY(-ref).getLength(),
                             jitter, "The magnitude is invalid [-Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setZ(ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setZ(ref).getLength(),
                             jitter, "The magnitude is invalid [Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setZ(-ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint().setZ(-ref).getLength(),
                             jitter, "The magnitude is invalid [-Z]")
             );
         }
 
         @Test
-        @DisplayName("Get radius (axes: 2)")
-        void getRadiusAxes2() {
+        @DisplayName("Get length (axes: 2)")
+        void getLengthAxes2() {
             double ref = HelperRandom.getTestValue();
             double expected = Math.abs(ref * Math.sqrt(2));
 
             assertAll("Validate radius",
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, 0).getLength(),
                             jitter, "The magnitude is invalid [X, Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, 0).getLength(),
                             jitter, "The magnitude is invalid [X, -Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, 0).getLength(),
                             jitter, "The magnitude is invalid [-X, Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, 0).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, 0).getLength(),
                             jitter, "The magnitude is invalid [-X, -Y]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, 0, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, 0, ref).getLength(),
                             jitter, "The magnitude is invalid [X, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, 0, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, 0, -ref).getLength(),
                             jitter, "The magnitude is invalid [X, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, 0, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, 0, ref).getLength(),
                             jitter, "The magnitude is invalid [-X, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, 0, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, 0, -ref).getLength(),
                             jitter, "The magnitude is invalid [-X, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, ref, ref).getLength(),
                             jitter, "The magnitude is invalid [Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, ref, -ref).getLength(),
                             jitter, "The magnitude is invalid [Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, -ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, -ref, ref).getLength(),
                             jitter, "The magnitude is invalid [-Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, -ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(0, -ref, -ref).getLength(),
                             jitter, "The magnitude is invalid [-Y, -Z]")
             );
         }
 
         @Test
-        @DisplayName("Get radius (axes: 3)")
-        void getRadiusAxes3() {
+        @DisplayName("Get length (axes: 3)")
+        void getLengthAxes3() {
             double ref = HelperRandom.getTestValue();
             double expected = Math.abs(ref * Math.sqrt(3));
 
             assertAll("Validate radius",
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, ref).getLength(),
                             jitter, "The magnitude is invalid [X, Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, ref, -ref).getLength(),
                             jitter, "The magnitude is invalid [X, Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, ref).getLength(),
                             jitter, "The magnitude is invalid [X, -Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(ref, -ref, -ref).getLength(),
                             jitter, "The magnitude is invalid [X, -Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, ref).getLength(),
                             jitter, "The magnitude is invalid [-X, Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, ref, -ref).getLength(),
                             jitter, "The magnitude is invalid [-X, Y, -Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, ref).getLength(),
                             jitter, "The magnitude is invalid [-X, -Y, Z]"),
-                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, -ref).getRadius(),
+                    () -> assertEquals(expected, FactoryGeometry.getIFPoint(-ref, -ref, -ref).getLength(),
                             jitter, "The magnitude is invalid [-X, -Y, -Z]")
             );
         }
 
         @Test
-        @DisplayName("Get radius (validate positions)")
-        void getRadiusValidatePositions() {
+        @DisplayName("Get length (validate positions)")
+        void getLengthValidatePositions() {
             double refX = HelperRandom.getTestValue();
             double refY = HelperRandom.getTestValue();
             double refZ = HelperRandom.getTestValue();
 
             IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
 
-            fPoint.getRadius();
+            fPoint.getLength();
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
@@ -397,8 +397,8 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set radius")
-        void setRadius() {
+        @DisplayName("Set length")
+        void setLength() {
             IFPoint fPoint;
 
             double refX = HelperRandom.getTestValue();
@@ -406,39 +406,39 @@ public class IFPointTest {
             double refZ = HelperRandom.getTestValue();
 
             fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
-            double magnitude = fPoint.getRadius();
+            double magnitude = fPoint.getLength();
 
             double magnitudeExpected = Math.abs(HelperRandom.getTestValue(magnitude));
-            fPoint.setRadius(magnitudeExpected);
+            fPoint.setLength(magnitudeExpected);
 
-            assertEquals(magnitudeExpected, fPoint.getRadius(),
+            assertEquals(magnitudeExpected, fPoint.getLength(),
                     jitter, "The magnitude of the vector is incorrect");
         }
 
         @Test
-        @DisplayName("Set radius (throw IllegalArgumentException)")
-        void setRadiusThrowIllegalArgumentException() {
+        @DisplayName("Set length (throw IllegalArgumentException)")
+        void setLengthThrowIllegalArgumentException() {
 
             assertThrows(IllegalArgumentException.class,
-                    () -> FactoryGeometry.getIFPoint().set(1, 1, 1).setRadius(-1),
+                    () -> FactoryGeometry.getIFPoint().set(1, 1, 1).setLength(-1),
                     "It should not be possible to set negative radius");
         }
 
         @Test
-        @DisplayName("Set radius (throw SamePositionException)")
-        void setRadiusThrowSamePositionException() {
+        @DisplayName("Set length (throw SamePositionException)")
+        void setLengthThrowSamePositionException() {
 
             assertThrows(SamePositionException.class,
-                    () -> FactoryGeometry.getIFPoint().setRadius(1),
+                    () -> FactoryGeometry.getIFPoint().setLength(1),
                     "The position of the reference IFPoint must not be zero");
         }
 
         @Test
-        @DisplayName("Set radius (validate references)")
-        void setRadiusValidateReferences() {
+        @DisplayName("Set length (validate references)")
+        void setLengthValidateReferences() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.setRadius(Math.abs(HelperRandom.getTestValue()));
+            IFPoint fPointRef = fPoint.setLength(Math.abs(HelperRandom.getTestValue()));
 
             assertSame(fPoint, fPointRef, "The reference should remain unchanged");
         }
@@ -450,7 +450,7 @@ public class IFPointTest {
 
             IFPoint fPoint = FactoryGeometry.getIFPoint(radius).setRandom();
 
-            assertEquals(radius, fPoint.getRadius(),
+            assertEquals(radius, fPoint.getLength(),
                     jitter, "The radius is invalid");
         }
 
@@ -602,7 +602,7 @@ public class IFPointTest {
                         jitter, "The polar angle is incorrect [" + angle + " rad]");
                 assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
                         jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
-                assertEquals(1, fPointRef.getRadius(),
+                assertEquals(1, fPointRef.getLength(),
                         jitter, "The magnitude is incorrect [" + angle + " rad]");
 
                 fPointRef = FactoryGeometry.getIFPoint(1, 0, 1).normalize().setInclination(-angle);
@@ -611,7 +611,7 @@ public class IFPointTest {
                         jitter, "The polar angle is incorrect [" + angle + " rad]");
                 assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
                         jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
-                assertEquals(1, fPointRef.getRadius(),
+                assertEquals(1, fPointRef.getLength(),
                         jitter, "The magnitude is incorrect [" + angle + " rad]");
             }
         }
@@ -626,7 +626,7 @@ public class IFPointTest {
                     jitter, "The polar angle is incorrect [" + angle + " rad]");
             assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
                     jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
-            assertEquals(1, fPointRef.getRadius(),
+            assertEquals(1, fPointRef.getLength(),
                     jitter, "The magnitude is incorrect [" + angle + " rad]");
         }
 
@@ -640,7 +640,7 @@ public class IFPointTest {
                     jitter, "The polar angle is incorrect [" + angle + " rad]");
             assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
                     jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
-            assertEquals(1, fPointRef.getRadius(),
+            assertEquals(1, fPointRef.getLength(),
                     jitter, "The magnitude is incorrect [" + angle + " rad]");
         }
 
@@ -666,7 +666,7 @@ public class IFPointTest {
                         jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
                 assertEquals(angle18, fPointRef.getInclination(),
                         jitter, "The polar angle is incorrect [" + angle + " rad]");
-                assertEquals(1, fPointRef.getRadius(),
+                assertEquals(1, fPointRef.getLength(),
                         jitter, "The magnitude is incorrect [" + angle + " rad]");
 
                 fPointRef = FactoryGeometry.getIFPoint(1, 1, 0).normalize().setAzimuth(-angle);
@@ -675,7 +675,7 @@ public class IFPointTest {
                         jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
                 assertEquals(angle18, fPointRef.getInclination(),
                         jitter, "The polar angle is incorrect [" + angle + " rad]");
-                assertEquals(1, fPointRef.getRadius(),
+                assertEquals(1, fPointRef.getLength(),
                         jitter, "The magnitude is incorrect [" + angle + " rad]");
             }
         }
@@ -690,7 +690,7 @@ public class IFPointTest {
                     jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
             assertEquals(angle18, fPointRef.getInclination(),
                     jitter, "The polar angle is incorrect [" + angle + " rad]");
-            assertEquals(1, fPointRef.getRadius(),
+            assertEquals(1, fPointRef.getLength(),
                     jitter, "The magnitude is incorrect [" + angle + " rad]");
         }
 
@@ -704,7 +704,7 @@ public class IFPointTest {
                     jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
             assertEquals(angle18, fPointRef.getInclination(),
                     jitter, "The polar angle is incorrect [" + angle + " rad]");
-            assertEquals(1, fPointRef.getRadius(),
+            assertEquals(1, fPointRef.getLength(),
                     jitter, "The magnitude is incorrect [" + angle + " rad]");
 
         }

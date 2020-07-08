@@ -357,18 +357,18 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
 
     @Override
     public IFPoint setSphericalCoordinates(double inclination, double azimuth) {
-        double radius = getRadius();
+        double radius = getLength();
 
         setX(Math.cos(azimuth) * Math.sin(inclination));
         setY(Math.cos(inclination));
         setZ(Math.sin(azimuth) * Math.sin(inclination));
 
-        return setRadius(radius);
+        return setLength(radius);
     }
 
     @Override
     public IFPoint setRandom(IFPoint... exclude) {
-        double radius = getRadius();
+        double radius = getLength();
 
         IFPoint[] excludeList = new IFPoint[exclude.length];
         for (int i = 0 ; i < exclude.length ; i++ ) {
@@ -395,7 +395,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
                 }
             }
 
-            return setRadius(radius);
+            return setLength(radius);
         }
 
     }
@@ -415,7 +415,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     @Override
     public IFPoint normalize() {
 
-        return setRadius(1);
+        return setLength(1);
     }
 
     @Override
@@ -438,9 +438,9 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
 
     @Override
     public IFPoint setInclination(double polar) {
-        double radius = getRadius();
+        double radius = getLength();
 
-        return setSphericalCoordinates(polar, getAzimuth()).setRadius(radius);
+        return setSphericalCoordinates(polar, getAzimuth()).setLength(radius);
     }
 
     @Override
@@ -463,9 +463,9 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
 
     @Override
     public IFPoint setAzimuth(double azimuthal) {
-        double radius = getRadius();
+        double radius = getLength();
 
-        return setSphericalCoordinates(getInclination(), azimuthal).setRadius(radius);
+        return setSphericalCoordinates(getInclination(), azimuthal).setLength(radius);
     }
 
     @Override
@@ -473,7 +473,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
         double angle, dProd, magAB;
 
         dProd = getDotProduct(ref);
-        magAB = getRadius() * ref.getRadius();
+        magAB = getLength() * ref.getLength();
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
@@ -499,7 +499,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
             throw new SamePositionException("IFPoints must not be on the same position");
         }
 
-        return this.sub(ref).setRadius(distance).add(ref);
+        return this.sub(ref).setLength(distance).add(ref);
     }
 
     @Override
@@ -527,15 +527,15 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public double getRadius() {
+    public double getLength() {
 
         return Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
     }
 
     @Override
-    public IFPoint setRadius(double radius) throws SamePositionException {
+    public IFPoint setLength(double length) throws SamePositionException {
 
-        if (radius < 0) {
+        if (length < 0) {
             throw new IllegalArgumentException("The requested radius must be positive");
         }
 
@@ -543,7 +543,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
             throw new SamePositionException("The origin is at the same position as the given point");
         }
 
-        return mul(radius / getRadius());
+        return mul(length / getLength());
     }
 
     @Override

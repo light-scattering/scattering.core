@@ -11,6 +11,8 @@ public interface IFVectorAdvanced {
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
 
+//    boolean contains(IFPoint ref);
+
     IFVector relocateBase();
     IFVector relocateBase(double bX, double bY, double bZ);
     IFVector relocateBase(IFPoint base);
@@ -29,6 +31,7 @@ public interface IFVectorAdvanced {
     double getLengthZ();
 
     IFPoint getCenter();
+//    IFPoint getRandom();
 
     IFVector normalize();
     IFVector reflectBase();
@@ -55,8 +58,10 @@ public interface IFVectorAdvanced {
     IFVector setParallel(IFPoint base, IFPoint head);
     IFVector setParallel(IFVector ref);
     boolean isOrthogonal(IFVector ref);
-    IFVector setOrthogonal(IFPoint headA, IFPoint headB);
-    IFVector setOrthogonal(IFVector ref);
+    IFVector setOrthogonal(IFPoint headA, IFPoint headB); // tests with zero
+    IFVector setOrthogonal(IFVector ref); // tests with zero
+
+//    boolean isAntiParallel(IFVector ref);
     
     boolean isZero();
 }

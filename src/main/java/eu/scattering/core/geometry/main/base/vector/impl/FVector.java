@@ -451,7 +451,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     public IFVector setLength(double length) throws SamePositionException {
         IFVector fCopyLocal = copy().relocateBase();
 
-        fCopyLocal.getHead().setRadius(length);
+        fCopyLocal.getHead().setLength(length);
         fCopyLocal.relocateBase(getBase());
 
         return set(fCopyLocal);
@@ -504,7 +504,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         IFVector fCopyExternal = ref.copy().relocateBase();
 
         dProd = fCopyLocal.getDotProduct(fCopyExternal);
-        magAB = fCopyLocal.getHead().getRadius() * fCopyExternal.getHead().getRadius();
+        magAB = fCopyLocal.getHead().getLength() * fCopyExternal.getHead().getLength();
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
@@ -574,21 +574,29 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public IFVector setOrthogonal(IFPoint headA, IFPoint headB) {
         double magnitude = getLength();
-        IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), headB.copy());
+        IFVector fVectorRef = FactoryGeometry.getIFVector(headA.copy(), headB.copy());
+        IFVector fVectorRot = copy().getCrossProduct(fVectorRef);
 
-        setHead(headA);
+        fVectorRef.getCrossProduct(fVectorRot).setLength(magnitude);
+        fVectorRef.relocateBase(getBase());
 
-        return getCrossProduct(fVectorRef).setLength(magnitude);
+        set(fVectorRef);
+
+        return this;
     }
 
     @Override
     public IFVector setOrthogonal(IFVector ref) {
         double magnitude = getLength();
-        IFVector fVectorRef = FactoryGeometry.getIFVector(getBase().copy(), ref.getHead().copy());
+        IFVector fVectorRef = FactoryGeometry.getIFVector(ref.getBase().copy(), ref.getHead().copy());
+        IFVector fVectorRot = copy().getCrossProduct(fVectorRef);
 
-        setHead(ref.getBase());
+        fVectorRef.getCrossProduct(fVectorRot).setLength(magnitude);
+        fVectorRef.relocateBase(getBase());
 
-        return getCrossProduct(fVectorRef.copy()).setLength(magnitude);
+        set(fVectorRef);
+
+        return this;
     }
 
     @Override

@@ -14,8 +14,8 @@ public interface IFPointAdvanced {
     IFPoint reflect();
     IFPoint reflect(IFPoint ref);
 
-    double getRadius();
-    IFPoint setRadius(double radius) throws SamePositionException, IllegalArgumentException;
+    double getLength();
+    IFPoint setLength(double length) throws SamePositionException, IllegalArgumentException;
     double getInclination();
     IFPoint setInclination(double inclination);
     double getAzimuth();
@@ -30,5 +30,4 @@ public interface IFPointAdvanced {
     IFPoint getCrossProduct(IFPoint ref);
 
     boolean isZero();
-
 }

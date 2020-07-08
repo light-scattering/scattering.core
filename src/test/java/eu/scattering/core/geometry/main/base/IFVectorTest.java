@@ -2633,7 +2633,7 @@ public class IFVectorTest {
         @DisplayName("Set orthogonal with IFVector")
         void setOrthogonalWithIFVector() {
             IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorB = HelperRandom.getTestVector();
+            IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
             fVectorA.setOrthogonal(fVectorB);
 
             assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
@@ -2642,8 +2642,34 @@ public class IFVectorTest {
         @Test
         @DisplayName("Set orthogonal with IFVector (simple)")
         void setOrthogonalWithIFVectorSimple() {
-            IFVector fVectorA = FactoryGeometry.getIFVector(-1, -1, -1);
+            IFVector fVectorA = FactoryGeometry.getIFVector(-1, 0, 0);
             IFVector fVectorB = FactoryGeometry.getIFVector(0, 0, 1, 1, 0, 0);
+
+            fVectorA.setOrthogonal(fVectorB);
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with IFVector (same base)")
+        void setOrthogonalWithIFVectorSameBase() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+
+            IFPoint fVectorBHead = HelperRandom.getTestPoint(fVectorA.getHead());
+            IFVector fVectorB = FactoryGeometry.getIFVector(fVectorA.getBase().copy(), fVectorBHead);
+
+            fVectorA.setOrthogonal(fVectorB);
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with IFVector (same head)")
+        void setOrthogonalWithIFVectorSameHead() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+
+            IFPoint fVectorBBase = HelperRandom.getTestPoint(fVectorA.getBase());
+            IFVector fVectorB = FactoryGeometry.getIFVector(fVectorBBase, fVectorA.getHead().copy());
 
             fVectorA.setOrthogonal(fVectorB);
 
@@ -2686,6 +2712,32 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Set orthogonal with IFPoints (same base)")
+        void setOrthogonalWithIFPointsSameBase() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+
+            IFPoint fVectorBHead = HelperRandom.getTestPoint(fVectorA.getHead());
+            IFVector fVectorB = FactoryGeometry.getIFVector(fVectorA.getBase().copy(), fVectorBHead);
+
+            fVectorA.setOrthogonal(fVectorB.getBase(), fVectorB.getHead());
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with IFPoints (same head)")
+        void setOrthogonalWithIFPointsSameHead() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+
+            IFPoint fVectorBBase = HelperRandom.getTestPoint(fVectorA.getBase());
+            IFVector fVectorB = FactoryGeometry.getIFVector(fVectorBBase, fVectorA.getHead().copy());
+
+            fVectorA.setOrthogonal(fVectorB.getBase(), fVectorB.getHead());
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two IFVectors should be orthogonal");
+        }
+
+        @Test
         @DisplayName("Set orthogonal with IFPoints (validate references)")
         void setOrthogonalWithIFPointsValidateReferences() {
             IFVector fVectorA = HelperRandom.getTestVector();
@@ -2697,7 +2749,7 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Set orthogonal with IFVector (validate positions)")
+        @DisplayName("Set orthogonal with IFPoints (validate positions)")
         void setOrthogonalWithIFPointsValidatePositions() {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector();
