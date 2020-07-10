@@ -13,51 +13,51 @@ public interface IFVectorAdvanced {
 
 //    boolean contains(IFPoint ref);
 
-    IFVector relocateBase();                                // VAL
-    IFVector relocateBase(double bX, double bY, double bZ); // VAL
-    IFVector relocateBase(IFPoint base);                    // VAL
-    IFVector relocateHead();                                // VAL
-    IFVector relocateHead(double hX, double hY, double hZ); // VAL
-    IFVector relocateHead(IFPoint head);                    // VAL
+    IFVector relocateBase();
+    IFVector relocateBase(double bX, double bY, double bZ);
+    IFVector relocateBase(IFPoint base);
+    IFVector relocateHead();
+    IFVector relocateHead(double hX, double hY, double hZ);
+    IFVector relocateHead(IFPoint head);
 
-    IFVector moveForward(double distance);                  // VAL
-    IFVector moveBackward(double distance);                 // VAL
+    IFVector moveForward(double distance);
+    IFVector moveBackward(double distance);
 
-    IFVector add(IFVector vector);  // VAL
-    IFVector sub(IFVector vector);  // VAL
+    IFVector add(IFVector vector);
+    IFVector sub(IFVector vector);
 
-    double getLengthX();    // VAL
-    double getLengthY();    // VAL
-    double getLengthZ();    // VAL
+    double getLengthX();
+    double getLengthY();
+    double getLengthZ();
 
     IFPoint getCenter();
 //    IFPoint getRandom();
 
-    IFVector normalize();               // VAL
-    IFVector reflectBase();             // VAL
-    IFVector reflectHead();             // VAL
-    IFVector reflect(IFPoint center);   // VAL
-    IFVector invertDirection();         // VAL
+    IFVector normalize();
+    IFVector reflectBase();
+    IFVector reflectHead();
+    IFVector reflect(IFPoint center);
+    IFVector invertDirection();
 
-    double getLength();                                             // VAL
-    IFVector setLength(double length) throws SamePositionException; // VAL
-    double getInclination();                                        // VAL
-    IFVector setInclination(double inclination);                    // VAL
-    double getAzimuth();                                            // VAL
-    IFVector setAzimuth(double azimuth);                            // VAL
+    double getLength();
+    IFVector setLength(double length) throws SamePositionException;
+    double getInclination();
+    IFVector setInclination(double inclination);
+    double getAzimuth();
+    IFVector setAzimuth(double azimuth);
 
-    double getAngle(IFPoint ref);       // VAL
-    double getAngle(IFVector ref);      // VAL
+    double getAngle(IFPoint ref);
+    double getAngle(IFVector ref);
 
-    double getDotProduct(IFPoint ref);          // VAL
-    double getDotProduct(IFVector ref);         // VAL
-    IFVector getCrossProduct(IFPoint ref);      // VAL
-    IFVector getCrossProduct(IFVector ref);     // VAL
+    double getDotProduct(IFPoint ref);
+    double getDotProduct(IFVector ref);
+    IFVector getCrossProduct(IFPoint ref);
+    IFVector getCrossProduct(IFVector ref);
 
-    boolean isParallel(IFVector ref);           // VAL
-    IFVector setParallel(IFVector ref);         // VAL // tests with zero
-    boolean isOrthogonal(IFVector ref);         // VAL
-    IFVector setOrthogonal(IFVector ref);       // VAL // tests with zero
+    boolean isParallel(IFVector ref);
+    IFVector setParallel(IFVector ref);         // tests with zero
+    boolean isOrthogonal(IFVector ref);
+    IFVector setOrthogonal(IFVector ref);       // tests with zero
 
 //    boolean isAntiParallel(IFVector ref);
     

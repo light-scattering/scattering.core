@@ -3,6 +3,9 @@ package eu.scattering.core.geometry.main.base;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.exception.SamePositionException;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.helper.HelperIFPoint;
+import eu.scattering.core.helper.HelperIFVector;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -206,13 +209,20 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Normalize (validate references)")
-        void normalizeValidateReferences() {
+        @DisplayName("Normalize (throw SamePositionException)")
+        void normalizeThrowSamePositionException() {
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
+
+            assertThrows(SamePositionException.class, fPoint::normalize,
+                    "The IFPoints must not be on the same position");
+        }
+
+        @Test
+        @DisplayName("Normalize (validate)")
+        void normalizeValidate() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.normalize();
-
-            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(IFPoint::normalize, fPoint);
         }
 
         @Test
@@ -232,13 +242,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Reflect (validate references)")
-        void reflectValidateReferences() {
+        @DisplayName("Reflect (validate)")
+        void reflectValidate() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.reflect();
-
-            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(IFPoint::reflect, fPoint);
         }
 
         @Test
@@ -267,33 +275,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Reflect by IFPoint (validate references)")
-        void reflectByIFPointValidateReferences() {
+        @DisplayName("Reflect (validate)")
+        void reflectByIFPointValidate() {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            IFPoint fPointRef = fPointA.reflect(fPointB);
-
-            assertSame(fPointA, fPointRef, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect by IFPoint (validate positions)")
-        void reflectByIFPointValidatePositions() {
-            IFPoint fPointA = HelperRandom.getTestPoint();
-
-            double refX = HelperRandom.getTestValue();
-            double refY = HelperRandom.getTestValue();
-            double refZ = HelperRandom.getTestValue();
-            IFPoint fPointB = FactoryGeometry.getIFPoint(refX, refY, refZ);
-
-            fPointA.reflect(fPointB);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refX, fPointB.getX(), "The X value is incorrect"),
-                    () -> assertEquals(refY, fPointB.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(refZ, fPointB.getZ(), "The Z value is incorrect")
-            );
+            HelperIFPoint.validateRef(IFPoint::reflect, fPointA, fPointB);
         }
 
         @Test
@@ -434,13 +421,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set length (validate references)")
-        void setLengthValidateReferences() {
+        @DisplayName("Set length (validate)")
+        void setLengthValidate() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.setLength(Math.abs(HelperRandom.getTestValue()));
-
-            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.setLength(1), fPoint);
         }
 
         @Test
@@ -472,6 +457,14 @@ public class IFPointTest {
             IFPoint fPoint = FactoryGeometry.getIFPoint(radius);
 
             assertTimeoutPreemptively(Duration.ofSeconds(1), () -> fPoint.setRandom(fPoint));
+        }
+
+        @Test
+        @DisplayName("Set random position (validate)")
+        void setRandomPositionValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateRef(IFPoint::setRandom, fPoint);
         }
 
         @Test
@@ -645,13 +638,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set inclination (validate references)")
-        void setInclinationValidateReferences() {
+        @DisplayName("Set inclination (validate)")
+        void setInclinationValidate() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.setInclination(Math.PI * 0.5);
-
-            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.setInclination(Math.PI * 0.5), fPoint);
         }
 
         @Test
@@ -710,13 +701,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set azimuth (validate references)")
-        void setAzimuthValidateReferences() {
+        @DisplayName("Set azimuth (validate)")
+        void setAzimuthValidate() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.setAzimuth(Math.PI * 0.5);
-
-            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.setAzimuth(Math.PI * 0.5), fPoint);
         }
 
         @Test
@@ -740,13 +729,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set spherical coordinates (validate references)")
-        void setSphericalCoordinatesValidateReferences() {
+        @DisplayName("Set spherical coordinates (validate)")
+        void setSphericalCoordinatesValidate() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.setSphericalCoordinates(Math.PI * 0.5, Math.PI * 0.5);
-
-            assertSame(fPoint, fPointRef, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.setSphericalCoordinates(Math.PI * 0.5, Math.PI * 0.5), fPoint);
         }
 
         @Test
@@ -859,28 +846,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get cross product (validate references)")
-        void getCrossProductValidateReferences() {
+        @DisplayName("Get cross product (validate)")
+        void getCrossProductValidate() {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            IFPoint fPointRef = fPointA.getCrossProduct(fPointB);
-
-            assertAll("Validate references",
-                    () -> assertSame(fPointRef, fPointA,
-                            "The returned reference should point at the same object"),
-                    () -> assertNotSame(fPointA, fPointB,
-                            "References should point at different objects")
-            );
-        }
-
-        @Test
-        @DisplayName("Get cross product (throw NullPointerException")
-        void getCrossProductThrowNullPointerException() {
-            IFPoint fPoint = HelperRandom.getTestPoint();
-
-            assertThrows(NullPointerException.class, () -> fPoint.getCrossProduct(null),
-                    "The reference IFPoint must not be null");
+            HelperIFPoint.validateRef(IFPoint::getCrossProduct, fPointA, fPointB);
         }
 
         @Test
@@ -1040,53 +1011,6 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set distance (validate positions)")
-        void setDistanceValidatePositions() {
-            IFPoint fPointA = HelperRandom.getTestPoint();
-
-            double refBX = HelperRandom.getTestValue();
-            double refBY = HelperRandom.getTestValue();
-            double refBZ = HelperRandom.getTestValue();
-            IFPoint fPointB = FactoryGeometry.getIFPoint(refBX, refBY, refBZ);
-
-            fPointA.setDistance(fPointB, 1);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refBX, fPointB.getX(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(refBY, fPointB.getY(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(refBZ, fPointB.getZ(),
-                            "The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Set distance (validate references)")
-        void setDistanceValidateReferences() {
-            IFPoint fPointA = HelperRandom.getTestPoint();
-            IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
-
-            IFPoint fPointRef = fPointA.setDistance(fPointB, 1);
-
-            assertAll("Validate references",
-                    () -> assertSame(fPointRef, fPointA,
-                            "The returned reference should point at the same object"),
-                    () -> assertNotSame(fPointA, fPointB,
-                            "References should point at different objects")
-            );
-        }
-
-        @Test
-        @DisplayName("Set distance (throw NullPointerException)")
-        void setDistanceThrowNullPointerException() {
-            IFPoint fPoint = HelperRandom.getTestPoint();
-
-            assertThrows(NullPointerException.class, () -> fPoint.setDistance(null, 1),
-                    "The reference IFPoint must not be null");
-        }
-
-        @Test
         @DisplayName("Set distance (throw SamePositionException)")
         void setDistanceThrowSamePositionException() {
             IFPoint fPointA = HelperRandom.getTestPoint();
@@ -1105,6 +1029,16 @@ public class IFPointTest {
             assertThrows(IllegalArgumentException.class, () -> fPointA.setDistance(fPointB, -1),
                     "The distance cannot be lower then zero");
         }
+
+        @Test
+        @DisplayName("Set distance (validate)")
+        void setDistanceValidate() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
+
+            HelperIFPoint.validateRef((a, b) -> a.setDistance(b, 1), fPointA, fPointB);
+        }
+
     }
 
     @Nested

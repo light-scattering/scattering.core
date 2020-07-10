@@ -42,11 +42,11 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     public IFVector setBaseRef(IFPoint baseRef) {
 
         if (baseRef == null) {
-            throw new NullPointerException(" The base IFPoint must not be null");
+            throw new NullPointerException(" The base IFPoint cannot be null");
         }
 
         if (baseRef == getHead()) {
-            throw new IllegalArgumentException("The base/head IFPoints cannot point to the same instance");
+            throw new IllegalArgumentException("The base/head IFPoints cannot point at the same instance");
         }
 
         origin[0] = baseRef;
@@ -64,11 +64,11 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     public IFVector setHeadRef(IFPoint headRef) {
 
         if (headRef == null) {
-            throw new NullPointerException(" The head IFPoint must not be null");
+            throw new NullPointerException(" The head IFPoint cannot be null");
         }
 
         if (headRef == getBase()) {
-            throw new IllegalArgumentException("The base/head IFPoints must not point to the same instance");
+            throw new IllegalArgumentException("The base/head IFPoints cannot point to the same instance");
         }
 
         origin[1] = headRef;
