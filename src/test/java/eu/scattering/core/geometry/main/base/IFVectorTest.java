@@ -6,7 +6,6 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.main.base.vector.IFVectorAdvanced;
 import eu.scattering.core.helper.HelperIFVector;
-import eu.scattering.core.helper.HelperNull;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -950,7 +949,7 @@ public class IFVectorTest {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            HelperIFVector.validate(IFVector::relocateBase, fVector, fPoint);
+            HelperIFVector.validateRef(IFVector::relocateBase, fVector, fPoint);
         }
 
         @Test
@@ -987,7 +986,7 @@ public class IFVectorTest {
         void relocateBaseWithParametersValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(a -> a.relocateBase(0, 0, 0), fVector);
+            HelperIFVector.validateRef(a -> a.relocateBase(0, 0, 0), fVector);
         }
 
         @Test
@@ -1023,7 +1022,7 @@ public class IFVectorTest {
         void relocateBaseToOXValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(IFVector::relocateBase, fVector);
+            HelperIFVector.validateRef(IFVector::relocateBase, fVector);
         }
 
         @Test
@@ -1061,7 +1060,7 @@ public class IFVectorTest {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            HelperIFVector.validate(IFVector::relocateHead, fVector, fPoint);
+            HelperIFVector.validateRef(IFVector::relocateHead, fVector, fPoint);
         }
 
         @Test
@@ -1098,7 +1097,7 @@ public class IFVectorTest {
         void relocateHeadWithParametersValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(a -> a.relocateHead(0, 0, 0), fVector);
+            HelperIFVector.validateRef(a -> a.relocateHead(0, 0, 0), fVector);
         }
 
         @Test
@@ -1134,7 +1133,7 @@ public class IFVectorTest {
         void relocateHeadToOXValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(IFVector::relocateHead, fVector);
+            HelperIFVector.validateRef(IFVector::relocateHead, fVector);
         }
 
         @Test
@@ -1183,7 +1182,7 @@ public class IFVectorTest {
         void moveForwardValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(a -> a.moveForward(1), fVector);
+            HelperIFVector.validateRef(a -> a.moveForward(1), fVector);
         }
 
         @Test
@@ -1233,7 +1232,7 @@ public class IFVectorTest {
         void moveBackwardValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(a -> a.moveBackward(1), fVector);
+            HelperIFVector.validateRef(a -> a.moveBackward(1), fVector);
         }
 
         @Test
@@ -1268,7 +1267,7 @@ public class IFVectorTest {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
 
-            HelperIFVector.validate(IFVector::add, fVectorA, fVectorB);
+            HelperIFVector.validateRef(IFVector::add, fVectorA, fVectorB);
         }
 
         @Test
@@ -1299,11 +1298,11 @@ public class IFVectorTest {
 
         @Test
         @DisplayName("Sub IFVector (validate)")
-        void subIFVectorValidateReferences() {
+        void subIFVectorValidate() {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
 
-            HelperIFVector.validate(IFVector::sub, fVectorA, fVectorB);
+            HelperIFVector.validateRef(IFVector::sub, fVectorA, fVectorB);
         }
 
         @Test
@@ -1318,6 +1317,14 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Get length X (validate)")
+        void getLengthXValidate() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            HelperIFVector.validateVal(IFVector::getLengthX, fVector);
+        }
+
+        @Test
         @DisplayName("Get length Y")
         void getLengthY() {
             IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
@@ -1329,6 +1336,14 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Get length Y (validate)")
+        void getLengthYValidate() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            HelperIFVector.validateVal(IFVector::getLengthY, fVector);
+        }
+
+        @Test
         @DisplayName("Get length Z")
         void getLengthZ() {
             IFVector fVector = FactoryGeometry.getIFVector(HelperRandom.getTestPoint(), HelperRandom.getTestPoint());
@@ -1337,6 +1352,14 @@ public class IFVectorTest {
                     "The Z length is incorrect");
             assertEquals(Math.abs(fVector.getBase().getZ() - fVector.getHead().getZ()), fVector.getLengthZ(),
                     "The Z length is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get length Z (validate)")
+        void getLengthZValidate() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            HelperIFVector.validateVal(IFVector::getLengthZ, fVector);
         }
 
         @Test
@@ -1427,6 +1450,14 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Get length (validate)")
+        void getLengthValidate() {
+            IFVector fVector = HelperRandom.getTestVector();
+
+            HelperIFVector.validateVal(IFVector::getLength, fVector);
+        }
+
+        @Test
         @DisplayName("Set length")
         void setLength() {
             IFPoint fPointBase = FactoryGeometry.getIFPoint(3, 3, 3);
@@ -1477,7 +1508,7 @@ public class IFVectorTest {
         void setLengthValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(a -> a.setLength(1), fVector);
+            HelperIFVector.validateRef(a -> a.setLength(1), fVector);
         }
 
         @Test
@@ -1506,7 +1537,7 @@ public class IFVectorTest {
         void normalizeValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(IFVector::normalize, fVector);
+            HelperIFVector.validateRef(IFVector::normalize, fVector);
         }
 
         @Test
@@ -1541,7 +1572,7 @@ public class IFVectorTest {
         void reflectHeadValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(IFVector::reflectHead, fVector);
+            HelperIFVector.validateRef(IFVector::reflectHead, fVector);
         }
 
         @Test
@@ -1599,7 +1630,7 @@ public class IFVectorTest {
         void reflectBaseValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(IFVector::reflectBase, fVector);
+            HelperIFVector.validateRef(IFVector::reflectBase, fVector);
         }
 
         @Test
@@ -1636,7 +1667,7 @@ public class IFVectorTest {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            HelperIFVector.validate(IFVector::reflect, fVector, fPoint);
+            HelperIFVector.validateRef(IFVector::reflect, fVector, fPoint);
         }
 
         @Test
@@ -1669,7 +1700,7 @@ public class IFVectorTest {
         void invertDirectionValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(IFVector::reflectHead, fVector);
+            HelperIFVector.validateRef(IFVector::reflectHead, fVector);
         }
 
         @Test
@@ -1684,28 +1715,11 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get inclination (validate positions")
-        void getInclinationValidatePositions() {
-            IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 1, 0);
-            IFPoint fPointHead = FactoryGeometry.getIFPoint(2, 2, 0);
-            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+        @DisplayName("Get inclination (validate)")
+        void getInclinationValidate() {
+            IFVector fVector = HelperRandom.getTestVector();
 
-            fVector.getInclination();
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(1, fVector.getBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
+            HelperIFVector.validateVal(IFVector::getInclination, fVector);
         }
 
         @Test
@@ -1738,7 +1752,7 @@ public class IFVectorTest {
         void setInclinationValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(a -> a.setInclination(Math.PI * 0.5), fVector);
+            HelperIFVector.validateRef(a -> a.setInclination(Math.PI * 0.5), fVector);
         }
 
         @Test
@@ -1753,28 +1767,11 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get azimuth (validate positions)")
-        void getAzimuthValidatePositions() {
-            IFPoint fPointBase = FactoryGeometry.getIFPoint(1, 1, 0);
-            IFPoint fPointHead = FactoryGeometry.getIFPoint(2, 1, 1);
-            IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
+        @DisplayName("Get azimuth (validate)")
+        void getAzimuthValidate() {
+            IFVector fVector = HelperRandom.getTestVector();
 
-            fVector.getAzimuth();
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(1, fVector.getBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
+            HelperIFVector.validateVal(IFVector::getAzimuth, fVector);
         }
 
         @Test
@@ -1807,7 +1804,7 @@ public class IFVectorTest {
         void setAzimuthValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validate(a -> a.setAzimuth(Math.PI * 0.5), fVector);
+            HelperIFVector.validateRef(a -> a.setAzimuth(Math.PI * 0.5), fVector);
         }
 
         @Test
@@ -1872,73 +1869,12 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get angle (validate positions)")
-        void getAngleValidatePositions() {
-            IFPoint fPointBaseA = FactoryGeometry.getIFPoint(1, 1, 1);
-            IFPoint fPointHeadA = FactoryGeometry.getIFPoint(2, 2, 2);
-            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
+        @DisplayName("Get angle (validate)")
+        void getAngleValidate() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
 
-            IFPoint fPointBaseB = FactoryGeometry.getIFPoint(1, -1, 1);
-            IFPoint fPointHeadB = FactoryGeometry.getIFPoint(2, -2, 2);
-            IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
-
-            fVectorA.getAngle(fVectorB);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(1, fVectorA.getBase().getX(),
-                            "Base A - The X value is incorrect"),
-                    () -> assertEquals(1, fVectorA.getBase().getY(),
-                            "Base A - The Y value is incorrect"),
-                    () -> assertEquals(1, fVectorA.getBase().getZ(),
-                            "Base A - The Z value is incorrect"),
-                    () -> assertEquals(2, fVectorA.getHead().getX(),
-                            "Head A - The X value is incorrect"),
-                    () -> assertEquals(2, fVectorA.getHead().getY(),
-                            "Head A - The Y value is incorrect"),
-                    () -> assertEquals(2, fVectorA.getHead().getZ(),
-                            "Head A - The Z value is incorrect"),
-                    () -> assertEquals(1, fVectorB.getBase().getX(),
-                            "Base B - The X value is incorrect"),
-                    () -> assertEquals(-1, fVectorB.getBase().getY(),
-                            "Base B - The Y value is incorrect"),
-                    () -> assertEquals(1, fVectorB.getBase().getZ(),
-                            "Base B - The Z value is incorrect"),
-                    () -> assertEquals(2, fVectorB.getHead().getX(),
-                            "Head B - The X value is incorrect"),
-                    () -> assertEquals(-2, fVectorB.getHead().getY(),
-                            "Head B - The Y value is incorrect"),
-                    () -> assertEquals(2, fVectorB.getHead().getZ(),
-                            "Head B - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Get angle (validate references)")
-        void getAngleValidateReferences() {
-            IFPoint fPointBaseA = HelperRandom.getTestPoint();
-            IFPoint fPointHeadA = HelperRandom.getTestPoint(fPointBaseA);
-            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
-
-            IFPoint fPointBaseB = HelperRandom.getTestPoint(fPointBaseA, fPointHeadA);
-            IFPoint fPointHeadB = HelperRandom.getTestPoint(fPointBaseA, fPointHeadA, fPointBaseB);
-            IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
-
-            fVectorA.getAngle(fVectorB);
-
-            assertAll("Validate IFPoint references",
-                    () -> assertNotSame(fVectorA.getBase(), fVectorA.getHead(),
-                            "IFPoints should be different objects"),
-                    () -> assertSame(fPointBaseA, fVectorA.getBase(),
-                            "The base IFPoint should not change"),
-                    () -> assertSame(fPointHeadA, fVectorA.getHead(),
-                            "The head IFPoint should not change"),
-                    () -> assertNotSame(fVectorB.getBase(), fVectorB.getHead(),
-                            "IFPoints should be different objects"),
-                    () -> assertSame(fPointBaseB, fVectorB.getBase(),
-                            "The base IFPoint should not change"),
-                    () -> assertSame(fPointHeadB, fVectorB.getHead(),
-                            "The head IFPoint should not change")
-            );
+            HelperIFVector.validateVal(IFVector::getAngle, fVectorA, fVectorB);
         }
 
         @Test
@@ -1956,36 +1892,12 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get angle with IFPoint (validate references)")
-        void getAngleWithIFPointValidateReferences() {
-            IFPoint base = FactoryGeometry.getIFPoint();
-            IFPoint head = FactoryGeometry.getIFPoint(2, 2, 0);
-            IFVector fVector = FactoryGeometry.getIFVector(base, head);
-            IFPoint fPoint = FactoryGeometry.getIFPoint(4, -4, 0);
+        @DisplayName("Get angle with IFPoint (validate)")
+        void getAngleWithIFPointValidate() {
+            IFVector fVector = HelperRandom.getTestVector();
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            fVector.getAngle(fPoint);
-
-            assertSame(base, fVector.getBase(),"The base IFPoint reference is incorrect");
-        }
-
-        @Test
-        @DisplayName("Get angle with IFPoint (validate positions)")
-        void getAngleWithIFPointValidatePositions() {
-            IFVector fVector = FactoryGeometry.getIFVector(2, 2, 0);
-            IFPoint fPoint = FactoryGeometry.getIFPoint(4, -4, 0);
-            IFPoint fPointRel = HelperRandom.getTestPoint();
-
-            fVector.relocateBase(fPointRel);
-            fPoint.add(fPointRel);
-
-            fVector.getAngle(fPoint);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(FactoryGeometry.getIFPoint(4, -4, 0).add(fPointRel), fPoint,
-                            "The IFPoint value is incorrect"),
-                    () -> assertEquals(fPointRel, fVector.getBase(),
-                            "The IFVector value is incorrect")
-            );
+            HelperIFVector.validateVal(IFVector::getAngle, fVector, fPoint);
         }
 
         @Test
@@ -2025,74 +1937,12 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get dot product (validate references)")
-        void getDotProductValidateReferences() {
-            IFPoint fPointBaseA = HelperRandom.getTestPoint();
-            IFPoint fPointHeadA = HelperRandom.getTestPoint();
-            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
+        @DisplayName("Get dot product (validate)")
+        void getDotProductValidate() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
 
-            IFPoint fPointBaseB = HelperRandom.getTestPoint();
-            IFPoint fPointHeadB = HelperRandom.getTestPoint();
-            IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
-
-            fVectorA.getDotProduct(fVectorB);
-
-            assertAll("Validate IFPoint references",
-                    () -> assertNotSame(fVectorA.getBase(), fVectorA.getHead(),
-                            "IFPoints should point at different objects"),
-                    () -> assertSame(fPointBaseA, fVectorA.getBase(),
-                            "The base IFPoint should not change"),
-                    () -> assertSame(fPointHeadA, fVectorA.getHead(),
-                            "The head IFPoint should not change"),
-                    () -> assertNotSame(fVectorB.getBase(), fVectorB.getHead(),
-                            "IFPoints should point at different objects"),
-                    () -> assertSame(fPointBaseB, fVectorB.getBase(),
-                            "The base IFPoint should not change"),
-                    () -> assertSame(fPointHeadB, fVectorB.getHead(),
-                            "The head IFPoint should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get dot product (validate positions)")
-        void getDotProductValidatePositions() {
-            IFPoint fPointBaseA = FactoryGeometry.getIFPoint(1, 2, 3);
-            IFPoint fPointHeadA = FactoryGeometry.getIFPoint(4, 5, 6);
-            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBaseA, fPointHeadA);
-
-            IFPoint fPointBaseB = FactoryGeometry.getIFPoint(-1, -2, -3);
-            IFPoint fPointHeadB = FactoryGeometry.getIFPoint(-4, -5, -6);
-            IFVector fVectorB = FactoryGeometry.getIFVector(fPointBaseB, fPointHeadB);
-
-            fVectorA.getDotProduct(fVectorB);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(1, fVectorA.getBase().getX(),
-                            "Base A - The X value is incorrect"),
-                    () -> assertEquals(2, fVectorA.getBase().getY(),
-                            "Base A - The Y value is incorrect"),
-                    () -> assertEquals(3, fVectorA.getBase().getZ(),
-                            "Base A - The Z value is incorrect"),
-                    () -> assertEquals(4, fVectorA.getHead().getX(),
-                            "Head A - The X value is incorrect"),
-                    () -> assertEquals(5, fVectorA.getHead().getY(),
-                            "Head A - The Y value is incorrect"),
-                    () -> assertEquals(6, fVectorA.getHead().getZ(),
-                            "Head A - The Z value is incorrect"),
-                    () -> assertEquals(-1, fVectorB.getBase().getX(),
-                            "Base B - The X value is incorrect"),
-                    () -> assertEquals(-2, fVectorB.getBase().getY(),
-                            "Base B - The Y value is incorrect"),
-                    () -> assertEquals(-3, fVectorB.getBase().getZ(),
-                            "Base B - The Z value is incorrect"),
-                    () -> assertEquals(-4, fVectorB.getHead().getX(),
-                            "Head B - The X value is incorrect"),
-                    () -> assertEquals(-5, fVectorB.getHead().getY(),
-                            "Head B - The Y value is incorrect"),
-                    () -> assertEquals(-6, fVectorB.getHead().getZ(),
-                            "Head B - The Z value is incorrect")
-            );
-
+            HelperIFVector.validateVal(IFVector::getDotProduct, fVectorA, fVectorB);
         }
 
         @Test
@@ -2114,35 +1964,12 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Get dot product with IFPoint (validate references)")
-        void getDotProducttWithIFPointValidateReferences() {
-            IFPoint base = FactoryGeometry.getIFPoint();
-            IFPoint head = FactoryGeometry.getIFPoint(2, 2, 0);
-            IFVector fVector = FactoryGeometry.getIFVector(base, head);
-            IFPoint fPoint = FactoryGeometry.getIFPoint(4, -4, 0);
-
-            fVector.getDotProduct(fPoint);
-
-            assertAll("Validate IFPoint references",
-                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
-                            "IFPoints should point at different objects"),
-                    () -> assertSame(base, fVector.getBase(),
-                            "The base IFPoint should not change"),
-                    () -> assertSame(head, fVector.getHead(),
-                            "The head IFPoint should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get dot product with IFPoint (validate positions)")
-        void getDotProductWithIFPointValidatePositions() {
+        @DisplayName("Get dot product with IFPoint (validate)")
+        void getDotProductWithIFPointValidate() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
-            IFPoint fPointRef = fPoint.copy();
 
-            fVector.getDotProduct(fPoint);
-
-            assertEquals(fPoint, fPointRef, "The IFVector value should not change");
+            HelperIFVector.validateVal(IFVector::getDotProduct, fVector, fPoint);
         }
 
         @Test
@@ -2192,7 +2019,7 @@ public class IFVectorTest {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
 
-            HelperIFVector.validate(IFVector::getCrossProduct, fVectorA, fVectorB);
+            HelperIFVector.validateRef(IFVector::getCrossProduct, fVectorA, fVectorB);
         }
 
         @Test
@@ -2223,7 +2050,7 @@ public class IFVectorTest {
             IFVector fVector = HelperRandom.getTestVector();
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            HelperIFVector.validate(IFVector::getCrossProduct, fVector, fPoint);
+            HelperIFVector.validateRef(IFVector::getCrossProduct, fVector, fPoint);
         }
 
         @Test
@@ -2272,6 +2099,15 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Is parallel (validate)")
+        void isParallelValidate() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
+
+            HelperIFVector.validateVal(IFVector::isParallel, fVectorA, fVectorB);
+        }
+
+        @Test
         @DisplayName("Set parallel")
         void setParallel() {
             IFVector fVectorA = HelperRandom.getTestVector();
@@ -2288,7 +2124,7 @@ public class IFVectorTest {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
 
-            HelperIFVector.validate(IFVector::setParallel, fVectorA, fVectorB);
+            HelperIFVector.validateRef(IFVector::setParallel, fVectorA, fVectorB);
         }
 
         @Test
@@ -2314,6 +2150,15 @@ public class IFVectorTest {
             }
 
             assertFalse(fVectorA.isOrthogonal(fVectorB), "IFVectors should not be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal (validate)")
+        void isOrthogonalValidate() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
+
+            HelperIFVector.validateVal(IFVector::isOrthogonal, fVectorA, fVectorB);
         }
 
         @Test
@@ -2369,7 +2214,7 @@ public class IFVectorTest {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector(fVectorA);
 
-            HelperIFVector.validate(IFVector::setOrthogonal, fVectorA, fVectorB);
+            HelperIFVector.validateRef(IFVector::setOrthogonal, fVectorA, fVectorB);
         }
 
         @Test

@@ -26,9 +26,9 @@ public interface IFVectorAdvanced {
     IFVector add(IFVector vector);  // VAL
     IFVector sub(IFVector vector);  // VAL
 
-    double getLengthX();
-    double getLengthY();
-    double getLengthZ();
+    double getLengthX();    // VAL
+    double getLengthY();    // VAL
+    double getLengthZ();    // VAL
 
     IFPoint getCenter();
 //    IFPoint getRandom();
@@ -39,24 +39,24 @@ public interface IFVectorAdvanced {
     IFVector reflect(IFPoint center);   // VAL
     IFVector invertDirection();         // VAL
 
-    double getLength();
+    double getLength();                                             // VAL
     IFVector setLength(double length) throws SamePositionException; // VAL
-    double getInclination();
+    double getInclination();                                        // VAL
     IFVector setInclination(double inclination);                    // VAL
-    double getAzimuth();
+    double getAzimuth();                                            // VAL
     IFVector setAzimuth(double azimuth);                            // VAL
 
-    double getAngle(IFPoint ref);
-    double getAngle(IFVector ref);
+    double getAngle(IFPoint ref);       // VAL
+    double getAngle(IFVector ref);      // VAL
 
-    double getDotProduct(IFPoint ref);
-    double getDotProduct(IFVector ref);
+    double getDotProduct(IFPoint ref);          // VAL
+    double getDotProduct(IFVector ref);         // VAL
     IFVector getCrossProduct(IFPoint ref);      // VAL
     IFVector getCrossProduct(IFVector ref);     // VAL
 
-    boolean isParallel(IFVector ref);
+    boolean isParallel(IFVector ref);           // VAL
     IFVector setParallel(IFVector ref);         // VAL // tests with zero
-    boolean isOrthogonal(IFVector ref);
+    boolean isOrthogonal(IFVector ref);         // VAL
     IFVector setOrthogonal(IFVector ref);       // VAL // tests with zero
 
 //    boolean isAntiParallel(IFVector ref);
