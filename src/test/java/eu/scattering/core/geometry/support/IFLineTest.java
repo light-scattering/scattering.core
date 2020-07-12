@@ -72,17 +72,17 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector);
 
             assertAll("Validate IFPoint values",
-                    () -> assertEquals(refAX, fLine.getOrigin().getBase().getX(),
+                    () -> assertEquals(refAX, fLine.getBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(refAY, fLine.getOrigin().getBase().getY(),
+                    () -> assertEquals(refAY, fLine.getBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(refAZ, fLine.getOrigin().getBase().getZ(),
+                    () -> assertEquals(refAZ, fLine.getBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(refBX, fLine.getOrigin().getHead().getX(),
+                    () -> assertEquals(refBX, fLine.getHead().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(refBY, fLine.getOrigin().getHead().getY(),
+                    () -> assertEquals(refBY, fLine.getHead().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(refBZ, fLine.getOrigin().getHead().getZ(),
+                    () -> assertEquals(refBZ, fLine.getHead().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -732,9 +732,9 @@ public class IFLineTest {
             double length = fLine.getOrigin().getLength();
 
             assertAll("Validate IFPoint",
-                    () -> assertTrue(fLine.getIFPoint(0).isSimilar(fLine.getOrigin().getBase()),
+                    () -> assertTrue(fLine.getIFPoint(0).isSimilar(fLine.getBase()),
                             "The IFPoint base is incorrect"),
-                    () -> assertTrue(fLine.getIFPoint(length).isSimilar(fLine.getOrigin().getHead()),
+                    () -> assertTrue(fLine.getIFPoint(length).isSimilar(fLine.getHead()),
                             "The IFPoint head is incorrect"),
                     () -> assertTrue(fLine.getIFPoint(-length).isSimilar(fLine.getOrigin().reflectHead().getHead()),
                             "The IFPoint inverse head is incorrect")
@@ -763,10 +763,10 @@ public class IFLineTest {
                     () -> assertTrue(fLine.getIFPointAtX(0).isPresent(),
                             "The IFPoint should be available"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getIFPointAtX(base.getX()).orElse(null))
-                                    .isSimilar(fLine.getOrigin().getBase()),
+                                    .isSimilar(fLine.getBase()),
                             "The IFPoint base is incorrect"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getIFPointAtX(head.getX()).orElse(null))
-                                    .isSimilar(fLine.getOrigin().getHead()),
+                                    .isSimilar(fLine.getHead()),
                             "The IFPoint head is incorrect")
             );
         }
@@ -802,10 +802,10 @@ public class IFLineTest {
                     () -> assertTrue(fLine.getIFPointAtY(0).isPresent(),
                             "The IFPoint should be available"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getIFPointAtY(base.getY()).orElse(null))
-                                    .isSimilar(fLine.getOrigin().getBase()),
+                                    .isSimilar(fLine.getBase()),
                             "The IFPoint base is incorrect"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getIFPointAtY(head.getY()).orElse(null))
-                                    .isSimilar(fLine.getOrigin().getHead()),
+                                    .isSimilar(fLine.getHead()),
                             "The IFPoint head is incorrect")
             );
         }
@@ -841,10 +841,10 @@ public class IFLineTest {
                     () -> assertTrue(fLine.getIFPointAtZ(0).isPresent(),
                             "The IFPoint should be available"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getIFPointAtZ(base.getZ()).orElse(null))
-                                    .isSimilar(fLine.getOrigin().getBase()),
+                                    .isSimilar(fLine.getBase()),
                             "The IFPoint base is incorrect"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getIFPointAtZ(head.getZ()).orElse(null))
-                                    .isSimilar(fLine.getOrigin().getHead()),
+                                    .isSimilar(fLine.getHead()),
                             "The IFPoint head is incorrect")
             );
         }
@@ -878,7 +878,7 @@ public class IFLineTest {
             fLineAOrigin.getBase().setZ(0);
             fLineAOrigin.getHead().setZ(0);
 
-            while (fLineAOrigin.isZero()) {
+            while (fLineAOrigin.isDirectional()) {
                 fLineAOrigin.set(HelperRandom.getTestVector());
 
                 fLineAOrigin.getBase().setZ(0);
@@ -1057,9 +1057,9 @@ public class IFLineTest {
             IFVector fLineBOrigin = FactoryGeometry.getIFVector(fLineBOriginBase, fLineBOriginHead);
             IFLine fLineB = FactoryGeometry.getIFLine(fLineBOrigin);
 
-            fLineBOrigin.relocateBase(fLineA.getOrigin().getBase());
+            fLineBOrigin.moveBase(fLineA.getBase());
 
-            IFVector fVectorDrift = fLineA.getOrigin().copy().getCrossProduct(fLineBOrigin).setLength(1.5 * jitter);
+            IFVector fVectorDrift = fLineA.getOrigin().copy().setCrossProduct(fLineBOrigin).setLength(1.5 * jitter);
 
             fLineBOrigin.getBase().set(fVectorDrift.getHead());
 

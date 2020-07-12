@@ -1,6 +1,7 @@
 package eu.scattering.core.geometry.main.base.point.impl;
 
-import eu.scattering.core.exception.SamePositionException;
+import eu.scattering.core.exception.DirectionException;
+import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.PresetBase;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
@@ -367,7 +368,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setRandom(IFPoint... exclude) {
+    public IFPoint setRandomAngle(IFPoint... exclude) {
         double radius = getLength();
 
         IFPoint[] excludeList = new IFPoint[exclude.length];
@@ -469,7 +470,16 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public double getAngle(IFPoint ref) {
+    public double getAngle(IFPoint ref) throws DirectionException {
+
+        if (isZero()) {
+            throw new DirectionException("The input IFPoint is zero");
+        }
+
+        if (ref.isZero()) {
+            throw new DirectionException("The reference IFPoint is zero");
+        }
+
         double angle, dProd, magAB;
 
         dProd = getDotProduct(ref);
@@ -489,14 +499,14 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setDistance(IFPoint ref, double distance) throws SamePositionException, IllegalArgumentException {
+    public IFPoint setDistance(IFPoint ref, double distance) throws PositionException, IllegalArgumentException {
 
         if (distance < 0) {
             throw new IllegalArgumentException("The distance between IFPoints cannot be lower than zero");
         }
 
         if (this.equals(ref)) {
-            throw new SamePositionException("IFPoints must not be on the same position");
+            throw new PositionException("IFPoints must not be on the same position");
         }
 
         return this.sub(ref).setLength(distance).add(ref);
@@ -515,7 +525,7 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint getCrossProduct(IFPoint ref) {
+    public IFPoint setCrossProduct(IFPoint ref) {
         double dimX, dimY, dimZ;
 
         dimX = (getY() * ref.getZ()) - (getZ() * ref.getY());
@@ -533,14 +543,10 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setLength(double length) throws SamePositionException {
-
-        if (length < 0) {
-            throw new IllegalArgumentException("The requested radius must be positive");
-        }
+    public IFPoint setLength(double length) throws DirectionException {
 
         if (getX() == 0 && getY() == 0 && getZ() == 0) {
-            throw new SamePositionException("The origin is at the same position as the given point");
+            throw new DirectionException("The origin is at the same position as the given point");
         }
 
         return mul(length / getLength());

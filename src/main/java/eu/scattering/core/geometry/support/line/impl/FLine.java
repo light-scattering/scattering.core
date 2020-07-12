@@ -310,11 +310,11 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 
         switch (dir) {
             case "XY":
-                return ref.getCrossProduct(ref.getBase().copy().setZ(1));
+                return ref.setCrossProduct(ref.getBase().copy().setZ(1));
             case "YZ":
-                return ref.getCrossProduct(ref.getBase().copy().setX(1));
+                return ref.setCrossProduct(ref.getBase().copy().setX(1));
             case "XZ":
-                return ref.getCrossProduct(ref.getBase().copy().setY(1));
+                return ref.setCrossProduct(ref.getBase().copy().setY(1));
         }
 
         throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);
@@ -322,7 +322,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 
     private IFPoint getCandidate2D(IFVector ref, double scaleFactor) {
 
-        return ref.copy().mul(scaleFactor).relocateBase(ref.getBase()).getHead();
+        return ref.copy().mul(scaleFactor).moveBase(ref.getBase()).getHead();
     }
 
     private Optional<IFPoint> getCandidate3D(String dir, IFPoint ref) {
@@ -429,12 +429,12 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
 
     private IFPoint moveForward(IFPoint ref, double distance) {
 
-        return ref.set(getOrigin().copy().relocateBase(ref).moveForward(distance).getBase());
+        return ref.set(getOrigin().copy().moveBase(ref).moveForward(distance).getBase());
     }
 
     private IFPoint moveBackward(IFPoint ref, double distance) {
 
-        return ref.set(getOrigin().copy().relocateBase(ref).moveBackward(distance).getBase());
+        return ref.set(getOrigin().copy().moveBase(ref).moveBackward(distance).getBase());
     }
 
 }

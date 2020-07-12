@@ -1,27 +1,33 @@
 package eu.scattering.core.geometry.main.base.vector;
 
-import eu.scattering.core.exception.SamePositionException;
+import eu.scattering.core.exception.DirectionException;
+import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 public interface IFVectorAdvanced {
 
     IFVector setSphericalCoordinates(double inclination, double azimuth);
-    IFVector setRandom(IFPoint... exclusion);
+    IFVector setRandomAngle(IFPoint... exclusion);
+
+    IFPoint getPointCenter();
+    IFPoint getPointRandom();
+    IFPoint getPointAtLength(double length);
+
+    boolean contains(IFPoint ref);
 
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
 
-//    boolean contains(IFPoint ref);
+    IFVector moveBase();
+    IFVector moveBase(double bX, double bY, double bZ);
+    IFVector moveBase(IFPoint base);
 
-    IFVector relocateBase();
-    IFVector relocateBase(double bX, double bY, double bZ);
-    IFVector relocateBase(IFPoint base);
-    IFVector relocateHead();
-    IFVector relocateHead(double hX, double hY, double hZ);
-    IFVector relocateHead(IFPoint head);
+    IFVector moveHead();
+    IFVector moveHead(double hX, double hY, double hZ);
+    IFVector moveHead(IFPoint head);
 
-    IFVector moveForward(double distance);
-    IFVector moveBackward(double distance);
+    IFVector moveForward(double distance) throws DirectionException;
+    IFVector moveBackward(double distance) throws DirectionException;
 
     IFVector add(IFVector vector);
     IFVector sub(IFVector vector);
@@ -30,36 +36,35 @@ public interface IFVectorAdvanced {
     double getLengthY();
     double getLengthZ();
 
-    IFPoint getCenter();
-//    IFPoint getRandom();
+    double getLength();
+    IFVector setLength(double length) throws DirectionException;
 
-    IFVector normalize();
+    IFVector normalize() throws DirectionException;
+
+    IFVector reflect(IFPoint center);
     IFVector reflectBase();
     IFVector reflectHead();
-    IFVector reflect(IFPoint center);
     IFVector invertDirection();
 
-    double getLength();
-    IFVector setLength(double length) throws SamePositionException;
     double getInclination();
     IFVector setInclination(double inclination);
     double getAzimuth();
     IFVector setAzimuth(double azimuth);
 
-    double getAngle(IFPoint ref);
-    double getAngle(IFVector ref);
+    double getAngle(IFPoint ref) throws PositionException, DirectionException;
+    double getAngle(IFVector ref) throws DirectionException;
 
     double getDotProduct(IFPoint ref);
     double getDotProduct(IFVector ref);
-    IFVector getCrossProduct(IFPoint ref);
-    IFVector getCrossProduct(IFVector ref);
+    IFVector setCrossProduct(IFPoint ref);
+    IFVector setCrossProduct(IFVector ref);
 
-    boolean isParallel(IFVector ref);
-    IFVector setParallel(IFVector ref);         // tests with zero
-    boolean isOrthogonal(IFVector ref);
-    IFVector setOrthogonal(IFVector ref);       // tests with zero
-
-//    boolean isAntiParallel(IFVector ref);
+    boolean isParallel(IFVector ref) throws DirectionException;
+    IFVector setParallel(IFVector ref) throws DirectionException;
+    boolean isAntiParallel(IFVector ref) throws DirectionException;
+    IFVector setAntiParallel(IFVector ref) throws DirectionException;
+    boolean isOrthogonal(IFVector ref) throws DirectionException;
+    IFVector setOrthogonal(IFVector ref) throws DirectionException; // Cannot be parallel
     
-    boolean isZero();
+    boolean isDirectional();
 }

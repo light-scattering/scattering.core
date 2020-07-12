@@ -178,8 +178,8 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
             return Optional.empty();
         }
 
-        IFPoint vPlane = getOrigin().copy().relocateBase().normalize().getHead();
-        IFPoint vLine = ref.getOrigin().copy().relocateBase().normalize().getHead();
+        IFPoint vPlane = getOrigin().copy().moveBase().normalize().getHead();
+        IFPoint vLine = ref.getOrigin().copy().moveBase().normalize().getHead();
 
         double dividend = vPlane.getDotProduct(getOrigin().getBase().copy().sub(ref.getOrigin().getBase()));
         double divisor = vPlane.getDotProduct(vLine);
@@ -209,7 +209,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
                 .set(getOrigin().getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         IFVector translation = FactoryGeometry.getIFVector(opC, fPoint.copy())
-                .relocateBase(getOrigin().getBase());
+                .moveBase(getOrigin().getBase());
 
         return fPoint.set(translation.getHead());
     }

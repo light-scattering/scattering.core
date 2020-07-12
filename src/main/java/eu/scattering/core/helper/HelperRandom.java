@@ -11,8 +11,8 @@ public final class HelperRandom {
 
     private HelperRandom() { }
 
-    private static final double valueMax = 10000;
-    private static final double valueMin = -valueMax;
+    private static final double valueMax = +10000;
+    private static final double valueMin = -10000;
 
     private static final IFPoint fPointZero = FactoryGeometry.getIFPoint();
     private static final IFVector fVectorZero = FactoryGeometry.getIFVector(FactoryGeometry.getIFPoint());

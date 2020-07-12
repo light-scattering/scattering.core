@@ -1,6 +1,7 @@
 package eu.scattering.core.geometry.support;
 
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
+import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 
 import java.util.List;
@@ -11,6 +12,9 @@ public interface ISupport<T> {
 
     IFVector getOrigin();
     T setOriginRef(IFVector origin);
+
+    IFPoint getBase();
+    IFPoint getHead();
 
     Consumer<IBaseExtensionAssembly> project();
     Consumer<IBaseExtensionAssembly> reflect();

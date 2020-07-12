@@ -50,6 +50,18 @@ public abstract class PresetSupport<T extends ISupport<T>>
         return getOrigin().isSimilar(element.getOrigin());
     }
 
+    @Override
+    public IFPoint getBase() {
+
+        return getOrigin().getBase();
+    }
+
+    @Override
+    public IFPoint getHead() {
+
+        return getOrigin().getHead();
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override

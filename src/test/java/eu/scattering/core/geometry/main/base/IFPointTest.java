@@ -1,11 +1,9 @@
 package eu.scattering.core.geometry.main.base;
 
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.exception.SamePositionException;
+import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
-import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.helper.HelperIFPoint;
-import eu.scattering.core.helper.HelperIFVector;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -213,7 +211,7 @@ public class IFPointTest {
         void normalizeThrowSamePositionException() {
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            assertThrows(SamePositionException.class, fPoint::normalize,
+            assertThrows(PositionException.class, fPoint::normalize,
                     "The IFPoints must not be on the same position");
         }
 
@@ -415,7 +413,7 @@ public class IFPointTest {
         @DisplayName("Set length (throw SamePositionException)")
         void setLengthThrowSamePositionException() {
 
-            assertThrows(SamePositionException.class,
+            assertThrows(PositionException.class,
                     () -> FactoryGeometry.getIFPoint().setLength(1),
                     "The position of the reference IFPoint must not be zero");
         }
@@ -429,42 +427,42 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set random position (validate vector magnitude)")
-        void setRandomPositionValidateMagnitude() {
+        @DisplayName("Set random angle (validate vector magnitude)")
+        void setRandomAngleValidateMagnitude() {
             double radius = Math.abs(HelperRandom.getTestValue());
 
-            IFPoint fPoint = FactoryGeometry.getIFPoint(radius).setRandom();
+            IFPoint fPoint = FactoryGeometry.getIFPoint(radius).setRandomAngle();
 
             assertEquals(radius, fPoint.getLength(),
                     jitter, "The radius is invalid");
         }
 
         @Test
-        @DisplayName("Set random position (validate correctness)")
-        void setRandomPositionValidateCorrectness() {
+        @DisplayName("Set random angle (validate correctness)")
+        void setRandomAngleValidateCorrectness() {
             double radius = Math.abs(HelperRandom.getTestValue());
 
-            IFPoint fPointA = FactoryGeometry.getIFPoint(radius).setRandom();
-            IFPoint fPointB = FactoryGeometry.getIFPoint(radius).setRandom(fPointA);
+            IFPoint fPointA = FactoryGeometry.getIFPoint(radius).setRandomAngle();
+            IFPoint fPointB = FactoryGeometry.getIFPoint(radius).setRandomAngle(fPointA);
 
             assertNotEquals(fPointA, fPointB, "Two randomly generated points should be different");
         }
 
         @Test
-        @DisplayName("Set random position (validate timeout)")
-        void setRandomPositionValidateTimeout() {
+        @DisplayName("Set random angle (validate timeout)")
+        void setRandomAngleValidateTimeout() {
             double radius = Math.abs(HelperRandom.getTestValue());
             IFPoint fPoint = FactoryGeometry.getIFPoint(radius);
 
-            assertTimeoutPreemptively(Duration.ofSeconds(1), () -> fPoint.setRandom(fPoint));
+            assertTimeoutPreemptively(Duration.ofSeconds(1), () -> fPoint.setRandomAngle(fPoint));
         }
 
         @Test
-        @DisplayName("Set random position (validate)")
-        void setRandomPositionValidate() {
+        @DisplayName("Set random angle (validate)")
+        void setRandomAngleValidate() {
             IFPoint fPoint = HelperRandom.getTestPoint();
 
-            HelperIFPoint.validateRef(IFPoint::setRandom, fPoint);
+            HelperIFPoint.validateRef(IFPoint::setRandomAngle, fPoint);
         }
 
         @Test
@@ -822,8 +820,8 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get cross product")
-        void getCrossProduct() {
+        @DisplayName("Set cross product")
+        void setCrossProduct() {
             double refAX = HelperRandom.getTestValue();
             double refAY = HelperRandom.getTestValue();
             double refAZ = HelperRandom.getTestValue();
@@ -834,7 +832,7 @@ public class IFPointTest {
             double refBZ = HelperRandom.getTestValue();
             IFPoint fPointB = FactoryGeometry.getIFPoint(refBX, refBY, refBZ);
 
-            IFPoint fPointRes = fPointA.copy().getCrossProduct(fPointB);
+            IFPoint fPointRes = fPointA.copy().setCrossProduct(fPointB);
 
             double dimX = (fPointA.getY() * fPointB.getZ()) - (fPointA.getZ() * fPointB.getY());
             double dimY = (fPointA.getZ() * fPointB.getX()) - (fPointA.getX() * fPointB.getZ());
@@ -846,12 +844,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get cross product (validate)")
-        void getCrossProductValidate() {
+        @DisplayName("Set cross product (validate)")
+        void setCrossProductValidate() {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            HelperIFPoint.validateRef(IFPoint::getCrossProduct, fPointA, fPointB);
+            HelperIFPoint.validateRef(IFPoint::setCrossProduct, fPointA, fPointB);
         }
 
         @Test
@@ -1016,7 +1014,7 @@ public class IFPointTest {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = fPointA.copy();
 
-            assertThrows(SamePositionException.class, () -> fPointA.setDistance(fPointB, 1),
+            assertThrows(PositionException.class, () -> fPointA.setDistance(fPointB, 1),
                     "IFPoints cannot be at the same position");
         }
 

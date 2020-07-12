@@ -70,17 +70,17 @@ public class IFPlaneTest {
             IFPlane fPlane = FactoryGeometry.getIFPlane(fVector);
 
             assertAll("Validate IFPoint values",
-                    () -> assertEquals(refAX, fPlane.getOrigin().getBase().getX(),
+                    () -> assertEquals(refAX, fPlane.getBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(refAY, fPlane.getOrigin().getBase().getY(),
+                    () -> assertEquals(refAY, fPlane.getBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(refAZ, fPlane.getOrigin().getBase().getZ(),
+                    () -> assertEquals(refAZ, fPlane.getBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(refBX, fPlane.getOrigin().getHead().getX(),
+                    () -> assertEquals(refBX, fPlane.getHead().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(refBY, fPlane.getOrigin().getHead().getY(),
+                    () -> assertEquals(refBY, fPlane.getHead().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(refBZ, fPlane.getOrigin().getHead().getZ(),
+                    () -> assertEquals(refBZ, fPlane.getHead().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -211,8 +211,8 @@ public class IFPlaneTest {
             IFPlane fPlaneA = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
             IFPlane fPlaneB = fPlaneA.copy();
 
-            fPlaneB.getOrigin().reflectHead().relocateBase(HelperRandom.getTestPoint());
-            fPlaneB.getOrigin().relocateBase(fPlaneB.copy().getOrigin().getBase().ext(fPlaneA.project()));
+            fPlaneB.getOrigin().reflectHead().moveBase(HelperRandom.getTestPoint());
+            fPlaneB.getOrigin().moveBase(fPlaneB.copy().getBase().ext(fPlaneA.project()));
 
             assertAll("Validate exactness",
                     () -> assertTrue(fPlaneA.isSimilar(fPlaneB), "IFPlanes should be similar"),
@@ -451,7 +451,7 @@ public class IFPlaneTest {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFPoint fPoint = FactoryGeometry.getIFVector(1, 1, 1)
                     .mul(jitter)
-                    .relocateBase(-1, 2, -1)
+                    .moveBase(-1, 2, -1)
                     .getHead();
 
             IFPoint relocation = HelperRandom.getTestPoint();
@@ -469,7 +469,7 @@ public class IFPlaneTest {
             IFPoint fPoint = FactoryGeometry.getIFVector(1, 1, 1)
                     .mul(jitter)
                     .reflectHead()
-                    .relocateBase(-1, 2, -1)
+                    .moveBase(-1, 2, -1)
                     .getHead();
 
             IFPoint relocation = HelperRandom.getTestPoint();
@@ -488,7 +488,7 @@ public class IFPlaneTest {
             IFPoint fPoint = FactoryGeometry.getIFVector(1, 1, 1)
                     .mul(jitter)
                     .reflectHead()
-                    .relocateBase(-1, 2, -1)
+                    .moveBase(-1, 2, -1)
                     .getHead();
 
             fPoint.extLog(fPlane.isInHalfSpace());

@@ -1,6 +1,7 @@
 package eu.scattering.core.geometry.main.base.vector.impl;
 
-import eu.scattering.core.exception.SamePositionException;
+import eu.scattering.core.exception.DirectionException;
+import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.PresetBase;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static eu.scattering.core.Configuration.jitter;
 
@@ -228,17 +230,17 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
 
     @Override
     public IFVector setSphericalCoordinates(double inclination, double azimuth) {
-        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().setSphericalCoordinates(inclination, azimuth);
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
-    public IFVector setRandom(IFPoint ... exclusion) {
-        IFVector fCopyLocal = copy().relocateBase();
+    public IFVector setRandomAngle(IFPoint ... exclusion) {
+        IFVector fCopyLocal = copy().moveBase();
 
         IFPoint[] excludeShift = new IFPoint[exclusion.length];
 
@@ -246,10 +248,35 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
             excludeShift[i] = exclusion[i].copy().sub(getBase());
         }
 
-        fCopyLocal.getHead().setRandom(excludeShift);
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.getHead().setRandomAngle(excludeShift);
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
+    }
+
+    @Override
+    public IFPoint getPointCenter() {
+        double posX = getBase().getX() + ((getHead().getX() - getBase().getX()) * 0.5);
+        double posY = getBase().getY() + ((getHead().getY() - getBase().getY()) * 0.5);
+        double posZ = getBase().getZ() + ((getHead().getZ() - getBase().getZ()) * 0.5);
+
+        return FactoryGeometry.getIFPoint(posX, posY, posZ);
+    }
+
+    @Override
+    public IFPoint getPointRandom() {
+
+        if (!isDirectional()) {
+            return getBase().copy();
+        }
+
+        return getPointAtLength(ThreadLocalRandom.current().nextDouble(getLength()));
+    }
+
+    @Override
+    public IFPoint getPointAtLength(double length) {
+
+        return copy().setLength(length).getHead();
     }
 
     @Override
@@ -265,19 +292,19 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector relocateBase() {
+    public IFVector moveBase() {
 
-        return relocateBase(FactoryGeometry.getIFPoint());
+        return moveBase(FactoryGeometry.getIFPoint());
     }
 
     @Override
-    public IFVector relocateBase(double bX, double bY, double bZ) {
+    public IFVector moveBase(double bX, double bY, double bZ) {
 
-        return relocateBase(FactoryGeometry.getIFPoint(bX, bY, bZ));
+        return moveBase(FactoryGeometry.getIFPoint(bX, bY, bZ));
     }
 
     @Override
-    public IFVector relocateBase(IFPoint base) {
+    public IFVector moveBase(IFPoint base) {
         IFPoint translation = FactoryGeometry.getIFPoint().set(base).sub(getBase());
 
         getBase().set(base);
@@ -287,19 +314,19 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector relocateHead() {
+    public IFVector moveHead() {
 
-        return relocateHead(FactoryGeometry.getIFPoint());
+        return moveHead(FactoryGeometry.getIFPoint());
     }
 
     @Override
-    public IFVector relocateHead(double hX, double hY, double hZ) {
+    public IFVector moveHead(double hX, double hY, double hZ) {
 
-        return relocateHead(FactoryGeometry.getIFPoint(hX, hY, hZ));
+        return moveHead(FactoryGeometry.getIFPoint(hX, hY, hZ));
     }
 
     @Override
-    public IFVector relocateHead(IFPoint head) {
+    public IFVector moveHead(IFPoint head) {
         IFPoint translation = FactoryGeometry.getIFPoint().set(head).sub(getHead());
 
         getBase().add(translation);
@@ -309,7 +336,11 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector moveForward(double distance) {
+    public IFVector moveForward(double distance) throws DirectionException {
+
+        if (isDirectional()) {
+            throw new DirectionException("The direction of the IFVector is unknown");
+        }
 
         if (distance < 0) {
             return moveBackward(-distance);
@@ -318,13 +349,17 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         IFVector fCopyLocal = copy();
         fCopyLocal.setLength(distance);
 
-        relocateBase(fCopyLocal.getHead());
+        moveBase(fCopyLocal.getHead());
 
         return this;
     }
 
     @Override
-    public IFVector moveBackward(double distance) {
+    public IFVector moveBackward(double distance) throws DirectionException {
+
+        if (isDirectional()) {
+            throw new DirectionException("The direction of the IFVector is unknown");
+        }
 
         if (distance < 0) {
             return moveForward(-distance);
@@ -333,29 +368,29 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         IFVector fCopyLocal = copy().reflectHead();
         fCopyLocal.setLength(distance);
 
-        relocateBase(fCopyLocal.getHead());
+        moveBase(fCopyLocal.getHead());
 
         return this;
     }
 
     @Override
     public IFVector add(IFVector vector) {
-        IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = vector.copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
+        IFVector fCopyExternal = vector.copy().moveBase();
 
         fCopyLocal.getHead().add(fCopyExternal.getHead());
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
     public IFVector sub(IFVector vector) {
-        IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = vector.copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
+        IFVector fCopyExternal = vector.copy().moveBase();
 
         fCopyLocal.getHead().sub(fCopyExternal.getHead());
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
@@ -379,41 +414,31 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFPoint getCenter() {
-
-        double valX = 0.5 * (getHead().getX() + getBase().getX());
-        double valY = 0.5 * (getHead().getY() + getBase().getY());
-        double valZ = 0.5 * (getHead().getZ() + getBase().getZ());
-
-        return FactoryGeometry.getIFPoint(valX, valY, valZ);
-    }
-
-    @Override
-    public IFVector normalize() {
-        IFVector fCopyLocal = copy().relocateBase();
+    public IFVector normalize() throws DirectionException {
+        IFVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().normalize();
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
     public IFVector reflectBase() {
-        IFVector fCopyLocal = copy().relocateHead();
+        IFVector fCopyLocal = copy().moveHead();
 
         fCopyLocal.getBase().reflect();
-        fCopyLocal.relocateHead(getHead());
+        fCopyLocal.moveHead(getHead());
 
         return set(fCopyLocal);
     }
 
     @Override
     public IFVector reflectHead() {
-        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().reflect();
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
@@ -448,60 +473,73 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector setLength(double length) throws SamePositionException {
-        IFVector fCopyLocal = copy().relocateBase();
+    public IFVector setLength(double length) throws DirectionException {
+        IFVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().setLength(length);
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
     public double getInclination() {
-        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
 
         return fCopyLocal.getHead().getInclination();
     }
 
     @Override
     public IFVector setInclination(double inclination) {
-        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().setInclination(inclination);
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
     public double getAzimuth() {
-        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
 
         return fCopyLocal.getHead().getAzimuth();
     }
 
     @Override
     public IFVector setAzimuth(double azimuth) {
-        IFVector fCopyLocal = copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().setAzimuth(azimuth);
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
-    public double getAngle(IFPoint ref) {
+    public double getAngle(IFPoint ref) throws PositionException, DirectionException {
+
+        if (getBase().isSimilar(ref)) {
+            throw new PositionException("The argument IFPoint is at the same position as the base IFPoint");
+        }
 
         return getAngle(FactoryGeometry.getIFVector(getBase(), ref));
     }
 
     @Override
-    public double getAngle(IFVector ref) {
+    public double getAngle(IFVector ref) throws DirectionException {
+
+        if (isDirectional()) {
+            throw new DirectionException("The direction of the input IFVector is not defined");
+        }
+
+        if (ref.isDirectional()) {
+            throw new DirectionException("The direction of the argument IFVector is not defined");
+        }
+
         double angle, dProd, magAB;
-        IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = ref.copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
+        IFVector fCopyExternal = ref.copy().moveBase();
 
         dProd = fCopyLocal.getDotProduct(fCopyExternal);
         magAB = fCopyLocal.getHead().getLength() * fCopyExternal.getHead().getLength();
@@ -518,59 +556,128 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
 
     @Override
     public double getDotProduct(IFVector ref) {
-        IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = ref.copy().relocateBase();
+        IFVector fCopyLocal = copy().moveBase();
+        IFVector fCopyExternal = ref.copy().moveBase();
 
         return fCopyLocal.getHead().getDotProduct(fCopyExternal.getHead());
     }
 
     @Override
-    public IFVector getCrossProduct(IFPoint ref) {
+    public IFVector setCrossProduct(IFPoint ref) {
 
-        return getCrossProduct(FactoryGeometry.getIFVector(getBase(), ref));
+        return setCrossProduct(FactoryGeometry.getIFVector(getBase(), ref));
     }
 
     @Override
-    public IFVector getCrossProduct(IFVector ref) {
-        IFVector fCopyLocal = copy().relocateBase();
-        IFVector fCopyExternal = ref.copy().relocateBase();
+    public IFVector setCrossProduct(IFVector ref) {
+        IFVector fCopyLocal = copy().moveBase();
+        IFVector fCopyExternal = ref.copy().moveBase();
 
-        fCopyLocal.getHead().getCrossProduct(fCopyExternal.getHead());
-        fCopyLocal.relocateBase(getBase());
+        fCopyLocal.getHead().setCrossProduct(fCopyExternal.getHead());
+        fCopyLocal.moveBase(getBase());
 
         return set(fCopyLocal);
     }
 
     @Override
-    public boolean isParallel(IFVector ref) {
-        IFPoint fCopyLocal = copy().relocateBase().normalize().getHead();
-        IFPoint fCopyExternal = ref.copy().relocateBase().normalize().getHead();
+    public boolean isParallel(IFVector ref) throws DirectionException {
 
-        return fCopyLocal.isSimilar(fCopyExternal) || fCopyLocal.isSimilar(fCopyExternal.reflect());
+        if (isDirectional()) {
+            throw new DirectionException("The input IFVector direction is not defined");
+        }
+
+        if (ref.isDirectional()) {
+            throw new DirectionException("The argument IFVector direction is not defined");
+        }
+
+        IFPoint fCopyLocal = copy().moveBase().normalize().getHead();
+        IFPoint fCopyExternal = ref.copy().moveBase().normalize().getHead();
+
+        return fCopyLocal.isSimilar(fCopyExternal);
     }
 
     @Override
-    public IFVector setParallel(IFVector ref) {
+    public IFVector setParallel(IFVector ref) throws DirectionException {
+
+        if (isDirectional()) {
+            throw new DirectionException("The input IFVector direction is not defined");
+        }
+
+        if (ref.isDirectional()) {
+            throw new DirectionException("The argument IFVector direction is not defined");
+        }
+
         double magnitude = getLength();
         IFPoint baseCopy = getBase().copy();
 
-        return set(ref).setLength(magnitude).relocateBase(baseCopy);
+        return set(ref).setLength(magnitude).moveBase(baseCopy);
     }
 
     @Override
-    public boolean isOrthogonal(IFVector ref) {
+    public boolean isAntiParallel(IFVector ref) throws DirectionException {
 
-        return Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter;
+        if (isDirectional()) {
+            throw new DirectionException("The input IFVector direction is not defined");
+        }
+
+        if (ref.isDirectional()) {
+            throw new DirectionException("The argument IFVector direction is not defined");
+        }
+
+        IFPoint fCopyLocal = copy().moveBase().normalize().getHead();
+        IFPoint fCopyExternal = ref.copy().moveBase().normalize().getHead();
+
+        return fCopyLocal.isSimilar(fCopyExternal.reflect());
     }
 
     @Override
-    public IFVector setOrthogonal(IFVector ref) {
+    public IFVector setAntiParallel(IFVector ref) throws DirectionException {
+
+        if (isDirectional()) {
+            throw new DirectionException("The input IFVector direction is not defined");
+        }
+
+        if (ref.isDirectional()) {
+            throw new DirectionException("The argument IFVector direction is not defined");
+        }
+
+        double magnitude = getLength();
+        IFPoint baseCopy = getBase().copy();
+
+        return set(ref).setLength(magnitude).moveBase(baseCopy).reflectHead();
+    }
+
+    @Override
+    public boolean isOrthogonal(IFVector ref) throws DirectionException {
+
+        if (isDirectional()) {
+            throw new DirectionException("The input IFVector direction is not defined");
+        }
+
+        if (ref.isDirectional()) {
+            throw new DirectionException("The argument IFVector direction is not defined");
+        }
+
+        return getDotProduct(ref) < jitter;//Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter;
+    }
+
+    @Override
+    public IFVector setOrthogonal(IFVector ref) throws DirectionException {
+
+        if (isDirectional()) {
+            throw new DirectionException("The input IFVector direction is not defined");
+        }
+
+        if (ref.isDirectional()) {
+            throw new DirectionException("The argument IFVector direction is not defined");
+        }
+
         double magnitude = getLength();
         IFVector fVectorRef = FactoryGeometry.getIFVector(ref.getBase().copy(), ref.getHead().copy());
-        IFVector fVectorRot = copy().getCrossProduct(fVectorRef);
+        IFVector fVectorRot = copy().setCrossProduct(fVectorRef);
 
-        fVectorRef.getCrossProduct(fVectorRot).setLength(magnitude);
-        fVectorRef.relocateBase(getBase());
+        fVectorRef.setCrossProduct(fVectorRot).setLength(magnitude);
+        fVectorRef.moveBase(getBase());
 
         set(fVectorRef);
 
@@ -578,7 +685,15 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public boolean isZero() {
+    public boolean contains(IFPoint ref) {
+        double distanceBase = getBase().getDistance(ref);
+        double distanceHead = getHead().getDistance(ref);
+
+        return distanceBase - distanceHead - getLength() < jitter;
+    }
+
+    @Override
+    public boolean isDirectional() {
 
         return getBase().equals(getHead());
     }
