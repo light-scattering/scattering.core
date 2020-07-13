@@ -1,35 +1,34 @@
 package eu.scattering.core.geometry.main.base.point;
 
-import eu.scattering.core.exception.PositionException;
+import eu.scattering.core.exception.DirectionException;
 
 public interface IFPointAdvanced {
 
-    IFPoint setSphericalCoordinates(double inclination, double azimuth);    // VAL
-    IFPoint setRandomAngle(IFPoint ...exclude);  // VAL
+    IFPoint setSphericalCoordinates(double inclination, double azimuth);
+    IFPoint setRandomAngle(IFPoint ...exclude);
 
     boolean isExact(double x, double y, double z);
     boolean isSimilar(double x, double y, double z);
 
-    IFPoint reflect();      // VAL
-    IFPoint reflect(IFPoint ref);   // VAL
+    IFPoint reflect();
+    IFPoint reflect(IFPoint ref);
 
-    IFPoint normalize();    // VAL
+    IFPoint normalize() throws DirectionException;
 
     double getLength();
-    IFPoint setLength(double length) throws PositionException, IllegalArgumentException;    // Val
+    IFPoint setLength(double length) throws DirectionException;
     double getInclination();
-    IFPoint setInclination(double inclination); // val
+    IFPoint setInclination(double inclination);
     double getAzimuth();
-    IFPoint setAzimuth(double azimuth); // VAL
+    IFPoint setAzimuth(double azimuth);
 
-    double getAngle(IFPoint ref);
-//    IFPoint setAngle(IFPoint ref, double angle);
+    double getAngle(IFPoint ref) throws DirectionException;
 
     double getDistance(IFPoint ref);
-    IFPoint setDistance(IFPoint ref, double distance) throws PositionException, IllegalArgumentException;   // VAL
+    IFPoint setDistance(IFPoint ref, double distance) throws DirectionException;
 
     double getDotProduct(IFPoint ref);
-    IFPoint setCrossProduct(IFPoint ref);   // VAL
+    IFPoint setCrossProduct(IFPoint ref);
 
     boolean isZero();
 }

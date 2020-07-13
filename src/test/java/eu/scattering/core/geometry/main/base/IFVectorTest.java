@@ -5,7 +5,6 @@ import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.helper.HelperAngle;
 import eu.scattering.core.helper.HelperIFVector;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
@@ -892,116 +891,6 @@ public class IFVectorTest {
             IFVector fVector = HelperRandom.getTestVector();
 
             HelperIFVector.validateRef(e -> e.setRandomAngle(), fVector);
-        }
-
-        @Test
-        @DisplayName("Get IFPoint center")
-        void getIFPointCenter() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            double posX = fVector.getBase().getX() + ((fVector.getHead().getX() - fVector.getBase().getX()) * 0.5);
-            double posY = fVector.getBase().getY() + ((fVector.getHead().getY() - fVector.getBase().getY()) * 0.5);
-            double posZ = fVector.getBase().getZ() + ((fVector.getHead().getZ() - fVector.getBase().getZ()) * 0.5);
-
-            assertTrue(FactoryGeometry.getIFPoint(posX, posY, posZ).isSimilar(fVector.getPointCenter()),
-                    "The resulting IFPoint is incorrect");
-        }
-
-        @Test
-        @DisplayName("Get IFPoint center (validate)")
-        void getIFPointCenterValidate() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            HelperIFVector.validateVal(e -> e.getPointCenter(), fVector);
-        }
-
-        @Test
-        @DisplayName("Get IFPoint random")
-        void getIFPointRandom() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            IFPoint fPointRes = fVector.getPointRandom();
-
-            double distanceBase = fVector.getBase().getDistance(fPointRes);
-            double distanceHead = fVector.getHead().getDistance(fPointRes);
-
-            assertEquals(distanceBase + distanceHead, fVector.getLength(),
-                    jitter, "The generated IFPoint does not belong to the vector");
-        }
-
-        @Test
-        @DisplayName("Get IFPoint random (validate)")
-        void getIFPointRandomValidate() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            HelperIFVector.validateVal(e -> e.getPointRandom(), fVector);
-        }
-
-        @Test
-        @DisplayName("Get IFPoint at length")
-        void getIFPointAtLength() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            double length = fVector.getLength() * 0.5;
-
-            double posX = fVector.getBase().getX() + ((fVector.getHead().getX() - fVector.getBase().getX()) * 0.5);
-            double posY = fVector.getBase().getY() + ((fVector.getHead().getY() - fVector.getBase().getY()) * 0.5);
-            double posZ = fVector.getBase().getZ() + ((fVector.getHead().getZ() - fVector.getBase().getZ()) * 0.5);
-
-            assertTrue(FactoryGeometry.getIFPoint(posX, posY, posZ).isSimilar(fVector.getPointAtLength(length)),
-                    "The location of the IFPoint is incorrect");
-        }
-
-        @Test
-        @DisplayName("Get IFPoint at length (negative)")
-        void getIFPointAtLengthNegative() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            double length = -fVector.getLength() * 0.5;
-
-            double posX = fVector.getBase().getX() + ((fVector.getHead().getX() - fVector.getBase().getX()) * 0.5);
-            double posY = fVector.getBase().getY() + ((fVector.getHead().getY() - fVector.getBase().getY()) * 0.5);
-            double posZ = fVector.getBase().getZ() + ((fVector.getHead().getZ() - fVector.getBase().getZ()) * 0.5);
-
-            IFPoint fPointRes = FactoryGeometry.getIFPoint(posX, posY, posZ).reflect(fVector.getBase());
-
-            assertTrue(fPointRes.isSimilar(fVector.getPointAtLength(length)),
-                    "The location of the IFPoint is incorrect");
-        }
-
-        @Test
-        @DisplayName("Contains")
-        void contains() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            double posX = fVector.getBase().getX() + ((fVector.getHead().getX() - fVector.getBase().getX()) * 0.5);
-            double posY = fVector.getBase().getY() + ((fVector.getHead().getY() - fVector.getBase().getY()) * 0.5);
-            double posZ = fVector.getBase().getZ() + ((fVector.getHead().getZ() - fVector.getBase().getZ()) * 0.5);
-
-            IFPoint fPointRes = FactoryGeometry.getIFPoint(posX, posY, posZ).reflect(fVector.getBase());
-
-            assertTrue(fVector.contains(fPointRes), "The IFPoint should be a part of the IFVector");
-        }
-
-        @Test
-        @DisplayName("Contains (fail)")
-        void containsFail() {
-            IFVector fVector = HelperRandom.getTestVector();
-            IFVector fVectorRef = FactoryGeometry.getIFVector(fVector.getPointCenter(), HelperRandom.getTestPoint(fVector.getHead()));
-
-            fVectorRef.setOrthogonal(fVector).setLength(1.5 * jitter);
-            System.out.println(fVector.isOrthogonal(fVectorRef));
-            System.out.println(HelperAngle.radToDeg(fVector.getAngle(fVectorRef)));
-
-            assertFalse(fVector.contains(fVectorRef.getHead()), "The IFPoint should not be a part of the IFVector");
-        }
-
-        @Test
-        @DisplayName("Get IFPoint at length (validate)")
-        void getIFPointAtLengthValidate() {
-            IFVector fVector = HelperRandom.getTestVector();
-
-            HelperIFVector.validateVal(e -> e.getPointAtLength(1), fVector);
         }
 
         @Test
@@ -2406,7 +2295,7 @@ public class IFVectorTest {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector();
 
-            while (Math.abs((Math.PI * 0.5) - fVectorA.getAngle(fVectorB))  <  jitter) {
+            while (fVectorA.getDotProduct(fVectorB) < jitter) {
                 fVectorB = HelperRandom.getTestVector();
             }
 
@@ -2477,6 +2366,30 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Set orthogonal (throw PositionException, parallel)")
+        void setOrthogonalThrowPositionExceptionParallel() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = HelperRandom.getTestVector();
+
+            fVectorA.setParallel(fVectorB);
+
+            assertThrows(PositionException.class, () -> fVectorA.setOrthogonal(fVectorB),
+                    "IFVectors cannot be parallel");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal (throw PositionException, anti-parallel)")
+        void setOrthogonalThrowPositionExceptionAntiParallel() {
+            IFVector fVectorA = HelperRandom.getTestVector();
+            IFVector fVectorB = HelperRandom.getTestVector();
+
+            fVectorA.setAntiParallel(fVectorB);
+
+            assertThrows(PositionException.class, () -> fVectorA.setOrthogonal(fVectorB),
+                    "IFVectors cannot be anti-parallel");
+        }
+
+        @Test
         @DisplayName("Set orthogonal (same head)")
         void setOrthogonalSameHead() {
             IFVector fVectorA = HelperRandom.getTestVector();
@@ -2519,31 +2432,31 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Is directional")
-        void isDirectional() {
+        @DisplayName("Is non-directional")
+        void isNonDirectional() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = fPointBase.copy();
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            assertTrue(fVector.isDirectional(), "The two IFPoints should be at the same position");
+            assertTrue(fVector.isNonDirectional(), "The two IFPoints should be at the same position");
         }
 
         @Test
-        @DisplayName("Is directional (fail)")
-        void isDirectionalFail() {
+        @DisplayName("Is non-directional (fail)")
+        void isNonDirectionalFail() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
             IFPoint fPointHead = HelperRandom.getTestPoint(fPointBase);
             IFVector fVector = FactoryGeometry.getIFVector(fPointBase, fPointHead);
 
-            assertFalse(fVector.isDirectional(), "The two IFPoints should not be at the same position");
+            assertFalse(fVector.isNonDirectional(), "The two IFPoints should not be at the same position");
         }
 
         @Test
-        @DisplayName("Is directional (validate)")
-        void isDirectionalValidate() {
+        @DisplayName("Is non-directional (validate)")
+        void isNonDirectionalValidate() {
             IFVector fVector = HelperRandom.getTestVector();
 
-            HelperIFVector.validateVal(IFVector::isDirectional, fVector);
+            HelperIFVector.validateVal(IFVector::isNonDirectional, fVector);
         }
 
     }

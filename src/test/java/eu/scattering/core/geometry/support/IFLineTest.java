@@ -878,7 +878,7 @@ public class IFLineTest {
             fLineAOrigin.getBase().setZ(0);
             fLineAOrigin.getHead().setZ(0);
 
-            while (fLineAOrigin.isDirectional()) {
+            while (fLineAOrigin.isNonDirectional()) {
                 fLineAOrigin.set(HelperRandom.getTestVector());
 
                 fLineAOrigin.getBase().setZ(0);

@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static eu.scattering.core.Configuration.jitter;
 
@@ -123,7 +122,6 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
 
     @Override
     public IFVector swap(IFVector element) {
-
         getBase().swap(element.getBase());
         getHead().swap(element.getHead());
 
@@ -255,31 +253,6 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFPoint getPointCenter() {
-        double posX = getBase().getX() + ((getHead().getX() - getBase().getX()) * 0.5);
-        double posY = getBase().getY() + ((getHead().getY() - getBase().getY()) * 0.5);
-        double posZ = getBase().getZ() + ((getHead().getZ() - getBase().getZ()) * 0.5);
-
-        return FactoryGeometry.getIFPoint(posX, posY, posZ);
-    }
-
-    @Override
-    public IFPoint getPointRandom() {
-
-        if (!isDirectional()) {
-            return getBase().copy();
-        }
-
-        return getPointAtLength(ThreadLocalRandom.current().nextDouble(getLength()));
-    }
-
-    @Override
-    public IFPoint getPointAtLength(double length) {
-
-        return copy().setLength(length).getHead();
-    }
-
-    @Override
     public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         return isExact(FactoryGeometry.getIFVector(bX, bY, bZ, hX, hY, hZ));
@@ -338,8 +311,8 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public IFVector moveForward(double distance) throws DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The direction of the IFVector is unknown");
+        if (isNonDirectional()) {
+            throw new DirectionException("The direction of the IFVector is not defined");
         }
 
         if (distance < 0) {
@@ -357,8 +330,8 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public IFVector moveBackward(double distance) throws DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The direction of the IFVector is unknown");
+        if (isNonDirectional()) {
+            throw new DirectionException("The direction of the IFVector is not defined");
         }
 
         if (distance < 0) {
@@ -520,7 +493,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     public double getAngle(IFPoint ref) throws PositionException, DirectionException {
 
         if (getBase().isSimilar(ref)) {
-            throw new PositionException("The argument IFPoint is at the same position as the base IFPoint");
+            throw new PositionException("The provided IFPoint is at the same position as the base IFPoint");
         }
 
         return getAngle(FactoryGeometry.getIFVector(getBase(), ref));
@@ -529,12 +502,12 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public double getAngle(IFVector ref) throws DirectionException {
 
-        if (isDirectional()) {
+        if (isNonDirectional()) {
             throw new DirectionException("The direction of the input IFVector is not defined");
         }
 
-        if (ref.isDirectional()) {
-            throw new DirectionException("The direction of the argument IFVector is not defined");
+        if (ref.isNonDirectional()) {
+            throw new DirectionException("The direction of the provided IFVector is not defined");
         }
 
         double angle, dProd, magAB;
@@ -582,12 +555,12 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public boolean isParallel(IFVector ref) throws DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The input IFVector direction is not defined");
+        if (isNonDirectional()) {
+            throw new DirectionException("The direction of the input IFVector is not defined");
         }
 
-        if (ref.isDirectional()) {
-            throw new DirectionException("The argument IFVector direction is not defined");
+        if (ref.isNonDirectional()) {
+            throw new DirectionException("The direction of the provided IFVector is not defined");
         }
 
         IFPoint fCopyLocal = copy().moveBase().normalize().getHead();
@@ -599,12 +572,12 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public IFVector setParallel(IFVector ref) throws DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The input IFVector direction is not defined");
+        if (isNonDirectional()) {
+            throw new DirectionException("The direction of the input IFVector is not defined");
         }
 
-        if (ref.isDirectional()) {
-            throw new DirectionException("The argument IFVector direction is not defined");
+        if (ref.isNonDirectional()) {
+            throw new DirectionException("The direction of the provided IFVector is not defined");
         }
 
         double magnitude = getLength();
@@ -616,12 +589,12 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public boolean isAntiParallel(IFVector ref) throws DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The input IFVector direction is not defined");
+        if (isNonDirectional()) {
+            throw new DirectionException("The direction of the input IFVector is not defined");
         }
 
-        if (ref.isDirectional()) {
-            throw new DirectionException("The argument IFVector direction is not defined");
+        if (ref.isNonDirectional()) {
+            throw new DirectionException("The direction of the provided IFVector is not defined");
         }
 
         IFPoint fCopyLocal = copy().moveBase().normalize().getHead();
@@ -633,12 +606,12 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public IFVector setAntiParallel(IFVector ref) throws DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The input IFVector direction is not defined");
+        if (isNonDirectional()) {
+            throw new DirectionException("The direction of the input IFVector is not defined");
         }
 
-        if (ref.isDirectional()) {
-            throw new DirectionException("The argument IFVector direction is not defined");
+        if (ref.isNonDirectional()) {
+            throw new DirectionException("The direction of the provided IFVector is not defined");
         }
 
         double magnitude = getLength();
@@ -650,26 +623,26 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     @Override
     public boolean isOrthogonal(IFVector ref) throws DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The input IFVector direction is not defined");
+        if (isNonDirectional()) {
+            throw new DirectionException("The direction of the input IFVector is not defined");
         }
 
-        if (ref.isDirectional()) {
-            throw new DirectionException("The argument IFVector direction is not defined");
+        if (ref.isNonDirectional()) {
+            throw new DirectionException("The direction of the provided IFVector is not defined");
         }
 
-        return getDotProduct(ref) < jitter;//Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter;
+        return (getDotProduct(ref) < jitter) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter);
     }
 
     @Override
-    public IFVector setOrthogonal(IFVector ref) throws DirectionException {
+    public IFVector setOrthogonal(IFVector ref) throws PositionException, DirectionException {
 
-        if (isDirectional()) {
-            throw new DirectionException("The input IFVector direction is not defined");
+        if (isParallel(ref)) {
+            throw new PositionException("IFVectors are parallel");
         }
 
-        if (ref.isDirectional()) {
-            throw new DirectionException("The argument IFVector direction is not defined");
+        if (isAntiParallel(ref)) {
+            throw new PositionException("IFVectors are anti-parallel");
         }
 
         double magnitude = getLength();
@@ -685,15 +658,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public boolean contains(IFPoint ref) {
-        double distanceBase = getBase().getDistance(ref);
-        double distanceHead = getHead().getDistance(ref);
-
-        return distanceBase - distanceHead - getLength() < jitter;
-    }
-
-    @Override
-    public boolean isDirectional() {
+    public boolean isNonDirectional() {
 
         return getBase().equals(getHead());
     }

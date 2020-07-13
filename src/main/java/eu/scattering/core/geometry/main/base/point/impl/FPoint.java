@@ -499,17 +499,13 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setDistance(IFPoint ref, double distance) throws PositionException, IllegalArgumentException {
+    public IFPoint setDistance(IFPoint ref, double distance) throws DirectionException {
 
-        if (distance < 0) {
-            throw new IllegalArgumentException("The distance between IFPoints cannot be lower than zero");
+        if (equals(ref)) {
+            throw new DirectionException("IFPoints must not be on the same position");
         }
 
-        if (this.equals(ref)) {
-            throw new PositionException("IFPoints must not be on the same position");
-        }
-
-        return this.sub(ref).setLength(distance).add(ref);
+        return sub(ref).setLength(distance).add(ref);
     }
 
     @Override

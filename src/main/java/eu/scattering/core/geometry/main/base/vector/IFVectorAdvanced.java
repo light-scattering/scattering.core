@@ -9,12 +9,6 @@ public interface IFVectorAdvanced {
     IFVector setSphericalCoordinates(double inclination, double azimuth);
     IFVector setRandomAngle(IFPoint... exclusion);
 
-    IFPoint getPointCenter();
-    IFPoint getPointRandom();
-    IFPoint getPointAtLength(double length);
-
-    boolean contains(IFPoint ref);
-
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
 
@@ -32,12 +26,12 @@ public interface IFVectorAdvanced {
     IFVector add(IFVector vector);
     IFVector sub(IFVector vector);
 
+    double getLength();
+    IFVector setLength(double length) throws DirectionException;
+
     double getLengthX();
     double getLengthY();
     double getLengthZ();
-
-    double getLength();
-    IFVector setLength(double length) throws DirectionException;
 
     IFVector normalize() throws DirectionException;
 
@@ -63,8 +57,9 @@ public interface IFVectorAdvanced {
     IFVector setParallel(IFVector ref) throws DirectionException;
     boolean isAntiParallel(IFVector ref) throws DirectionException;
     IFVector setAntiParallel(IFVector ref) throws DirectionException;
+
     boolean isOrthogonal(IFVector ref) throws DirectionException;
-    IFVector setOrthogonal(IFVector ref) throws DirectionException; // Cannot be parallel
+    IFVector setOrthogonal(IFVector ref) throws PositionException, DirectionException;
     
-    boolean isDirectional();
+    boolean isNonDirectional();
 }

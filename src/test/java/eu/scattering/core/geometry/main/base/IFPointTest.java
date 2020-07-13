@@ -1,7 +1,7 @@
 package eu.scattering.core.geometry.main.base;
 
+import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.helper.HelperIFPoint;
 import eu.scattering.core.helper.HelperRandom;
@@ -141,14 +141,6 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set values with an IFPoint (throw NullPointerException)")
-        void setWithIFPointThrowNullPointerException() {
-            IFPoint fPoint = FactoryGeometry.getIFPoint();
-
-            assertThrows(NullPointerException.class, () -> fPoint.set(null), "The reference cannot be null" );
-        }
-
-        @Test
         @DisplayName("Set X")
         void setX() {
             IFPoint fPoint = FactoryGeometry.getIFPoint();
@@ -207,11 +199,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Normalize (throw SamePositionException)")
-        void normalizeThrowSamePositionException() {
+        @DisplayName("Normalize (throw DirectionException)")
+        void normalizeThrowDirectionException() {
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            assertThrows(PositionException.class, fPoint::normalize,
+            assertThrows(DirectionException.class, fPoint::normalize,
                     "The IFPoints must not be on the same position");
         }
 
@@ -364,21 +356,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get length (validate positions)")
-        void getLengthValidatePositions() {
-            double refX = HelperRandom.getTestValue();
-            double refY = HelperRandom.getTestValue();
-            double refZ = HelperRandom.getTestValue();
+        @DisplayName("Get length (validate)")
+        void getLengthValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
-
-            fPoint.getLength();
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
-            );
+            HelperIFPoint.validateVal(IFPoint::getLength, fPoint);
         }
 
         @Test
@@ -401,19 +383,29 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set length (throw IllegalArgumentException)")
-        void setLengthThrowIllegalArgumentException() {
+        @DisplayName("Set length (negative)")
+        void setLengthNegative() {
+            IFPoint fPoint;
 
-            assertThrows(IllegalArgumentException.class,
-                    () -> FactoryGeometry.getIFPoint().set(1, 1, 1).setLength(-1),
-                    "It should not be possible to set negative radius");
+            double refX = HelperRandom.getTestValue();
+            double refY = HelperRandom.getTestValue();
+            double refZ = HelperRandom.getTestValue();
+
+            fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
+            double magnitude = fPoint.getLength();
+
+            double magnitudeExpected = Math.abs(HelperRandom.getTestValue(magnitude));
+            fPoint.setLength(-magnitudeExpected);
+
+            assertEquals(magnitudeExpected, fPoint.getLength(),
+                    jitter, "The magnitude of the vector is incorrect");
         }
 
         @Test
-        @DisplayName("Set length (throw SamePositionException)")
-        void setLengthThrowSamePositionException() {
+        @DisplayName("Set length (throw DirectionException)")
+        void setLengthThrowDirectionException() {
 
-            assertThrows(PositionException.class,
+            assertThrows(DirectionException.class,
                     () -> FactoryGeometry.getIFPoint().setLength(1),
                     "The position of the reference IFPoint must not be zero");
         }
@@ -500,21 +492,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get inclination (validate positions)")
-        void getInclinationValidatePositions() {
-            double refX = HelperRandom.getTestValue();
-            double refY = HelperRandom.getTestValue();
-            double refZ = HelperRandom.getTestValue();
+        @DisplayName("Get inclination (validate)")
+        void getInclinationValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
-
-            fPoint.getInclination();
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
-            );
+            HelperIFPoint.validateVal(IFPoint::getInclination, fPoint);
         }
 
         @Test
@@ -564,21 +546,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get azimuth (validate positions)")
-        void getAzimuthValidatePositions() {
-            double refX = HelperRandom.getTestValue();
-            double refY = HelperRandom.getTestValue();
-            double refZ = HelperRandom.getTestValue();
+        @DisplayName("Get azimuth (validate)")
+        void getAzimuthValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPoint = FactoryGeometry.getIFPoint(refX, refY, refZ);
-
-            fPoint.getAzimuth();
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
-            );
+            HelperIFPoint.validateVal(IFPoint::getAzimuth, fPoint);
         }
 
         @Test
@@ -754,6 +726,14 @@ public class IFPointTest {
         }
 
         @Test
+        @DisplayName("Is zero (validate)")
+        void isZeroValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateVal(IFPoint::isZero, fPoint);
+        }
+
+        @Test
         @DisplayName("Get dot product")
         void getDotProduct() {
             IFPoint fPointA = HelperRandom.getTestPoint();
@@ -769,54 +749,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get dot product (validate references)")
-        void getDotProductValidateReferences() {
+        @DisplayName("Get dot product (validate)")
+        void getDotProductValidate() {
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            fPointA.getDotProduct(fPointB);
-
-            assertNotSame(fPointA, fPointB, "IFPoints should point at different objects");
-        }
-
-        @Test
-        @DisplayName("Get dot product (validate positions)")
-        void getDotProductValidatePositions() {
-            double refAX = HelperRandom.getTestValue();
-            double refAY = HelperRandom.getTestValue();
-            double refAZ = HelperRandom.getTestValue();
-            IFPoint fPointA = FactoryGeometry.getIFPoint(refAX, refAY, refAZ);
-
-            double refBX = HelperRandom.getTestValue();
-            double refBY = HelperRandom.getTestValue();
-            double refBZ = HelperRandom.getTestValue();
-            IFPoint fPointB = FactoryGeometry.getIFPoint(refBX, refBY, refBZ);
-
-            fPointA.getDotProduct(fPointB);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refAX, fPointA.getX(),
-                            "IFPoint A - The X value is incorrect"),
-                    () -> assertEquals(refAY, fPointA.getY(),
-                            "IFPoint A - The Y value is incorrect"),
-                    () -> assertEquals(refAZ, fPointA.getZ(),
-                            "IFPoint A - The Z value is incorrect"),
-                    () -> assertEquals(refBX, fPointB.getX(),
-                            "IFPoint B - The X value is incorrect"),
-                    () -> assertEquals(refBY, fPointB.getY(),
-                            "IFPoint B - The Y value is incorrect"),
-                    () -> assertEquals(refBZ, fPointB.getZ(),
-                            "IFPoint B - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Get dot product (throw NullPointerException)")
-        void getDotProductThrowNullPointerException() {
-            IFPoint fPoint = HelperRandom.getTestPoint();
-
-            assertThrows(NullPointerException.class, () -> fPoint.getDotProduct(null),
-                    "The reference IFPoint must not be null");
+            HelperIFPoint.validateVal(IFPoint::getDotProduct, fPointA, fPointB);
         }
 
         @Test
@@ -897,47 +835,32 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get angle (validate positions)")
-        void getAngleValidatePositions() {
-            IFPoint fPointA = FactoryGeometry.getIFPoint(1, 2, 3);
-            IFPoint fPointB = FactoryGeometry.getIFPoint(4, 5, 6);
-
-            fPointA.getAngle(fPointB);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(1, fPointA.getX(),
-                            "IFPoint A - The X value is incorrect"),
-                    () -> assertEquals(2, fPointA.getY(),
-                            "IFPoint A - The Y value is incorrect"),
-                    () -> assertEquals(3, fPointA.getZ(),
-                            "IFPoint A - The Z value is incorrect"),
-                    () -> assertEquals(4, fPointB.getX(),
-                            "IFPoint B - The X value is incorrect"),
-                    () -> assertEquals(5, fPointB.getY(),
-                            "IFPoint B - The Y value is incorrect"),
-                    () -> assertEquals(6, fPointB.getZ(),
-                            "IFPoint B - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Get angle (validate references)")
-        void getAngleValidateReferences() {
-            IFPoint fPointA = HelperRandom.getTestPoint();
+        @DisplayName("Get angle (throw DirectionException, input)")
+        void getAngleThrowDirectionExceptionInput() {
+            IFPoint fPointA = FactoryGeometry.getIFPoint();
             IFPoint fPointB = HelperRandom.getTestPoint();
 
-            fPointA.getAngle(fPointB);
-
-            assertNotSame(fPointA, fPointB, "IFPoints should point to different objects");
+            assertThrows(DirectionException.class, () -> fPointA.getAngle(fPointB),
+                    "The direction of the input IFPoint is not defined");
         }
 
         @Test
-        @DisplayName("Get angle (throw NullPointerException)")
-        void getAngleThrowNullPointerException() {
-            IFPoint fPoint = HelperRandom.getTestPoint();
+        @DisplayName("Get angle (throw DirectionException, argument)")
+        void getAngleThrowDirectionExceptionArgument() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = FactoryGeometry.getIFPoint();
 
-            assertThrows(NullPointerException.class, () -> fPoint.getAngle(null),
-                    "The reference IFVector cannot be null");
+            assertThrows(DirectionException.class, () -> fPointA.getAngle(fPointB),
+                    "The direction of the argument IFPoint is not defined");
+        }
+
+        @Test
+        @DisplayName("Get angle (validate)")
+        void getAngleValidate() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
+
+            HelperIFPoint.validateVal(IFPoint::getAngle, fPointA, fPointB);
         }
 
         @Test
@@ -956,43 +879,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Get distance (validate positions)")
-        void getDistanceValidatePositions() {
-            double refAX = HelperRandom.getTestValue();
-            double refAY = HelperRandom.getTestValue();
-            double refAZ = HelperRandom.getTestValue();
-            IFPoint fPointA = FactoryGeometry.getIFPoint(refAX, refAY, refAZ);
+        @DisplayName("Get distance (validate)")
+        void getDistanceValidate() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            double refBX = HelperRandom.getTestValue();
-            double refBY = HelperRandom.getTestValue();
-            double refBZ = HelperRandom.getTestValue();
-            IFPoint fPointB = FactoryGeometry.getIFPoint(refBX, refBY, refBZ);
-
-            fPointA.getDistance(fPointB);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refAX, fPointA.getX(),
-                            "IFPoint A - The X value is incorrect"),
-                    () -> assertEquals(refAY, fPointA.getY(),
-                            "IFPoint A - The Y value is incorrect"),
-                    () -> assertEquals(refAZ, fPointA.getZ(),
-                            "IFPoint A - The Z value is incorrect"),
-                    () -> assertEquals(refBX, fPointB.getX(),
-                            "IFPoint B - The X value is incorrect"),
-                    () -> assertEquals(refBY, fPointB.getY(),
-                            "IFPoint B - The Y value is incorrect"),
-                    () -> assertEquals(refBZ, fPointB.getZ(),
-                            "IFPoint B - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance (throw NullPointerException)")
-        void getDistanceThrowNullPointerException() {
-            IFPoint fPoint = FactoryGeometry.getIFPoint();
-
-            assertThrows(NullPointerException.class, () -> fPoint.getDistance(null),
-                    "The reference IFPoint must not be null");
+            HelperIFPoint.validateVal(IFPoint::getDistance, fPointA, fPointB);
         }
 
         @Test
@@ -1009,23 +901,40 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Set distance (throw SamePositionException)")
-        void setDistanceThrowSamePositionException() {
-            IFPoint fPointA = HelperRandom.getTestPoint();
-            IFPoint fPointB = fPointA.copy();
-
-            assertThrows(PositionException.class, () -> fPointA.setDistance(fPointB, 1),
-                    "IFPoints cannot be at the same position");
-        }
-
-        @Test
-        @DisplayName("Set distance (throw IllegalArgumentException)")
-        void setDistanceThrowIllegalArgumentException() {
+        @DisplayName("Set distance A (negative)")
+        void setDistanceNegativeA() {
+            double distance = Math.abs(HelperRandom.getTestValue());
             IFPoint fPointA = HelperRandom.getTestPoint();
             IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
 
-            assertThrows(IllegalArgumentException.class, () -> fPointA.setDistance(fPointB, -1),
-                    "The distance cannot be lower then zero");
+            fPointA.setDistance(fPointB, -distance);
+
+            assertEquals(distance, fPointA.getDistance(fPointB),
+                    jitter, "The distance between IFPoints is erroneous");
+        }
+
+        @Test
+        @DisplayName("Set distance B (negative)")
+        void setDistanceNegativeB() {
+            double distance = Math.abs(HelperRandom.getTestValue());
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint(fPointA);
+
+            IFPoint fPointRefA = fPointA.copy().setDistance(fPointB, distance);
+            IFPoint fPointRefB = fPointA.copy().setDistance(fPointB, -distance);
+
+            assertEquals(2 * distance, fPointRefA.getDistance(fPointRefB),
+                    jitter, "The distance between IFPoints is erroneous");
+        }
+
+        @Test
+        @DisplayName("Set distance (throw DirectionException)")
+        void setDistanceThrowDirectionException() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = fPointA.copy();
+
+            assertThrows(DirectionException.class, () -> fPointA.setDistance(fPointB, 1),
+                    "IFPoints cannot be at the same position");
         }
 
         @Test
@@ -1091,15 +1000,6 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Exactness (throw NullPointerException)")
-        void isExactThrowNullPointerException() {
-            IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
-
-            assertThrows(NullPointerException.class,
-                    () -> fPointRef.isExact(null), "The operand cannot be null");
-        }
-
-        @Test
         @DisplayName("Exactness with parameters")
         void isExactWithParameters() {
             IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
@@ -1113,6 +1013,14 @@ public class IFPointTest {
             IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
 
             assertFalse(fPointRef.isExact(0, 0, 0), "IFPoint values should not be equal");
+        }
+
+        @Test
+        @DisplayName("Exactness with parameters (validate)")
+        void isExactWithParametersValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateVal(e -> e.isExact(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1180,6 +1088,14 @@ public class IFPointTest {
         }
 
         @Test
+        @DisplayName("Similarity with parameters (validate)")
+        void isSimilarWithParametersValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateVal(e -> e.isSimilar(0, 0, 0), fPoint);
+        }
+
+        @Test
         @DisplayName("Get hash code")
         void getHashCode() {
             IFPoint fPointRefA = FactoryGeometry.getIFPoint(refX, refY, refZ);
@@ -1199,6 +1115,14 @@ public class IFPointTest {
         }
 
         @Test
+        @DisplayName("Get hash code (validate)")
+        void getHashCodeValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateVal(IFPoint::hashCode, fPoint);
+        }
+
+        @Test
         @DisplayName("Copy")
         void copy() {
             IFPoint fPointRef = FactoryGeometry.getIFPoint(refX, refY, refZ);
@@ -1212,6 +1136,14 @@ public class IFPointTest {
                     () -> assertNotEquals(fPointRef, fPoint.add(fPointRef),
                             "FPoints should have different values")
             );
+        }
+
+        @Test
+        @DisplayName("Copy (validate)")
+        void copyValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateVal(IFPoint::copy, fPoint);
         }
 
     }
@@ -1253,35 +1185,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Add IFPoint (validate references)")
-        void addIFPointValidateReferences() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
+        @DisplayName("Add IFPoint (validate)")
+        void addIFPointValidate() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.add(fPointOp);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Add IFPoint (validate positions)")
-        void addIFPointValidatePositions() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
-
-            fPoint.add(fPointOp);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(opX, fPointOp.getX(), "The X value is incorrect"),
-                    () -> assertEquals(opY, fPointOp.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(opZ, fPointOp.getZ(), "The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Add IFPoint (throw NullPointerException)")
-        void addIFPointThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class,
-                    () -> fPoint.add(null), "The operand cannot be null");
+            HelperIFPoint.validateRef(IFPoint::add, fPointA, fPointB);
         }
 
         @Test
@@ -1298,11 +1207,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Add primitives (validate references)")
-        void addPrimitivesValidateReferences() {
-            IFPoint fPointRef = fPoint.add(opX, opY, opZ);
+        @DisplayName("Add primitives (validate)")
+        void addPrimitivesValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.add(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1320,13 +1229,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Add factor (validate references)")
-        void addFactorValidateReferences() {
-            double op = opX * opY * opZ;
+        @DisplayName("Add factor (validate)")
+        void addFactorValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.add(op);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.add(1), fPoint);
         }
 
         @Test
@@ -1343,11 +1250,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Add X (validate references)")
-        void addXValidateReferences() {
-            IFPoint fPointRef = fPoint.addX(opX);
+        @DisplayName("Add X (validate)")
+        void addXValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.addX(1), fPoint);
         }
 
         @Test
@@ -1364,11 +1271,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Add Y (validate references)")
-        void addYValidateReferences() {
-            IFPoint fPointRef = fPoint.addY(opY);
+        @DisplayName("Add Y (validate)")
+        void addYValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.addY(1), fPoint);
         }
 
         @Test
@@ -1385,11 +1292,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Add Z (validate references)")
-        void addZValidateReferences() {
-            IFPoint fPointRef = fPoint.addZ(opX);
+        @DisplayName("Add Z (validate)")
+        void addZValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.addZ(1), fPoint);
         }
 
         @Test
@@ -1407,35 +1314,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Sub IFPoint (validate positions)")
-        void subIFPointValidatePositions() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
+        @DisplayName("Sub IFPoint (validate)")
+        void subIFPointValidate() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint();
 
-            fPoint.sub(fPointOp);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(opX, fPointOp.getX(), "The X value is incorrect"),
-                    () -> assertEquals(opY, fPointOp.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(opZ, fPointOp.getZ(), "The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Sub IFPoint (validate references)")
-        void subIFPointValidateReferences() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
-
-            IFPoint fPointRef = fPoint.sub(fPointOp);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Sub IFPoint (throw NullPointerException)")
-        void subIFPointThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class,
-                    () -> fPoint.sub(null), "The operand cannot be null");
+            HelperIFPoint.validateRef(IFPoint::sub, fPointA, fPointB);
         }
 
         @Test
@@ -1452,11 +1336,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Sub primitives (validate references)")
-        void subPrimitivesValidateReferences() {
-            IFPoint fPointRef = fPoint.sub(opX, opY, opZ);
+        @DisplayName("Sub primitives (validate)")
+        void subPrimitivesValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.sub(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1474,13 +1358,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Sub factor (validate references)")
-        void subFactorValidateReferences() {
-            double op = opX * opY * opZ;
+        @DisplayName("Sub factor (validate)")
+        void subFactorValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.sub(op);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.sub(1), fPoint);
         }
 
         @Test
@@ -1497,11 +1379,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Sub X (validate references)")
-        void subXValidateReferences() {
-            IFPoint fPointRef = fPoint.subX(opX);
+        @DisplayName("Sub X (validate)")
+        void subXValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.subX(1), fPoint);
         }
 
         @Test
@@ -1518,11 +1400,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Sub Y (validate references)")
-        void subYValidateReferences() {
-            IFPoint fPointRef = fPoint.subY(opY);
+        @DisplayName("Sub Y (validate)")
+        void subYValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.subY(1), fPoint);
         }
 
         @Test
@@ -1539,11 +1421,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Sub Z (validate references)")
-        void subZValidateReferences() {
-            IFPoint fPointRef = fPoint.subZ(opX);
+        @DisplayName("Sub Z (validate)")
+        void subZValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.subZ(1), fPoint);
         }
 
         @Test
@@ -1561,35 +1443,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Mul IFPoint (validate positions)")
-        void mulIFPointValidatePositions() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
+        @DisplayName("Mul IFPoint (validate)")
+        void mulIFPointValidate() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint();
 
-            fPoint.mul(fPointOp);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(opX, fPointOp.getX(), "The X value is incorrect"),
-                    () -> assertEquals(opY, fPointOp.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(opZ, fPointOp.getZ(), "The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Mul IFPoint (validate references)")
-        void mulIFPointValidateReferences() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
-
-            IFPoint fPointRef = fPoint.mul(fPointOp);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Mul IFPoint (throw NullPointerException)")
-        void mulIFPointThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class,
-                    () -> fPoint.mul(null), "The operand cannot be null");
+            HelperIFPoint.validateRef(IFPoint::mul, fPointA, fPointB);
         }
 
         @Test
@@ -1606,11 +1465,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Mul primitives (validate references)")
-        void mulPrimitivesValidateReferences() {
-            IFPoint fPointRef = fPoint.mul(opX, opY, opZ);
+        @DisplayName("Mul primitives (validate)")
+        void mulPrimitivesValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.mul(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1628,13 +1487,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Mul factor (validate references)")
-        void mulFactorValidateReferences() {
-            double op = opX * opY * opZ;
+        @DisplayName("Mul factor (validate)")
+        void mulFactorValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.mul(op);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.mul(1), fPoint);
         }
 
         @Test
@@ -1651,11 +1508,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Mul X (validate references)")
-        void mulXValidateReferences() {
-            IFPoint fPointRef = fPoint.mulX(opX);
+        @DisplayName("Mul X (validate)")
+        void mulXValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.mulX(1), fPoint);
         }
 
         @Test
@@ -1672,11 +1529,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Mul Y (validate references)")
-        void mulYValidateReferences() {
-            IFPoint fPointRef = fPoint.mulY(opY);
+        @DisplayName("Mul Y (validate)")
+        void mulYValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.mulY(1), fPoint);
         }
 
         @Test
@@ -1693,11 +1550,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Mul Z (validate references)")
-        void mulZValidateReferences() {
-            IFPoint fPointRef = fPoint.mulZ(opX);
+        @DisplayName("Mul Z (validate)")
+        void mulZValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
+            HelperIFPoint.validateRef(e -> e.mulZ(1), fPoint);
         }
 
         @Test
@@ -1712,30 +1569,6 @@ public class IFPointTest {
                     () -> assertEquals(refY / opY, fPoint.getY(), "The Y value is incorrect"),
                     () -> assertEquals(refZ / opZ, fPoint.getZ(), "The Z value is incorrect")
             );
-        }
-
-        @Test
-        @DisplayName("Div IFPoint (validate positions)")
-        void divIFPointValidatePositions() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
-
-            fPoint.div(fPointOp);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(opX, fPointOp.getX(), "The X value is incorrect"),
-                    () -> assertEquals(opY, fPointOp.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(opZ, fPointOp.getZ(), "The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Div IFPoint (validate references)")
-        void divIFPointValidateReferences() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
-
-            IFPoint fPointRef = fPoint.div(fPointOp);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
         }
 
         @Test
@@ -1756,11 +1589,12 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Div IFPoint (NullPointerException)")
-        void divIFPointThrowNullPointerException() {
+        @DisplayName("Div IFPoint (validate)")
+        void divIFPointValidate() {
+            IFPoint fPointA = HelperRandom.getTestPoint();
+            IFPoint fPointB = HelperRandom.getTestPoint();
 
-            assertThrows(NullPointerException.class, () -> fPoint.div(null),
-                    "The reference cannot be null");
+            HelperIFPoint.validateRef(IFPoint::mul, fPointA, fPointB);
         }
 
         @Test
@@ -1774,14 +1608,6 @@ public class IFPointTest {
                     () -> assertEquals(refY / opY, fPoint.getY(), "The Y value is incorrect"),
                     () -> assertEquals(refZ / opZ, fPoint.getZ(), "The Z value is incorrect")
             );
-        }
-
-        @Test
-        @DisplayName("Div primitives (validate references)")
-        void divPrimitivesValidateReferences() {
-            IFPoint fPointRef = fPoint.div(opX, opY, opZ);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
         }
 
         @Test
@@ -1799,6 +1625,14 @@ public class IFPointTest {
         }
 
         @Test
+        @DisplayName("Div primitives (validate)")
+        void divPrimitivesValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateRef(e -> e.div(1, 1, 1), fPoint);
+        }
+
+        @Test
         @DisplayName("Div factor")
         void divFactor() {
             double op = opX * opY * opZ;
@@ -1813,21 +1647,19 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Div factor (validate references)")
-        void divFactorValidateReferences() {
-            double op = opX * opY * opZ;
-
-            IFPoint fPointRef = fPoint.div(op);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
         @DisplayName("Div factor (throw ArithmeticException)")
         void divFactorThrowArithmeticException() {
             double op = opX * opY * opZ;
 
             assertThrows(ArithmeticException.class, () -> fPoint.div(0), "The factor is zero");
+        }
+
+        @Test
+        @DisplayName("Div factor (validate)")
+        void divFactorValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateRef(e -> e.div(1), fPoint);
         }
 
         @Test
@@ -1844,18 +1676,18 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Div X (validate references)")
-        void divXValidateReferences() {
-            IFPoint fPointRef = fPoint.divX(opX);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
         @DisplayName("Div X (throw ArithmeticException)")
         void divXThrowArithmeticException() {
 
             assertThrows(ArithmeticException.class, () -> fPoint.divX(0), "The X value is zero");
+        }
+
+        @Test
+        @DisplayName("Div X (validate)")
+        void divXValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateRef(e -> e.divX(1), fPoint);
         }
 
         @Test
@@ -1872,18 +1704,18 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Div Y (validate references)")
-        void divYValidateReferences() {
-            IFPoint fPointRef = fPoint.divY(opY);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
         @DisplayName("Div Y (throw ArithmeticException)")
         void divYThrowArithmeticException() {
 
             assertThrows(ArithmeticException.class, () -> fPoint.divY(0), "The Y value is zero");
+        }
+
+        @Test
+        @DisplayName("Div Y (validate)")
+        void divYValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateRef(e -> e.divY(1), fPoint);
         }
 
         @Test
@@ -1900,18 +1732,18 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Div Z (validate references)")
-        void divZValidateReferences() {
-            IFPoint fPointRef = fPoint.divZ(opX);
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
         @DisplayName("Div Z (ArithmeticException)")
         void divZThrowArithmeticException() {
 
             assertThrows(ArithmeticException.class, () -> fPoint.divZ(0), "The Z value is zero");
+        }
+
+        @Test
+        @DisplayName("Div Z (validate)")
+        void divZValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            HelperIFPoint.validateRef(e -> e.divZ(1), fPoint);
         }
 
         @Test
@@ -1945,8 +1777,8 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Swap (validate references)")
-        void swapValidateReferences() {
+        @DisplayName("Swap (validate)")
+        void swapValidate() {
             IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
 
             IFPoint fPointRef = fPointOp.swap(fPoint);
@@ -1955,14 +1787,6 @@ public class IFPointTest {
                     () -> assertNotSame(fPoint, fPointOp, "IFPoint references should be different"),
                     () -> assertSame(fPointOp, fPointRef, "The IFPoint reference should not change")
             );
-        }
-
-        @Test
-        @DisplayName("Swap (throw NullPointerException)")
-        void swapThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class, () -> fPoint.swap(null),
-                    "The reference IFPoint must not be null");
         }
 
         @Test
@@ -1983,8 +1807,8 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Imprint (validate references")
-        void imprintValidateReferences() {
+        @DisplayName("Imprint (validate)")
+        void imprintValidate() {
             IFPoint fPointOp = FactoryGeometry.getIFPoint();
 
             IFPoint fPointRef = fPointOp.imprint(fPoint);
@@ -1993,14 +1817,6 @@ public class IFPointTest {
                     () -> assertNotSame(fPoint, fPointOp, "IFPoint references should be different"),
                     () -> assertSame(fPointOp, fPointRef, "The IFPoint reference should not change")
             );
-        }
-
-        @Test
-        @DisplayName("Imprint (throw NullPointerException)")
-        void imprintThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class, () -> fPoint.imprint(null),
-                    "The reference IFPoint must not be null");
         }
 
         @Test
@@ -2017,20 +1833,11 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Custom function - chain (validate references)")
-        void funValidateReferences() {
-            IFPoint fPointRef = fPoint.fun(e -> e.addX(opX).addY(opY).addZ(opZ));
+        @DisplayName("Custom function - chain (validate)")
+        void funValidate() {
+            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            assertSame(fPointRef, fPoint, "The IFPoint reference is erroneous");
-
-        }
-
-        @Test
-        @DisplayName("Custom function - chain (throw NullPointerException)")
-        void funThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class, () -> fPoint.fun(null),
-                    "The reference expression must not be null");
+            HelperIFPoint.validateRef(e -> e.addX(opX).addY(opY).addZ(opZ), fPoint);
         }
 
         @Test
@@ -2042,26 +1849,10 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Custom function - number (throw NullPointerException)")
-        void funValThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class, () -> fPoint.funVal(null),
-                    "The reference expression must not be null");
-        }
-
-        @Test
         @DisplayName("Custom function - value")
         void funLog() {
 
             assertTrue(fPoint.funLog(e -> e.getX() != 0), "The resulting value is erroneous");
-        }
-
-        @Test
-        @DisplayName("Custom function - number (throw NullPointerException)")
-        void funLogThrowNullPointerException() {
-
-            assertThrows(NullPointerException.class, () -> fPoint.funLog(null),
-                    "The reference expression must not be null");
         }
 
     }
