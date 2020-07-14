@@ -1,5 +1,6 @@
 package eu.scattering.core.geometry.support.line;
 
+import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.IBaseExtension;
@@ -13,9 +14,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface IFLine extends IGeometryBase<IFLine>, IDebug<IFLine>, ISupport<IFLine> {
-
-    Consumer<IBaseExtensionAssembly> moveForward(double distance);
-    Consumer<IBaseExtensionAssembly> moveBackward(double distance);
+// TODO - Finish DirectionException (tests)
+    Consumer<IBaseExtensionAssembly> moveForward(double distance) throws DirectionException;
+    Consumer<IBaseExtensionAssembly> moveBackward(double distance) throws DirectionException;
 
     Function<IBaseExtensionAssembly, List<Boolean>> isPartOfRay();
     Function<IBaseExtensionAssembly, List<Boolean>> isPartOfSegment();

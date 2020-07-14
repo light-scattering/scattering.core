@@ -2574,6 +2574,15 @@ public class IFVectorTest {
         }
 
         @Test
+        @DisplayName("Is similar (zero)")
+        void isSimilarZero() {
+            IFVector fVectorA = FactoryGeometry.getIFVector();
+            IFVector fVectorB = FactoryGeometry.getIFVector();
+
+            assertTrue(fVectorA.isSimilar(fVectorB), "IFVectors should be similar");
+        }
+
+        @Test
         @DisplayName("Is similar (fail)")
         void isSimilarFail() {
             IFPoint fPointBase = HelperRandom.getTestPoint();
