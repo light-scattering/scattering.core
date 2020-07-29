@@ -5,7 +5,7 @@ import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.helper.HelperIFVector;
+import eu.scattering.core.geometry.main.base.helper.HelperIFVector;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -2290,14 +2290,23 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Is orthogonal (fail)")
-        void isOrthogonalFail() {
+        @DisplayName("Is orthogonal A (fail)")
+        void isOrthogonalAFail() {
             IFVector fVectorA = HelperRandom.getTestVector();
             IFVector fVectorB = HelperRandom.getTestVector();
 
             while (fVectorA.getDotProduct(fVectorB) < jitter) {
                 fVectorB = HelperRandom.getTestVector();
             }
+
+            assertFalse(fVectorA.isOrthogonal(fVectorB), "IFVectors should not be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal B (fail)")
+        void isOrthogonalBFail() {
+            IFVector fVectorA = FactoryGeometry.getIFVector(0, 1, 0);
+            IFVector fVectorB = FactoryGeometry.getIFVector(-1, 1, 0, 1, -1, 0);
 
             assertFalse(fVectorA.isOrthogonal(fVectorB), "IFVectors should not be orthogonal");
         }

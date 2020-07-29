@@ -3,7 +3,7 @@ package eu.scattering.core.geometry.main.base;
 import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
-import eu.scattering.core.helper.HelperIFPoint;
+import eu.scattering.core.geometry.main.base.helper.HelperIFPoint;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 

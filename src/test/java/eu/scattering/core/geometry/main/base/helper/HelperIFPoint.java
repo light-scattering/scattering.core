@@ -1,6 +1,5 @@
-package eu.scattering.core.helper;
+package eu.scattering.core.geometry.main.base.helper;
 
-import eu.scattering.core.geometry.main.IBase;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 import java.util.function.BiFunction;
@@ -11,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class HelperIFPoint {
 
-    public static IBase validateRef(BiFunction<IFPoint, IFPoint, IFPoint> test, IFPoint in, IFPoint arg) {
+    public static IFPoint validateRef(BiFunction<IFPoint, IFPoint, IFPoint> test, IFPoint in, IFPoint arg) {
         IFPoint argPos = arg.copy();
 
         assertThrows(NullPointerException.class, () -> test.apply(in, null), "The reference cannot be null");
@@ -24,7 +23,7 @@ public class HelperIFPoint {
         return res;
     }
 
-    public static IBase validateRef(Function<IFPoint, IFPoint> test, IFPoint in) {
+    public static IFPoint validateRef(Function<IFPoint, IFPoint> test, IFPoint in) {
 
         IFPoint res = test.apply(in);
 

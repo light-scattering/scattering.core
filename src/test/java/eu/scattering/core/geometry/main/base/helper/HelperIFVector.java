@@ -1,6 +1,5 @@
-package eu.scattering.core.helper;
+package eu.scattering.core.geometry.main.base.helper;
 
-import eu.scattering.core.geometry.main.IBase;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 
@@ -11,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public final class HelperIFVector {
 
-    public static IBase validateRef(BiFunction<IFVector, IFVector, IFVector> test, IFVector in, IFVector arg) {
+    public static IFVector validateRef(BiFunction<IFVector, IFVector, IFVector> test, IFVector in, IFVector arg) {
         IFPoint inBaseRef = in.getBase();
         IFPoint inHeadRef = in.getHead();
         IFPoint argBaseRef = arg.getBase();
@@ -40,7 +39,7 @@ public final class HelperIFVector {
         return res;
     }
 
-    public static IBase validateRef(BiFunction<IFVector, IFPoint, IFVector> test, IFVector in, IFPoint arg) {
+    public static IFVector validateRef(BiFunction<IFVector, IFPoint, IFVector> test, IFVector in, IFPoint arg) {
         IFPoint inBaseRef = in.getBase();
         IFPoint inHeadRef = in.getHead();
         IFPoint argPos = arg.copy();
@@ -63,7 +62,7 @@ public final class HelperIFVector {
         return res;
     }
 
-    public static IBase validateRef(Function<IFVector, IFVector> test, IFVector in) {
+    public static IFVector validateRef(Function<IFVector, IFVector> test, IFVector in) {
         IFPoint inBaseRef = in.getBase();
         IFPoint inHeadRef = in.getHead();
 

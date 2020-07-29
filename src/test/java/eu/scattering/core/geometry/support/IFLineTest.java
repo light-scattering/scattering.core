@@ -1,11 +1,11 @@
 package eu.scattering.core.geometry.support;
 
+import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.factory.FactoryGeometry;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.line.IFLine;
-import eu.scattering.core.helper.HelperIFLine;
-import eu.scattering.core.helper.HelperIFPoint;
+import eu.scattering.core.geometry.support.helper.HelperIFLine;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
 
@@ -705,6 +705,16 @@ public class IFLineTest {
         }
 
         @Test
+        @DisplayName("Move forward (throw DirectionException)")
+        void moveForwardThrowDirectionException() {
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector());
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
+
+            assertThrows(DirectionException.class, () -> fPoint.ext(fLine.moveForward(Math.sqrt(3))),
+                    "The direction of the IFLine is not defined");
+        }
+
+        @Test
         @DisplayName("Move forward (validate)")
         void moveForwardValidate() {
             IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector());
@@ -736,6 +746,16 @@ public class IFLineTest {
 
             assertTrue(fPoint.isSimilar(FactoryGeometry.getIFPoint(2, 1, 1)),
                     "The translation is erroneous");
+        }
+
+        @Test
+        @DisplayName("Move backward (throw DirectionException)")
+        void moveBackwardThrowDirectionException() {
+            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector());
+            IFPoint fPoint = FactoryGeometry.getIFPoint();
+
+            assertThrows(DirectionException.class, () -> fPoint.ext(fLine.moveBackward(Math.sqrt(3))),
+                    "The direction of the IFLine is not defined");
         }
 
         @Test

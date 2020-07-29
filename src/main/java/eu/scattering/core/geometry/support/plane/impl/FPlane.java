@@ -88,7 +88,8 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     @Override
     public boolean isSimilar(IFPlane ref) {
 
-        return getOrigin().isParallel(ref.getOrigin()) && ref.getOrigin().extLog(isPartOf()).get(0);
+        return (getOrigin().isParallel(ref.getOrigin()) || getOrigin().isAntiParallel(ref.getOrigin()))
+                && ref.getOrigin().extLog(isPartOf()).get(0);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -144,7 +145,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     @Override
     public Consumer<IBaseExtensionAssembly> setDistance(double distance) {
 
-        return (e) -> e.disassemble().stream()
+        return (e) -> e.disassemble()
                 .forEach(p -> p.setDistance(projectOnPlane(p.copy()), distance));
     }
 
@@ -159,7 +160,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isIntersecting(IBaseExtensionAssembly assembly) {
+    public boolean isCut(IBaseExtensionAssembly assembly) {
 
         List<Boolean> isInHalfSpace = assembly.disassemble().stream()
                 .map(p -> isInHalfSpace(projectOnLine(p.copy())))
@@ -192,7 +193,23 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
 
     @Override
     public Optional<IFLine> getCommonIFLine(IFPlane ref) {
-        return null;
+
+        if (getOrigin().isParallel(ref.getOrigin()) || getOrigin().isAntiParallel(ref.getOrigin())) {
+            return Optional.empty();
+        }
+
+        IFPoint vPlane1 = getOrigin().copy().moveBase().getHead();
+        double d1 = -vPlane1.getDotProduct(getBase());
+
+        IFPoint vPlane2 = ref.getOrigin().copy().moveBase().getHead();
+        double d2 = -vPlane2.getDotProduct(ref.getBase());
+
+        IFPoint vPlanePar = vPlane1.copy().setCrossProduct(vPlane2);
+        double vPlaneParDot = vPlanePar.getDotProduct(vPlanePar);
+
+        IFPoint pos = vPlane1.mul(d2).sub(vPlane2.mul(d1)).setCrossProduct(vPlanePar).div(vPlaneParDot);
+
+        return Optional.of(FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(vPlanePar).moveBase(pos)));
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -241,3 +258,4 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
 }
 
 // http://geomalgorithms.com/a05-_intersect-1.html
+// https://opentextbc.ca/calculusv3openstax/chapter/equations-of-lines-and-planes-in-space/

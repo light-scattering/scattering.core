@@ -5,8 +5,11 @@ import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.plane.IFPlane;
+import eu.scattering.core.geometry.support.helper.HelperIFPlane;
 import eu.scattering.core.helper.HelperRandom;
 import org.junit.jupiter.api.*;
+
+import java.util.Optional;
 
 import static eu.scattering.core.Configuration.jitter;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,8 +32,8 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Construct (validate positions)")
-        void constructValidatePositions() {
+        @DisplayName("Construct (validate)")
+        void constructValidate() {
             IFPlane fPlane = FactoryGeometry.getIFPlane();
 
             assertEquals(FactoryGeometry.getIFVector(), fPlane.getOrigin(),
@@ -157,6 +160,14 @@ public class IFPlaneTest {
         }
 
         @Test
+        @DisplayName("Parse JSON export (validate)")
+        void parseJSONExportValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector());
+
+            HelperIFPlane.validateVal(IFPlane::exportToJSON, fPlane);
+        }
+
+        @Test
         @DisplayName("Exactness")
         void isExact() {
             IFVector fVector = HelperRandom.getTestVector();
@@ -183,18 +194,17 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Exactness (throw NullPointerException)")
-        void isExactThrowNullPointerException() {
-            IFVector fVector = HelperRandom.getTestVector();
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVector);
+        @DisplayName("Exactness (validate)")
+        void isExactValidate() {
+            IFPlane fPlaneA = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector());
+            IFPlane fPlaneB = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector());
 
-            assertThrows(NullPointerException.class,
-                    () -> fPlane.isExact(null), "The operand cannot be null");
+            HelperIFPlane.validateVal(IFPlane::isExact, fPlaneA, fPlaneB);
         }
 
         @Test
-        @DisplayName("Similarity A")
-        void isSimilarA() {
+        @DisplayName("Similarity")
+        void isSimilar() {
             IFVector fVector = HelperRandom.getTestVector();
             IFPlane fPlaneA = FactoryGeometry.getIFPlane(fVector.copy());
             IFPlane fPlaneB = FactoryGeometry.getIFPlane(fVector.copy().add(0.5 * jitter));
@@ -206,8 +216,8 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Similarity B")
-        void isSimilarB() {
+        @DisplayName("Similarity (inverted)")
+        void isSimilarInverted() {
             IFPlane fPlaneA = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
             IFPlane fPlaneB = fPlaneA.copy();
 
@@ -234,6 +244,15 @@ public class IFPlaneTest {
         }
 
         @Test
+        @DisplayName("Similarity (validate)")
+        void isSimilarValidate() {
+            IFPlane fPlaneA = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 1, 0));
+            IFPlane fPlaneB = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 1, 0));
+
+            HelperIFPlane.validateVal(IFPlane::isSimilar, fPlaneA, fPlaneB);
+        }
+
+        @Test
         @DisplayName("Get hash code")
         void getHashCode() {
             IFVector fVector = HelperRandom.getTestVector();
@@ -256,6 +275,14 @@ public class IFPlaneTest {
         }
 
         @Test
+        @DisplayName("Get hash code (validate)")
+        void getHashCodeValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector());
+
+            HelperIFPlane.validateVal(IFPlane::hashCode, fPlane);
+        }
+
+        @Test
         @DisplayName("Copy")
         void copy() {
             IFVector fVector = HelperRandom.getTestVector();
@@ -268,6 +295,14 @@ public class IFPlaneTest {
                     () -> assertEquals(fPlaneA, fPlaneB,
                             "IFPlanes should have the same values")
             );
+        }
+
+        @Test
+        @DisplayName("Copy (validate)")
+        void copyValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector());
+
+            HelperIFPlane.validateVal(IFPlane::copy, fPlane);
         }
 
     }
@@ -294,26 +329,11 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Project (validate references)")
-        void projectValidateReferences() {
-            IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+        @DisplayName("Project (validate)")
+        void projectValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
 
-            IFPoint fPointRef = fPoint.ext(fPlane.project());
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Project (validate positions)")
-        void projectValidatePositions() {
-            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fPlane.project());
-
-            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+            HelperIFPlane.validateVal(IFPlane::project, fPlane);
         }
 
         @Test
@@ -329,26 +349,11 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Reflect (validate references)")
-        void reflectValidateReferences() {
-            IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+        @DisplayName("Reflect (validate)")
+        void reflectValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
 
-            IFPoint fPointRef = fPoint.ext(fPlane.reflect());
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Reflect (validate positions)")
-        void reflectValidatePositions() {
-            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fPlane.reflect());
-
-            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+            HelperIFPlane.validateVal(IFPlane::reflect, fPlane);
         }
 
         @Test
@@ -372,15 +377,11 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Location (validate positions)")
-        void isPartOfValidatePositions() {
-            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(-1, 2, -1).add(0.5 * jitter);
+        @DisplayName("Location (validate)")
+        void locationValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
 
-            fPoint.extLog(fPlane.isPartOf());
-
-            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+            HelperIFPlane.validateVal(IFPlane::isPartOf, fPlane);
         }
 
         @Test
@@ -399,15 +400,11 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Get distance (validate positions)")
-        void getDistanceValidatePositions() {
-            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
+        @DisplayName("Get distance (validate)")
+        void getDistanceValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
 
-            fPoint.extVal(fPlane.getDistance());
-
-            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+            HelperIFPlane.validateVal(IFPlane::getDistance, fPlane);
         }
 
         @Test
@@ -423,26 +420,11 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Set distance (validate references)")
-        void setDistanceValidateReferences() {
+        @DisplayName("Set distance (validate)")
+        void setDistanceValidate() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
-            IFPoint fPoint = HelperRandom.getTestPoint();
 
-            IFPoint fPointRef = fPoint.ext(fPlane.setDistance(1));
-
-            assertSame(fPointRef, fPoint, "The reference should remain unchanged");
-        }
-
-        @Test
-        @DisplayName("Set distance (validate positions)")
-        void setDistanceValidatePositions() {
-            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
-            IFPoint fPoint = FactoryGeometry.getIFPoint(0, 3, 0);
-
-            fPoint.ext(fPlane.setDistance(1));
-
-            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+            HelperIFPlane.validateVal(e -> e.setDistance(1), fPlane);
         }
 
         @Test
@@ -481,88 +463,89 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Determine half-space (validate positions)")
-        void isInHalfSpaceValidatePositions() {
-            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
-            IFPoint fPoint = FactoryGeometry.getIFVector(1, 1, 1)
-                    .mul(jitter)
-                    .reflectHead()
-                    .moveBase(-1, 2, -1)
-                    .getHead();
+        @DisplayName("Determine half-space (validate)")
+        void isInHalfSpaceValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
 
-            fPoint.extLog(fPlane.isInHalfSpace());
-
-            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+            HelperIFPlane.validateVal(IFPlane::isInHalfSpace, fPlane);
         }
 
         @Test
         @DisplayName("Determine intersection A")
-        void isIntersectingA() {
+        void isCutA() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, -1, -1, -1);
 
-            assertTrue(fPlane.isIntersecting(fVector), "The IFVector should intersect with the IFPlane");
+            assertTrue(fPlane.isCut(fVector), "The IFVector should intersect with the IFPlane");
         }
 
         @Test
         @DisplayName("Determine intersection B")
-        void isIntersectingB() {
+        void isCutB() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(-1, -1, -1, 1, 1, 1);
 
-            assertTrue(fPlane.isIntersecting(fVector), "The IFVector should intersect with the IFPlane");
+            assertTrue(fPlane.isCut(fVector), "The IFVector should intersect with the IFPlane");
         }
 
         @Test
         @DisplayName("Determine intersection A (fail)")
-        void isIntersectingAFail() {
+        void isCutAFail() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, 2, 2, 2);
 
-            assertFalse(fPlane.isIntersecting(fVector), "The IFVector should not intersect with the IFPlane");
+            assertFalse(fPlane.isCut(fVector), "The IFVector should not intersect with the IFPlane");
         }
 
         @Test
         @DisplayName("Determine intersection B (fail)")
-        void isCIntersectingBFail() {
+        void isCutBFail() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFVector fVector = FactoryGeometry.getIFVector(-1, -1, -1, -2, -2, -2);
 
-            assertFalse(fPlane.isIntersecting(fVector), "The IFVector should not intersect with the IFPlane");
+            assertFalse(fPlane.isCut(fVector), "The IFVector should not intersect with the IFPlane");
         }
 
         @Test
-        @DisplayName("Determine intersection (validate positions)")
-        void isCIntersectingValidatePositions() {
-            IFVector fVectorOrigin = FactoryGeometry.getIFVector(1, 1, 1);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fVectorOrigin.copy());
-            IFVector fVector = FactoryGeometry.getIFVector(1, 1, 1, -1, -1, -1);
+        @DisplayName("Determine intersection (validate)")
+        void isCutValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
+            IFVector fVector = FactoryGeometry.getIFVector();
 
-            fPlane.isIntersecting(fVector);
-
-            assertEquals(fVectorOrigin, fPlane.getOrigin(), "The origin values should remain unchanged");
+            HelperIFPlane.validateVal(e -> e.isCut(fVector), fPlane);
         }
 
         @Test
-        @DisplayName("Get intersecting IFPoint")
-        void getIntersectingIFPoint() {
+        @DisplayName("Get common IFPoint")
+        void getCommonIFPoint() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 1, 0));
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, -1, 0));
+            IFLine fLine = FactoryGeometry.getIFLine(
+                    FactoryGeometry.getIFVector(-1, 1, 0, 1, -1, 0));
+
             IFPoint fPointRel = HelperRandom.getTestPoint();
 
             fPlane.getOrigin().add(fPointRel);
             fLine.getOrigin().add(fPointRel);
 
-            assertTrue(fPlane.getCommonIFPoint(fLine).get().isSimilar(FactoryGeometry.getIFPoint(fPointRel)),
+            Optional<IFPoint> fPointOpt = fPlane.getCommonIFPoint(fLine);
+
+            if (fPointOpt.isEmpty()) {
+                fail("The common IFPoint should exist");
+            }
+
+            IFPoint fPoint = fPointOpt.get();
+
+            assertTrue(fPoint.isSimilar(FactoryGeometry.getIFPoint(fPointRel)),
                     "The intersecting IFPoint is erroneous");
         }
 
         @Test
-        @DisplayName("Get intersecting IFPoint (empty)")
-        void getIntersectingPointEmpty() {
+        @DisplayName("Get common IFPoint (empty)")
+        void getCommonIFPointEmpty() {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(0, 1, 0));
-            IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+            IFLine fLine = FactoryGeometry.getIFLine(
+                    FactoryGeometry.getIFVector(-1, 1, 0, 1, 1, 0));
+
             IFPoint fPointRel = HelperRandom.getTestPoint();
 
             fPlane.getOrigin().add(fPointRel);
@@ -573,21 +556,82 @@ public class IFPlaneTest {
         }
 
         @Test
-        @DisplayName("Get intersecting IFPoint (validate positions)")
-        void getIntersectingPointValidatePositions() {
-            IFVector fPlaneOrigin = FactoryGeometry.getIFVector(0, 1, 0);
-            IFPlane fPlane = FactoryGeometry.getIFPlane(fPlaneOrigin.copy());
-            IFVector fLineOrigin = FactoryGeometry.getIFVector(-1, 1, 0, 1, -1, 0);
-            IFLine fLine = FactoryGeometry.getIFLine(fLineOrigin.copy());
+        @DisplayName("Get common IFPoint (validate)")
+        void getCommonIFPointValidate() {
+            IFPlane fPlane = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
+            IFLine fLine = FactoryGeometry.getIFLine(HelperRandom.getTestVector());
 
-            fPlane.getCommonIFPoint(fLine);
+            HelperIFPlane.validateVal(e -> fPlane.getCommonIFPoint(fLine), fPlane);
+        }
 
-            assertAll("Validate positions",
-                    () -> assertTrue(fPlane.getOrigin().isExact(fPlaneOrigin),
-                            "The IFPlane position should not change"),
-                    () -> assertTrue(fLine.getOrigin().isExact(fLineOrigin),
-                            "The IFLine position should not change")
+        @Test
+        @DisplayName("Get common IFLine")
+        void getCommonIFLine() {
+            IFVector fVector1 = FactoryGeometry.getIFVector(1, 0, 0);
+            IFVector fVector2 = FactoryGeometry.getIFVector(1, 0, 0);
+
+            while (fVector1.isParallel(fVector2) || fVector1.isAntiParallel(fVector2)) {
+                fVector1 = FactoryGeometry.getIFVector(1, 0, 0);
+                fVector2 = FactoryGeometry.getIFVector(1, 0, 0);
+
+                fVector1.setRandomAngle();
+                fVector2.setRandomAngle(fVector1.getHead());
+
+                fVector1.moveBase(HelperRandom.getTestPoint().div(100));
+                fVector2.moveBase(HelperRandom.getTestPoint().div(100));
+            }
+
+            IFPlane fPlane1 = FactoryGeometry.getIFPlane(fVector1);
+            IFPlane fPlane2 = FactoryGeometry.getIFPlane(fVector2);
+
+            Optional<IFLine> fLineOpt = fPlane1.getCommonIFLine(fPlane2);
+
+            if (fLineOpt.isEmpty()) {
+                fail("The common IFLine should exist");
+            }
+
+            IFLine fLine = fLineOpt.get();
+
+            assertAll("Validate IFLine",
+                    () -> assertTrue(fLine.getBase().extLog(fPlane1.isPartOf()).get(0),
+                            "The IFLine base does not belong to IFPlane 1"),
+                    () -> assertTrue(fLine.getHead().extLog(fPlane1.isPartOf()).get(0),
+                            "The IFLine head does not belong to IFPlane 1"),
+                    () -> assertTrue(fLine.getBase().extLog(fPlane2.isPartOf()).get(0),
+                            "The IFLine base does not belong to IFPlane 2"),
+                    () -> assertTrue(fLine.getHead().extLog(fPlane2.isPartOf()).get(0),
+                            "The IFLine head does not belong to IFPlane 2")
             );
+        }
+
+        @Test
+        @DisplayName("Get common IFLine (fail)")
+        void getCommonIFLineFail() {
+            IFVector fVector1 = FactoryGeometry.getIFVector(1, 0, 0);
+            IFVector fVector2 = FactoryGeometry.getIFVector(1, 0, 0);
+
+            IFPoint fPoint = HelperRandom.getTestPoint();
+
+            fVector1.moveBase(fPoint);
+            fVector2.moveBase(fPoint);
+
+            IFPlane fPlane1 = FactoryGeometry.getIFPlane(fVector1);
+            IFPlane fPlane2 = FactoryGeometry.getIFPlane(fVector2);
+
+            Optional<IFLine> fLineOpt = fPlane1.getCommonIFLine(fPlane2);
+
+            if (fLineOpt.isPresent()) {
+                fail("The common IFLine should not exist");
+            }
+        }
+
+        @Test
+        @DisplayName("Get common IFLine (validate)")
+        void getCommonIFLineValidate() {
+            IFPlane fPlane1 = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
+            IFPlane fPlane2 = FactoryGeometry.getIFPlane(HelperRandom.getTestVector());
+
+            HelperIFPlane.validateVal(IFPlane::getCommonIFLine, fPlane1, fPlane2);
         }
 
     }

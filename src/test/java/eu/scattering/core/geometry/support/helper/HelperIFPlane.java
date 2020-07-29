@@ -1,18 +1,17 @@
-package eu.scattering.core.helper;
+package eu.scattering.core.geometry.support.helper;
 
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
-import eu.scattering.core.geometry.support.line.IFLine;
+import eu.scattering.core.geometry.support.plane.IFPlane;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class HelperIFLine {
+public class HelperIFPlane {
 
-    public static Object validateVal(BiFunction<IFLine, IFLine, Object> test, IFLine in, IFLine arg) {
+    public static Object validateVal(BiFunction<IFPlane, IFPlane, Object> test, IFPlane in, IFPlane arg) {
         IFVector inRef = in.getOrigin();
         IFVector inRefPos = in.getOrigin().copy();
         IFPoint inBaseRef = in.getBase();
@@ -52,7 +51,7 @@ public class HelperIFLine {
         return res;
     }
 
-    public static Object validateVal(Function<IFLine, Object> test, IFLine in) {
+    public static Object validateVal(Function<IFPlane, Object> test, IFPlane in) {
         IFVector inRef = in.getOrigin();
         IFVector inRefPos = in.getOrigin().copy();
         IFPoint inBaseRef = in.getBase();

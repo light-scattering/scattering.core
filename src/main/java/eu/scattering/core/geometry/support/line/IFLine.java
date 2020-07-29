@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface IFLine extends IGeometryBase<IFLine>, IDebug<IFLine>, ISupport<IFLine> {
-// TODO - Finish DirectionException (tests)
+
     Consumer<IBaseExtensionAssembly> moveForward(double distance) throws DirectionException;
     Consumer<IBaseExtensionAssembly> moveBackward(double distance) throws DirectionException;
 

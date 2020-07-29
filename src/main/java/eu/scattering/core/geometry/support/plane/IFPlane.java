@@ -15,7 +15,7 @@ public interface IFPlane  extends IGeometryBase<IFPlane>, IDebug<IFPlane>, ISupp
 
     Function<IBaseExtensionAssembly, List<Boolean>> isInHalfSpace();
 
-    boolean isIntersecting(IBaseExtensionAssembly assembly);
+    boolean isCut(IBaseExtensionAssembly assembly);
 
     Optional<IFPoint> getCommonIFPoint(IFLine ref);
     Optional<IFLine> getCommonIFLine(IFPlane ref);

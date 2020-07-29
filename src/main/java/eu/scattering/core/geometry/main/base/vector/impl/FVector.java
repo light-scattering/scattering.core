@@ -631,7 +631,7 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
             throw new DirectionException("The direction of the provided IFVector is not defined");
         }
 
-        return (getDotProduct(ref) < jitter) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter);
+        return (Math.abs(getDotProduct(ref)) < jitter) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter);
     }
 
     @Override
