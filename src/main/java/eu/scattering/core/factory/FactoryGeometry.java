@@ -2,6 +2,7 @@ package eu.scattering.core.factory;
 
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.point.impl.FPoint;
+import eu.scattering.core.geometry.main.base.point.impl.FPointDev;
 import eu.scattering.core.geometry.main.base.vector.IFVector;
 import eu.scattering.core.geometry.main.base.vector.impl.FVector;
 import eu.scattering.core.geometry.support.line.IFLine;
@@ -19,7 +20,7 @@ public class FactoryGeometry {
 
     public static IFPoint getIFPoint() {
 
-        return FPoint.create();
+        return FPointDev.create(FPoint.create());
     }
 
     public static IFVector getIFVector() {

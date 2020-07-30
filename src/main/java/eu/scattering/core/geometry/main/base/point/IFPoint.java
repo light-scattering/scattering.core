@@ -5,7 +5,7 @@ import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 
 public interface IFPoint extends IFPointAdvanced,
-        IGeometryBase<IFPoint>, IDebug<IFPoint>, IBase<IFPoint> {
+        IGeometryBase<IFPoint>, IDebug<IFPoint>, IBase<IFPoint>, Cloneable {
 
     IFPoint set(double x, double y, double z);
 
@@ -17,4 +17,6 @@ public interface IFPoint extends IFPointAdvanced,
 
     double getZ();
     IFPoint setZ(double z);
+
+    Object clone();
 }

@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 import static eu.scattering.core.Configuration.debugPrintStream;
 
 public abstract class PresetBase<T extends IBase<T>>
-        implements IGeometryBase<T>, IDebug<T>, IBase<T> {
+        implements IGeometryBase<T>, IDebug<T>, IBase<T>{
 
     @Override
     public abstract Object clone();
