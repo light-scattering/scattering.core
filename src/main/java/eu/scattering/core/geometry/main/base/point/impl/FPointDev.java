@@ -1,6 +1,7 @@
 package eu.scattering.core.geometry.main.base.point.impl;
 
 import eu.scattering.core.CoreObject;
+import eu.scattering.core.Main;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.geometry.IGeometryBase;
@@ -26,6 +27,8 @@ public class FPointDev extends CoreObject
 
     public static IFPoint create(IFPoint core) {
 
+        Main.getDevStats().recordInstance(FPointDev.class);
+
         return new FPointDev(core);
     }
 
@@ -36,6 +39,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         core.set(x, y, z);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return this;
     }
@@ -48,6 +53,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getX();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -58,6 +65,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         core.setX(x);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return this;
     }
@@ -70,6 +79,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getY();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -80,6 +91,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         core.setY(y);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return this;
     }
@@ -92,6 +105,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getZ();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -102,6 +117,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         core.setZ(z);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return this;
     }
@@ -114,6 +131,8 @@ public class FPointDev extends CoreObject
 
         core.devDescribe();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return this;
     }
 
@@ -124,6 +143,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         core.devDescribe(message);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return this;
     }
@@ -136,6 +157,8 @@ public class FPointDev extends CoreObject
 
         var res = core.isExact(element);
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -146,6 +169,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         var res = core.isSimilar(element);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
@@ -158,6 +183,8 @@ public class FPointDev extends CoreObject
 
         var res = core.exportToJSON();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -167,9 +194,11 @@ public class FPointDev extends CoreObject
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        var res = core.importFromJSON(json);
+        core.importFromJSON(json);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -178,7 +207,9 @@ public class FPointDev extends CoreObject
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = core.copy();
+        var res = create(core.copy());
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
@@ -189,9 +220,9 @@ public class FPointDev extends CoreObject
         String name = "self()";
         long time = System.currentTimeMillis();
 
-         var res = core;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
-         return res;
+        return this;
     }
 
     @Override
@@ -200,9 +231,11 @@ public class FPointDev extends CoreObject
         String name = "add(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(fPoint);
+        core.add(fPoint);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -211,9 +244,11 @@ public class FPointDev extends CoreObject
         String name = "add(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(x, y, z);
+        core.add(x, y, z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -222,9 +257,11 @@ public class FPointDev extends CoreObject
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(factor);
+        core.add(factor);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -233,9 +270,11 @@ public class FPointDev extends CoreObject
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addX(x);
+        core.addX(x);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -244,9 +283,11 @@ public class FPointDev extends CoreObject
         String name = "addY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addY(y);
+        core.addY(y);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -255,9 +296,11 @@ public class FPointDev extends CoreObject
         String name = "addZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addZ(z);
+        core.addZ(z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -266,9 +309,11 @@ public class FPointDev extends CoreObject
         String name = "sub(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(fPoint);
+        core.sub(fPoint);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -277,9 +322,11 @@ public class FPointDev extends CoreObject
         String name = "sub(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(x, y, z);
+        core.sub(x, y, z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -288,9 +335,11 @@ public class FPointDev extends CoreObject
         String name = "sub(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(factor);
+        core.sub(factor);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -299,9 +348,11 @@ public class FPointDev extends CoreObject
         String name = "subX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subX(x);
+        core.subX(x);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -310,9 +361,11 @@ public class FPointDev extends CoreObject
         String name = "subY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subY(y);
+        core.subY(y);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -321,9 +374,11 @@ public class FPointDev extends CoreObject
         String name = "subZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subZ(z);
+        core.subZ(z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -332,9 +387,11 @@ public class FPointDev extends CoreObject
         String name = "mul(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(fPoint);
+        core.mul(fPoint);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -343,9 +400,11 @@ public class FPointDev extends CoreObject
         String name = "mul(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(x, y, z);
+        core.mul(x, y, z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -354,9 +413,11 @@ public class FPointDev extends CoreObject
         String name = "mul(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(factor);
+        core.mul(factor);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -365,9 +426,11 @@ public class FPointDev extends CoreObject
         String name = "mulX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulX(x);
+        core.mulX(x);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -376,9 +439,11 @@ public class FPointDev extends CoreObject
         String name = "mulY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulY(y);
+        core.mulY(y);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -387,9 +452,11 @@ public class FPointDev extends CoreObject
         String name = "mulZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulZ(z);
+        core.mulZ(z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -398,9 +465,11 @@ public class FPointDev extends CoreObject
         String name = "div(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(fPoint);
+        core.div(fPoint);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -409,9 +478,11 @@ public class FPointDev extends CoreObject
         String name = "div(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(x, y, z);
+        core.div(x, y, z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -420,9 +491,11 @@ public class FPointDev extends CoreObject
         String name = "div(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(factor);
+        core.div(factor);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -431,9 +504,11 @@ public class FPointDev extends CoreObject
         String name = "divX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divX(x);
+        core.divX(x);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -442,9 +517,11 @@ public class FPointDev extends CoreObject
         String name = "divY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divY(y);
+        core.divY(y);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -453,9 +530,11 @@ public class FPointDev extends CoreObject
         String name = "divZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divZ(z);
+        core.divZ(z);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -464,9 +543,11 @@ public class FPointDev extends CoreObject
         String name = "set(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(element);
+        core.set(element);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -475,9 +556,11 @@ public class FPointDev extends CoreObject
         String name = "swap(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.swap(element);
+        core.swap(element);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -486,9 +569,11 @@ public class FPointDev extends CoreObject
         String name = "imprint(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.imprint(element);
+        core.imprint(element);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -497,9 +582,11 @@ public class FPointDev extends CoreObject
         String name = "fun(Consumer<IFPoint> exp)";
         long time = System.currentTimeMillis();
 
-        var res = core.fun(exp);
+        core.fun(exp);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -509,6 +596,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         var res = core.funVal(exp);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
@@ -521,6 +610,8 @@ public class FPointDev extends CoreObject
 
         var res = core.funLog(exp);
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -530,9 +621,11 @@ public class FPointDev extends CoreObject
         String name = "ext(Consumer<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.ext(exp);
+        core.ext(exp);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -542,6 +635,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         var res = core.extVal(exp);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
@@ -554,6 +649,8 @@ public class FPointDev extends CoreObject
 
         var res = core.extLog(exp);
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -565,6 +662,8 @@ public class FPointDev extends CoreObject
 
         var res = core.disassemble();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -574,9 +673,11 @@ public class FPointDev extends CoreObject
         String name = "setSphericalCoordinates(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setSphericalCoordinates(inclination, azimuth);
+        core.setSphericalCoordinates(inclination, azimuth);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -585,9 +686,11 @@ public class FPointDev extends CoreObject
         String name = "setRandomAngle(IFPoint...)";
         long time = System.currentTimeMillis();
 
-        var res = core.setRandomAngle(exclude);
+        core.setRandomAngle(exclude);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -597,6 +700,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         var res = core.isExact(x, y, z);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
@@ -609,6 +714,8 @@ public class FPointDev extends CoreObject
 
         var res = core.isSimilar(x, y, z);
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -618,9 +725,11 @@ public class FPointDev extends CoreObject
         String name = "reflect()";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect();
+        core.reflect();
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -629,9 +738,11 @@ public class FPointDev extends CoreObject
         String name = "reflect(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect(ref);
+        core.reflect(ref);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -640,9 +751,11 @@ public class FPointDev extends CoreObject
         String name = "normalize()";
         long time = System.currentTimeMillis();
 
-        var res = core.normalize();
+        core.normalize();
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -653,6 +766,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getLength();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -662,9 +777,11 @@ public class FPointDev extends CoreObject
         String name = "setLength(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setLength(length);
+        core.setLength(length);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -675,6 +792,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getInclination();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -684,9 +803,11 @@ public class FPointDev extends CoreObject
         String name = "setInclination(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setInclination(inclination);
+        core.setInclination(inclination);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -697,6 +818,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getAzimuth();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -706,9 +829,11 @@ public class FPointDev extends CoreObject
         String name = "setAzimuth(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setAzimuth(azimuth);
+        core.setAzimuth(azimuth);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -718,6 +843,8 @@ public class FPointDev extends CoreObject
         long time = System.currentTimeMillis();
 
         var res = core.getAngle(ref);
+
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
@@ -730,6 +857,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getDistance(ref);
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -739,9 +868,11 @@ public class FPointDev extends CoreObject
         String name = "setDistance(IFPoint, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setDistance(ref, distance);
+        core.setDistance(ref, distance);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -752,6 +883,8 @@ public class FPointDev extends CoreObject
 
         var res = core.getDotProduct(ref);
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -761,9 +894,11 @@ public class FPointDev extends CoreObject
         String name = "setCrossProduct(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setCrossProduct(ref);
+        core.setCrossProduct(ref);
 
-        return res;
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return this;
     }
 
     @Override
@@ -774,6 +909,8 @@ public class FPointDev extends CoreObject
 
         var res = core.isZero();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
@@ -783,18 +920,9 @@ public class FPointDev extends CoreObject
         String name = "clone()";
         long time = System.currentTimeMillis();
 
-        var res = core.clone();
+        var res = create((IFPoint) core.clone());
 
-        return res;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        String name = "equals()";
-        long time = System.currentTimeMillis();
-
-        var res = core.equals(object);
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
@@ -807,17 +935,36 @@ public class FPointDev extends CoreObject
 
         var res = core.toString();
 
+        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
         return res;
     }
 
     @Override
     public int hashCode() {
 
-        String name = "hashCode()";
-        long time = System.currentTimeMillis();
+//        String name = "hashCode()";
+//        long time = System.currentTimeMillis();
 
         var res = core.hashCode();
+        System.out.println(res);
+
+//        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
 
         return res;
     }
+
+    @Override
+    public boolean equals(Object object) {
+
+//        String name = "equals()";
+//        long time = System.currentTimeMillis();
+
+        var res = core.equals(object);
+
+//        Main.getDevStats().recordData(this, name, System.currentTimeMillis() - time);
+
+        return res;
+    }
+
 }
