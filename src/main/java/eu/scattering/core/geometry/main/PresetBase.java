@@ -1,11 +1,13 @@
 package eu.scattering.core.geometry.main;
 
+import eu.scattering.core.debug.dao.DevStats;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -326,6 +328,24 @@ public abstract class PresetBase<T extends IBase<T>>
                 + " - " + toString());
 
         return self();
+    }
+
+    @Override
+    public T devDescribeStats() {
+
+        return self();
+    }
+
+    @Override
+    public Optional<DevStats> devGetStats() {
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Long> devGetNumberOfInstances() {
+
+        return Optional.empty();
     }
 
 }

@@ -1,22 +1,19 @@
 package eu.scattering.core.debug.dao;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Dev {
 
-    private int numberOfInstances = 0;
+    @Getter private int numberOfInstances = 0;
     private DevStats statClass = new DevStats();
     private Map<Object, DevStats> statObject = new HashMap<>();
 
     public void incNumberOfInstances() {
 
         numberOfInstances++;
-    }
-
-    public int getNumberOfInstances() {
-
-        return numberOfInstances;
     }
 
     public DevStatsRecord getStats(String methodName) {
@@ -37,8 +34,17 @@ public class Dev {
 
     @Override
     public String toString() {
+        StringBuilder builder = new StringBuilder();
 
-        return statClass.toString();
+        builder.append("registered methods: " + statClass.getDevStats().size() + "\n");
+        builder.append("registered objects: " + statObject.size() + " ");
+        builder.append("(to see their statistics, you have to access them individually)\n");
+
+        for (Map.Entry<String, DevStatsRecord> entry : statClass.getDevStats().entrySet()) {
+            builder.append(" - " + entry.getKey() + " / " + entry.getValue() + "\n");
+        }
+
+        return builder.toString();
     }
 
 }

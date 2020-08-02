@@ -1,12 +1,14 @@
 package eu.scattering.core.debug.dao;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class DevStatsRecord {
 
-    private int numberOfIterations;
-    private List<Long> executionTimes;
+    @Getter private int numberOfIterations;
+    @Getter private List<Long> executionTimes;
 
     public DevStatsRecord() {
 
@@ -18,11 +20,6 @@ public class DevStatsRecord {
 
         numberOfIterations++;
         executionTimes.add(time);
-    }
-
-    public int getNumberOfIterations() {
-
-        return numberOfIterations;
     }
 
     public long getTimeTotal() {
@@ -48,8 +45,8 @@ public class DevStatsRecord {
     @Override
     public String toString() {
 
-        return "iterations " + getNumberOfIterations() + " , time avg " + getTimeAvg()
-                + " , time min " + getTimeMin() + " , time max " + getTimeMax();
+        return "iterations " + getNumberOfIterations() + " , time avg " + getTimeAvg() + " [ms]"
+                + " , time min " + getTimeMin() + " [ms]" + " , time max " + getTimeMax() + " [ms]";
     }
 
 }

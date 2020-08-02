@@ -120,14 +120,6 @@ public class FVector extends PresetBase<IFVector> implements IFVector {
         return this;
     }
 
-    @Override
-    public IFVector swap(IFVector element) {
-        getBase().swap(element.getBase());
-        getHead().swap(element.getHead());
-
-        return this;
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

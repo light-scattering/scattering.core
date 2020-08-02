@@ -1,11 +1,13 @@
 package eu.scattering.core.debug.dao;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class DevStats {
 
-    private Map<String, DevStatsRecord> devStats;
+    @Getter private Map<String, DevStatsRecord> devStats;
 
     public DevStats() {
 
@@ -23,13 +25,20 @@ public class DevStats {
         return record;
     }
 
+    public void recordEvent(String methodName, long executionTime) {
+
+        getDevStatsRecord(methodName).update(executionTime);
+    }
+
     @Override
     public String toString() {
 
         StringBuilder builder = new StringBuilder();
 
+        builder.append("registered methods: " + devStats.size() + "\n");
+
         for (Map.Entry<String, DevStatsRecord> entry : devStats.entrySet()) {
-            builder.append(entry.getKey() + " / " + entry.getValue());
+            builder.append(entry.getKey() + " / " + entry.getValue() + "\n");
         }
 
         return builder.toString();

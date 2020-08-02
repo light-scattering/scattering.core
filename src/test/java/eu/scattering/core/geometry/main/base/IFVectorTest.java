@@ -3416,39 +3416,6 @@ public class IFVectorTest {
         }
 
         @Test
-        @DisplayName("Swap")
-        void swap() {
-            IFVector fVectorA = HelperRandom.getTestVector();
-            IFVector fVectorRefA = fVectorA.copy();
-            IFVector fVectorB = HelperRandom.getTestVector();
-            IFVector fVectorRefB = fVectorB.copy();
-
-            fVectorA.swap(fVectorB);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(fVectorRefA, fVectorB, "The reference X value is incorrect"),
-                    () -> assertEquals(fVectorRefB, fVectorA, "The reference Y value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Swap (validate)")
-        void swapValidate() {
-            IFPoint fPointBase = HelperRandom.getTestPoint();
-            IFPoint fPointHead = HelperRandom.getTestPoint();
-
-            IFVector fVectorA = FactoryGeometry.getIFVector(fPointBase, fPointHead);
-            IFVector fVectorB = HelperRandom.getTestVector();
-
-            fVectorA.swap(fVectorB);
-
-            fPointBase.set(1, 2, 3);
-
-            assertEquals(FactoryGeometry.getIFPoint(1, 2, 3), fVectorA.getBase(),
-                    "The reference X value is incorrect");
-        }
-
-        @Test
         @DisplayName("Imprint")
         void imprint() {
             IFVector fVectorRef = HelperRandom.getTestVector();

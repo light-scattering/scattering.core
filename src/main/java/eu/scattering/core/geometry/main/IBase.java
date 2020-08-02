@@ -33,6 +33,5 @@ public interface IBase<T> extends IBaseExtension<T> {
     T divZ(double z);
 
     T set(T element);
-    T swap(T element);
     T imprint(T element);
 }

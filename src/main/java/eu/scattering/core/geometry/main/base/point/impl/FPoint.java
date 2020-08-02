@@ -83,16 +83,6 @@ public class FPoint extends PresetBase<IFPoint> implements IFPoint {
         return setX(x).setY(y).setZ(z);
     }
 
-    @Override
-    public IFPoint swap(IFPoint element) {
-        IFPoint store = copy();
-
-        set(element);
-        element.set(store);
-
-        return this;
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

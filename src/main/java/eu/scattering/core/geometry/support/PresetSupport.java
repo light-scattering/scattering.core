@@ -1,10 +1,12 @@
 package eu.scattering.core.geometry.support;
 
+import eu.scattering.core.debug.dao.DevStats;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 
 import java.time.LocalTime;
+import java.util.Optional;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
 
@@ -83,6 +85,24 @@ public abstract class PresetSupport<T extends ISupport<T>>
                 + " - " + toString());
 
         return self();
+    }
+
+    @Override
+    public T devDescribeStats() {
+
+        return self();
+    }
+
+    @Override
+    public Optional<DevStats> devGetStats() {
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Long> devGetNumberOfInstances() {
+
+        return Optional.empty();
     }
 
 }

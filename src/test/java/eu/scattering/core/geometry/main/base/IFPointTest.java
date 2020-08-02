@@ -1760,36 +1760,6 @@ public class IFPointTest {
         }
 
         @Test
-        @DisplayName("Swap")
-        void swap() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
-
-            fPointOp.swap(fPoint);
-
-            assertAll("Validate IFPoint values",
-                    () -> assertEquals(refX, fPointOp.getX(), "The reference X value is incorrect"),
-                    () -> assertEquals(refY, fPointOp.getY(), "The reference Y value is incorrect"),
-                    () -> assertEquals(refZ, fPointOp.getZ(), "The reference Z value is incorrect"),
-                    () -> assertEquals(opX, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(opY, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(opZ, fPoint.getZ(), "The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Swap (validate)")
-        void swapValidate() {
-            IFPoint fPointOp = FactoryGeometry.getIFPoint(opX, opY, opZ);
-
-            IFPoint fPointRef = fPointOp.swap(fPoint);
-
-            assertAll("Validate references",
-                    () -> assertNotSame(fPoint, fPointOp, "IFPoint references should be different"),
-                    () -> assertSame(fPointOp, fPointRef, "The IFPoint reference should not change")
-            );
-        }
-
-        @Test
         @DisplayName("Imprint")
         void imprint() {
             IFPoint fPointRef = FactoryGeometry.getIFPoint();
