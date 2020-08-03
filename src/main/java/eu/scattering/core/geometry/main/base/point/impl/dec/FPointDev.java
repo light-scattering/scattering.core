@@ -1,7 +1,8 @@
 package eu.scattering.core.geometry.main.base.point.impl.dec;
 
-import eu.scattering.core.debug.dao.DevStats;
+import eu.scattering.core.debug.IStats;
 import eu.scattering.core.exception.DirectionException;
+import eu.scattering.core.factory.FactoryDebug;
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.main.PresetBase;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
@@ -14,20 +15,20 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
+import static eu.scattering.core.Configuration.devRecordObjects;
 
 public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
     private static long numberOfInstances = 0;
-
+    private static final IStats statsClass = FactoryDebug.getIStats();
+    private final IStats statsObject = FactoryDebug.getIStats();
     private final IFPoint core;
-    private final DevStats stats;
 
     private FPointDev(IFPoint core) {
 
         numberOfInstances++;
 
         this.core = core;
-        this.stats = new DevStats();
     }
 
     public static IFPoint create(IFPoint core) {
@@ -41,11 +42,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "set(double, double, double)";
         long time = System.currentTimeMillis();
 
-        core.set(x, y, z);
+        var res = core.set(x, y, z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getX();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -67,11 +68,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setX(double)";
         long time = System.currentTimeMillis();
 
-        core.setX(x);
+        var res = core.setX(x);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getY();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -93,11 +94,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setY(double)";
         long time = System.currentTimeMillis();
 
-        core.setY(y);
+        var res = core.setY(y);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -108,7 +109,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getZ();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -119,11 +120,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setZ(double)";
         long time = System.currentTimeMillis();
 
-        core.setZ(z);
+        var res = core.setZ(z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -132,11 +133,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        core.devDescribe();
+        var res = core.devDescribe();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -145,11 +146,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "devDescribe(String)";
         long time = System.currentTimeMillis();
 
-        core.devDescribe(message);
+        var res = core.devDescribe(message);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -160,7 +161,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.isExact(element);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -173,7 +174,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.isSimilar(element);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -186,7 +187,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.exportToJSON();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -197,11 +198,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        core.importFromJSON(json);
+        var res = core.importFromJSON(json);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -212,7 +213,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = create(core.copy());
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -223,7 +224,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "self()";
         long time = System.currentTimeMillis();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return this;
     }
@@ -234,11 +235,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "add(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.add(fPoint);
+        var res = core.add(fPoint);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -247,11 +248,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "add(double, double, double)";
         long time = System.currentTimeMillis();
 
-        core.add(x, y, z);
+        var res = core.add(x, y, z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -260,11 +261,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        core.add(factor);
+        var res = core.add(factor);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -273,11 +274,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        core.addX(x);
+        var res = core.addX(x);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -286,11 +287,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "addY(double)";
         long time = System.currentTimeMillis();
 
-        core.addY(y);
+        var res = core.addY(y);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -299,11 +300,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "addZ(double)";
         long time = System.currentTimeMillis();
 
-        core.addZ(z);
+        var res = core.addZ(z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -312,11 +313,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "sub(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.sub(fPoint);
+        var res = core.sub(fPoint);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -325,11 +326,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "sub(double, double, double)";
         long time = System.currentTimeMillis();
 
-        core.sub(x, y, z);
+        var res = core.sub(x, y, z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -338,11 +339,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "sub(double)";
         long time = System.currentTimeMillis();
 
-        core.sub(factor);
+        var res = core.sub(factor);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -351,11 +352,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "subX(double)";
         long time = System.currentTimeMillis();
 
-        core.subX(x);
+        var res = core.subX(x);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -364,11 +365,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "subY(double)";
         long time = System.currentTimeMillis();
 
-        core.subY(y);
+        var res = core.subY(y);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -377,11 +378,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "subZ(double)";
         long time = System.currentTimeMillis();
 
-        core.subZ(z);
+        var res = core.subZ(z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -390,11 +391,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "mul(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.mul(fPoint);
+        var res = core.mul(fPoint);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -403,11 +404,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "mul(double, double, double)";
         long time = System.currentTimeMillis();
 
-        core.mul(x, y, z);
+        var res = core.mul(x, y, z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -416,11 +417,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "mul(double)";
         long time = System.currentTimeMillis();
 
-        core.mul(factor);
+        var res = core.mul(factor);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -429,11 +430,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "mulX(double)";
         long time = System.currentTimeMillis();
 
-        core.mulX(x);
+        var res = core.mulX(x);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -442,11 +443,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "mulY(double)";
         long time = System.currentTimeMillis();
 
-        core.mulY(y);
+        var res = core.mulY(y);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -455,11 +456,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "mulZ(double)";
         long time = System.currentTimeMillis();
 
-        core.mulZ(z);
+        var res = core.mulZ(z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -468,11 +469,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "div(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.div(fPoint);
+        var res = core.div(fPoint);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -481,11 +482,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "div(double, double, double)";
         long time = System.currentTimeMillis();
 
-        core.div(x, y, z);
+        var res = core.div(x, y, z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -494,11 +495,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "div(double)";
         long time = System.currentTimeMillis();
 
-        core.div(factor);
+        var res = core.div(factor);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -507,11 +508,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "divX(double)";
         long time = System.currentTimeMillis();
 
-        core.divX(x);
+        var res = core.divX(x);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -520,11 +521,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "divY(double)";
         long time = System.currentTimeMillis();
 
-        core.divY(y);
+        var res = core.divY(y);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -533,11 +534,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "divZ(double)";
         long time = System.currentTimeMillis();
 
-        core.divZ(z);
+        var res = core.divZ(z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -546,11 +547,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "set(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.set(element);
+        var res = core.set(element);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -559,11 +560,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "imprint(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.imprint(element);
+        var res = core.imprint(element);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -572,11 +573,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "fun(Consumer<IFPoint> exp)";
         long time = System.currentTimeMillis();
 
-        core.fun(exp);
+        var res = core.fun(exp);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -587,7 +588,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.funVal(exp);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -600,7 +601,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.funLog(exp);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -611,11 +612,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "ext(Consumer<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        core.ext(exp);
+        var res = core.ext(exp);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -626,7 +627,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.extVal(exp);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -639,7 +640,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.extLog(exp);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -652,7 +653,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.disassemble();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -663,11 +664,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setSphericalCoordinates(double, double)";
         long time = System.currentTimeMillis();
 
-        core.setSphericalCoordinates(inclination, azimuth);
+        var res = core.setSphericalCoordinates(inclination, azimuth);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -676,11 +677,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setRandomAngle(IFPoint...)";
         long time = System.currentTimeMillis();
 
-        core.setRandomAngle(exclude);
+        var res = core.setRandomAngle(exclude);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -691,7 +692,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.isExact(x, y, z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -704,7 +705,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.isSimilar(x, y, z);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -715,11 +716,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "reflect()";
         long time = System.currentTimeMillis();
 
-        core.reflect();
+        var res = core.reflect();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -728,11 +729,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "reflect(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.reflect(ref);
+        var res = core.reflect(ref);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -741,11 +742,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "normalize()";
         long time = System.currentTimeMillis();
 
-        core.normalize();
+        var res = core.normalize();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -756,7 +757,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getLength();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -767,11 +768,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setLength(double)";
         long time = System.currentTimeMillis();
 
-        core.setLength(length);
+        var res = core.setLength(length);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -782,7 +783,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getInclination();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -793,11 +794,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setInclination(double)";
         long time = System.currentTimeMillis();
 
-        core.setInclination(inclination);
+        var res = core.setInclination(inclination);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -808,7 +809,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getAzimuth();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -819,11 +820,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setAzimuth(double)";
         long time = System.currentTimeMillis();
 
-        core.setAzimuth(azimuth);
+        var res = core.setAzimuth(azimuth);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -834,7 +835,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getAngle(ref);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -847,7 +848,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getDistance(ref);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -858,11 +859,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setDistance(IFPoint, double)";
         long time = System.currentTimeMillis();
 
-        core.setDistance(ref, distance);
+        var res = core.setDistance(ref, distance);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -873,7 +874,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.getDotProduct(ref);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -884,11 +885,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         String name = "setCrossProduct(IFPoint)";
         long time = System.currentTimeMillis();
 
-        core.setCrossProduct(ref);
+        var res = core.setCrossProduct(ref);
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
-        return this;
+        return res == core ? this : create(res);
     }
 
     @Override
@@ -899,7 +900,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         var res = core.isZero();
 
-        stats.recordEvent(name, System.currentTimeMillis() - time);
+        updateStats(name, time);
 
         return res;
     }
@@ -938,23 +939,50 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public Optional<Long> devGetNumberOfInstances() {
+
+        return Optional.of(numberOfInstances);
+    }
+
+    @Override
     public IFPoint devDescribeStats() {
 
-        debugPrintStream.println(stats.toString());
+        debugPrintStream.println(statsObject.toString());
 
         return self();
     }
 
     @Override
-    public Optional<DevStats> devGetStats() {
+    public IFPoint devDescribeClassStats() {
 
-        return Optional.of(stats);
+        debugPrintStream.println(statsClass.toString());
+
+        return self();
     }
 
     @Override
-    public Optional<Long> devGetNumberOfInstances() {
+    public Optional<IStats> devGetStats() {
 
-        return Optional.of(numberOfInstances);
+        return Optional.of(statsObject);
+    }
+
+    @Override
+    public Optional<IStats> devGetClassStats() {
+
+        return Optional.of(statsClass);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private void updateStats(String name, long startTime) {
+
+        long time = System.currentTimeMillis() - startTime;
+
+        statsClass.recordEvent(name, time);
+
+        if (devRecordObjects) {
+            statsObject.recordEvent(name, time);
+        }
     }
 
 }

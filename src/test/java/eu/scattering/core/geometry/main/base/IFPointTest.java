@@ -1649,7 +1649,6 @@ public class IFPointTest {
         @Test
         @DisplayName("Div factor (throw ArithmeticException)")
         void divFactorThrowArithmeticException() {
-            double op = opX * opY * opZ;
 
             assertThrows(ArithmeticException.class, () -> fPoint.div(0), "The factor is zero");
         }

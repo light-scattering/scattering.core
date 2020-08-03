@@ -1,6 +1,6 @@
 package eu.scattering.core.debug;
 
-import eu.scattering.core.debug.dao.DevStats;
+import eu.scattering.core.debug.impl.Stats;
 
 import java.util.Optional;
 
@@ -8,13 +8,12 @@ public interface IDebug<T> {
 
     T devDescribe();
     T devDescribe(String message);
-    T devDescribeStats();
 
-    Optional<DevStats> devGetStats();
     Optional<Long> devGetNumberOfInstances();
-
-//    T devLog();
-//    T devLog(String message);
+    Optional<IStats> devGetStats();
+    Optional<IStats> devGetClassStats();
+    T devDescribeStats();
+    T devDescribeClassStats();
 
 //    String devGetMeta();
 //    T devSetMeta(String meta);

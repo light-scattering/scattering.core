@@ -9,4 +9,6 @@ public class Configuration {
     public static final double jitter = 1E-10;
 
     public static final PrintStream debugPrintStream = System.out;
+
+    public static final boolean devRecordObjects = true;
 }

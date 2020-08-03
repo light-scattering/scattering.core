@@ -1,6 +1,6 @@
 package eu.scattering.core.geometry.support;
 
-import eu.scattering.core.debug.dao.DevStats;
+import eu.scattering.core.debug.IStats;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
@@ -90,11 +90,27 @@ public abstract class PresetSupport<T extends ISupport<T>>
     @Override
     public T devDescribeStats() {
 
+        debugPrintStream.println("Not implemented");
+
         return self();
     }
 
     @Override
-    public Optional<DevStats> devGetStats() {
+    public T devDescribeClassStats() {
+
+        debugPrintStream.println("Not implemented");
+
+        return self();
+    }
+
+    @Override
+    public Optional<IStats> devGetStats() {
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<IStats> devGetClassStats() {
 
         return Optional.empty();
     }
