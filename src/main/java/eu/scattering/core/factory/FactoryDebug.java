@@ -13,9 +13,9 @@ public class FactoryDebug {
     // The following section contains methods associated with the debugging feature, they should not be changed.
     // -------------------------------------------------------------------------------------------------
 
-    public static IStats getIStats() {
+    public static IStats getIStats(boolean isEnabled) {
 
-        return Stats.create();
+        return Stats.create(isEnabled);
     }
 
     public static IStatsMethod getIStatsMethod() {

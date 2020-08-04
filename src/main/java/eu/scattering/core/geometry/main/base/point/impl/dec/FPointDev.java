@@ -1,5 +1,6 @@
 package eu.scattering.core.geometry.main.base.point.impl.dec;
 
+import eu.scattering.core.Configuration;
 import eu.scattering.core.debug.IStats;
 import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.factory.FactoryDebug;
@@ -15,13 +16,12 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
-import static eu.scattering.core.Configuration.devRecordObjects;
 
 public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
     private static long numberOfInstances = 0;
-    private static final IStats statsClass = FactoryDebug.getIStats();
-    private final IStats statsObject = FactoryDebug.getIStats();
+    private static final IStats statsClass = FactoryDebug.getIStats(false);
+    private final IStats statsObject = FactoryDebug.getIStats(Configuration.isDevStatsObjectEventsSuspended());
     private final IFPoint core;
 
     private FPointDev(IFPoint core) {
@@ -980,9 +980,11 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
         statsClass.recordEvent(name, time);
 
-        if (devRecordObjects) {
-            statsObject.recordEvent(name, time);
+        if (statsObject.isSuspended()) {
+            return;
         }
+
+        statsObject.recordEvent(name, time);
     }
 
 }

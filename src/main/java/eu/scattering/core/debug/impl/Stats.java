@@ -10,17 +10,17 @@ import java.util.*;
 public class Stats implements IStats {
 
     private Map<String, IStatsMethod> stats;
-    private boolean isEnabled;
+    private boolean isSuspended;
 
-    private Stats() {
+    private Stats(boolean suspend) {
 
         stats = new HashMap<>();
-        isEnabled = true;
+        this.isSuspended = suspend;
     }
 
-    public static IStats create() {
+    public static IStats create(boolean suspend) {
 
-        return new Stats();
+        return new Stats(suspend);
     }
 
     @Override
@@ -43,13 +43,10 @@ public class Stats implements IStats {
     @Override
     public void recordEvent(String methodName, long methodExecutionTime) {
 
-        if (isEnabled) {
-            recordForcedEvent(methodName, methodExecutionTime);
+        if (isSuspended) {
+            return;
         }
-    }
 
-    @Override
-    public void recordForcedEvent(String methodName, long methodExecutionTime) {
         Optional<IStatsMethod> statsMethodOptional = getMethod(methodName);
         IStatsMethod statsMethod;
 
@@ -64,21 +61,20 @@ public class Stats implements IStats {
     }
 
     @Override
-    public void clear() {
+    public void reset() {
 
         stats.clear();
     }
 
-    @Override
-    public void enable() {
+    public void setSuspended(boolean suspend) {
 
-        isEnabled = true;
+        isSuspended = suspend;
     }
 
     @Override
-    public void disable() {
+    public boolean isSuspended() {
 
-        isEnabled = false;
+        return isSuspended;
     }
 
     @Override

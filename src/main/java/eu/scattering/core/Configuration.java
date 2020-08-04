@@ -1,5 +1,8 @@
 package eu.scattering.core;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.PrintStream;
 
 public class Configuration {
@@ -10,5 +13,6 @@ public class Configuration {
 
     public static final PrintStream debugPrintStream = System.out;
 
-    public static final boolean devRecordObjects = true;
+    @Getter @Setter public static boolean devStatsActive = true;
+    @Getter @Setter public static boolean devStatsObjectEventsSuspended = false;
 }

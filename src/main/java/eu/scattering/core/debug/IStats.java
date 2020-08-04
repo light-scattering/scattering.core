@@ -5,13 +5,13 @@ import java.util.Set;
 
 public interface IStats {
 
-    void recordEvent(String methodName, long methodExecutionTime);
-    void recordForcedEvent(String methodName, long methodExecutionTime);
+    void recordEvent(String methodName, long methodExecutionTime); // Cannot be lower than zero, NullPointerException
 
-    void clear();
-    void enable();
-    void disable();
+    void reset();
+
+    void setSuspended(boolean suspend);
+    boolean isSuspended();
 
     Set<String> getMethodNames();
-    Optional<IStatsMethod> getMethod(String methodName);
+    Optional<IStatsMethod> getMethod(String methodName); // NullPointerException
 }
