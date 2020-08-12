@@ -1,6 +1,5 @@
 package eu.scattering.core.geometry;
 
-import eu.scattering.core.debug.IDev;
 import eu.scattering.core.debug.stats.IStats;
 
 import java.time.LocalTime;
@@ -8,7 +7,7 @@ import java.util.Optional;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
 
-public abstract class PresetGeometry<T> implements IGeometry<T>, IDev<T> {
+public abstract class PresetGeometry<T> implements IGeometry<T> {
 
     private String meta = "";
 

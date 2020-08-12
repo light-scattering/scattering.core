@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface IFLine extends IGeometry<IFLine>, IDev<IFLine>, ISupport<IFLine> {
+public interface IFLine extends IGeometry<IFLine>, IDev<IFLine>, ISupport<IFLine>, Cloneable {
 
     Consumer<IBaseExtensionAssembly> moveForward(double distance) throws DirectionException;
     Consumer<IBaseExtensionAssembly> moveBackward(double distance) throws DirectionException;
@@ -26,4 +26,6 @@ public interface IFLine extends IGeometry<IFLine>, IDev<IFLine>, ISupport<IFLine
     Optional<IFPoint> getIFPointAtZ(double z);
 
     Optional<IFPoint> getCommonIFPoint(IFLine ref);
+
+    Object clone();
 }

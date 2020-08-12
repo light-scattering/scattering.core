@@ -6,7 +6,7 @@ import eu.scattering.core.debug.IDev;
 import eu.scattering.core.geometry.base.point.IFPoint;
 
 public interface IFVector extends IFVectorAdvanced,
-        IGeometry<IFVector>, IDev<IFVector>, IBase<IFVector> {
+        IGeometry<IFVector>, IBase<IFVector>, IDev<IFVector>, Cloneable {
 
     IFVector set(IFPoint base, IFPoint head);
     IFVector setRef(IFPoint baseRef, IFPoint headRef);
@@ -18,4 +18,6 @@ public interface IFVector extends IFVectorAdvanced,
     IFPoint getHead();
     IFVector setHead(IFPoint head);
     IFVector setHeadRef(IFPoint headRef);
+
+    Object clone();
 }

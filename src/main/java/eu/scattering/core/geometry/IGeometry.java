@@ -1,8 +1,9 @@
 package eu.scattering.core.geometry;
 
+import eu.scattering.core.debug.IDev;
 import org.json.JSONObject;
 
-public interface IGeometry<T> {
+public interface IGeometry<T> extends IDev<T> {
 
     boolean isExact(T element);
 

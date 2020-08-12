@@ -4,8 +4,7 @@ import eu.scattering.core.debug.IDev;
 import eu.scattering.core.geometry.IGeometry;
 import eu.scattering.core.geometry.base.point.IFPoint;
 
-public interface IFComplex extends IFComplexAdvanced,
-        IGeometry<IFPoint>, IDev<IFComplex> {
+public interface IFComplex extends IFComplexAdvanced, IGeometry<IFPoint> {
 
     IFComplex set(double re, double im);
 

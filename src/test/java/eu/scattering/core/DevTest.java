@@ -1,10 +1,9 @@
 package eu.scattering.core;
 
+import eu.scattering.core.debug.IDev;
 import eu.scattering.core.debug.stats.IStats;
 import eu.scattering.core.debug.stats.IStatsMethod;
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.IGeometry;
-import eu.scattering.core.geometry.base.point.IFPoint;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
@@ -17,7 +16,7 @@ public class DevTest {
     private static boolean initialDevEnabled;
     private static boolean initialDevObjectStatsSuspended;
 
-    private static IGeometry getInstance() {
+    private static IDev<?> getTestInstance() {
 
         return FactoryGeometry.getIFPoint();
     }
@@ -42,8 +41,8 @@ public class DevTest {
         Configuration.setDevEnabled(true);
         Configuration.setDevObjectStatsSuspended(true);
 
-        FactoryGeometry.getIFPoint().devGetClassStats().ifPresent(e -> e.reset());
-        FactoryGeometry.getIFPoint().devResetNumberOfInstances();
+        getTestInstance().devGetClassStats().ifPresent(IStats::reset);
+        getTestInstance().devResetNumberOfInstances();
     }
 
     @Nested
@@ -58,7 +57,7 @@ public class DevTest {
             @DisplayName("Get IStats for classes")
             void getIStatsForClasses() {
 
-                assertTrue(FactoryGeometry.getIFPoint().devGetClassStats().isPresent(),
+                assertTrue(getTestInstance().devGetClassStats().isPresent(),
                         "The IStat object should be available");
             }
 
@@ -67,39 +66,25 @@ public class DevTest {
             void getIStatsForClassesDisabled() {
                 Configuration.setDevEnabled(false);
 
-                assertTrue(FactoryGeometry.getIFPoint().devGetClassStats().isEmpty(),
+                assertTrue(getTestInstance().devGetClassStats().isEmpty(),
                         "The IStat object should not be available");
             }
 
             @Test
             @DisplayName("Validate number of initially registered events for classes")
             void validateNumberOfInitiallyRegisteredEventsForClasses() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThat(stats.getMethodNames())
                         .hasSize(0);
             }
 
             @Test
-            @DisplayName("Register single class event (dynamic)")
-            void registerSingleClassEventDynamic() {
-                IFPoint fPoint = FactoryGeometry.getIFPoint()
-                        .set(1, 1, 1);
-
-                Optional<IStats> statsOpt = fPoint.devGetClassStats();
-                IStats stats = statsOpt.get();
-
-                assertThat(stats.getMethodNames())
-                        .hasSize(1)
-                        .containsExactlyInAnyOrder("set(double, double, double)");
-            }
-
-            @Test
             @DisplayName("Register single class event")
             void registerSingleClassEvent() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
@@ -111,8 +96,8 @@ public class DevTest {
             @Test
             @DisplayName("Register single class event (throw NullPointerException)")
             void registerSingleClassEventThrowNullPointerException() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThrows(ArithmeticException.class,
                         () -> stats.recordEvent("test event 1", -10L),
@@ -122,8 +107,8 @@ public class DevTest {
             @Test
             @DisplayName("Register single class event (throw ArithmeticException)")
             void registerSingleClassEventThrowArithmeticException() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThrows(NullPointerException.class, () -> stats.recordEvent(null, 10L),
                         "The method name must be specified");
@@ -132,8 +117,8 @@ public class DevTest {
             @Test
             @DisplayName("Register multiple unique events")
             void registerMultipleUniqueEvents() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 2", 10L);
@@ -147,8 +132,8 @@ public class DevTest {
             @Test
             @DisplayName("Register multiple mixed events")
             void registerMultipleMixedEvents() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 1", 10L);
@@ -162,8 +147,8 @@ public class DevTest {
             @Test
             @DisplayName("Reset events")
             void resetEvents() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 2", 10L);
@@ -181,8 +166,8 @@ public class DevTest {
             @Test
             @DisplayName("Validate suspended status")
             void validateSuspendedStatus() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertFalse(stats.isSuspended(),
                         "The registration of events is not consistent with the default value");
@@ -191,8 +176,8 @@ public class DevTest {
             @Test
             @DisplayName("Validate suspended status (true)")
             void validateSuspendedStatusTrue() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.setSuspended(true);
 
@@ -203,8 +188,8 @@ public class DevTest {
             @Test
             @DisplayName("Validate suspended status (false)")
             void validateSuspendedStatusFalse() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.setSuspended(false);
 
@@ -215,8 +200,8 @@ public class DevTest {
             @Test
             @DisplayName("Register event in the suspended state")
             void recordEventSuspended() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.setSuspended(true);
                 stats.recordEvent("test event 1", 10L);
@@ -235,7 +220,7 @@ public class DevTest {
             @DisplayName("Get IStats for objects")
             void getIStatsForObjects() {
 
-                assertTrue(FactoryGeometry.getIFPoint().devGetStats().isPresent(),
+                assertTrue(getTestInstance().devGetStats().isPresent(),
                         "The IStat object should be available");
             }
 
@@ -244,44 +229,15 @@ public class DevTest {
             void getIStatsForObjectsDisabled() {
                 Configuration.setDevEnabled(false);
 
-                assertTrue(FactoryGeometry.getIFPoint().devGetStats().isEmpty(),
+                assertTrue(getTestInstance().devGetStats().isEmpty(),
                         "The IStat object should not be available");
             }
 
             @Test
             @DisplayName("Validate number of initially registered events for objects")
             void validateNumberOfInitiallyRegisteredEventsForObjects() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
-
-                assertThat(stats.getMethodNames())
-                        .hasSize(0);
-            }
-
-            @Test
-            @DisplayName("Register single object event (dynamic / enabled)")
-            void registerSingleObjectEventDynamicEnabled() {
-                Configuration.setDevObjectStatsSuspended(false);
-
-                IFPoint fPoint = FactoryGeometry.getIFPoint()
-                        .set(1, 1, 1);
-
-                Optional<IStats> statsOpt = fPoint.devGetStats();
-                IStats stats = statsOpt.get();
-
-                assertThat(stats.getMethodNames())
-                        .hasSize(1)
-                        .containsExactlyInAnyOrder("set(double, double, double)");
-            }
-
-            @Test
-            @DisplayName("Register single object event (dynamic / disabled)")
-            void registerSingleObjectEventDynamicDisabled() {
-                IFPoint fPoint = FactoryGeometry.getIFPoint()
-                        .set(1, 1, 1);
-
-                Optional<IStats> statsOpt = fPoint.devGetStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThat(stats.getMethodNames())
                         .hasSize(0);
@@ -292,8 +248,8 @@ public class DevTest {
             void registerSingleObjectEventEnabled() {
                 Configuration.setDevObjectStatsSuspended(false);
 
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
@@ -305,8 +261,8 @@ public class DevTest {
             @Test
             @DisplayName("Register single object event (disabled)")
             void registerSingleObjectEventDisabled() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
@@ -323,8 +279,8 @@ public class DevTest {
             @Test
             @DisplayName("Get method")
             void getMethod() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
@@ -336,8 +292,8 @@ public class DevTest {
             @Test
             @DisplayName("Get method (throw NullPointerException)")
             void getMethodThrowNullPointerException() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
@@ -348,8 +304,8 @@ public class DevTest {
             @Test
             @DisplayName("Get non-existent method")
             void getNonExistentMethod() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
@@ -361,15 +317,15 @@ public class DevTest {
             @Test
             @DisplayName("Get execution times")
             void getExecutionTimes() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThat(statsMethod.getExecutionTimes())
                         .hasSize(3)
@@ -379,13 +335,13 @@ public class DevTest {
             @Test
             @DisplayName("Register time (validate list)")
             void registerTimeValidateList() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 statsMethod.recordExecutionTime(20L);
                 statsMethod.recordExecutionTime(30L);
@@ -398,13 +354,13 @@ public class DevTest {
             @Test
             @DisplayName("Register time (validate iterations)")
             void registerTimeValidateIterations() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 statsMethod.recordExecutionTime(20L);
                 statsMethod.recordExecutionTime(30L);
@@ -416,13 +372,13 @@ public class DevTest {
             @Test
             @DisplayName("Register time (throw ArithmeticException)")
             void registerTimeThrowArithmeticException() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThrows(ArithmeticException.class, () -> statsMethod.recordExecutionTime(-10L),
                         "The event time must be a positive value");
@@ -431,15 +387,15 @@ public class DevTest {
             @Test
             @DisplayName("Get number of iterations")
             void getNumberOfIterations() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(3, statsMethod.getNumberOfIterations(),
                         "The number of iterations is incorrect");
@@ -448,15 +404,15 @@ public class DevTest {
             @Test
             @DisplayName("Get time total")
             void getTimeTotal() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(60L, statsMethod.getTimeTotal(),
                         "The total time is incorrect");
@@ -465,15 +421,15 @@ public class DevTest {
             @Test
             @DisplayName("Get time avg")
             void getTimeAvg() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(20L, statsMethod.getTimeAvg(),
                         "The averaged time is incorrect");
@@ -482,15 +438,15 @@ public class DevTest {
             @Test
             @DisplayName("Get time min")
             void getTimeMin() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(10L, statsMethod.getTimeMin(),
                         "The min time is incorrect");
@@ -499,15 +455,15 @@ public class DevTest {
             @Test
             @DisplayName("Get time max")
             void getTimeMax() {
-                Optional<IStats> statsOpt = FactoryGeometry.getIFPoint().devGetClassStats();
-                IStats stats = statsOpt.get();
+                Optional<IStats> statsOpt = getTestInstance().devGetClassStats();
+                IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
 
                 stats.recordEvent("test event 1", 10L);
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
                 Optional<IStatsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                IStatsMethod statsMethod = statsMethodOpt.get();
+                IStatsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(30L, statsMethod.getTimeMax(),
                         "The max time is incorrect");
@@ -518,16 +474,16 @@ public class DevTest {
     }
 
     @Nested
-    @DisplayName("Dev methods")
-    class DevMethods {
+    @DisplayName("IDev methods")
+    class IDevMethods {
 
         @Test
         @DisplayName("Number of instances (initial)")
         void getNumberOfInstancesInitial() {
 
-            FactoryGeometry.getIFPoint().devResetNumberOfInstances();
+            getTestInstance().devResetNumberOfInstances();
 
-            assertEquals(1, FactoryGeometry.getIFPoint().devGetNumberOfInstances().get(),
+            assertEquals(1, getTestInstance().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
                     "There should be exactly one instance");
         }
 
@@ -535,12 +491,12 @@ public class DevTest {
         @DisplayName("Number of instances")
         void getNumberOfInstances() {
 
-            FactoryGeometry.getIFPoint().devResetNumberOfInstances();
+            getTestInstance().devResetNumberOfInstances();
 
-            FactoryGeometry.getIFPoint();
-            FactoryGeometry.getIFPoint();
+            getTestInstance();
+            getTestInstance();
 
-            assertEquals(3, FactoryGeometry.getIFPoint().devGetNumberOfInstances().get(),
+            assertEquals(3, getTestInstance().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
                     "There should be exactly three instances");
         }
 
@@ -550,7 +506,7 @@ public class DevTest {
 
             Configuration.setDevEnabled(false);
 
-            assertEquals(Optional.empty(), FactoryGeometry.getIFPoint().devGetNumberOfInstances(),
+            assertEquals(Optional.empty(), getTestInstance().devGetNumberOfInstances(),
                     "The number of instances field should not be available");
         }
 
@@ -558,14 +514,14 @@ public class DevTest {
         @DisplayName("Reset number of instances")
         void resetNumberOfInstances() {
 
-            FactoryGeometry.getIFPoint().devResetNumberOfInstances();
+            getTestInstance().devResetNumberOfInstances();
 
-            FactoryGeometry.getIFPoint();
-            FactoryGeometry.getIFPoint();
+            getTestInstance();
+            getTestInstance();
 
-            FactoryGeometry.getIFPoint().devResetNumberOfInstances();
+            getTestInstance().devResetNumberOfInstances();
 
-            assertEquals(1, FactoryGeometry.getIFPoint().devGetNumberOfInstances().get(),
+            assertEquals(1, getTestInstance().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
                     "There should be exactly one instance");
         }
 
@@ -573,7 +529,7 @@ public class DevTest {
         @DisplayName("Get meta-data")
         void getMetaData() {
 
-            assertEquals("", FactoryGeometry.getIFPoint().devGetMeta(),
+            assertEquals("", getTestInstance().devGetMeta(),
                     "The meta-data should be empty");
         }
 
@@ -581,11 +537,11 @@ public class DevTest {
         @DisplayName("Set meta-data")
         void setMetaData() {
 
-            IFPoint fPoint = FactoryGeometry.getIFPoint();
+            IDev<?> fElement = getTestInstance();
 
-            fPoint.devSetMeta("test");
+            fElement.devSetMeta("test");
 
-            assertEquals("test", fPoint.devGetMeta(),
+            assertEquals("test", fElement.devGetMeta(),
                     "The meta-data is incorrect");
         }
 

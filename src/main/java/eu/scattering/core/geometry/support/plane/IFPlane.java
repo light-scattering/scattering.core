@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface IFPlane  extends IGeometry<IFPlane>, IDev<IFPlane>, ISupport<IFPlane> {
+public interface IFPlane  extends IGeometry<IFPlane>, IDev<IFPlane>, ISupport<IFPlane>, Cloneable {
 
     Function<IBaseExtensionAssembly, List<Boolean>> isInHalfSpace();
 
@@ -20,5 +20,6 @@ public interface IFPlane  extends IGeometry<IFPlane>, IDev<IFPlane>, ISupport<IF
     Optional<IFPoint> getCommonIFPoint(IFLine ref);
     Optional<IFLine> getCommonIFLine(IFPlane ref);
 
+    Object clone();
 }
 
