@@ -1,35 +1,15 @@
-package eu.scattering.core.geometry.main;
+package eu.scattering.core.geometry.base;
 
-import eu.scattering.core.debug.stats.IStats;
-import eu.scattering.core.geometry.IGeometryBase;
-import eu.scattering.core.debug.IDebug;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.PresetGeometry;
+import eu.scattering.core.geometry.base.point.IFPoint;
 
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static eu.scattering.core.Configuration.debugPrintStream;
-
 public abstract class PresetBase<T extends IBase<T>>
-        implements IGeometryBase<T>, IBase<T>, IDebug<T> {
-
-    @Override
-    public abstract Object clone();
-
-    @Override
-    public abstract boolean equals(Object object);
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-
-        return exportToJSON().toString();
-    }
+        extends PresetGeometry<T> implements IBase<T> {
 
     @Override
     public int hashCode() {
@@ -43,8 +23,6 @@ public abstract class PresetBase<T extends IBase<T>>
 
         return hashCode;
     }
-
-    // -------------------------------------------------------------------------------------------------
 
     @Override
     public T add(IFPoint fPoint) {
@@ -305,63 +283,6 @@ public abstract class PresetBase<T extends IBase<T>>
     public List<Boolean> extLog(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
 
         return exp.apply(self());
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public T devDescribe() {
-
-        debugPrintStream.println(LocalTime.now().toString()
-                + " - " + self().getClass().getSimpleName()
-                + " - " + toString());
-
-        return self();
-    }
-
-    @Override
-    public T devDescribe(String message) {
-
-        debugPrintStream.println(message
-                + " / " + LocalTime.now().toString()
-                + " - " + self().getClass().getSimpleName()
-                + " - " + toString());
-
-        return self();
-    }
-
-    @Override
-    public T devDescribeStats() {
-
-        debugPrintStream.println("Not implemented");
-
-        return self();
-    }
-
-    @Override
-    public T devDescribeClassStats() {
-
-        debugPrintStream.println("Not implemented");
-
-        return self();
-    }
-
-    @Override
-    public Optional<IStats> devGetStats() {
-
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<IStats> devGetClassStats() {
-
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.empty();
     }
 
 }

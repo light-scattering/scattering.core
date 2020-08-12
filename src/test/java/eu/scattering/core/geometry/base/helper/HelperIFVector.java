@@ -1,7 +1,7 @@
-package eu.scattering.core.geometry.main.base.helper;
+package eu.scattering.core.geometry.base.helper;
 
-import eu.scattering.core.geometry.main.base.point.IFPoint;
-import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.vector.IFVector;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

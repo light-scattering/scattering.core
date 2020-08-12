@@ -1,11 +1,11 @@
-package eu.scattering.core.geometry.main.base.point;
+package eu.scattering.core.geometry.base.point;
 
-import eu.scattering.core.geometry.main.IBase;
-import eu.scattering.core.geometry.IGeometryBase;
-import eu.scattering.core.debug.IDebug;
+import eu.scattering.core.geometry.base.IBase;
+import eu.scattering.core.geometry.IGeometry;
+import eu.scattering.core.debug.IDev;
 
 public interface IFPoint extends IFPointAdvanced,
-        IGeometryBase<IFPoint>, IDebug<IFPoint>, IBase<IFPoint>, Cloneable {
+        IGeometry<IFPoint>, IDev<IFPoint>, IBase<IFPoint>, Cloneable {
 
     IFPoint set(double x, double y, double z);
 

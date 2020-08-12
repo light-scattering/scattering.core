@@ -3,7 +3,7 @@ package eu.scattering.core;
 import eu.scattering.core.debug.stats.IStats;
 import eu.scattering.core.debug.stats.IStatsMethod;
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.base.point.IFPoint;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

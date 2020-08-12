@@ -1,31 +1,10 @@
 package eu.scattering.core.geometry.support;
 
-import eu.scattering.core.debug.stats.IStats;
-import eu.scattering.core.geometry.IGeometryBase;
-import eu.scattering.core.debug.IDebug;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
-
-import java.time.LocalTime;
-import java.util.Optional;
-
-import static eu.scattering.core.Configuration.debugPrintStream;
+import eu.scattering.core.geometry.PresetGeometry;
+import eu.scattering.core.geometry.base.point.IFPoint;
 
 public abstract class PresetSupport<T extends ISupport<T>>
-        implements ISupport<T>, IGeometryBase<T>, IDebug<T> {
-
-    @Override
-    public abstract Object clone();
-
-    @Override
-    public abstract boolean equals(Object object);
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public String toString() {
-
-        return exportToJSON().toString();
-    }
+        extends PresetGeometry<T> implements ISupport<T> {
 
     @Override
     public int hashCode() {
@@ -62,63 +41,6 @@ public abstract class PresetSupport<T extends ISupport<T>>
     public IFPoint getHead() {
 
         return getOrigin().getHead();
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public T devDescribe() {
-
-        debugPrintStream.println(LocalTime.now().toString()
-                + " - " + self().getClass().getSimpleName()
-                + " - " + toString());
-
-        return self();
-    }
-
-    @Override
-    public T devDescribe(String message) {
-
-        debugPrintStream.println(message
-                + " / " + LocalTime.now().toString()
-                + " - " + self().getClass().getSimpleName()
-                + " - " + toString());
-
-        return self();
-    }
-
-    @Override
-    public T devDescribeStats() {
-
-        debugPrintStream.println("Not implemented");
-
-        return self();
-    }
-
-    @Override
-    public T devDescribeClassStats() {
-
-        debugPrintStream.println("Not implemented");
-
-        return self();
-    }
-
-    @Override
-    public Optional<IStats> devGetStats() {
-
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<IStats> devGetClassStats() {
-
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.empty();
     }
 
 }

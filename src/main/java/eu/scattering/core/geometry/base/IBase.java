@@ -1,6 +1,6 @@
-package eu.scattering.core.geometry.main;
+package eu.scattering.core.geometry.base;
 
-import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.base.point.IFPoint;
 
 public interface IBase<T> extends IBaseExtension<T> {
 

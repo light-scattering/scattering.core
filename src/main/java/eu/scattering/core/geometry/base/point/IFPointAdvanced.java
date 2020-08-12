@@ -1,4 +1,4 @@
-package eu.scattering.core.geometry.main.base.point;
+package eu.scattering.core.geometry.base.point;
 
 import eu.scattering.core.exception.DirectionException;
 

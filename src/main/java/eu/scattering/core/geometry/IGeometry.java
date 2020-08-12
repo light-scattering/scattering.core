@@ -2,7 +2,7 @@ package eu.scattering.core.geometry;
 
 import org.json.JSONObject;
 
-public interface IGeometryBase<T> {
+public interface IGeometry<T> {
 
     boolean isExact(T element);
 
@@ -15,5 +15,4 @@ public interface IGeometryBase<T> {
     T copy();
 
     T self();
-
 }

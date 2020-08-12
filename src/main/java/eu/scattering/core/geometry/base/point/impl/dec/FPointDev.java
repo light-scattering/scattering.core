@@ -1,11 +1,11 @@
-package eu.scattering.core.geometry.main.base.point.impl.dec;
+package eu.scattering.core.geometry.base.point.impl.dec;
 
 import eu.scattering.core.debug.stats.IStats;
 import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.factory.FactoryDebug;
-import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
-import eu.scattering.core.geometry.main.PresetBase;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.base.IBaseExtensionAssembly;
+import eu.scattering.core.geometry.base.PresetBase;
+import eu.scattering.core.geometry.base.point.IFPoint;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -133,19 +133,6 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
         long time = System.currentTimeMillis();
 
         var res = core.devDescribe();
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public IFPoint devDescribe(String message) {
-
-        String name = "devDescribe(String)";
-        long time = System.currentTimeMillis();
-
-        var res = core.devDescribe(message);
 
         updateStats(name, time);
 

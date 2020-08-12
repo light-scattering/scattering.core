@@ -1,8 +1,8 @@
-package eu.scattering.core.geometry.main.base.vector;
+package eu.scattering.core.geometry.base.vector;
 
 import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.exception.PositionException;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.base.point.IFPoint;
 
 public interface IFVectorAdvanced {
 

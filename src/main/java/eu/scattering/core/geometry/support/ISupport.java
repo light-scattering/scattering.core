@@ -1,9 +1,9 @@
 package eu.scattering.core.geometry.support;
 
 import eu.scattering.core.exception.DirectionException;
-import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
-import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.geometry.base.IBaseExtensionAssembly;
+import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.vector.IFVector;
 
 import java.util.List;
 import java.util.function.Consumer;

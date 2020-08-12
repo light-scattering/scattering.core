@@ -4,18 +4,18 @@ import eu.scattering.core.debug.stats.IStats;
 
 import java.util.Optional;
 
-public interface IDebug<T> {
+public interface IDev<T> {
 
     T devDescribe();
-    T devDescribe(String message);
-
-    Optional<Long> devGetNumberOfInstances();
-    Optional<IStats> devGetStats();
-    Optional<IStats> devGetClassStats();
     T devDescribeStats();
     T devDescribeClassStats();
 
+    Optional<Long> devGetNumberOfInstances();
+//    void devResetNumberOfInstances();
+
+    Optional<IStats> devGetStats();
+    Optional<IStats> devGetClassStats();
+
 //    String devGetMeta();
 //    T devSetMeta(String meta);
-
 }

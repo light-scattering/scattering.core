@@ -1,4 +1,4 @@
-package eu.scattering.core.geometry.main;
+package eu.scattering.core.geometry.base;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -14,5 +14,4 @@ public interface IBaseExtension<T> extends IBaseExtensionAssembly {
     T ext(Consumer<IBaseExtensionAssembly> exp);
     List<Double> extVal(Function<IBaseExtensionAssembly, List<Double>> exp);
     List<Boolean> extLog(Function<IBaseExtensionAssembly, List<Boolean>> exp);
-
 }

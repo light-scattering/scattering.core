@@ -1,8 +1,8 @@
 package eu.scattering.core.geometry.support;
 
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
-import eu.scattering.core.geometry.main.base.vector.IFVector;
+import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.vector.IFVector;
 import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.plane.IFPlane;
 import eu.scattering.core.geometry.support.helper.HelperIFPlane;

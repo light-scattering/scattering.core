@@ -1,10 +1,9 @@
-package eu.scattering.core.geometry.main.base.point.impl;
+package eu.scattering.core.geometry.base.point.impl;
 
 import eu.scattering.core.exception.DirectionException;
-import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.factory.FactoryGeometry;
-import eu.scattering.core.geometry.main.PresetBase;
-import eu.scattering.core.geometry.main.base.point.IFPoint;
+import eu.scattering.core.geometry.base.PresetBase;
+import eu.scattering.core.geometry.base.point.IFPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
