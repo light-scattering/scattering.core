@@ -207,11 +207,6 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
     @Override
     public IFPoint self() {
 
-        String name = "self()";
-        long time = System.currentTimeMillis();
-
-        updateStats(name, time);
-
         return this;
     }
 
@@ -928,6 +923,14 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
     public Optional<Long> devGetNumberOfInstances() {
 
         return Optional.of(numberOfInstances);
+    }
+
+    @Override
+    public IFPoint devResetNumberOfInstances() {
+
+        numberOfInstances = 0;
+
+        return self();
     }
 
     @Override

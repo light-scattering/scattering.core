@@ -11,11 +11,11 @@ public interface IDev<T> {
     T devDescribeClassStats();
 
     Optional<Long> devGetNumberOfInstances();
-//    void devResetNumberOfInstances();
+    T devResetNumberOfInstances();
 
     Optional<IStats> devGetStats();
     Optional<IStats> devGetClassStats();
 
-//    String devGetMeta();
-//    T devSetMeta(String meta);
+    String devGetMeta();
+    T devSetMeta(String meta);
 }

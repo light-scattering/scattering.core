@@ -10,6 +10,8 @@ import static eu.scattering.core.Configuration.debugPrintStream;
 
 public abstract class PresetGeometry<T> implements IGeometry<T>, IDev<T> {
 
+    private String meta = "";
+
     @Override
     public abstract Object clone();
 
@@ -66,6 +68,28 @@ public abstract class PresetGeometry<T> implements IGeometry<T>, IDev<T> {
     public Optional<Long> devGetNumberOfInstances() {
 
         return Optional.empty();
+    }
+
+    @Override
+    public T devResetNumberOfInstances() {
+
+        debugPrintStream.println("Not implemented");
+
+        return self();
+    }
+
+    @Override
+    public String devGetMeta() {
+
+        return meta;
+    }
+
+    @Override
+    public T devSetMeta(String meta) {
+
+        this.meta = meta;
+
+        return self();
     }
 
 }
