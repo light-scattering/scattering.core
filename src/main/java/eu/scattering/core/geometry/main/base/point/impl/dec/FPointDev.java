@@ -1,7 +1,6 @@
 package eu.scattering.core.geometry.main.base.point.impl.dec;
 
-import eu.scattering.core.Configuration;
-import eu.scattering.core.debug.IStats;
+import eu.scattering.core.debug.stats.IStats;
 import eu.scattering.core.exception.DirectionException;
 import eu.scattering.core.factory.FactoryDebug;
 import eu.scattering.core.geometry.main.IBaseExtensionAssembly;
@@ -20,8 +19,8 @@ import static eu.scattering.core.Configuration.debugPrintStream;
 public class FPointDev extends PresetBase<IFPoint> implements IFPoint  {
 
     private static long numberOfInstances = 0;
-    private static final IStats statsClass = FactoryDebug.getIStats(false);
-    private final IStats statsObject = FactoryDebug.getIStats(Configuration.isDevStatsObjectEventsSuspended());
+    private static final IStats statsClass = FactoryDebug.getIStats(true);
+    private final IStats statsObject = FactoryDebug.getIStats(false);
     private final IFPoint core;
 
     private FPointDev(IFPoint core) {

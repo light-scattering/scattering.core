@@ -1,15 +1,10 @@
-package eu.scattering.core.debug;
+package eu.scattering.core.debug.stats;
 
 import java.util.List;
 
 public interface IStatsMethod {
 
-    void recordEvent(long executionTime);
-    void recordForcedEvent(long executionTime);
-
-    void clear();
-    void enable();
-    void disable();
+    void recordExecutionTime(long executionTime);
 
     List<Long> getExecutionTimes();
     int getNumberOfIterations();

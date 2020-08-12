@@ -8,6 +8,10 @@ public class PlaygroundTest {
 
     @Test
     void playground() {
+
+        Configuration.setDevObjectStatsSuspended(false);
+        Configuration.setDevEnabled(true);
+
        IFPoint fPoint = FactoryGeometry.getIFPoint();
        fPoint.set(1, 1, 1);
        fPoint.setX(3);

@@ -1,7 +1,6 @@
-package eu.scattering.core.debug.impl;
+package eu.scattering.core.debug.stats.impl;
 
-import eu.scattering.core.debug.IStatsMethod;
-import lombok.Getter;
+import eu.scattering.core.debug.stats.IStatsMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +9,11 @@ public class StatsMethod implements IStatsMethod {
 
     private int numberOfIterations;
     private List<Long> executionTimes;
-    private boolean isEnabled;
 
     private StatsMethod() {
 
         numberOfIterations = 0;
         executionTimes = new ArrayList<>();
-        isEnabled = true;
     }
 
     public static IStatsMethod create() {
@@ -24,38 +21,14 @@ public class StatsMethod implements IStatsMethod {
         return new StatsMethod();
     }
 
-    @Override
-    public void recordEvent(long executionTime) {
+    public void recordExecutionTime(long executionTime) {
 
-        if (isEnabled) {
-            recordForcedEvent(executionTime);
+        if (executionTime < 0) {
+            throw new ArithmeticException("The event time must be greater than zero");
         }
-    }
-
-    @Override
-    public void recordForcedEvent(long executionTime) {
 
         numberOfIterations++;
         getExecutionTimes().add(executionTime);
-    }
-
-    @Override
-    public void clear() {
-
-        numberOfIterations = 0;
-        getExecutionTimes().clear();
-    }
-
-    @Override
-    public void enable() {
-
-        isEnabled = true;
-    }
-
-    @Override
-    public void disable() {
-
-        isEnabled = false;
     }
 
     @Override

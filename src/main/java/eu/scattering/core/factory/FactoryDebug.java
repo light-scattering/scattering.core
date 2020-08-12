@@ -1,9 +1,9 @@
 package eu.scattering.core.factory;
 
-import eu.scattering.core.debug.IStats;
-import eu.scattering.core.debug.IStatsMethod;
-import eu.scattering.core.debug.impl.Stats;
-import eu.scattering.core.debug.impl.StatsMethod;
+import eu.scattering.core.debug.stats.IStats;
+import eu.scattering.core.debug.stats.IStatsMethod;
+import eu.scattering.core.debug.stats.impl.Stats;
+import eu.scattering.core.debug.stats.impl.StatsMethod;
 
 public class FactoryDebug {
 
@@ -13,9 +13,9 @@ public class FactoryDebug {
     // The following section contains methods associated with the debugging feature, they should not be changed.
     // -------------------------------------------------------------------------------------------------
 
-    public static IStats getIStats(boolean isEnabled) {
+    public static IStats getIStats(boolean global) {
 
-        return Stats.create(isEnabled);
+        return Stats.create(global);
     }
 
     public static IStatsMethod getIStatsMethod() {

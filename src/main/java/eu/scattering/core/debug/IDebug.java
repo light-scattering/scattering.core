@@ -1,6 +1,6 @@
 package eu.scattering.core.debug;
 
-import eu.scattering.core.debug.impl.Stats;
+import eu.scattering.core.debug.stats.IStats;
 
 import java.util.Optional;
 

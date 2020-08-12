@@ -1,6 +1,6 @@
 package eu.scattering.core.geometry.support;
 
-import eu.scattering.core.debug.IStats;
+import eu.scattering.core.debug.stats.IStats;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;

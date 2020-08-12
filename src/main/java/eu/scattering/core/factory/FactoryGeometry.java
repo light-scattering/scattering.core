@@ -1,5 +1,6 @@
 package eu.scattering.core.factory;
 
+import eu.scattering.core.Configuration;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
 import eu.scattering.core.geometry.main.base.point.impl.FPoint;
 import eu.scattering.core.geometry.main.base.point.impl.dec.FPointDev;
@@ -9,8 +10,6 @@ import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.line.impl.FLine;
 import eu.scattering.core.geometry.support.plane.IFPlane;
 import eu.scattering.core.geometry.support.plane.impl.FPlane;
-
-import static eu.scattering.core.Configuration.devStatsActive;
 
 public class FactoryGeometry {
 
@@ -23,7 +22,7 @@ public class FactoryGeometry {
     public static IFPoint getIFPoint() {
         IFPoint fPoint = FPoint.create();
 
-        fPoint = devStatsActive ? FPointDev.create(fPoint) : fPoint;
+        fPoint = Configuration.isDevEnabled() ? FPointDev.create(fPoint) : fPoint;
 
         return fPoint;
     }

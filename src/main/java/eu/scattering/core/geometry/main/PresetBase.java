@@ -1,6 +1,6 @@
 package eu.scattering.core.geometry.main;
 
-import eu.scattering.core.debug.IStats;
+import eu.scattering.core.debug.stats.IStats;
 import eu.scattering.core.geometry.IGeometryBase;
 import eu.scattering.core.debug.IDebug;
 import eu.scattering.core.geometry.main.base.point.IFPoint;
@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 import static eu.scattering.core.Configuration.debugPrintStream;
 
 public abstract class PresetBase<T extends IBase<T>>
-        implements IGeometryBase<T>, IDebug<T>, IBase<T>{
+        implements IGeometryBase<T>, IBase<T>, IDebug<T> {
 
     @Override
     public abstract Object clone();

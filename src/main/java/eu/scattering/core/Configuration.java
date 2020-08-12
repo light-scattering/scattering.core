@@ -13,6 +13,6 @@ public class Configuration {
 
     public static final PrintStream debugPrintStream = System.out;
 
-    @Getter @Setter public static boolean devStatsActive = true;
-    @Getter @Setter public static boolean devStatsObjectEventsSuspended = false;
+    @Getter @Setter public static boolean devEnabled = true;
+    @Getter @Setter public static boolean devObjectStatsSuspended = true;
 }

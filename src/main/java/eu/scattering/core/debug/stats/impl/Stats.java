@@ -1,7 +1,8 @@
-package eu.scattering.core.debug.impl;
+package eu.scattering.core.debug.stats.impl;
 
-import eu.scattering.core.debug.IStats;
-import eu.scattering.core.debug.IStatsMethod;
+import eu.scattering.core.Configuration;
+import eu.scattering.core.debug.stats.IStats;
+import eu.scattering.core.debug.stats.IStatsMethod;
 import eu.scattering.core.factory.FactoryDebug;
 
 import java.time.LocalTime;
@@ -10,17 +11,22 @@ import java.util.*;
 public class Stats implements IStats {
 
     private Map<String, IStatsMethod> stats;
-    private boolean isSuspended;
+    private boolean suspended;
 
-    private Stats(boolean suspend) {
+    private Stats(boolean global) {
 
         stats = new HashMap<>();
-        this.isSuspended = suspend;
+
+        if (global) {
+            this.suspended = false;
+        } else {
+            this.suspended = Configuration.isDevObjectStatsSuspended();
+        }
     }
 
-    public static IStats create(boolean suspend) {
+    public static IStats create(boolean global) {
 
-        return new Stats(suspend);
+        return new Stats(global);
     }
 
     @Override
@@ -31,6 +37,11 @@ public class Stats implements IStats {
 
     @Override
     public Optional<IStatsMethod> getMethod(String methodName) {
+
+        if (methodName == null) {
+            throw new NullPointerException("The method name cannot be null");
+        }
+
         IStatsMethod record = stats.get(methodName);
 
         if (record == null) {
@@ -43,7 +54,11 @@ public class Stats implements IStats {
     @Override
     public void recordEvent(String methodName, long methodExecutionTime) {
 
-        if (isSuspended) {
+        if (methodName == null) {
+            throw new NullPointerException("The method name cannot be null");
+        }
+
+        if (suspended) {
             return;
         }
 
@@ -57,7 +72,7 @@ public class Stats implements IStats {
             statsMethod = statsMethodOptional.get();
         }
 
-        statsMethod.recordEvent(methodExecutionTime);
+        statsMethod.recordExecutionTime(methodExecutionTime);
     }
 
     @Override
@@ -68,13 +83,13 @@ public class Stats implements IStats {
 
     public void setSuspended(boolean suspend) {
 
-        isSuspended = suspend;
+        suspended = suspend;
     }
 
     @Override
     public boolean isSuspended() {
 
-        return isSuspended;
+        return suspended;
     }
 
     @Override
