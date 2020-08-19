@@ -9,10 +9,10 @@ public class Config {
 
     private Config() { }
 
-    public static final double jitter = 1E-10;
+    @Getter @Setter private static double jitter = 1E-10;
 
-    public static final PrintStream debugPrintStream = System.out;
+    @Getter @Setter private static PrintStream debugPrintStream = System.out;
 
-    @Getter @Setter public static boolean devEnabled = true;
-    @Getter @Setter public static boolean devObjectStatsSuspended = true;
+    @Getter @Setter private static boolean devEnabled = true;
+    @Getter @Setter private static boolean devObjectStatsSuspended = true;
 }
