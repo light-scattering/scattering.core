@@ -549,12 +549,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint fun(Consumer<IFPoint> exp) {
+    public IFPoint cus(Consumer<IFPoint> exp) {
 
-        String name = "fun(Consumer<IFPoint> exp)";
+        String name = "cus(Consumer<IFPoint> exp)";
         long time = System.currentTimeMillis();
 
-        var res = core.fun(exp);
+        var res = core.cus(exp);
 
         updateStats(name, time);
 
@@ -562,12 +562,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public double funVal(Function<IFPoint, Double> exp) {
+    public double cusDouble(Function<IFPoint, Double> exp) {
 
-        String name = "funVal(Function<IFPoint, Double>)";
+        String name = "cusDouble(Function<IFPoint, Double>)";
         long time = System.currentTimeMillis();
 
-        var res = core.funVal(exp);
+        var res = core.cusDouble(exp);
 
         updateStats(name, time);
 
@@ -575,12 +575,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public boolean funLog(Predicate<IFPoint> exp) {
+    public boolean cusBoolean(Predicate<IFPoint> exp) {
 
-        String name = "funLog(Predicate<IFPoint>)";
+        String name = "cusBoolean(Predicate<IFPoint>)";
         long time = System.currentTimeMillis();
 
-        var res = core.funLog(exp);
+        var res = core.cusBoolean(exp);
 
         updateStats(name, time);
 
@@ -601,12 +601,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public List<Double> extVal(Function<IBaseExtensionAssembly, List<Double>> exp) {
+    public List<Double> extDouble(Function<IBaseExtensionAssembly, List<Double>> exp) {
 
-        String name = "extVal(Function<IBaseExtensionAssembly>)";
+        String name = "extDouble(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extVal(exp);
+        var res = core.extDouble(exp);
 
         updateStats(name, time);
 
@@ -614,12 +614,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public List<Boolean> extLog(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
+    public List<Boolean> extBoolean(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
 
-        String name = "extLog(Function<IBaseExtensionAssembly>)";
+        String name = "extBoolean(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extLog(exp);
+        var res = core.extBoolean(exp);
 
         updateStats(name, time);
 

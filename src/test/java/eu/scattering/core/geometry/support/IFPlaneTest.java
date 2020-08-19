@@ -362,7 +362,7 @@ public class IFPlaneTest {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFPoint fPoint = FactoryGeometry.getIFPoint(-1, 2, -1).add(0.5 * jitter);
 
-            assertTrue(fPoint.extLog(fPlane.isPartOf()).get(0),
+            assertTrue(fPoint.extBoolean(fPlane.isPartOf()).get(0),
                     "The distance should be negligible");
         }
 
@@ -372,7 +372,7 @@ public class IFPlaneTest {
             IFPlane fPlane = FactoryGeometry.getIFPlane(FactoryGeometry.getIFVector(1, 1, 1));
             IFPoint fPoint = FactoryGeometry.getIFPoint(-1, 2, -1).add(1.5 * jitter);
 
-            assertFalse(fPoint.extLog(fPlane.isPartOf()).get(0),
+            assertFalse(fPoint.extBoolean(fPlane.isPartOf()).get(0),
                     "The distance should not be negligible");
         }
 
@@ -395,7 +395,7 @@ public class IFPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertEquals(Math.sqrt(3), fPoint.extVal(fPlane.getDistance()).get(0),
+            assertEquals(Math.sqrt(3), fPoint.extDouble(fPlane.getDistance()).get(0),
                     "The distance is erroneous");
         }
 
@@ -415,7 +415,7 @@ public class IFPlaneTest {
 
             fPoint.ext(fPlane.setDistance(1));
 
-            assertEquals(1, fPoint.extVal(fPlane.getDistance()).get(0),
+            assertEquals(1, fPoint.extDouble(fPlane.getDistance()).get(0),
                     jitter, "The distance is erroneous");
         }
 
@@ -441,7 +441,7 @@ public class IFPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertTrue(fPoint.extLog(fPlane.isInHalfSpace()).get(0),"The half-space is erroneous");
+            assertTrue(fPoint.extBoolean(fPlane.isInHalfSpace()).get(0),"The half-space is erroneous");
         }
 
         @Test
@@ -459,7 +459,7 @@ public class IFPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertFalse(fPoint.extLog(fPlane.isInHalfSpace()).get(0),"The half-space is erroneous");
+            assertFalse(fPoint.extBoolean(fPlane.isInHalfSpace()).get(0),"The half-space is erroneous");
         }
 
         @Test
@@ -593,13 +593,13 @@ public class IFPlaneTest {
             IFLine fLine = fLineOpt.get();
 
             assertAll("Validate IFLine",
-                    () -> assertTrue(fLine.getBase().extLog(fPlane1.isPartOf()).get(0),
+                    () -> assertTrue(fLine.getBase().extBoolean(fPlane1.isPartOf()).get(0),
                             "The IFLine base does not belong to IFPlane 1"),
-                    () -> assertTrue(fLine.getHead().extLog(fPlane1.isPartOf()).get(0),
+                    () -> assertTrue(fLine.getHead().extBoolean(fPlane1.isPartOf()).get(0),
                             "The IFLine head does not belong to IFPlane 1"),
-                    () -> assertTrue(fLine.getBase().extLog(fPlane2.isPartOf()).get(0),
+                    () -> assertTrue(fLine.getBase().extBoolean(fPlane2.isPartOf()).get(0),
                             "The IFLine base does not belong to IFPlane 2"),
-                    () -> assertTrue(fLine.getHead().extLog(fPlane2.isPartOf()).get(0),
+                    () -> assertTrue(fLine.getHead().extBoolean(fPlane2.isPartOf()).get(0),
                             "The IFLine head does not belong to IFPlane 2")
             );
         }

@@ -89,7 +89,7 @@ public class FPlane extends PresetSupport<IFPlane> implements IFPlane {
     public boolean isSimilar(IFPlane ref) {
 
         return (getOrigin().isParallel(ref.getOrigin()) || getOrigin().isAntiParallel(ref.getOrigin()))
-                && ref.getOrigin().extLog(isPartOf()).get(0);
+                && ref.getOrigin().extBoolean(isPartOf()).get(0);
     }
 
     // -------------------------------------------------------------------------------------------------

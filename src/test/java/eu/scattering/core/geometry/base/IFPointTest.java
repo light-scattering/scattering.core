@@ -1792,7 +1792,7 @@ public class IFPointTest {
         @DisplayName("Custom function - chain")
         void fun() {
 
-            fPoint.fun(e -> e.addX(opX).addY(opY).addZ(opZ));
+            fPoint.cus(e -> e.addX(opX).addY(opY).addZ(opZ));
 
             assertAll("Validate IFPoint values",
                     () -> assertEquals(refX + opX, fPoint.getX(), "The X value is incorrect"),
@@ -1813,7 +1813,7 @@ public class IFPointTest {
         @DisplayName("Custom function - value")
         void funVal() {
 
-            assertEquals(refX + refY + refZ, fPoint.funVal(e -> e.getX() + e.getY() + e.getZ()),
+            assertEquals(refX + refY + refZ, fPoint.cusDouble(e -> e.getX() + e.getY() + e.getZ()),
                     "The resulting value is erroneous");
         }
 
@@ -1821,7 +1821,7 @@ public class IFPointTest {
         @DisplayName("Custom function - value")
         void funLog() {
 
-            assertTrue(fPoint.funLog(e -> e.getX() != 0), "The resulting value is erroneous");
+            assertTrue(fPoint.cusBoolean(e -> e.getX() != 0), "The resulting value is erroneous");
         }
 
     }

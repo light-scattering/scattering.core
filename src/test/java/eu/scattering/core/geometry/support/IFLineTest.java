@@ -431,7 +431,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
             IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(0.5 * jitter);
 
-            assertTrue(fPoint.extLog(fLine.isPartOf()).get(0),
+            assertTrue(fPoint.extBoolean(fLine.isPartOf()).get(0),
                     "The distance should be negligible");
         }
 
@@ -441,7 +441,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(2, 2, 2));
             IFPoint fPoint = FactoryGeometry.getIFPoint(1, 1, 1).addY(1.5 * jitter);
 
-            assertFalse(fPoint.extLog(fLine.isPartOf()).get(0),
+            assertFalse(fPoint.extBoolean(fLine.isPartOf()).get(0),
                     "The distance should not be negligible");
         }
 
@@ -452,7 +452,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(-4, -4, -4).addY(0.5 * jitter);
 
-            fPoint.extLog(fLine.isPartOf());
+            fPoint.extBoolean(fLine.isPartOf());
         }
 
         @Test
@@ -462,7 +462,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(4, 4, 4).addY(0.5 * jitter);
 
-            fPoint.extLog(fLine.isPartOf());
+            fPoint.extBoolean(fLine.isPartOf());
         }
 
         @Test
@@ -484,7 +484,7 @@ public class IFLineTest {
             fLine.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertEquals(Math.sqrt(6), fPoint.extVal(fLine.getDistance()).get(0),
+            assertEquals(Math.sqrt(6), fPoint.extDouble(fLine.getDistance()).get(0),
                     "The distance is erroneous");
         }
 
@@ -495,7 +495,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
 
-            fPoint.extVal(fLine.getDistance());
+            fPoint.extDouble(fLine.getDistance());
         }
 
         @Test
@@ -505,7 +505,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
-            fPoint.extVal(fLine.getDistance());
+            fPoint.extDouble(fLine.getDistance());
         }
 
         @Test
@@ -529,7 +529,7 @@ public class IFLineTest {
 
             fPoint.ext(fLine.setDistance(1));
 
-            assertTrue(Math.abs(fPoint.extVal(fLine.getDistance()).get(0) - 1) < jitter,
+            assertTrue(Math.abs(fPoint.extDouble(fLine.getDistance()).get(0) - 1) < jitter,
                     "The distance is erroneous");
         }
 
@@ -566,7 +566,7 @@ public class IFLineTest {
 
             fPoint.ext(fLine.setDistance(-1));
 
-            assertTrue(Math.abs(fPoint.extVal(fLine.getDistance()).get(0) - 1) < jitter,
+            assertTrue(Math.abs(fPoint.extDouble(fLine.getDistance()).get(0) - 1) < jitter,
                     "The distance between IFPoints is erroneous");
         }
 
@@ -603,7 +603,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            assertTrue(fPoint.extLog(fLine.isPartOfRay()).get(0),
+            assertTrue(fPoint.extBoolean(fLine.isPartOfRay()).get(0),
                     "The IFPoint is a part of the ray");
         }
 
@@ -614,7 +614,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
 
-            assertFalse(fPoint.extLog(fLine.isPartOfRay()).get(0),
+            assertFalse(fPoint.extBoolean(fLine.isPartOfRay()).get(0),
                     "The IFPoint is not a part of the ray");
         }
 
@@ -625,7 +625,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
-            assertTrue(fPoint.extLog(fLine.isPartOfRay()).get(0),
+            assertTrue(fPoint.extBoolean(fLine.isPartOfRay()).get(0),
                     "The IFPoint is a part of the ray");
         }
 
@@ -644,7 +644,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint();
 
-            assertTrue(fPoint.extLog(fLine.isPartOfSegment()).get(0),
+            assertTrue(fPoint.extBoolean(fLine.isPartOfSegment()).get(0),
                     "The IFPoint is a part of the segment");
         }
 
@@ -655,7 +655,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, -9, 0);
 
-            assertFalse(fPoint.extLog(fLine.isPartOfSegment()).get(0),
+            assertFalse(fPoint.extBoolean(fLine.isPartOfSegment()).get(0),
                     "The IFPoint is not a of the segment");
         }
 
@@ -666,7 +666,7 @@ public class IFLineTest {
             IFLine fLine = FactoryGeometry.getIFLine(fVector.copy());
             IFPoint fPoint = FactoryGeometry.getIFPoint(0, 9, 0);
 
-            assertFalse(fPoint.extLog(fLine.isPartOfSegment()).get(0),
+            assertFalse(fPoint.extBoolean(fLine.isPartOfSegment()).get(0),
                     "The IFPoint is not a part of the segment");
         }
 
@@ -925,7 +925,7 @@ public class IFLineTest {
             fLineBOriginBase.setZ(0);
             fLineBOriginBase.setZ(0);
 
-            while (fLineBOriginBase.extLog(fLineA.isPartOf()).get(0)) {
+            while (fLineBOriginBase.extBoolean(fLineA.isPartOf()).get(0)) {
                 fLineBOriginBase.set(HelperRandom.getTestPoint());
 
                 fLineBOriginBase.setZ(0);
@@ -935,12 +935,12 @@ public class IFLineTest {
             assertTrue(fPointRes.isPresent(),"IFLines should have one intersecting IFPoint");
 
             assertAll("Validate IFPoint",
-                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 1 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                                    "(distance: " + fPointRes.get().extDouble(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineB.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 2 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+                                    "(distance: " + fPointRes.get().extDouble(fLineB.getDistance()).get(0)+ ")")
             );
         }
 
@@ -961,9 +961,9 @@ public class IFLineTest {
             assertTrue(fPointRes.isPresent(),"IFLines should have one intersecting IFPoint");
 
             assertAll("Validate IFPoint",
-                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 1"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineB.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 2")
             );
         }
@@ -989,7 +989,7 @@ public class IFLineTest {
             IFPoint fLineBOriginHead = fLineA.getIFPoint(HelperRandom.getTestValue());
             IFLine fLineB = FactoryGeometry.getIFLine(FactoryGeometry.getIFVector(fLineBOriginBase, fLineBOriginHead));
 
-            while (fLineBOriginBase.extLog(fLineA.isPartOf()).get(0)) {
+            while (fLineBOriginBase.extBoolean(fLineA.isPartOf()).get(0)) {
                 fLineBOriginBase.set(HelperRandom.getTestPoint());
             }
 
@@ -997,12 +997,12 @@ public class IFLineTest {
             assertTrue(fPointRes.isPresent(),"IFLines should have one intersecting IFPoint");
 
             assertAll("Validate IFPoint",
-                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 1 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                                    "(distance: " + fPointRes.get().extDouble(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineB.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 2 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+                                    "(distance: " + fPointRes.get().extDouble(fLineB.getDistance()).get(0)+ ")")
             );
         }
 
@@ -1020,12 +1020,12 @@ public class IFLineTest {
             assertAll("Validate IFPoint",
                     () -> assertEquals(fPointRes.get(), FactoryGeometry.getIFPoint(1, 1, 0),
                             "The IFPoint is erroneous"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 1 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                                    "(distance: " + fPointRes.get().extDouble(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineB.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 2 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+                                    "(distance: " + fPointRes.get().extDouble(fLineB.getDistance()).get(0)+ ")")
             );
         }
         @Test
@@ -1042,12 +1042,12 @@ public class IFLineTest {
             assertAll("Validate IFPoint",
                     () -> assertEquals(fPointRes.get(), FactoryGeometry.getIFPoint(1, 1, 0),
                             "The IFPoint is erroneous"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 1 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                                    "(distance: " + fPointRes.get().extDouble(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineB.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 2 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+                                    "(distance: " + fPointRes.get().extDouble(fLineB.getDistance()).get(0)+ ")")
             );
         }
 
@@ -1065,12 +1065,12 @@ public class IFLineTest {
             assertAll("Validate IFPoint",
                     () -> assertEquals(fPointRes.get(), FactoryGeometry.getIFPoint(1, 1, 1),
                             "The IFPoint is erroneous"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineA.isPartOf()).get(0),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 1 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineA.getDistance()).get(0)+ ")"),
-                    () -> assertTrue(fPointRes.get().extLog(fLineB.isPartOf()).get(0),
+                                    "(distance: " + fPointRes.get().extDouble(fLineA.getDistance()).get(0)+ ")"),
+                    () -> assertTrue(fPointRes.get().extBoolean(fLineB.isPartOf()).get(0),
                             "The IFPoint should be part of IFLine 2 " +
-                                    "(distance: " + fPointRes.get().extVal(fLineB.getDistance()).get(0)+ ")")
+                                    "(distance: " + fPointRes.get().extDouble(fLineB.getDistance()).get(0)+ ")")
             );
         }
 
@@ -1081,7 +1081,7 @@ public class IFLineTest {
 
             IFPoint fLineBOriginHead = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
 
-            while (fLineBOriginHead.extLog(fLineA.isPartOf()).get(0)) {
+            while (fLineBOriginHead.extBoolean(fLineA.isPartOf()).get(0)) {
                 fLineBOriginHead = FactoryGeometry.getIFPoint(HelperRandom.getTestPoint());
             }
 

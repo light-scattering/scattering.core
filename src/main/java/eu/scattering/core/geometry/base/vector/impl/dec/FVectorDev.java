@@ -460,12 +460,12 @@ public class FVectorDev extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public IFVector fun(Consumer<IFVector> exp) {
+    public IFVector cus(Consumer<IFVector> exp) {
 
-        String name = "fun(Consumer<IFVector>)";
+        String name = "cus(Consumer<IFVector>)";
         long time = System.currentTimeMillis();
 
-        var res = core.fun(exp);
+        var res = core.cus(exp);
 
         updateStats(name, time);
 
@@ -473,12 +473,12 @@ public class FVectorDev extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public double funVal(Function<IFVector, Double> exp) {
+    public double cusDouble(Function<IFVector, Double> exp) {
 
-        String name = "funVal(Function<IFVector, Double>)";
+        String name = "cusDouble(Function<IFVector, Double>)";
         long time = System.currentTimeMillis();
 
-        var res = core.funVal(exp);
+        var res = core.cusDouble(exp);
 
         updateStats(name, time);
 
@@ -486,12 +486,12 @@ public class FVectorDev extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public boolean funLog(Predicate<IFVector> exp) {
+    public boolean cusBoolean(Predicate<IFVector> exp) {
 
-        String name = "funLog(Predicate<IFVector>)";
+        String name = "cusBoolean(Predicate<IFVector>)";
         long time = System.currentTimeMillis();
 
-        var res = core.funLog(exp);
+        var res = core.cusBoolean(exp);
 
         updateStats(name, time);
 
@@ -512,12 +512,12 @@ public class FVectorDev extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public List<Double> extVal(Function<IBaseExtensionAssembly, List<Double>> exp) {
+    public List<Double> extDouble(Function<IBaseExtensionAssembly, List<Double>> exp) {
 
-        String name = "extVal(Function<IBaseExtensionAssembly>)";
+        String name = "extDouble(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extVal(exp);
+        var res = core.extDouble(exp);
 
         updateStats(name, time);
 
@@ -525,12 +525,12 @@ public class FVectorDev extends PresetBase<IFVector> implements IFVector {
     }
 
     @Override
-    public List<Boolean> extLog(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
+    public List<Boolean> extBoolean(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
 
-        String name = "extLog(Function<IBaseExtensionAssembly>)";
+        String name = "extBoolean(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extLog(exp);
+        var res = core.extBoolean(exp);
 
         updateStats(name, time);
 

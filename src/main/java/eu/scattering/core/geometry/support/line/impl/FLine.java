@@ -87,7 +87,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
     @Override
     public boolean isSimilar(IFLine ref) {
 
-        return getOrigin().extLog(ref.isPartOf()).stream().allMatch(e -> e);
+        return getOrigin().extBoolean(ref.isPartOf()).stream().allMatch(e -> e);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -383,7 +383,7 @@ public class FLine extends PresetSupport<IFLine> implements IFLine {
             return Optional.empty();
         }
 
-        if (candidate.get().extLog(isPartOf()).get(0) && candidate.get().extLog(ref.isPartOf()).get(0)) {
+        if (candidate.get().extBoolean(isPartOf()).get(0) && candidate.get().extBoolean(ref.isPartOf()).get(0)) {
             return candidate;
         }
 

@@ -246,7 +246,7 @@ public abstract class PresetBase<T extends IBase<T>>
     }
 
     @Override
-    public T fun(Consumer<T> exp) {
+    public T cus(Consumer<T> exp) {
 
         exp.accept(self());
 
@@ -254,13 +254,13 @@ public abstract class PresetBase<T extends IBase<T>>
     }
 
     @Override
-    public double funVal(Function<T, Double> exp) {
+    public double cusDouble(Function<T, Double> exp) {
 
         return exp.apply(self());
     }
 
     @Override
-    public boolean funLog(Predicate<T> exp) {
+    public boolean cusBoolean(Predicate<T> exp) {
 
         return exp.test(self());
     }
@@ -274,13 +274,13 @@ public abstract class PresetBase<T extends IBase<T>>
     }
 
     @Override
-    public List<Double> extVal(Function<IBaseExtensionAssembly, List<Double>> exp) {
+    public List<Double> extDouble(Function<IBaseExtensionAssembly, List<Double>> exp) {
 
         return exp.apply(self());
     }
 
     @Override
-    public List<Boolean> extLog(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
+    public List<Boolean> extBoolean(Function<IBaseExtensionAssembly, List<Boolean>> exp) {
 
         return exp.apply(self());
     }
