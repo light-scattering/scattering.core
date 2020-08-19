@@ -1,11 +1,13 @@
-package eu.scattering.core.geometry.base.point.impl.dec;
+package eu.scattering.core.geometry.base.vector.impl.dec;
 
 import eu.scattering.core.debug.stats.IStats;
 import eu.scattering.core.exception.DirectionException;
+import eu.scattering.core.exception.PositionException;
 import eu.scattering.core.factory.FactoryDebug;
 import eu.scattering.core.geometry.base.IBaseExtensionAssembly;
 import eu.scattering.core.geometry.base.PresetBase;
 import eu.scattering.core.geometry.base.point.IFPoint;
+import eu.scattering.core.geometry.base.vector.IFVector;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -16,133 +18,29 @@ import java.util.function.Predicate;
 
 import static eu.scattering.core.Configuration.debugPrintStream;
 
-public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
+public class FVectorDev extends PresetBase<IFVector> implements IFVector {
 
     private static long numberOfInstances = 0;
     private static final IStats statsClass = FactoryDebug.getIStats(true);
     private final IStats statsObject = FactoryDebug.getIStats(false);
-    private final IFPoint core;
+    private final IFVector core;
 
-    private FPointDev(IFPoint core) {
+    private FVectorDev(IFVector core) {
 
         numberOfInstances++;
 
         this.core = core;
     }
 
-    public static IFPoint create(IFPoint core) {
+    public static IFVector create(IFVector core) {
 
-        return new FPointDev(core);
+        return new FVectorDev(core);
     }
 
     @Override
-    public IFPoint set(double x, double y, double z) {
+    public boolean isExact(IFVector element) {
 
-        String name = "set(double, double, double)";
-        long time = System.currentTimeMillis();
-
-        var res = core.set(x, y, z);
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public double getX() {
-
-        String name = "getX()";
-        long time = System.currentTimeMillis();
-
-        var res = core.getX();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
-    public IFPoint setX(double x) {
-
-        String name = "setX(double)";
-        long time = System.currentTimeMillis();
-
-        var res = core.setX(x);
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public double getY() {
-
-        String name = "getY()";
-        long time = System.currentTimeMillis();
-
-        var res = core.getY();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
-    public IFPoint setY(double y) {
-
-        String name = "setY(double)";
-        long time = System.currentTimeMillis();
-
-        var res = core.setY(y);
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public double getZ() {
-
-        String name = "getZ()";
-        long time = System.currentTimeMillis();
-
-        var res = core.getZ();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
-    public IFPoint setZ(double z) {
-
-        String name = "setZ(double)";
-        long time = System.currentTimeMillis();
-
-        var res = core.setZ(z);
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public IFPoint devDescribe() {
-
-        String name = "devDescribe()";
-        long time = System.currentTimeMillis();
-
-        var res = core.devDescribe();
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public boolean isExact(IFPoint element) {
-
-        String name = "isExact(IFPoint)";
+        String name = "isExact(IFVector)";
         long time = System.currentTimeMillis();
 
         var res = core.isExact(element);
@@ -153,9 +51,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public boolean isSimilar(IFPoint element) {
+    public boolean isSimilar(IFVector element) {
 
-        String name = "isSimilar(IFPoint)";
+        String name = "isSimilar(IFVector)";
         long time = System.currentTimeMillis();
 
         var res = core.isSimilar(element);
@@ -179,7 +77,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint importFromJSON(JSONObject json) {
+    public IFVector importFromJSON(JSONObject json) {
 
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
@@ -192,12 +90,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint copy() {
+    public IFVector copy() {
 
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = create(core.copy());
+        var res = core.copy();
 
         updateStats(name, time);
 
@@ -205,13 +103,26 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint self() {
+    public IFVector self() {
 
         return this;
     }
 
     @Override
-    public IFPoint add(IFPoint fPoint) {
+    public IFVector devDescribe() {
+
+        String name = "devDescribe()";
+        long time = System.currentTimeMillis();
+
+        var res = core.devDescribe();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector add(IFPoint fPoint) {
 
         String name = "add(IFPoint)";
         long time = System.currentTimeMillis();
@@ -224,7 +135,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint add(double x, double y, double z) {
+    public IFVector add(double x, double y, double z) {
 
         String name = "add(double, double, double)";
         long time = System.currentTimeMillis();
@@ -237,7 +148,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint add(double factor) {
+    public IFVector add(double factor) {
 
         String name = "add(double)";
         long time = System.currentTimeMillis();
@@ -250,9 +161,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint addX(double x) {
+    public IFVector addX(double x) {
 
-        String name = "add(double)";
+        String name = "addX(double)";
         long time = System.currentTimeMillis();
 
         var res = core.addX(x);
@@ -263,7 +174,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint addY(double y) {
+    public IFVector addY(double y) {
 
         String name = "addY(double)";
         long time = System.currentTimeMillis();
@@ -276,7 +187,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint addZ(double z) {
+    public IFVector addZ(double z) {
 
         String name = "addZ(double)";
         long time = System.currentTimeMillis();
@@ -289,7 +200,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint sub(IFPoint fPoint) {
+    public IFVector sub(IFPoint fPoint) {
 
         String name = "sub(IFPoint)";
         long time = System.currentTimeMillis();
@@ -302,9 +213,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint sub(double x, double y, double z) {
+    public IFVector sub(double x, double y, double z) {
 
-        String name = "sub(double, double, double)";
+        String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
         var res = core.sub(x, y, z);
@@ -315,7 +226,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint sub(double factor) {
+    public IFVector sub(double factor) {
 
         String name = "sub(double)";
         long time = System.currentTimeMillis();
@@ -328,7 +239,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint subX(double x) {
+    public IFVector subX(double x) {
 
         String name = "subX(double)";
         long time = System.currentTimeMillis();
@@ -341,7 +252,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint subY(double y) {
+    public IFVector subY(double y) {
 
         String name = "subY(double)";
         long time = System.currentTimeMillis();
@@ -354,7 +265,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint subZ(double z) {
+    public IFVector subZ(double z) {
 
         String name = "subZ(double)";
         long time = System.currentTimeMillis();
@@ -367,7 +278,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint mul(IFPoint fPoint) {
+    public IFVector mul(IFPoint fPoint) {
 
         String name = "mul(IFPoint)";
         long time = System.currentTimeMillis();
@@ -380,7 +291,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint mul(double x, double y, double z) {
+    public IFVector mul(double x, double y, double z) {
 
         String name = "mul(double, double, double)";
         long time = System.currentTimeMillis();
@@ -393,7 +304,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint mul(double factor) {
+    public IFVector mul(double factor) {
 
         String name = "mul(double)";
         long time = System.currentTimeMillis();
@@ -406,7 +317,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint mulX(double x) {
+    public IFVector mulX(double x) {
 
         String name = "mulX(double)";
         long time = System.currentTimeMillis();
@@ -419,7 +330,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint mulY(double y) {
+    public IFVector mulY(double y) {
 
         String name = "mulY(double)";
         long time = System.currentTimeMillis();
@@ -432,7 +343,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint mulZ(double z) {
+    public IFVector mulZ(double z) {
 
         String name = "mulZ(double)";
         long time = System.currentTimeMillis();
@@ -445,7 +356,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint div(IFPoint fPoint) {
+    public IFVector div(IFPoint fPoint) {
 
         String name = "div(IFPoint)";
         long time = System.currentTimeMillis();
@@ -458,7 +369,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint div(double x, double y, double z) {
+    public IFVector div(double x, double y, double z) {
 
         String name = "div(double, double, double)";
         long time = System.currentTimeMillis();
@@ -471,7 +382,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint div(double factor) {
+    public IFVector div(double factor) {
 
         String name = "div(double)";
         long time = System.currentTimeMillis();
@@ -484,7 +395,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint divX(double x) {
+    public IFVector divX(double x) {
 
         String name = "divX(double)";
         long time = System.currentTimeMillis();
@@ -497,7 +408,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint divY(double y) {
+    public IFVector divY(double y) {
 
         String name = "divY(double)";
         long time = System.currentTimeMillis();
@@ -510,7 +421,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint divZ(double z) {
+    public IFVector divZ(double z) {
 
         String name = "divZ(double)";
         long time = System.currentTimeMillis();
@@ -523,9 +434,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint set(IFPoint element) {
+    public IFVector set(IFVector element) {
 
-        String name = "set(IFPoint)";
+        String name = "set(IFVector)";
         long time = System.currentTimeMillis();
 
         var res = core.set(element);
@@ -536,9 +447,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint imprint(IFPoint element) {
+    public IFVector imprint(IFVector element) {
 
-        String name = "imprint(IFPoint)";
+        String name = "imprint(IFVector)";
         long time = System.currentTimeMillis();
 
         var res = core.imprint(element);
@@ -549,9 +460,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint fun(Consumer<IFPoint> exp) {
+    public IFVector fun(Consumer<IFVector> exp) {
 
-        String name = "fun(Consumer<IFPoint> exp)";
+        String name = "fun(Consumer<IFVector>)";
         long time = System.currentTimeMillis();
 
         var res = core.fun(exp);
@@ -562,9 +473,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public double funVal(Function<IFPoint, Double> exp) {
+    public double funVal(Function<IFVector, Double> exp) {
 
-        String name = "funVal(Function<IFPoint, Double>)";
+        String name = "funVal(Function<IFVector, Double>)";
         long time = System.currentTimeMillis();
 
         var res = core.funVal(exp);
@@ -575,9 +486,9 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public boolean funLog(Predicate<IFPoint> exp) {
+    public boolean funLog(Predicate<IFVector> exp) {
 
-        String name = "funLog(Predicate<IFPoint>)";
+        String name = "funLog(Predicate<IFVector>)";
         long time = System.currentTimeMillis();
 
         var res = core.funLog(exp);
@@ -588,7 +499,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint ext(Consumer<IBaseExtensionAssembly> exp) {
+    public IFVector ext(Consumer<IBaseExtensionAssembly> exp) {
 
         String name = "ext(Consumer<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
@@ -640,7 +551,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setSphericalCoordinates(double inclination, double azimuth) {
+    public IFVector setSphericalCoordinates(double inclination, double azimuth) {
 
         String name = "setSphericalCoordinates(double, double)";
         long time = System.currentTimeMillis();
@@ -653,12 +564,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setRandomAngle(IFPoint... exclude) {
+    public IFVector setRandomAngle(IFPoint... exclusion) {
 
         String name = "setRandomAngle(IFPoint...)";
         long time = System.currentTimeMillis();
 
-        var res = core.setRandomAngle(exclude);
+        var res = core.setRandomAngle(exclusion);
 
         updateStats(name, time);
 
@@ -666,12 +577,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public boolean isExact(double x, double y, double z) {
+    public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
-        String name = "isExact(double, double, double)";
+        String name = "isExact(double, double, double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(x, y, z);
+        var res = core.isExact(bX, bY, bZ, hX, hY, hZ);
 
         updateStats(name, time);
 
@@ -679,12 +590,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public boolean isSimilar(double x, double y, double z) {
+    public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
-        String name = "isSimilar(double, double, double)";
+        String name = "isSimilar(double, double, double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(x, y, z);
+        var res = core.isSimilar(bX, bY, bZ, hX, hY, hZ);
 
         updateStats(name, time);
 
@@ -692,12 +603,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint reflect() {
+    public IFVector moveBase() {
 
-        String name = "reflect()";
+        String name = "moveBase()";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect();
+        var res = core.moveBase();
 
         updateStats(name, time);
 
@@ -705,12 +616,12 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint reflect(IFPoint ref) {
+    public IFVector moveBase(double bX, double bY, double bZ) {
 
-        String name = "reflect(IFPoint)";
+        String name = "moveBase(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect(ref);
+        var res = core.moveBase(bX, bY, bZ);
 
         updateStats(name, time);
 
@@ -718,12 +629,103 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint normalize() throws DirectionException {
+    public IFVector moveBase(IFPoint base) {
 
-        String name = "normalize()";
+        String name = "moveBase(IFPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.normalize();
+        var res = core.moveBase(base);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector moveHead() {
+
+        String name = "moveHead()";
+        long time = System.currentTimeMillis();
+
+        var res = core.moveHead();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector moveHead(double hX, double hY, double hZ) {
+
+        String name = "moveHead(double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.moveHead(hX, hY, hZ);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector moveHead(IFPoint head) {
+
+        String name = "moveHead(IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.moveHead(head);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector moveForward(double distance) throws DirectionException {
+
+        String name = "moveForward(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.moveForward(distance);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector moveBackward(double distance) throws DirectionException {
+
+        String name = "moveBackward(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.moveBackward(distance);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector add(IFVector vector) {
+
+        String name = "add(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.add(vector);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector sub(IFVector vector) {
+
+        String name = "sub(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.sub(vector);
 
         updateStats(name, time);
 
@@ -744,12 +746,116 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setLength(double length) throws DirectionException {
+    public IFVector setLength(double length) throws DirectionException {
 
         String name = "setLength(double)";
         long time = System.currentTimeMillis();
 
         var res = core.setLength(length);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public double getLengthX() {
+
+        String name = "getLengthX()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getLengthX();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public double getLengthY() {
+
+        String name = "getLengthY()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getLengthY();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public double getLengthZ() {
+
+        String name = "getLengthZ()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getLengthZ();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public IFVector normalize() throws DirectionException {
+
+        String name = "normalize()";
+        long time = System.currentTimeMillis();
+
+        var res = core.normalize();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector reflect(IFPoint center) {
+
+        String name = "reflect(IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.reflect(center);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector reflectBase() {
+
+        String name = "reflectBase()";
+        long time = System.currentTimeMillis();
+
+        var res = core.reflectBase();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector reflectHead() {
+
+        String name = "reflectHead()";
+        long time = System.currentTimeMillis();
+
+        var res = core.reflectHead();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector invertDirection() {
+
+        String name = "invertDirection()";
+        long time = System.currentTimeMillis();
+
+        var res = core.invertDirection();
 
         updateStats(name, time);
 
@@ -770,7 +876,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setInclination(double inclination) {
+    public IFVector setInclination(double inclination) {
 
         String name = "setInclination(double)";
         long time = System.currentTimeMillis();
@@ -796,7 +902,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setAzimuth(double azimuth) {
+    public IFVector setAzimuth(double azimuth) {
 
         String name = "setAzimuth(double)";
         long time = System.currentTimeMillis();
@@ -809,7 +915,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public double getAngle(IFPoint ref) throws DirectionException {
+    public double getAngle(IFPoint ref) throws PositionException, DirectionException {
 
         String name = "getAngle(IFPoint)";
         long time = System.currentTimeMillis();
@@ -822,29 +928,16 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public double getDistance(IFPoint ref) {
+    public double getAngle(IFVector ref) throws DirectionException {
 
-        String name = "getDistance(IFPoint)";
+        String name = "getAngle(IFVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.getDistance(ref);
+        var res = core.getAngle(ref);
 
         updateStats(name, time);
 
         return res;
-    }
-
-    @Override
-    public IFPoint setDistance(IFPoint ref, double distance) throws DirectionException {
-
-        String name = "setDistance(IFPoint, double)";
-        long time = System.currentTimeMillis();
-
-        var res = core.setDistance(ref, distance);
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
     }
 
     @Override
@@ -861,7 +954,20 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint setCrossProduct(IFPoint ref) {
+    public double getDotProduct(IFVector ref) {
+
+        String name = "getDotProduct(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.getDotProduct(ref);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public IFVector setCrossProduct(IFPoint ref) {
 
         String name = "setCrossProduct(IFPoint)";
         long time = System.currentTimeMillis();
@@ -874,16 +980,211 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public boolean isZero() {
+    public IFVector setCrossProduct(IFVector ref) {
 
-        String name = "isZero()";
+        String name = "setCrossProduct(IFVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.isZero();
+        var res = core.setCrossProduct(ref);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public boolean isParallel(IFVector ref) throws DirectionException {
+
+        String name = "isParallel(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isParallel(ref);
 
         updateStats(name, time);
 
         return res;
+    }
+
+    @Override
+    public IFVector setParallel(IFVector ref) throws DirectionException {
+
+        String name = "setParallel(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setParallel(ref);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public boolean isAntiParallel(IFVector ref) throws DirectionException {
+
+        String name = "isAntiParallel(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isAntiParallel(ref);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public IFVector setAntiParallel(IFVector ref) throws DirectionException {
+
+        String name = "setAntiParallel(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setAntiParallel(ref);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public boolean isOrthogonal(IFVector ref) throws DirectionException {
+
+        String name = "isOrthogonal(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isOrthogonal(ref);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public IFVector setOrthogonal(IFVector ref) throws PositionException, DirectionException {
+
+        String name = "setOrthogonal(IFVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setOrthogonal(ref);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public boolean isNonDirectional() {
+
+        String name = "isNonDirectional()";
+        long time = System.currentTimeMillis();
+
+        var res = core.isNonDirectional();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public IFVector set(IFPoint base, IFPoint head) {
+
+        String name = "set(IFPoint, IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.set(base, head);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector setRef(IFPoint baseRef, IFPoint headRef) {
+
+        String name = "setRef(IFPoint, IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setRef(baseRef, headRef);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFPoint getBase() {
+
+        String name = "getBase()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getBase();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public IFVector setBase(IFPoint base) {
+
+        String name = "setBase(IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setBase(base);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector setBaseRef(IFPoint baseRef) {
+
+        String name = "setBaseRef(IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setBaseRef(baseRef);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFPoint getHead() {
+
+        String name = "getHead()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getHead();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public IFVector setHead(IFPoint head) {
+
+        String name = "setHead(IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setHead(head);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public IFVector setHeadRef(IFPoint headRef) {
+
+        String name = "setHeadRef(IFPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setHeadRef(headRef);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -891,7 +1192,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     @Override
     public Object clone() {
 
-        return create((IFPoint) core.clone());
+        return create((IFVector) core.clone());
 
     }
 
@@ -910,7 +1211,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof IFPoint) {
+        if (object instanceof IFVector) {
             return core.equals(object);
         }
 
@@ -926,7 +1227,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint devResetNumberOfInstances() {
+    public IFVector devResetNumberOfInstances() {
 
         numberOfInstances = 0;
 
@@ -934,7 +1235,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint devDescribeStats() {
+    public IFVector devDescribeStats() {
 
         debugPrintStream.println(statsObject.toString());
 
@@ -942,7 +1243,7 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
     }
 
     @Override
-    public IFPoint devDescribeClassStats() {
+    public IFVector devDescribeClassStats() {
 
         debugPrintStream.println(statsClass.toString());
 
@@ -975,5 +1276,4 @@ public class FPointDev extends PresetBase<IFPoint> implements IFPoint {
 
         statsObject.recordEvent(name, time);
     }
-
 }

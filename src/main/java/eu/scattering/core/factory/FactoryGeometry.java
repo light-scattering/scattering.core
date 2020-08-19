@@ -6,10 +6,13 @@ import eu.scattering.core.geometry.base.point.impl.FPoint;
 import eu.scattering.core.geometry.base.point.impl.dec.FPointDev;
 import eu.scattering.core.geometry.base.vector.IFVector;
 import eu.scattering.core.geometry.base.vector.impl.FVector;
+import eu.scattering.core.geometry.base.vector.impl.dec.FVectorDev;
 import eu.scattering.core.geometry.support.line.IFLine;
 import eu.scattering.core.geometry.support.line.impl.FLine;
+import eu.scattering.core.geometry.support.line.impl.dec.FLineDev;
 import eu.scattering.core.geometry.support.plane.IFPlane;
 import eu.scattering.core.geometry.support.plane.impl.FPlane;
+import eu.scattering.core.geometry.support.plane.impl.dec.FPlaneDev;
 
 public class FactoryGeometry {
 
@@ -28,18 +31,27 @@ public class FactoryGeometry {
     }
 
     public static IFVector getIFVector() {
+        IFVector fVector = FVector.create();
 
-        return FVector.create();
+        fVector = Configuration.isDevEnabled() ? FVectorDev.create(fVector) : fVector;
+
+        return fVector;
     }
 
     public static IFLine getIFLine() {
+        IFLine fLine = FLine.create();
 
-        return FLine.create();
+        fLine = Configuration.isDevEnabled() ? FLineDev.create(fLine) : fLine;
+
+        return fLine;
     }
 
     public static IFPlane getIFPlane() {
+        IFPlane fPlane = FPlane.create();
 
-        return FPlane.create();
+        fPlane = Configuration.isDevEnabled() ? FPlaneDev.create(fPlane) : fPlane;
+
+        return fPlane;
     }
 
     // -------------------------------------------------------------------------------------------------

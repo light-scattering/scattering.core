@@ -18,7 +18,7 @@ public class DevTest {
 
     private static IDev<?> getTestInstance() {
 
-        return FactoryGeometry.getIFPoint();
+        return FactoryGeometry.getIFLine();
     }
 
     @BeforeAll
