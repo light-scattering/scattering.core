@@ -1,9 +1,9 @@
 package eu.scattering.core;
 
-import eu.scattering.core.debug.IDev;
-import eu.scattering.core.debug.stats.IStats;
-import eu.scattering.core.debug.stats.IStatsMethod;
-import eu.scattering.core.factory.FactoryGeometry;
+import eu.scattering.core.dev.IDev;
+import eu.scattering.core.dev.stats.IStats;
+import eu.scattering.core.dev.stats.IStatsMethod;
+import eu.scattering.core.main.MainFactory;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
@@ -18,28 +18,28 @@ public class DevTest {
 
     private static IDev<?> getTestInstance() {
 
-        return FactoryGeometry.getIFLine();
+        return MainFactory.getIFLine();
     }
 
     @BeforeAll
     static void beforeAll() {
 
-        initialDevEnabled = Configuration.isDevEnabled();
-        initialDevObjectStatsSuspended = Configuration.isDevObjectStatsSuspended();
+        initialDevEnabled = Config.isDevEnabled();
+        initialDevObjectStatsSuspended = Config.isDevObjectStatsSuspended();
     }
 
     @AfterAll
     static void afterAll() {
 
-        Configuration.setDevEnabled(initialDevEnabled);
-        Configuration.setDevObjectStatsSuspended(initialDevObjectStatsSuspended);
+        Config.setDevEnabled(initialDevEnabled);
+        Config.setDevObjectStatsSuspended(initialDevObjectStatsSuspended);
     }
 
     @BeforeEach
     void beforeEach() {
 
-        Configuration.setDevEnabled(true);
-        Configuration.setDevObjectStatsSuspended(true);
+        Config.setDevEnabled(true);
+        Config.setDevObjectStatsSuspended(true);
 
         getTestInstance().devGetClassStats().ifPresent(IStats::reset);
         getTestInstance().devResetNumberOfInstances();
@@ -64,7 +64,7 @@ public class DevTest {
             @Test
             @DisplayName("Get IStats for classes (disabled)")
             void getIStatsForClassesDisabled() {
-                Configuration.setDevEnabled(false);
+                Config.setDevEnabled(false);
 
                 assertTrue(getTestInstance().devGetClassStats().isEmpty(),
                         "The IStat object should not be available");
@@ -227,7 +227,7 @@ public class DevTest {
             @Test
             @DisplayName("Get IStats for object (disabled)")
             void getIStatsForObjectsDisabled() {
-                Configuration.setDevEnabled(false);
+                Config.setDevEnabled(false);
 
                 assertTrue(getTestInstance().devGetStats().isEmpty(),
                         "The IStat object should not be available");
@@ -246,7 +246,7 @@ public class DevTest {
             @Test
             @DisplayName("Register single object event (enabled)")
             void registerSingleObjectEventEnabled() {
-                Configuration.setDevObjectStatsSuspended(false);
+                Config.setDevObjectStatsSuspended(false);
 
                 Optional<IStats> statsOpt = getTestInstance().devGetStats();
                 IStats stats = statsOpt.orElseGet(() -> fail("Empty optional"));
@@ -504,7 +504,7 @@ public class DevTest {
         @DisplayName("Number of instances (disabled)")
         void getNumberOfInstancesDisabled() {
 
-            Configuration.setDevEnabled(false);
+            Config.setDevEnabled(false);
 
             assertEquals(Optional.empty(), getTestInstance().devGetNumberOfInstances(),
                     "The number of instances field should not be available");
