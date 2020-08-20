@@ -1,7 +1,6 @@
 package eu.scattering.core.design.engine.base;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.engine.base.vector.FVectorAdvanced;
 import eu.scattering.core.injection.EngineFactory;
 import eu.scattering.core.design.engine.base.point.FPoint;
 import eu.scattering.core.design.engine.base.vector.FVector;
@@ -889,7 +888,7 @@ public class FVectorTest {
         void setRandomAngleValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(FVectorAdvanced::setRandomAngle, fVector);
+            FVectorHelper.validateRef(e -> e.setRandomAngle(), fVector);
         }
 
         @Test
