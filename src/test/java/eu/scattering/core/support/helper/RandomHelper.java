@@ -2,8 +2,8 @@ package eu.scattering.core.support.helper;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.injection.EngineFactory;
-import eu.scattering.core.design.engine.base.point.FPoint;
-import eu.scattering.core.design.engine.base.vector.FVector;
+import eu.scattering.core.design.main.engine.base.point.FPoint;
+import eu.scattering.core.design.main.engine.base.vector.FVector;
 
 import java.util.concurrent.ThreadLocalRandom;
 

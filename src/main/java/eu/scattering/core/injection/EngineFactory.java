@@ -1,18 +1,20 @@
 package eu.scattering.core.injection;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.engine.base.point.FPoint;
-import eu.scattering.core.implementation.engine.base.point.FPointDefault;
-import eu.scattering.core.implementation.engine.base.point.FPointDevelopment;
-import eu.scattering.core.design.engine.base.vector.FVector;
-import eu.scattering.core.implementation.engine.base.vector.FVectorDefault;
-import eu.scattering.core.implementation.engine.base.vector.FVectorDevelopment;
-import eu.scattering.core.design.engine.support.line.FLine;
-import eu.scattering.core.implementation.engine.support.line.FLineDefault;
-import eu.scattering.core.implementation.engine.support.line.FLineDevelopment;
-import eu.scattering.core.design.engine.support.plane.FPlane;
-import eu.scattering.core.implementation.engine.support.plane.FPlaneDefault;
-import eu.scattering.core.implementation.engine.support.plane.FPlaneDevelopment;
+import eu.scattering.core.design.main.engine.base.point.FPoint;
+import eu.scattering.core.design.main.valjo.FDipole;
+import eu.scattering.core.implementation.main.engine.base.point.FPointDefault;
+import eu.scattering.core.implementation.main.engine.base.point.FPointDevelopment;
+import eu.scattering.core.design.main.engine.base.vector.FVector;
+import eu.scattering.core.implementation.main.engine.base.vector.FVectorDefault;
+import eu.scattering.core.implementation.main.engine.base.vector.FVectorDevelopment;
+import eu.scattering.core.design.main.engine.support.line.FLine;
+import eu.scattering.core.implementation.main.engine.support.line.FLineDefault;
+import eu.scattering.core.implementation.main.engine.support.line.FLineDevelopment;
+import eu.scattering.core.design.main.engine.support.plane.FPlane;
+import eu.scattering.core.implementation.main.engine.support.plane.FPlaneDefault;
+import eu.scattering.core.implementation.main.engine.support.plane.FPlaneDevelopment;
+import eu.scattering.core.implementation.main.valjo.FDipoleDefault;
 
 public class EngineFactory {
 
@@ -52,6 +54,18 @@ public class EngineFactory {
         fPlane = Config.isDevEnabled() ? FPlaneDevelopment.create(fPlane) : fPlane;
 
         return fPlane;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    public static FDipole getFDipole(int x, int y, int z) {
+
+        return FDipoleDefault.create(x, y, z);
+    }
+
+    public static FDipole getFDipole(String position) {
+
+        return FDipoleDefault.parse(position);
     }
 
     // -------------------------------------------------------------------------------------------------

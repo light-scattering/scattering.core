@@ -7,15 +7,16 @@ import java.util.Optional;
 public interface Development<T> {
 
     T devDescribe();
-    T devDescribeStats();
-    T devDescribeClassStats();
+    T devDescribeStatistics();
+    T devDescribeClassStatistics();
+//    T devDescribeNumberOfInstances();
 
     Optional<Long> devGetNumberOfInstances();
     T devResetNumberOfInstances();
 
-    Optional<Statistics> devGetStats();
-    Optional<Statistics> devGetClassStats();
+    Optional<Statistics> devGetStatistics();
+    Optional<Statistics> devGetClassStatistics();
 
-    String devGetMeta();
-    T devSetMeta(String meta);
+    String devGetLabel();
+    T devSetLabel(String label);
 }

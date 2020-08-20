@@ -1,7 +1,9 @@
 package eu.scattering.core.design;
 
+import eu.scattering.core.design.main.engine.base.vector.FVector;
+import eu.scattering.core.design.main.engine.support.plane.FPlane;
 import eu.scattering.core.injection.EngineFactory;
-import eu.scattering.core.design.engine.base.point.FPoint;
+import eu.scattering.core.design.main.engine.base.point.FPoint;
 import org.junit.jupiter.api.Test;
 
 public class PlaygroundTest {
@@ -9,19 +11,15 @@ public class PlaygroundTest {
     @Test
     void playground() {
 
-       FPoint fPoint = EngineFactory.getFPoint();
-       fPoint.set(1, 1, 1);
-       fPoint.setX(3);
+       FVector fVector = EngineFactory.getFVector(0, 1, 0);
+       FPlane fPlane = EngineFactory.getFPlane(fVector);
+       FPoint fPoint = EngineFactory.getFPoint(1, 2, 3);
 
-        FPoint fPoint2 = EngineFactory.getFPoint();
-        fPoint2.set(1, 1, 1);
-        fPoint2.reflect();
-        fPoint2.normalize();
-        fPoint2.setX(3);
+       fPoint.ext(fPlane.reflect()).ext(fPlane.setDistance(10)).ext(fPlane.project()).cus(e -> e.set(1, 2, 3));
 
-        fPoint.devDescribeStats();
-        fPoint.devDescribeClassStats();
-
-        System.out.println(fPoint2.devGetStats().get().getMethod("setX(double)"));
+       fVector.devDescribeClassStatistics();
+       fPlane.devDescribeClassStatistics();
+       fPoint.devDescribeClassStatistics();
+        System.out.println(fPoint.devGetNumberOfInstances().get());
     }
 }
