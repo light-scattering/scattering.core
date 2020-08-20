@@ -1,9 +1,9 @@
 package eu.scattering.core.support.helper;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.injection.MainFactory;
-import eu.scattering.core.design.main.engine.base.point.FPoint;
-import eu.scattering.core.design.main.engine.base.vector.FVector;
+import eu.scattering.core.injection.EngineFactory;
+import eu.scattering.core.design.engine.base.point.FPoint;
+import eu.scattering.core.design.engine.base.vector.FVector;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -14,8 +14,8 @@ public final class RandomHelper {
     private static final double valueMax = +10000;
     private static final double valueMin = -10000;
 
-    private static final FPoint fPointZero = MainFactory.getFPoint();
-    private static final FVector fVectorZero = MainFactory.getFVector(MainFactory.getFPoint());
+    private static final FPoint fPointZero = EngineFactory.getFPoint();
+    private static final FVector fVectorZero = EngineFactory.getFVector(EngineFactory.getFPoint());
 
     public static double getTestValue(double... exclude) {
         double value = 0;
@@ -35,11 +35,11 @@ public final class RandomHelper {
     }
 
     public static FPoint getTestPoint(FPoint... exclude) {
-        FPoint fPoint = MainFactory.getFPoint();
+        FPoint fPoint = EngineFactory.getFPoint();
 
         mainLoop:
         while (fPoint.isSimilar(fPointZero)) {
-            fPoint = MainFactory.getFPoint(getTestValue(), getTestValue(), getTestValue());
+            fPoint = EngineFactory.getFPoint(getTestValue(), getTestValue(), getTestValue());
 
             for (FPoint singularity : exclude) {
                 if (fPoint.isSimilar(singularity)) {
@@ -52,11 +52,11 @@ public final class RandomHelper {
     }
 
     public static FVector getTestVector(FVector... exclude) {
-        FVector fVector = MainFactory.getFVector();
+        FVector fVector = EngineFactory.getFVector();
 
         mainLoop:
         while (fVector.isSimilar(fVectorZero)) {
-            fVector = MainFactory.getFVector(getTestPoint(), getTestPoint());
+            fVector = EngineFactory.getFVector(getTestPoint(), getTestPoint());
 
             for (FVector singularity : exclude) {
                 if (fVector.isSimilar(singularity)) {

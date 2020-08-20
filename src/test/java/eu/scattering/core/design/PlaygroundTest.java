@@ -1,7 +1,7 @@
 package eu.scattering.core.design;
 
-import eu.scattering.core.injection.MainFactory;
-import eu.scattering.core.design.main.engine.base.point.FPoint;
+import eu.scattering.core.injection.EngineFactory;
+import eu.scattering.core.design.engine.base.point.FPoint;
 import org.junit.jupiter.api.Test;
 
 public class PlaygroundTest {
@@ -9,11 +9,11 @@ public class PlaygroundTest {
     @Test
     void playground() {
 
-       FPoint fPoint = MainFactory.getFPoint();
+       FPoint fPoint = EngineFactory.getFPoint();
        fPoint.set(1, 1, 1);
        fPoint.setX(3);
 
-        FPoint fPoint2 = MainFactory.getFPoint();
+        FPoint fPoint2 = EngineFactory.getFPoint();
         fPoint2.set(1, 1, 1);
         fPoint2.reflect();
         fPoint2.normalize();

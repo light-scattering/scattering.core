@@ -13,5 +13,5 @@ public interface Statistics {
     boolean isSuspended();
 
     Set<String> getMethodNames();
-    Optional<MethodStatistics> getMethod(String methodName);
+    Optional<StatisticsMethod> getMethod(String methodName);
 }

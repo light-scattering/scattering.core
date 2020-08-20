@@ -2,7 +2,7 @@ package eu.scattering.core.implementation.development.statistics;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.design.development.statistics.MethodStatistics;
+import eu.scattering.core.design.development.statistics.StatisticsMethod;
 import eu.scattering.core.injection.DevelopmentFactory;
 
 import java.time.LocalTime;
@@ -10,7 +10,7 @@ import java.util.*;
 
 public class StatisticsDefault implements Statistics {
 
-    private Map<String, MethodStatistics> stats;
+    private Map<String, StatisticsMethod> stats;
     private boolean suspended;
 
     private StatisticsDefault(boolean global) {
@@ -36,13 +36,13 @@ public class StatisticsDefault implements Statistics {
     }
 
     @Override
-    public Optional<MethodStatistics> getMethod(String methodName) {
+    public Optional<StatisticsMethod> getMethod(String methodName) {
 
         if (methodName == null) {
             throw new NullPointerException("The method name cannot be null");
         }
 
-        MethodStatistics record = stats.get(methodName);
+        StatisticsMethod record = stats.get(methodName);
 
         if (record == null) {
             return Optional.empty();
@@ -62,8 +62,8 @@ public class StatisticsDefault implements Statistics {
             return;
         }
 
-        Optional<MethodStatistics> statsMethodOptional = getMethod(methodName);
-        MethodStatistics statsMethod;
+        Optional<StatisticsMethod> statsMethodOptional = getMethod(methodName);
+        StatisticsMethod statsMethod;
 
         if (statsMethodOptional.isEmpty()) {
             statsMethod = DevelopmentFactory.getIStatsMethod();
@@ -95,11 +95,11 @@ public class StatisticsDefault implements Statistics {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        Map<String, MethodStatistics> devStatsSorted = new TreeMap<>(stats);
+        Map<String, StatisticsMethod> devStatsSorted = new TreeMap<>(stats);
 
         builder.append(LocalTime.now().toString()).append(" - registered methods: ").append(devStatsSorted.size()).append("\n");
 
-        for (Map.Entry<String, MethodStatistics> entry : devStatsSorted.entrySet()) {
+        for (Map.Entry<String, StatisticsMethod> entry : devStatsSorted.entrySet()) {
             builder.append("- ").append(entry.getKey()).append(" / ").append(entry.getValue()).append("\n");
         }
 

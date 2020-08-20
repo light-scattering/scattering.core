@@ -1,9 +1,9 @@
 package eu.scattering.core.injection;
 
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.design.development.statistics.MethodStatistics;
+import eu.scattering.core.design.development.statistics.StatisticsMethod;
 import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
-import eu.scattering.core.implementation.development.statistics.MethodStatisticsDefault;
+import eu.scattering.core.implementation.development.statistics.StatisticsMethodDefault;
 
 public class DevelopmentFactory {
 
@@ -18,8 +18,8 @@ public class DevelopmentFactory {
         return StatisticsDefault.create(global);
     }
 
-    public static MethodStatistics getIStatsMethod() {
+    public static StatisticsMethod getIStatsMethod() {
 
-        return MethodStatisticsDefault.create();
+        return StatisticsMethodDefault.create();
     }
 }

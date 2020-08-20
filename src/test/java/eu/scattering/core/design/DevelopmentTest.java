@@ -3,8 +3,8 @@ package eu.scattering.core.design;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.design.development.statistics.MethodStatistics;
-import eu.scattering.core.injection.MainFactory;
+import eu.scattering.core.design.development.statistics.StatisticsMethod;
+import eu.scattering.core.injection.EngineFactory;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ public class DevelopmentTest {
 
     private static Development<?> getTestInstance() {
 
-        return MainFactory.getFLine();
+        return EngineFactory.getFLine();
     }
 
     @BeforeAll
@@ -285,7 +285,7 @@ public class DevelopmentTest {
 
                 stats.recordEvent("test event 1", 10L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
 
                 assertTrue(statsMethodOpt.isPresent(), "The requested method should be available");
             }
@@ -310,7 +310,7 @@ public class DevelopmentTest {
 
                 stats.recordEvent("test event 1", 10L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 2");
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 2");
 
                 assertTrue(statsMethodOpt.isEmpty(), "The requested method should not be available");
             }
@@ -325,8 +325,8 @@ public class DevelopmentTest {
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThat(statsMethod.getExecutionTimes())
                         .hasSize(3)
@@ -341,8 +341,8 @@ public class DevelopmentTest {
 
                 stats.recordEvent("test event 1", 10L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 statsMethod.recordExecutionTime(20L);
                 statsMethod.recordExecutionTime(30L);
@@ -360,8 +360,8 @@ public class DevelopmentTest {
 
                 stats.recordEvent("test event 1", 10L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 statsMethod.recordExecutionTime(20L);
                 statsMethod.recordExecutionTime(30L);
@@ -378,8 +378,8 @@ public class DevelopmentTest {
 
                 stats.recordEvent("test event 1", 10L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertThrows(ArithmeticException.class, () -> statsMethod.recordExecutionTime(-10L),
                         "The event time must be a positive value");
@@ -395,8 +395,8 @@ public class DevelopmentTest {
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(3, statsMethod.getNumberOfIterations(),
                         "The number of iterations is incorrect");
@@ -412,8 +412,8 @@ public class DevelopmentTest {
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(60L, statsMethod.getTimeTotal(),
                         "The total time is incorrect");
@@ -429,8 +429,8 @@ public class DevelopmentTest {
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(20L, statsMethod.getTimeAvg(),
                         "The averaged time is incorrect");
@@ -446,8 +446,8 @@ public class DevelopmentTest {
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(10L, statsMethod.getTimeMin(),
                         "The min time is incorrect");
@@ -463,8 +463,8 @@ public class DevelopmentTest {
                 stats.recordEvent("test event 1", 20L);
                 stats.recordEvent("test event 1", 30L);
 
-                Optional<MethodStatistics> statsMethodOpt = stats.getMethod("test event 1");
-                MethodStatistics statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(30L, statsMethod.getTimeMax(),
                         "The max time is incorrect");
