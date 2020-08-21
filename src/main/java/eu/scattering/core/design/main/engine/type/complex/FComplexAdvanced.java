@@ -37,7 +37,9 @@ public interface FComplexAdvanced {
     FComplex pow(int n);
     FComplex root(int n);
 
+    FComplex inverse();
     FComplex conjugate();
+    FComplex normalize();
 
     FComplex imprint(FComplex fComplex);
 }

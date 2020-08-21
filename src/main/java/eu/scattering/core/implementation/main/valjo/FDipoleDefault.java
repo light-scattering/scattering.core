@@ -1,6 +1,8 @@
 package eu.scattering.core.implementation.main.valjo;
 
 import eu.scattering.core.design.main.valjo.FDipole;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public final class FDipoleDefault implements FDipole {
 
@@ -13,7 +15,6 @@ public final class FDipoleDefault implements FDipole {
         this.x = x;
         this.y = y;
         this.z = z;
-
     }
 
     public static FDipole create(int x, int y, int z) {
@@ -21,11 +22,10 @@ public final class FDipoleDefault implements FDipole {
         return new FDipoleDefault(x, y, z);
     }
 
-    public static FDipole parse(String dipole) {
+    public static FDipole parse(String json) {
+        JSONArray structure = (new JSONObject(json)).getJSONArray("dipole");
 
-        String[] pos = dipole.split(",");
-
-        return new FDipoleDefault(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]), Integer.parseInt(pos[2]));
+        return new FDipoleDefault(structure.getInt(0), structure.getInt(1), structure.getInt(2));
     }
 
     @Override
@@ -54,13 +54,7 @@ public final class FDipoleDefault implements FDipole {
     @Override
     public String toString() {
 
-        return x + "," + y + "," + z;
-    }
-
-    @Override
-    public Object clone() {
-
-        throw new UnsupportedOperationException("The clone method is not implemented");
+        return exportToJSON().toString();
     }
 
     @Override
@@ -85,6 +79,17 @@ public final class FDipoleDefault implements FDipole {
     public int getPositionZ() {
 
         return z;
+    }
+
+    @Override
+    public JSONObject exportToJSON() {
+        JSONObject json = new JSONObject();
+
+        json.append("dipole", getPositionX());
+        json.append("dipole", getPositionY());
+        json.append("dipole", getPositionZ());
+
+        return json;
     }
 
 }

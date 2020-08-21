@@ -1,6 +1,8 @@
 package eu.scattering.core.design.main.valjo;
 
-public interface FDipole {
+import eu.scattering.core.design.main.Main;
+
+public interface FDipole extends Main<FDipole> {
 
     int[] getPosition();
 

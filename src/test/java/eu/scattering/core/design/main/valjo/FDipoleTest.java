@@ -24,7 +24,7 @@ public class FDipoleTest {
     @Test
     @DisplayName("Create with String")
     public void createWithString() {
-        FDipole fDipole = EngineFactory.getFDipole("1,2,3");
+        FDipole fDipole = EngineFactory.getFDipole("{\"dipole\":[1,2,3]}");
 
         assertAll("Check values",
                 () -> assertEquals(1, fDipole.getPositionX(), "The X value is incorrect"),
