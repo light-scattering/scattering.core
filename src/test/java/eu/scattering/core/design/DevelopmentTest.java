@@ -4,7 +4,7 @@ import eu.scattering.core.Config;
 import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
-import eu.scattering.core.injection.EngineFactory;
+import eu.scattering.core.injection.MainFactory;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
@@ -19,7 +19,7 @@ public class DevelopmentTest {
 
     private static Development<?> getTestInstance() {
 
-        return EngineFactory.getFLine();
+        return MainFactory.getFLine();
     }
 
     @BeforeAll

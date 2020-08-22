@@ -1,6 +1,6 @@
 package eu.scattering.core.design.main.valjo;
 
-import eu.scattering.core.injection.EngineFactory;
+import eu.scattering.core.injection.MainFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ public class FDipoleTest {
     @Test
     @DisplayName("Create with parameters")
     public void createWithParameters() {
-        FDipole fDipole = EngineFactory.getFDipole(1, 2, 3);
+        FDipole fDipole = MainFactory.getFDipole(1, 2, 3);
 
         assertAll("Check values",
                 () -> assertEquals(1, fDipole.getPositionX(), "The X value is incorrect"),
@@ -24,7 +24,7 @@ public class FDipoleTest {
     @Test
     @DisplayName("Create with String")
     public void createWithString() {
-        FDipole fDipole = EngineFactory.getFDipole("{\"dipole\":[1,2,3]}");
+        FDipole fDipole = MainFactory.getFDipole("{\"dipole\":[1,2,3]}");
 
         assertAll("Check values",
                 () -> assertEquals(1, fDipole.getPositionX(), "The X value is incorrect"),
@@ -36,7 +36,7 @@ public class FDipoleTest {
     @Test
     @DisplayName("Get values")
     public void getValues() {
-        FDipole fDipole = EngineFactory.getFDipole(1, 2, 3);
+        FDipole fDipole = MainFactory.getFDipole(1, 2, 3);
 
         assertThat(fDipole.getPosition()).containsExactly(1, 2, 3);
     }
