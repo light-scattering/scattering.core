@@ -3,7 +3,7 @@ package eu.scattering.core.implementation.main.engine.base.vector;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.injection.DevelopmentFactory;
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.implementation.main.engine.base.BasePreset;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 import eu.scattering.core.design.main.engine.base.vector.FVector;
@@ -496,7 +496,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector ext(Consumer<BaseComposite> exp) {
+    public FVector ext(Consumer<Disassemble> exp) {
 
         String name = "ext(Consumer<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
@@ -509,7 +509,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public List<Double> extDouble(Function<BaseComposite, List<Double>> exp) {
+    public List<Double> extDouble(Function<Disassemble, List<Double>> exp) {
 
         String name = "extDouble(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
@@ -522,7 +522,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public List<Boolean> extBoolean(Function<BaseComposite, List<Boolean>> exp) {
+    public List<Boolean> extBoolean(Function<Disassemble, List<Boolean>> exp) {
 
         String name = "extBoolean(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();

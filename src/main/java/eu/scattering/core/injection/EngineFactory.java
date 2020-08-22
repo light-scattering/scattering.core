@@ -2,6 +2,8 @@ package eu.scattering.core.injection;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
+import eu.scattering.core.design.main.engine.type.complex.FComplex;
+import eu.scattering.core.design.main.engine.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.valjo.FDipole;
 import eu.scattering.core.implementation.main.engine.base.point.FPointDefault;
 import eu.scattering.core.implementation.main.engine.base.point.FPointDevelopment;
@@ -14,6 +16,8 @@ import eu.scattering.core.implementation.main.engine.support.line.FLineDevelopme
 import eu.scattering.core.design.main.engine.support.plane.FPlane;
 import eu.scattering.core.implementation.main.engine.support.plane.FPlaneDefault;
 import eu.scattering.core.implementation.main.engine.support.plane.FPlaneDevelopment;
+import eu.scattering.core.implementation.main.engine.type.complex.FComplexDefault;
+import eu.scattering.core.implementation.main.engine.type.quaternion.FQuaternionDefault;
 import eu.scattering.core.implementation.main.valjo.FDipoleDefault;
 
 public class EngineFactory {
@@ -54,6 +58,16 @@ public class EngineFactory {
         fPlane = Config.isDevEnabled() ? FPlaneDevelopment.create(fPlane) : fPlane;
 
         return fPlane;
+    }
+
+    public static FComplex getFComplex() {
+
+        return FComplexDefault.create();
+    }
+
+    public static FQuaternion getFQuaternion() {
+
+        return FQuaternionDefault.create();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -142,6 +156,20 @@ public class EngineFactory {
     public static FPlane getFPlane(FVector fVector) {
 
         return getFPlane().setOriginRef(fVector);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    public static FComplex getFComplex(double re, double im) {
+
+        return getFComplex().set(re, im);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    public static FQuaternion getFQuaternion(double re, double i, double j, double k) {
+
+        return getFQuaternion().set(re, i, j, k);
     }
 
 }

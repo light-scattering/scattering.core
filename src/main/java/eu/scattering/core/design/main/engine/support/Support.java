@@ -1,6 +1,6 @@
 package eu.scattering.core.design.main.engine.support;
 
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 import eu.scattering.core.design.main.engine.base.vector.FVector;
 
@@ -17,11 +17,11 @@ public interface Support<T> {
     FPoint getBase();
     FPoint getHead();
 
-    Consumer<BaseComposite> project();
-    Consumer<BaseComposite> reflect();
+    Consumer<Disassemble> project();
+    Consumer<Disassemble> reflect();
 
-    Function<BaseComposite, List<Double>> getDistance();
-    Consumer<BaseComposite> setDistance(double distance);
+    Function<Disassemble, List<Double>> getDistance();
+    Consumer<Disassemble> setDistance(double distance);
 
-    Function<BaseComposite, List<Boolean>> isPartOf();
+    Function<Disassemble, List<Boolean>> isPartOf();
 }

@@ -3,7 +3,7 @@ package eu.scattering.core.implementation.main.engine.support.line;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.injection.DevelopmentFactory;
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 import eu.scattering.core.design.main.engine.base.vector.FVector;
 import eu.scattering.core.implementation.main.engine.support.SupportPreset;
@@ -171,7 +171,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> project() {
+    public Consumer<Disassemble> project() {
 
         String name = "project()";
         long time = System.currentTimeMillis();
@@ -184,7 +184,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> reflect() {
+    public Consumer<Disassemble> reflect() {
 
         String name = "reflect()";
         long time = System.currentTimeMillis();
@@ -197,7 +197,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> setDistance(double distance) {
+    public Consumer<Disassemble> setDistance(double distance) {
 
         String name = "setDistance(double)";
         long time = System.currentTimeMillis();
@@ -210,7 +210,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Function<BaseComposite, List<Double>> getDistance() {
+    public Function<Disassemble, List<Double>> getDistance() {
 
         String name = "getDistance()";
         long time = System.currentTimeMillis();
@@ -223,7 +223,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOf() {
+    public Function<Disassemble, List<Boolean>> isPartOf() {
 
         String name = "isPartOf()";
         long time = System.currentTimeMillis();
@@ -236,7 +236,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> moveForward(double distance) {
+    public Consumer<Disassemble> moveForward(double distance) {
 
         String name = "moveForward(double)";
         long time = System.currentTimeMillis();
@@ -249,7 +249,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> moveBackward(double distance) {
+    public Consumer<Disassemble> moveBackward(double distance) {
 
         String name = "moveBackward(double)";
         long time = System.currentTimeMillis();
@@ -262,7 +262,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOfRay() {
+    public Function<Disassemble, List<Boolean>> isPartOfRay() {
 
         String name = "isPartOfRay()";
         long time = System.currentTimeMillis();
@@ -275,7 +275,7 @@ public class FLineDevelopment extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOfSegment() {
+    public Function<Disassemble, List<Boolean>> isPartOfSegment() {
 
         String name = "isPartOfSegment()";
         long time = System.currentTimeMillis();

@@ -2,7 +2,7 @@ package eu.scattering.core.implementation.main.engine.support.line;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.injection.EngineFactory;
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 import eu.scattering.core.design.main.engine.base.vector.FVector;
 import eu.scattering.core.implementation.main.engine.support.SupportPreset;
@@ -110,7 +110,7 @@ public class FLineDefault extends SupportPreset<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Consumer<BaseComposite> project() {
+    public Consumer<Disassemble> project() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -121,7 +121,7 @@ public class FLineDefault extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> reflect() {
+    public Consumer<Disassemble> reflect() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -132,7 +132,7 @@ public class FLineDefault extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOf() {
+    public Function<Disassemble, List<Boolean>> isPartOf() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -144,7 +144,7 @@ public class FLineDefault extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Function<BaseComposite, List<Double>> getDistance() {
+    public Function<Disassemble, List<Double>> getDistance() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -156,7 +156,7 @@ public class FLineDefault extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> setDistance(double distance) {
+    public Consumer<Disassemble> setDistance(double distance) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -167,19 +167,19 @@ public class FLineDefault extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Consumer<BaseComposite> moveForward(double distance) {
+    public Consumer<Disassemble> moveForward(double distance) {
 
         return (e) -> e.disassemble().forEach(p -> moveForward(p, distance));
     }
 
     @Override
-    public Consumer<BaseComposite> moveBackward(double distance) {
+    public Consumer<Disassemble> moveBackward(double distance) {
 
         return (e) -> e.disassemble().forEach(p -> moveBackward(p, distance));
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOfRay() {
+    public Function<Disassemble, List<Boolean>> isPartOfRay() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -191,7 +191,7 @@ public class FLineDefault extends SupportPreset<FLine> implements FLine {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOfSegment() {
+    public Function<Disassemble, List<Boolean>> isPartOfSegment() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");

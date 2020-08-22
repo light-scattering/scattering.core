@@ -31,9 +31,13 @@ public interface FQuaternionAdvanced {
     FQuaternion divIm(double i, double j, double k);
 
     FQuaternion pow(int n);
-    FQuaternion root(int n);
+    FQuaternion[] root(int n);
 
     FQuaternion inverse();
     FQuaternion conjugate();
     FQuaternion normalize();
+
+    FQuaternion imprint(FQuaternion fQuaternion);
+
+    boolean isZero();
 }

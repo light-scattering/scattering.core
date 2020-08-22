@@ -2,7 +2,7 @@ package eu.scattering.core.implementation.main.engine.support.plane;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.injection.EngineFactory;
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 import eu.scattering.core.design.main.engine.base.vector.FVector;
 import eu.scattering.core.implementation.main.engine.support.SupportPreset;
@@ -112,7 +112,7 @@ public class FPlaneDefault extends SupportPreset<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Consumer<BaseComposite> project() {
+    public Consumer<Disassemble> project() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -123,7 +123,7 @@ public class FPlaneDefault extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Consumer<BaseComposite> reflect() {
+    public Consumer<Disassemble> reflect() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -134,7 +134,7 @@ public class FPlaneDefault extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOf() {
+    public Function<Disassemble, List<Boolean>> isPartOf() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -146,7 +146,7 @@ public class FPlaneDefault extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Function<BaseComposite, List<Double>> getDistance() {
+    public Function<Disassemble, List<Double>> getDistance() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -158,7 +158,7 @@ public class FPlaneDefault extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Consumer<BaseComposite> setDistance(double distance) {
+    public Consumer<Disassemble> setDistance(double distance) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -169,7 +169,7 @@ public class FPlaneDefault extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isInHalfSpace() {
+    public Function<Disassemble, List<Boolean>> isInHalfSpace() {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -183,7 +183,7 @@ public class FPlaneDefault extends SupportPreset<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isCut(BaseComposite assembly) {
+    public boolean isCut(Disassemble assembly) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");

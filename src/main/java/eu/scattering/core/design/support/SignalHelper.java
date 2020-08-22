@@ -1,7 +1,5 @@
 package eu.scattering.core.design.support;
 
-import eu.scattering.core.design.main.engine.type.complex.FComplex;
-
 public interface SignalHelper {
 
     double[] genSignalSine(int length, double deltaTime, double ampl, double freq, double phi);

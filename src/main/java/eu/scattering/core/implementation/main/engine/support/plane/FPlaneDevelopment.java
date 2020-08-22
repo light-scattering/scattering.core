@@ -3,7 +3,7 @@ package eu.scattering.core.implementation.main.engine.support.plane;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.injection.DevelopmentFactory;
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 import eu.scattering.core.design.main.engine.base.vector.FVector;
 import eu.scattering.core.implementation.main.engine.support.SupportPreset;
@@ -36,7 +36,7 @@ public class FPlaneDevelopment extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isInHalfSpace() {
+    public Function<Disassemble, List<Boolean>> isInHalfSpace() {
 
         String name = "isInHalfSpace()";
         long time = System.currentTimeMillis();
@@ -49,7 +49,7 @@ public class FPlaneDevelopment extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public boolean isCut(BaseComposite assembly) {
+    public boolean isCut(Disassemble assembly) {
 
         String name = "isCut(IBaseExtensionAssembly)";
         long time = System.currentTimeMillis();
@@ -247,7 +247,7 @@ public class FPlaneDevelopment extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Consumer<BaseComposite> project() {
+    public Consumer<Disassemble> project() {
 
         String name = "project()";
         long time = System.currentTimeMillis();
@@ -260,7 +260,7 @@ public class FPlaneDevelopment extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Consumer<BaseComposite> reflect() {
+    public Consumer<Disassemble> reflect() {
 
         String name = "reflect()";
         long time = System.currentTimeMillis();
@@ -273,7 +273,7 @@ public class FPlaneDevelopment extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Consumer<BaseComposite> setDistance(double distance) throws IllegalStateException {
+    public Consumer<Disassemble> setDistance(double distance) throws IllegalStateException {
 
         String name = "setDistance(double)";
         long time = System.currentTimeMillis();
@@ -286,7 +286,7 @@ public class FPlaneDevelopment extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Function<BaseComposite, List<Double>> getDistance() {
+    public Function<Disassemble, List<Double>> getDistance() {
 
         String name = "getDistance()";
         long time = System.currentTimeMillis();
@@ -299,7 +299,7 @@ public class FPlaneDevelopment extends SupportPreset<FPlane> implements FPlane {
     }
 
     @Override
-    public Function<BaseComposite, List<Boolean>> isPartOf() {
+    public Function<Disassemble, List<Boolean>> isPartOf() {
 
         String name = "isPartOf()";
         long time = System.currentTimeMillis();

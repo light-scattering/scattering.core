@@ -1,8 +1,14 @@
 package eu.scattering.core.design.main.engine.base;
 
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 
-public interface Base<T> extends BaseExtension<T> {
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+public interface Base<T> extends Disassemble {
 
     T add(FPoint fPoint);
     T add(double x, double y, double z);
@@ -34,4 +40,12 @@ public interface Base<T> extends BaseExtension<T> {
 
     T set(T element);
     T imprint(T element);
+
+    T cus(Consumer<T> exp);
+    double cusDouble(Function<T, Double> exp);
+    boolean cusBoolean(Predicate<T> exp);
+
+    T ext(Consumer<Disassemble> exp);
+    List<Double> extDouble(Function<Disassemble, List<Double>> exp);
+    List<Boolean> extBoolean(Function<Disassemble, List<Boolean>> exp);
 }

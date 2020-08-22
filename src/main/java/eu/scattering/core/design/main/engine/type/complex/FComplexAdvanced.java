@@ -2,13 +2,11 @@ package eu.scattering.core.design.main.engine.type.complex;
 
 public interface FComplexAdvanced {
 
-    FComplex setPolarCoordinates(double magnitude, double phase);
-
     double getMagnitude();
-    double setMagnitude(double magnitude);
+    FComplex setMagnitude(double magnitude);
 
     double getPhase();
-    double setPhase(double phase);
+    FComplex setPhase(double phase);
 
     FComplex add(FComplex fComplex);
     FComplex add(double re, double im);
@@ -35,11 +33,13 @@ public interface FComplexAdvanced {
     FComplex divIm(double im);
 
     FComplex pow(int n);
-    FComplex root(int n);
+    FComplex[] root(int n);
 
     FComplex inverse();
     FComplex conjugate();
     FComplex normalize();
 
     FComplex imprint(FComplex fComplex);
+
+    boolean isZero();
 }

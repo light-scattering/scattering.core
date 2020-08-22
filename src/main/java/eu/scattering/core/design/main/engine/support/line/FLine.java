@@ -2,7 +2,7 @@ package eu.scattering.core.design.main.engine.support.line;
 
 import eu.scattering.core.design.main.engine.Engine;
 import eu.scattering.core.design.development.Development;
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 import eu.scattering.core.design.main.engine.support.Support;
 
@@ -13,11 +13,11 @@ import java.util.function.Function;
 
 public interface FLine extends Engine<FLine>, Support<FLine>, Development<FLine>, Cloneable {
 
-    Consumer<BaseComposite> moveForward(double distance);
-    Consumer<BaseComposite> moveBackward(double distance);
+    Consumer<Disassemble> moveForward(double distance);
+    Consumer<Disassemble> moveBackward(double distance);
 
-    Function<BaseComposite, List<Boolean>> isPartOfRay();
-    Function<BaseComposite, List<Boolean>> isPartOfSegment();
+    Function<Disassemble, List<Boolean>> isPartOfRay();
+    Function<Disassemble, List<Boolean>> isPartOfSegment();
 
     FPoint getFPoint(double length);
     Optional<FPoint> getFPointAtX(double x);

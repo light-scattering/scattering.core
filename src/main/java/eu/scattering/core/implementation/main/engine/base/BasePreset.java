@@ -2,7 +2,7 @@ package eu.scattering.core.implementation.main.engine.base;
 
 import eu.scattering.core.implementation.main.engine.EnginePreset;
 import eu.scattering.core.design.main.engine.base.Base;
-import eu.scattering.core.design.main.engine.base.BaseComposite;
+import eu.scattering.core.design.main.engine.Disassemble;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
 
 import java.util.List;
@@ -267,7 +267,7 @@ public abstract class BasePreset<T extends Base<T>> extends EnginePreset<T> impl
     }
 
     @Override
-    public T ext(Consumer<BaseComposite> exp) {
+    public T ext(Consumer<Disassemble> exp) {
 
         exp.accept(self());
 
@@ -275,13 +275,13 @@ public abstract class BasePreset<T extends Base<T>> extends EnginePreset<T> impl
     }
 
     @Override
-    public List<Double> extDouble(Function<BaseComposite, List<Double>> exp) {
+    public List<Double> extDouble(Function<Disassemble, List<Double>> exp) {
 
         return exp.apply(self());
     }
 
     @Override
-    public List<Boolean> extBoolean(Function<BaseComposite, List<Boolean>> exp) {
+    public List<Boolean> extBoolean(Function<Disassemble, List<Boolean>> exp) {
 
         return exp.apply(self());
     }

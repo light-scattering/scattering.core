@@ -1,6 +1,7 @@
 package eu.scattering.core.implementation.main.engine.base.point;
 
 import eu.scattering.core.Config;
+import eu.scattering.core.design.main.engine.Engine;
 import eu.scattering.core.injection.EngineFactory;
 import eu.scattering.core.implementation.main.engine.base.BasePreset;
 import eu.scattering.core.design.main.engine.base.point.FPoint;
@@ -34,6 +35,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
     @Override
     public FPoint setX(double x) {
+
         origin[0] = x;
 
         return this;
@@ -46,6 +48,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
     @Override
     public FPoint setY(double y) {
+
         origin[1] = y;
 
         return this;
@@ -53,6 +56,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
     @Override
     public double getZ() {
+
         return origin[2];
     }
 
@@ -139,7 +143,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-        return new FPointDefault().set(this);
+        return EngineFactory.getFPoint().set(this);
     }
 
     @Override
@@ -173,6 +177,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
     @Override
     public Object clone() {
+
         return copy();
     }
 
