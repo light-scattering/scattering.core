@@ -9,6 +9,7 @@ import eu.scattering.core.design.main.algebra.engine.extension.helper.FLineHelpe
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -1255,6 +1256,23 @@ public class FLineTest {
             FLine fLineB = MainFactory.getFLine(RandomHelper.getTestVector());
 
             FLineHelper.validateVal(FLine::getCommonFPoint, fLineA, fLineB);
+        }
+
+        @Test
+        @DisplayName("Disassemble")
+        void disassemble() {
+            FLine fLine = MainFactory.getFLine();
+            List<FPoint> disassembly = fLine.disassemble();
+
+            disassembly.get(0).set(1, 2, 3);
+            disassembly.get(1).set(4, 5, 6);
+
+            assertAll("Validate FPoints",
+                    () -> assertTrue(MainFactory.getFPoint(1, 2, 3).isExact(fLine.getBase()),
+                            "The FPoint base value is erroneous"),
+                    () -> assertTrue(MainFactory.getFPoint(4, 5, 6).isExact(fLine.getHead()),
+                            "The FPoint head value is erroneous")
+            );
         }
 
     }

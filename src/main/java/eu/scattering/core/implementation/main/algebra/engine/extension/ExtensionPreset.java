@@ -4,6 +4,8 @@ import eu.scattering.core.implementation.main.algebra.EnginePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.extension.Extension;
 
+import java.util.List;
+
 public abstract class ExtensionPreset<T extends Extension<T>> extends EnginePreset<T> implements Extension<T> {
 
     @Override
@@ -42,6 +44,13 @@ public abstract class ExtensionPreset<T extends Extension<T>> extends EnginePres
 
         return getOrigin().getHead();
     }
+
+    @Override
+    public List<FPoint> disassemble() {
+
+        return getOrigin().disassemble();
+    }
+
 
 }
 

@@ -306,6 +306,20 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
 
 
     @Override
+    public boolean isExact(double re, double im) {
+
+        return getRe() == re && getIm() == im;
+    }
+
+    @Override
+    public boolean isSimilar(double re, double im) {
+        double distanceRe = Math.abs(getRe() - re);
+        double distanceIm = Math.abs(getIm() - im);
+
+        return distanceRe < Config.getJitter() && distanceIm < Config.getJitter();
+    }
+
+    @Override
     public double getMagnitude() {
 
         return Math.sqrt((getRe() * getRe()) + (getIm() * getIm()));

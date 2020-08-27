@@ -10,6 +10,7 @@ import eu.scattering.core.design.main.algebra.engine.extension.helper.FPlaneHelp
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -748,6 +749,23 @@ public class FPlaneTest {
             FPlane fPlane2 = MainFactory.getFPlane(RandomHelper.getTestVector());
 
             FPlaneHelper.validateVal(FPlane::getCommonFLine, fPlane1, fPlane2);
+        }
+
+        @Test
+        @DisplayName("Disassemble")
+        void disassemble() {
+            FPlane fPlane = MainFactory.getFPlane();
+            List<FPoint> disassembly = fPlane.disassemble();
+
+            disassembly.get(0).set(1, 2, 3);
+            disassembly.get(1).set(4, 5, 6);
+
+            assertAll("Validate FPoints",
+                    () -> assertTrue(MainFactory.getFPoint(1, 2, 3).isExact(fPlane.getBase()),
+                            "The FPoint base value is erroneous"),
+                    () -> assertTrue(MainFactory.getFPoint(4, 5, 6).isExact(fPlane.getHead()),
+                            "The FPoint head value is erroneous")
+            );
         }
 
     }

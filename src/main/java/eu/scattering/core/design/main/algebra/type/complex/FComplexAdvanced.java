@@ -2,6 +2,9 @@ package eu.scattering.core.design.main.algebra.type.complex;
 
 public interface FComplexAdvanced {
 
+    boolean isExact(double re, double im);
+    boolean isSimilar(double re, double im);
+
     double getMagnitude();
     FComplex setMagnitude(double magnitude);
 

@@ -1,6 +1,7 @@
 package eu.scattering.core.support.helper;
 
 import eu.scattering.core.Config;
+import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -16,6 +17,7 @@ public final class RandomHelper {
 
     private static final FPoint fPointZero = MainFactory.getFPoint();
     private static final FVector fVectorZero = MainFactory.getFVector(MainFactory.getFPoint());
+    private static final FComplex fComplexZero = MainFactory.getFComplex();
 
     public static double getTestValue(double... exclude) {
         double value = 0;
@@ -66,6 +68,23 @@ public final class RandomHelper {
         }
 
         return fVector;
+    }
+
+    public static FComplex getTestComplex(FComplex... exclude) {
+        FComplex fComplex = MainFactory.getFComplex();
+
+        mainLoop:
+        while (fComplex.isSimilar(fComplexZero)) {
+            fComplex = MainFactory.getFComplex(getTestValue(), getTestValue());
+
+            for (FComplex singularity : exclude) {
+                if (fComplex.isSimilar(singularity)) {
+                    continue mainLoop;
+                }
+            }
+        }
+
+        return fComplex;
     }
 
 }

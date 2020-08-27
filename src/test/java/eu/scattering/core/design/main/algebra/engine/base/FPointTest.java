@@ -950,12 +950,13 @@ public class FPointTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    class ICoreFeatures {
+    class CoreFeatures {
 
         private double refX, refY, refZ;
 
         @BeforeEach
-        void beforeAll() {
+        void beforeEach() {
+
             refX = RandomHelper.getTestValue();
             refY = RandomHelper.getTestValue();
             refZ = RandomHelper.getTestValue();
@@ -980,7 +981,7 @@ public class FPointTest {
             FPoint fPointRef = MainFactory.getFPoint(refX, refY, refZ);
             FPoint fPointOp = MainFactory.getFPoint(refX, refY, refZ);
 
-            assertAll("Check combinations",
+            assertAll("Validate exactness",
                     () -> assertTrue(fPointRef.isExact(fPointOp), "FPoints should be equal"),
                     () -> assertTrue(fPointOp.isExact(fPointRef), "FPoints should be equal")
             );
@@ -1073,7 +1074,10 @@ public class FPointTest {
         void isSimilarWithParameters() {
             FPoint fPoint = MainFactory.getFPoint(refX, refY, refZ);
 
-            assertTrue(fPoint.isSimilar(refX + (0.5 * Config.getJitter()), refY + (0.5 * Config.getJitter()), refZ + (0.5 * Config.getJitter())),
+            assertTrue(fPoint.isSimilar(
+                    refX + (0.5 * Config.getJitter()),
+                    refY + (0.5 * Config.getJitter()),
+                    refZ + (0.5 * Config.getJitter())),
                     "FPoint values should be equal");
         }
 
@@ -1110,7 +1114,7 @@ public class FPointTest {
             FPoint fPointRefA = MainFactory.getFPoint(refX, refY, refZ);
 
             assertNotEquals(fPointRefA.hashCode(), MainFactory.getFPoint().hashCode(),
-                    "The different FPoints should not have the same hash code");
+                    "Two different FPoints should not have the same hash code");
         }
 
         @Test
@@ -1150,11 +1154,11 @@ public class FPointTest {
     @Nested
     @Tag("Algebra")
     @DisplayName("Base algebra")
-    class IBaseAlgebra {
+    class BaseAlgebra {
 
         private double refX, refY, refZ;
-        private FPoint fPoint;
         private double opX, opY, opZ;
+        private FPoint fPoint;
 
         @BeforeEach
         void beforeEach() {
@@ -1162,11 +1166,11 @@ public class FPointTest {
             refY = RandomHelper.getTestValue();
             refZ = RandomHelper.getTestValue();
 
-            fPoint = MainFactory.getFPoint(refX, refY, refZ);
-
             opX = RandomHelper.getTestValue();
             opY = RandomHelper.getTestValue();
             opZ = RandomHelper.getTestValue();
+
+            fPoint = MainFactory.getFPoint(refX, refY, refZ);
         }
 
         @Test

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface Extension<T> {
+public interface Extension<T> extends Engine {
 
     FVector getOrigin();
 
