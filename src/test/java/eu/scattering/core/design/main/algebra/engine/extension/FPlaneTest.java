@@ -6,7 +6,7 @@ import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
-import eu.scattering.core.design.main.algebra.engine.extension.support.FPlaneHelper;
+import eu.scattering.core.design.main.algebra.engine.extension.support.FPlaneTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
@@ -165,7 +165,7 @@ public class FPlaneTest {
         void parseJSONExportValidate() {
             FPlane fPlane = MainFactory.getFPlane(MainFactory.getFVector());
 
-            FPlaneHelper.validateVal(FPlane::exportToJSON, fPlane);
+            FPlaneTestHelper.testValue(FPlane::exportToJSON, fPlane);
         }
 
         @Test
@@ -200,7 +200,7 @@ public class FPlaneTest {
             FPlane fPlaneA = MainFactory.getFPlane(MainFactory.getFVector());
             FPlane fPlaneB = MainFactory.getFPlane(MainFactory.getFVector());
 
-            FPlaneHelper.validateVal(FPlane::isExact, fPlaneA, fPlaneB);
+            FPlaneTestHelper.testValue(FPlane::isExact, fPlaneA, fPlaneB);
         }
 
         @Test
@@ -250,7 +250,7 @@ public class FPlaneTest {
             FPlane fPlaneA = MainFactory.getFPlane(MainFactory.getFVector(0, 1, 0));
             FPlane fPlaneB = MainFactory.getFPlane(MainFactory.getFVector(0, 1, 0));
 
-            FPlaneHelper.validateVal(FPlane::isSimilar, fPlaneA, fPlaneB);
+            FPlaneTestHelper.testValue(FPlane::isSimilar, fPlaneA, fPlaneB);
         }
 
         @Test
@@ -280,7 +280,7 @@ public class FPlaneTest {
         void getHashCodeValidate() {
             FPlane fPlane = MainFactory.getFPlane(MainFactory.getFVector());
 
-            FPlaneHelper.validateVal(FPlane::hashCode, fPlane);
+            FPlaneTestHelper.testValue(FPlane::hashCode, fPlane);
         }
 
         @Test
@@ -303,7 +303,7 @@ public class FPlaneTest {
         void copyValidate() {
             FPlane fPlane = MainFactory.getFPlane(MainFactory.getFVector());
 
-            FPlaneHelper.validateVal(FPlane::copy, fPlane);
+            FPlaneTestHelper.testValue(FPlane::copy, fPlane);
         }
 
     }
@@ -344,7 +344,7 @@ public class FPlaneTest {
         void projectValidate() {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(FPlane::project, fPlane);
+            FPlaneTestHelper.testValue(FPlane::project, fPlane);
         }
 
         @Test
@@ -374,7 +374,7 @@ public class FPlaneTest {
         void reflectValidate() {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(FPlane::reflect, fPlane);
+            FPlaneTestHelper.testValue(FPlane::reflect, fPlane);
         }
 
         @Test
@@ -412,7 +412,7 @@ public class FPlaneTest {
         void locationValidate() {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(FPlane::isPartOf, fPlane);
+            FPlaneTestHelper.testValue(FPlane::isPartOf, fPlane);
         }
 
         @Test
@@ -445,7 +445,7 @@ public class FPlaneTest {
         void getDistanceValidate() {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(FPlane::getDistance, fPlane);
+            FPlaneTestHelper.testValue(FPlane::getDistance, fPlane);
         }
 
         @Test
@@ -475,7 +475,7 @@ public class FPlaneTest {
         void setDistanceValidate() {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(e -> e.setDistance(1), fPlane);
+            FPlaneTestHelper.testValue(e -> e.setDistance(1), fPlane);
         }
 
         @Test
@@ -528,7 +528,7 @@ public class FPlaneTest {
         void isInHalfSpaceValidate() {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(FPlane::isInHalfSpace, fPlane);
+            FPlaneTestHelper.testValue(FPlane::isInHalfSpace, fPlane);
         }
 
         @Test
@@ -583,7 +583,7 @@ public class FPlaneTest {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
             FVector fVector = MainFactory.getFVector();
 
-            FPlaneHelper.validateVal(e -> e.isCut(fVector), fPlane);
+            FPlaneTestHelper.testValue(e -> e.isCut(fVector), fPlane);
         }
 
         @Test
@@ -652,7 +652,7 @@ public class FPlaneTest {
             FPlane fPlane = MainFactory.getFPlane(RandomHelper.getTestVector());
             FLine fLine = MainFactory.getFLine(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(e -> fPlane.getCommonFPoint(fLine), fPlane);
+            FPlaneTestHelper.testValue(e -> fPlane.getCommonFPoint(fLine), fPlane);
         }
 
         @Test
@@ -748,7 +748,7 @@ public class FPlaneTest {
             FPlane fPlane1 = MainFactory.getFPlane(RandomHelper.getTestVector());
             FPlane fPlane2 = MainFactory.getFPlane(RandomHelper.getTestVector());
 
-            FPlaneHelper.validateVal(FPlane::getCommonFLine, fPlane1, fPlane2);
+            FPlaneTestHelper.testValue(FPlane::getCommonFLine, fPlane1, fPlane2);
         }
 
         @Test

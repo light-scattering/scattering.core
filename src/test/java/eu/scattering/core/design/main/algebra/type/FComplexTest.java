@@ -2,7 +2,7 @@ package eu.scattering.core.design.main.algebra.type;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.design.main.algebra.type.support.FComplexHelper;
+import eu.scattering.core.design.main.algebra.type.support.FComplexTestHelper;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
@@ -148,7 +148,7 @@ public class FComplexTest {
             FComplex fComplexA = MainFactory.getFComplex();
             FComplex fComplexB = MainFactory.getFComplex();
 
-            FComplexHelper.validateRef(FComplex::add, fComplexA, fComplexB);
+            FComplexTestHelper.testReference(Type::add, fComplexA, fComplexB);
         }
 
         @Test
@@ -170,7 +170,7 @@ public class FComplexTest {
         void addPrimitivesValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.add(0, 0), fComplex);
+            FComplexTestHelper.testReference(e -> e.add(0, 0), fComplex);
         }
 
         @Test
@@ -193,7 +193,7 @@ public class FComplexTest {
         void addFactorValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.add(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.add(1), fComplex);
         }
 
         @Test
@@ -215,7 +215,7 @@ public class FComplexTest {
         void addReValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.addRe(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.addRe(1), fComplex);
         }
 
         @Test
@@ -237,7 +237,7 @@ public class FComplexTest {
         void addImValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.addIm(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.addIm(1), fComplex);
         }
 
         @Test
@@ -261,7 +261,7 @@ public class FComplexTest {
             FComplex fComplexA = MainFactory.getFComplex();
             FComplex fComplexB = MainFactory.getFComplex();
 
-            FComplexHelper.validateRef(FComplex::sub, fComplexA, fComplexB);
+            FComplexTestHelper.testReference(FComplex::sub, fComplexA, fComplexB);
         }
 
         @Test
@@ -283,7 +283,7 @@ public class FComplexTest {
         void subPrimitivesValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.sub(0, 0), fComplex);
+            FComplexTestHelper.testReference(e -> e.sub(0, 0), fComplex);
         }
 
         @Test
@@ -306,7 +306,7 @@ public class FComplexTest {
         void subFactorValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.sub(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.sub(1), fComplex);
         }
 
         @Test
@@ -328,7 +328,7 @@ public class FComplexTest {
         void subReValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.subRe(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.subRe(1), fComplex);
         }
 
         @Test
@@ -350,7 +350,7 @@ public class FComplexTest {
         void subImValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.subIm(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.subIm(1), fComplex);
         }
 
         @Test
@@ -374,7 +374,7 @@ public class FComplexTest {
             FComplex fComplexA = MainFactory.getFComplex(1, 1);
             FComplex fComplexB = MainFactory.getFComplex(1, 1);
 
-            FComplexHelper.validateRef(FComplex::mul, fComplexA, fComplexB);
+            FComplexTestHelper.testReference(FComplex::mul, fComplexA, fComplexB);
         }
 
         @Test
@@ -396,7 +396,7 @@ public class FComplexTest {
         void mulPrimitivesValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.mul(1, 1), fComplex);
+            FComplexTestHelper.testReference(e -> e.mul(1, 1), fComplex);
         }
 
         @Test
@@ -419,7 +419,7 @@ public class FComplexTest {
         void mulFactorValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.mul(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.mul(1), fComplex);
         }
 
         @Test
@@ -441,7 +441,7 @@ public class FComplexTest {
         void mulReValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.mulRe(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.mulRe(1), fComplex);
         }
 
         @Test
@@ -463,7 +463,7 @@ public class FComplexTest {
         void mulImValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.mulIm(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.mulIm(1), fComplex);
         }
 
         @Test
@@ -496,7 +496,7 @@ public class FComplexTest {
             FComplex fComplexA = MainFactory.getFComplex(1, 1);
             FComplex fComplexB = MainFactory.getFComplex(1, 1);
 
-            FComplexHelper.validateRef(FComplex::div, fComplexA, fComplexB);
+            FComplexTestHelper.testReference(FComplex::div, fComplexA, fComplexB);
         }
 
         @Test
@@ -532,7 +532,7 @@ public class FComplexTest {
         void divPrimitivesValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.div(1, 1), fComplex);
+            FComplexTestHelper.testReference(e -> e.div(1, 1), fComplex);
         }
 
         @Test
@@ -564,7 +564,7 @@ public class FComplexTest {
         void divFactorValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.div(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.div(1), fComplex);
         }
 
         @Test
@@ -595,7 +595,7 @@ public class FComplexTest {
         void divReValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.divRe(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.divRe(1), fComplex);
         }
 
         @Test
@@ -626,7 +626,7 @@ public class FComplexTest {
         void divImValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.divIm(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.divIm(1), fComplex);
         }
 
         @Test
@@ -727,7 +727,7 @@ public class FComplexTest {
             FComplex fComplexRef = MainFactory.getFComplex(refRe, refIm);
             FComplex fComplexOp = MainFactory.getFComplex(refRe, refIm);
 
-            FComplexHelper.validateVal(FComplex::isExact, fComplexRef, fComplexOp);
+            FComplexTestHelper.testValue(FComplex::isExact, fComplexRef, fComplexOp);
         }
 
         @Test
@@ -752,7 +752,7 @@ public class FComplexTest {
         void isExactWithParametersValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateVal(e -> e.isExact(0, 0), fComplex);
+            FComplexTestHelper.testValue(e -> e.isExact(0, 0), fComplex);
         }
 
         @Test
@@ -808,7 +808,7 @@ public class FComplexTest {
             FComplex fComplexRef = MainFactory.getFComplex(refRe, refIm);
             FComplex fComplexOp = MainFactory.getFComplex(refRe, refIm);
 
-            FComplexHelper.validateVal(FComplex::isSimilar, fComplexRef, fComplexOp);
+            FComplexTestHelper.testValue(FComplex::isSimilar, fComplexRef, fComplexOp);
         }
 
         @Test
@@ -839,7 +839,7 @@ public class FComplexTest {
         void isSimilarWithParametersValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateVal(e -> e.isSimilar(0, 0), fComplex);
+            FComplexTestHelper.testValue(e -> e.isSimilar(0, 0), fComplex);
         }
 
         @Test
@@ -866,7 +866,7 @@ public class FComplexTest {
         void getHashCodeValidate() {
             FComplex fComplexRef = MainFactory.getFComplex();
 
-            FComplexHelper.validateVal(FComplex::hashCode, fComplexRef);
+            FComplexTestHelper.testValue(FComplex::hashCode, fComplexRef);
         }
 
         @Test
@@ -890,7 +890,7 @@ public class FComplexTest {
         void copyValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateVal(FComplex::copy, fComplex);
+            FComplexTestHelper.testValue(FComplex::copy, fComplex);
         }
     }
 
@@ -914,7 +914,7 @@ public class FComplexTest {
         void getMagnitudeValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateVal(FComplex::getMagnitude, fComplex);
+            FComplexTestHelper.testValue(FComplex::getMagnitude, fComplex);
         }
 
         @Test
@@ -955,7 +955,7 @@ public class FComplexTest {
         void setMagnitudeValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateRef(e -> e.setMagnitude(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.setMagnitude(1), fComplex);
         }
 
         @Test
@@ -1031,7 +1031,7 @@ public class FComplexTest {
         void getPhaseValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateVal(FComplex::getPhase, fComplex);
+            FComplexTestHelper.testValue(FComplex::getPhase, fComplex);
         }
 
         @Test
@@ -1051,7 +1051,7 @@ public class FComplexTest {
         void setPhaseValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateRef(e -> e.setPhase(1), fComplex);
+            FComplexTestHelper.testReference(e -> e.setPhase(1), fComplex);
         }
 
         @Test
@@ -1076,7 +1076,7 @@ public class FComplexTest {
         public void inverseValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateRef(FComplex::inverse, fComplex);
+            FComplexTestHelper.testReference(FComplex::inverse, fComplex);
         }
 
         @Test
@@ -1100,7 +1100,7 @@ public class FComplexTest {
         public void conjugateValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateRef(FComplex::conjugate, fComplex);
+            FComplexTestHelper.testReference(FComplex::conjugate, fComplex);
         }
 
         @Test
@@ -1127,7 +1127,7 @@ public class FComplexTest {
         public void normalizeValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateRef(FComplex::normalize, fComplex);
+            FComplexTestHelper.testReference(FComplex::normalize, fComplex);
         }
 
         @Test
@@ -1151,7 +1151,7 @@ public class FComplexTest {
         public void isZeroValidate() {
             FComplex fComplex = MainFactory.getFComplex();
 
-            FComplexHelper.validateVal(FComplex::isZero, fComplex);
+            FComplexTestHelper.testValue(FComplex::isZero, fComplex);
         }
 
         @Test
@@ -1190,7 +1190,7 @@ public class FComplexTest {
         public void powValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateRef(e -> e.pow(3), fComplex);
+            FComplexTestHelper.testReference(e -> e.pow(3), fComplex);
         }
 
         @Test
@@ -1234,7 +1234,7 @@ public class FComplexTest {
         public void rootValidate() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            FComplexHelper.validateVal(e -> e.root(3), fComplex);
+            FComplexTestHelper.testValue(e -> e.root(3), fComplex);
         }
     }
 }

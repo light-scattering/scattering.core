@@ -4,7 +4,7 @@ import eu.scattering.core.Config;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.design.main.algebra.engine.base.support.FVectorHelper;
+import eu.scattering.core.design.main.algebra.engine.base.support.FVectorTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
@@ -863,7 +863,7 @@ public class FVectorTest {
         void setSphericalCoordinatesValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(e -> e.setSphericalCoordinates(0, 0), fVector);
+            FVectorTestHelper.testReference(e -> e.setSphericalCoordinates(0, 0), fVector);
         }
 
         @Test
@@ -888,7 +888,7 @@ public class FVectorTest {
         void setRandomAngleValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(e -> e.setRandomAngle(), fVector);
+            FVectorTestHelper.testReference(e -> e.setRandomAngle(), fVector);
         }
 
         @Test
@@ -926,7 +926,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateRef(FVector::moveBase, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::moveBase, fVector, fPoint);
         }
 
         @Test
@@ -963,7 +963,7 @@ public class FVectorTest {
         void moveBaseWithParametersValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(a -> a.moveBase(0, 0, 0), fVector);
+            FVectorTestHelper.testReference(a -> a.moveBase(0, 0, 0), fVector);
         }
 
         @Test
@@ -999,7 +999,7 @@ public class FVectorTest {
         void moveBaseToOXValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(FVector::moveBase, fVector);
+            FVectorTestHelper.testReference(FVector::moveBase, fVector);
         }
 
         @Test
@@ -1037,7 +1037,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateRef(FVector::moveHead, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::moveHead, fVector, fPoint);
         }
 
         @Test
@@ -1074,7 +1074,7 @@ public class FVectorTest {
         void moveHeadWithParametersValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(a -> a.moveHead(0, 0, 0), fVector);
+            FVectorTestHelper.testReference(a -> a.moveHead(0, 0, 0), fVector);
         }
 
         @Test
@@ -1110,7 +1110,7 @@ public class FVectorTest {
         void moveHeadToOXValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(FVector::moveHead, fVector);
+            FVectorTestHelper.testReference(FVector::moveHead, fVector);
         }
 
         @Test
@@ -1168,7 +1168,7 @@ public class FVectorTest {
         void moveForwardValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(a -> a.moveForward(1), fVector);
+            FVectorTestHelper.testReference(a -> a.moveForward(1), fVector);
         }
 
         @Test
@@ -1227,7 +1227,7 @@ public class FVectorTest {
         void moveBackwardValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(a -> a.moveBackward(1), fVector);
+            FVectorTestHelper.testReference(a -> a.moveBackward(1), fVector);
         }
 
         @Test
@@ -1262,7 +1262,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::add, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::add, fVectorA, fVectorB);
         }
 
         @Test
@@ -1297,7 +1297,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::sub, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::sub, fVectorA, fVectorB);
         }
 
         @Test
@@ -1316,7 +1316,7 @@ public class FVectorTest {
         void getLengthXValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::getLengthX, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthX, fVector);
         }
 
         @Test
@@ -1335,7 +1335,7 @@ public class FVectorTest {
         void getLengthYValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::getLengthY, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthY, fVector);
         }
 
         @Test
@@ -1354,7 +1354,7 @@ public class FVectorTest {
         void getLengthZValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::getLengthZ, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthZ, fVector);
         }
 
         @Test
@@ -1397,7 +1397,7 @@ public class FVectorTest {
         void getLengthValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::getLength, fVector);
+            FVectorTestHelper.testValue(FVector::getLength, fVector);
         }
 
         @Test
@@ -1462,7 +1462,7 @@ public class FVectorTest {
         void setLengthValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(a -> a.setLength(1), fVector);
+            FVectorTestHelper.testReference(a -> a.setLength(1), fVector);
         }
 
         @Test
@@ -1491,7 +1491,7 @@ public class FVectorTest {
         void normalizeValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(FVector::normalize, fVector);
+            FVectorTestHelper.testReference(FVector::normalize, fVector);
         }
 
         @Test
@@ -1526,7 +1526,7 @@ public class FVectorTest {
         void reflectHeadValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(FVector::reflectHead, fVector);
+            FVectorTestHelper.testReference(FVector::reflectHead, fVector);
         }
 
         @Test
@@ -1584,7 +1584,7 @@ public class FVectorTest {
         void reflectBaseValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(FVector::reflectBase, fVector);
+            FVectorTestHelper.testReference(FVector::reflectBase, fVector);
         }
 
         @Test
@@ -1621,7 +1621,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateRef(FVector::reflect, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::reflect, fVector, fPoint);
         }
 
         @Test
@@ -1654,7 +1654,7 @@ public class FVectorTest {
         void invertDirectionValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(FVector::reflectHead, fVector);
+            FVectorTestHelper.testReference(FVector::reflectHead, fVector);
         }
 
         @Test
@@ -1673,7 +1673,7 @@ public class FVectorTest {
         void getInclinationValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::getInclination, fVector);
+            FVectorTestHelper.testValue(FVector::getInclination, fVector);
         }
 
         @Test
@@ -1706,7 +1706,7 @@ public class FVectorTest {
         void setInclinationValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(a -> a.setInclination(Math.PI * 0.5), fVector);
+            FVectorTestHelper.testReference(a -> a.setInclination(Math.PI * 0.5), fVector);
         }
 
         @Test
@@ -1725,7 +1725,7 @@ public class FVectorTest {
         void getAzimuthValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::getAzimuth, fVector);
+            FVectorTestHelper.testValue(FVector::getAzimuth, fVector);
         }
 
         @Test
@@ -1758,7 +1758,7 @@ public class FVectorTest {
         void setAzimuthValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateRef(a -> a.setAzimuth(Math.PI * 0.5), fVector);
+            FVectorTestHelper.testReference(a -> a.setAzimuth(Math.PI * 0.5), fVector);
         }
 
         @Test
@@ -1848,7 +1848,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateVal(FVector::getAngle, fVectorA, fVectorB);
+            FVectorTestHelper.testValue(FVector::getAngle, fVectorA, fVectorB);
         }
 
         @Test
@@ -1891,7 +1891,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateVal(FVector::getAngle, fVector, fPoint);
+            FVectorTestHelper.testValue(FVector::getAngle, fVector, fPoint);
         }
 
         @Test
@@ -1936,7 +1936,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateVal(FVector::getDotProduct, fVectorA, fVectorB);
+            FVectorTestHelper.testValue(FVector::getDotProduct, fVectorA, fVectorB);
         }
 
         @Test
@@ -1963,7 +1963,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateVal(FVector::getDotProduct, fVector, fPoint);
+            FVectorTestHelper.testValue(FVector::getDotProduct, fVector, fPoint);
         }
 
         @Test
@@ -2013,7 +2013,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::setCrossProduct, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::setCrossProduct, fVectorA, fVectorB);
         }
 
         @Test
@@ -2044,7 +2044,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateRef(FVector::setCrossProduct, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::setCrossProduct, fVector, fPoint);
         }
 
         @Test
@@ -2118,7 +2118,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateVal(FVector::isParallel, fVectorA, fVectorB);
+            FVectorTestHelper.testValue(FVector::isParallel, fVectorA, fVectorB);
         }
 
         @Test
@@ -2158,7 +2158,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::setParallel, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::setParallel, fVectorA, fVectorB);
         }
 
         @Test
@@ -2232,7 +2232,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateVal(FVector::isAntiParallel, fVectorA, fVectorB);
+            FVectorTestHelper.testValue(FVector::isAntiParallel, fVectorA, fVectorB);
         }
 
         @Test
@@ -2272,7 +2272,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::setAntiParallel, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::setAntiParallel, fVectorA, fVectorB);
         }
 
         @Test
@@ -2335,7 +2335,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateVal(FVector::isOrthogonal, fVectorA, fVectorB);
+            FVectorTestHelper.testValue(FVector::isOrthogonal, fVectorA, fVectorB);
         }
 
         @Test
@@ -2435,7 +2435,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::setOrthogonal, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::setOrthogonal, fVectorA, fVectorB);
         }
 
         @Test
@@ -2463,7 +2463,7 @@ public class FVectorTest {
         void isNonDirectionalValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::isNonDirectional, fVector);
+            FVectorTestHelper.testValue(FVector::isNonDirectional, fVector);
         }
 
     }
@@ -2492,7 +2492,7 @@ public class FVectorTest {
         void parseJSONExportValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::exportToJSON, fVector);
+            FVectorTestHelper.testValue(FVector::exportToJSON, fVector);
         }
 
         @Test
@@ -2525,7 +2525,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateVal(FVector::isExact, fVectorA, fVectorB);
+            FVectorTestHelper.testValue(FVector::isExact, fVectorA, fVectorB);
         }
 
         @Test
@@ -2565,7 +2565,7 @@ public class FVectorTest {
         void isExactWithParametersValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.isExact(0, 0, 0, 0, 0, 0), fVector);
+            FVectorTestHelper.testValue(e -> e.isExact(0, 0, 0, 0, 0, 0), fVector);
         }
 
         @Test
@@ -2607,7 +2607,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateVal(FVector::isSimilar, fVectorA, fVectorB);
+            FVectorTestHelper.testValue(FVector::isSimilar, fVectorA, fVectorB);
         }
 
         @Test
@@ -2651,7 +2651,7 @@ public class FVectorTest {
         void isSimilarWithParametersValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.isSimilar(0, 0, 0, 0, 0, 0), fVector);
+            FVectorTestHelper.testValue(e -> e.isSimilar(0, 0, 0, 0, 0, 0), fVector);
         }
 
         @Test
@@ -2685,7 +2685,7 @@ public class FVectorTest {
         void getHashCodeValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::hashCode, fVector);
+            FVectorTestHelper.testValue(FVector::hashCode, fVector);
         }
 
         @Test
@@ -2711,7 +2711,7 @@ public class FVectorTest {
         void copyValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::copy, fVector);
+            FVectorTestHelper.testValue(FVector::copy, fVector);
         }
 
     }
@@ -2744,7 +2744,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::add, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::add, fVectorA, fVectorB);
         }
 
         @Test
@@ -2769,7 +2769,7 @@ public class FVectorTest {
         void addPrimitivesValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.add(0, 0, 0), fVector);
+            FVectorTestHelper.testValue(e -> e.add(0, 0, 0), fVector);
         }
 
         @Test
@@ -2794,7 +2794,7 @@ public class FVectorTest {
         void addFactorValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.add(0), fVector);
+            FVectorTestHelper.testValue(e -> e.add(0), fVector);
         }
 
         @Test
@@ -2819,7 +2819,7 @@ public class FVectorTest {
         void addXValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.addX(0), fVector);
+            FVectorTestHelper.testValue(e -> e.addX(0), fVector);
         }
 
         @Test
@@ -2844,7 +2844,7 @@ public class FVectorTest {
         void addYValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.addY(0), fVector);
+            FVectorTestHelper.testValue(e -> e.addY(0), fVector);
         }
 
         @Test
@@ -2869,7 +2869,7 @@ public class FVectorTest {
         void addZValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.addZ(0), fVector);
+            FVectorTestHelper.testValue(e -> e.addZ(0), fVector);
         }
 
         @Test
@@ -2895,7 +2895,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector(fVectorA);
 
-            FVectorHelper.validateRef(FVector::sub, fVectorA, fVectorB);
+            FVectorTestHelper.testReference(FVector::sub, fVectorA, fVectorB);
         }
 
         @Test
@@ -2920,7 +2920,7 @@ public class FVectorTest {
         void subPrimitivesValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.sub(0, 0, 0), fVector);
+            FVectorTestHelper.testValue(e -> e.sub(0, 0, 0), fVector);
         }
 
         @Test
@@ -2945,7 +2945,7 @@ public class FVectorTest {
         void subFactorValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.sub(0), fVector);
+            FVectorTestHelper.testValue(e -> e.sub(0), fVector);
         }
 
         @Test
@@ -2970,7 +2970,7 @@ public class FVectorTest {
         void subXValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.subX(0), fVector);
+            FVectorTestHelper.testValue(e -> e.subX(0), fVector);
         }
 
         @Test
@@ -2995,7 +2995,7 @@ public class FVectorTest {
         void subYValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.subY(0), fVector);
+            FVectorTestHelper.testValue(e -> e.subY(0), fVector);
         }
 
         @Test
@@ -3020,7 +3020,7 @@ public class FVectorTest {
         void subZValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.subZ(0), fVector);
+            FVectorTestHelper.testValue(e -> e.subZ(0), fVector);
         }
 
         @Test
@@ -3046,7 +3046,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateRef(FVector::mul, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::mul, fVector, fPoint);
         }
 
         @Test
@@ -3071,7 +3071,7 @@ public class FVectorTest {
         void mulPrimitivesValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.mul(1, 1, 1), fVector);
+            FVectorTestHelper.testValue(e -> e.mul(1, 1, 1), fVector);
         }
 
         @Test
@@ -3096,7 +3096,7 @@ public class FVectorTest {
         void mulFactorValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.mul(1), fVector);
+            FVectorTestHelper.testValue(e -> e.mul(1), fVector);
         }
 
         @Test
@@ -3121,7 +3121,7 @@ public class FVectorTest {
         void mulXValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.mulX(1), fVector);
+            FVectorTestHelper.testValue(e -> e.mulX(1), fVector);
         }
 
         @Test
@@ -3146,7 +3146,7 @@ public class FVectorTest {
         void mulYValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.mulY(1), fVector);
+            FVectorTestHelper.testValue(e -> e.mulY(1), fVector);
         }
 
         @Test
@@ -3171,7 +3171,7 @@ public class FVectorTest {
         void mulZValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.mulZ(1), fVector);
+            FVectorTestHelper.testValue(e -> e.mulZ(1), fVector);
         }
 
         @Test
@@ -3215,7 +3215,7 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FVectorHelper.validateRef(FVector::div, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::div, fVector, fPoint);
         }
 
         @Test
@@ -3255,7 +3255,7 @@ public class FVectorTest {
         void divPrimitivesValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.div(1, 1, 1), fVector);
+            FVectorTestHelper.testValue(e -> e.div(1, 1, 1), fVector);
         }
 
         @Test
@@ -3288,7 +3288,7 @@ public class FVectorTest {
         void divFactorValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.div(1), fVector);
+            FVectorTestHelper.testValue(e -> e.div(1), fVector);
         }
 
         @Test
@@ -3322,7 +3322,7 @@ public class FVectorTest {
         void divXValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.divX(1), fVector);
+            FVectorTestHelper.testValue(e -> e.divX(1), fVector);
         }
 
         @Test
@@ -3355,7 +3355,7 @@ public class FVectorTest {
         void divYValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.divY(1), fVector);
+            FVectorTestHelper.testValue(e -> e.divY(1), fVector);
         }
 
         @Test
@@ -3388,7 +3388,7 @@ public class FVectorTest {
         void divZValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(e -> e.divZ(1), fVector);
+            FVectorTestHelper.testValue(e -> e.divZ(1), fVector);
         }
 
         @Test
@@ -3410,7 +3410,7 @@ public class FVectorTest {
         void getFPointsValidate() {
             FVector fVector = RandomHelper.getTestVector();
 
-            FVectorHelper.validateVal(FVector::disassemble, fVector);
+            FVectorTestHelper.testValue(FVector::disassemble, fVector);
         }
 
         @Test

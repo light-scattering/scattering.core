@@ -3,7 +3,7 @@ package eu.scattering.core.design.main.algebra.engine.base;
 import eu.scattering.core.Config;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.design.main.algebra.engine.base.support.FPointHelper;
+import eu.scattering.core.design.main.algebra.engine.base.support.FPointTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
@@ -211,7 +211,7 @@ public class FPointTest {
         void normalizeValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(FPoint::normalize, fPoint);
+            FPointTestHelper.testReference(FPoint::normalize, fPoint);
         }
 
         @Test
@@ -235,7 +235,7 @@ public class FPointTest {
         void reflectValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(FPoint::reflect, fPoint);
+            FPointTestHelper.testReference(FPoint::reflect, fPoint);
         }
 
         @Test
@@ -269,7 +269,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
-            FPointHelper.validateRef(FPoint::reflect, fPointA, fPointB);
+            FPointTestHelper.testReference(FPoint::reflect, fPointA, fPointB);
         }
 
         @Test
@@ -359,7 +359,7 @@ public class FPointTest {
         void getLengthValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(FPoint::getLength, fPoint);
+            FPointTestHelper.testValue(FPoint::getLength, fPoint);
         }
 
         @Test
@@ -414,7 +414,7 @@ public class FPointTest {
         void setLengthValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.setLength(1), fPoint);
+            FPointTestHelper.testReference(e -> e.setLength(1), fPoint);
         }
 
         @Test
@@ -453,7 +453,7 @@ public class FPointTest {
         void setRandomAngleValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(FPoint::setRandomAngle, fPoint);
+            FPointTestHelper.testReference(FPoint::setRandomAngle, fPoint);
         }
 
         @Test
@@ -495,7 +495,7 @@ public class FPointTest {
         void getInclinationValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(FPoint::getInclination, fPoint);
+            FPointTestHelper.testValue(FPoint::getInclination, fPoint);
         }
 
         @Test
@@ -549,7 +549,7 @@ public class FPointTest {
         void getAzimuthValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(FPoint::getAzimuth, fPoint);
+            FPointTestHelper.testValue(FPoint::getAzimuth, fPoint);
         }
 
         @Test
@@ -611,7 +611,7 @@ public class FPointTest {
         void setInclinationValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.setInclination(Math.PI * 0.5), fPoint);
+            FPointTestHelper.testReference(e -> e.setInclination(Math.PI * 0.5), fPoint);
         }
 
         @Test
@@ -674,7 +674,7 @@ public class FPointTest {
         void setAzimuthValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.setAzimuth(Math.PI * 0.5), fPoint);
+            FPointTestHelper.testReference(e -> e.setAzimuth(Math.PI * 0.5), fPoint);
         }
 
         @Test
@@ -702,7 +702,7 @@ public class FPointTest {
         void setSphericalCoordinatesValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.setSphericalCoordinates(Math.PI * 0.5, Math.PI * 0.5), fPoint);
+            FPointTestHelper.testReference(e -> e.setSphericalCoordinates(Math.PI * 0.5, Math.PI * 0.5), fPoint);
         }
 
         @Test
@@ -729,7 +729,7 @@ public class FPointTest {
         void isZeroValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(FPoint::isZero, fPoint);
+            FPointTestHelper.testValue(FPoint::isZero, fPoint);
         }
 
         @Test
@@ -753,7 +753,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
-            FPointHelper.validateVal(FPoint::getDotProduct, fPointA, fPointB);
+            FPointTestHelper.testValue(FPoint::getDotProduct, fPointA, fPointB);
         }
 
         @Test
@@ -786,7 +786,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
-            FPointHelper.validateRef(FPoint::setCrossProduct, fPointA, fPointB);
+            FPointTestHelper.testReference(FPoint::setCrossProduct, fPointA, fPointB);
         }
 
         @Test
@@ -859,7 +859,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
-            FPointHelper.validateVal(FPoint::getAngle, fPointA, fPointB);
+            FPointTestHelper.testValue(FPoint::getAngle, fPointA, fPointB);
         }
 
         @Test
@@ -883,7 +883,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
-            FPointHelper.validateVal(FPoint::getDistance, fPointA, fPointB);
+            FPointTestHelper.testValue(FPoint::getDistance, fPointA, fPointB);
         }
 
         @Test
@@ -942,7 +942,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
-            FPointHelper.validateRef((a, b) -> a.setDistance(b, 1), fPointA, fPointB);
+            FPointTestHelper.testReference((a, b) -> a.setDistance(b, 1), fPointA, fPointB);
         }
 
     }
@@ -1020,7 +1020,7 @@ public class FPointTest {
         void isExactWithParametersValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(e -> e.isExact(0, 0, 0), fPoint);
+            FPointTestHelper.testValue(e -> e.isExact(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1095,7 +1095,7 @@ public class FPointTest {
         void isSimilarWithParametersValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(e -> e.isSimilar(0, 0, 0), fPoint);
+            FPointTestHelper.testValue(e -> e.isSimilar(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1122,7 +1122,7 @@ public class FPointTest {
         void getHashCodeValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(FPoint::hashCode, fPoint);
+            FPointTestHelper.testValue(FPoint::hashCode, fPoint);
         }
 
         @Test
@@ -1146,7 +1146,7 @@ public class FPointTest {
         void copyValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateVal(FPoint::copy, fPoint);
+            FPointTestHelper.testValue(FPoint::copy, fPoint);
         }
 
     }
@@ -1193,7 +1193,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(FPoint::add, fPointA, fPointB);
+            FPointTestHelper.testReference(FPoint::add, fPointA, fPointB);
         }
 
         @Test
@@ -1214,7 +1214,7 @@ public class FPointTest {
         void addPrimitivesValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.add(0, 0, 0), fPoint);
+            FPointTestHelper.testReference(e -> e.add(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1236,7 +1236,7 @@ public class FPointTest {
         void addFactorValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.add(1), fPoint);
+            FPointTestHelper.testReference(e -> e.add(1), fPoint);
         }
 
         @Test
@@ -1257,7 +1257,7 @@ public class FPointTest {
         void addXValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.addX(1), fPoint);
+            FPointTestHelper.testReference(e -> e.addX(1), fPoint);
         }
 
         @Test
@@ -1278,7 +1278,7 @@ public class FPointTest {
         void addYValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.addY(1), fPoint);
+            FPointTestHelper.testReference(e -> e.addY(1), fPoint);
         }
 
         @Test
@@ -1299,7 +1299,7 @@ public class FPointTest {
         void addZValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.addZ(1), fPoint);
+            FPointTestHelper.testReference(e -> e.addZ(1), fPoint);
         }
 
         @Test
@@ -1322,7 +1322,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(FPoint::sub, fPointA, fPointB);
+            FPointTestHelper.testReference(FPoint::sub, fPointA, fPointB);
         }
 
         @Test
@@ -1343,7 +1343,7 @@ public class FPointTest {
         void subPrimitivesValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.sub(0, 0, 0), fPoint);
+            FPointTestHelper.testReference(e -> e.sub(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1365,7 +1365,7 @@ public class FPointTest {
         void subFactorValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.sub(1), fPoint);
+            FPointTestHelper.testReference(e -> e.sub(1), fPoint);
         }
 
         @Test
@@ -1386,7 +1386,7 @@ public class FPointTest {
         void subXValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.subX(1), fPoint);
+            FPointTestHelper.testReference(e -> e.subX(1), fPoint);
         }
 
         @Test
@@ -1407,7 +1407,7 @@ public class FPointTest {
         void subYValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.subY(1), fPoint);
+            FPointTestHelper.testReference(e -> e.subY(1), fPoint);
         }
 
         @Test
@@ -1428,7 +1428,7 @@ public class FPointTest {
         void subZValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.subZ(1), fPoint);
+            FPointTestHelper.testReference(e -> e.subZ(1), fPoint);
         }
 
         @Test
@@ -1451,7 +1451,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(FPoint::mul, fPointA, fPointB);
+            FPointTestHelper.testReference(FPoint::mul, fPointA, fPointB);
         }
 
         @Test
@@ -1472,7 +1472,7 @@ public class FPointTest {
         void mulPrimitivesValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.mul(0, 0, 0), fPoint);
+            FPointTestHelper.testReference(e -> e.mul(0, 0, 0), fPoint);
         }
 
         @Test
@@ -1494,7 +1494,7 @@ public class FPointTest {
         void mulFactorValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.mul(1), fPoint);
+            FPointTestHelper.testReference(e -> e.mul(1), fPoint);
         }
 
         @Test
@@ -1515,7 +1515,7 @@ public class FPointTest {
         void mulXValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.mulX(1), fPoint);
+            FPointTestHelper.testReference(e -> e.mulX(1), fPoint);
         }
 
         @Test
@@ -1536,7 +1536,7 @@ public class FPointTest {
         void mulYValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.mulY(1), fPoint);
+            FPointTestHelper.testReference(e -> e.mulY(1), fPoint);
         }
 
         @Test
@@ -1557,7 +1557,7 @@ public class FPointTest {
         void mulZValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.mulZ(1), fPoint);
+            FPointTestHelper.testReference(e -> e.mulZ(1), fPoint);
         }
 
         @Test
@@ -1597,7 +1597,7 @@ public class FPointTest {
             FPoint fPointA = RandomHelper.getTestPoint();
             FPoint fPointB = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(FPoint::mul, fPointA, fPointB);
+            FPointTestHelper.testReference(FPoint::mul, fPointA, fPointB);
         }
 
         @Test
@@ -1632,7 +1632,7 @@ public class FPointTest {
         void divPrimitivesValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.div(1, 1, 1), fPoint);
+            FPointTestHelper.testReference(e -> e.div(1, 1, 1), fPoint);
         }
 
         @Test
@@ -1661,7 +1661,7 @@ public class FPointTest {
         void divFactorValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.div(1), fPoint);
+            FPointTestHelper.testReference(e -> e.div(1), fPoint);
         }
 
         @Test
@@ -1689,7 +1689,7 @@ public class FPointTest {
         void divXValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.divX(1), fPoint);
+            FPointTestHelper.testReference(e -> e.divX(1), fPoint);
         }
 
         @Test
@@ -1717,7 +1717,7 @@ public class FPointTest {
         void divYValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.divY(1), fPoint);
+            FPointTestHelper.testReference(e -> e.divY(1), fPoint);
         }
 
         @Test
@@ -1745,7 +1745,7 @@ public class FPointTest {
         void divZValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.divZ(1), fPoint);
+            FPointTestHelper.testReference(e -> e.divZ(1), fPoint);
         }
 
         @Test
@@ -1809,7 +1809,7 @@ public class FPointTest {
         void transValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
-            FPointHelper.validateRef(e -> e.addX(opX).addY(opY).addZ(opZ), fPoint);
+            FPointTestHelper.testReference(e -> e.addX(opX).addY(opY).addZ(opZ), fPoint);
         }
 
         @Test

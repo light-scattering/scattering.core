@@ -1,7 +1,7 @@
 package eu.scattering.core.design.main.algebra.type;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.main.algebra.type.support.FQuaternionHelper;
+import eu.scattering.core.design.main.algebra.type.support.FQuaternionTestHelper;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.support.helper.RandomHelper;
@@ -218,7 +218,7 @@ public class FQuaternionTest {
             FQuaternion fQuaternionA = MainFactory.getFQuaternion();
             FQuaternion fQuaternionB = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(FQuaternion::add, fQuaternionA, fQuaternionB);
+            FQuaternionTestHelper.restReference(FQuaternion::add, fQuaternionA, fQuaternionB);
         }
 
         @Test
@@ -244,7 +244,7 @@ public class FQuaternionTest {
         void addPrimitivesValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.add(0, 0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.add(0, 0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -271,7 +271,7 @@ public class FQuaternionTest {
         void addFactorValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.add(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.add(0), fQuaternion);
         }
 
         @Test
@@ -297,7 +297,7 @@ public class FQuaternionTest {
         void addReValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.addRe(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.addRe(0), fQuaternion);
         }
 
         @Test
@@ -323,7 +323,7 @@ public class FQuaternionTest {
         void addImValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.addIm(0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.addIm(0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -349,7 +349,7 @@ public class FQuaternionTest {
         void addIValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.addI(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.addI(0), fQuaternion);
         }
 
         @Test
@@ -375,7 +375,7 @@ public class FQuaternionTest {
         void addJValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.addJ(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.addJ(0), fQuaternion);
         }
 
         @Test
@@ -401,7 +401,7 @@ public class FQuaternionTest {
         void addKValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.addK(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.addK(0), fQuaternion);
         }
 
         @Test
@@ -429,7 +429,7 @@ public class FQuaternionTest {
             FQuaternion fQuaternionA = MainFactory.getFQuaternion();
             FQuaternion fQuaternionB = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(FQuaternion::sub, fQuaternionA, fQuaternionB);
+            FQuaternionTestHelper.restReference(FQuaternion::sub, fQuaternionA, fQuaternionB);
         }
 
         @Test
@@ -455,7 +455,7 @@ public class FQuaternionTest {
         void subPrimitivesValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.sub(0, 0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.sub(0, 0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -482,7 +482,7 @@ public class FQuaternionTest {
         void subFactorValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.sub(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.sub(0), fQuaternion);
         }
 
         @Test
@@ -508,7 +508,7 @@ public class FQuaternionTest {
         void subReValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.subRe(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.subRe(0), fQuaternion);
         }
 
         @Test
@@ -534,7 +534,7 @@ public class FQuaternionTest {
         void subImValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.subIm(0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.subIm(0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -560,7 +560,7 @@ public class FQuaternionTest {
         void subIValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.subI(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.subI(0), fQuaternion);
         }
 
         @Test
@@ -586,7 +586,7 @@ public class FQuaternionTest {
         void subJValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.subJ(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.subJ(0), fQuaternion);
         }
 
         @Test
@@ -612,7 +612,7 @@ public class FQuaternionTest {
         void subKValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.subK(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.subK(0), fQuaternion);
         }
 
         @Test
@@ -640,7 +640,7 @@ public class FQuaternionTest {
             FQuaternion fQuaternionA = MainFactory.getFQuaternion();
             FQuaternion fQuaternionB = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(FQuaternion::mul, fQuaternionA, fQuaternionB);
+            FQuaternionTestHelper.restReference(FQuaternion::mul, fQuaternionA, fQuaternionB);
         }
 
         @Test
@@ -666,7 +666,7 @@ public class FQuaternionTest {
         void mulPrimitivesValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.mul(0, 0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mul(0, 0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -693,7 +693,7 @@ public class FQuaternionTest {
         void mulFactorValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.mul(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mul(0), fQuaternion);
         }
 
         @Test
@@ -719,7 +719,7 @@ public class FQuaternionTest {
         void mulReValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.mulRe(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mulRe(0), fQuaternion);
         }
 
         @Test
@@ -745,7 +745,7 @@ public class FQuaternionTest {
         void mulImValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.mulIm(0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mulIm(0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -771,7 +771,7 @@ public class FQuaternionTest {
         void mulIValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.mulI(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mulI(0), fQuaternion);
         }
 
         @Test
@@ -797,7 +797,7 @@ public class FQuaternionTest {
         void mulJValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.mulJ(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mulJ(0), fQuaternion);
         }
 
         @Test
@@ -823,7 +823,7 @@ public class FQuaternionTest {
         void mulKValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.mulK(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mulK(0), fQuaternion);
         }
 
         @Test
@@ -860,7 +860,7 @@ public class FQuaternionTest {
             FQuaternion fQuaternionA = MainFactory.getFQuaternion();
             FQuaternion fQuaternionB = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(FQuaternion::div, fQuaternionA, fQuaternionB);
+            FQuaternionTestHelper.restReference(FQuaternion::div, fQuaternionA, fQuaternionB);
         }
 
         @Test
@@ -906,7 +906,7 @@ public class FQuaternionTest {
         void divPrimitivesValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.div(0, 0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.div(0, 0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -942,7 +942,7 @@ public class FQuaternionTest {
         void divFactorValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.div(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.div(0), fQuaternion);
         }
 
         @Test
@@ -977,7 +977,7 @@ public class FQuaternionTest {
         void divReValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.divRe(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.divRe(0), fQuaternion);
         }
 
         @Test
@@ -1020,7 +1020,7 @@ public class FQuaternionTest {
         void divImValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.divIm(0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.divIm(0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -1055,7 +1055,7 @@ public class FQuaternionTest {
         void divIValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.divI(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.divI(0), fQuaternion);
         }
 
         @Test
@@ -1090,7 +1090,7 @@ public class FQuaternionTest {
         void divJValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.divJ(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.divJ(0), fQuaternion);
         }
 
         @Test
@@ -1125,7 +1125,7 @@ public class FQuaternionTest {
         void divKValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.subK(0), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.subK(0), fQuaternion);
         }
 
         @Test
@@ -1239,7 +1239,7 @@ public class FQuaternionTest {
             FQuaternion fQuaternionRef = MainFactory.getFQuaternion(refRe, refI, refJ, refK);
             FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * Config.getJitter());
 
-            FQuaternionHelper.validateVal(FQuaternion::isExact, fQuaternionRef, fQuaternionOp);
+            FQuaternionTestHelper.testValue(FQuaternion::isExact, fQuaternionRef, fQuaternionOp);
         }
 
         @Test
@@ -1265,7 +1265,7 @@ public class FQuaternionTest {
         void isExactWithParametersValidate() {
             FQuaternion fQuaternionRef = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateVal(e -> e.isExact(0, 0, 0, 0), fQuaternionRef);
+            FQuaternionTestHelper.testValue(e -> e.isExact(0, 0, 0, 0), fQuaternionRef);
         }
 
         @Test
@@ -1345,7 +1345,7 @@ public class FQuaternionTest {
             FQuaternion fQuaternionRef = MainFactory.getFQuaternion(refRe, refI, refJ, refK);
             FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * Config.getJitter());
 
-            FQuaternionHelper.validateVal(FQuaternion::isSimilar, fQuaternionRef, fQuaternionOp);
+            FQuaternionTestHelper.testValue(FQuaternion::isSimilar, fQuaternionRef, fQuaternionOp);
         }
 
         @Test
@@ -1377,7 +1377,7 @@ public class FQuaternionTest {
         void isSimilarWithParametersValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateVal(e -> e.isSimilar(0, 0, 0, 0), fQuaternion);
+            FQuaternionTestHelper.testValue(e -> e.isSimilar(0, 0, 0, 0), fQuaternion);
         }
 
         @Test
@@ -1404,7 +1404,7 @@ public class FQuaternionTest {
         void getHashCodeValidate() {
             FQuaternion fQuaternionRef = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateVal(FQuaternion::hashCode, fQuaternionRef);
+            FQuaternionTestHelper.testValue(FQuaternion::hashCode, fQuaternionRef);
         }
 
         @Test
@@ -1428,7 +1428,7 @@ public class FQuaternionTest {
         void copyValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateVal(FQuaternion::copy, fQuaternion);
+            FQuaternionTestHelper.testValue(FQuaternion::copy, fQuaternion);
         }
     }
 
@@ -1457,7 +1457,7 @@ public class FQuaternionTest {
         void getMagnitudeValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateVal(FQuaternion::getMagnitude, fQuaternion);
+            FQuaternionTestHelper.testValue(FQuaternion::getMagnitude, fQuaternion);
         }
 
         @Test
@@ -1498,7 +1498,7 @@ public class FQuaternionTest {
         void setMagnitudeValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.setMagnitude(1), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.setMagnitude(1), fQuaternion);
         }
 
         @Test
@@ -1529,7 +1529,7 @@ public class FQuaternionTest {
         void inverseValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(FQuaternion::inverse, fQuaternion);
+            FQuaternionTestHelper.restReference(FQuaternion::inverse, fQuaternion);
         }
 
         @Test
@@ -1560,7 +1560,7 @@ public class FQuaternionTest {
         void conjugateValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(FQuaternion::conjugate, fQuaternion);
+            FQuaternionTestHelper.restReference(FQuaternion::conjugate, fQuaternion);
         }
 
         @Test
@@ -1587,7 +1587,7 @@ public class FQuaternionTest {
         void normalizeValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateRef(FQuaternion::normalize, fQuaternion);
+            FQuaternionTestHelper.restReference(FQuaternion::normalize, fQuaternion);
         }
 
         @Test
@@ -1611,7 +1611,7 @@ public class FQuaternionTest {
         void isZeroValidate() {
             FQuaternion fQuaternion = MainFactory.getFQuaternion();
 
-            FQuaternionHelper.validateVal(FQuaternion::isZero, fQuaternion);
+            FQuaternionTestHelper.testValue(FQuaternion::isZero, fQuaternion);
         }
 
         @Test
@@ -1650,7 +1650,7 @@ public class FQuaternionTest {
         public void powValidate() {
             FQuaternion fQuaternion = RandomHelper.getTestQuaternion();
 
-            FQuaternionHelper.validateRef(e -> e.pow(3), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.pow(3), fQuaternion);
         }
 
         @Test
@@ -1694,7 +1694,7 @@ public class FQuaternionTest {
         public void rootValidate() {
             FQuaternion fQuaternion = RandomHelper.getTestQuaternion();
 
-            FQuaternionHelper.validateVal(e -> e.root(3), fQuaternion);
+            FQuaternionTestHelper.testValue(e -> e.root(3), fQuaternion);
         }
     }
 }

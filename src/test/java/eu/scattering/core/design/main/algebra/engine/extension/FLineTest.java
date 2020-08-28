@@ -5,7 +5,7 @@ import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
-import eu.scattering.core.design.main.algebra.engine.extension.support.FLineHelper;
+import eu.scattering.core.design.main.algebra.engine.extension.support.FLineTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
@@ -149,7 +149,7 @@ public class FLineTest {
         void parseJSONExportValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector());
 
-            FLineHelper.validateVal(FLine::exportToJSON, fLine);
+            FLineTestHelper.testValue(FLine::exportToJSON, fLine);
         }
 
         @Test
@@ -184,7 +184,7 @@ public class FLineTest {
             FLine fLineA = MainFactory.getFLine(MainFactory.getFVector());
             FLine fLineB = MainFactory.getFLine(MainFactory.getFVector());
 
-            FLineHelper.validateVal(FLine::isExact, fLineA, fLineB);
+            FLineTestHelper.testValue(FLine::isExact, fLineA, fLineB);
         }
 
         @Test
@@ -278,7 +278,7 @@ public class FLineTest {
             FLine fLineA = MainFactory.getFLine(RandomHelper.getTestVector());
             FLine fLineB = MainFactory.getFLine(RandomHelper.getTestVector());
 
-            FLineHelper.validateVal(FLine::isSimilar, fLineA, fLineB);
+            FLineTestHelper.testValue(FLine::isSimilar, fLineA, fLineB);
         }
 
         @Test
@@ -308,7 +308,7 @@ public class FLineTest {
         void getHashCodeValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector());
 
-            FLineHelper.validateVal(FLine::hashCode, fLine);
+            FLineTestHelper.testValue(FLine::hashCode, fLine);
         }
 
         @Test
@@ -331,7 +331,7 @@ public class FLineTest {
         void copyValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector());
 
-            FLineHelper.validateVal(FLine::copy, fLine);
+            FLineTestHelper.testValue(FLine::copy, fLine);
         }
 
     }
@@ -392,7 +392,7 @@ public class FLineTest {
         void projectValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(FLine::project, fLine);
+            FLineTestHelper.testValue(FLine::project, fLine);
         }
 
         @Test
@@ -442,7 +442,7 @@ public class FLineTest {
         void reflectValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(FLine::reflect, fLine);
+            FLineTestHelper.testValue(FLine::reflect, fLine);
         }
 
         @Test
@@ -500,7 +500,7 @@ public class FLineTest {
         void isPartOfValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(FLine::isPartOf, fLine);
+            FLineTestHelper.testValue(FLine::isPartOf, fLine);
         }
 
         @Test
@@ -553,7 +553,7 @@ public class FLineTest {
         void getDistanceValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(FLine::getDistance, fLine);
+            FLineTestHelper.testValue(FLine::getDistance, fLine);
         }
 
         @Test
@@ -643,7 +643,7 @@ public class FLineTest {
         void setDistanceValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(e -> e.setDistance(1), fLine);
+            FLineTestHelper.testValue(e -> e.setDistance(1), fLine);
         }
 
         @Test
@@ -694,7 +694,7 @@ public class FLineTest {
         void projectOnRayValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(FLine::isPartOfRay, fLine);
+            FLineTestHelper.testValue(FLine::isPartOfRay, fLine);
         }
 
         @Test
@@ -745,7 +745,7 @@ public class FLineTest {
         void projectOnSegmentValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(FLine::isPartOfSegment, fLine);
+            FLineTestHelper.testValue(FLine::isPartOfSegment, fLine);
         }
 
         @Test
@@ -789,7 +789,7 @@ public class FLineTest {
         void moveForwardValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector());
 
-            FLineHelper.validateVal(e -> e.moveForward(1), fLine);
+            FLineTestHelper.testValue(e -> e.moveForward(1), fLine);
         }
 
         @Test
@@ -833,7 +833,7 @@ public class FLineTest {
         void moveBackwardValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector());
 
-            FLineHelper.validateVal(e -> e.moveBackward(1), fLine);
+            FLineTestHelper.testValue(e -> e.moveBackward(1), fLine);
         }
 
         @Test
@@ -914,7 +914,7 @@ public class FLineTest {
         void getFPointAtXValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(e -> e.getFPointAtX(0), fLine);
+            FLineTestHelper.testValue(e -> e.getFPointAtX(0), fLine);
         }
 
         @Test
@@ -959,7 +959,7 @@ public class FLineTest {
         void getFPointAtYValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(e -> e.getFPointAtY(0), fLine);
+            FLineTestHelper.testValue(e -> e.getFPointAtY(0), fLine);
         }
 
         @Test
@@ -1004,7 +1004,7 @@ public class FLineTest {
         void getFPointAtZValidate() {
             FLine fLine = MainFactory.getFLine(MainFactory.getFVector(1, 1, 1));
 
-            FLineHelper.validateVal(e -> e.getFPointAtZ(0), fLine);
+            FLineTestHelper.testValue(e -> e.getFPointAtZ(0), fLine);
         }
 
         @Test
@@ -1255,7 +1255,7 @@ public class FLineTest {
             FLine fLineA = MainFactory.getFLine(RandomHelper.getTestVector());
             FLine fLineB = MainFactory.getFLine(RandomHelper.getTestVector());
 
-            FLineHelper.validateVal(FLine::getCommonFPoint, fLineA, fLineB);
+            FLineTestHelper.testValue(FLine::getCommonFPoint, fLineA, fLineB);
         }
 
         @Test
