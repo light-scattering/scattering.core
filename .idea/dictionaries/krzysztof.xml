@@ -2,6 +2,9 @@
   <dictionary name="krzysztof">
     <words>
       <w>halfspace</w>
+      <w>hanning</w>
+      <w>idft</w>
+      <w>ifft</w>
       <w>krzysztof</w>
       <w>projectable</w>
       <w>skorupski</w>
