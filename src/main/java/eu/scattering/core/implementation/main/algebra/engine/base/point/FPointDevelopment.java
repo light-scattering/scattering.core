@@ -547,12 +547,12 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint cus(Consumer<FPoint> exp) {
+    public FPoint trans(Consumer<FPoint> exp) {
 
-        String name = "cus(Consumer<FPoint> exp)";
+        String name = "trans(Consumer<FPoint> exp)";
         long time = System.currentTimeMillis();
 
-        var res = core.cus(exp);
+        var res = core.trans(exp);
 
         updateStats(name, time);
 
@@ -560,12 +560,12 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public double cusDouble(Function<FPoint, Double> exp) {
+    public double transDouble(Function<FPoint, Double> exp) {
 
-        String name = "cusDouble(Function<FPoint, Double>)";
+        String name = "transDouble(Function<FPoint, Double>)";
         long time = System.currentTimeMillis();
 
-        var res = core.cusDouble(exp);
+        var res = core.transDouble(exp);
 
         updateStats(name, time);
 
@@ -573,12 +573,12 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public boolean cusBoolean(Predicate<FPoint> exp) {
+    public boolean transBoolean(Predicate<FPoint> exp) {
 
-        String name = "cusBoolean(Predicate<FPoint>)";
+        String name = "transBoolean(Predicate<FPoint>)";
         long time = System.currentTimeMillis();
 
-        var res = core.cusBoolean(exp);
+        var res = core.transBoolean(exp);
 
         updateStats(name, time);
 

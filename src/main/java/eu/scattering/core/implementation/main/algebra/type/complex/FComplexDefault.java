@@ -163,9 +163,9 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FComplex add(FComplex fComplex) {
+    public FComplex add(FComplex element) {
 
-        return add(fComplex.getRe(), fComplex.getIm());
+        return add(element.getRe(), element.getIm());
     }
 
     @Override
@@ -193,9 +193,9 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
     }
 
     @Override
-    public FComplex sub(FComplex fComplex) {
+    public FComplex sub(FComplex element) {
 
-        return sub(fComplex.getRe(), fComplex.getIm());
+        return sub(element.getRe(), element.getIm());
     }
 
     @Override
@@ -223,10 +223,10 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
     }
 
     @Override
-    public FComplex mul(FComplex fComplex) {
+    public FComplex mul(FComplex element) {
 
-        double valueRe = getRe() * fComplex.getRe() - getIm() * fComplex.getIm();
-        double valueIm = getRe() * fComplex.getIm() + getIm() * fComplex.getRe();
+        double valueRe = getRe() * element.getRe() - getIm() * element.getIm();
+        double valueIm = getRe() * element.getIm() + getIm() * element.getRe();
 
         return set(valueRe, valueIm);
     }
@@ -256,15 +256,15 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
     }
 
     @Override
-    public FComplex div(FComplex fComplex) {
+    public FComplex div(FComplex element) {
 
-        if (fComplex.isZero()) {
+        if (element.isZero()) {
             throw new IllegalArgumentException("The divisor cannot be zero");
         }
 
-        double nominatorRe = (getRe() * fComplex.getRe()) + (getIm() * fComplex.getIm());
-        double nominatorIm = (getIm() * fComplex.getRe()) - (getRe() * fComplex.getIm());
-        double denominator = (fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm());
+        double nominatorRe = (getRe() * element.getRe()) + (getIm() * element.getIm());
+        double nominatorIm = (getIm() * element.getRe()) - (getRe() * element.getIm());
+        double denominator = (element.getRe() * element.getRe()) + (element.getIm() * element.getIm());
 
         return set(nominatorRe / denominator, nominatorIm / denominator);
     }
@@ -402,9 +402,9 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
     }
 
     @Override
-    public FComplex imprint(FComplex fComplex) {
+    public FComplex imprint(FComplex element) {
 
-        fComplex.set(this);
+        element.set(this);
 
         return this;
     }

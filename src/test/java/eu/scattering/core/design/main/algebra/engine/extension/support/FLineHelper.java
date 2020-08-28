@@ -1,17 +1,18 @@
-package eu.scattering.core.design.main.algebra.engine.extension.helper;
+package eu.scattering.core.design.main.algebra.engine.extension.support;
 
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
+import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class FPlaneHelper {
+public class FLineHelper {
 
-    public static Object validateVal(BiFunction<FPlane, FPlane, Object> test, FPlane in, FPlane arg) {
+    public static Object validateVal(BiFunction<FLine, FLine, Object> test, FLine in, FLine arg) {
         FVector inRef = in.getOrigin();
         FVector inRefPos = in.getOrigin().copy();
         FPoint inBaseRef = in.getBase();
@@ -51,7 +52,7 @@ public class FPlaneHelper {
         return res;
     }
 
-    public static Object validateVal(Function<FPlane, Object> test, FPlane in) {
+    public static Object validateVal(Function<FLine, Object> test, FLine in) {
         FVector inRef = in.getOrigin();
         FVector inRefPos = in.getOrigin().copy();
         FPoint inBaseRef = in.getBase();

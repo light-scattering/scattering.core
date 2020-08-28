@@ -40,10 +40,10 @@ public interface Base<T> extends Engine {
 
     T set(T element);
     T imprint(T element);
-// TODO disassembly should be available for all engine classes, and therefore, custom methods.
-    T cus(Consumer<T> exp);
-    double cusDouble(Function<T, Double> exp);
-    boolean cusBoolean(Predicate<T> exp);
+
+    T trans(Consumer<T> exp);
+    double transDouble(Function<T, Double> exp);
+    boolean transBoolean(Predicate<T> exp);
 
     T ext(Consumer<Engine> exp);
     List<Double> extDouble(Function<Engine, List<Double>> exp);

@@ -247,7 +247,7 @@ public abstract class BasePreset<T extends Base<T>> extends EnginePreset<T> impl
     }
 
     @Override
-    public T cus(Consumer<T> exp) {
+    public T trans(Consumer<T> exp) {
 
         exp.accept(self());
 
@@ -255,13 +255,13 @@ public abstract class BasePreset<T extends Base<T>> extends EnginePreset<T> impl
     }
 
     @Override
-    public double cusDouble(Function<T, Double> exp) {
+    public double transDouble(Function<T, Double> exp) {
 
         return exp.apply(self());
     }
 
     @Override
-    public boolean cusBoolean(Predicate<T> exp) {
+    public boolean transBoolean(Predicate<T> exp) {
 
         return exp.test(self());
     }

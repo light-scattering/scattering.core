@@ -4,7 +4,7 @@ import eu.scattering.core.Config;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.design.main.algebra.engine.base.helper.FVectorHelper;
+import eu.scattering.core.design.main.algebra.engine.base.support.FVectorHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 

@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.algebra.type.helper;
+package eu.scattering.core.design.main.algebra.type.support;
 
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 
@@ -57,5 +57,4 @@ public class FComplexHelper {
 
         return res;
     }
-
 }

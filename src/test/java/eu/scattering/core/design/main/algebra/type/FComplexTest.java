@@ -1,19 +1,16 @@
 package eu.scattering.core.design.main.algebra.type;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.main.Main;
-import eu.scattering.core.design.main.algebra.engine.base.helper.FPointHelper;
-import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.design.main.algebra.type.helper.FComplexHelper;
+import eu.scattering.core.design.main.algebra.type.support.FComplexHelper;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
-import javax.imageio.stream.FileCacheImageOutputStream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+@Timeout(5)
+@DisplayName("FComplex")
 public class FComplexTest {
 
     @Nested
@@ -30,9 +27,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(0, fComplex.getRe(),
-                            "The real part of the FComplex value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(0, fComplex.getIm(),
-                            "The imaginary part of the FComplex value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -43,9 +40,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(1, fComplex.getRe(),
-                            "The real part of the FComplex value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(2, fComplex.getIm(),
-                            "The imaginary part of the FComplex value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -58,9 +55,9 @@ public class FComplexTest {
 
             assertAll("Updated values are incorrect",
                     () -> assertEquals(1, fComplex.getRe(),
-                            "The real part of the FComplex value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(2, fComplex.getIm(),
-                            "The imaginary part of the FComplex value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -73,9 +70,9 @@ public class FComplexTest {
 
             assertAll("Updated values are incorrect",
                     () -> assertEquals(1, fComplex.getRe(),
-                            "The real part of the FComplex value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(2, fComplex.getIm(),
-                            "The imaginary part of the FComplex value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -88,9 +85,9 @@ public class FComplexTest {
 
             assertAll("Updated values are incorrect",
                     () -> assertEquals(1, fComplex.getRe(),
-                            "The real part of the FComplex value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(0, fComplex.getIm(),
-                            "The imaginary part of the FComplex value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -103,9 +100,9 @@ public class FComplexTest {
 
             assertAll("Updated values are incorrect",
                     () -> assertEquals(0, fComplex.getRe(),
-                            "The real part of the FComplex value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(1, fComplex.getIm(),
-                            "The imaginary part of the FComplex value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
     }
@@ -139,9 +136,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe + opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm + opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -162,9 +159,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe + opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm + opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -185,9 +182,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe + op, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm + op, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -207,9 +204,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe + opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -229,9 +226,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm + opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -252,9 +249,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe - opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm - opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -275,9 +272,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe - opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm - opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -298,9 +295,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe - op, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm - op, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part  is incorrect")
             );
         }
 
@@ -320,9 +317,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe - opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -342,9 +339,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm - opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -365,9 +362,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe * opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm * opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -388,9 +385,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe * opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm * opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -411,9 +408,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe * op, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm * op, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -433,9 +430,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe * opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -455,9 +452,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm * opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -478,9 +475,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe / opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm / opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -490,7 +487,7 @@ public class FComplexTest {
 
             assertThrows(ArithmeticException.class,
                     () -> fComplex.div(MainFactory.getFComplex(0, 0)),
-                    "The FComplex value is zero");
+                    "The divisor cannot be zero");
         }
 
         @Test
@@ -510,9 +507,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe / opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm / opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -547,9 +544,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe / op, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm / op, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -559,7 +556,7 @@ public class FComplexTest {
 
             assertThrows(ArithmeticException.class,
                     () -> fComplex.div(0),
-                    "The division factor is zero");
+                    "The divisor cannot be zero");
         }
 
         @Test
@@ -578,9 +575,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe / opRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -590,7 +587,7 @@ public class FComplexTest {
 
             assertThrows(ArithmeticException.class,
                     () -> fComplex.divRe(0),
-                    "The division value is zero");
+                    "The divisor cannot be zero");
         }
 
         @Test
@@ -609,9 +606,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplex.getRe(),
-                            "The real part of the value is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm / opIm, fComplex.getIm(),
-                            "The imaginary part of the value is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -621,7 +618,7 @@ public class FComplexTest {
 
             assertThrows(ArithmeticException.class,
                     () -> fComplex.divIm(0),
-                    "The division value is zero");
+                    "The divisor cannot be zero");
         }
 
         @Test
@@ -640,10 +637,14 @@ public class FComplexTest {
             fComplex.imprint(fComplexRef);
 
             assertAll("Validate FComplex values",
-                    () -> assertEquals(refRe, fComplex.getRe(), "The reference Re value is incorrect"),
-                    () -> assertEquals(refIm, fComplex.getIm(), "The reference Im value is incorrect"),
-                    () -> assertEquals(refRe, fComplexRef.getRe(), "The Re value is incorrect"),
-                    () -> assertEquals(refIm, fComplexRef.getIm(), "The Im value is incorrect")
+                    () -> assertEquals(refRe, fComplex.getRe(),
+                            "The reference Re value is incorrect"),
+                    () -> assertEquals(refIm, fComplex.getIm(),
+                            "The reference Im value is incorrect"),
+                    () -> assertEquals(refRe, fComplexRef.getRe(),
+                            "The Re value is incorrect"),
+                    () -> assertEquals(refIm, fComplexRef.getIm(),
+                            "The Im value is incorrect")
             );
         }
 
@@ -655,8 +656,10 @@ public class FComplexTest {
             FComplex fComplexRef = fComplexOp.imprint(fComplex);
 
             assertAll("Validate references",
-                    () -> assertNotSame(fComplex, fComplexOp, "FComplex references should be different"),
-                    () -> assertSame(fComplexOp, fComplexRef, "The FComplex reference should not change")
+                    () -> assertNotSame(fComplex, fComplexOp,
+                            "FComplex references should change"),
+                    () -> assertSame(fComplexOp, fComplexRef,
+                            "The FComplex reference should not change")
             );
         }
 
@@ -684,9 +687,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplexOp.getRe(),
-                            "The value of the real part is incorrect"),
+                            "The real part is incorrect"),
                     () -> assertEquals(refIm, fComplexOp.getIm(),
-                            "The value of the imaginary part is incorrect")
+                            "The imaginary part is incorrect")
             );
         }
 
@@ -697,8 +700,10 @@ public class FComplexTest {
             FComplex fComplexOp = MainFactory.getFComplex(refRe, refIm);
 
             assertAll("Validate exactness",
-                    () -> assertTrue(fComplexRef.isExact(fComplexOp), "FComplex values should be equal"),
-                    () -> assertTrue(fComplexOp.isExact(fComplexRef), "FComplex values should be equal")
+                    () -> assertTrue(fComplexRef.isExact(fComplexOp),
+                            "FComplex values should be equal"),
+                    () -> assertTrue(fComplexOp.isExact(fComplexRef),
+                            "FComplex values should be equal")
             );
         }
 
@@ -706,12 +711,23 @@ public class FComplexTest {
         @DisplayName("Exactness (fail)")
         void isExactFail() {
             FComplex fComplexRef = MainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = MainFactory.getFComplex(refRe, refIm).add(0.5 * Config.getJitter());
+            FComplex fComplexOp = fComplexRef.copy().add(0.5 * Config.getJitter());
 
             assertAll("Validate exactness",
-                    () -> assertFalse(fComplexRef.isExact(fComplexOp), "FComplex values should not be equal"),
-                    () -> assertFalse(fComplexOp.isExact(fComplexRef), "FComplex values should not be equal")
+                    () -> assertFalse(fComplexRef.isExact(fComplexOp),
+                            "FComplex values should not be equal"),
+                    () -> assertFalse(fComplexOp.isExact(fComplexRef),
+                            "FComplex values should not be equal")
             );
+        }
+
+        @Test
+        @DisplayName("Exactness (validate)")
+        void isExactValidate() {
+            FComplex fComplexRef = MainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = MainFactory.getFComplex(refRe, refIm);
+
+            FComplexHelper.validateVal(FComplex::isExact, fComplexRef, fComplexOp);
         }
 
         @Test
@@ -727,7 +743,8 @@ public class FComplexTest {
         void isExactWithParametersFail() {
             FComplex fComplexRef = MainFactory.getFComplex(refRe, refIm);
 
-            assertFalse(fComplexRef.isExact(0, 0), "FComplex values should be equal");
+            assertFalse(fComplexRef.isExact(0, 0),
+                    "FComplex values should not be equal");
         }
 
         @Test
@@ -745,16 +762,21 @@ public class FComplexTest {
             double ref = Config.getJitter() * 0.5;
 
             assertAll("Check combinations (true)",
-                    () -> assertTrue(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef)),
-                            "FComplex should be similar (same position)"),
-                    () -> assertTrue(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).addRe(ref)),
-                            "FComplex should be similar (positive Re)"),
-                    () -> assertTrue(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).subRe(ref)),
-                            "FComplex should be similar (negative Re)"),
-                    () -> assertTrue(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).addIm(ref)),
-                            "FComplex should be similar (positive Im)"),
-                    () -> assertTrue(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).subIm(ref)),
-                            "FComplex should be similar (negative Im)")
+                    () -> assertTrue(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef)),
+                            "FComplex values should be similar (same position)"),
+                    () -> assertTrue(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).addRe(ref)),
+                            "FComplex values should be similar (positive Re)"),
+                    () -> assertTrue(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).subRe(ref)),
+                            "FComplex values should be similar (negative Re)"),
+                    () -> assertTrue(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).addIm(ref)),
+                            "FComplex values should be similar (positive Im)"),
+                    () -> assertTrue(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).subIm(ref)),
+                            "FComplex values should be similar (negative Im)")
             );
         }
 
@@ -765,25 +787,39 @@ public class FComplexTest {
             double ref = Config.getJitter() * 2;
 
             assertAll("Check combinations (true)",
-                    () -> assertFalse(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).addRe(ref)),
-                            "FComplex should not be similar (positive Re)"),
-                    () -> assertFalse(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).subRe(ref)),
-                            "FComplex should not be similar (negative Re)"),
-                    () -> assertFalse(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).addIm(ref)),
-                            "FComplex should not be similar (positive Im)"),
-                    () -> assertFalse(fComplexRef.isSimilar(MainFactory.getFComplex().add(fComplexRef).subIm(ref)),
-                            "FComplex should not be similar (negative Im)")
+                    () -> assertFalse(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).addRe(ref)),
+                            "FComplex values should not be similar (positive Re)"),
+                    () -> assertFalse(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).subRe(ref)),
+                            "FComplex values should not be similar (negative Re)"),
+                    () -> assertFalse(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).addIm(ref)),
+                            "FComplex values should not be similar (positive Im)"),
+                    () -> assertFalse(fComplexRef
+                                    .isSimilar(MainFactory.getFComplex().add(fComplexRef).subIm(ref)),
+                            "FComplex values should not be similar (negative Im)")
             );
+        }
+
+        @Test
+        @DisplayName("Similarity (validate)")
+        void isSimilarValidate() {
+            FComplex fComplexRef = MainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = MainFactory.getFComplex(refRe, refIm);
+
+            FComplexHelper.validateVal(FComplex::isSimilar, fComplexRef, fComplexOp);
         }
 
         @Test
         @DisplayName("Similarity with parameters")
         void isSimilarWithParameters() {
             FComplex fComplexRef = MainFactory.getFComplex(refRe, refIm);
+            double jitter = 0.5 * Config.getJitter();
 
             assertTrue(fComplexRef.isSimilar(
-                    refRe + (0.5 * Config.getJitter()),
-                    refRe + (0.5 * Config.getJitter())),
+                    refRe + jitter,
+                    refIm + jitter),
                     "FComplex values should be similar");
         }
 
@@ -841,7 +877,7 @@ public class FComplexTest {
 
             assertAll("Validate copy",
                     () -> assertNotSame(fComplexRef, fComplex,
-                            "FComplex represent different objects"),
+                            "FComplex objects contain different values"),
                     () -> assertEquals(fComplexRef, fComplex,
                             "FComplex values should be the same"),
                     () -> assertNotEquals(fComplexRef, fComplex.add(fComplexRef),
@@ -868,7 +904,7 @@ public class FComplexTest {
         void getMagnitude() {
             FComplex fComplex = RandomHelper.getTestComplex();
 
-            double res = Math.sqrt(fComplex.getRe() * fComplex.getRe() + (fComplex.getIm() * fComplex.getIm()));
+            double res = Math.sqrt((fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm()));
 
             assertEquals(res, fComplex.getMagnitude(), "The magnitude is erroneous");
         }
@@ -907,19 +943,19 @@ public class FComplexTest {
         }
 
         @Test
-        @DisplayName("Set magnitude (validate)")
-        void setMagnitudeValidate() {
-            FComplex fComplex = MainFactory.getFComplex();
-
-            FComplexHelper.validateRef(e -> e.setMagnitude(1), fComplex);
-        }
-
-        @Test
         @DisplayName("Set magnitude (throw IllegalStateException)")
         void setMagnitudeThrowIllegalStateException() {
 
             assertThrows(IllegalStateException.class, () -> MainFactory.getFComplex().setMagnitude(1),
                     "The direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set magnitude (validate)")
+        void setMagnitudeValidate() {
+            FComplex fComplex = MainFactory.getFComplex();
+
+            FComplexHelper.validateRef(e -> e.setMagnitude(1), fComplex);
         }
 
         @Test
@@ -1031,7 +1067,8 @@ public class FComplexTest {
                     () -> assertEquals(-re, fComplex.getRe(),
                             Config.getJitter(), "The Re value is erroneous"),
                     () -> assertEquals(-im, fComplex.getIm(),
-                            Config.getJitter(), "The Im value is erroneous"));
+                            Config.getJitter(), "The Im value is erroneous")
+            );
         }
 
         @Test
@@ -1134,7 +1171,8 @@ public class FComplexTest {
             FComplex fComplex = MainFactory.getFComplex(3, 4);
             int n = -3;
 
-            FComplex res = MainFactory.getFComplex(1, 0).div(fComplex.copy().mul(fComplex).mul(fComplex));
+            FComplex res = MainFactory.getFComplex(1, 0)
+                    .div(fComplex.copy().mul(fComplex).mul(fComplex));
 
             assertTrue(fComplex.pow(n).isSimilar(res), "The value is erroneous");
         }

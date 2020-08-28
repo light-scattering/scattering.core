@@ -457,12 +457,12 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector cus(Consumer<FVector> exp) {
+    public FVector trans(Consumer<FVector> exp) {
 
-        String name = "cus(Consumer<FVector>)";
+        String name = "trans(Consumer<FVector>)";
         long time = System.currentTimeMillis();
 
-        var res = core.cus(exp);
+        var res = core.trans(exp);
 
         updateStats(name, time);
 
@@ -470,12 +470,12 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public double cusDouble(Function<FVector, Double> exp) {
+    public double transDouble(Function<FVector, Double> exp) {
 
-        String name = "cusDouble(Function<FVector, Double>)";
+        String name = "transDouble(Function<FVector, Double>)";
         long time = System.currentTimeMillis();
 
-        var res = core.cusDouble(exp);
+        var res = core.transDouble(exp);
 
         updateStats(name, time);
 
@@ -483,12 +483,12 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public boolean cusBoolean(Predicate<FVector> exp) {
+    public boolean transBoolean(Predicate<FVector> exp) {
 
-        String name = "cusBoolean(Predicate<FVector>)";
+        String name = "transBoolean(Predicate<FVector>)";
         long time = System.currentTimeMillis();
 
-        var res = core.cusBoolean(exp);
+        var res = core.transBoolean(exp);
 
         updateStats(name, time);
 

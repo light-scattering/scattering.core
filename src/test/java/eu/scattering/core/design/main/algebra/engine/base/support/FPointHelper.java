@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.algebra.engine.base.helper;
+package eu.scattering.core.design.main.algebra.engine.base.support;
 
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 

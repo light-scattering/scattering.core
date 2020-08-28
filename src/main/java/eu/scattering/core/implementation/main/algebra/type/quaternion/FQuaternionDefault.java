@@ -135,17 +135,27 @@ public class FQuaternionDefault extends EnginePreset<FQuaternion> implements FQu
     }
 
     @Override
+    public boolean isExact(double re, double i, double j, double k) {
+        return false;
+    }
+
+    @Override
+    public boolean isSimilar(double re, double i, double j, double k) {
+        return false;
+    }
+
+    @Override
     public double getMagnitude() {
         return 0;
     }
 
     @Override
-    public double setMagnitude(double magnitude) {
-        return 0;
+    public FQuaternion setMagnitude(double magnitude) {
+        return null;
     }
 
     @Override
-    public FQuaternion add(FQuaternion fQuaternion) {
+    public FQuaternion add(FQuaternion element) {
         return null;
     }
 
@@ -170,7 +180,22 @@ public class FQuaternionDefault extends EnginePreset<FQuaternion> implements FQu
     }
 
     @Override
-    public FQuaternion sub(FQuaternion fQuaternion) {
+    public FQuaternion addI(double i) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion addJ(double j) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion addK(double k) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion sub(FQuaternion element) {
         return null;
     }
 
@@ -195,7 +220,22 @@ public class FQuaternionDefault extends EnginePreset<FQuaternion> implements FQu
     }
 
     @Override
-    public FQuaternion mul(FQuaternion fQuaternion) {
+    public FQuaternion subI(double i) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion subJ(double j) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion subK(double k) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion mul(FQuaternion element) {
         return null;
     }
 
@@ -220,12 +260,22 @@ public class FQuaternionDefault extends EnginePreset<FQuaternion> implements FQu
     }
 
     @Override
-    public FQuaternion divL(FQuaternion fQuaternion) {
+    public FQuaternion mulI(double i) {
         return null;
     }
 
     @Override
-    public FQuaternion devR(FQuaternion fQuaternion) {
+    public FQuaternion mulJ(double j) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion mulK(double k) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion div(FQuaternion element) {
         return null;
     }
 
@@ -246,6 +296,21 @@ public class FQuaternionDefault extends EnginePreset<FQuaternion> implements FQu
 
     @Override
     public FQuaternion divIm(double i, double j, double k) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion divI(double i) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion divJ(double j) {
+        return null;
+    }
+
+    @Override
+    public FQuaternion divK(double k) {
         return null;
     }
 
@@ -275,7 +340,7 @@ public class FQuaternionDefault extends EnginePreset<FQuaternion> implements FQu
     }
 
     @Override
-    public FQuaternion imprint(FQuaternion fQuaternion) {
+    public FQuaternion imprint(FQuaternion element) {
         return null;
     }
 

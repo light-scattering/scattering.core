@@ -3,7 +3,7 @@ package eu.scattering.core.design.main.algebra.engine.base;
 import eu.scattering.core.Config;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.design.main.algebra.engine.base.helper.FPointHelper;
+import eu.scattering.core.design.main.algebra.engine.base.support.FPointHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
@@ -1793,9 +1793,9 @@ public class FPointTest {
 
         @Test
         @DisplayName("Custom function - chain")
-        void cus() {
+        void trans() {
 
-            fPoint.cus(e -> e.addX(opX).addY(opY).addZ(opZ));
+            fPoint.trans(e -> e.addX(opX).addY(opY).addZ(opZ));
 
             assertAll("Validate FPoint values",
                     () -> assertEquals(refX + opX, fPoint.getX(), "The X value is incorrect"),
@@ -1806,7 +1806,7 @@ public class FPointTest {
 
         @Test
         @DisplayName("Custom function - chain (validate)")
-        void cusValidate() {
+        void transValidate() {
             FPoint fPoint = RandomHelper.getTestPoint();
 
             FPointHelper.validateRef(e -> e.addX(opX).addY(opY).addZ(opZ), fPoint);
@@ -1814,17 +1814,17 @@ public class FPointTest {
 
         @Test
         @DisplayName("Custom function - value")
-        void cusVal() {
+        void transVal() {
 
-            assertEquals(refX + refY + refZ, fPoint.cusDouble(e -> e.getX() + e.getY() + e.getZ()),
+            assertEquals(refX + refY + refZ, fPoint.transDouble(e -> e.getX() + e.getY() + e.getZ()),
                     "The resulting value is erroneous");
         }
 
         @Test
         @DisplayName("Custom function - value")
-        void cusLog() {
+        void transLog() {
 
-            assertTrue(fPoint.cusBoolean(e -> e.getX() != 0), "The resulting value is erroneous");
+            assertTrue(fPoint.transBoolean(e -> e.getX() != 0), "The resulting value is erroneous");
         }
 
     }

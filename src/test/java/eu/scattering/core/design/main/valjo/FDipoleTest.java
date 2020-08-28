@@ -3,10 +3,13 @@ package eu.scattering.core.design.main.valjo;
 import eu.scattering.core.injection.MainFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Timeout(5)
+@DisplayName("FDipole")
 public class FDipoleTest {
 
     @Test

@@ -2,6 +2,7 @@ package eu.scattering.core.support.helper;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
+import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -14,10 +15,6 @@ public final class RandomHelper {
 
     private static final double valueMax = +10000;
     private static final double valueMin = -10000;
-
-    private static final FPoint fPointZero = MainFactory.getFPoint();
-    private static final FVector fVectorZero = MainFactory.getFVector(MainFactory.getFPoint());
-    private static final FComplex fComplexZero = MainFactory.getFComplex();
 
     public static double getTestValue(double... exclude) {
         double value = 0;
@@ -37,6 +34,7 @@ public final class RandomHelper {
     }
 
     public static FPoint getTestPoint(FPoint... exclude) {
+        FPoint fPointZero = MainFactory.getFPoint();
         FPoint fPoint = MainFactory.getFPoint();
 
         mainLoop:
@@ -54,6 +52,7 @@ public final class RandomHelper {
     }
 
     public static FVector getTestVector(FVector... exclude) {
+        FVector fVectorZero = MainFactory.getFVector(MainFactory.getFPoint());
         FVector fVector = MainFactory.getFVector();
 
         mainLoop:
@@ -71,6 +70,7 @@ public final class RandomHelper {
     }
 
     public static FComplex getTestComplex(FComplex... exclude) {
+        FComplex fComplexZero = MainFactory.getFComplex();
         FComplex fComplex = MainFactory.getFComplex();
 
         mainLoop:
@@ -87,4 +87,21 @@ public final class RandomHelper {
         return fComplex;
     }
 
+    public static FQuaternion getTestQuaternion(FQuaternion... exclude) {
+        FQuaternion fQuaternionZero = MainFactory.getFQuaternion();
+        FQuaternion fQuaternion = MainFactory.getFQuaternion();
+
+        mainLoop:
+        while (fQuaternion.isSimilar(fQuaternionZero)) {
+            fQuaternion = MainFactory.getFQuaternion(getTestValue(), getTestValue(), getTestValue(), getTestValue());
+
+            for (FQuaternion singularity : exclude) {
+                if (fQuaternion.isSimilar(singularity)) {
+                    continue mainLoop;
+                }
+            }
+        }
+
+        return fQuaternion;
+    }
 }
