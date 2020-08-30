@@ -7,7 +7,7 @@ import eu.scattering.core.design.main.algebra.Algebra;
 import java.time.LocalTime;
 import java.util.Optional;
 
-public abstract class EnginePreset<T> implements Algebra<T> {
+public abstract class AlgebraPreset<T> implements Algebra<T> {
 
     private String meta = "";
 
@@ -45,6 +45,22 @@ public abstract class EnginePreset<T> implements Algebra<T> {
 
     @Override
     public T devDescribeClassStatistics() {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return self();
+    }
+
+    @Override
+    public T objectStatisticsEnable() {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return self();
+    }
+
+    @Override
+    public T objectStatisticsDisable() {
 
         Config.getDebugPrintStream().println("Not implemented");
 

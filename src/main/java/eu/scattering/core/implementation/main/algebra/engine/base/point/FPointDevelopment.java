@@ -17,8 +17,10 @@ import java.util.function.Predicate;
 public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
 
     private static long numberOfInstances = 0;
-    private static final Statistics statsClass = DevelopmentFactory.getIStats(true);
-    private final Statistics statsObject = DevelopmentFactory.getIStats(false);
+
+    private static final Statistics statsClass = DevelopmentFactory.getIStats().setActive(true);
+    private final Statistics statsObject = DevelopmentFactory.getIStats();
+
     private final FPoint core;
 
     private FPointDevelopment(FPoint core) {
@@ -31,6 +33,20 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     public static FPoint create(FPoint core) {
 
         return new FPointDevelopment(core);
+    }
+
+    public FPoint objectStatisticsEnable() {
+
+        statsObject.setActive(true);
+
+        return this;
+    }
+
+    public FPoint objectStatisticsDisable() {
+
+        statsObject.setActive(false);
+
+        return this;
     }
 
     @Override
@@ -966,11 +982,6 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         long time = System.currentTimeMillis() - startTime;
 
         statsClass.recordEvent(name, time);
-
-        if (statsObject.isSuspended()) {
-            return;
-        }
-
         statsObject.recordEvent(name, time);
     }
 

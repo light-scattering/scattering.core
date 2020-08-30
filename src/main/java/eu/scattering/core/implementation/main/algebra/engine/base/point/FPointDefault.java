@@ -1,7 +1,6 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import org.json.JSONArray;
@@ -10,6 +9,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static eu.scattering.core.Config.mainFactory;
 
 public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
@@ -142,7 +143,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-        return MainFactory.getFPoint().set(this);
+        return mainFactory.getFPoint().set(this);
     }
 
     @Override
@@ -395,13 +396,13 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public boolean isExact(double x, double y, double z) {
 
-        return isExact(MainFactory.getFPoint(x, y, z));
+        return isExact(mainFactory.getFPoint(x, y, z));
     }
 
     @Override
     public boolean isSimilar(double x, double y, double z) {
 
-        return isSimilar(MainFactory.getFPoint(x, y, z));
+        return isSimilar(mainFactory.getFPoint(x, y, z));
     }
 
     @Override

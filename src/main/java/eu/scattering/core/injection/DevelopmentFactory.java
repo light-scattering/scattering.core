@@ -13,9 +13,9 @@ public class DevelopmentFactory {
     // The following section contains methods associated with the debugging feature, they should not be changed.
     // -------------------------------------------------------------------------------------------------
 
-    public static Statistics getIStats(boolean global) {
+    public static Statistics getIStats() {
 
-        return StatisticsDefault.create(global);
+        return StatisticsDefault.create();
     }
 
     public static StatisticsMethod getIStatsMethod() {

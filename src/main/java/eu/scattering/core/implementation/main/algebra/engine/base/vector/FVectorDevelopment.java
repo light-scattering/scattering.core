@@ -18,8 +18,10 @@ import java.util.function.Predicate;
 public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
 
     private static long numberOfInstances = 0;
-    private static final Statistics statsClass = DevelopmentFactory.getIStats(true);
-    private final Statistics statsObject = DevelopmentFactory.getIStats(false);
+
+    private static final Statistics statsClass = DevelopmentFactory.getIStats().setActive(true);
+    private final Statistics statsObject = DevelopmentFactory.getIStats();
+
     private final FVector core;
 
     private FVectorDevelopment(FVector core) {
@@ -32,6 +34,20 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     public static FVector create(FVector core) {
 
         return new FVectorDevelopment(core);
+    }
+
+    public FVector objectStatisticsEnable() {
+
+        statsObject.setActive(true);
+
+        return this;
+    }
+
+    public FVector objectStatisticsDisable() {
+
+        statsObject.setActive(false);
+
+        return this;
     }
 
     @Override
@@ -1267,7 +1283,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
 
         statsClass.recordEvent(name, time);
 
-        if (statsObject.isSuspended()) {
+        if (statsObject.isActive()) {
             return;
         }
 

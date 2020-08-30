@@ -18,8 +18,10 @@ import java.util.function.Function;
 public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     private static long numberOfInstances = 0;
-    private static final Statistics statsClass = DevelopmentFactory.getIStats(true);
-    private final Statistics statsObject = DevelopmentFactory.getIStats(false);
+
+    private static final Statistics statsClass = DevelopmentFactory.getIStats().setActive(true);
+    private final Statistics statsObject = DevelopmentFactory.getIStats();
+
     private final FLine core;
 
     private FLineDevelopment(FLine core) {
@@ -32,6 +34,20 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
     public static FLine create(FLine core) {
 
         return new FLineDevelopment(core);
+    }
+
+    public FLine objectStatisticsEnable() {
+
+        statsObject.setActive(true);
+
+        return this;
+    }
+
+    public FLine objectStatisticsDisable() {
+
+        statsObject.setActive(false);
+
+        return this;
     }
 
     @Override
@@ -435,7 +451,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
         statsClass.recordEvent(name, time);
 
-        if (statsObject.isSuspended()) {
+        if (statsObject.isActive()) {
             return;
         }
 

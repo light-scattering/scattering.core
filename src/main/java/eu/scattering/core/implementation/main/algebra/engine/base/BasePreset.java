@@ -1,6 +1,6 @@
 package eu.scattering.core.implementation.main.algebra.engine.base;
 
-import eu.scattering.core.implementation.main.algebra.EnginePreset;
+import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
 import eu.scattering.core.design.main.algebra.engine.base.Base;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class BasePreset<T extends Base<T>> extends EnginePreset<T> implements Base<T> {
+public abstract class BasePreset<T extends Base<T>> extends AlgebraPreset<T> implements Base<T> {
 
     @Override
     public int hashCode() {

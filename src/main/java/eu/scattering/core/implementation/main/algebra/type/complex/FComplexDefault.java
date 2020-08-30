@@ -2,12 +2,13 @@ package eu.scattering.core.implementation.main.algebra.type.complex;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.implementation.main.algebra.EnginePreset;
-import eu.scattering.core.injection.MainFactory;
+import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FComplexDefault extends EnginePreset<FComplex> implements FComplex {
+import static eu.scattering.core.Config.mainFactory;
+
+public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -123,7 +124,7 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
     @Override
     public FComplex copy() {
 
-        return MainFactory.getFComplex().set(this);
+        return mainFactory.getFComplex().set(this);
     }
 
     @Override
@@ -377,7 +378,7 @@ public class FComplexDefault extends EnginePreset<FComplex> implements FComplex 
             double valueRe = tmp * Math.cos((phase + (2 * i * Math.PI)) / n);
             double valueIm = tmp * Math.sin((phase + (2 * i * Math.PI)) / n);
 
-            res[i] = MainFactory.getFComplex(valueRe, valueIm);
+            res[i] = mainFactory.getFComplex(valueRe, valueIm);
         }
 
         return res;

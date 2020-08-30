@@ -5,12 +5,12 @@ import java.util.Set;
 
 public interface Statistics {
 
-    void recordEvent(String methodName, long methodExecutionTime);
+    Statistics recordEvent(String methodName, long methodExecutionTime);
 
-    void reset();
+    Statistics reset();
 
-    void setSuspended(boolean suspend);
-    boolean isSuspended();
+    Statistics setActive(boolean suspend);
+    boolean isActive();
 
     Set<String> getMethodNames();
     Optional<StatisticsMethod> getMethod(String methodName);

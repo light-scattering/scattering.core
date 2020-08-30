@@ -19,8 +19,10 @@ import java.util.function.Function;
 public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane {
 
     private static long numberOfInstances = 0;
-    private static final Statistics statsClass = DevelopmentFactory.getIStats(true);
-    private final Statistics statsObject = DevelopmentFactory.getIStats(false);
+
+    private static final Statistics statsClass = DevelopmentFactory.getIStats().setActive(true);
+    private final Statistics statsObject = DevelopmentFactory.getIStats();
+
     private final FPlane core;
 
     private FPlaneDevelopment(FPlane core) {
@@ -33,6 +35,20 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
     public static FPlane create(FPlane core) {
 
         return new FPlaneDevelopment(core);
+    }
+
+    public FPlane objectStatisticsEnable() {
+
+        statsObject.setActive(true);
+
+        return this;
+    }
+
+    public FPlane objectStatisticsDisable() {
+
+        statsObject.setActive(false);
+
+        return this;
     }
 
     @Override
@@ -363,7 +379,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
 
         statsClass.recordEvent(name, time);
 
-        if (statsObject.isSuspended()) {
+        if (statsObject.isActive()) {
             return;
         }
 

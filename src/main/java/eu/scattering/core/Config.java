@@ -1,5 +1,7 @@
 package eu.scattering.core;
 
+import eu.scattering.core.design.injection.MainFactory;
+import eu.scattering.core.implementation.injection.FactoryDevelopment;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,10 +11,8 @@ public class Config {
 
     private Config() { }
 
+    public static MainFactory mainFactory = new FactoryDevelopment();
+
     @Getter @Setter private static double jitter = 1E-10;
-
     @Getter @Setter private static PrintStream debugPrintStream = System.out;
-
-    @Getter @Setter private static boolean devEnabled = true;
-    @Getter @Setter private static boolean devObjectStatsSuspended = true;
 }
