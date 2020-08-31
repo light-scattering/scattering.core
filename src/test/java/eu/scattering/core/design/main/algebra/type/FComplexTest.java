@@ -356,15 +356,22 @@ public class FComplexTest {
         @Test
         @DisplayName("Mul FComplex")
         void mulFComplex() {
+            double refRe = 2, refIm = 3;
+            double opRe = 4, opIm = 5;
+
+            FComplex fComplex = mainFactory.getFComplex(refRe, refIm);
             FComplex fComplexOp = mainFactory.getFComplex(opRe, opIm);
 
             fComplex.mul(fComplexOp);
 
+            double valueRe = (refRe * opRe) - (refIm * opIm);
+            double valueIm = ((refRe + refIm) * (opRe + opIm)) - (refRe * opRe) - (refIm * opIm);
+
             assertAll("Validate FComplex values",
-                    () -> assertEquals(refRe * opRe, fComplex.getRe(),
-                            "The real part is incorrect"),
-                    () -> assertEquals(refIm * opIm, fComplex.getIm(),
-                            "The imaginary part is incorrect")
+                    () -> assertEquals(valueRe, fComplex.getRe(),
+                            Config.getJitter(), "The real part is incorrect"),
+                    () -> assertEquals(valueIm, fComplex.getIm(),
+                            Config.getJitter(), "The imaginary part is incorrect")
             );
         }
 
@@ -381,7 +388,7 @@ public class FComplexTest {
         @DisplayName("Mul primitives")
         void mulPrimitives() {
 
-            fComplex.add(opRe, opIm);
+            fComplex.mul(opRe, opIm);
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe * opRe, fComplex.getRe(),
@@ -469,14 +476,22 @@ public class FComplexTest {
         @Test
         @DisplayName("Div FComplex")
         void divFComplex() {
+            double refRe = 2, refIm = 3;
+            double opRe = 4, opIm = 5;
+
+            FComplex fComplex = mainFactory.getFComplex(refRe, refIm);
             FComplex fComplexOp = mainFactory.getFComplex(opRe, opIm);
 
             fComplex.div(fComplexOp);
 
+            double divisor = (opRe * opRe) + (opIm * opIm);
+            double valueRe = ((refRe * opRe) + (refIm * opIm)) / (divisor);
+            double valueIm = ((refIm * opRe) - (refRe * opIm)) / (divisor);
+
             assertAll("Validate FComplex values",
-                    () -> assertEquals(refRe / opRe, fComplex.getRe(),
+                    () -> assertEquals(valueRe, fComplex.getRe(),
                             "The real part is incorrect"),
-                    () -> assertEquals(refIm / opIm, fComplex.getIm(),
+                    () -> assertEquals(valueIm, fComplex.getIm(),
                             "The imaginary part is incorrect")
             );
         }
@@ -953,7 +968,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Set magnitude (validate)")
         void setMagnitudeValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = mainFactory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(e -> e.setMagnitude(1), fComplex);
         }
@@ -1029,7 +1044,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get phase (validate)")
         void getPhaseValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = mainFactory.getFComplex(1, 1);
 
             FComplexTestHelper.testValue(FComplex::getPhase, fComplex);
         }
@@ -1125,7 +1140,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Normalize (validate)")
         public void normalizeValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = mainFactory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(FComplex::normalize, fComplex);
         }

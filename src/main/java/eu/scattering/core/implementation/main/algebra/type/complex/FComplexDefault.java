@@ -260,7 +260,7 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
     public FComplex div(FComplex element) {
 
         if (element.isZero()) {
-            throw new IllegalArgumentException("The divisor cannot be zero");
+            throw new ArithmeticException("The divisor cannot be zero");
         }
 
         double nominatorRe = (getRe() * element.getRe()) + (getIm() * element.getIm());
@@ -286,7 +286,7 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
     public FComplex divRe(double re) {
 
         if (re == 0) {
-            throw new IllegalArgumentException("The real part of the FComplex value cannot be zero");
+            throw new ArithmeticException("The real part of the FComplex value cannot be zero");
         }
 
         return setRe(getRe() / re);
@@ -296,7 +296,7 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
     public FComplex divIm(double im) {
 
         if (im == 0) {
-            throw new IllegalArgumentException("The imaginary part of the FComplex value cannot be zero");
+            throw new ArithmeticException("The imaginary part of the FComplex value cannot be zero");
         }
 
         return setIm(getIm() / im);
@@ -335,6 +335,11 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
 
     @Override
     public double getPhase() {
+
+        if (isZero()) {
+            throw new IllegalStateException("The direction is not defined");
+        }
+
         double magnitude = getMagnitude();
 
         if (getIm() >= 0 && magnitude != 0) {
@@ -358,9 +363,10 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
 
     @Override
     public FComplex pow(int n) {
-        double pow = Math.pow(getMagnitude(), n);
+        double power = Math.pow(getMagnitude(), n);
+        double phase = getPhase();
 
-        return setRe(pow * Math.cos(n * getPhase())).setIm(pow * Math.sin(n * getPhase()));
+        return setRe(power * Math.cos(n * phase)).setIm(power * Math.sin(n * phase));
     }
 
     @Override

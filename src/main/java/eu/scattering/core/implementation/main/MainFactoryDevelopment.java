@@ -17,6 +17,7 @@ import eu.scattering.core.implementation.main.algebra.engine.extension.line.FLin
 import eu.scattering.core.implementation.main.algebra.engine.extension.plane.FPlaneDefault;
 import eu.scattering.core.implementation.main.algebra.engine.extension.plane.FPlaneDevelopment;
 import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefault;
+import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDevelopment;
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import eu.scattering.core.implementation.main.vo.FDipoleDefault;
 
@@ -49,7 +50,7 @@ public final class MainFactoryDevelopment implements MainFactory {
     @Override
     public FComplex getFComplex() {
 
-        return FComplexDefault.create();
+        return FComplexDevelopment.create(FComplexDefault.create());
     }
 
     @Override
