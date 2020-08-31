@@ -1,18 +1,20 @@
-package eu.scattering.core.injection;
+package eu.scattering.core.implementation.injection.helper;
 
+import eu.scattering.core.design.injection.helper.HelperFactory;
 import eu.scattering.core.design.support.AngleHelper;
 import eu.scattering.core.design.support.SignalHelper;
 import eu.scattering.core.implementation.support.AngleHelperDefault;
 import eu.scattering.core.implementation.support.SignalHelperDefault;
 
-public final class Helper {
+public final class HelperFactoryDefault implements HelperFactory {
 
-    private Helper() { }
+    private HelperFactoryDefault() { }
 
     private static AngleHelper angleHelper;
     private static SignalHelper signalHelper;
 
-    public static AngleHelper forAngle() {
+    @Override
+    public AngleHelper forAngle() {
 
         if (angleHelper == null) {
             angleHelper = getAngleHelper();
@@ -21,7 +23,8 @@ public final class Helper {
         return angleHelper;
     }
 
-    public static SignalHelper forSignal() {
+    @Override
+    public SignalHelper forSignal() {
 
         if (signalHelper == null) {
             signalHelper = getSignalHelper();

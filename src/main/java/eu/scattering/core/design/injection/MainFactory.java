@@ -6,8 +6,9 @@ import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
+import eu.scattering.core.design.main.valjo.FDipole;
 
-public interface MainFactory extends MainFactoryValjo {
+public interface MainFactory {
 
     FPoint getFPoint();
 
@@ -105,4 +106,10 @@ public interface MainFactory extends MainFactoryValjo {
 
         return getFQuaternion().set(re, i, j, k);
     }
+
+    // -------------------------------------------------------------------------------------------------
+
+    FDipole getFDipole(int x, int y, int z);
+
+    FDipole getFDipole(String position);
 }

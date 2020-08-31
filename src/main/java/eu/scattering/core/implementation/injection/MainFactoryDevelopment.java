@@ -20,7 +20,7 @@ import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefau
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import eu.scattering.core.implementation.main.valjo.FDipoleDefault;
 
-public class FactoryDevelopment implements MainFactory {
+public final class MainFactoryDevelopment implements MainFactory {
 
     @Override
     public FPoint getFPoint() {

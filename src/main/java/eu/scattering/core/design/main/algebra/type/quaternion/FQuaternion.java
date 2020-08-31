@@ -1,7 +1,5 @@
 package eu.scattering.core.design.main.algebra.type.quaternion;
 
-import eu.scattering.core.design.development.Development;
-import eu.scattering.core.design.main.algebra.Algebra;
 import eu.scattering.core.design.main.algebra.type.Type;
 
 public interface FQuaternion extends FQuaternionAdvanced,

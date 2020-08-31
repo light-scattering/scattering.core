@@ -4,8 +4,8 @@ import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
 import eu.scattering.core.design.injection.MainFactory;
-import eu.scattering.core.implementation.injection.FactoryDefault;
-import eu.scattering.core.implementation.injection.FactoryDevelopment;
+import eu.scattering.core.implementation.injection.MainFactoryDefault;
+import eu.scattering.core.implementation.injection.MainFactoryDevelopment;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Development")
 public class DevelopmentTest {
 
-    private MainFactory mainFactory = new FactoryDefault();
-    private MainFactory mainFactoryDevelopment = new FactoryDevelopment();
+    private MainFactory mainFactory = new MainFactoryDefault();
+    private MainFactory mainFactoryDevelopment = new MainFactoryDevelopment();
 
     private Development<?> getTestInstance() {
 

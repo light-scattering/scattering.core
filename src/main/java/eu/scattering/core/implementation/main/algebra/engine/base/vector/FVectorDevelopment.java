@@ -2,7 +2,6 @@ package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.injection.DevelopmentFactory;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
@@ -15,12 +14,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static eu.scattering.core.Config.statisticsFactory;
+
 public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = DevelopmentFactory.getIStats().setEnabled();
-    private final Statistics statsObject = DevelopmentFactory.getIStats();
+    private static final Statistics statsClass = statisticsFactory.getStatistics().setEnabled();
+    private final Statistics statsObject = statisticsFactory.getStatistics();
 
     private final FVector core;
 

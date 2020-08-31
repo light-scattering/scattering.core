@@ -2,10 +2,11 @@ package eu.scattering.core.implementation.development.statistics;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
-import eu.scattering.core.injection.DevelopmentFactory;
 
 import java.time.LocalTime;
 import java.util.*;
+
+import static eu.scattering.core.Config.statisticsFactory;
 
 public class StatisticsDefault implements Statistics {
 
@@ -90,7 +91,7 @@ public class StatisticsDefault implements Statistics {
         StatisticsMethod statsMethod;
 
         if (statsMethodOptional.isEmpty()) {
-            statsMethod = DevelopmentFactory.getIStatsMethod();
+            statsMethod = statisticsFactory.getStatisticsMethod();
             statistics.put(methodName, statsMethod);
         } else {
             statsMethod = statsMethodOptional.get();

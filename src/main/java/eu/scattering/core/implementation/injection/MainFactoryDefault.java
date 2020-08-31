@@ -1,6 +1,5 @@
 package eu.scattering.core.implementation.injection;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.injection.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -17,7 +16,7 @@ import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefau
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import eu.scattering.core.implementation.main.valjo.FDipoleDefault;
 
-public class FactoryDefault implements MainFactory {
+public final class MainFactoryDefault implements MainFactory {
 
     @Override
     public FPoint getFPoint() {
