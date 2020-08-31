@@ -1,14 +1,14 @@
-package eu.scattering.core.implementation.injection.helper;
+package eu.scattering.core.implementation.support;
 
-import eu.scattering.core.design.injection.helper.HelperFactory;
-import eu.scattering.core.design.support.AngleHelper;
-import eu.scattering.core.design.support.SignalHelper;
-import eu.scattering.core.implementation.support.AngleHelperDefault;
-import eu.scattering.core.implementation.support.SignalHelperDefault;
+import eu.scattering.core.design.support.SupportFactory;
+import eu.scattering.core.design.support.helper.AngleHelper;
+import eu.scattering.core.design.support.helper.SignalHelper;
+import eu.scattering.core.implementation.support.helper.AngleHelperDefault;
+import eu.scattering.core.implementation.support.helper.SignalHelperDefault;
 
-public final class HelperFactoryDefault implements HelperFactory {
+public final class SupportFactoryDefault implements SupportFactory {
 
-    private HelperFactoryDefault() { }
+    private SupportFactoryDefault() { }
 
     private static AngleHelper angleHelper;
     private static SignalHelper signalHelper;

@@ -1,9 +1,9 @@
 package eu.scattering.core;
 
-import eu.scattering.core.design.injection.MainFactory;
-import eu.scattering.core.design.injection.StatisticsFactory;
-import eu.scattering.core.implementation.injection.MainFactoryDevelopment;
-import eu.scattering.core.implementation.injection.StatisticsFactoryDefault;
+import eu.scattering.core.design.main.MainFactory;
+import eu.scattering.core.design.development.DevelopmentFactory;
+import eu.scattering.core.implementation.main.MainFactoryDevelopment;
+import eu.scattering.core.implementation.development.DevelopmentFactoryDefault;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ public class Config {
     private Config() { }
 
     public static MainFactory mainFactory = new MainFactoryDevelopment();
-    public static StatisticsFactory statisticsFactory = new StatisticsFactoryDefault();
+    public static DevelopmentFactory developmentFactory = new DevelopmentFactoryDefault();
 
     @Getter @Setter private static double jitter = 1E-10;
     @Getter @Setter private static PrintStream debugPrintStream = System.out;

@@ -13,14 +13,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static eu.scattering.core.Config.statisticsFactory;
+import static eu.scattering.core.Config.developmentFactory;
 
 public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = statisticsFactory.getStatistics().setEnabled();
-    private final Statistics statsObject = statisticsFactory.getStatistics();
+    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
+    private final Statistics statsObject = developmentFactory.getStatistics();
 
     private final FPoint core;
 

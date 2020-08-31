@@ -1,49 +1,45 @@
-package eu.scattering.core.implementation.injection;
+package eu.scattering.core.implementation.main;
 
-import eu.scattering.core.design.injection.MainFactory;
+import eu.scattering.core.design.main.MainFactory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.design.main.valjo.FDipole;
+import eu.scattering.core.design.main.vo.FDipole;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
-import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDevelopment;
 import eu.scattering.core.implementation.main.algebra.engine.base.vector.FVectorDefault;
-import eu.scattering.core.implementation.main.algebra.engine.base.vector.FVectorDevelopment;
 import eu.scattering.core.implementation.main.algebra.engine.extension.line.FLineDefault;
-import eu.scattering.core.implementation.main.algebra.engine.extension.line.FLineDevelopment;
 import eu.scattering.core.implementation.main.algebra.engine.extension.plane.FPlaneDefault;
-import eu.scattering.core.implementation.main.algebra.engine.extension.plane.FPlaneDevelopment;
 import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefault;
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
-import eu.scattering.core.implementation.main.valjo.FDipoleDefault;
+import eu.scattering.core.implementation.main.vo.FDipoleDefault;
 
-public final class MainFactoryDevelopment implements MainFactory {
+public final class MainFactoryDefault implements MainFactory {
 
     @Override
     public FPoint getFPoint() {
 
-        return FPointDevelopment.create(FPointDefault.create());
+        return FPointDefault.create();
     }
 
     @Override
     public FVector getFVector() {
 
-        return FVectorDevelopment.create(FVectorDefault.create());
+        return FVectorDefault.create();
     }
 
     @Override
     public FLine getFLine() {
 
-        return FLineDevelopment.create(FLineDefault.create());
+        return FLineDefault.create();
     }
 
     @Override
     public FPlane getFPlane() {
 
-        return FPlaneDevelopment.create(FPlaneDefault.create());
+        return FPlaneDefault.create();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package eu.scattering.core.design.support;
+package eu.scattering.core.design.support.helper;
 
 public interface AngleHelper {
 

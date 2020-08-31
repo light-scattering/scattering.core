@@ -1,7 +1,7 @@
 package eu.scattering.core.design.main.algebra.engine.shape;
 
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.design.main.valjo.FDipole;
+import eu.scattering.core.design.main.vo.FDipole;
 
 import java.util.List;
 

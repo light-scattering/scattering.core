@@ -6,7 +6,7 @@ import eu.scattering.core.design.development.statistics.StatisticsMethod;
 import java.time.LocalTime;
 import java.util.*;
 
-import static eu.scattering.core.Config.statisticsFactory;
+import static eu.scattering.core.Config.developmentFactory;
 
 public class StatisticsDefault implements Statistics {
 
@@ -91,7 +91,7 @@ public class StatisticsDefault implements Statistics {
         StatisticsMethod statsMethod;
 
         if (statsMethodOptional.isEmpty()) {
-            statsMethod = statisticsFactory.getStatisticsMethod();
+            statsMethod = developmentFactory.getStatisticsMethod();
             statistics.put(methodName, statsMethod);
         } else {
             statsMethod = statsMethodOptional.get();

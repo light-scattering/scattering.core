@@ -1,4 +1,4 @@
-package eu.scattering.core.design.injection;
+package eu.scattering.core.design.main;
 
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -6,7 +6,7 @@ import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.design.main.valjo.FDipole;
+import eu.scattering.core.design.main.vo.FDipole;
 
 public interface MainFactory {
 

@@ -1,9 +1,9 @@
-package eu.scattering.core.design.injection;
+package eu.scattering.core.design.development;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
 
-public interface StatisticsFactory {
+public interface DevelopmentFactory {
 
     Statistics getStatistics();
 

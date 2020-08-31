@@ -1,12 +1,12 @@
-package eu.scattering.core.implementation.injection;
+package eu.scattering.core.implementation.development;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
-import eu.scattering.core.design.injection.StatisticsFactory;
+import eu.scattering.core.design.development.DevelopmentFactory;
 import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
 import eu.scattering.core.implementation.development.statistics.StatisticsMethodDefault;
 
-public final class StatisticsFactoryDefault implements StatisticsFactory {
+public final class DevelopmentFactoryDefault implements DevelopmentFactory {
 
     @Override
     public Statistics getStatistics() {

@@ -3,9 +3,9 @@ package eu.scattering.core.design;
 import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
-import eu.scattering.core.design.injection.MainFactory;
-import eu.scattering.core.implementation.injection.MainFactoryDefault;
-import eu.scattering.core.implementation.injection.MainFactoryDevelopment;
+import eu.scattering.core.design.main.MainFactory;
+import eu.scattering.core.implementation.main.MainFactoryDefault;
+import eu.scattering.core.implementation.main.MainFactoryDevelopment;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;

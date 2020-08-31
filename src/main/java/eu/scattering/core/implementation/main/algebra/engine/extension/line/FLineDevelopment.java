@@ -14,14 +14,14 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static eu.scattering.core.Config.statisticsFactory;
+import static eu.scattering.core.Config.developmentFactory;
 
 public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = statisticsFactory.getStatistics().setEnabled();
-    private final Statistics statsObject = statisticsFactory.getStatistics();
+    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
+    private final Statistics statsObject = developmentFactory.getStatistics();
 
     private final FLine core;
 

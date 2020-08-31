@@ -1,6 +1,6 @@
-package eu.scattering.core.implementation.main.valjo;
+package eu.scattering.core.implementation.main.vo;
 
-import eu.scattering.core.design.main.valjo.FDipole;
+import eu.scattering.core.design.main.vo.FDipole;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

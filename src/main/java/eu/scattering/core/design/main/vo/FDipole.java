@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.valjo;
+package eu.scattering.core.design.main.vo;
 
 import eu.scattering.core.design.main.Main;
 

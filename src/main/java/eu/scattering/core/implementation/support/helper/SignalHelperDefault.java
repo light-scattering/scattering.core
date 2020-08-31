@@ -1,6 +1,6 @@
-package eu.scattering.core.implementation.support;
+package eu.scattering.core.implementation.support.helper;
 
-import eu.scattering.core.design.support.SignalHelper;
+import eu.scattering.core.design.support.helper.SignalHelper;
 
 public class SignalHelperDefault implements SignalHelper {
 

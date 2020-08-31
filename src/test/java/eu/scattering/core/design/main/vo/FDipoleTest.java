@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.valjo;
+package eu.scattering.core.design.main.vo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
