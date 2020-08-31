@@ -1,10 +1,11 @@
 package eu.scattering.core.design;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
-import eu.scattering.core.injection.MainFactory;
+import eu.scattering.core.design.injection.MainFactory;
+import eu.scattering.core.implementation.injection.MainFactoryDefault;
+import eu.scattering.core.implementation.injection.MainFactoryDevelopment;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
@@ -16,118 +17,107 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Development")
 public class DevelopmentTest {
 
-    private static boolean initialDevEnabled;
-    private static boolean initialDevObjectStatsSuspended;
+    private MainFactory mainFactory = new MainFactoryDefault();
+    private MainFactory mainFactoryDevelopment = new MainFactoryDevelopment();
 
-    private static Development<?> getTestInstance() {
+    private Development<?> getTestInstance() {
 
-        return MainFactory.getFLine();
+        return mainFactory.getFPoint();
     }
 
-    @BeforeAll
-    static void beforeAll() {
+    private Development<?> getTestInstanceDevelopment() {
 
-        initialDevEnabled = Config.isDevEnabled();
-        initialDevObjectStatsSuspended = Config.isDevObjectStatsSuspended();
-    }
-
-    @AfterAll
-    static void afterAll() {
-
-        Config.setDevEnabled(initialDevEnabled);
-        Config.setDevObjectStatsSuspended(initialDevObjectStatsSuspended);
+        return mainFactoryDevelopment.getFPoint();
     }
 
     @BeforeEach
     void beforeEach() {
 
-        Config.setDevEnabled(true);
-        Config.setDevObjectStatsSuspended(true);
-
-        getTestInstance().devGetClassStatistics().ifPresent(Statistics::reset);
-        getTestInstance().devResetNumberOfInstances();
+        getTestInstanceDevelopment().devResetNumberOfInstances();
+        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(e -> e.setEnabled());
+        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(Statistics::reset);
     }
 
     @Nested
-    @DisplayName("IStats implementation")
-    class DevIStats {
+    @DisplayName("Statistics implementation")
+    class DevStatistics {
 
         @Nested
         @DisplayName("Class")
         class DevClass {
 
             @Test
-            @DisplayName("Get IStats for classes")
-            void getIStatsForClasses() {
+            @DisplayName("Get Statistics for classes")
+            void getStatisticsForClasses() {
 
-                assertTrue(getTestInstance().devGetClassStatistics().isPresent(),
-                        "The IStat object should be available");
+                assertTrue(getTestInstanceDevelopment().devGetClassStatistics().isPresent(),
+                        "The Statistics object should be available");
             }
 
             @Test
-            @DisplayName("Get IStats for classes (disabled)")
-            void getIStatsForClassesDisabled() {
-                Config.setDevEnabled(false);
+            @DisplayName("Get Statistics for classes (disabled)")
+            void getStatisticsForClassesDisabled() {
 
-                assertTrue(getTestInstance().devGetClassStatistics().isEmpty(),
-                        "The IStat object should not be available");
+                assertFalse(getTestInstance().devGetClassStatistics().isPresent(),
+                        "The Statistics object should not be available");
             }
 
             @Test
             @DisplayName("Validate number of initially registered events for classes")
             void validateNumberOfInitiallyRegisteredEventsForClasses() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
             @Test
             @DisplayName("Register single class event")
             void registerSingleClassEvent() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(1)
                         .containsExactlyInAnyOrder("test event 1");
             }
 
             @Test
-            @DisplayName("Register single class event (throw NullPointerException)")
-            void registerSingleClassEventThrowNullPointerException() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+            @DisplayName("Register single class event (throw ArithmeticException)")
+            void registerSingleClassEventThrowArithmeticException() {
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertThrows(ArithmeticException.class,
-                        () -> stats.recordEvent("test event 1", -10L),
-                        "The event time must be a positive value");
+                        () -> statistics.recordEvent("test event 1", -10L),
+                        "The event time must be represented by a positive value");
             }
 
             @Test
-            @DisplayName("Register single class event (throw ArithmeticException)")
-            void registerSingleClassEventThrowArithmeticException() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+            @DisplayName("Register single class event (throw NullPointerException)")
+            void registerSingleClassEventThrowNullPointerException() {
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThrows(NullPointerException.class, () -> stats.recordEvent(null, 10L),
+                assertThrows(NullPointerException.class,
+                        () -> statistics.recordEvent(null, 10L),
                         "The method name must be specified");
             }
 
             @Test
             @DisplayName("Register multiple unique events")
             void registerMultipleUniqueEvents() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 2", 10L);
-                stats.recordEvent("test event 3", 10L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 2", 10L);
+                statistics.recordEvent("test event 3", 10L);
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(3)
                         .containsExactlyInAnyOrder("test event 1", "test event 2", "test event 3");
             }
@@ -135,14 +125,14 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register multiple mixed events")
             void registerMultipleMixedEvents() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 2", 10L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 2", 10L);
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(2)
                         .containsExactlyInAnyOrder("test event 1", "test event 2");
             }
@@ -150,66 +140,54 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Reset events")
             void resetEvents() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 2", 10L);
-                stats.recordEvent("test event 3", 10L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 2", 10L);
+                statistics.recordEvent("test event 3", 10L);
 
-                stats.reset();
+                statistics.reset();
 
-                stats.recordEvent("test event 4", 10L);
+                statistics.recordEvent("test event 4", 10L);
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(1)
                         .containsExactlyInAnyOrder("test event 4");
             }
 
             @Test
-            @DisplayName("Validate suspended status")
-            void validateSuspendedStatus() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+            @DisplayName("Validate active status")
+            void validateActiveStatus() {
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertFalse(stats.isSuspended(),
+                assertTrue(statistics.isEnabled(),
                         "The registration of events is not consistent with the default value");
             }
 
             @Test
-            @DisplayName("Validate suspended status (true)")
-            void validateSuspendedStatusTrue() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+            @DisplayName("Validate inactive status")
+            void validateInactiveStatusTrue() {
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.setSuspended(true);
+                statistics.setDisabled();
 
-                assertTrue(stats.isSuspended(),
+                assertFalse(statistics.isEnabled(),
                         "The registration of events should be suspended");
-            }
-
-            @Test
-            @DisplayName("Validate suspended status (false)")
-            void validateSuspendedStatusFalse() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
-
-                stats.setSuspended(false);
-
-                assertFalse(stats.isSuspended(),
-                        "The registration of events should not be suspended");
             }
 
             @Test
             @DisplayName("Register event in the suspended state")
             void recordEventSuspended() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.setSuspended(true);
-                stats.recordEvent("test event 1", 10L);
+                statistics.setDisabled();
+                statistics.recordEvent("test event 1", 10L);
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
@@ -220,43 +198,43 @@ public class DevelopmentTest {
         class DevObject {
 
             @Test
-            @DisplayName("Get IStats for objects")
-            void getIStatsForObjects() {
+            @DisplayName("Get Statistics for objects")
+            void getStatisticsForObjects() {
 
-                assertTrue(getTestInstance().devGetStatistics().isPresent(),
-                        "The IStat object should be available");
+                assertTrue(getTestInstanceDevelopment().devGetStatistics().isPresent(),
+                        "The Statistics object should be available");
             }
 
             @Test
-            @DisplayName("Get IStats for object (disabled)")
-            void getIStatsForObjectsDisabled() {
-                Config.setDevEnabled(false);
+            @DisplayName("Get Statistics for object (disabled)")
+            void getStatisticsForObjectsDisabled() {
 
                 assertTrue(getTestInstance().devGetStatistics().isEmpty(),
-                        "The IStat object should not be available");
+                        "The Statistics object should not be available");
             }
 
             @Test
             @DisplayName("Validate number of initially registered events for objects")
             void validateNumberOfInitiallyRegisteredEventsForObjects() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
             @Test
             @DisplayName("Register single object event (enabled)")
             void registerSingleObjectEventEnabled() {
-                Config.setDevObjectStatsSuspended(false);
+                Development<?> element = getTestInstanceDevelopment();
+                element.objectStatisticsEnable();
 
-                Optional<Statistics> statsOpt = getTestInstance().devGetStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = element.devGetStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(1)
                         .containsExactlyInAnyOrder("test event 1");
             }
@@ -264,12 +242,12 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register single object event (disabled)")
             void registerSingleObjectEventDisabled() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                assertThat(stats.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
@@ -282,55 +260,55 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Get method")
             void getMethod() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
 
-                assertTrue(statsMethodOpt.isPresent(), "The requested method should be available");
+                assertTrue(methodOptional.isPresent(), "The requested method should be available");
             }
 
             @Test
             @DisplayName("Get method (throw NullPointerException)")
             void getMethodThrowNullPointerException() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                assertThrows(NullPointerException.class, () -> stats.getMethod(null),
+                assertThrows(NullPointerException.class, () -> statistics.getRegisteredMethod(null),
                         "The method name must be defined");
             }
 
             @Test
             @DisplayName("Get non-existent method")
             void getNonExistentMethod() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 2");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 2");
 
-                assertTrue(statsMethodOpt.isEmpty(), "The requested method should not be available");
+                assertTrue(methodOptional.isEmpty(), "The requested method should not be available");
             }
 
             @Test
             @DisplayName("Get execution times")
             void getExecutionTimes() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 1", 20L);
-                stats.recordEvent("test event 1", 30L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 20L);
+                statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThat(statsMethod.getExecutionTimes())
+                assertThat(method.getExecutionTimes())
                         .hasSize(3)
                         .containsExactlyInAnyOrder(10L, 20L, 30L);
             }
@@ -338,18 +316,18 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register time (validate list)")
             void registerTimeValidateList() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                statsMethod.recordExecutionTime(20L);
-                statsMethod.recordExecutionTime(30L);
+                method.recordExecutionTime(20L);
+                method.recordExecutionTime(30L);
 
-                assertThat(statsMethod.getExecutionTimes())
+                assertThat(method.getExecutionTimes())
                         .hasSize(3)
                         .containsExactlyInAnyOrder(10L, 20L, 30L);
             }
@@ -357,118 +335,118 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register time (validate iterations)")
             void registerTimeValidateIterations() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                statsMethod.recordExecutionTime(20L);
-                statsMethod.recordExecutionTime(30L);
+                method.recordExecutionTime(20L);
+                method.recordExecutionTime(30L);
 
-                assertEquals(3, statsMethod.getNumberOfIterations(),
+                assertEquals(3, method.getNumberOfIterations(),
                         "The number of iterations is incorrect");
             }
 
             @Test
             @DisplayName("Register time (throw ArithmeticException)")
             void registerTimeThrowArithmeticException() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThrows(ArithmeticException.class, () -> statsMethod.recordExecutionTime(-10L),
+                assertThrows(ArithmeticException.class, () -> method.recordExecutionTime(-10L),
                         "The event time must be a positive value");
             }
 
             @Test
             @DisplayName("Get number of iterations")
             void getNumberOfIterations() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 1", 20L);
-                stats.recordEvent("test event 1", 30L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 20L);
+                statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertEquals(3, statsMethod.getNumberOfIterations(),
+                assertEquals(3, method.getNumberOfIterations(),
                         "The number of iterations is incorrect");
             }
 
             @Test
             @DisplayName("Get time total")
             void getTimeTotal() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 1", 20L);
-                stats.recordEvent("test event 1", 30L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 20L);
+                statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertEquals(60L, statsMethod.getTimeTotal(),
+                assertEquals(60L, method.getTimeTotal(),
                         "The total time is incorrect");
             }
 
             @Test
             @DisplayName("Get time avg")
             void getTimeAvg() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 1", 20L);
-                stats.recordEvent("test event 1", 30L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 20L);
+                statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertEquals(20L, statsMethod.getTimeAvg(),
+                assertEquals(20L, method.getTimeAvg(),
                         "The averaged time is incorrect");
             }
 
             @Test
             @DisplayName("Get time min")
             void getTimeMin() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 1", 20L);
-                stats.recordEvent("test event 1", 30L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 20L);
+                statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertEquals(10L, statsMethod.getTimeMin(),
+                assertEquals(10L, method.getTimeMin(),
                         "The min time is incorrect");
             }
 
             @Test
             @DisplayName("Get time max")
             void getTimeMax() {
-                Optional<Statistics> statsOpt = getTestInstance().devGetClassStatistics();
-                Statistics stats = statsOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                stats.recordEvent("test event 1", 10L);
-                stats.recordEvent("test event 1", 20L);
-                stats.recordEvent("test event 1", 30L);
+                statistics.recordEvent("test event 1", 10L);
+                statistics.recordEvent("test event 1", 20L);
+                statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> statsMethodOpt = stats.getMethod("test event 1");
-                StatisticsMethod statsMethod = statsMethodOpt.orElseGet(() -> fail("Empty optional"));
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
+                StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertEquals(30L, statsMethod.getTimeMax(),
+                assertEquals(30L, method.getTimeMax(),
                         "The max time is incorrect");
             }
 
@@ -477,16 +455,17 @@ public class DevelopmentTest {
     }
 
     @Nested
-    @DisplayName("IDev methods")
-    class IDevMethods {
+    @DisplayName("Development methods")
+    class DevelopmentMethods {
 
         @Test
         @DisplayName("Number of instances (initial)")
         void getNumberOfInstancesInitial() {
 
-            getTestInstance().devResetNumberOfInstances();
+            getTestInstanceDevelopment().devResetNumberOfInstances();
 
-            assertEquals(1, getTestInstance().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
+            assertEquals(1,
+                    getTestInstanceDevelopment().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
                     "There should be exactly one instance");
         }
 
@@ -494,12 +473,13 @@ public class DevelopmentTest {
         @DisplayName("Number of instances")
         void getNumberOfInstances() {
 
-            getTestInstance().devResetNumberOfInstances();
+            getTestInstanceDevelopment().devResetNumberOfInstances();
 
-            getTestInstance();
-            getTestInstance();
+            getTestInstanceDevelopment();
+            getTestInstanceDevelopment();
 
-            assertEquals(3, getTestInstance().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
+            assertEquals(3,
+                    getTestInstanceDevelopment().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
                     "There should be exactly three instances");
         }
 
@@ -507,24 +487,23 @@ public class DevelopmentTest {
         @DisplayName("Number of instances (disabled)")
         void getNumberOfInstancesDisabled() {
 
-            Config.setDevEnabled(false);
-
             assertEquals(Optional.empty(), getTestInstance().devGetNumberOfInstances(),
-                    "The number of instances field should not be available");
+                    "The number of instances should not be available");
         }
 
         @Test
         @DisplayName("Reset number of instances")
         void resetNumberOfInstances() {
 
-            getTestInstance().devResetNumberOfInstances();
+            getTestInstanceDevelopment().devResetNumberOfInstances();
 
-            getTestInstance();
-            getTestInstance();
+            getTestInstanceDevelopment();
+            getTestInstanceDevelopment();
 
-            getTestInstance().devResetNumberOfInstances();
+            getTestInstanceDevelopment().devResetNumberOfInstances();
 
-            assertEquals(1, getTestInstance().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
+            assertEquals(1,
+                    getTestInstanceDevelopment().devGetNumberOfInstances().orElseGet(() -> fail("Empty optional")),
                     "There should be exactly one instance");
         }
 
@@ -532,7 +511,7 @@ public class DevelopmentTest {
         @DisplayName("Get meta-data")
         void getMetaData() {
 
-            assertEquals("", getTestInstance().devGetLabel(),
+            assertEquals("", getTestInstanceDevelopment().devGetLabel(),
                     "The meta-data should be empty");
         }
 
@@ -540,11 +519,11 @@ public class DevelopmentTest {
         @DisplayName("Set meta-data")
         void setMetaData() {
 
-            Development<?> fElement = getTestInstance();
+            Development<?> element = getTestInstanceDevelopment();
 
-            fElement.devSetLabel("test");
+            element.devSetLabel("test");
 
-            assertEquals("test", fElement.devGetLabel(),
+            assertEquals("test", element.devGetLabel(),
                     "The meta-data is incorrect");
         }
 

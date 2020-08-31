@@ -1,7 +1,6 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.injection.MainFactory;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -10,6 +9,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static eu.scattering.core.Config.mainFactory;
 
 public class FVectorDefault extends BasePreset<FVector> implements FVector {
 
@@ -24,8 +25,8 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     public static FVectorDefault create() {
         FVectorDefault fVector = new FVectorDefault();
 
-        fVector.origin[0] = MainFactory.getFPoint();
-        fVector.origin[1] = MainFactory.getFPoint();
+        fVector.origin[0] = mainFactory.getFPoint();
+        fVector.origin[1] = mainFactory.getFPoint();
 
         return fVector;
     }
@@ -152,8 +153,8 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     public FVector importFromJSON(JSONObject json) {
         JSONArray structure = json.getJSONArray("vector");
 
-        setBaseRef(MainFactory.getFPoint().importFromJSON(structure.getJSONObject(0)));
-        setHeadRef(MainFactory.getFPoint().importFromJSON(structure.getJSONObject(1)));
+        setBaseRef(mainFactory.getFPoint().importFromJSON(structure.getJSONObject(0)));
+        setHeadRef(mainFactory.getFPoint().importFromJSON(structure.getJSONObject(1)));
 
         return this;
     }
@@ -162,8 +163,8 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     public FVectorDefault copy() {
         FVectorDefault fVector = new FVectorDefault();
 
-        fVector.setBaseRef(MainFactory.getFPoint(getBase()));
-        fVector.setHeadRef(MainFactory.getFPoint(getHead()));
+        fVector.setBaseRef(mainFactory.getFPoint(getBase()));
+        fVector.setHeadRef(mainFactory.getFPoint(getHead()));
 
         return fVector;
     }
@@ -244,30 +245,30 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     @Override
     public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
-        return isExact(MainFactory.getFVector(bX, bY, bZ, hX, hY, hZ));
+        return isExact(mainFactory.getFVector(bX, bY, bZ, hX, hY, hZ));
     }
 
     @Override
     public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
-        return isSimilar(MainFactory.getFVector(bX, bY, bZ, hX, hY, hZ));
+        return isSimilar(mainFactory.getFVector(bX, bY, bZ, hX, hY, hZ));
     }
 
     @Override
     public FVector moveBase() {
 
-        return moveBase(MainFactory.getFPoint());
+        return moveBase(mainFactory.getFPoint());
     }
 
     @Override
     public FVector moveBase(double bX, double bY, double bZ) {
 
-        return moveBase(MainFactory.getFPoint(bX, bY, bZ));
+        return moveBase(mainFactory.getFPoint(bX, bY, bZ));
     }
 
     @Override
     public FVector moveBase(FPoint base) {
-        FPoint translation = MainFactory.getFPoint().set(base).sub(getBase());
+        FPoint translation = mainFactory.getFPoint().set(base).sub(getBase());
 
         getBase().set(base);
         getHead().add(translation);
@@ -278,18 +279,18 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     @Override
     public FVector moveHead() {
 
-        return moveHead(MainFactory.getFPoint());
+        return moveHead(mainFactory.getFPoint());
     }
 
     @Override
     public FVector moveHead(double hX, double hY, double hZ) {
 
-        return moveHead(MainFactory.getFPoint(hX, hY, hZ));
+        return moveHead(mainFactory.getFPoint(hX, hY, hZ));
     }
 
     @Override
     public FVector moveHead(FPoint head) {
-        FPoint translation = MainFactory.getFPoint().set(head).sub(getHead());
+        FPoint translation = mainFactory.getFPoint().set(head).sub(getHead());
 
         getBase().add(translation);
         getHead().set(head);
@@ -485,7 +486,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
             throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
         }
 
-        return getAngle(MainFactory.getFVector(getBase(), ref));
+        return getAngle(mainFactory.getFVector(getBase(), ref));
     }
 
     @Override
@@ -513,7 +514,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     @Override
     public double getDotProduct(FPoint ref) {
 
-        return getDotProduct(MainFactory.getFVector(getBase(), ref));
+        return getDotProduct(mainFactory.getFVector(getBase(), ref));
     }
 
     @Override
@@ -527,7 +528,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     @Override
     public FVector setCrossProduct(FPoint ref) {
 
-        return setCrossProduct(MainFactory.getFVector(getBase(), ref));
+        return setCrossProduct(mainFactory.getFVector(getBase(), ref));
     }
 
     @Override
@@ -636,7 +637,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
         }
 
         double magnitude = getLength();
-        FVector fVectorRef = MainFactory.getFVector(ref.getBase().copy(), ref.getHead().copy());
+        FVector fVectorRef = mainFactory.getFVector(ref.getBase().copy(), ref.getHead().copy());
         FVector fVectorRot = copy().setCrossProduct(fVectorRef);
 
         fVectorRef.setCrossProduct(fVectorRot).setLength(magnitude);

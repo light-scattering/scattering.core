@@ -1,48 +1,73 @@
 package eu.scattering.core.implementation.development.statistics;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.development.statistics.StatisticsMethod;
-import eu.scattering.core.injection.DevelopmentFactory;
 
 import java.time.LocalTime;
 import java.util.*;
 
+import static eu.scattering.core.Config.statisticsFactory;
+
 public class StatisticsDefault implements Statistics {
 
-    private Map<String, StatisticsMethod> stats;
-    private boolean suspended;
+    private Map<String, StatisticsMethod> statistics;
+    private boolean active;
 
-    private StatisticsDefault(boolean global) {
+    private StatisticsDefault() {
 
-        stats = new HashMap<>();
-
-        if (global) {
-            this.suspended = false;
-        } else {
-            this.suspended = Config.isDevObjectStatsSuspended();
-        }
+        statistics = new HashMap<>();
+        active = false;
     }
 
-    public static Statistics create(boolean global) {
+    public static Statistics create() {
 
-        return new StatisticsDefault(global);
+        return new StatisticsDefault();
     }
 
     @Override
-    public Set<String> getMethodNames() {
+    public Statistics reset() {
 
-        return stats.keySet();
+        statistics.clear();
+
+        return this;
     }
 
     @Override
-    public Optional<StatisticsMethod> getMethod(String methodName) {
+    public Statistics setEnabled() {
+
+        active = true;
+
+        return this;
+    }
+
+    @Override
+    public Statistics setDisabled() {
+
+        active = false;
+
+        return this;
+    }
+
+    @Override
+    public boolean isEnabled() {
+
+        return active;
+    }
+
+    @Override
+    public Set<String> getRegisteredMethodNames() {
+
+        return statistics.keySet();
+    }
+
+    @Override
+    public Optional<StatisticsMethod> getRegisteredMethod(String methodName) {
 
         if (methodName == null) {
             throw new NullPointerException("The method name cannot be null");
         }
 
-        StatisticsMethod record = stats.get(methodName);
+        StatisticsMethod record = statistics.get(methodName);
 
         if (record == null) {
             return Optional.empty();
@@ -52,50 +77,36 @@ public class StatisticsDefault implements Statistics {
     }
 
     @Override
-    public void recordEvent(String methodName, long methodExecutionTime) {
+    public Statistics recordEvent(String methodName, long methodExecutionTime) {
 
         if (methodName == null) {
             throw new NullPointerException("The method name cannot be null");
         }
 
-        if (suspended) {
-            return;
+        if (!active) {
+            return this;
         }
 
-        Optional<StatisticsMethod> statsMethodOptional = getMethod(methodName);
+        Optional<StatisticsMethod> statsMethodOptional = getRegisteredMethod(methodName);
         StatisticsMethod statsMethod;
 
         if (statsMethodOptional.isEmpty()) {
-            statsMethod = DevelopmentFactory.getIStatsMethod();
-            stats.put(methodName, statsMethod);
+            statsMethod = statisticsFactory.getStatisticsMethod();
+            statistics.put(methodName, statsMethod);
         } else {
             statsMethod = statsMethodOptional.get();
         }
 
         statsMethod.recordExecutionTime(methodExecutionTime);
+
+        return this;
     }
 
-    @Override
-    public void reset() {
-
-        stats.clear();
-    }
-
-    public void setSuspended(boolean suspend) {
-
-        suspended = suspend;
-    }
-
-    @Override
-    public boolean isSuspended() {
-
-        return suspended;
-    }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        Map<String, StatisticsMethod> devStatsSorted = new TreeMap<>(stats);
+        Map<String, StatisticsMethod> devStatsSorted = new TreeMap<>(statistics);
 
         builder.append(LocalTime.now().toString()).append(" - registered methods: ").append(devStatsSorted.size()).append("\n");
 

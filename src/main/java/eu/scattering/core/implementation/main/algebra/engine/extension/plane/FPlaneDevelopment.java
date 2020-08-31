@@ -2,7 +2,6 @@ package eu.scattering.core.implementation.main.algebra.engine.extension.plane;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.injection.DevelopmentFactory;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -16,11 +15,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static eu.scattering.core.Config.statisticsFactory;
+
 public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane {
 
     private static long numberOfInstances = 0;
-    private static final Statistics statsClass = DevelopmentFactory.getIStats(true);
-    private final Statistics statsObject = DevelopmentFactory.getIStats(false);
+
+    private static final Statistics statsClass = statisticsFactory.getStatistics().setEnabled();
+    private final Statistics statsObject = statisticsFactory.getStatistics();
+
     private final FPlane core;
 
     private FPlaneDevelopment(FPlane core) {
@@ -33,6 +36,20 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
     public static FPlane create(FPlane core) {
 
         return new FPlaneDevelopment(core);
+    }
+
+    public FPlane objectStatisticsEnable() {
+
+        statsObject.setEnabled();
+
+        return this;
+    }
+
+    public FPlane objectStatisticsDisable() {
+
+        statsObject.setDisabled();
+
+        return this;
     }
 
     @Override
@@ -363,7 +380,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
 
         statsClass.recordEvent(name, time);
 
-        if (statsObject.isSuspended()) {
+        if (statsObject.isEnabled()) {
             return;
         }
 

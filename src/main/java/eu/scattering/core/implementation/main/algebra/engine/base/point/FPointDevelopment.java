@@ -2,7 +2,6 @@ package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.injection.DevelopmentFactory;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
@@ -14,11 +13,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static eu.scattering.core.Config.statisticsFactory;
+
 public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
 
     private static long numberOfInstances = 0;
-    private static final Statistics statsClass = DevelopmentFactory.getIStats(true);
-    private final Statistics statsObject = DevelopmentFactory.getIStats(false);
+
+    private static final Statistics statsClass = statisticsFactory.getStatistics().setEnabled();
+    private final Statistics statsObject = statisticsFactory.getStatistics();
+
     private final FPoint core;
 
     private FPointDevelopment(FPoint core) {
@@ -31,6 +34,20 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     public static FPoint create(FPoint core) {
 
         return new FPointDevelopment(core);
+    }
+
+    public FPoint objectStatisticsEnable() {
+
+        statsObject.setEnabled();
+
+        return this;
+    }
+
+    public FPoint objectStatisticsDisable() {
+
+        statsObject.setDisabled();
+
+        return this;
     }
 
     @Override
@@ -966,11 +983,6 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         long time = System.currentTimeMillis() - startTime;
 
         statsClass.recordEvent(name, time);
-
-        if (statsObject.isSuspended()) {
-            return;
-        }
-
         statsObject.recordEvent(name, time);
     }
 

@@ -14,6 +14,9 @@ public interface Development<T> {
     Optional<Long> devGetNumberOfInstances();
     T devResetNumberOfInstances();
 
+    T objectStatisticsEnable();
+    T objectStatisticsDisable();
+
     Optional<Statistics> devGetStatistics();
     Optional<Statistics> devGetClassStatistics();
 

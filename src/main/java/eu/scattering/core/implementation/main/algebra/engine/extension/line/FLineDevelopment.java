@@ -2,7 +2,6 @@ package eu.scattering.core.implementation.main.algebra.engine.extension.line;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.injection.DevelopmentFactory;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -15,11 +14,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static eu.scattering.core.Config.statisticsFactory;
+
 public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     private static long numberOfInstances = 0;
-    private static final Statistics statsClass = DevelopmentFactory.getIStats(true);
-    private final Statistics statsObject = DevelopmentFactory.getIStats(false);
+
+    private static final Statistics statsClass = statisticsFactory.getStatistics().setEnabled();
+    private final Statistics statsObject = statisticsFactory.getStatistics();
+
     private final FLine core;
 
     private FLineDevelopment(FLine core) {
@@ -32,6 +35,20 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
     public static FLine create(FLine core) {
 
         return new FLineDevelopment(core);
+    }
+
+    public FLine objectStatisticsEnable() {
+
+        statsObject.setEnabled();
+
+        return this;
+    }
+
+    public FLine objectStatisticsDisable() {
+
+        statsObject.setDisabled();
+
+        return this;
     }
 
     @Override
@@ -435,7 +452,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
         statsClass.recordEvent(name, time);
 
-        if (statsObject.isSuspended()) {
+        if (statsObject.isEnabled()) {
             return;
         }
 
