@@ -24,13 +24,43 @@ public class StatisticsDefault implements Statistics {
     }
 
     @Override
-    public Set<String> getMethodNames() {
+    public Statistics reset() {
+
+        statistics.clear();
+
+        return this;
+    }
+
+    @Override
+    public Statistics setEnabled() {
+
+        active = true;
+
+        return this;
+    }
+
+    @Override
+    public Statistics setDisabled() {
+
+        active = false;
+
+        return this;
+    }
+
+    @Override
+    public boolean isEnabled() {
+
+        return active;
+    }
+
+    @Override
+    public Set<String> getRegisteredMethodNames() {
 
         return statistics.keySet();
     }
 
     @Override
-    public Optional<StatisticsMethod> getMethod(String methodName) {
+    public Optional<StatisticsMethod> getRegisteredMethod(String methodName) {
 
         if (methodName == null) {
             throw new NullPointerException("The method name cannot be null");
@@ -56,7 +86,7 @@ public class StatisticsDefault implements Statistics {
             return this;
         }
 
-        Optional<StatisticsMethod> statsMethodOptional = getMethod(methodName);
+        Optional<StatisticsMethod> statsMethodOptional = getRegisteredMethod(methodName);
         StatisticsMethod statsMethod;
 
         if (statsMethodOptional.isEmpty()) {
@@ -71,27 +101,6 @@ public class StatisticsDefault implements Statistics {
         return this;
     }
 
-    @Override
-    public Statistics reset() {
-
-        statistics.clear();
-
-        return this;
-    }
-
-    @Override
-    public Statistics setActive(boolean active) {
-
-        this.active = active;
-
-        return this;
-    }
-
-    @Override
-    public boolean isActive() {
-
-        return active;
-    }
 
     @Override
     public String toString() {

@@ -18,7 +18,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = DevelopmentFactory.getIStats().setActive(true);
+    private static final Statistics statsClass = DevelopmentFactory.getIStats().setEnabled();
     private final Statistics statsObject = DevelopmentFactory.getIStats();
 
     private final FPoint core;
@@ -37,14 +37,14 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
 
     public FPoint objectStatisticsEnable() {
 
-        statsObject.setActive(true);
+        statsObject.setEnabled();
 
         return this;
     }
 
     public FPoint objectStatisticsDisable() {
 
-        statsObject.setActive(false);
+        statsObject.setDisabled();
 
         return this;
     }

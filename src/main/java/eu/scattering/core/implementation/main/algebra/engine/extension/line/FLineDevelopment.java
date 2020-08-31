@@ -19,7 +19,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = DevelopmentFactory.getIStats().setActive(true);
+    private static final Statistics statsClass = DevelopmentFactory.getIStats().setEnabled();
     private final Statistics statsObject = DevelopmentFactory.getIStats();
 
     private final FLine core;
@@ -38,14 +38,14 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     public FLine objectStatisticsEnable() {
 
-        statsObject.setActive(true);
+        statsObject.setEnabled();
 
         return this;
     }
 
     public FLine objectStatisticsDisable() {
 
-        statsObject.setActive(false);
+        statsObject.setDisabled();
 
         return this;
     }
@@ -451,7 +451,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
         statsClass.recordEvent(name, time);
 
-        if (statsObject.isActive()) {
+        if (statsObject.isEnabled()) {
             return;
         }
 

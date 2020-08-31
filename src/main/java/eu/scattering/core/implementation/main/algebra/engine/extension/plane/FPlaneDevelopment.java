@@ -20,7 +20,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = DevelopmentFactory.getIStats().setActive(true);
+    private static final Statistics statsClass = DevelopmentFactory.getIStats().setEnabled();
     private final Statistics statsObject = DevelopmentFactory.getIStats();
 
     private final FPlane core;
@@ -39,14 +39,14 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
 
     public FPlane objectStatisticsEnable() {
 
-        statsObject.setActive(true);
+        statsObject.setEnabled();
 
         return this;
     }
 
     public FPlane objectStatisticsDisable() {
 
-        statsObject.setActive(false);
+        statsObject.setDisabled();
 
         return this;
     }
@@ -379,7 +379,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
 
         statsClass.recordEvent(name, time);
 
-        if (statsObject.isActive()) {
+        if (statsObject.isEnabled()) {
             return;
         }
 

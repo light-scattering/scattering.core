@@ -33,8 +33,9 @@ public class DevelopmentTest {
     @BeforeEach
     void beforeEach() {
 
-        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(Statistics::reset);
         getTestInstanceDevelopment().devResetNumberOfInstances();
+        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(e -> e.setEnabled());
+        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(Statistics::reset);
     }
 
     @Nested
@@ -67,7 +68,7 @@ public class DevelopmentTest {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
@@ -79,7 +80,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(1)
                         .containsExactlyInAnyOrder("test event 1");
             }
@@ -116,7 +117,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 2", 10L);
                 statistics.recordEvent("test event 3", 10L);
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(3)
                         .containsExactlyInAnyOrder("test event 1", "test event 2", "test event 3");
             }
@@ -131,7 +132,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 1", 10L);
                 statistics.recordEvent("test event 2", 10L);
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(2)
                         .containsExactlyInAnyOrder("test event 1", "test event 2");
             }
@@ -150,7 +151,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 4", 10L);
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(1)
                         .containsExactlyInAnyOrder("test event 4");
             }
@@ -161,7 +162,7 @@ public class DevelopmentTest {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertTrue(statistics.isActive(),
+                assertTrue(statistics.isEnabled(),
                         "The registration of events is not consistent with the default value");
             }
 
@@ -171,9 +172,9 @@ public class DevelopmentTest {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                statistics.setActive(false);
+                statistics.setDisabled();
 
-                assertFalse(statistics.isActive(),
+                assertFalse(statistics.isEnabled(),
                         "The registration of events should be suspended");
             }
 
@@ -183,10 +184,10 @@ public class DevelopmentTest {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                statistics.setActive(false);
+                statistics.setDisabled();
                 statistics.recordEvent("test event 1", 10L);
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
@@ -218,7 +219,7 @@ public class DevelopmentTest {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
@@ -233,7 +234,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(1)
                         .containsExactlyInAnyOrder("test event 1");
             }
@@ -246,7 +247,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                assertThat(statistics.getMethodNames())
+                assertThat(statistics.getRegisteredMethodNames())
                         .hasSize(0);
             }
 
@@ -264,7 +265,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
 
                 assertTrue(methodOptional.isPresent(), "The requested method should be available");
             }
@@ -277,7 +278,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                assertThrows(NullPointerException.class, () -> statistics.getMethod(null),
+                assertThrows(NullPointerException.class, () -> statistics.getRegisteredMethod(null),
                         "The method name must be defined");
             }
 
@@ -289,7 +290,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 2");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 2");
 
                 assertTrue(methodOptional.isEmpty(), "The requested method should not be available");
             }
@@ -304,7 +305,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 1", 20L);
                 statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertThat(method.getExecutionTimes())
@@ -320,7 +321,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 method.recordExecutionTime(20L);
@@ -339,7 +340,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 method.recordExecutionTime(20L);
@@ -357,7 +358,7 @@ public class DevelopmentTest {
 
                 statistics.recordEvent("test event 1", 10L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertThrows(ArithmeticException.class, () -> method.recordExecutionTime(-10L),
@@ -374,7 +375,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 1", 20L);
                 statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(3, method.getNumberOfIterations(),
@@ -391,7 +392,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 1", 20L);
                 statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(60L, method.getTimeTotal(),
@@ -408,7 +409,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 1", 20L);
                 statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(20L, method.getTimeAvg(),
@@ -425,7 +426,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 1", 20L);
                 statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(10L, method.getTimeMin(),
@@ -442,7 +443,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 1", 20L);
                 statistics.recordEvent("test event 1", 30L);
 
-                Optional<StatisticsMethod> methodOptional = statistics.getMethod("test event 1");
+                Optional<StatisticsMethod> methodOptional = statistics.getRegisteredMethod("test event 1");
                 StatisticsMethod method = methodOptional.orElseGet(() -> fail("Empty optional"));
 
                 assertEquals(30L, method.getTimeMax(),
