@@ -682,7 +682,6 @@ public class FComplexDevelopment implements FComplex {
     public Object clone() {
 
         return create((FComplex) core.clone());
-
     }
 
     @Override
@@ -750,6 +749,7 @@ public class FComplexDevelopment implements FComplex {
 
         return Optional.of(statsClass);
     }
+
     // -------------------------------------------------------------------------------------------------
 
     private void updateStats(String name, long startTime) {

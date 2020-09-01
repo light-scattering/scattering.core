@@ -1,10 +1,8 @@
 package eu.scattering.core.implementation.main.algebra.type.quaternion;
 
+import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.design.main.algebra.Algebra;
-import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDevelopment;
 import org.json.JSONObject;
 
 import java.util.Optional;
@@ -49,11 +47,6 @@ public class FQuaternionDevelopment implements FQuaternion {
     }
 
     @Override
-    public FQuaternion importFromJSON(JSONObject json) {
-        return null;
-    }
-
-    @Override
     public FQuaternion set(FQuaternion fQuaternion) {
 
         String name = "set(FQuaternion)";
@@ -68,351 +61,864 @@ public class FQuaternionDevelopment implements FQuaternion {
 
     @Override
     public FQuaternion set(double re, double i, double j, double k) {
-        return null;
+
+        String name = "set(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.set(re, i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @Override
-    public boolean isSimilar(FQuaternion element) {
-        return false;
-    }
-
-    @Override
-    public boolean isExact(FQuaternion element) {
-        return false;
-    }
-
-    @Override
-    public FQuaternion copy() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion self() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion devDescribe() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion devDescribeStatistics() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion devDescribeClassStatistics() {
-        return null;
-    }
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-        return Optional.empty();
-    }
-
-    @Override
-    public FQuaternion devResetNumberOfInstances() {
-        return null;
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-        return Optional.empty();
-    }
-
-    @Override
-    public String devGetLabel() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion devSetLabel(String label) {
-        return null;
-    }
-
-    @Override
-    public JSONObject exportToJSON() {
-        return null;
-    }
-
-
 
     @Override
     public double getRe() {
-        return 0;
+
+        String name = "getRe()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getRe();
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override
     public FQuaternion setRe(double re) {
-        return null;
+
+        String name = "setRe(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setRe(re);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public double getI() {
-        return 0;
+
+        String name = "getI()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getI();
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override
     public FQuaternion setI(double i) {
-        return null;
+
+        String name = "setI(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setI(i);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public double getJ() {
-        return 0;
+
+        String name = "getJ()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getJ();
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override
     public FQuaternion setJ(double j) {
-        return null;
+
+        String name = "setJ(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setJ(j);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public double getK() {
-        return 0;
+
+        String name = "getK()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getK();
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override
     public FQuaternion setK(double k) {
-        return null;
+
+        String name = "setK(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setK(k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
-    public Object clone() {
-        return null;
+    public boolean isExact(FQuaternion element) {
+
+        String name = "isExact(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isExact(element);
+
+        updateStats(name, time);
+
+        return res;
     }
+
+    @Override
+    public boolean isSimilar(FQuaternion element) {
+
+        String name = "isSimilar(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isSimilar(element);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public JSONObject exportToJSON() {
+
+        String name = "exportToJSON()";
+        long time = System.currentTimeMillis();
+
+        var res = core.exportToJSON();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FQuaternion importFromJSON(JSONObject json) {
+
+        String name = "importFromJSON(JSONObject)";
+        long time = System.currentTimeMillis();
+
+        var res = core.importFromJSON(json);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion copy() {
+
+        String name = "copy()";
+        long time = System.currentTimeMillis();
+
+        var res = create(core.copy());
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion self() {
+
+        return this;
+    }
+
 
     @Override
     public FQuaternion add(FQuaternion element) {
-        return null;
+
+        String name = "add(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = core.add(element);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion sub(FQuaternion element) {
-        return null;
+
+        String name = "sub(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = core.sub(element);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mul(FQuaternion element) {
-        return null;
+
+        String name = "mul(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mul(element);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion div(FQuaternion element) {
-        return null;
+
+        String name = "div(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = core.div(element);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion add(double factor) {
-        return null;
+
+        String name = "add(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.add(factor);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion sub(double factor) {
-        return null;
+
+        String name = "sub(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.sub(factor);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mul(double factor) {
-        return null;
+
+        String name = "mul(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mul(factor);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion div(double factor) {
-        return null;
+
+        String name = "div(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.div(factor);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
-    @Override
-    public double getMagnitude() {
-        return 0;
-    }
-
-    @Override
-    public FQuaternion setMagnitude(double magnitude) {
-        return null;
-    }
-
-    @Override
-    public FQuaternion pow(int n) {
-        return null;
-    }
-
-    @Override
-    public FQuaternion negate() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion inverse() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion conjugate() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion normalize() {
-        return null;
-    }
-
-    @Override
-    public FQuaternion imprint(FQuaternion element) {
-        return null;
-    }
-
-    @Override
-    public boolean isZero() {
-        return false;
-    }
-
-    @Override
-    public boolean isExact(double re, double i, double j, double k) {
-        return false;
-    }
-
-    @Override
-    public boolean isSimilar(double re, double i, double j, double k) {
-        return false;
-    }
 
     @Override
     public FQuaternion add(double re, double i, double j, double k) {
-        return null;
+
+        String name = "add(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.add(re, i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion addRe(double re) {
-        return null;
+
+        String name = "addRe(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.addRe(re);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion addIm(double i, double j, double k) {
-        return null;
+
+        String name = "addIm(double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.addIm(i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion addI(double i) {
-        return null;
+
+        String name = "addI(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.addI(i);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion addJ(double j) {
-        return null;
+
+        String name = "addJ(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.addJ(j);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion addK(double k) {
-        return null;
+
+        String name = "addK(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.addK(k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion sub(double re, double i, double j, double k) {
-        return null;
+
+        String name = "sub(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.sub(re, i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion subRe(double re) {
-        return null;
+
+        String name = "subRe(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.subRe(re);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion subIm(double i, double j, double k) {
-        return null;
+
+        String name = "subIm(double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.subIm(i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion subI(double i) {
-        return null;
+
+        String name = "subI(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.subI(i);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion subJ(double j) {
-        return null;
+
+        String name = "subJ(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.subJ(j);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion subK(double k) {
-        return null;
+
+        String name = "subK(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.subK(k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mul(double re, double i, double j, double k) {
-        return null;
+
+        String name = "mul(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mul(re, i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mulRe(double re) {
-        return null;
+
+        String name = "mulRe(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mulRe(re);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mulIm(double i, double j, double k) {
-        return null;
+
+        String name = "mulIm(double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mulIm(i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mulI(double i) {
-        return null;
+
+        String name = "mulI(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mulI(i);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mulJ(double j) {
-        return null;
+
+        String name = "mulJ(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mulJ(j);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion mulK(double k) {
-        return null;
+
+        String name = "mulK(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.mulK(k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion div(double re, double i, double j, double k) {
-        return null;
+
+        String name = "div(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.div(re, i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion divRe(double re) {
-        return null;
+
+        String name = "divRe(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.divRe(re);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion divIm(double i, double j, double k) {
-        return null;
+
+        String name = "divIm(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.divIm(i, j, k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion divI(double i) {
-        return null;
+
+        String name = "divI(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.divI(i);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion divJ(double j) {
-        return null;
+
+        String name = "divJ(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.divJ(j);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override
     public FQuaternion divK(double k) {
-        return null;
+
+        String name = "divK(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.divK(k);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion devDescribe() {
+
+        String name = "devDescribe()";
+        long time = System.currentTimeMillis();
+
+        var res = core.devDescribe();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public String devGetLabel() {
+
+        String name = "devGetLabel()";
+        long time = System.currentTimeMillis();
+
+        var res = core.devGetLabel();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FQuaternion devSetLabel(String label) {
+
+        String name = "devSetLabel(String)";
+        long time = System.currentTimeMillis();
+
+        var res = core.devSetLabel(label);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public double getMagnitude() {
+
+        String name = "getMagnitude()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getMagnitude();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FQuaternion setMagnitude(double magnitude) {
+
+        String name = "setMagnitude(double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setMagnitude(magnitude);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion pow(int n) {
+
+        String name = "pow(int)";
+        long time = System.currentTimeMillis();
+
+        var res = core.pow(n);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion negate() {
+
+        String name = "negate()";
+        long time = System.currentTimeMillis();
+
+        var res = core.negate();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion inverse() {
+
+        String name = "inverse()";
+        long time = System.currentTimeMillis();
+
+        var res = core.inverse();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion conjugate() {
+
+        String name = "conjugate()";
+        long time = System.currentTimeMillis();
+
+        var res = core.conjugate();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion normalize() {
+
+        String name = "normalize()";
+        long time = System.currentTimeMillis();
+
+        var res = core.normalize();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FQuaternion imprint(FQuaternion element) {
+
+        String name = "imprint(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = core.imprint(element);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public boolean isZero() {
+
+        String name = "isZero()";
+        long time = System.currentTimeMillis();
+
+        var res = core.isZero();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public boolean isExact(double re, double i, double j, double k) {
+
+        String name = "isExact(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isExact(re, i, j, k);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public boolean isSimilar(double re, double i, double j, double k) {
+
+        String name = "isSimilar(double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isSimilar(re, i, j, k);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public Object clone() {
+
+        return create((FQuaternion) core.clone());
+    }
+
+    @Override
+    public String toString() {
+
+        return core.toString();
+    }
+
+    @Override
+    public int hashCode() {
+
+        return core.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FQuaternion) {
+            return core.equals(object);
+        }
+
+        return false;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public Optional<Long> devGetNumberOfInstances() {
+
+        return Optional.of(numberOfInstances);
+    }
+
+    @Override
+    public FQuaternion devResetNumberOfInstances() {
+
+        numberOfInstances = 0;
+
+        return self();
+    }
+
+    @Override
+    public FQuaternion devDescribeStatistics() {
+
+        Config.getDebugPrintStream().println(statsObject.toString());
+
+        return self();
+    }
+
+    @Override
+    public FQuaternion devDescribeClassStatistics() {
+
+        Config.getDebugPrintStream().println(statsClass.toString());
+
+        return self();
+    }
+
+    @Override
+    public Optional<Statistics> devGetStatistics() {
+
+        return Optional.of(statsObject);
+    }
+
+    @Override
+    public Optional<Statistics> devGetClassStatistics() {
+
+        return Optional.of(statsClass);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -424,4 +930,5 @@ public class FQuaternionDevelopment implements FQuaternion {
         statsClass.recordEvent(name, time);
         statsObject.recordEvent(name, time);
     }
+
 }
