@@ -2,9 +2,7 @@ package eu.scattering.core.implementation.main.algebra.type.complex;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDevelopment;
 import org.json.JSONObject;
 
 import java.util.Optional;
@@ -351,6 +349,19 @@ public class FComplexDevelopment implements FComplex {
         updateStats(name, time);
 
         return res;
+    }
+
+    @Override
+    public FComplex negate() {
+
+        String name = "negate()";
+        long time = System.currentTimeMillis();
+
+        var res = core.negate();
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
     }
 
     @Override

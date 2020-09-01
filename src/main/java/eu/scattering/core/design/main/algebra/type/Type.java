@@ -18,8 +18,8 @@ public interface Type<T> extends Algebra<T> {
     T setMagnitude(double magnitude);
 
     T pow(int n);
-    T[] root(int n);
 
+    T negate();
     T inverse();
     T conjugate();
     T normalize();

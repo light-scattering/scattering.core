@@ -305,7 +305,6 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
 
     // -------------------------------------------------------------------------------------------------
 
-
     @Override
     public boolean isExact(double re, double im) {
 
@@ -391,9 +390,17 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
     }
 
     @Override
-    public FComplex inverse() {
+    public FComplex negate() {
 
         return mul(-1);
+    }
+
+    @Override
+    public FComplex inverse() {
+
+        mainFactory.getFComplex(1, 0).div(this).imprint(this);
+
+        return this;
     }
 
     @Override

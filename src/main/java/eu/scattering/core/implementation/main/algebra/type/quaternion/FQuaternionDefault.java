@@ -1,8 +1,13 @@
 package eu.scattering.core.implementation.main.algebra.type.quaternion;
 
+import eu.scattering.core.Config;
+import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import static eu.scattering.core.Config.mainFactory;
 
 public class FQuaternionDefault extends AlgebraPreset<FQuaternion> implements FQuaternion {
 
@@ -95,257 +100,429 @@ public class FQuaternionDefault extends AlgebraPreset<FQuaternion> implements FQ
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Object clone() {
-        return null;
+    public boolean isExact(FQuaternion fQuaternion) {
+
+        if (fQuaternion == null) {
+            throw new NullPointerException("The reference FQuaternion cannot be null");
+        }
+
+        if (this == fQuaternion) {
+            return true;
+        }
+
+        return getRe() == fQuaternion.getRe() && getI() == fQuaternion.getI() &&
+                getJ() == fQuaternion.getJ() && getK() == fQuaternion.getK();
     }
 
     @Override
-    public boolean equals(Object object) {
-        return false;
-    }
+    public boolean isSimilar(FQuaternion fQuaternion) {
 
-    @Override
-    public FQuaternion importFromJSON(JSONObject json) {
-        return null;
-    }
+        if (fQuaternion == null) {
+            throw new NullPointerException("The reference FQuaternion cannot be null");
+        }
 
-    @Override
-    public FQuaternion copy() {
-        return null;
-    }
+        if (this == fQuaternion) {
+            return true;
+        }
 
-    @Override
-    public FQuaternion self() {
-        return null;
-    }
+        double distanceRe = Math.abs(getRe() - fQuaternion.getRe());
+        double distanceI = Math.abs(getI() - fQuaternion.getI());
+        double distanceJ = Math.abs(getJ() - fQuaternion.getJ());
+        double distanceK = Math.abs(getK() - fQuaternion.getK());
 
-    @Override
-    public boolean isSimilar(FQuaternion element) {
-        return false;
-    }
-
-    @Override
-    public boolean isExact(FQuaternion element) {
-        return false;
+        return distanceRe < Config.getJitter() && distanceI < Config.getJitter() &&
+                distanceJ < Config.getJitter() && distanceK < Config.getJitter();
     }
 
     @Override
     public JSONObject exportToJSON() {
-        return null;
+
+        JSONObject json = new JSONObject();
+
+        json.append("quaternion", getRe());
+        json.append("quaternion", getI());
+        json.append("quaternion", getJ());
+        json.append("quaternion", getK());
+
+        return json;
     }
 
     @Override
-    public boolean isExact(double re, double i, double j, double k) {
+    public FQuaternion importFromJSON(JSONObject json) {
+
+        JSONArray structure = json.getJSONArray("quaternion");
+
+        setRe(structure.getDouble(0));
+        setI(structure.getDouble(1));
+        setJ(structure.getDouble(2));
+        setK(structure.getDouble(3));
+
+        return this;
+    }
+
+    @Override
+    public FQuaternion copy() {
+
+        return mainFactory.getFQuaternion().set(this);
+    }
+
+    @Override
+    public FQuaternion self() {
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public int hashCode() {
+        int hashCode = 7;
+
+        hashCode = 31 * hashCode + (int) (getRe() * 100);
+        hashCode = 31 * hashCode + (int) (getI() * 100);
+        hashCode = 31 * hashCode + (int) (getJ() * 100);
+        hashCode = 31 * hashCode + (int) (getK() * 100);
+
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+
+        if (object instanceof FQuaternion) {
+            return isExact((FQuaternion) object);
+        }
+
         return false;
     }
 
     @Override
-    public boolean isSimilar(double re, double i, double j, double k) {
-        return false;
+    public Object clone() {
+
+        return copy();
     }
 
-    @Override
-    public double getMagnitude() {
-        return 0;
-    }
-
-    @Override
-    public FQuaternion setMagnitude(double magnitude) {
-        return null;
-    }
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FQuaternion add(FQuaternion element) {
-        return null;
+
+        return add(element.getRe(), element.getI(), element.getJ(), element.getK());
     }
 
     @Override
     public FQuaternion add(double re, double i, double j, double k) {
-        return null;
+
+        return addRe(re).addIm(i, j, k);
     }
 
     @Override
     public FQuaternion add(double factor) {
-        return null;
+
+        return add(factor, factor, factor, factor);
     }
 
     @Override
     public FQuaternion addRe(double re) {
-        return null;
+
+        return setRe(getRe() + re);
     }
 
     @Override
     public FQuaternion addIm(double i, double j, double k) {
-        return null;
+
+        return addI(i).addJ(j).addK(k);
     }
 
     @Override
     public FQuaternion addI(double i) {
-        return null;
+
+        return setI(getI() + i);
     }
 
     @Override
     public FQuaternion addJ(double j) {
-        return null;
+
+        return setJ(getJ() + j);
     }
 
     @Override
     public FQuaternion addK(double k) {
-        return null;
+
+        return setK(getK() + k);
     }
 
     @Override
     public FQuaternion sub(FQuaternion element) {
-        return null;
+
+        return sub(element.getRe(), element.getI(), element.getJ(), element.getK());
     }
 
     @Override
     public FQuaternion sub(double re, double i, double j, double k) {
-        return null;
+
+        return subRe(re).subIm(i, j, k);
     }
 
     @Override
     public FQuaternion sub(double factor) {
-        return null;
+
+        return sub(factor, factor, factor, factor);
     }
 
     @Override
     public FQuaternion subRe(double re) {
-        return null;
+
+        return setRe(getRe() - re);
     }
 
     @Override
     public FQuaternion subIm(double i, double j, double k) {
-        return null;
+
+        return subI(i).subJ(j).subK(k);
     }
 
     @Override
     public FQuaternion subI(double i) {
-        return null;
+
+        return setI(getI() - i);
     }
 
     @Override
     public FQuaternion subJ(double j) {
-        return null;
+
+        return setJ(getJ() - j);
     }
 
     @Override
     public FQuaternion subK(double k) {
-        return null;
+
+        return setK(getK() - k);
     }
 
     @Override
     public FQuaternion mul(FQuaternion element) {
-        return null;
+
+        double valueRe = (element.getRe() * getRe()) - (element.getI() * getI()) -
+                (element.getJ() * getJ()) - (element.getK() * getK());
+        double valueI = (element.getRe() * getI()) + (element.getI() * getRe()) -
+                (element.getJ() * getK()) + (element.getK() * getJ());
+        double valueJ = (element.getRe() * getJ()) + (element.getI() * getK()) +
+                (element.getJ() * getRe()) - (element.getK() * getI());
+        double valueK = (element.getRe() * getK()) - (element.getI() * getJ()) +
+                (element.getJ() * getI()) + (element.getK() * getRe());
+
+        return set(valueRe, valueI, valueJ, valueK);
     }
 
     @Override
     public FQuaternion mul(double re, double i, double j, double k) {
-        return null;
+
+        return mulRe(re).mulIm(i, j, k);
     }
 
     @Override
     public FQuaternion mul(double factor) {
-        return null;
+
+        return mul(factor, factor, factor, factor);
     }
 
     @Override
     public FQuaternion mulRe(double re) {
-        return null;
+
+        return setRe(getRe() * re);
     }
 
     @Override
     public FQuaternion mulIm(double i, double j, double k) {
-        return null;
+
+        return mulI(i).mulJ(j).mulK(k);
     }
 
     @Override
     public FQuaternion mulI(double i) {
-        return null;
+
+        return setI(getI() * i);
     }
 
     @Override
     public FQuaternion mulJ(double j) {
-        return null;
+
+        return setJ(getJ() * j);
     }
 
     @Override
     public FQuaternion mulK(double k) {
-        return null;
+
+        return setK(getK() * k);
     }
 
     @Override
     public FQuaternion div(FQuaternion element) {
-        return null;
+
+        if (element.isZero()) {
+            throw new ArithmeticException("The divisor cannot be zero");
+        }
+
+        return mul(element.copy().inverse());
     }
 
     @Override
     public FQuaternion div(double re, double i, double j, double k) {
-        return null;
+
+        return divRe(re).divI(i).divJ(j).divK(k);
     }
 
     @Override
     public FQuaternion div(double factor) {
-        return null;
+
+        return div(factor, factor, factor, factor);
     }
 
     @Override
     public FQuaternion divRe(double re) {
-        return null;
+
+        if (re == 0) {
+            throw new ArithmeticException("The real part of the FQuaternion value cannot be zero");
+        }
+
+        return setRe(getRe() / re);
     }
 
     @Override
     public FQuaternion divIm(double i, double j, double k) {
-        return null;
+
+        return divI(i).divJ(j).divK(k);
     }
 
     @Override
     public FQuaternion divI(double i) {
-        return null;
+
+        if (i == 0) {
+            throw new ArithmeticException("The imaginary part (I) of the FQuaternion value cannot be zero");
+        }
+
+        return setI(getI() / i);
     }
 
     @Override
     public FQuaternion divJ(double j) {
-        return null;
+
+        if (j == 0) {
+            throw new ArithmeticException("The imaginary part (J) of the FQuaternion value cannot be zero");
+        }
+
+        return setJ(getJ() / j);
     }
 
     @Override
     public FQuaternion divK(double k) {
-        return null;
+
+        if (k == 0) {
+            throw new ArithmeticException("The imaginary part (K) of the FQuaternion value cannot be zero");
+        }
+
+        return setK(getK() / k);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isExact(double re, double i, double j, double k) {
+
+        return getRe() == re && getI() == i && getJ() == j && getK() == k;
+    }
+
+    @Override
+    public boolean isSimilar(double re, double i, double j, double k) {
+        double distanceRe = Math.abs(getRe() - re);
+        double distanceI = Math.abs(getI() - i);
+        double distanceJ = Math.abs(getJ() - j);
+        double distanceK = Math.abs(getK() - k);
+
+        return distanceRe < Config.getJitter() && distanceI < Config.getJitter() &&
+                distanceJ < Config.getJitter() && distanceK < Config.getJitter();
+    }
+
+    @Override
+    public double getMagnitude() {
+
+        return Math.sqrt((getRe() * getRe()) + (getI() * getI()) + (getJ() * getJ())+ (getK() * getK()));
+    }
+
+    @Override
+    public FQuaternion setMagnitude(double magnitude) {
+
+        if (isZero()) {
+            throw new IllegalStateException("The direction is not defined");
+        }
+
+        mul(Math.abs(magnitude) / getMagnitude());
+
+        return magnitude > 0 ? this : negate();
     }
 
     @Override
     public FQuaternion pow(int n) {
-        return null;
+
+        if (n == 0) {
+            return set(1, 0, 0, 0);
+        }
+
+        FQuaternion factor = copy();
+
+        for (int i = 1 ; i < Math.abs(n) ; i++) {
+            mul(factor);
+        }
+
+        return n > 0 ? this : inverse();
     }
 
     @Override
-    public FQuaternion[] root(int n) {
-        return new FQuaternion[0];
+    public FQuaternion negate() {
+
+        return mul(-1);
     }
 
     @Override
     public FQuaternion inverse() {
-        return null;
+
+        if (isZero()) {
+            throw new ArithmeticException("The direction is not defined");
+        }
+
+        double factor = (getRe() * getRe()) + (getI() * getI()) +
+                (getJ() * getJ()) + (getK() * getK());
+
+        return set(getRe() / factor, -getI() / factor, -getJ() / factor, -getK() / factor);
     }
 
     @Override
     public FQuaternion conjugate() {
-        return null;
+
+        return mulIm(-1, -1, -1);
     }
 
     @Override
     public FQuaternion normalize() {
-        return null;
+
+        return setMagnitude(1);
     }
 
     @Override
     public FQuaternion imprint(FQuaternion element) {
-        return null;
+
+        element.set(this);
+
+        return this;
     }
 
     @Override
     public boolean isZero() {
-        return false;
+
+        return getRe() == 0 && getI() == 0 && getJ() == 0 && getK() == 0;
     }
 }
+
+// http://tamivox.org/redbear/qtrn_calc/index.html

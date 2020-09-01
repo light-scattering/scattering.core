@@ -354,8 +354,8 @@ public class FComplexTest {
         }
 
         @Test
-        @DisplayName("Mul FComplex")
-        void mulFComplex() {
+        @DisplayName("Mul FComplex (simple)")
+        void mulFComplexSimple() {
             double refRe = 2, refIm = 3;
             double opRe = 4, opIm = 5;
 
@@ -474,8 +474,8 @@ public class FComplexTest {
         }
 
         @Test
-        @DisplayName("Div FComplex")
-        void divFComplex() {
+        @DisplayName("Div FComplex (simple)")
+        void divFComplexSimple() {
             double refRe = 2, refIm = 3;
             double opRe = 4, opIm = 5;
 
@@ -948,7 +948,7 @@ public class FComplexTest {
         @DisplayName("Set magnitude (negative)")
         void setMagnitudeNegative() {
             FComplex fComplexA = RandomHelper.getTestComplex();
-            FComplex fComplexB = fComplexA.copy().inverse();
+            FComplex fComplexB = fComplexA.copy().negate();
             double magnitude = Math.abs(RandomHelper.getTestValue());
 
             fComplexA.setMagnitude(-magnitude);
@@ -1070,13 +1070,13 @@ public class FComplexTest {
         }
 
         @Test
-        @DisplayName("Inverse")
-        public void inverse() {
+        @DisplayName("Negate")
+        public void negate() {
             double re = RandomHelper.getTestValue();
             double im = RandomHelper.getTestValue();
             FComplex fComplex = mainFactory.getFComplex(re, im);
 
-            fComplex.inverse();
+            fComplex.negate();
 
             assertAll("Validate FComplex",
                     () -> assertEquals(-re, fComplex.getRe(),
@@ -1087,9 +1087,35 @@ public class FComplexTest {
         }
 
         @Test
+        @DisplayName("Negate (validate)")
+        public void negateValidate() {
+            FComplex fComplex = mainFactory.getFComplex(1, 1);
+
+            FComplexTestHelper.testReference(FComplex::negate, fComplex);
+        }
+
+        @Test
+        @DisplayName("Inverse")
+        public void inverse() {
+            double re = RandomHelper.getTestValue();
+            double im = RandomHelper.getTestValue();
+            FComplex fComplex = mainFactory.getFComplex(re, im);
+
+            fComplex.inverse();
+            fComplex.mul(mainFactory.getFComplex(re, im));
+
+            assertAll("Validate FComplex",
+                    () -> assertEquals(1, fComplex.getRe(),
+                            Config.getJitter(), "The Re value is erroneous"),
+                    () -> assertEquals(0, fComplex.getIm(),
+                            Config.getJitter(), "The Im value is erroneous")
+            );
+        }
+
+        @Test
         @DisplayName("Inverse (validate)")
         public void inverseValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = mainFactory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(FComplex::inverse, fComplex);
         }

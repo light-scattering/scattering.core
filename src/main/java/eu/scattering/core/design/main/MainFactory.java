@@ -107,6 +107,11 @@ public interface MainFactory {
         return getFQuaternion().set(re, i, j, k);
     }
 
+    default FQuaternion getFQuaternion(double re) {
+
+        return getFQuaternion().setRe(re);
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     FDipole getFDipole(int x, int y, int z);

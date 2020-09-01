@@ -23,4 +23,6 @@ public interface FComplexAdvanced {
     FComplex div(double re, double im);
     FComplex divRe(double re);
     FComplex divIm(double im);
+
+    FComplex[] root(int n);
 }
