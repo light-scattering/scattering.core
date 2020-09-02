@@ -19,6 +19,8 @@ public interface FLine extends Algebra<FLine>, Extension<FLine>, Development<FLi
     Function<Engine, List<Boolean>> isPartOfRay();
     Function<Engine, List<Boolean>> isPartOfSegment();
 
+//    Consumer<Engine> rotate(double angle);
+
     FPoint getFPoint(double length);
     Optional<FPoint> getFPointAtX(double x);
     Optional<FPoint> getFPointAtY(double y);

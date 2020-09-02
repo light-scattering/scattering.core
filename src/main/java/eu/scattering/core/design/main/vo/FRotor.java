@@ -1,9 +1,18 @@
 package eu.scattering.core.design.main.vo;
 
-public interface FRotor {
+import eu.scattering.core.design.main.Main;
+import eu.scattering.core.design.main.algebra.engine.Engine;
+import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
+import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 
-    double[] getVector();
-    double getAngle();
+import java.util.function.Consumer;
 
-    double[] rotate(double x, double y, double z);
+public interface FRotor extends Main<FRotor> {
+
+    FQuaternion getCore();
+
+    FVector getRotationAxis();
+    double getRotationAngle();
+
+    Consumer<Engine> rotate(double angle);
 }

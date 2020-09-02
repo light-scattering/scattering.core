@@ -25,7 +25,7 @@ public interface FPointAdvanced {
     double getAngle(FPoint ref);
 //    FPoint setAngle(FPoint ref, double angle);
 
-//    double rotate(FPoint ref, double angle);
+//    FPoint rotate(FPoint ref, double angle);
 //    double rotate(FRotor rot);
 
     double getDistance(FPoint ref);
@@ -34,5 +34,6 @@ public interface FPointAdvanced {
     double getDotProduct(FPoint ref);
     FPoint setCrossProduct(FPoint ref);
 
+//    boolean isNonDirectional();
     boolean isZero();
 }

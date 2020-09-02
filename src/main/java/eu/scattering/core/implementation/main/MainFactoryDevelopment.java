@@ -8,6 +8,7 @@ import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.vo.FDipole;
+import eu.scattering.core.design.main.vo.FRotor;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDevelopment;
 import eu.scattering.core.implementation.main.algebra.engine.base.vector.FVectorDefault;
@@ -21,6 +22,7 @@ import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDevel
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDevelopment;
 import eu.scattering.core.implementation.main.vo.FDipoleDefault;
+import eu.scattering.core.implementation.main.vo.FRotorDefault;
 
 public final class MainFactoryDevelopment implements MainFactory {
 
@@ -67,8 +69,26 @@ public final class MainFactoryDevelopment implements MainFactory {
     }
 
     @Override
-    public FDipole getFDipole(String position) {
+    public FDipole getFDipole(String structure) {
 
-        return FDipoleDefault.parse(position);
+        return FDipoleDefault.parse(structure);
+    }
+
+    @Override
+    public FRotor getFRotor(FVector axis, double angle) {
+
+        return FRotorDefault.create(axis, angle);
+    }
+
+    @Override
+    public FRotor getFRotor(FPoint axis, double angle) {
+
+        return FRotorDefault.create(axis, angle);
+    }
+
+    @Override
+    public FRotor getFRotor(String structure) {
+
+        return FRotorDefault.parse(structure);
     }
 }

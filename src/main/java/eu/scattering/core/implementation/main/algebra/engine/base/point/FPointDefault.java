@@ -1,6 +1,7 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
 import eu.scattering.core.Config;
+import eu.scattering.core.design.main.vo.FRotor;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import org.json.JSONArray;
@@ -480,6 +481,21 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
         return Double.isNaN(angle) ? 0 : angle;
     }
+
+//    @Override
+//    public FPoint rotate(FPoint ref, double angle) {
+//
+//        if (ref.isZero()) {
+//            throw new IllegalStateException("The reference FPoint is zero");
+//        }
+//
+//        if (angle == 0) {
+//            return this;
+//        }
+//
+//        FRotor fRotor = mainFactory.getFRotor()
+//        return 0;
+//    }
 
     @Override
     public double getDistance(FPoint ref) {

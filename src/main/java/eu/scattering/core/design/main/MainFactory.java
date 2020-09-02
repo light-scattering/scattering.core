@@ -7,6 +7,7 @@ import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.vo.FDipole;
+import eu.scattering.core.design.main.vo.FRotor;
 
 public interface MainFactory {
 
@@ -116,5 +117,13 @@ public interface MainFactory {
 
     FDipole getFDipole(int x, int y, int z);
 
-    FDipole getFDipole(String position);
+    FDipole getFDipole(String structure);
+
+    // -------------------------------------------------------------------------------------------------
+
+    FRotor getFRotor(FVector axis, double angle);
+
+    FRotor getFRotor(FPoint axis, double angle);
+
+    FRotor getFRotor(String structure);
 }

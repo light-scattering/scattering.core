@@ -1,89 +1,174 @@
 package eu.scattering.core.implementation.main.vo;
 
+import eu.scattering.core.design.main.algebra.engine.Engine;
+import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
+import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
+import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.vo.FRotor;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.function.Consumer;
+
+import static eu.scattering.core.Config.mainFactory;
 
 public class FRotorDefault implements FRotor {
 
-    private double re, i, j, k;
-    private double[][] core;;
+    private final FPoint offset = mainFactory.getFPoint();
+    private final FQuaternion core = mainFactory.getFQuaternion();
+    private final double[][] rotation = new double[3][3];
 
-    private FRotorDefault(double x, double y, double z, double angle) {
+    private FRotorDefault(FVector axis, double angle) {
 
-        initializeCore(x, y, z, angle);
+        if (axis.isNonDirectional()) {
+            throw new IllegalArgumentException("The rotation axis is not defined");
+        }
+
+        offset.set(axis.getBase());
+
+        initializeCore(axis.copy().moveBase().getHead(), angle);
         initializeRotor();
     }
 
-    private void initializeCore(double x, double y, double z, double angle) {
-        double magnitude = Math.sqrt((x * x) + (y * y) + (z * z));
+    private FRotorDefault(FPoint axis, double angle) {
 
-        x /= magnitude;
-        y /= magnitude;
-        z /= magnitude;
+        if (axis.isZero()) {
+            throw new IllegalArgumentException("The rotation axis is not defined");
+        }
 
-        double factor = Math.sin(angle * 0.5);
+        initializeCore(axis.copy(), angle);
+        initializeRotor();
+    }
 
-        re = Math.cos(angle * 0.5);
-        i = x * factor;
-        j = y * factor;
-        k = z * factor;
+    private FRotorDefault(double re, double i, double j, double k) {
+        double direction = 1 - (re * re);
+
+        if (direction <= 0) {
+            throw new IllegalArgumentException("The rotation axis is not defined");
+        }
+
+        this.core.set(re, i, j, k);
+
+        initializeRotor();
+    }
+
+    public static FRotor create(FPoint axis, double angle) {
+
+        return new FRotorDefault(axis, angle);
+    }
+
+    public static FRotor create(FVector axis, double angle) {
+
+        return new FRotorDefault(axis, angle);
+    }
+
+    public static FRotor parse(String json) {
+        JSONArray structure = (new JSONObject(json)).getJSONArray("rotor");
+
+        double re = structure.getDouble(0);
+        double i = structure.getDouble(1);
+        double j = structure.getDouble(2);
+        double k = structure.getDouble(3);
+
+        return new FRotorDefault(re, i, j, k);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return getCore().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FRotor) {
+            FRotor ref = (FRotor) object;
+
+            return getCore().equals(ref.getCore());
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+
+        return exportToJSON().toString();
+    }
+
+    private void initializeCore(FPoint axis, double angle) {
+
+        axis.normalize().mul(Math.sin(angle * 0.5));
+        core.set(Math.cos(angle * 0.5), axis.getX(), axis.getY(), axis.getZ());
     }
 
     private void initializeRotor() {
-        core = new double[3][3];
 
-        core[0][0] = 1 - (2 * j * j) - (2 * k * k);
-        core[0][1] = 2 * ((i * j) + (re * k));
-        core[0][2] = 2 * ((i * k) - (re * j));
-        core[1][0] = 2 * ((i * j) - (re * k));
-        core[1][1] = 1 - (2 * i * i) - (2 * k * k);
-        core[1][2] = 2 * ((j * k) + (re * i));
-        core[2][0] = 2 * ((i * k) + (re * j));
-        core[2][1] = 2 * ((j * k) - (re * i));
-        core[2][2] = 1 - (2 * i * i) - (2 * j * j);
-    }
-
-    public static FRotor create(double x, double y, double z, double angle) {
-
-        return new FRotorDefault(x, y, z, angle);
+        rotation[0][0] = 1 - (2 * core.getJ() * core.getJ()) - (2 * core.getK() * core.getK());
+        rotation[0][1] = 2 * ((core.getI() * core.getJ()) + (core.getRe() * core.getK()));
+        rotation[0][2] = 2 * ((core.getI() * core.getK()) - (core.getRe() * core.getJ()));
+        rotation[1][0] = 2 * ((core.getI() * core.getJ()) - (core.getRe() * core.getK()));
+        rotation[1][1] = 1 - (2 * core.getI() * core.getI()) - (2 * core.getK() * core.getK());
+        rotation[1][2] = 2 * ((core.getJ() * core.getK()) + (core.getRe() * core.getI()));
+        rotation[2][0] = 2 * ((core.getI() * core.getK()) + (core.getRe() * core.getJ()));
+        rotation[2][1] = 2 * ((core.getJ() * core.getK()) - (core.getRe() * core.getI()));
+        rotation[2][2] = 1 - (2 * core.getI() * core.getI()) - (2 * core.getJ() * core.getJ());
     }
 
     @Override
-    public double[] getVector() {
-        double factor;
+    public FVector getRotationAxis() {
+        double factor = 1 / Math.sqrt(1 - (core.getRe() * core.getRe()));
 
-        factor = 1 - (re * re);
+        FPoint head = mainFactory.getFPoint(core.getI(), core.getJ(), core.getK()).mul(factor).add(offset);
+        FVector axis = mainFactory.getFVector(offset.copy(), head);
 
-        if (factor <= 0) {
-            return new double[] {0, 0, 0, 0};
-        }
-
-        factor = 1 / Math.sqrt(factor);
-
-        return new double[] {i * factor, j * factor, k * factor};
+        return axis;
     }
 
     @Override
-    public double getAngle() {
+    public double getRotationAngle() {
 
-        if (re <= -1) {
+        if (core.getRe() <= -1) {
             return Math.PI * 2;
         }
 
-        if (re >= 1) {
+        if (core.getRe() >= 1) {
             return 0;
         }
 
-        return Math.acos(re) * 2;
+        return Math.acos(core.getRe()) * 2;
     }
 
     @Override
-    public double[] rotate(double x, double y, double z) {
-        double[] result = new double[3];
+    public FQuaternion getCore() {
 
-        result[0] = (core[0][0] * x) + (core[0][1] * y) + (core[0][2] * z);
-        result[1] = (core[1][0] * x) + (core[1][1] * y) + (core[1][2] * z);
-        result[2] = (core[2][0] * x) + (core[2][1] * y) + (core[2][2] * z);
-
-        return result;
+        return core.copy();
     }
+
+    @Override
+    public Consumer<Engine> rotate(double angle) {
+
+        return (e) -> e.disassemble().forEach(p -> p
+                .sub(offset)
+                .set(
+                        (rotation[0][0] * p.getX()) + (rotation[0][1] * p.getY()) + (rotation[0][2] * p.getZ()),
+                        (rotation[1][0] * p.getX()) + (rotation[1][1] * p.getY()) + (rotation[1][2] * p.getZ()),
+                        (rotation[2][0] * p.getX()) + (rotation[2][1] * p.getY()) + (rotation[2][2] * p.getZ())
+                )
+                .add(offset));
+    }
+
+    @Override
+    public JSONObject exportToJSON() {
+        JSONObject json = new JSONObject();
+
+        json.append("rotor", core.getRe());
+        json.append("rotor", core.getI());
+        json.append("rotor", core.getJ());
+        json.append("rotor", core.getK());
+
+        return json;
+    }
+
 }

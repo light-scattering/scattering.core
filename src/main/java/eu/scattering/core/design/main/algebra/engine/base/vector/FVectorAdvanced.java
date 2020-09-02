@@ -43,21 +43,29 @@ public interface FVectorAdvanced {
     double getAzimuth();
     FVector setAzimuth(double azimuth);
 
-    double getAngle(FPoint ref) throws IllegalStateException;
-    double getAngle(FVector ref) throws IllegalStateException;
+    double getAngle(FPoint ref);
+    double getAngle(FVector ref);
 
     double getDotProduct(FPoint ref);
     double getDotProduct(FVector ref);
     FVector setCrossProduct(FPoint ref);
     FVector setCrossProduct(FVector ref);
 
-    boolean isParallel(FVector ref) throws IllegalStateException;
-    FVector setParallel(FVector ref) throws IllegalStateException;
-    boolean isAntiParallel(FVector ref) throws IllegalStateException;
-    FVector setAntiParallel(FVector ref) throws IllegalStateException;
+//    boolean isSameDirection(FVector ref);
+//    boolean isSameDirection(FPoint ref);
 
-    boolean isOrthogonal(FVector ref) throws IllegalStateException;
-    FVector setOrthogonal(FVector ref) throws IllegalStateException;
+    boolean isParallel(FVector ref);
+//    boolean isParallel(FPoint ref);
+    FVector setParallel(FVector ref);
+
+    boolean isAntiParallel(FVector ref);
+//    boolean isAntiParallel(FPoint ref);
+    FVector setAntiParallel(FVector ref);
+
+    boolean isOrthogonal(FVector ref);
+//    boolean isOrthogonal(FPoint ref);
+    FVector setOrthogonal(FVector ref);
     
     boolean isNonDirectional();
+//    boolean isZero();
 }
