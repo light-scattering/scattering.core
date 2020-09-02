@@ -3,6 +3,7 @@ package eu.scattering.core.design.main.algebra.engine.base;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.support.FPointTestHelper;
+import eu.scattering.core.design.main.vo.FRotor;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
@@ -733,6 +734,35 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Is non-directional")
+        void isNonDirectional() {
+
+            assertTrue(mainFactory.getFPoint().isNonDirectional(),
+                    "The reference point should be non-directional");
+        }
+
+        @Test
+        @DisplayName("Is non-directional (fail)")
+        void isNonDirectionalFail() {
+            double refX = RandomHelper.getTestValue();
+            double refY = RandomHelper.getTestValue();
+            double refZ = RandomHelper.getTestValue();
+
+            FPoint fPointRef = mainFactory.getFPoint().set(refX, refY, refZ);
+
+            assertFalse(fPointRef.isNonDirectional(),
+                    "The reference point should be directional");
+        }
+
+        @Test
+        @DisplayName("Is non-directional (validate)")
+        void isNonDirectionalValidate() {
+            FPoint fPoint = RandomHelper.getTestPoint();
+
+            FPointTestHelper.testValue(FPoint::isNonDirectional, fPoint);
+        }
+
+        @Test
         @DisplayName("Get dot product")
         void getDotProduct() {
             FPoint fPointA = RandomHelper.getTestPoint();
@@ -787,6 +817,49 @@ public class FPointTest {
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
             FPointTestHelper.testReference(FPoint::setCrossProduct, fPointA, fPointB);
+        }
+
+        @Test
+        @DisplayName("Rotate (simple, positive)")
+        void rotateSimplePositive() {
+            FPoint fPointA = mainFactory.getFPoint(1, 1, 0);
+            FPoint fPointB = mainFactory.getFPoint(0, 1, 0);
+
+            fPointA.rotate(fPointB, Math.PI);
+
+            assertTrue(mainFactory.getFPoint(-1, 1, 0).isSimilar(fPointA),
+                    "The position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate (simple, negative)")
+        void rotateSimpleNegative() {
+            FPoint fPointA = mainFactory.getFPoint(1, 1, 0);
+            FPoint fPointB = mainFactory.getFPoint(0, 1, 0);
+
+            fPointA.rotate(fPointB, -Math.PI);
+
+            assertTrue(mainFactory.getFPoint(-1, 1, 0).isSimilar(fPointA),
+                    "The position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate (throw IllegalArgumentException)")
+        void rotateThrowIllegalArgumentException() {
+            FPoint fPointA = mainFactory.getFPoint(1, 1, 0);
+            FPoint fPointB = mainFactory.getFPoint();
+
+            assertThrows(IllegalArgumentException.class, () -> fPointA.rotate(fPointB, Math.PI),
+                    "The rotation axis is not defined");
+        }
+
+        @Test
+        @DisplayName("Rotate (validate)")
+        void rotateValidate() {
+            FPoint fPointA = RandomHelper.getTestPoint();
+            FPoint fPointB = RandomHelper.getTestPoint(fPointA);
+
+            FPointTestHelper.testReference((a, b) -> a.rotate(b, Math.PI), fPointA, fPointB);
         }
 
         @Test
@@ -860,6 +933,96 @@ public class FPointTest {
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
             FPointTestHelper.testValue(FPoint::getAngle, fPointA, fPointB);
+        }
+
+        @Test
+        @DisplayName("Set angle (simple)")
+        void setAngleSimple() {
+            FPoint fPointA = mainFactory.getFPoint(1, 0, 0);
+            FPoint fPointB = mainFactory.getFPoint(0, 1, 0);
+
+            fPointA.setAngle(fPointB, Math.PI * 0.25);
+
+            double position = 1 / Math.sqrt(2);
+
+            assertAll("Validate rotation",
+                    () -> assertEquals(Math.PI * 0.25, fPointA.getAngle(fPointB),
+                            Config.getJitter(), "The angle is erroneous"),
+                    () -> assertTrue(mainFactory.getFPoint(position, position, 0).isSimilar(fPointA),
+                            "The position is erroneous")
+                    );
+        }
+
+        @Test
+        @DisplayName("Set angle (simple, negative position)")
+        void setAngleSimpleNegativePosition() {
+            FPoint fPointA = mainFactory.getFPoint(-1, 0, 0);
+            FPoint fPointB = mainFactory.getFPoint(0, 1, 0);
+
+            fPointA.setAngle(fPointB, Math.PI * 0.25);
+
+            double position = 1 / Math.sqrt(2);
+
+            assertAll("Validate rotation",
+                    () -> assertEquals(Math.PI * 0.25, fPointA.getAngle(fPointB),
+                            Config.getJitter(), "The angle is erroneous"),
+                    () -> assertTrue(mainFactory.getFPoint(-position, position, 0).isSimilar(fPointA),
+                            "The position is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set angle (simple, negative angle)")
+        void setAngleSimpleNegativeAngle() {
+            FPoint fPointA = mainFactory.getFPoint(1, 0, 0);
+            FPoint fPointB = mainFactory.getFPoint(0, 1, 0);
+
+            fPointA.setAngle(fPointB, -Math.PI * 0.25);
+
+            double position = 1 / Math.sqrt(2);
+
+            assertAll("Validate rotation",
+                    () -> assertEquals(Math.PI * 0.25, fPointA.getAngle(fPointB),
+                            Config.getJitter(), "The angle is erroneous"),
+                    () -> assertTrue(mainFactory.getFPoint(-position, position, 0).isSimilar(fPointA),
+                            "The position is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set angle")
+        void setAngle() {
+            FPoint fPointA = mainFactory.getFPoint(1, 0, 0);
+            FPoint fPointB = mainFactory.getFPoint(0, 1, 0);
+
+            double magnitude = fPointA.getLength();
+            double angle = RandomHelper.getTestValue() % (Math.PI);
+            fPointA.setAngle(fPointB, angle);
+
+            assertAll("Validate rotation",
+                    () -> assertEquals(magnitude, fPointA.getLength(),
+                            Config.getJitter(), "The magnitude is erroneous"),
+                    () -> assertEquals(Math.abs(angle), fPointA.getAngle(fPointB),
+                            Config.getJitter(), "The angle is erroneous")
+                    );
+        }
+
+        @Test
+        @DisplayName("Set angle (throw IllegalArgumentException)")
+        void setAngleThrowIllegalArgumentException() {
+            FPoint fPoint = RandomHelper.getTestPoint();
+
+            assertThrows(IllegalArgumentException.class, () -> fPoint.setAngle(mainFactory.getFPoint(), Math.PI),
+                    "The rotation axis is not defined");
+        }
+
+        @Test
+        @DisplayName("Set angle (validate)")
+        void setAngleValidate() {
+            FPoint fPointA = RandomHelper.getTestPoint();
+            FPoint fPointB = RandomHelper.getTestPoint(fPointA);
+
+            FPointTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fPointA, fPointB);
         }
 
         @Test

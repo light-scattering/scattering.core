@@ -2466,6 +2466,32 @@ public class FVectorTest {
             FVectorTestHelper.testValue(FVector::isNonDirectional, fVector);
         }
 
+        @Test
+        @DisplayName("Is zero")
+        void isZero() {
+            FVector fVector = mainFactory.getFVector();
+
+            assertTrue(fVector.isZero(), "The two FPoints should be zero");
+        }
+
+        @Test
+        @DisplayName("Is zero (fail)")
+        void isZeroFail() {
+            FPoint fPointBase = RandomHelper.getTestPoint();
+            FPoint fPointHead = fPointBase.copy();
+            FVector fVector = mainFactory.getFVector(fPointBase, fPointHead);
+
+            assertFalse(fVector.isZero(), "The two FPoints should not be zero");
+        }
+
+        @Test
+        @DisplayName("Is zero (validate)")
+        void isZeroValidate() {
+            FVector fVector = RandomHelper.getTestVector();
+
+            FVectorTestHelper.testValue(FVector::isZero, fVector);
+        }
+
     }
 
     @Nested

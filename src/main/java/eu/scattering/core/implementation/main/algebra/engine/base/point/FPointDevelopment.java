@@ -837,6 +837,32 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint setAngle(FPoint ref, double angle) {
+
+        String name = "setAngle(FPoint, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setAngle(ref, angle);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FPoint rotate(FPoint ref, double angle) {
+
+        String name = "rotate(FPoint, double)";
+        long time = System.currentTimeMillis();
+
+        var res = core.rotate(ref, angle);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
     public double getDistance(FPoint ref) {
 
         String name = "getDistance(FPoint)";
@@ -886,6 +912,19 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         updateStats(name, time);
 
         return res == core ? this : create(res);
+    }
+
+    @Override
+    public boolean isNonDirectional() {
+
+        String name = "isNonDirectional()";
+        long time = System.currentTimeMillis();
+
+        var res = core.isNonDirectional();
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override

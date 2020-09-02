@@ -4,6 +4,7 @@ import eu.scattering.core.design.main.algebra.Algebra;
 import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
+import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.Extension;
 
 import java.util.List;

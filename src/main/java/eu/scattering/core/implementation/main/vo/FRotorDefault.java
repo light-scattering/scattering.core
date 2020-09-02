@@ -147,7 +147,7 @@ public class FRotorDefault implements FRotor {
     }
 
     @Override
-    public Consumer<Engine> rotate(double angle) {
+    public Consumer<Engine> rotate() {
 
         return (e) -> e.disassemble().forEach(p -> p
                 .sub(offset)

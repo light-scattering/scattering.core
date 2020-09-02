@@ -14,6 +14,7 @@ public interface FPointAdvanced {
     FPoint normalize();
 
     double getLength();
+//    double getLengthP2();
     FPoint setLength(double length);
     double getInclination();
     FPoint setInclination(double inclination);
@@ -21,16 +22,17 @@ public interface FPointAdvanced {
     FPoint setAzimuth(double azimuth);
 
     double getAngle(FPoint ref);
-//    FPoint setAngle(FPoint ref, double angle);
+    FPoint setAngle(FPoint ref, double angle);
 
-//    FPoint rotate(FPoint ref, double angle);
+    FPoint rotate(FPoint ref, double angle);
 
     double getDistance(FPoint ref);
+//    double getDistanceP2(FPoint ref);
     FPoint setDistance(FPoint ref, double distance);
 
     double getDotProduct(FPoint ref);
     FPoint setCrossProduct(FPoint ref);
 
-//    boolean isNonDirectional();
+    boolean isNonDirectional();
     boolean isZero();
 }

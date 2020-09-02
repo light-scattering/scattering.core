@@ -482,20 +482,25 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
         return Double.isNaN(angle) ? 0 : angle;
     }
 
-//    @Override
-//    public FPoint rotate(FPoint ref, double angle) {
-//
-//        if (ref.isZero()) {
-//            throw new IllegalStateException("The reference FPoint is zero");
-//        }
-//
-//        if (angle == 0) {
-//            return this;
-//        }
-//
-//        FRotor fRotor = mainFactory.getFRotor()
-//        return 0;
-//    }
+    @Override
+    public FPoint setAngle(FPoint ref, double angle) {
+
+        FPoint axis = copy().setCrossProduct(ref);
+        FRotor rotor = mainFactory.getFRotor(axis, angle);
+
+        ref.copy().ext(rotor.rotate()).imprint(this);
+
+        return this;
+    }
+
+    @Override
+    public FPoint rotate(FPoint ref, double angle) {
+
+        FRotor rotor = mainFactory.getFRotor(ref, angle);
+        ext(rotor.rotate());
+
+        return this;
+    }
 
     @Override
     public double getDistance(FPoint ref) {
@@ -554,6 +559,12 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
         }
 
         return mul(length / getLength());
+    }
+
+    @Override
+    public boolean isNonDirectional() {
+
+        return getX() == 0 && getY() == 0 && getZ() == 0;
     }
 
     @Override

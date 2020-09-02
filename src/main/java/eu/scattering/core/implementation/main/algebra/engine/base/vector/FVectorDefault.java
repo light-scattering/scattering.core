@@ -654,4 +654,10 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
         return getBase().equals(getHead());
     }
 
+    @Override
+    public boolean isZero() {
+
+        return getBase().isZero() && getHead().isZero();
+    }
+
 }

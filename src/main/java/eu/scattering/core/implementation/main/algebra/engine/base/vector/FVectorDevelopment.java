@@ -1098,6 +1098,19 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
+    public boolean isZero() {
+
+        String name = "isZero()";
+        long time = System.currentTimeMillis();
+
+        var res = core.isZero();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
     public FVector set(FPoint base, FPoint head) {
 
         String name = "set(FPoint, FPoint)";

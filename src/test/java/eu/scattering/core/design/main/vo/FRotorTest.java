@@ -182,4 +182,57 @@ public class FRotorTest {
                 "FRotor instances have different core (angle)");
     }
 
+    @Test
+    @DisplayName("Rotate (validate magnitude)")
+    public void rotateValidateLength() {
+        FPoint fPoint = RandomHelper.getTestPoint();
+        double length = fPoint.getLength();
+        double angle = RandomHelper.getTestValue() % (2 * Math.PI);
+        FRotor fRotor = mainFactory.getFRotor(RandomHelper.getTestPoint(), angle);
+
+        fPoint.ext(fRotor.rotate());
+
+        assertEquals(length, fPoint.getLength(), Config.getJitter(),
+                "The magnitude is invalid");
+    }
+
+    @Test
+    @DisplayName("Rotate A (simple)")
+    public void rotateSimpleA() {
+        FPoint fPoint = mainFactory.getFPoint(1, 0, 0);
+        FRotor fRotor = mainFactory.getFRotor(mainFactory.getFPoint(0, 0, 1), Math.PI * 0.5);
+
+        fPoint.ext(fRotor.rotate());
+
+        assertTrue(mainFactory.getFPoint(0, -1, 0).isSimilar(fPoint),
+                "The position is invalid");
+
+    }
+
+    @Test
+    @DisplayName("Rotate B (simple)")
+    public void rotateSimpleB() {
+        FPoint fPoint = mainFactory.getFPoint(1, 0, 0);
+        FRotor fRotor = mainFactory.getFRotor(mainFactory.getFPoint(0, 0, 1), Math.PI * 1.5);
+
+        fPoint.ext(fRotor.rotate());
+
+        assertTrue(mainFactory.getFPoint(0, 1, 0).isSimilar(fPoint),
+                "The position is invalid");
+
+    }
+
+    @Test
+    @DisplayName("Rotate C (simple)")
+    public void rotateSimpleC() {
+        FPoint fPoint = mainFactory.getFPoint(1, 1, 1);
+        FRotor fRotor = mainFactory.getFRotor(mainFactory.getFPoint(-1, 1, 0), Math.PI);
+
+        fPoint.ext(fRotor.rotate());
+        System.out.println(fPoint);
+        assertTrue(mainFactory.getFPoint(-1, -1, -1).isSimilar(fPoint),
+                "The position is invalid");
+
+    }
+
 }

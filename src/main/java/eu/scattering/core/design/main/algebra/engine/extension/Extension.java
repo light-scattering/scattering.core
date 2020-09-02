@@ -21,6 +21,7 @@ public interface Extension<T> extends Engine {
     Consumer<Engine> reflect();
 
     Function<Engine, List<Double>> getDistance();
+//    Function<Engine, List<Double>> getDistanceP2();
     Consumer<Engine> setDistance(double distance);
 
     Function<Engine, List<Boolean>> isPartOf();

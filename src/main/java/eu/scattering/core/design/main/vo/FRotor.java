@@ -14,5 +14,5 @@ public interface FRotor extends Main<FRotor> {
     FVector getRotationAxis();
     double getRotationAngle();
 
-    Consumer<Engine> rotate(double angle);
+    Consumer<Engine> rotate();
 }
