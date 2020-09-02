@@ -1,7 +1,5 @@
 package eu.scattering.core.design.main.algebra.engine.base.point;
 
-import eu.scattering.core.design.main.vo.FRotor;
-
 public interface FPointAdvanced {
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
@@ -26,7 +24,6 @@ public interface FPointAdvanced {
 //    FPoint setAngle(FPoint ref, double angle);
 
 //    FPoint rotate(FPoint ref, double angle);
-//    double rotate(FRotor rot);
 
     double getDistance(FPoint ref);
     FPoint setDistance(FPoint ref, double distance);

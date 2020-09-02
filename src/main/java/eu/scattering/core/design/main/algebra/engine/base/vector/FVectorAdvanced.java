@@ -51,8 +51,8 @@ public interface FVectorAdvanced {
     FVector setCrossProduct(FPoint ref);
     FVector setCrossProduct(FVector ref);
 
-//    boolean isSameDirection(FVector ref);
-//    boolean isSameDirection(FPoint ref);
+//    boolean isEquidirectional(FVector ref);
+//    boolean isEquidirectional(FPoint ref);
 
     boolean isParallel(FVector ref);
 //    boolean isParallel(FPoint ref);
