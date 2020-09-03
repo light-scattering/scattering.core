@@ -364,6 +364,28 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Get length P2")
+        void getLengthP2() {
+            double x = RandomHelper.getTestValue();
+            double y = RandomHelper.getTestValue();
+            double z = RandomHelper.getTestValue();
+
+            FPoint fPoint = mainFactory.getFPoint(x, y, z);
+            double lengthP2 = (x * x) + (y * y) + (z * z);
+
+            assertEquals(lengthP2, fPoint.getLengthP2(),
+                    Config.getJitter(), "The P2 length is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get length P2 (validate)")
+        void getLengthP2Validate() {
+            FPoint fPoint = RandomHelper.getTestPoint();
+
+            FPointTestHelper.testValue(FPoint::getLengthP2, fPoint);
+        }
+
+        @Test
         @DisplayName("Set length")
         void setLength() {
             FPoint fPoint;
@@ -1047,6 +1069,30 @@ public class FPointTest {
             FPoint fPointB = RandomHelper.getTestPoint(fPointA);
 
             FPointTestHelper.testValue(FPoint::getDistance, fPointA, fPointB);
+        }
+
+        @Test
+        @DisplayName("Get distance P2")
+        void getDistanceP2() {
+            FPoint fPointA = RandomHelper.getTestPoint();
+            FPoint fPointB = RandomHelper.getTestPoint();
+
+            double dimX = fPointA.getX() - fPointB.getX();
+            double dimY = fPointA.getY() - fPointB.getY();
+            double dimZ = fPointA.getZ() - fPointB.getZ();
+            double reference = (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
+
+            assertEquals(reference, fPointA.getDistanceP2(fPointB),
+                    Config.getJitter(), "The distance between FPoints is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 (validate)")
+        void getDistanceP2Validate() {
+            FPoint fPointA = RandomHelper.getTestPoint();
+            FPoint fPointB = RandomHelper.getTestPoint(fPointA);
+
+            FPointTestHelper.testValue(FPoint::getDistanceP2, fPointA, fPointB);
         }
 
         @Test

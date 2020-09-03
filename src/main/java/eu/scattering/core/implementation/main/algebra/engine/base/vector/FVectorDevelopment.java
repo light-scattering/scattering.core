@@ -760,6 +760,19 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
+    public double getLengthP2() {
+
+        String name = "getLengthP2()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getLengthP2();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
     public FVector setLength(double length) throws IllegalStateException {
 
         String name = "setLength(double)";
@@ -955,6 +968,58 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
+    public FVector setAngle(FPoint ref, double angle) {
+
+        String name = "setAngle(FPoint, angle)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setAngle(ref, angle);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FVector setAngle(FVector ref, double angle) {
+
+        String name = "setAngle(FVector, angle)";
+        long time = System.currentTimeMillis();
+
+        var res = core.setAngle(ref, angle);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FVector rotate(FPoint ref, double angle) {
+
+        String name = "rotate(FPoint, angle)";
+        long time = System.currentTimeMillis();
+
+        var res = core.rotate(ref, angle);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
+    public FVector rotate(FVector ref, double angle) {
+
+        String name = "rotate(FVector, angle)";
+        long time = System.currentTimeMillis();
+
+        var res = core.rotate(ref, angle);
+
+        updateStats(name, time);
+
+        return res == core ? this : create(res);
+    }
+
+    @Override
     public double getDotProduct(FPoint ref) {
 
         String name = "getDotProduct(FPoint)";
@@ -1004,6 +1069,19 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         updateStats(name, time);
 
         return res == core ? this : create(res);
+    }
+
+    @Override
+    public boolean isCollinear(FVector ref) {
+
+        String name = "isCollinear(FVector)";
+        long time = System.currentTimeMillis();
+
+        var res = core.isCollinear(ref);
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override

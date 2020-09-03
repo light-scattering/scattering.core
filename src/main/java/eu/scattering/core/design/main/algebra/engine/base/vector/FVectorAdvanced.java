@@ -25,7 +25,7 @@ public interface FVectorAdvanced {
     FVector sub(FVector vector);
 
     double getLength();
-//    double getLengthP2();
+    double getLengthP2();
     FVector setLength(double length);
 
     double getLengthX();
@@ -45,19 +45,19 @@ public interface FVectorAdvanced {
     FVector setAzimuth(double azimuth);
 
     double getAngle(FPoint ref);
-//    FVector setAngle(FPoint ref, double angle);
     double getAngle(FVector ref);
-//    FVector setAngle(FVector ref, double angle);
+    FVector setAngle(FPoint ref, double angle);     //test
+    FVector setAngle(FVector ref, double angle);    //test
 
-//    FVector rotate(FPoint ref, double angle);
-//    FVector rotate(FVector ref, double angle);
+    FVector rotate(FPoint ref, double angle);   //test
+    FVector rotate(FVector ref, double angle);  //test
 
     double getDotProduct(FPoint ref);
     double getDotProduct(FVector ref);
     FVector setCrossProduct(FPoint ref);
     FVector setCrossProduct(FVector ref);
 
-//    boolean isCollinear(FVector ref);
+    boolean isCollinear(FVector ref);
 
     boolean isParallel(FVector ref);
     FVector setParallel(FVector ref);

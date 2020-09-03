@@ -16,6 +16,11 @@ public class Config {
     public static MainFactory mainFactory = new MainFactoryDevelopment();
     public static DevelopmentFactory developmentFactory = new DevelopmentFactoryDefault();
 
+    public static MainFactory getFactory() {
+
+        return mainFactory;
+    }
+
     @Getter @Setter private static double jitter = 1E-10;
     @Getter @Setter private static PrintStream debugPrintStream = System.out;
 }

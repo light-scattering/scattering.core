@@ -759,6 +759,19 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
+    public double getLengthP2() {
+
+        String name = "getLengthP2()";
+        long time = System.currentTimeMillis();
+
+        var res = core.getLengthP2();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
     public FPoint setLength(double length) throws IllegalStateException {
 
         String name = "setLength(double)";
@@ -869,6 +882,19 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         long time = System.currentTimeMillis();
 
         var res = core.getDistance(ref);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public double getDistanceP2(FPoint ref) {
+
+        String name = "getDistanceP2(FPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = core.getDistanceP2(ref);
 
         updateStats(name, time);
 

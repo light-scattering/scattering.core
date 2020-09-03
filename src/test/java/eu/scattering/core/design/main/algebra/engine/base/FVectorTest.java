@@ -1389,7 +1389,8 @@ public class FVectorTest {
             double dimZ = fVector.getLengthZ() * fVector.getLengthZ();
             double radius = Math.sqrt(dimX + dimY + dimZ);
 
-            assertEquals(radius, fVector.getLength(), Config.getJitter(), "The radius is erroneous");
+            assertEquals(radius, fVector.getLength(),
+                    Config.getJitter(), "The radius is erroneous");
         }
 
         @Test
@@ -1398,6 +1399,25 @@ public class FVectorTest {
             FVector fVector = RandomHelper.getTestVector();
 
             FVectorTestHelper.testValue(FVector::getLength, fVector);
+        }
+
+        @Test
+        @DisplayName("Get length P2")
+        void getLengthP2() {
+            FPoint fPointBase = mainFactory.getFPoint(1, 1, 1);
+            FPoint fPointHead = mainFactory.getFPoint(2, 2, 2);
+            FVector fVector = mainFactory.getFVector(fPointBase, fPointHead);
+
+            assertEquals(3, fVector.getLengthP2(),
+                    Config.getJitter(), "The P2 length is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get length P2 (validate)")
+        void getLengthP2Validate() {
+            FVector fVector = RandomHelper.getTestVector();
+
+            FVectorTestHelper.testValue(FVector::getLengthP2, fVector);
         }
 
         @Test
@@ -2048,6 +2068,89 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Is collinear A")
+        void isCollinearA() {
+            FVector fVectorA = mainFactory.getFVector(mainFactory.getFPoint(2, 2, 2));
+            FVector fVectorB = mainFactory.getFVector(mainFactory.getFPoint(4, 4, 4));
+
+            fVectorA.moveBase(RandomHelper.getTestPoint());
+            fVectorB.moveBase(RandomHelper.getTestPoint());
+
+            assertTrue(fVectorA.isCollinear(fVectorB), "The two FVectors should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear B")
+        void isCollinearB() {
+            FVector fVectorA = mainFactory.getFVector(-1, 0, 0, 1, 0, 0);
+            FVector fVectorB = mainFactory.getFVector(-1, 1, 0, 1, 1, 0);
+
+            assertTrue(fVectorA.isCollinear(fVectorB), "The two FVectors should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear A (opposite direction")
+        void isCollinearAOppositeDirection() {
+            FVector fVectorA = mainFactory.getFVector(mainFactory.getFPoint(2, 2, 2));
+            FVector fVectorB = mainFactory.getFVector(mainFactory.getFPoint(-4, -4, -4));
+
+            fVectorA.moveBase(RandomHelper.getTestPoint());
+            fVectorB.moveBase(RandomHelper.getTestPoint());
+
+            assertTrue(fVectorA.isCollinear(fVectorB), "The FVectors should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear B (opposite direction")
+        void isCollinearBOppositeDirection() {
+            FVector fVectorA = mainFactory.getFVector(-1, 0, 0, 1, 0, 0);
+            FVector fVectorB = mainFactory.getFVector(1, 1, 0, -1, 1, 0);
+
+            assertTrue(fVectorA.isCollinear(fVectorB), "The two FVectors should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear (fail)")
+        void isCollinearFail() {
+            FVector fVectorA = mainFactory.getFVector(RandomHelper.getTestPoint());
+            FVector fVectorB = mainFactory.getFVector(RandomHelper.getTestPoint(fVectorA.getHead()));
+
+            fVectorA.moveBase(RandomHelper.getTestPoint());
+            fVectorB.moveBase(RandomHelper.getTestPoint());
+
+            assertFalse(fVectorA.isCollinear(fVectorB), "The FVectors should not be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear (throw IllegalStateException, input)")
+        void isCollinearThrowIllegalStateExceptionInput() {
+            FVector fVectorA = mainFactory.getFVector(0, 0, 0);
+            FVector fVectorB = RandomHelper.getTestVector();
+
+            assertThrows(IllegalStateException.class, () -> fVectorA.isCollinear(fVectorB),
+                    "The input FVector direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is collinear (throw IllegalStateException, argument)")
+        void isCollinearThrowIllegalStateExceptionArgument() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = mainFactory.getFVector(0, 0, 0);
+
+            assertThrows(IllegalStateException.class, () -> fVectorA.isCollinear(fVectorB),
+                    "The argument FVector direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is collinear (validate)")
+        void isCollinearValidate() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = RandomHelper.getTestVector(fVectorA);
+
+            FVectorTestHelper.testValue(FVector::isCollinear, fVectorA, fVectorB);
+        }
+
+        @Test
         @DisplayName("Is parallel A")
         void isParallelA() {
             FVector fVectorA = mainFactory.getFVector(mainFactory.getFPoint(2, 2, 2));
@@ -2089,7 +2192,7 @@ public class FVectorTest {
             fVectorA.moveBase(RandomHelper.getTestPoint());
             fVectorB.moveBase(RandomHelper.getTestPoint());
 
-            assertFalse(fVectorA.isParallel(fVectorB), "The FVectors should be parallel");
+            assertFalse(fVectorA.isParallel(fVectorB), "The FVectors should not be parallel");
         }
 
         @Test

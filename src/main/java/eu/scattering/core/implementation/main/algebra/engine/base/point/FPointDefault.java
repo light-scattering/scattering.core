@@ -504,11 +504,17 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
     @Override
     public double getDistance(FPoint ref) {
+
+        return Math.sqrt(getDistanceP2(ref));
+    }
+
+    @Override
+    public double getDistanceP2(FPoint ref) {
         double dimX = ref.getX() - getX();
         double dimY = ref.getY() - getY();
         double dimZ = ref.getZ() - getZ();
 
-        return Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
+        return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
     }
 
     @Override
@@ -548,7 +554,13 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public double getLength() {
 
-        return Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ()));
+        return Math.sqrt(getLengthP2());
+    }
+
+    @Override
+    public double getLengthP2() {
+
+        return (getX() * getX()) + (getY() * getY()) + (getZ() * getZ());
     }
 
     @Override

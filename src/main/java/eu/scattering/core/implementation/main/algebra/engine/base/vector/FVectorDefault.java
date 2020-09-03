@@ -299,7 +299,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector moveForward(double distance) throws IllegalStateException {
+    public FVector moveForward(double distance) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the IFVector is not defined");
@@ -318,7 +318,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector moveBackward(double distance) throws IllegalStateException {
+    public FVector moveBackward(double distance) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the IFVector is not defined");
@@ -377,7 +377,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector normalize() throws IllegalStateException {
+    public FVector normalize() {
         FVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().normalize();
@@ -428,15 +428,20 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     @Override
     public double getLength() {
 
+        return Math.sqrt(getLengthP2());
+    }
+
+    @Override
+    public double getLengthP2() {
         double distanceX = getHead().getX() - getBase().getX();
         double distanceY = getHead().getY() - getBase().getY();
         double distanceZ = getHead().getZ() - getBase().getZ();
 
-        return Math.sqrt((distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ));
+        return (distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ);
     }
 
     @Override
-    public FVector setLength(double length) throws IllegalStateException {
+    public FVector setLength(double length) {
         FVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getHead().setLength(length);
@@ -480,7 +485,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public double getAngle(FPoint ref) throws IllegalStateException {
+    public double getAngle(FPoint ref) {
 
         if (getBase().isSimilar(ref)) {
             throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
@@ -490,7 +495,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public double getAngle(FVector ref) throws IllegalStateException {
+    public double getAngle(FVector ref) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the input IFVector is not defined");
@@ -509,6 +514,70 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
+    }
+
+    @Override
+    public FVector setAngle(FPoint ref, double angle) {
+
+        if (getBase().isSimilar(ref)) {
+            throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
+        }
+
+        FVector fCopyLocal = copy().moveBase();
+        FPoint fCopyExternal = ref.copy().sub(getBase());
+
+        fCopyLocal.getHead().setAngle(fCopyExternal, angle);
+        fCopyLocal.moveBase(getBase());
+
+        return set(fCopyLocal);
+    }
+
+    @Override
+    public FVector setAngle(FVector ref, double angle) {
+
+        if (ref.isNonDirectional()) {
+            throw new IllegalStateException("The direction of the provided FVector is not defined");
+        }
+
+        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyExternal = ref.copy().moveBase();
+
+        fCopyLocal.getHead().setAngle(fCopyExternal.getHead(), angle);
+        fCopyLocal.moveBase(getBase());
+
+        return set(fCopyLocal);
+    }
+
+    @Override
+    public FVector rotate(FPoint ref, double angle) {
+
+        if (getBase().isSimilar(ref)) {
+            throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
+        }
+
+        FVector fCopyLocal = copy().moveBase();
+        FPoint fCopyExternal = ref.copy().sub(getBase());
+
+        fCopyLocal.getHead().rotate(fCopyExternal, angle);
+        fCopyLocal.moveBase(getBase());
+
+        return set(fCopyLocal);
+    }
+
+    @Override
+    public FVector rotate(FVector ref, double angle) {
+
+        if (ref.isNonDirectional()) {
+            throw new IllegalStateException("The direction of the provided FVector is not defined");
+        }
+
+        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyExternal = ref.copy().moveBase();
+
+        fCopyLocal.getHead().rotate(fCopyExternal.getHead(), angle);
+        fCopyLocal.moveBase(getBase());
+
+        return set(fCopyLocal);
     }
 
     @Override
@@ -543,7 +612,13 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public boolean isParallel(FVector ref) throws IllegalStateException {
+    public boolean isCollinear(FVector ref) {
+
+        return isParallel(ref) || isAntiParallel(ref);
+    }
+
+    @Override
+    public boolean isParallel(FVector ref) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
@@ -560,7 +635,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector setParallel(FVector ref) throws IllegalStateException {
+    public FVector setParallel(FVector ref) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
@@ -577,7 +652,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public boolean isAntiParallel(FVector ref) throws IllegalStateException {
+    public boolean isAntiParallel(FVector ref) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
@@ -594,7 +669,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector setAntiParallel(FVector ref) throws IllegalStateException {
+    public FVector setAntiParallel(FVector ref) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
@@ -611,7 +686,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public boolean isOrthogonal(FVector ref) throws IllegalStateException {
+    public boolean isOrthogonal(FVector ref) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
@@ -626,7 +701,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector setOrthogonal(FVector ref) throws IllegalStateException {
+    public FVector setOrthogonal(FVector ref) {
 
         if (isParallel(ref)) {
             throw new IllegalStateException("FVectors are parallel");
