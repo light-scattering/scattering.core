@@ -523,6 +523,10 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
             throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
         }
 
+        if (getHead().isSimilar(ref)) {
+            throw new IllegalStateException("The provided FPoint is at the same position as the head FPoint");
+        }
+
         FVector fCopyLocal = copy().moveBase();
         FPoint fCopyExternal = ref.copy().sub(getBase());
 
@@ -536,7 +540,11 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
     public FVector setAngle(FVector ref, double angle) {
 
         if (ref.isNonDirectional()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalArgumentException("The direction of the provided FVector is not defined");
+        }
+
+        if (isSimilar(ref)) {
+            throw new IllegalStateException("The two FVectors are similar");
         }
 
         FVector fCopyLocal = copy().moveBase();

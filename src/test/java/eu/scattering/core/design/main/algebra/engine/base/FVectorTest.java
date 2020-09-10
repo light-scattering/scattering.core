@@ -1915,6 +1915,120 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Set angle with FPoint")
+        void setAngleWithFPoint() {
+            FVector fVector = RandomHelper.getTestVector();
+            FPoint fPoint = RandomHelper.getTestPoint();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            fVector.setAngle(fPoint, angle);
+
+            assertEquals(angle, fVector.getAngle(fPoint),
+                    Config.getJitter(), "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Set angle with FPoint (negative)")
+        void setAngleWithFPointNegative() {
+            FVector fVector = RandomHelper.getTestVector();
+            FPoint fPoint = RandomHelper.getTestPoint();
+            double angle = -Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            fVector.setAngle(fPoint, angle);
+
+            assertEquals(angle, -fVector.getAngle(fPoint),
+                    Config.getJitter(), "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Set angle with FPoint (throw IllegalStateException, base)")
+        void setAngleWithFPointThrowIllegalStateExceptionBase() {
+            FVector fVector = RandomHelper.getTestVector();
+            FPoint fPoint = fVector.getBase().copy();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            assertThrows(IllegalStateException.class, () -> fVector.setAngle(fPoint, angle),
+                    "The argument FPoint is at the same position as the base FPoint");
+        }
+
+        @Test
+        @DisplayName("Set angle with FPoint (throw IllegalStateException, head)")
+        void setAngleWithFPointThrowIllegalStateExceptionHead() {
+            FVector fVector = RandomHelper.getTestVector();
+            FPoint fPoint = fVector.getHead().copy();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            assertThrows(IllegalStateException.class, () -> fVector.setAngle(fPoint, angle),
+                    "The argument FPoint is at the same position as the head FPoint");
+        }
+
+        @Test
+        @DisplayName("Set angle with FPoint (validate)")
+        void setAngleWithFPointValidate() {
+            FVector fVector = RandomHelper.getTestVector();
+            FPoint fPoint = RandomHelper.getTestPoint();
+
+            FVectorTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fVector, fPoint);
+        }
+
+        @Test
+        @DisplayName("Set angle with FVector")
+        void setAngleWithFVector() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = RandomHelper.getTestVector();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            fVectorA.setAngle(fVectorB, angle);
+
+            assertEquals(angle, fVectorA.getAngle(fVectorB),
+                    Config.getJitter(), "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Set angle with FVector (negative)")
+        void setAngleWithFVectorNegative() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = RandomHelper.getTestVector();
+            double angle = -Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            fVectorA.setAngle(fVectorB, angle);
+
+            assertEquals(angle, -fVectorA.getAngle(fVectorB),
+                    Config.getJitter(), "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Set angle with FVector (throw IllegalStateException, position)")
+        void setAngleWithFVectorThrowIllegalStateExceptionPosition() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = fVectorA.copy();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            assertThrows(IllegalStateException.class, () -> fVectorA.setAngle(fVectorB, angle),
+                    "Both FVectors are at the same position");
+        }
+
+        @Test
+        @DisplayName("Set angle with FVector (throw IllegalArgumentException, direction)")
+        void setAngleWithFVectorThrowIllegalArgumentExceptionDirection() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = mainFactory.getFVector();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            assertThrows(IllegalArgumentException.class, () -> fVectorA.setAngle(fVectorB, angle),
+                    "The direction of the provided FVector is not defined");
+        }
+
+        @Test
+        @DisplayName("Set angle with FVector (validate)")
+        void setAngleWithFVectorValidate() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = RandomHelper.getTestVector();
+
+            FVectorTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fVectorA, fVectorB);
+        }
+
+        @Test
         @DisplayName("Get dot product")
         void getDotProduct() {
             FPoint fPointBaseA = RandomHelper.getTestPoint();

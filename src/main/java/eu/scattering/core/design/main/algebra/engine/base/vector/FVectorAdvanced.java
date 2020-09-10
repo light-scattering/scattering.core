@@ -46,8 +46,8 @@ public interface FVectorAdvanced {
 
     double getAngle(FPoint ref);
     double getAngle(FVector ref);
-    FVector setAngle(FPoint ref, double angle);     //test
-    FVector setAngle(FVector ref, double angle);    //test
+    FVector setAngle(FPoint ref, double angle);
+    FVector setAngle(FVector ref, double angle);
 
     FVector rotate(FPoint ref, double angle);   //test
     FVector rotate(FVector ref, double angle);  //test
