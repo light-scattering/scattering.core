@@ -1,6 +1,7 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
 import eu.scattering.core.Config;
+import eu.scattering.core.design.main.vo.rotor.FRotor;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -563,29 +564,21 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
             throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
         }
 
-        FVector fCopyLocal = copy().moveBase();
-        FPoint fCopyExternal = ref.copy().sub(getBase());
+        FRotor rotor = mainFactory.getFRotor(mainFactory.getFVector(getBase(), ref), angle);
 
-        fCopyLocal.getHead().rotate(fCopyExternal, angle);
-        fCopyLocal.moveBase(getBase());
-
-        return set(fCopyLocal);
+        return ext(rotor.rotate());
     }
 
     @Override
     public FVector rotate(FVector ref, double angle) {
 
         if (ref.isNonDirectional()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalArgumentException("The direction of the provided FVector is not defined");
         }
 
-        FVector fCopyLocal = copy().moveBase();
-        FVector fCopyExternal = ref.copy().moveBase();
+        FRotor rotor = mainFactory.getFRotor(ref, angle);
 
-        fCopyLocal.getHead().rotate(fCopyExternal.getHead(), angle);
-        fCopyLocal.moveBase(getBase());
-
-        return set(fCopyLocal);
+        return ext(rotor.rotate());
     }
 
     @Override

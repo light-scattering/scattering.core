@@ -2029,6 +2029,94 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Rotate with FPoint (simple)")
+        void rotateWithFPointSimple() {
+            FVector fVector = mainFactory.getFVector(-1, 1, 0, -2, 2, 0);
+            FPoint fPoint = mainFactory.getFPoint(0, 2, 0);
+
+            fVector.rotate(fPoint, Math.PI * 0.5);
+
+            assertTrue(fVector.isSimilar(-1, 1, 0, -1, 1, -Math.sqrt(2)),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate with FPoint (simple, negative)")
+        void rotateWithFPointSimpleNegative() {
+            FVector fVector = mainFactory.getFVector(-1, 1, 0, -2, 2, 0);
+            FPoint fPoint = mainFactory.getFPoint(0, 2, 0);
+
+            fVector.rotate(fPoint, -(Math.PI * 0.5));
+
+            assertTrue(fVector.isSimilar(-1, 1, 0, -1, 1, Math.sqrt(2)),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate with FPoint (throw IllegalStateException)")
+        void rotateWithFPointThrowIllegalStateException() {
+            FVector fVector = RandomHelper.getTestVector();
+            FPoint fPoint = fVector.getBase().copy();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            assertThrows(IllegalStateException.class, () -> fVector.rotate(fPoint, angle),
+                    "The argument FPoint is at the same position as the base FPoint");
+        }
+
+        @Test
+        @DisplayName("Rotate with FPoint (validate)")
+        void rotateWithFPointValidate() {
+            FVector fVector = RandomHelper.getTestVector();
+            FPoint fPoint = RandomHelper.getTestPoint();
+
+            FVectorTestHelper.testReference((a, b) -> a.rotate(b, Math.PI), fVector, fPoint);
+        }
+
+        @Test
+        @DisplayName("Rotate with FVector (simple)")
+        void rotateWithFVectorSimple() {
+            FVector fVectorA = mainFactory.getFVector(-1, 1, 0, -2, 2, 0);
+            FVector fVectorB = mainFactory.getFVector(0, 1, 0);
+
+            fVectorA.rotate(fVectorB, Math.PI * 0.5);
+
+            assertTrue(fVectorA.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate with FVector (simple, negative)")
+        void rotateWithFVectorSimpleNegative() {
+            FVector fVectorA = mainFactory.getFVector(-1, 1, 0, -2, 2, 0);
+            FVector fVectorB = mainFactory.getFVector(0, 1, 0);
+
+            fVectorA.rotate(fVectorB, -(Math.PI * 0.5));
+
+            assertTrue(fVectorA.isSimilar(0, 1, 1, 0, 2, 2),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate with FVector (throw IllegalArgumentException)")
+        void rotateWithFVectorThrowIllegalArgumentException() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = mainFactory.getFVector();
+            double angle = Math.abs(RandomHelper.getTestValue() % Math.PI);
+
+            assertThrows(IllegalArgumentException.class, () -> fVectorA.rotate(fVectorB, angle),
+                    "The direction of the provided FVector is not defined");
+        }
+
+        @Test
+        @DisplayName("Rotate with FVector (validate)")
+        void rotateWithFVectorValidate() {
+            FVector fVectorA = RandomHelper.getTestVector();
+            FVector fVectorB = RandomHelper.getTestVector();
+
+            FVectorTestHelper.testReference((a, b) -> a.rotate(b, Math.PI), fVectorA, fVectorB);
+        }
+
+        @Test
         @DisplayName("Get dot product")
         void getDotProduct() {
             FPoint fPointBaseA = RandomHelper.getTestPoint();
