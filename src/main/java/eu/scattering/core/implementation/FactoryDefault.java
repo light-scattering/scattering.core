@@ -7,8 +7,8 @@ import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.design.main.container.position.FPosition;
-import eu.scattering.core.design.main.container.rotor.FRotor;
+import eu.scattering.core.design.main.box.position.FPosition;
+import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.design.support.helper.AngleHelper;
 import eu.scattering.core.design.support.helper.SignalHelper;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
@@ -17,8 +17,8 @@ import eu.scattering.core.implementation.main.algebra.engine.extension.line.FLin
 import eu.scattering.core.implementation.main.algebra.engine.extension.plane.FPlaneDefault;
 import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefault;
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
-import eu.scattering.core.implementation.main.container.position.FPositionDefault;
-import eu.scattering.core.implementation.main.container.rotor.FRotorDefault;
+import eu.scattering.core.implementation.main.box.position.FPositionDefault;
+import eu.scattering.core.implementation.main.box.rotation.FRotationDefault;
 
 public final class FactoryDefault implements Factory {
 
@@ -71,21 +71,21 @@ public final class FactoryDefault implements Factory {
     }
 
     @Override
-    public FRotor getFRotor(FVector axis, double angle) {
+    public FRotation getFRotation(FVector axis, double angle) {
 
-        return FRotorDefault.create(axis, angle);
+        return FRotationDefault.create(axis, angle);
     }
 
     @Override
-    public FRotor getFRotor(FPoint axis, double angle) {
+    public FRotation getFRotation(FPoint axis, double angle) {
 
-        return FRotorDefault.create(axis, angle);
+        return FRotationDefault.create(axis, angle);
     }
 
     @Override
-    public FRotor getFRotor(String structure) {
+    public FRotation getFRotation(String structure) {
 
-        return FRotorDefault.parse(structure);
+        return FRotationDefault.parse(structure);
     }
 
     @Override

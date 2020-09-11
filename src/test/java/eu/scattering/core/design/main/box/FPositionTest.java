@@ -1,6 +1,6 @@
-package eu.scattering.core.design.main.container;
+package eu.scattering.core.design.main.box;
 
-import eu.scattering.core.design.main.container.position.FPosition;
+import eu.scattering.core.design.main.box.position.FPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;

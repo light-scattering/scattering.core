@@ -1,10 +1,10 @@
-package eu.scattering.core.design.main.container;
+package eu.scattering.core.design.main.box;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.design.main.container.rotor.FRotor;
+import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,8 @@ import static eu.scattering.core.Config.mainFactory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
-@DisplayName("FRotor")
-public class FRotorTest {
+@DisplayName("FRotation")
+public class FRotationTest {
 
     @Test
     @DisplayName("Create with FPoint (positive angle)")
@@ -23,12 +23,12 @@ public class FRotorTest {
         FPoint axis = RandomHelper.getTestPoint();
         double angle = Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
 
-        FRotor fRotor = mainFactory.getFRotor(axis, angle);
+        FRotation fRotation = mainFactory.getFRotation(axis, angle);
 
         assertAll("Validate FPoint",
-                () -> assertEquals(angle, fRotor.getRotationAngle(),
+                () -> assertEquals(angle, fRotation.getRotationAngle(),
                         Config.getJitter(), "The angle is incorrect"),
-                () -> assertTrue(fRotor.getRotationAxis().isParallel(mainFactory.getFVector(axis)),
+                () -> assertTrue(fRotation.getRotationAxis().isParallel(mainFactory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -39,12 +39,12 @@ public class FRotorTest {
         FPoint axis = RandomHelper.getTestPoint();
         double angle = -Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
 
-        FRotor fRotor = mainFactory.getFRotor(axis, angle);
+        FRotation fRotation = mainFactory.getFRotation(axis, angle);
 
         assertAll("Validate FPoint",
-                () -> assertEquals(-angle, fRotor.getRotationAngle(),
+                () -> assertEquals(-angle, fRotation.getRotationAngle(),
                         Config.getJitter(), "The angle is incorrect"),
-                () -> assertTrue(fRotor.getRotationAxis().isAntiParallel(mainFactory.getFVector(axis)),
+                () -> assertTrue(fRotation.getRotationAxis().isAntiParallel(mainFactory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -55,12 +55,12 @@ public class FRotorTest {
         FVector axis = RandomHelper.getTestVector();
         double angle = Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
 
-        FRotor fRotor = mainFactory.getFRotor(axis, angle);
+        FRotation fRotation = mainFactory.getFRotation(axis, angle);
 
         assertAll("Validate FPoint",
-                () -> assertEquals(angle, fRotor.getRotationAngle(),
+                () -> assertEquals(angle, fRotation.getRotationAngle(),
                         Config.getJitter(), "The angle is incorrect"),
-                () -> assertTrue(fRotor.getRotationAxis().isParallel(axis),
+                () -> assertTrue(fRotation.getRotationAxis().isParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -71,12 +71,12 @@ public class FRotorTest {
         FVector axis = RandomHelper.getTestVector();
         double angle = -Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
 
-        FRotor fRotor = mainFactory.getFRotor(axis, angle);
+        FRotation fRotation = mainFactory.getFRotation(axis, angle);
 
         assertAll("Validate FPoint",
-                () -> assertEquals(-angle, fRotor.getRotationAngle(),
+                () -> assertEquals(-angle, fRotation.getRotationAngle(),
                         Config.getJitter(), "The angle is incorrect"),
-                () -> assertTrue(fRotor.getRotationAxis().isAntiParallel(axis),
+                () -> assertTrue(fRotation.getRotationAxis().isAntiParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -84,9 +84,9 @@ public class FRotorTest {
     @Test
     @DisplayName("Create with String")
     public void createWithString() {
-        FRotor fRotor = mainFactory.getFRotor("{\"rotor\":[0.5,1,2,3]}");
+        FRotation fRotation = mainFactory.getFRotation("{\"rotor\":[0.5,1,2,3]}");
 
-        assertTrue(mainFactory.getFQuaternion(0.5, 1, 2,3 ).isExact(fRotor.getCore()),
+        assertTrue(mainFactory.getFQuaternion(0.5, 1, 2,3 ).isExact(fRotation.getCore()),
                 "The core value is incorrect");
     }
 
@@ -94,30 +94,30 @@ public class FRotorTest {
     @DisplayName("Create with String (throw IllegalArgumentException)")
     public void createWithStringThrowIllegalArgumentException() {
 
-        assertThrows(IllegalArgumentException.class, () -> mainFactory.getFRotor("{\"rotor\":[1,2,3,4]}"),
+        assertThrows(IllegalArgumentException.class, () -> mainFactory.getFRotation("{\"rotor\":[1,2,3,4]}"),
                 "The provided value is erroneous");
     }
 
     @Test
     @DisplayName("Parse JSON")
     public void parseJSON() {
-        FRotor fRotorRefA = mainFactory.getFRotor(RandomHelper.getTestVector(), RandomHelper.getTestValue());
-        FRotor fRotorRefB = mainFactory.getFRotor(fRotorRefA.exportToJSON().toString());
+        FRotation fRotationRefA = mainFactory.getFRotation(RandomHelper.getTestVector(), RandomHelper.getTestValue());
+        FRotation fRotationRefB = mainFactory.getFRotation(fRotationRefA.exportToJSON().toString());
 
-        assertTrue(fRotorRefA.equals(fRotorRefB), "The generated JSON object is erroneous");
+        assertTrue(fRotationRefA.equals(fRotationRefB), "The generated JSON object is erroneous");
     }
 
     @Test
     @DisplayName("Mutability")
     public void mutability() {
         FVector fVectorRef = RandomHelper.getTestVector();
-        FRotor fRotorRef = mainFactory.getFRotor(fVectorRef, 1);
+        FRotation fRotationRef = mainFactory.getFRotation(fVectorRef, 1);
 
-        FQuaternion coreRef = fRotorRef.getCore();
+        FQuaternion coreRef = fRotationRef.getCore();
 
         fVectorRef.invertDirection().setLength(RandomHelper.getTestValue());
 
-        assertTrue(coreRef.equals(fRotorRef.getCore()), "The instance is mutable");
+        assertTrue(coreRef.equals(fRotationRef.getCore()), "The instance is mutable");
     }
 
     @Test
@@ -126,10 +126,10 @@ public class FRotorTest {
         FVector fVectorRefA = RandomHelper.getTestVector();
         FVector fVectorRefB = fVectorRefA.copy();
 
-        FRotor fRotorRefA = mainFactory.getFRotor(fVectorRefA, 1);
-        FRotor fRotorRefB = mainFactory.getFRotor(fVectorRefB, 1);
+        FRotation fRotationRefA = mainFactory.getFRotation(fVectorRefA, 1);
+        FRotation fRotationRefB = mainFactory.getFRotation(fVectorRefB, 1);
 
-        assertEquals(fRotorRefA.hashCode(), fRotorRefB.hashCode(),
+        assertEquals(fRotationRefA.hashCode(), fRotationRefB.hashCode(),
                 Config.getJitter(), "The hash code is erroneous");
     }
 
@@ -139,10 +139,10 @@ public class FRotorTest {
         FVector fVectorRefA = RandomHelper.getTestVector();
         FVector fVectorRefB = RandomHelper.getTestVector();
 
-        FRotor fRotorRefA = mainFactory.getFRotor(fVectorRefA, 1);
-        FRotor fRotorRefB = mainFactory.getFRotor(fVectorRefB, 1);
+        FRotation fRotationRefA = mainFactory.getFRotation(fVectorRefA, 1);
+        FRotation fRotationRefB = mainFactory.getFRotation(fVectorRefB, 1);
 
-        assertNotEquals(fRotorRefA.hashCode(), fRotorRefB.hashCode(),
+        assertNotEquals(fRotationRefA.hashCode(), fRotationRefB.hashCode(),
                 Config.getJitter(), "The hash code is erroneous");
     }
 
@@ -151,11 +151,11 @@ public class FRotorTest {
     public void equals() {
         FVector fVector = RandomHelper.getTestVector();
 
-        FRotor fRotorRefA = mainFactory.getFRotor(fVector, 1);
-        FRotor fRotorRefB = mainFactory.getFRotor(fVector, 1);
+        FRotation fRotationRefA = mainFactory.getFRotation(fVector, 1);
+        FRotation fRotationRefB = mainFactory.getFRotation(fVector, 1);
 
-        assertTrue(fRotorRefA.equals(fRotorRefB),
-                 "FRotor instances have the same core");
+        assertTrue(fRotationRefA.equals(fRotationRefB),
+                 "FRotation instances have the same core");
     }
 
     @Test
@@ -164,11 +164,11 @@ public class FRotorTest {
         FVector fVectorRefA = RandomHelper.getTestVector();
         FVector fVectorRefB = RandomHelper.getTestVector();
 
-        FRotor fRotorRefA = mainFactory.getFRotor(fVectorRefA, 1);
-        FRotor fRotorRefB = mainFactory.getFRotor(fVectorRefB, 1);
+        FRotation fRotationRefA = mainFactory.getFRotation(fVectorRefA, 1);
+        FRotation fRotationRefB = mainFactory.getFRotation(fVectorRefB, 1);
 
-        assertFalse(fRotorRefA.equals(fRotorRefB),
-                "FRotor instances have different core (axis)");
+        assertFalse(fRotationRefA.equals(fRotationRefB),
+                "FRotation instances have different core (axis)");
     }
 
     @Test
@@ -176,11 +176,11 @@ public class FRotorTest {
     public void equalsFalseAngle() {
         FVector fVector = RandomHelper.getTestVector();
 
-        FRotor fRotorRefA = mainFactory.getFRotor(fVector, 1);
-        FRotor fRotorRefB = mainFactory.getFRotor(fVector, 2);
+        FRotation fRotationRefA = mainFactory.getFRotation(fVector, 1);
+        FRotation fRotationRefB = mainFactory.getFRotation(fVector, 2);
 
-        assertFalse(fRotorRefA.equals(fRotorRefB),
-                "FRotor instances have different core (angle)");
+        assertFalse(fRotationRefA.equals(fRotationRefB),
+                "FRotation instances have different core (angle)");
     }
 
     @Test
@@ -189,9 +189,9 @@ public class FRotorTest {
         FPoint fPoint = RandomHelper.getTestPoint();
         double length = fPoint.getLength();
         double angle = RandomHelper.getTestValue() % (2 * Math.PI);
-        FRotor fRotor = mainFactory.getFRotor(RandomHelper.getTestPoint(), angle);
+        FRotation fRotation = mainFactory.getFRotation(RandomHelper.getTestPoint(), angle);
 
-        fPoint.ext(fRotor.rotate());
+        fPoint.ext(fRotation.rotate());
 
         assertEquals(length, fPoint.getLength(), Config.getJitter(),
                 "The magnitude is invalid");
@@ -201,9 +201,9 @@ public class FRotorTest {
     @DisplayName("Rotate A (simple)")
     public void rotateSimpleA() {
         FPoint fPoint = mainFactory.getFPoint(1, 0, 0);
-        FRotor fRotor = mainFactory.getFRotor(mainFactory.getFPoint(0, 0, 1), Math.PI * 0.5);
+        FRotation fRotation = mainFactory.getFRotation(mainFactory.getFPoint(0, 0, 1), Math.PI * 0.5);
 
-        fPoint.ext(fRotor.rotate());
+        fPoint.ext(fRotation.rotate());
 
         assertTrue(mainFactory.getFPoint(0, -1, 0).isSimilar(fPoint),
                 "The position is invalid");
@@ -214,9 +214,9 @@ public class FRotorTest {
     @DisplayName("Rotate B (simple)")
     public void rotateSimpleB() {
         FPoint fPoint = mainFactory.getFPoint(1, 0, 0);
-        FRotor fRotor = mainFactory.getFRotor(mainFactory.getFPoint(0, 0, 1), Math.PI * 1.5);
+        FRotation fRotation = mainFactory.getFRotation(mainFactory.getFPoint(0, 0, 1), Math.PI * 1.5);
 
-        fPoint.ext(fRotor.rotate());
+        fPoint.ext(fRotation.rotate());
 
         assertTrue(mainFactory.getFPoint(0, 1, 0).isSimilar(fPoint),
                 "The position is invalid");
@@ -227,9 +227,9 @@ public class FRotorTest {
     @DisplayName("Rotate C (simple)")
     public void rotateSimpleC() {
         FPoint fPoint = mainFactory.getFPoint(1, 1, 1);
-        FRotor fRotor = mainFactory.getFRotor(mainFactory.getFPoint(-1, 1, 0), Math.PI);
+        FRotation fRotation = mainFactory.getFRotation(mainFactory.getFPoint(-1, 1, 0), Math.PI);
 
-        fPoint.ext(fRotor.rotate());
+        fPoint.ext(fRotation.rotate());
         System.out.println(fPoint);
         assertTrue(mainFactory.getFPoint(-1, -1, -1).isSimilar(fPoint),
                 "The position is invalid");

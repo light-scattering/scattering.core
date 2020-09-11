@@ -1,7 +1,7 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.main.container.rotor.FRotor;
+import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -564,7 +564,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
             throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
         }
 
-        FRotor rotor = mainFactory.getFRotor(mainFactory.getFVector(getBase(), ref), angle);
+        FRotation rotor = mainFactory.getFRotation(mainFactory.getFVector(getBase(), ref), angle);
 
         return ext(rotor.rotate());
     }
@@ -576,7 +576,7 @@ public class FVectorDefault extends BasePreset<FVector> implements FVector {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
         }
 
-        FRotor rotor = mainFactory.getFRotor(ref, angle);
+        FRotation rotor = mainFactory.getFRotation(ref, angle);
 
         return ext(rotor.rotate());
     }

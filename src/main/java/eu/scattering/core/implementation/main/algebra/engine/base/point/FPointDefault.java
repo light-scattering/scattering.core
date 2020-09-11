@@ -1,7 +1,7 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.main.container.rotor.FRotor;
+import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import org.json.JSONArray;
@@ -44,6 +44,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
     @Override
     public double getY() {
+
         return origin[1];
     }
 
@@ -63,6 +64,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
 
     @Override
     public FPoint setZ(double z) {
+
         origin[2] = z;
 
         return this;
@@ -486,7 +488,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     public FPoint setAngle(FPoint ref, double angle) {
 
         FPoint axis = copy().setCrossProduct(ref);
-        FRotor rotor = mainFactory.getFRotor(axis, angle);
+        FRotation rotor = mainFactory.getFRotation(axis, angle);
 
         ref.copy().ext(rotor.rotate()).imprint(this);
 
@@ -496,7 +498,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public FPoint rotate(FPoint ref, double angle) {
 
-        FRotor rotor = mainFactory.getFRotor(ref, angle);
+        FRotation rotor = mainFactory.getFRotation(ref, angle);
         ext(rotor.rotate());
 
         return this;

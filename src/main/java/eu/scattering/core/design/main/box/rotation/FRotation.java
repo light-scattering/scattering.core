@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.container.rotor;
+package eu.scattering.core.design.main.box.rotation;
 
 import eu.scattering.core.design.main.Main;
 import eu.scattering.core.design.main.algebra.engine.Engine;
@@ -7,7 +7,7 @@ import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 
 import java.util.function.Consumer;
 
-public interface FRotor extends Main<FRotor> {
+public interface FRotation extends Main<FRotation> {
 
     FQuaternion getCore();
 

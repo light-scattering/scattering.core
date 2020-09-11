@@ -1,7 +1,7 @@
 package eu.scattering.core.design.main.algebra.engine.shape;
 
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.design.main.container.position.FPosition;
+import eu.scattering.core.design.main.box.position.FPosition;
 
 import java.util.List;
 

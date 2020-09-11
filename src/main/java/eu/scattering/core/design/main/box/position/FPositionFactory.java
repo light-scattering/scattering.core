@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.container.position;
+package eu.scattering.core.design.main.box.position;
 
 public interface FPositionFactory {
 

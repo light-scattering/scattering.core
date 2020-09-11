@@ -1,10 +1,10 @@
-package eu.scattering.core.implementation.main.container.rotor;
+package eu.scattering.core.implementation.main.box.rotation;
 
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.design.main.container.rotor.FRotor;
+import eu.scattering.core.design.main.box.rotation.FRotation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,13 +12,13 @@ import java.util.function.Consumer;
 
 import static eu.scattering.core.Config.mainFactory;
 
-public class FRotorDefault implements FRotor {
+public class FRotationDefault implements FRotation {
 
     private final FPoint offset = mainFactory.getFPoint();
     private final FQuaternion core = mainFactory.getFQuaternion();
     private final double[][] rotation = new double[3][3];
 
-    private FRotorDefault(FVector axis, double angle) {
+    private FRotationDefault(FVector axis, double angle) {
 
         if (axis.isNonDirectional()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
@@ -30,7 +30,7 @@ public class FRotorDefault implements FRotor {
         initializeRotor();
     }
 
-    private FRotorDefault(FPoint axis, double angle) {
+    private FRotationDefault(FPoint axis, double angle) {
 
         if (axis.isZero()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
@@ -40,7 +40,7 @@ public class FRotorDefault implements FRotor {
         initializeRotor();
     }
 
-    private FRotorDefault(double re, double i, double j, double k) {
+    private FRotationDefault(double re, double i, double j, double k) {
         double direction = 1 - (re * re);
 
         if (direction <= 0) {
@@ -52,17 +52,17 @@ public class FRotorDefault implements FRotor {
         initializeRotor();
     }
 
-    public static FRotor create(FPoint axis, double angle) {
+    public static FRotation create(FPoint axis, double angle) {
 
-        return new FRotorDefault(axis, angle);
+        return new FRotationDefault(axis, angle);
     }
 
-    public static FRotor create(FVector axis, double angle) {
+    public static FRotation create(FVector axis, double angle) {
 
-        return new FRotorDefault(axis, angle);
+        return new FRotationDefault(axis, angle);
     }
 
-    public static FRotor parse(String json) {
+    public static FRotation parse(String json) {
         JSONArray structure = (new JSONObject(json)).getJSONArray("rotor");
 
         double re = structure.getDouble(0);
@@ -70,7 +70,7 @@ public class FRotorDefault implements FRotor {
         double j = structure.getDouble(2);
         double k = structure.getDouble(3);
 
-        return new FRotorDefault(re, i, j, k);
+        return new FRotationDefault(re, i, j, k);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class FRotorDefault implements FRotor {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FRotor) {
-            FRotor ref = (FRotor) object;
+        if (object instanceof FRotation) {
+            FRotation ref = (FRotation) object;
 
             return getCore().equals(ref.getCore());
         }

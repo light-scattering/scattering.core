@@ -1,6 +1,6 @@
-package eu.scattering.core.implementation.main.container.position;
+package eu.scattering.core.implementation.main.box.position;
 
-import eu.scattering.core.design.main.container.position.FPosition;
+import eu.scattering.core.design.main.box.position.FPosition;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
