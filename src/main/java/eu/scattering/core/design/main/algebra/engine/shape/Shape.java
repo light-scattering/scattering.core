@@ -1,7 +1,7 @@
 package eu.scattering.core.design.main.algebra.engine.shape;
 
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.design.main.vo.dipole.FDipole;
+import eu.scattering.core.design.main.container.position.FPosition;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public interface Shape<T> {
 
     boolean isPartOf(FPoint fPoint);
 
-    List<FDipole> getMesh();
+    List<FPosition> getMesh();
 
     double getVolume();
 

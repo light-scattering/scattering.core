@@ -1,7 +1,7 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.main.vo.rotor.FRotor;
+import eu.scattering.core.design.main.container.rotor.FRotor;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;

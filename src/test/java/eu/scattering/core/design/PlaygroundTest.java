@@ -16,7 +16,7 @@ public class PlaygroundTest {
     @Test
     void playground() {
 
-        System.out.println(mainFactory.getFDipole(1,2 , 3).toString());
+        System.out.println(mainFactory.getFPosition(1,2 , 3).toString());
 
        FVector fVector = mainFactory.getFVector(0, 1, 0);
        FPlane fPlane = mainFactory.getFPlane(fVector);

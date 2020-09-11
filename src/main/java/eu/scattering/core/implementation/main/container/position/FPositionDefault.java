@@ -1,31 +1,31 @@
-package eu.scattering.core.implementation.main.vo;
+package eu.scattering.core.implementation.main.container.position;
 
-import eu.scattering.core.design.main.vo.dipole.FDipole;
+import eu.scattering.core.design.main.container.position.FPosition;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public final class FDipoleDefault implements FDipole {
+public final class FPositionDefault implements FPosition {
 
     private final int x;
     private final int y;
     private final int z;
 
-    private FDipoleDefault(int x, int y, int z) {
+    private FPositionDefault(int x, int y, int z) {
 
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public static FDipole create(int x, int y, int z) {
+    public static FPosition create(int x, int y, int z) {
 
-        return new FDipoleDefault(x, y, z);
+        return new FPositionDefault(x, y, z);
     }
 
-    public static FDipole parse(String json) {
+    public static FPosition parse(String json) {
         JSONArray structure = (new JSONObject(json)).getJSONArray("dipole");
 
-        return new FDipoleDefault(structure.getInt(0), structure.getInt(1), structure.getInt(2));
+        return new FPositionDefault(structure.getInt(0), structure.getInt(1), structure.getInt(2));
     }
 
     @Override
@@ -42,10 +42,10 @@ public final class FDipoleDefault implements FDipole {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FDipole) {
-            FDipole ref = (FDipole) object;
+        if (object instanceof FPosition) {
+            FPosition ref = (FPosition) object;
 
-            return (x == ref.getPositionX()) && (y == ref.getPositionY()) && (z == ref.getPositionZ());
+            return (x == ref.getX()) && (y == ref.getY()) && (z == ref.getZ());
         }
 
         return false;
@@ -58,25 +58,25 @@ public final class FDipoleDefault implements FDipole {
     }
 
     @Override
-    public int[] getPosition() {
+    public int[] get() {
 
         return new int[] {x, y, z};
     }
 
     @Override
-    public int getPositionX() {
+    public int getX() {
 
         return x;
     }
 
     @Override
-    public int getPositionY() {
+    public int getY() {
 
         return y;
     }
 
     @Override
-    public int getPositionZ() {
+    public int getZ() {
 
         return z;
     }
@@ -85,9 +85,9 @@ public final class FDipoleDefault implements FDipole {
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        json.append("dipole", getPositionX());
-        json.append("dipole", getPositionY());
-        json.append("dipole", getPositionZ());
+        json.append("dipole", getX());
+        json.append("dipole", getY());
+        json.append("dipole", getZ());
 
         return json;
     }

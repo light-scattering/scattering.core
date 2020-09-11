@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.vo.rotor;
+package eu.scattering.core.design.main.container.rotor;
 
 import eu.scattering.core.design.main.Main;
 import eu.scattering.core.design.main.algebra.engine.Engine;
