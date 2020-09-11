@@ -3,7 +3,6 @@ package eu.scattering.core.design.main.algebra.engine.base;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.support.FPointTestHelper;
-import eu.scattering.core.design.main.vo.FRotor;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 

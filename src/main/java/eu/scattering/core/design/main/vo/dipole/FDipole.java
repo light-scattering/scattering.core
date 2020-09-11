@@ -1,4 +1,4 @@
-package eu.scattering.core.design.main.vo;
+package eu.scattering.core.design.main.vo.dipole;
 
 import eu.scattering.core.design.main.Main;
 

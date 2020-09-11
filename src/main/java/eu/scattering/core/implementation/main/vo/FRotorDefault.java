@@ -4,7 +4,7 @@ import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.design.main.vo.FRotor;
+import eu.scattering.core.design.main.vo.rotor.FRotor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
