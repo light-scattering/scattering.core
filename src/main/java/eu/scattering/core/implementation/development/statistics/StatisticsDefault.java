@@ -1,23 +1,23 @@
 package eu.scattering.core.implementation.development.statistics;
 
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.design.development.statistics.StatisticsMethod;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.*;
 
-import static eu.scattering.core.Config.developmentFactory;
-
 public class StatisticsDefault implements Statistics {
 
-    private Map<String, StatisticsMethod> statistics;
-    private boolean active;
-
-    private StatisticsDefault() {
-
-        statistics = new HashMap<>();
-        active = false;
+    private class Record {
+        @Getter @Setter private int iterations = 0;
+        @Getter @Setter private final List<Integer> executionTimes = new ArrayList<>();
     }
+
+    private boolean recordingEnabled = false;
+    private final Map<String, Record> executionData = new HashMap<>();
+
+    private StatisticsDefault() { }
 
     public static Statistics create() {
 
@@ -25,9 +25,9 @@ public class StatisticsDefault implements Statistics {
     }
 
     @Override
-    public Statistics reset() {
+    public Statistics clear() {
 
-        statistics.clear();
+        executionData.clear();
 
         return this;
     }
@@ -35,7 +35,7 @@ public class StatisticsDefault implements Statistics {
     @Override
     public Statistics setEnabled() {
 
-        active = true;
+        recordingEnabled = true;
 
         return this;
     }
@@ -43,7 +43,7 @@ public class StatisticsDefault implements Statistics {
     @Override
     public Statistics setDisabled() {
 
-        active = false;
+        recordingEnabled = false;
 
         return this;
     }
@@ -51,29 +51,41 @@ public class StatisticsDefault implements Statistics {
     @Override
     public boolean isEnabled() {
 
-        return active;
+        return recordingEnabled;
     }
 
     @Override
-    public Set<String> getRegisteredMethodNames() {
+    public Set<String> getMethodNames() {
 
-        return statistics.keySet();
+        return executionData.keySet();
     }
 
     @Override
-    public Optional<StatisticsMethod> getRegisteredMethod(String methodName) {
+    public Optional<List<Integer>> getExecutionTimes(String methodName) {
 
         if (methodName == null) {
             throw new NullPointerException("The method name cannot be null");
         }
 
-        StatisticsMethod record = statistics.get(methodName);
-
-        if (record == null) {
-            return Optional.empty();
+        if (executionData.containsKey(methodName)) {
+            return Optional.of(executionData.get(methodName).getExecutionTimes());
         }
 
-        return Optional.of(record);
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Integer> getNumberOfIterations(String methodName) {
+
+        if (methodName == null) {
+            throw new NullPointerException("The method name cannot be null");
+        }
+
+        if (executionData.containsKey(methodName)) {
+            return Optional.of(executionData.get(methodName).getIterations());
+        }
+
+        return Optional.empty();
     }
 
     @Override
@@ -83,34 +95,36 @@ public class StatisticsDefault implements Statistics {
             throw new NullPointerException("The method name cannot be null");
         }
 
-        if (!active) {
+        if (methodExecutionTime < 0) {
+            throw new ArithmeticException("The execution time cannot be lower than zero");
+        }
+
+        if (!recordingEnabled) {
             return this;
         }
 
-        Optional<StatisticsMethod> statsMethodOptional = getRegisteredMethod(methodName);
-        StatisticsMethod statsMethod;
-
-        if (statsMethodOptional.isEmpty()) {
-            statsMethod = developmentFactory.getStatisticsMethod();
-            statistics.put(methodName, statsMethod);
+        Record record;
+        if (executionData.containsKey(methodName)) {
+            record = executionData.get(methodName);
         } else {
-            statsMethod = statsMethodOptional.get();
+            record = new Record();
+            executionData.put(methodName, record);
         }
 
-        statsMethod.recordExecutionTime(methodExecutionTime);
+        record.setIterations(record.getIterations() + 1);
+        record.getExecutionTimes().add((int) methodExecutionTime);
 
         return this;
     }
 
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        Map<String, StatisticsMethod> devStatsSorted = new TreeMap<>(statistics);
+        Map<String, Record> devStatsSorted = new TreeMap<>(executionData);
 
         builder.append(LocalTime.now().toString()).append(" - registered methods: ").append(devStatsSorted.size()).append("\n");
 
-        for (Map.Entry<String, StatisticsMethod> entry : devStatsSorted.entrySet()) {
+        for (Map.Entry<String, Record> entry : devStatsSorted.entrySet()) {
             builder.append("- ").append(entry.getKey()).append(" / ").append(entry.getValue()).append("\n");
         }
 

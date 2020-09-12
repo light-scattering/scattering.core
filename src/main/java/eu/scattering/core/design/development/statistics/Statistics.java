@@ -6,18 +6,15 @@ import java.util.Set;
 
 public interface Statistics {
 
-    Statistics reset();
-
-    Statistics setEnabled();
-    Statistics setDisabled();
-
-    boolean isEnabled();
-
+    Statistics clear();
     Statistics recordEvent(String methodName, long methodExecutionTime);
 
-    Set<String> getRegisteredMethodNames();
-//    List<Integer> getMethodExecutionTimes(String methodName);
-//    int getMethodNumberOfIterations(String methodName);
+    boolean isEnabled();
+    Statistics setEnabled(); // add flag
+    Statistics setDisabled();// delete
+    
+    Set<String> getMethodNames();
 
-    Optional<StatisticsMethod> getRegisteredMethod(String methodName);
+    Optional<Integer> getNumberOfIterations(String methodName);
+    Optional<List<Integer>> getExecutionTimes(String methodName);
 }
