@@ -20,7 +20,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
+    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
     private final Statistics statsObject = developmentFactory.getStatistics();
 
     private final FVector core;
@@ -39,14 +39,14 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
 
     public FVector objectStatisticsEnable() {
 
-        statsObject.setEnabled();
+        statsObject.setEnabled(true);
 
         return this;
     }
 
     public FVector objectStatisticsDisable() {
 
-        statsObject.setDisabled();
+        statsObject.setEnabled(false);
 
         return this;
     }

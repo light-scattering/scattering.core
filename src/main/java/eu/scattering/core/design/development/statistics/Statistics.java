@@ -6,12 +6,11 @@ import java.util.Set;
 
 public interface Statistics {
 
-    Statistics clear();
+    Statistics reset();
     Statistics recordEvent(String methodName, long methodExecutionTime);
 
     boolean isEnabled();
-    Statistics setEnabled(); // add flag
-    Statistics setDisabled();// delete
+    Statistics setEnabled(boolean enabled);
     
     Set<String> getMethodNames();
 

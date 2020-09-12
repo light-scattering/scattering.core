@@ -13,7 +13,7 @@ public class FComplexDevelopment implements FComplex {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
+    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
     private final Statistics statsObject = developmentFactory.getStatistics();
 
     private final FComplex core;
@@ -33,7 +33,7 @@ public class FComplexDevelopment implements FComplex {
     @Override
     public FComplex objectStatisticsEnable() {
 
-        statsObject.setEnabled();
+        statsObject.setEnabled(true);
 
         return this;
     }
@@ -41,7 +41,7 @@ public class FComplexDevelopment implements FComplex {
     @Override
     public FComplex objectStatisticsDisable() {
 
-        statsObject.setDisabled();
+        statsObject.setEnabled(false);
 
         return this;
     }

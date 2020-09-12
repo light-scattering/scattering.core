@@ -13,7 +13,7 @@ public class FQuaternionDevelopment implements FQuaternion {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
+    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
     private final Statistics statsObject = developmentFactory.getStatistics();
 
     private final FQuaternion core;
@@ -33,7 +33,7 @@ public class FQuaternionDevelopment implements FQuaternion {
     @Override
     public FQuaternion objectStatisticsEnable() {
 
-        statsObject.setEnabled();
+        statsObject.setEnabled(true);
 
         return this;
     }
@@ -41,7 +41,7 @@ public class FQuaternionDevelopment implements FQuaternion {
     @Override
     public FQuaternion objectStatisticsDisable() {
 
-        statsObject.setDisabled();
+        statsObject.setEnabled(false);
 
         return this;
     }

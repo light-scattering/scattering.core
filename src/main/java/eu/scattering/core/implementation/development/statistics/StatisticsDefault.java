@@ -25,7 +25,7 @@ public class StatisticsDefault implements Statistics {
     }
 
     @Override
-    public Statistics clear() {
+    public Statistics reset() {
 
         executionData.clear();
 
@@ -33,17 +33,9 @@ public class StatisticsDefault implements Statistics {
     }
 
     @Override
-    public Statistics setEnabled() {
+    public Statistics setEnabled(boolean enabled) {
 
-        recordingEnabled = true;
-
-        return this;
-    }
-
-    @Override
-    public Statistics setDisabled() {
-
-        recordingEnabled = false;
+        recordingEnabled = enabled;
 
         return this;
     }

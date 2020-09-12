@@ -33,8 +33,8 @@ public class DevelopmentTest {
     void beforeEach() {
 
         getTestInstanceDevelopment().devResetNumberOfInstances();
-        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(e -> e.setEnabled());
-        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(Statistics::clear);
+        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(e -> e.setEnabled(true));
+        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(Statistics::reset);
     }
 
     @Nested
@@ -146,7 +146,7 @@ public class DevelopmentTest {
                 statistics.recordEvent("test event 2", 10L);
                 statistics.recordEvent("test event 3", 10L);
 
-                statistics.clear();
+                statistics.reset();
 
                 statistics.recordEvent("test event 4", 10L);
 
@@ -171,7 +171,7 @@ public class DevelopmentTest {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                statistics.setDisabled();
+                statistics.setEnabled(false);
 
                 assertFalse(statistics.isEnabled(),
                         "The registration of events should be suspended");
@@ -183,7 +183,7 @@ public class DevelopmentTest {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                statistics.setDisabled();
+                statistics.setEnabled(false);
                 statistics.recordEvent("test event 1", 10L);
 
                 assertThat(statistics.getMethodNames())

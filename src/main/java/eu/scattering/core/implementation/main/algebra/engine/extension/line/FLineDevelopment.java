@@ -20,7 +20,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
+    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
     private final Statistics statsObject = developmentFactory.getStatistics();
 
     private final FLine core;
@@ -39,14 +39,14 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     public FLine objectStatisticsEnable() {
 
-        statsObject.setEnabled();
+        statsObject.setEnabled(true);
 
         return this;
     }
 
     public FLine objectStatisticsDisable() {
 
-        statsObject.setDisabled();
+        statsObject.setEnabled(false);
 
         return this;
     }
