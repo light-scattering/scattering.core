@@ -7,14 +7,14 @@ import org.json.JSONObject;
 
 import java.util.Optional;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FComplexDevelopment implements FComplex {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
-    private final Statistics statsObject = developmentFactory.getStatistics();
+    private static final Statistics statsClass = factory.getStatistics().setEnabled(true);
+    private final Statistics statsObject = factory.getStatistics();
 
     private final FComplex core;
 
@@ -31,17 +31,9 @@ public class FComplexDevelopment implements FComplex {
     }
 
     @Override
-    public FComplex objectStatisticsEnable() {
+    public FComplex devSetStatisticsEnabled(boolean enabled) {
 
-        statsObject.setEnabled(true);
-
-        return this;
-    }
-
-    @Override
-    public FComplex objectStatisticsDisable() {
-
-        statsObject.setEnabled(false);
+        statsObject.setEnabled(enabled);
 
         return this;
     }
@@ -430,12 +422,12 @@ public class FComplexDevelopment implements FComplex {
     }
 
     @Override
-    public FComplex devDescribe() {
+    public FComplex devDesc() {
 
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        var res = core.devDescribe();
+        var res = core.devDesc();
 
         updateStats(name, time);
 
@@ -723,7 +715,7 @@ public class FComplexDevelopment implements FComplex {
     }
 
     @Override
-    public FComplex devDescribeStatistics() {
+    public FComplex devDescStatistics() {
 
         Config.getDebugPrintStream().println(statsObject.toString());
 
@@ -731,7 +723,7 @@ public class FComplexDevelopment implements FComplex {
     }
 
     @Override
-    public FComplex devDescribeClassStatistics() {
+    public FComplex devDescClassStatistics() {
 
         Config.getDebugPrintStream().println(statsClass.toString());
 
@@ -749,6 +741,16 @@ public class FComplexDevelopment implements FComplex {
 
         return Optional.of(statsClass);
     }
+
+    @Override
+    public FComplex devDescNumberOfInstances() {
+
+        String data = "Number of instances for FComplexDevelopment: " + numberOfInstances + "\n";
+
+        Config.getDebugPrintStream().println(data);
+
+        return self();
+    };
 
     // -------------------------------------------------------------------------------------------------
 

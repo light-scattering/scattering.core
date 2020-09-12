@@ -6,7 +6,7 @@ import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex {
 
@@ -124,7 +124,7 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
     @Override
     public FComplex copy() {
 
-        return mainFactory.getFComplex().set(this);
+        return factory.getFComplex().set(this);
     }
 
     @Override
@@ -383,7 +383,7 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
             double valueRe = tmp * Math.cos((phase + (2 * i * Math.PI)) / n);
             double valueIm = tmp * Math.sin((phase + (2 * i * Math.PI)) / n);
 
-            res[i] = mainFactory.getFComplex(valueRe, valueIm);
+            res[i] = factory.getFComplex(valueRe, valueIm);
         }
 
         return res;
@@ -398,7 +398,7 @@ public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex
     @Override
     public FComplex inverse() {
 
-        mainFactory.getFComplex(1, 0).div(this).imprint(this);
+        factory.getFComplex(1, 0).div(this).imprint(this);
 
         return this;
     }

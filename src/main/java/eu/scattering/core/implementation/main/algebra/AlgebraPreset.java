@@ -9,8 +9,6 @@ import java.util.Optional;
 
 public abstract class AlgebraPreset<T> implements Algebra<T> {
 
-    private String meta = "";
-
     @Override
     public abstract Object clone();
 
@@ -26,7 +24,7 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devDescribe() {
+    public T devDesc() {
 
         Config.getDebugPrintStream().println(LocalTime.now().toString()
                 + " - " + self().getClass().getSimpleName()
@@ -36,7 +34,7 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devDescribeStatistics() {
+    public T devDescStatistics() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
@@ -44,7 +42,15 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devDescribeClassStatistics() {
+    public T devDescNumberOfInstances() {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return self();
+    };
+
+    @Override
+    public T devDescClassStatistics() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
@@ -52,15 +58,7 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T objectStatisticsEnable() {
-
-        Config.getDebugPrintStream().println("Not implemented");
-
-        return self();
-    }
-
-    @Override
-    public T objectStatisticsDisable() {
+    public T devSetStatisticsEnabled(boolean enabled) {
 
         Config.getDebugPrintStream().println("Not implemented");
 
@@ -96,13 +94,15 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     @Override
     public String devGetLabel() {
 
-        return meta;
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return "";
     }
 
     @Override
     public T devSetLabel(String label) {
 
-        this.meta = label;
+        Config.getDebugPrintStream().println("Not implemented");
 
         return self();
     }

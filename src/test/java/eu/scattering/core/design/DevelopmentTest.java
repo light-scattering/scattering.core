@@ -226,7 +226,7 @@ public class DevelopmentTest {
             @DisplayName("Register single object event (enabled)")
             void registerSingleObjectEventEnabled() {
                 Development<?> element = getTestInstanceDevelopment();
-                element.objectStatisticsEnable();
+                element.devSetStatisticsEnabled(true);
 
                 Optional<Statistics> statisticsOptional = element.devGetStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));

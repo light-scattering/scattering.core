@@ -11,7 +11,7 @@ public class StatisticsDefault implements Statistics {
 
     private class Record {
         @Getter @Setter private int iterations = 0;
-        @Getter @Setter private final List<Integer> executionTimes = new ArrayList<>();
+        @Getter private final List<Integer> executionTimes = new ArrayList<>();
     }
 
     private boolean recordingEnabled = false;
@@ -111,13 +111,30 @@ public class StatisticsDefault implements Statistics {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
         Map<String, Record> devStatsSorted = new TreeMap<>(executionData);
+        StringBuilder builder = new StringBuilder();
 
-        builder.append(LocalTime.now().toString()).append(" - registered methods: ").append(devStatsSorted.size()).append("\n");
+        builder
+                .append("Registered methods: ").append(devStatsSorted.size()).append(" ")
+                .append("(retrieval time - ").append(LocalTime.now().toString()).append("):")
+                .append("\n");
+
 
         for (Map.Entry<String, Record> entry : devStatsSorted.entrySet()) {
-            builder.append("- ").append(entry.getKey()).append(" / ").append(entry.getValue()).append("\n");
+            Integer iterations = entry.getValue().getIterations();
+            List<Integer> executionTimes = entry.getValue().getExecutionTimes();
+
+            int total = executionTimes.stream().reduce(0, (a, b) -> a + b);
+            int average = total / iterations;
+            int max = executionTimes.stream().max(Comparator.comparing(Integer::intValue)).get();
+            int min = executionTimes.stream().min(Comparator.comparing(Integer::intValue)).get();
+
+            builder.append("- ").append(entry.getKey()).append(" [").append(iterations).append("] - ")
+                    .append("Total: ").append(total).append(" | ")
+                    .append("Avg: ").append(average).append(" | ")
+                    .append("Min: ").append(min).append(" | ")
+                    .append("Max: ").append(max)
+                    .append("\n");
         }
 
         return builder.toString();

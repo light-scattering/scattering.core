@@ -1,13 +1,12 @@
 package eu.scattering.core.implementation.main.algebra.type.quaternion;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FQuaternionDefault extends AlgebraPreset<FQuaternion> implements FQuaternion {
 
@@ -163,7 +162,7 @@ public class FQuaternionDefault extends AlgebraPreset<FQuaternion> implements FQ
     @Override
     public FQuaternion copy() {
 
-        return mainFactory.getFQuaternion().set(this);
+        return factory.getFQuaternion().set(this);
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FPlaneDefault extends ExtensionPreset<FPlane> implements FPlane {
 
@@ -30,7 +30,7 @@ public class FPlaneDefault extends ExtensionPreset<FPlane> implements FPlane {
 
     public static FPlane create() {
 
-        return new FPlaneDefault().setOriginRef(mainFactory.getFVector());
+        return new FPlaneDefault().setOriginRef(factory.getFVector());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class FPlaneDefault extends ExtensionPreset<FPlane> implements FPlane {
     public FPlane importFromJSON(JSONObject json) {
         JSONArray structure = json.getJSONArray("plane");
 
-        getOrigin().set(mainFactory.getFVector().importFromJSON(structure.getJSONObject(0)));
+        getOrigin().set(factory.getFVector().importFromJSON(structure.getJSONObject(0)));
 
         return this;
     }
@@ -76,7 +76,7 @@ public class FPlaneDefault extends ExtensionPreset<FPlane> implements FPlane {
     @Override
     public FPlane copy() {
 
-        return mainFactory.getFPlane(getOrigin().copy());
+        return factory.getFPlane(getOrigin().copy());
     }
 
     @Override
@@ -237,34 +237,34 @@ public class FPlaneDefault extends ExtensionPreset<FPlane> implements FPlane {
 
         FPoint pos = vPlane1.mul(d2).sub(vPlane2.mul(d1)).setCrossProduct(vPlanePar).div(vPlaneParDot);
 
-        return Optional.of(mainFactory.getFLine(mainFactory.getFVector(vPlanePar).moveBase(pos)));
+        return Optional.of(factory.getFLine(factory.getFVector(vPlanePar).moveBase(pos)));
     }
 
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectOnPlane(FPoint fPoint) {
-        FPoint opA = mainFactory.getFPoint(getOrigin().getHead())
+        FPoint opA = factory.getFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
                 .div(getOrigin().getLength());
 
-        FPoint opB = mainFactory.getFPoint(fPoint)
+        FPoint opB = factory.getFPoint(fPoint)
                 .sub(getOrigin().getBase());
 
-        FPoint opC = mainFactory.getFPoint()
+        FPoint opC = factory.getFPoint()
                 .set(getOrigin().getBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
-        FVector translation = mainFactory.getFVector(opC, fPoint.copy())
+        FVector translation = factory.getFVector(opC, fPoint.copy())
                 .moveBase(getOrigin().getBase());
 
         return fPoint.set(translation.getHead());
     }
 
     private FPoint projectOnLine(FPoint fPoint) {
-        FPoint opA = mainFactory.getFPoint(getOrigin().getHead())
+        FPoint opA = factory.getFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
                 .div(getOrigin().getLength());
 
-        FPoint opB = mainFactory.getFPoint(fPoint)
+        FPoint opB = factory.getFPoint(fPoint)
                 .sub(getOrigin().getBase());
 
         return fPoint.set(getOrigin().getBase().copy().add(opA.mul(opB.getDotProduct(opA))));

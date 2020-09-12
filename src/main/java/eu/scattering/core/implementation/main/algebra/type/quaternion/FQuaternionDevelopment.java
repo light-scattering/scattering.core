@@ -7,14 +7,14 @@ import org.json.JSONObject;
 
 import java.util.Optional;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FQuaternionDevelopment implements FQuaternion {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
-    private final Statistics statsObject = developmentFactory.getStatistics();
+    private static final Statistics statsClass = factory.getStatistics().setEnabled(true);
+    private final Statistics statsObject = factory.getStatistics();
 
     private final FQuaternion core;
 
@@ -31,17 +31,9 @@ public class FQuaternionDevelopment implements FQuaternion {
     }
 
     @Override
-    public FQuaternion objectStatisticsEnable() {
+    public FQuaternion devSetStatisticsEnabled(boolean enabled) {
 
-        statsObject.setEnabled(true);
-
-        return this;
-    }
-
-    @Override
-    public FQuaternion objectStatisticsDisable() {
-
-        statsObject.setEnabled(false);
+        statsObject.setEnabled(enabled);
 
         return this;
     }
@@ -666,12 +658,12 @@ public class FQuaternionDevelopment implements FQuaternion {
     }
 
     @Override
-    public FQuaternion devDescribe() {
+    public FQuaternion devDesc() {
 
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        var res = core.devDescribe();
+        var res = core.devDesc();
 
         updateStats(name, time);
 
@@ -894,7 +886,7 @@ public class FQuaternionDevelopment implements FQuaternion {
     }
 
     @Override
-    public FQuaternion devDescribeStatistics() {
+    public FQuaternion devDescStatistics() {
 
         Config.getDebugPrintStream().println(statsObject.toString());
 
@@ -902,7 +894,7 @@ public class FQuaternionDevelopment implements FQuaternion {
     }
 
     @Override
-    public FQuaternion devDescribeClassStatistics() {
+    public FQuaternion devDescClassStatistics() {
 
         Config.getDebugPrintStream().println(statsClass.toString());
 
@@ -920,6 +912,16 @@ public class FQuaternionDevelopment implements FQuaternion {
 
         return Optional.of(statsClass);
     }
+
+    @Override
+    public FQuaternion devDescNumberOfInstances() {
+
+        String data = "Number of instances for FQuaternionDevelopment: " + numberOfInstances + "\n";
+
+        Config.getDebugPrintStream().println(data);
+
+        return self();
+    };
 
     // -------------------------------------------------------------------------------------------------
 

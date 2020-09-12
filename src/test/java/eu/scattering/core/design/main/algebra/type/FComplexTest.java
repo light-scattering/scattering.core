@@ -6,7 +6,7 @@ import eu.scattering.core.design.main.algebra.type.support.FComplexTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
@@ -21,7 +21,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Construct")
         void construct() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             assertNotNull(fComplex, "The instance is null");
 
@@ -36,7 +36,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Construct with parameters")
         void constructWithParameters() {
-            FComplex fComplex = mainFactory.getFComplex(1, 2);
+            FComplex fComplex = factory.getFComplex(1, 2);
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(1, fComplex.getRe(),
@@ -49,7 +49,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Set values with primitives")
         void setWithPrimitives() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             fComplex.set(1, 2);
 
@@ -64,9 +64,9 @@ public class FComplexTest {
         @Test
         @DisplayName("Set values with FComplex")
         void setWithFComplex() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
-            fComplex.set(mainFactory.getFComplex(1, 2));
+            fComplex.set(factory.getFComplex(1, 2));
 
             assertAll("Updated values are incorrect",
                     () -> assertEquals(1, fComplex.getRe(),
@@ -79,7 +79,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Set Re")
         void setRe() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             fComplex.setRe(1);
 
@@ -94,7 +94,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Set Im")
         void setIm() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             fComplex.setIm(1);
 
@@ -124,13 +124,13 @@ public class FComplexTest {
             opRe = RandomHelper.getTestValue();
             opIm = RandomHelper.getTestValue();
 
-            fComplex = mainFactory.getFComplex(refRe, refIm);
+            fComplex = factory.getFComplex(refRe, refIm);
         }
 
         @Test
         @DisplayName("Add FComplex")
         void addFComplex() {
-            FComplex fComplexOp = mainFactory.getFComplex(opRe, opIm);
+            FComplex fComplexOp = factory.getFComplex(opRe, opIm);
 
             fComplex.add(fComplexOp);
 
@@ -145,8 +145,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Add FComplex (validate)")
         void addFComplexValidate() {
-            FComplex fComplexA = mainFactory.getFComplex();
-            FComplex fComplexB = mainFactory.getFComplex();
+            FComplex fComplexA = factory.getFComplex();
+            FComplex fComplexB = factory.getFComplex();
 
             FComplexTestHelper.testReference(Type::add, fComplexA, fComplexB);
         }
@@ -243,7 +243,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Sub FComplex")
         void subFComplex() {
-            FComplex fComplexOp = mainFactory.getFComplex(opRe, opIm);
+            FComplex fComplexOp = factory.getFComplex(opRe, opIm);
 
             fComplex.sub(fComplexOp);
 
@@ -258,8 +258,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Sub FComplex (validate)")
         void subFComplexValidate() {
-            FComplex fComplexA = mainFactory.getFComplex();
-            FComplex fComplexB = mainFactory.getFComplex();
+            FComplex fComplexA = factory.getFComplex();
+            FComplex fComplexB = factory.getFComplex();
 
             FComplexTestHelper.testReference(FComplex::sub, fComplexA, fComplexB);
         }
@@ -359,8 +359,8 @@ public class FComplexTest {
             double refRe = 2, refIm = 3;
             double opRe = 4, opIm = 5;
 
-            FComplex fComplex = mainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = mainFactory.getFComplex(opRe, opIm);
+            FComplex fComplex = factory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = factory.getFComplex(opRe, opIm);
 
             fComplex.mul(fComplexOp);
 
@@ -378,8 +378,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Mul FComplex (validate)")
         void mulFComplexValidate() {
-            FComplex fComplexA = mainFactory.getFComplex(1, 1);
-            FComplex fComplexB = mainFactory.getFComplex(1, 1);
+            FComplex fComplexA = factory.getFComplex(1, 1);
+            FComplex fComplexB = factory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(FComplex::mul, fComplexA, fComplexB);
         }
@@ -479,8 +479,8 @@ public class FComplexTest {
             double refRe = 2, refIm = 3;
             double opRe = 4, opIm = 5;
 
-            FComplex fComplex = mainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = mainFactory.getFComplex(opRe, opIm);
+            FComplex fComplex = factory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = factory.getFComplex(opRe, opIm);
 
             fComplex.div(fComplexOp);
 
@@ -501,15 +501,15 @@ public class FComplexTest {
         void divFComplexThrowArithmeticException() {
 
             assertThrows(ArithmeticException.class,
-                    () -> fComplex.div(mainFactory.getFComplex(0, 0)),
+                    () -> fComplex.div(factory.getFComplex(0, 0)),
                     "The divisor cannot be zero");
         }
 
         @Test
         @DisplayName("Div FComplex (validate)")
         void divFComplexValidate() {
-            FComplex fComplexA = mainFactory.getFComplex(1, 1);
-            FComplex fComplexB = mainFactory.getFComplex(1, 1);
+            FComplex fComplexA = factory.getFComplex(1, 1);
+            FComplex fComplexB = factory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(FComplex::div, fComplexA, fComplexB);
         }
@@ -647,7 +647,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Imprint")
         void imprint() {
-            FComplex fComplexRef = mainFactory.getFComplex();
+            FComplex fComplexRef = factory.getFComplex();
 
             fComplex.imprint(fComplexRef);
 
@@ -666,7 +666,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Imprint (validate)")
         void imprintValidate() {
-            FComplex fComplexOp = mainFactory.getFComplex();
+            FComplex fComplexOp = factory.getFComplex();
 
             FComplex fComplexRef = fComplexOp.imprint(fComplex);
 
@@ -697,8 +697,8 @@ public class FComplexTest {
         @Test
         @DisplayName("JSON parser")
         void parseJSON() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = mainFactory.getFComplex().importFromJSON(fComplexRef.exportToJSON());
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = factory.getFComplex().importFromJSON(fComplexRef.exportToJSON());
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplexOp.getRe(),
@@ -711,8 +711,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness")
         void isExact() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = factory.getFComplex(refRe, refIm);
 
             assertAll("Validate exactness",
                     () -> assertTrue(fComplexRef.isExact(fComplexOp),
@@ -725,7 +725,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness (fail)")
         void isExactFail() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
             FComplex fComplexOp = fComplexRef.copy().add(0.5 * Config.getJitter());
 
             assertAll("Validate exactness",
@@ -739,8 +739,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness (validate)")
         void isExactValidate() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = factory.getFComplex(refRe, refIm);
 
             FComplexTestHelper.testValue(FComplex::isExact, fComplexRef, fComplexOp);
         }
@@ -748,7 +748,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness with parameters")
         void isExactWithParameters() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
 
             assertTrue(fComplexRef.isExact(refRe, refIm), "FComplex values should be equal");
         }
@@ -756,7 +756,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness with parameters (fail)")
         void isExactWithParametersFail() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
 
             assertFalse(fComplexRef.isExact(0, 0),
                     "FComplex values should not be equal");
@@ -765,7 +765,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness with parameters (validate)")
         void isExactWithParametersValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             FComplexTestHelper.testValue(e -> e.isExact(0, 0), fComplex);
         }
@@ -773,24 +773,24 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity")
         void isSimilar() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
             double ref = Config.getJitter() * 0.5;
 
             assertAll("Check combinations (true)",
                     () -> assertTrue(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef)),
                             "FComplex values should be similar (same position)"),
                     () -> assertTrue(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).addRe(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).addRe(ref)),
                             "FComplex values should be similar (positive Re)"),
                     () -> assertTrue(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).subRe(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).subRe(ref)),
                             "FComplex values should be similar (negative Re)"),
                     () -> assertTrue(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).addIm(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).addIm(ref)),
                             "FComplex values should be similar (positive Im)"),
                     () -> assertTrue(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).subIm(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).subIm(ref)),
                             "FComplex values should be similar (negative Im)")
             );
         }
@@ -798,21 +798,21 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
             double ref = Config.getJitter() * 2;
 
             assertAll("Check combinations (true)",
                     () -> assertFalse(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).addRe(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).addRe(ref)),
                             "FComplex values should not be similar (positive Re)"),
                     () -> assertFalse(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).subRe(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).subRe(ref)),
                             "FComplex values should not be similar (negative Re)"),
                     () -> assertFalse(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).addIm(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).addIm(ref)),
                             "FComplex values should not be similar (positive Im)"),
                     () -> assertFalse(fComplexRef
-                                    .isSimilar(mainFactory.getFComplex().add(fComplexRef).subIm(ref)),
+                                    .isSimilar(factory.getFComplex().add(fComplexRef).subIm(ref)),
                             "FComplex values should not be similar (negative Im)")
             );
         }
@@ -820,8 +820,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity (validate)")
         void isSimilarValidate() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
+            FComplex fComplexOp = factory.getFComplex(refRe, refIm);
 
             FComplexTestHelper.testValue(FComplex::isSimilar, fComplexRef, fComplexOp);
         }
@@ -829,7 +829,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity with parameters")
         void isSimilarWithParameters() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
             double jitter = 0.5 * Config.getJitter();
 
             assertTrue(fComplexRef.isSimilar(
@@ -841,7 +841,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity with parameters (fail)")
         void isSimilarWithParametersFail() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
 
             assertFalse(fComplexRef.isSimilar(
                     refRe + (1.5 * Config.getJitter()),
@@ -852,7 +852,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity with parameters (validate)")
         void isSimilarWithParametersValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             FComplexTestHelper.testValue(e -> e.isSimilar(0, 0), fComplex);
         }
@@ -860,8 +860,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Get hash code")
         void getHashCode() {
-            FComplex fComplexRefA = mainFactory.getFComplex(refRe, refIm);
-            FComplex fComplexRefB = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRefA = factory.getFComplex(refRe, refIm);
+            FComplex fComplexRefB = factory.getFComplex(refRe, refIm);
 
             assertEquals(fComplexRefA.hashCode(), fComplexRefB.hashCode(),
                     "Two identical FComplex values should have the same hash code");
@@ -870,16 +870,16 @@ public class FComplexTest {
         @Test
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
-            FComplex fComplexRefA = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRefA = factory.getFComplex(refRe, refIm);
 
-            assertNotEquals(fComplexRefA.hashCode(), mainFactory.getFComplex().hashCode(),
+            assertNotEquals(fComplexRefA.hashCode(), factory.getFComplex().hashCode(),
                     "Two different FComplex values should not have the same hash code");
         }
 
         @Test
         @DisplayName("Get hash code (validate)")
         void getHashCodeValidate() {
-            FComplex fComplexRef = mainFactory.getFComplex();
+            FComplex fComplexRef = factory.getFComplex();
 
             FComplexTestHelper.testValue(FComplex::hashCode, fComplexRef);
         }
@@ -887,7 +887,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Copy")
         void copy() {
-            FComplex fComplexRef = mainFactory.getFComplex(refRe, refIm);
+            FComplex fComplexRef = factory.getFComplex(refRe, refIm);
             FComplex fComplex = fComplexRef.copy();
 
             assertAll("Validate copy",
@@ -927,7 +927,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get magnitude (validate)")
         void getMagnitudeValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             FComplexTestHelper.testValue(FComplex::getMagnitude, fComplex);
         }
@@ -961,14 +961,14 @@ public class FComplexTest {
         @DisplayName("Set magnitude (throw IllegalStateException)")
         void setMagnitudeThrowIllegalStateException() {
 
-            assertThrows(IllegalStateException.class, () -> mainFactory.getFComplex().setMagnitude(1),
+            assertThrows(IllegalStateException.class, () -> factory.getFComplex().setMagnitude(1),
                     "The direction is not defined");
         }
 
         @Test
         @DisplayName("Set magnitude (validate)")
         void setMagnitudeValidate() {
-            FComplex fComplex = mainFactory.getFComplex(1, 1);
+            FComplex fComplex = factory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(e -> e.setMagnitude(1), fComplex);
         }
@@ -979,7 +979,7 @@ public class FComplexTest {
             double re = RandomHelper.getTestValue();
             double im = RandomHelper.getTestValue();
 
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             assertNotEquals(Math.PI, fComplex.getPhase(),
                     Config.getJitter(), "The phase is erroneous");
@@ -991,7 +991,7 @@ public class FComplexTest {
             double re = Math.abs(RandomHelper.getTestValue());
             double im = 0;
 
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(0, fComplex.getPhase(),
                     Config.getJitter(), "The phase is erroneous");
@@ -1003,7 +1003,7 @@ public class FComplexTest {
             double re = -Math.abs(RandomHelper.getTestValue());
             double im = 0;
 
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI, fComplex.getPhase(),
                     Config.getJitter(), "The phase is erroneous");
@@ -1015,7 +1015,7 @@ public class FComplexTest {
             double re = 1;
             double im = 1;
 
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI * +0.25, fComplex.getPhase(),
                     Config.getJitter(), "The phase is erroneous");
@@ -1027,7 +1027,7 @@ public class FComplexTest {
             double re = 1;
             double im = -1;
 
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI * -0.25, fComplex.getPhase(),
                     Config.getJitter(), "The phase is erroneous");
@@ -1037,14 +1037,14 @@ public class FComplexTest {
         @DisplayName("Get phase (throw IllegalStateException)")
         void getPhaseThrowIllegalStateException() {
 
-            assertThrows(IllegalStateException.class, () -> mainFactory.getFComplex().getPhase(),
+            assertThrows(IllegalStateException.class, () -> factory.getFComplex().getPhase(),
                     "The direction is not defined");
         }
 
         @Test
         @DisplayName("Get phase (validate)")
         void getPhaseValidate() {
-            FComplex fComplex = mainFactory.getFComplex(1, 1);
+            FComplex fComplex = factory.getFComplex(1, 1);
 
             FComplexTestHelper.testValue(FComplex::getPhase, fComplex);
         }
@@ -1052,7 +1052,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Set phase")
         void setPhase() {
-            FComplex fComplex = mainFactory.getFComplex(1, 1);
+            FComplex fComplex = factory.getFComplex(1, 1);
             double phase = RandomHelper.getTestValue() % Math.PI;
 
             fComplex.setPhase(phase);
@@ -1064,7 +1064,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Set phase (validate)")
         void setPhaseValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             FComplexTestHelper.testReference(e -> e.setPhase(1), fComplex);
         }
@@ -1074,7 +1074,7 @@ public class FComplexTest {
         public void negate() {
             double re = RandomHelper.getTestValue();
             double im = RandomHelper.getTestValue();
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.negate();
 
@@ -1089,7 +1089,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Negate (validate)")
         public void negateValidate() {
-            FComplex fComplex = mainFactory.getFComplex(1, 1);
+            FComplex fComplex = factory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(FComplex::negate, fComplex);
         }
@@ -1099,10 +1099,10 @@ public class FComplexTest {
         public void inverse() {
             double re = RandomHelper.getTestValue();
             double im = RandomHelper.getTestValue();
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.inverse();
-            fComplex.mul(mainFactory.getFComplex(re, im));
+            fComplex.mul(factory.getFComplex(re, im));
 
             assertAll("Validate FComplex",
                     () -> assertEquals(1, fComplex.getRe(),
@@ -1115,7 +1115,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Inverse (validate)")
         public void inverseValidate() {
-            FComplex fComplex = mainFactory.getFComplex(1, 1);
+            FComplex fComplex = factory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(FComplex::inverse, fComplex);
         }
@@ -1125,7 +1125,7 @@ public class FComplexTest {
         public void conjugate() {
             double re = RandomHelper.getTestValue();
             double im = RandomHelper.getTestValue();
-            FComplex fComplex = mainFactory.getFComplex(re, im);
+            FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.conjugate();
 
@@ -1139,7 +1139,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Conjugate (validate)")
         public void conjugateValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             FComplexTestHelper.testReference(FComplex::conjugate, fComplex);
         }
@@ -1159,14 +1159,14 @@ public class FComplexTest {
         @DisplayName("Normalize (throw IllegalStateException)")
         void normalizeThrowIllegalStateException() {
 
-            assertThrows(IllegalStateException.class, () -> mainFactory.getFComplex().normalize(),
+            assertThrows(IllegalStateException.class, () -> factory.getFComplex().normalize(),
                     "The direction is not defined");
         }
 
         @Test
         @DisplayName("Normalize (validate)")
         public void normalizeValidate() {
-            FComplex fComplex = mainFactory.getFComplex(1, 1);
+            FComplex fComplex = factory.getFComplex(1, 1);
 
             FComplexTestHelper.testReference(FComplex::normalize, fComplex);
         }
@@ -1174,7 +1174,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Is zero")
         public void isZero() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             assertTrue(fComplex.isZero(), "The FComplex value should be zero");
         }
@@ -1190,7 +1190,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Is zero (validate)")
         public void isZeroValidate() {
-            FComplex fComplex = mainFactory.getFComplex();
+            FComplex fComplex = factory.getFComplex();
 
             FComplexTestHelper.testValue(FComplex::isZero, fComplex);
         }
@@ -1198,7 +1198,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Power")
         public void pow() {
-            FComplex fComplex = mainFactory.getFComplex(3, 4);
+            FComplex fComplex = factory.getFComplex(3, 4);
             int n = 3;
 
             FComplex res = fComplex.copy().mul(fComplex).mul(fComplex);
@@ -1209,10 +1209,10 @@ public class FComplexTest {
         @Test
         @DisplayName("Power (negative)")
         public void powNegative() {
-            FComplex fComplex = mainFactory.getFComplex(3, 4);
+            FComplex fComplex = factory.getFComplex(3, 4);
             int n = -3;
 
-            FComplex res = mainFactory.getFComplex(1, 0)
+            FComplex res = factory.getFComplex(1, 0)
                     .div(fComplex.copy().mul(fComplex).mul(fComplex));
 
             assertTrue(fComplex.pow(n).isSimilar(res), "The value is erroneous");

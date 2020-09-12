@@ -14,14 +14,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
-    private final Statistics statsObject = developmentFactory.getStatistics();
+    private static final Statistics statsClass = factory.getStatistics().setEnabled(true);
+    private final Statistics statsObject = factory.getStatistics();
 
     private final FVector core;
 
@@ -37,7 +37,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         return new FVectorDevelopment(core);
     }
 
-    public FVector objectStatisticsEnable() {
+    public FVector devSetStatsEnabled() {
 
         statsObject.setEnabled(true);
 
@@ -123,12 +123,12 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector devDescribe() {
+    public FVector devDesc() {
 
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        var res = core.devDescribe();
+        var res = core.devDesc();
 
         updateStats(name, time);
 
@@ -1340,7 +1340,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector devDescribeStatistics() {
+    public FVector devDescStatistics() {
 
         Config.getDebugPrintStream().println(statsObject.toString());
 
@@ -1348,7 +1348,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector devDescribeClassStatistics() {
+    public FVector devDescClassStatistics() {
 
         Config.getDebugPrintStream().println(statsClass.toString());
 

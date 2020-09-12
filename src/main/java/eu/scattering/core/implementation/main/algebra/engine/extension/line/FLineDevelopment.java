@@ -14,14 +14,14 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
 
     private static long numberOfInstances = 0;
 
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled(true);
-    private final Statistics statsObject = developmentFactory.getStatistics();
+    private static final Statistics statsClass = factory.getStatistics().setEnabled(true);
+    private final Statistics statsObject = factory.getStatistics();
 
     private final FLine core;
 
@@ -37,7 +37,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         return new FLineDevelopment(core);
     }
 
-    public FLine objectStatisticsEnable() {
+    public FLine devSetStatsEnabled() {
 
         statsObject.setEnabled(true);
 
@@ -52,12 +52,12 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
     }
 
     @Override
-    public FLine devDescribe() {
+    public FLine devDesc() {
 
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        var res = core.devDescribe();
+        var res = core.devDesc();
 
         updateStats(name, time);
 
@@ -417,7 +417,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
     }
 
     @Override
-    public FLine devDescribeStatistics() {
+    public FLine devDescStatistics() {
 
         Config.getDebugPrintStream().println(statsObject.toString());
 
@@ -425,7 +425,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
     }
 
     @Override
-    public FLine devDescribeClassStatistics() {
+    public FLine devDescClassStatistics() {
 
         Config.getDebugPrintStream().println(statsClass.toString());
 
