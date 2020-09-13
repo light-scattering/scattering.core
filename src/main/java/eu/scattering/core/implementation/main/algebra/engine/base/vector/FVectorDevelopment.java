@@ -3,7 +3,7 @@ package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.Engine;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
+import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import org.json.JSONObject;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 
 import static eu.scattering.core.Config.factory;
 
-public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
+public class FVectorDevelopment extends BasePresetDefault<FVector> implements FVector {
 
     private static long numberOfInstances = 0;
 

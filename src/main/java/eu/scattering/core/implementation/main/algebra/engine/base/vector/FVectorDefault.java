@@ -2,7 +2,7 @@ package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
+import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import org.json.JSONArray;
@@ -13,7 +13,7 @@ import java.util.List;
 
 import static eu.scattering.core.Config.factory;
 
-public class FVectorDefault extends BasePreset<FVector> implements FVector {
+public class FVectorDefault extends BasePresetDefault<FVector> implements FVector {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.

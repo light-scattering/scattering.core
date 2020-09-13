@@ -2,13 +2,13 @@ package eu.scattering.core.implementation.main.algebra.type.quaternion;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static eu.scattering.core.Config.factory;
 
-public class FQuaternionDefault extends AlgebraPreset<FQuaternion> implements FQuaternion {
+public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implements FQuaternion {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.

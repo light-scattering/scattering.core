@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface Development<T> {
 
-//    T isDevStatisticsEnabled();
+    boolean devIsStatisticsEnabled();
     T devSetStatisticsEnabled(boolean enabled);
 
     T devDesc();

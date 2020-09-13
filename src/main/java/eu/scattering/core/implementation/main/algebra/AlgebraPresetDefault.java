@@ -7,7 +7,7 @@ import eu.scattering.core.design.main.algebra.Algebra;
 import java.time.LocalTime;
 import java.util.Optional;
 
-public abstract class AlgebraPreset<T> implements Algebra<T> {
+public abstract class AlgebraPresetDefault<T> implements Algebra<T> {
 
     @Override
     public abstract Object clone();
@@ -21,6 +21,22 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     public String toString() {
 
         return exportToJSON().toString();
+    }
+
+    @Override
+    public boolean devIsStatisticsEnabled() {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return false;
+    }
+
+    @Override
+    public T devSetStatisticsEnabled(boolean enabled) {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return self();
     }
 
     @Override
@@ -42,14 +58,6 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devDescNumberOfInstances() {
-
-        Config.getDebugPrintStream().println("Not implemented");
-
-        return self();
-    };
-
-    @Override
     public T devDescClassStatistics() {
 
         Config.getDebugPrintStream().println("Not implemented");
@@ -58,7 +66,21 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devSetStatisticsEnabled(boolean enabled) {
+    public T devDescNumberOfInstances() {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return self();
+    };
+
+    @Override
+    public Optional<Long> devGetNumberOfInstances() {
+
+        return Optional.empty();
+    }
+
+    @Override
+    public T devResetNumberOfInstances() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
@@ -75,20 +97,6 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     public Optional<Statistics> devGetClassStatistics() {
 
         return Optional.empty();
-    }
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.empty();
-    }
-
-    @Override
-    public T devResetNumberOfInstances() {
-
-        Config.getDebugPrintStream().println("Not implemented");
-
-        return self();
     }
 
     @Override

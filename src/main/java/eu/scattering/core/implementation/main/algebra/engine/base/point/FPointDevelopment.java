@@ -1,39 +1,27 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static eu.scattering.core.Config.factory;
 
-public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
+public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implements FPoint {
 
-    private static final Statistics statisticsClass = factory.getStatistics().setEnabled(true);
+    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
-
-    private final Statistics statistics = factory.getStatistics().setEnabled(false);
-    private final LocalTime creationTime;
-    private final String creationId;
-    private final FPoint core;
-
-    private String meta = "";
 
     private FPointDevelopment(FPoint core) {
 
         numberOfInstances++;
 
-        this.creationTime = LocalTime.now();
-        this.creationId = "FPointDevelopment:" + numberOfInstances;
         this.core = core;
     }
 
@@ -41,6 +29,26 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
 
         return new FPointDevelopment(core);
     }
+
+    @Override
+    protected long getNumberOfInstances() {
+
+        return numberOfInstances;
+    }
+
+    @Override
+    protected void setNumberOfInstances(long numberOfInstances) {
+
+        this.numberOfInstances = numberOfInstances;
+    }
+
+    @Override
+    protected Statistics getClassStatistics() {
+
+        return classStatistics;
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FPoint set(double x, double y, double z) {
@@ -712,7 +720,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint normalize() throws IllegalStateException {
+    public FPoint normalize() {
 
         String name = "normalize()";
         long time = System.currentTimeMillis();
@@ -751,7 +759,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint setLength(double length) throws IllegalStateException {
+    public FPoint setLength(double length) {
 
         String name = "setLength(double)";
         long time = System.currentTimeMillis();
@@ -816,7 +824,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public double getAngle(FPoint ref) throws IllegalStateException {
+    public double getAngle(FPoint ref) {
 
         String name = "getAngle(FPoint)";
         long time = System.currentTimeMillis();
@@ -881,7 +889,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint setDistance(FPoint ref, double distance) throws IllegalStateException {
+    public FPoint setDistance(FPoint ref, double distance) {
 
         String name = "setDistance(FPoint, double)";
         long time = System.currentTimeMillis();
@@ -951,19 +959,6 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     public Object clone() {
 
         return create((FPoint) core.clone());
-
-    }
-
-    @Override
-    public String toString() {
-
-        return core.toString();
-    }
-
-    @Override
-    public int hashCode() {
-
-        return core.hashCode();
     }
 
     @Override
@@ -974,109 +969,6 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         }
 
         return false;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public FPoint devSetStatisticsEnabled(boolean enabled) {
-
-        statistics.setEnabled(enabled);
-
-        return this;
-    }
-
-    @Override
-    public FPoint devDesc() {
-
-        String data = LocalTime.now().toString() + " - " + creationId + " (created at " + creationTime + ") - " +
-                exportToJSON() + "\n";
-
-        Config.getDebugPrintStream().println(data);
-
-        return self();
-    }
-
-    @Override
-    public FPoint devDescStatistics() {
-
-        String postfix = statistics.isEnabled() ? statistics.toString() : "EVENT LOGGING DISABLED\n";
-        String data = "Object statistics for " + creationId  + " (created at " + creationTime + "):\n" + postfix;
-
-        Config.getDebugPrintStream().println(data);
-
-        return self();
-    }
-
-    @Override
-    public FPoint devDescClassStatistics() {
-
-        String data = "Class statistics for FPointDevelopment:\n" +
-                statisticsClass.toString();
-
-        Config.getDebugPrintStream().println(data);
-
-        return self();
-    }
-
-    @Override
-    public FPoint devDescNumberOfInstances() {
-
-        String data = "Number of instances for FPointDevelopment: " + numberOfInstances + "\n";
-
-        Config.getDebugPrintStream().println(data);
-
-        return self();
-    };
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.of(numberOfInstances);
-    }
-
-    @Override
-    public FPoint devResetNumberOfInstances() {
-
-        numberOfInstances = 0;
-
-        return self();
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-
-        return Optional.of(statistics);
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-
-        return Optional.of(statisticsClass);
-    }
-
-    @Override
-    public String devGetLabel() {
-
-        return meta;
-    }
-
-    @Override
-    public FPoint devSetLabel(String label) {
-
-        this.meta = label;
-
-        return self();
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private void updateStats(String name, long startTime) {
-
-        long time = System.currentTimeMillis() - startTime;
-
-        statisticsClass.recordEvent(name, time);
-        statistics.recordEvent(name, time);
     }
 
 }

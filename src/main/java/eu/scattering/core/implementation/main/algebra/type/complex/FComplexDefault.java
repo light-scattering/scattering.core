@@ -2,13 +2,13 @@ package eu.scattering.core.implementation.main.algebra.type.complex;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static eu.scattering.core.Config.factory;
 
-public class FComplexDefault extends AlgebraPreset<FComplex> implements FComplex {
+public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements FComplex {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.

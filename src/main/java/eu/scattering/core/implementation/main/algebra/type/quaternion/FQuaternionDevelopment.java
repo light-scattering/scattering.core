@@ -3,13 +3,14 @@ package eu.scattering.core.implementation.main.algebra.type.quaternion;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import org.json.JSONObject;
 
 import java.util.Optional;
 
 import static eu.scattering.core.Config.factory;
 
-public class FQuaternionDevelopment implements FQuaternion {
+public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> implements FQuaternion {
 
     private static long numberOfInstances = 0;
 

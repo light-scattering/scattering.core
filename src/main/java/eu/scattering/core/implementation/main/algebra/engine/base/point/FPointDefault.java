@@ -2,7 +2,7 @@ package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
+import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static eu.scattering.core.Config.factory;
 
-public class FPointDefault extends BasePreset<FPoint> implements FPoint {
+public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.

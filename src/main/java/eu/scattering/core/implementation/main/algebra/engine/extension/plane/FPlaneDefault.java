@@ -4,7 +4,7 @@ import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPreset;
+import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPresetDefault;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import org.json.JSONArray;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import static eu.scattering.core.Config.factory;
 
-public class FPlaneDefault extends ExtensionPreset<FPlane> implements FPlane {
+public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPlane {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
