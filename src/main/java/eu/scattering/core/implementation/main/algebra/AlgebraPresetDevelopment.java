@@ -15,14 +15,14 @@ import static eu.scattering.core.Config.factory;
 
 public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
 
-    @Getter(AccessLevel.PROTECTED) private final FPoint core;
+    @Getter(AccessLevel.PROTECTED) private final T core;
     @Getter(AccessLevel.PRIVATE) private final Statistics instanceStatistics = factory.getStatistics().setEnabled(false);
     @Getter(AccessLevel.PRIVATE) private final LocalTime instanceCreationTime = LocalTime.now();
     @Getter(AccessLevel.PRIVATE) private final String instanceId = self().getClass().getSimpleName() + ":" + getNumberOfInstances();
 
     @Getter(AccessLevel.PRIVATE) @Setter(AccessLevel.PRIVATE) private String instanceLabel = "";
 
-    protected AlgebraPresetDevelopment(FPoint core) {
+    protected AlgebraPresetDevelopment(T core) {
 
         this.core = core;
     }
