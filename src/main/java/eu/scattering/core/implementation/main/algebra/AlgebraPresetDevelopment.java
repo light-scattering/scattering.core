@@ -4,6 +4,9 @@ import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.Algebra;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.Optional;
@@ -12,13 +15,17 @@ import static eu.scattering.core.Config.factory;
 
 public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
 
-    protected FPoint core;
+    @Getter(AccessLevel.PROTECTED) private final FPoint core;
+    @Getter(AccessLevel.PRIVATE) private final Statistics instanceStatistics = factory.getStatistics().setEnabled(false);
+    @Getter(AccessLevel.PRIVATE) private final LocalTime instanceCreationTime = LocalTime.now();
+    @Getter(AccessLevel.PRIVATE) private final String instanceId = self().getClass().getSimpleName() + ":" + getNumberOfInstances();
 
-    private final Statistics instanceStatistics = factory.getStatistics().setEnabled(false);
-    private final LocalTime instanceCreationTime = LocalTime.now();
-    private final String instanceId = self().getClass().getSimpleName() + ":" + getNumberOfInstances();
-    private final String className = self().getClass().getSimpleName();
-    private String instanceLabel = "";
+    @Getter(AccessLevel.PRIVATE) @Setter(AccessLevel.PRIVATE) private String instanceLabel = "";
+
+    protected AlgebraPresetDevelopment(FPoint core) {
+
+        this.core = core;
+    }
 
     protected abstract long getNumberOfInstances();
     protected abstract void setNumberOfInstances(long numberOfInstances);
@@ -35,13 +42,13 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     @Override
     public String toString() {
 
-        return core.toString();
+        return getCore().toString();
     }
 
     @Override
     public int hashCode() {
 
-        return core.hashCode();
+        return getCore().hashCode();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -86,7 +93,7 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     @Override
     public T devDescClassStatistics() {
 
-        String data = "Class statistics for " + className + ":\n" +
+        String data = "Class statistics for " + self().getClass().getSimpleName() + ":\n" +
                 getClassStatistics().toString();
 
         Config.getDebugPrintStream().println(data);
@@ -97,7 +104,7 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     @Override
     public T devDescNumberOfInstances() {
 
-        String data = "Number of instances for " + className + ": " + getNumberOfInstances() + "\n";
+        String data = "Number of instances for " + self().getClass().getSimpleName() + ": " + getNumberOfInstances() + "\n";
 
         Config.getDebugPrintStream().println(data);
 
