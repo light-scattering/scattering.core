@@ -804,17 +804,4 @@ public class FQuaternionDevelopment extends AlgebraPresetDevelopment<FQuaternion
 
         return res;
     }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FQuaternion) {
-            return getCore().equals(object);
-        }
-
-        return false;
-    }
-
 }

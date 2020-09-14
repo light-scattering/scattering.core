@@ -633,17 +633,4 @@ public class FComplexDevelopment extends AlgebraPresetDevelopment<FComplex> impl
 
         return res == getCore() ? this : create(res);
     }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FComplex) {
-            return getCore().equals(object);
-        }
-
-        return false;
-    }
-
 }

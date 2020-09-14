@@ -1292,17 +1292,4 @@ public class FVectorDevelopment extends AlgebraPresetDevelopment<FVector> implem
 
         return res == getCore() ? this : create(res);
     }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FVector) {
-            return getCore().equals(object);
-        }
-
-        return false;
-    }
-
 }

@@ -893,9 +893,9 @@ public class FComplexTest {
             assertAll("Validate copy",
                     () -> assertNotSame(fComplexRef, fComplex,
                             "FComplex objects contain different values"),
-                    () -> assertEquals(fComplexRef, fComplex,
+                    () -> assertTrue(fComplexRef.isExact(fComplex),
                             "FComplex values should be the same"),
-                    () -> assertNotEquals(fComplexRef, fComplex.add(fComplexRef),
+                    () -> assertFalse(fComplexRef.isExact(fComplex.add(fComplexRef)),
                             "FComplex values should be different")
             );
         }

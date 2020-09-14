@@ -10,11 +10,6 @@ import java.util.Optional;
 public abstract class AlgebraPresetDefault<T> implements Algebra<T> {
 
     @Override
-    public abstract boolean equals(Object object);
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
     public String toString() {
 
         return exportToJSON().toString();

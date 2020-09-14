@@ -185,17 +185,6 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
         return hashCode;
     }
 
-    @Override
-    public boolean equals(Object object) {
-
-
-        if (object instanceof FQuaternion) {
-            return isExact((FQuaternion) object);
-        }
-
-        return false;
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
