@@ -5,7 +5,7 @@ import eu.scattering.core.design.support.helper.SignalHelper;
 
 public interface SupportFactory {
 
-    AngleHelper forAngle();
+    AngleHelper getHelperAngle();
 
-    SignalHelper forSignal();
+    SignalHelper getHelperSignal();
 }

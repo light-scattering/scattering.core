@@ -1,13 +1,12 @@
 package eu.scattering.core.implementation.main.algebra.engine.extension.plane;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPreset;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -15,42 +14,43 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
-public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane {
+public class FPlaneDevelopment extends AlgebraPresetDevelopment<FPlane> implements FPlane {
 
+    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
-
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
-    private final Statistics statsObject = developmentFactory.getStatistics();
-
-    private final FPlane core;
-
-    private FPlaneDevelopment(FPlane core) {
-
-        numberOfInstances++;
-
-        this.core = core;
-    }
 
     public static FPlane create(FPlane core) {
 
+        numberOfInstances++;
         return new FPlaneDevelopment(core);
     }
 
-    public FPlane objectStatisticsEnable() {
+    @Override
+    protected Statistics getClassStatistics() {
 
-        statsObject.setEnabled();
-
-        return this;
+        return classStatistics;
     }
 
-    public FPlane objectStatisticsDisable() {
+    @Override
+    protected long getNumberOfInstances() {
 
-        statsObject.setDisabled();
-
-        return this;
+        return numberOfInstances;
     }
+
+    @Override
+    protected void setNumberOfInstances(long numberOfInstances) {
+
+        this.numberOfInstances = numberOfInstances;
+    }
+
+    private FPlaneDevelopment(FPlane core) {
+
+        setCore(core);
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public Function<Engine, List<Boolean>> isInHalfSpace() {
@@ -58,7 +58,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "isInHalfSpace()";
         long time = System.currentTimeMillis();
 
-        var res = core.isInHalfSpace();
+        var res = getCore().isInHalfSpace();
 
         updateStats(name, time);
 
@@ -71,7 +71,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "isCut(IBaseExtensionAssembly)";
         long time = System.currentTimeMillis();
 
-        var res = core.isCut(assembly);
+        var res = getCore().isCut(assembly);
 
         updateStats(name, time);
 
@@ -84,7 +84,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "getCommonFPoint(FLine)";
         long time = System.currentTimeMillis();
 
-        var res = core.getCommonFPoint(ref);
+        var res = getCore().getCommonFPoint(ref);
 
         updateStats(name, time);
 
@@ -97,34 +97,11 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "getCommonFLine(FPlane)";
         long time = System.currentTimeMillis();
 
-        var res = core.getCommonFLine(ref);
+        var res = getCore().getCommonFLine(ref);
 
         updateStats(name, time);
 
         return res;
-    }
-
-    @Override
-    public Object clone() {
-
-        String name = "clone()";
-        long time = System.currentTimeMillis();
-
-        var res = core.clone();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPlane) {
-            return core.equals(object);
-        }
-
-        return false;
     }
 
     @Override
@@ -133,7 +110,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "isExact(FPlane)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(element);
+        var res = getCore().isExact(element);
 
         updateStats(name, time);
 
@@ -146,7 +123,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "isSimilar(element)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(element);
+        var res = getCore().isSimilar(element);
 
         updateStats(name, time);
 
@@ -159,7 +136,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "exportToJSON()";
         long time = System.currentTimeMillis();
 
-        var res = core.exportToJSON();
+        var res = getCore().exportToJSON();
 
         updateStats(name, time);
 
@@ -172,11 +149,11 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        var res = core.importFromJSON(json);
+        var res = getCore().importFromJSON(json);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -185,11 +162,11 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = core.copy();
+        var res = getCore().copy();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -199,16 +176,16 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
     }
 
     @Override
-    public FPlane devDescribe() {
+    public FPlane devDesc() {
 
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        var res = core.devDescribe();
+        var res = getCore().devDesc();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -217,7 +194,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "getOrigin()";
         long time = System.currentTimeMillis();
 
-        var res = core.getOrigin();
+        var res = getCore().getOrigin();
 
         updateStats(name, time);
 
@@ -230,11 +207,11 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "setOriginRef(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.setOriginRef(origin);
+        var res = getCore().setOriginRef(origin);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -243,7 +220,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "getBase()";
         long time = System.currentTimeMillis();
 
-        var res = core.getBase();
+        var res = getCore().getBase();
 
         updateStats(name, time);
 
@@ -256,7 +233,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "getHead()";
         long time = System.currentTimeMillis();
 
-        var res = core.getHead();
+        var res = getCore().getHead();
 
         updateStats(name, time);
 
@@ -269,7 +246,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "project()";
         long time = System.currentTimeMillis();
 
-        var res = core.project();
+        var res = getCore().project();
 
         updateStats(name, time);
 
@@ -282,7 +259,7 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "reflect()";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect();
+        var res = getCore().reflect();
 
         updateStats(name, time);
 
@@ -290,12 +267,12 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
     }
 
     @Override
-    public Consumer<Engine> setDistance(double distance) throws IllegalStateException {
+    public Consumer<Engine> setDistance(double distance) {
 
         String name = "setDistance(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setDistance(distance);
+        var res = getCore().setDistance(distance);
 
         updateStats(name, time);
 
@@ -308,7 +285,20 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "getDistance()";
         long time = System.currentTimeMillis();
 
-        var res = core.getDistance();
+        var res = getCore().getDistance();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public Function<Engine, List<Double>> getDistanceP2() {
+
+        String name = "getDistanceP2()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getDistanceP2();
 
         updateStats(name, time);
 
@@ -321,7 +311,20 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
         String name = "isPartOf()";
         long time = System.currentTimeMillis();
 
-        var res = core.isPartOf();
+        var res = getCore().isPartOf();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public List<FPoint> disassemble() {
+
+        String name = "disassemble()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().disassemble();
 
         updateStats(name, time);
 
@@ -331,60 +334,26 @@ public class FPlaneDevelopment extends ExtensionPreset<FPlane> implements FPlane
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Optional<Long> devGetNumberOfInstances() {
+    public Object clone() {
 
-        return Optional.of(numberOfInstances);
+        String name = "clone()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().clone();
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override
-    public FPlane devResetNumberOfInstances() {
+    public boolean equals(Object object) {
 
-        numberOfInstances = 0;
-
-        return self();
-    }
-
-    @Override
-    public FPlane devDescribeStatistics() {
-
-        Config.getDebugPrintStream().println(statsObject.toString());
-
-        return self();
-    }
-
-    @Override
-    public FPlane devDescribeClassStatistics() {
-
-        Config.getDebugPrintStream().println(statsClass.toString());
-
-        return self();
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-
-        return Optional.of(statsObject);
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-
-        return Optional.of(statsClass);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private void updateStats(String name, long startTime) {
-
-        long time = System.currentTimeMillis() - startTime;
-
-        statsClass.recordEvent(name, time);
-
-        if (statsObject.isEnabled()) {
-            return;
+        if (object instanceof FPlane) {
+            return getCore().equals(object);
         }
 
-        statsObject.recordEvent(name, time);
+        return false;
     }
 
 }

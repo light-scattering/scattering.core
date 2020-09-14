@@ -7,9 +7,7 @@ import eu.scattering.core.design.main.algebra.Algebra;
 import java.time.LocalTime;
 import java.util.Optional;
 
-public abstract class AlgebraPreset<T> implements Algebra<T> {
-
-    private String meta = "";
+public abstract class AlgebraPresetDefault<T> implements Algebra<T> {
 
     @Override
     public abstract Object clone();
@@ -26,7 +24,23 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devDescribe() {
+    public boolean devIsStatisticsEnabled() {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return false;
+    }
+
+    @Override
+    public T devSetStatisticsEnabled(boolean enabled) {
+
+        Config.getDebugPrintStream().println("Not implemented");
+
+        return self();
+    }
+
+    @Override
+    public T devDesc() {
 
         Config.getDebugPrintStream().println(LocalTime.now().toString()
                 + " - " + self().getClass().getSimpleName()
@@ -36,7 +50,7 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devDescribeStatistics() {
+    public T devDescStatistics() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
@@ -44,7 +58,7 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T devDescribeClassStatistics() {
+    public T devDescClassStatistics() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
@@ -52,15 +66,21 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public T objectStatisticsEnable() {
+    public T devDescNumberOfInstances() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
         return self();
+    };
+
+    @Override
+    public Optional<Long> devGetNumberOfInstances() {
+
+        return Optional.empty();
     }
 
     @Override
-    public T objectStatisticsDisable() {
+    public T devResetNumberOfInstances() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
@@ -80,29 +100,17 @@ public abstract class AlgebraPreset<T> implements Algebra<T> {
     }
 
     @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.empty();
-    }
-
-    @Override
-    public T devResetNumberOfInstances() {
+    public String devGetLabel() {
 
         Config.getDebugPrintStream().println("Not implemented");
 
-        return self();
-    }
-
-    @Override
-    public String devGetLabel() {
-
-        return meta;
+        return "";
     }
 
     @Override
     public T devSetLabel(String label) {
 
-        this.meta = label;
+        Config.getDebugPrintStream().println("Not implemented");
 
         return self();
     }

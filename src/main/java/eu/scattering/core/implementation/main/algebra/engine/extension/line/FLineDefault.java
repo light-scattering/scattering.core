@@ -4,7 +4,8 @@ import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPreset;
+import eu.scattering.core.design.main.box.rotation.FRotation;
+import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPresetDefault;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,9 +16,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 
-public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
+public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -29,7 +30,7 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
 
     public static FLine create() {
 
-        return new FLineDefault().setOriginRef(mainFactory.getFVector());
+        return new FLineDefault().setOriginRef(factory.getFVector());
     }
 
     @Override
@@ -67,7 +68,7 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
     public FLine importFromJSON(JSONObject json) {
         JSONArray structure = json.getJSONArray("line");
 
-        getOrigin().set(mainFactory.getFVector().importFromJSON(structure.getJSONObject(0)));
+        getOrigin().set(factory.getFVector().importFromJSON(structure.getJSONObject(0)));
 
         return this;
     }
@@ -75,7 +76,7 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
     @Override
     public FLine copy() {
 
-        return mainFactory.getFLine(getOrigin().copy());
+        return factory.getFLine(getOrigin().copy());
     }
 
     @Override
@@ -157,6 +158,18 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
     }
 
     @Override
+    public Function<Engine, List<Double>> getDistanceP2() {
+
+        if (getOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return (e) -> e.disassemble().stream()
+                .map(p -> p.getDistanceP2(projectFPoint(p.copy())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Consumer<Engine> setDistance(double distance) {
 
         if (getOrigin().isNonDirectional()) {
@@ -204,6 +217,19 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
     }
 
     @Override
+    public Consumer<Engine> rotate(double angle) {
+
+        if (getOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        FRotation rotation = factory.getFRotation(getOrigin(), angle);
+
+        return (e) -> e.disassemble()
+                .forEach(p -> p.ext(rotation.rotate()));
+    }
+
+    @Override
     public FPoint getFPoint(double length) {
 
         if (getOrigin().isNonDirectional()) {
@@ -238,7 +264,7 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
         double y = getOrigin().getBase().getY() + (m / l * (x - getOrigin().getBase().getX()));
         double z = getOrigin().getBase().getZ() + (n / l * (x - getOrigin().getBase().getX()));
 
-        return Optional.of(mainFactory.getFPoint(x, y, z));
+        return Optional.of(factory.getFPoint(x, y, z));
     }
 
     @Override
@@ -259,7 +285,7 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
         double x = getOrigin().getBase().getX() + (l / m * (y - getOrigin().getBase().getY()));
         double z = getOrigin().getBase().getZ() + (n / m * (y - getOrigin().getBase().getY()));
 
-        return Optional.of(mainFactory.getFPoint(x, y, z));
+        return Optional.of(factory.getFPoint(x, y, z));
     }
 
     @Override
@@ -280,7 +306,7 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
         double x = getOrigin().getBase().getX() + (l / n * (z - getOrigin().getBase().getZ()));
         double y = getOrigin().getBase().getY() + (m / n * (z - getOrigin().getBase().getZ()));
 
-        return Optional.of(mainFactory.getFPoint(x, y, z));
+        return Optional.of(factory.getFPoint(x, y, z));
     }
 
     @Override
@@ -294,7 +320,7 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
 
         FVector u = projectOnPlane(dir, getOrigin().copy());
         FVector v = projectOnPlane(dir, ref.getOrigin().copy());
-        FVector w = mainFactory.getFVector(v.getBase(), u.getBase());
+        FVector w = factory.getFVector(v.getBase(), u.getBase());
 
         v = getCrossProduct(dir, v);
 
@@ -438,11 +464,11 @@ public class FLineDefault extends ExtensionPreset<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectFPoint(FPoint fPoint) {
-        FPoint opA = mainFactory.getFPoint(getOrigin().getHead())
+        FPoint opA = factory.getFPoint(getOrigin().getHead())
                 .sub(getOrigin().getBase())
                 .div(getOrigin().getLength());
 
-        FPoint opB = mainFactory.getFPoint(fPoint)
+        FPoint opB = factory.getFPoint(fPoint)
                 .sub(getOrigin().getBase());
 
         fPoint.set(origin.getBase().copy().add(opA.mul(opB.getDotProduct(opA))));

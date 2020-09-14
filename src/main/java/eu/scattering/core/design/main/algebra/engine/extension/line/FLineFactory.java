@@ -10,5 +10,4 @@ public interface FLineFactory {
 
         return getFLine().setOriginRef(fVector);
     }
-
 }

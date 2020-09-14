@@ -1,19 +1,19 @@
 package eu.scattering.core.design.development.statistics;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public interface Statistics {
 
-    Statistics reset();
-
-    Statistics setEnabled();
-    Statistics setDisabled();
-
     boolean isEnabled();
+    Statistics setEnabled(boolean enabled);
 
+    Statistics reset();
     Statistics recordEvent(String methodName, long methodExecutionTime);
+    
+    Set<String> getMethodNames();
 
-    Set<String> getRegisteredMethodNames();
-    Optional<StatisticsMethod> getRegisteredMethod(String methodName);
+    Optional<Integer> getNumberOfIterations(String methodName);
+    Optional<List<Integer>> getExecutionTimes(String methodName);
 }

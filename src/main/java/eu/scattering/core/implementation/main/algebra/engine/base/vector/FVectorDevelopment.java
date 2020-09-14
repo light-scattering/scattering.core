@@ -1,55 +1,56 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.Engine;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
-public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
+public class FVectorDevelopment extends AlgebraPresetDevelopment<FVector> implements FVector {
 
+    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
-
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
-    private final Statistics statsObject = developmentFactory.getStatistics();
-
-    private final FVector core;
-
-    private FVectorDevelopment(FVector core) {
-
-        numberOfInstances++;
-
-        this.core = core;
-    }
 
     public static FVector create(FVector core) {
 
+        numberOfInstances++;
         return new FVectorDevelopment(core);
     }
 
-    public FVector objectStatisticsEnable() {
 
-        statsObject.setEnabled();
+    @Override
+    protected Statistics getClassStatistics() {
 
-        return this;
+        return classStatistics;
     }
 
-    public FVector objectStatisticsDisable() {
+    @Override
+    protected long getNumberOfInstances() {
 
-        statsObject.setDisabled();
-
-        return this;
+        return numberOfInstances;
     }
+
+    @Override
+    protected void setNumberOfInstances(long numberOfInstances) {
+
+        this.numberOfInstances = numberOfInstances;
+    }
+
+
+    private FVectorDevelopment(FVector core) {
+
+        setCore(core);
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isExact(FVector element) {
@@ -57,7 +58,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "isExact(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(element);
+        var res = getCore().isExact(element);
 
         updateStats(name, time);
 
@@ -70,7 +71,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "isSimilar(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(element);
+        var res = getCore().isSimilar(element);
 
         updateStats(name, time);
 
@@ -83,7 +84,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "exportToJSON()";
         long time = System.currentTimeMillis();
 
-        var res = core.exportToJSON();
+        var res = getCore().exportToJSON();
 
         updateStats(name, time);
 
@@ -96,11 +97,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        var res = core.importFromJSON(json);
+        var res = getCore().importFromJSON(json);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -109,7 +110,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = core.copy();
+        var res = getCore().copy();
 
         updateStats(name, time);
 
@@ -123,16 +124,16 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector devDescribe() {
+    public FVector devDesc() {
 
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        var res = core.devDescribe();
+        var res = getCore().devDesc();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -141,11 +142,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "add(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(fPoint);
+        var res = getCore().add(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -154,11 +155,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "add(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(x, y, z);
+        var res = getCore().add(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -167,11 +168,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(factor);
+        var res = getCore().add(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -180,11 +181,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "addX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addX(x);
+        var res = getCore().addX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -193,11 +194,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "addY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addY(y);
+        var res = getCore().addY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -206,11 +207,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "addZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addZ(z);
+        var res = getCore().addZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -219,11 +220,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "sub(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(fPoint);
+        var res = getCore().sub(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -232,11 +233,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "devDescribe()";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(x, y, z);
+        var res = getCore().sub(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -245,11 +246,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "sub(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(factor);
+        var res = getCore().sub(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -258,11 +259,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "subX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subX(x);
+        var res = getCore().subX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -271,11 +272,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "subY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subY(y);
+        var res = getCore().subY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -284,11 +285,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "subZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subZ(z);
+        var res = getCore().subZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -297,11 +298,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "mul(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(fPoint);
+        var res = getCore().mul(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -310,11 +311,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "mul(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(x, y, z);
+        var res = getCore().mul(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -323,11 +324,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "mul(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(factor);
+        var res = getCore().mul(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -336,11 +337,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "mulX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulX(x);
+        var res = getCore().mulX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -349,11 +350,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "mulY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulY(y);
+        var res = getCore().mulY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -362,11 +363,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "mulZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulZ(z);
+        var res = getCore().mulZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -375,11 +376,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "div(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(fPoint);
+        var res = getCore().div(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -388,11 +389,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "div(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(x, y, z);
+        var res = getCore().div(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -401,11 +402,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "div(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(factor);
+        var res = getCore().div(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -414,11 +415,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "divX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divX(x);
+        var res = getCore().divX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -427,11 +428,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "divY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divY(y);
+        var res = getCore().divY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -440,11 +441,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "divZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divZ(z);
+        var res = getCore().divZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -453,11 +454,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "set(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(element);
+        var res = getCore().set(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -466,11 +467,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "imprint(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.imprint(element);
+        var res = getCore().imprint(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -479,11 +480,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "trans(Consumer<FVector>)";
         long time = System.currentTimeMillis();
 
-        var res = core.trans(exp);
+        var res = getCore().trans(exp);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -492,7 +493,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "transDouble(Function<FVector, Double>)";
         long time = System.currentTimeMillis();
 
-        var res = core.transDouble(exp);
+        var res = getCore().transDouble(exp);
 
         updateStats(name, time);
 
@@ -505,7 +506,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "transBoolean(Predicate<FVector>)";
         long time = System.currentTimeMillis();
 
-        var res = core.transBoolean(exp);
+        var res = getCore().transBoolean(exp);
 
         updateStats(name, time);
 
@@ -518,11 +519,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "ext(Consumer<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.ext(exp);
+        var res = getCore().ext(exp);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -531,7 +532,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "extDouble(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extDouble(exp);
+        var res = getCore().extDouble(exp);
 
         updateStats(name, time);
 
@@ -544,7 +545,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "extBoolean(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extBoolean(exp);
+        var res = getCore().extBoolean(exp);
 
         updateStats(name, time);
 
@@ -557,7 +558,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "disassemble()";
         long time = System.currentTimeMillis();
 
-        var res = core.disassemble();
+        var res = getCore().disassemble();
 
         updateStats(name, time);
 
@@ -570,11 +571,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setSphericalCoordinates(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setSphericalCoordinates(inclination, azimuth);
+        var res = getCore().setSphericalCoordinates(inclination, azimuth);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -583,11 +584,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setRandomAngle(FPoint...)";
         long time = System.currentTimeMillis();
 
-        var res = core.setRandomAngle(exclusion);
+        var res = getCore().setRandomAngle(exclusion);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -596,7 +597,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "isExact(double, double, double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(bX, bY, bZ, hX, hY, hZ);
+        var res = getCore().isExact(bX, bY, bZ, hX, hY, hZ);
 
         updateStats(name, time);
 
@@ -609,7 +610,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "isSimilar(double, double, double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(bX, bY, bZ, hX, hY, hZ);
+        var res = getCore().isSimilar(bX, bY, bZ, hX, hY, hZ);
 
         updateStats(name, time);
 
@@ -622,11 +623,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "moveBase()";
         long time = System.currentTimeMillis();
 
-        var res = core.moveBase();
+        var res = getCore().moveBase();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -635,11 +636,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "moveBase(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveBase(bX, bY, bZ);
+        var res = getCore().moveBase(bX, bY, bZ);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -648,11 +649,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "moveBase(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveBase(base);
+        var res = getCore().moveBase(base);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -661,11 +662,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "moveHead()";
         long time = System.currentTimeMillis();
 
-        var res = core.moveHead();
+        var res = getCore().moveHead();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -674,11 +675,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "moveHead(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveHead(hX, hY, hZ);
+        var res = getCore().moveHead(hX, hY, hZ);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -687,37 +688,37 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "moveHead(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveHead(head);
+        var res = getCore().moveHead(head);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
-    public FVector moveForward(double distance) throws IllegalStateException {
+    public FVector moveForward(double distance) {
 
         String name = "moveForward(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveForward(distance);
+        var res = getCore().moveForward(distance);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
-    public FVector moveBackward(double distance) throws IllegalStateException {
+    public FVector moveBackward(double distance) {
 
         String name = "moveBackward(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveBackward(distance);
+        var res = getCore().moveBackward(distance);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -726,11 +727,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "add(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(vector);
+        var res = getCore().add(vector);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -739,11 +740,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "sub(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(vector);
+        var res = getCore().sub(vector);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -752,7 +753,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getLength()";
         long time = System.currentTimeMillis();
 
-        var res = core.getLength();
+        var res = getCore().getLength();
 
         updateStats(name, time);
 
@@ -765,7 +766,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getLengthP2()";
         long time = System.currentTimeMillis();
 
-        var res = core.getLengthP2();
+        var res = getCore().getLengthP2();
 
         updateStats(name, time);
 
@@ -773,16 +774,16 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector setLength(double length) throws IllegalStateException {
+    public FVector setLength(double length) {
 
         String name = "setLength(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setLength(length);
+        var res = getCore().setLength(length);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -791,7 +792,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getLengthX()";
         long time = System.currentTimeMillis();
 
-        var res = core.getLengthX();
+        var res = getCore().getLengthX();
 
         updateStats(name, time);
 
@@ -804,7 +805,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getLengthY()";
         long time = System.currentTimeMillis();
 
-        var res = core.getLengthY();
+        var res = getCore().getLengthY();
 
         updateStats(name, time);
 
@@ -817,7 +818,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getLengthZ()";
         long time = System.currentTimeMillis();
 
-        var res = core.getLengthZ();
+        var res = getCore().getLengthZ();
 
         updateStats(name, time);
 
@@ -825,16 +826,16 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector normalize() throws IllegalStateException {
+    public FVector normalize() {
 
         String name = "normalize()";
         long time = System.currentTimeMillis();
 
-        var res = core.normalize();
+        var res = getCore().normalize();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -843,11 +844,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "reflect(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect(center);
+        var res = getCore().reflect(center);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -856,11 +857,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "reflectBase()";
         long time = System.currentTimeMillis();
 
-        var res = core.reflectBase();
+        var res = getCore().reflectBase();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -869,11 +870,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "reflectHead()";
         long time = System.currentTimeMillis();
 
-        var res = core.reflectHead();
+        var res = getCore().reflectHead();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -882,11 +883,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "invertDirection()";
         long time = System.currentTimeMillis();
 
-        var res = core.invertDirection();
+        var res = getCore().invertDirection();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -895,7 +896,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getInclination()";
         long time = System.currentTimeMillis();
 
-        var res = core.getInclination();
+        var res = getCore().getInclination();
 
         updateStats(name, time);
 
@@ -908,11 +909,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setInclination(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setInclination(inclination);
+        var res = getCore().setInclination(inclination);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -921,7 +922,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getAzimuth()";
         long time = System.currentTimeMillis();
 
-        var res = core.getAzimuth();
+        var res = getCore().getAzimuth();
 
         updateStats(name, time);
 
@@ -934,20 +935,20 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setAzimuth(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setAzimuth(azimuth);
+        var res = getCore().setAzimuth(azimuth);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
-    public double getAngle(FPoint ref) throws IllegalStateException {
+    public double getAngle(FPoint ref) {
 
         String name = "getAngle(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.getAngle(ref);
+        var res = getCore().getAngle(ref);
 
         updateStats(name, time);
 
@@ -955,12 +956,12 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public double getAngle(FVector ref) throws IllegalStateException {
+    public double getAngle(FVector ref) {
 
         String name = "getAngle(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.getAngle(ref);
+        var res = getCore().getAngle(ref);
 
         updateStats(name, time);
 
@@ -973,11 +974,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setAngle(FPoint, angle)";
         long time = System.currentTimeMillis();
 
-        var res = core.setAngle(ref, angle);
+        var res = getCore().setAngle(ref, angle);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -986,11 +987,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setAngle(FVector, angle)";
         long time = System.currentTimeMillis();
 
-        var res = core.setAngle(ref, angle);
+        var res = getCore().setAngle(ref, angle);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -999,11 +1000,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "rotate(FPoint, angle)";
         long time = System.currentTimeMillis();
 
-        var res = core.rotate(ref, angle);
+        var res = getCore().rotate(ref, angle);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1012,11 +1013,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "rotate(FVector, angle)";
         long time = System.currentTimeMillis();
 
-        var res = core.rotate(ref, angle);
+        var res = getCore().rotate(ref, angle);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1025,7 +1026,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getDotProduct(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.getDotProduct(ref);
+        var res = getCore().getDotProduct(ref);
 
         updateStats(name, time);
 
@@ -1038,7 +1039,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getDotProduct(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.getDotProduct(ref);
+        var res = getCore().getDotProduct(ref);
 
         updateStats(name, time);
 
@@ -1051,11 +1052,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setCrossProduct(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setCrossProduct(ref);
+        var res = getCore().setCrossProduct(ref);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1064,11 +1065,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setCrossProduct(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.setCrossProduct(ref);
+        var res = getCore().setCrossProduct(ref);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1077,7 +1078,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "isCollinear(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.isCollinear(ref);
+        var res = getCore().isCollinear(ref);
 
         updateStats(name, time);
 
@@ -1085,12 +1086,12 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public boolean isParallel(FVector ref) throws IllegalStateException {
+    public boolean isParallel(FVector ref) {
 
         String name = "isParallel(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.isParallel(ref);
+        var res = getCore().isParallel(ref);
 
         updateStats(name, time);
 
@@ -1098,25 +1099,25 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector setParallel(FVector ref) throws IllegalStateException {
+    public FVector setParallel(FVector ref) {
 
         String name = "setParallel(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.setParallel(ref);
+        var res = getCore().setParallel(ref);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
-    public boolean isAntiParallel(FVector ref) throws IllegalStateException {
+    public boolean isAntiParallel(FVector ref) {
 
         String name = "isAntiParallel(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.isAntiParallel(ref);
+        var res = getCore().isAntiParallel(ref);
 
         updateStats(name, time);
 
@@ -1124,25 +1125,25 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector setAntiParallel(FVector ref) throws IllegalStateException {
+    public FVector setAntiParallel(FVector ref) {
 
         String name = "setAntiParallel(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.setAntiParallel(ref);
+        var res = getCore().setAntiParallel(ref);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
-    public boolean isOrthogonal(FVector ref) throws IllegalStateException {
+    public boolean isOrthogonal(FVector ref) {
 
         String name = "isOrthogonal(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.isOrthogonal(ref);
+        var res = getCore().isOrthogonal(ref);
 
         updateStats(name, time);
 
@@ -1150,16 +1151,16 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     }
 
     @Override
-    public FVector setOrthogonal(FVector ref) throws IllegalStateException {
+    public FVector setOrthogonal(FVector ref) {
 
         String name = "setOrthogonal(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.setOrthogonal(ref);
+        var res = getCore().setOrthogonal(ref);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1168,7 +1169,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "isNonDirectional()";
         long time = System.currentTimeMillis();
 
-        var res = core.isNonDirectional();
+        var res = getCore().isNonDirectional();
 
         updateStats(name, time);
 
@@ -1181,7 +1182,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "isZero()";
         long time = System.currentTimeMillis();
 
-        var res = core.isZero();
+        var res = getCore().isZero();
 
         updateStats(name, time);
 
@@ -1194,11 +1195,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "set(FPoint, FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(base, head);
+        var res = getCore().set(base, head);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1207,11 +1208,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setRef(FPoint, FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setRef(baseRef, headRef);
+        var res = getCore().setRef(baseRef, headRef);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1220,7 +1221,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getBase()";
         long time = System.currentTimeMillis();
 
-        var res = core.getBase();
+        var res = getCore().getBase();
 
         updateStats(name, time);
 
@@ -1233,11 +1234,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setBase(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setBase(base);
+        var res = getCore().setBase(base);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1246,11 +1247,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setBaseRef(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setBaseRef(baseRef);
+        var res = getCore().setBaseRef(baseRef);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1259,7 +1260,7 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "getHead()";
         long time = System.currentTimeMillis();
 
-        var res = core.getHead();
+        var res = getCore().getHead();
 
         updateStats(name, time);
 
@@ -1272,11 +1273,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setHead(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setHead(head);
+        var res = getCore().setHead(head);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -1285,11 +1286,11 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
         String name = "setHeadRef(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setHeadRef(headRef);
+        var res = getCore().setHeadRef(headRef);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -1297,88 +1298,18 @@ public class FVectorDevelopment extends BasePreset<FVector> implements FVector {
     @Override
     public Object clone() {
 
-        return create((FVector) core.clone());
+        return create((FVector) getCore().clone());
 
-    }
-
-    @Override
-    public String toString() {
-
-        return core.toString();
-    }
-
-    @Override
-    public int hashCode() {
-
-        return core.hashCode();
     }
 
     @Override
     public boolean equals(Object object) {
 
         if (object instanceof FVector) {
-            return core.equals(object);
+            return getCore().equals(object);
         }
 
         return false;
     }
 
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.of(numberOfInstances);
-    }
-
-    @Override
-    public FVector devResetNumberOfInstances() {
-
-        numberOfInstances = 0;
-
-        return self();
-    }
-
-    @Override
-    public FVector devDescribeStatistics() {
-
-        Config.getDebugPrintStream().println(statsObject.toString());
-
-        return self();
-    }
-
-    @Override
-    public FVector devDescribeClassStatistics() {
-
-        Config.getDebugPrintStream().println(statsClass.toString());
-
-        return self();
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-
-        return Optional.of(statsObject);
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-
-        return Optional.of(statsClass);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private void updateStats(String name, long startTime) {
-
-        long time = System.currentTimeMillis() - startTime;
-
-        statsClass.recordEvent(name, time);
-
-        if (statsObject.isEnabled()) {
-            return;
-        }
-
-        statsObject.recordEvent(name, time);
-    }
 }

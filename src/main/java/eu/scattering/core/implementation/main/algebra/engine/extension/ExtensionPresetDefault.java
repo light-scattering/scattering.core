@@ -1,12 +1,13 @@
 package eu.scattering.core.implementation.main.algebra.engine.extension;
 
-import eu.scattering.core.implementation.main.algebra.AlgebraPreset;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.extension.Extension;
 
 import java.util.List;
 
-public abstract class ExtensionPreset<T extends Extension<T>> extends AlgebraPreset<T> implements Extension<T> {
+public abstract class ExtensionPresetDefault<T extends Extension<T>>
+        extends AlgebraPresetDefault<T> implements Extension<T> {
 
     @Override
     public int hashCode() {
@@ -51,6 +52,4 @@ public abstract class ExtensionPreset<T extends Extension<T>> extends AlgebraPre
         return getOrigin().disassemble();
     }
 
-
 }
-

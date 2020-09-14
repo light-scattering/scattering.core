@@ -13,5 +13,4 @@ public interface FQuaternionFactory {
 
         return getFQuaternion().setRe(re);
     }
-
 }
