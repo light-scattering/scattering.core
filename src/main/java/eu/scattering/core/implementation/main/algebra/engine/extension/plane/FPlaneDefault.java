@@ -104,12 +104,6 @@ public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPl
         return false;
     }
 
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

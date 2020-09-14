@@ -196,12 +196,6 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
         return false;
     }
 
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

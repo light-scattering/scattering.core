@@ -155,12 +155,6 @@ public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements F
         return false;
     }
 
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

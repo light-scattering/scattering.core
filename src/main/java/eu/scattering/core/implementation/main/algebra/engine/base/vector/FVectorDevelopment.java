@@ -41,7 +41,7 @@ public class FVectorDevelopment extends AlgebraPresetDevelopment<FVector> implem
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        this.numberOfInstances = numberOfInstances;
+        FVectorDevelopment.numberOfInstances = numberOfInstances;
     }
 
 
@@ -1294,13 +1294,6 @@ public class FVectorDevelopment extends AlgebraPresetDevelopment<FVector> implem
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Object clone() {
-
-        return create((FVector) getCore().clone());
-
-    }
 
     @Override
     public boolean equals(Object object) {

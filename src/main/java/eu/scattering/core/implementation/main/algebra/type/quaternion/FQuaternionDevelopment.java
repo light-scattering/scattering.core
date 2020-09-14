@@ -33,7 +33,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDevelopment<FQuaternion
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        this.numberOfInstances = numberOfInstances;
+        FQuaternionDevelopment.numberOfInstances = numberOfInstances;
     }
 
     private FQuaternionDevelopment(FQuaternion core) {
@@ -806,12 +806,6 @@ public class FQuaternionDevelopment extends AlgebraPresetDevelopment<FQuaternion
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Object clone() {
-
-        return create((FQuaternion) getCore().clone());
-    }
 
     @Override
     public boolean equals(Object object) {

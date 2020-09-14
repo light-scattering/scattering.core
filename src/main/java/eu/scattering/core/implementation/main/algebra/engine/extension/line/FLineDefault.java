@@ -103,12 +103,6 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
         return false;
     }
 
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

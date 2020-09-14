@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface FPlane extends Algebra<FPlane>, Extension<FPlane>, Development<FPlane>, Cloneable {
+public interface FPlane extends Algebra<FPlane>, Extension<FPlane>, Development<FPlane>{
 
     Function<Engine, List<Boolean>> isInHalfSpace();
 
@@ -19,7 +19,5 @@ public interface FPlane extends Algebra<FPlane>, Extension<FPlane>, Development<
 
     Optional<FPoint> getCommonFPoint(FLine ref);
     Optional<FLine> getCommonFLine(FPlane ref);
-
-    Object clone();
 }
 

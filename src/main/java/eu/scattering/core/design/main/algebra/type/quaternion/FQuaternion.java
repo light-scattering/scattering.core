@@ -2,8 +2,7 @@ package eu.scattering.core.design.main.algebra.type.quaternion;
 
 import eu.scattering.core.design.main.algebra.type.Type;
 
-public interface FQuaternion extends FQuaternionAdvanced,
-        Type<FQuaternion>, Cloneable {
+public interface FQuaternion extends FQuaternionAdvanced, Type<FQuaternion> {
 
     FQuaternion set(FQuaternion fQuaternion);
     FQuaternion set(double re, double i, double j, double k);
@@ -17,6 +16,4 @@ public interface FQuaternion extends FQuaternionAdvanced,
     FQuaternion setJ(double j);
     double getK();
     FQuaternion setK(double k);
-
-    Object clone();
 }

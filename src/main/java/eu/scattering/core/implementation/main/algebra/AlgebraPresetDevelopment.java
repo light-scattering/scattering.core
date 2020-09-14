@@ -31,9 +31,6 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     protected abstract void setNumberOfInstances(long numberOfInstances);
 
     @Override
-    public abstract Object clone();
-
-    @Override
     public abstract boolean equals(Object object);
 
     // -------------------------------------------------------------------------------------------------
@@ -107,7 +104,7 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
         Config.getDebugPrintStream().println(result);
 
         return self();
-    };
+    }
 
     @Override
     public Optional<Long> devGetNumberOfInstances() {

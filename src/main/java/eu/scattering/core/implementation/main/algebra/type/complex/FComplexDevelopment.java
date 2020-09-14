@@ -33,7 +33,7 @@ public class FComplexDevelopment extends AlgebraPresetDevelopment<FComplex> impl
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        this.numberOfInstances = numberOfInstances;
+        FComplexDevelopment.numberOfInstances = numberOfInstances;
     }
 
     private FComplexDevelopment(FComplex core) {
@@ -635,12 +635,6 @@ public class FComplexDevelopment extends AlgebraPresetDevelopment<FComplex> impl
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Object clone() {
-
-        return create((FComplex) getCore().clone());
-    }
 
     @Override
     public boolean equals(Object object) {

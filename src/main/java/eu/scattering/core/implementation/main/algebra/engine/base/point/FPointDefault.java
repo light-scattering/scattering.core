@@ -178,12 +178,6 @@ public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
         return false;
     }
 
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

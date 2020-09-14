@@ -198,12 +198,6 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
         return false;
     }
 
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
 //--------------------------------------------------
 
     @Override

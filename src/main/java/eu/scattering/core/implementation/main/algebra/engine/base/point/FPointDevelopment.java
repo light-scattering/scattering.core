@@ -39,7 +39,7 @@ public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implemen
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        this.numberOfInstances = numberOfInstances;
+        FPointDevelopment.numberOfInstances = numberOfInstances;
     }
 
     private FPointDevelopment(FPoint core) {
@@ -953,12 +953,6 @@ public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implemen
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Object clone() {
-
-        return create((FPoint) getCore().clone());
-    }
 
     @Override
     public boolean equals(Object object) {

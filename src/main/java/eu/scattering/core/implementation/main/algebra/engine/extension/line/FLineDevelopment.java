@@ -41,7 +41,7 @@ public class FLineDevelopment extends AlgebraPresetDevelopment<FLine> implements
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        this.numberOfInstances = numberOfInstances;
+        FLineDevelopment.numberOfInstances = numberOfInstances;
     }
 
     private FLineDevelopment(FLine core) {
@@ -396,12 +396,6 @@ public class FLineDevelopment extends AlgebraPresetDevelopment<FLine> implements
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Object clone() {
-
-        return create((FLine) getCore().clone());
-    }
 
     @Override
     public boolean equals(Object object) {

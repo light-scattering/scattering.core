@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface FLine extends Algebra<FLine>, Extension<FLine>, Development<FLine>, Cloneable {
+public interface FLine extends Algebra<FLine>, Extension<FLine>, Development<FLine> {
 
     Consumer<Engine> moveForward(double distance);
     Consumer<Engine> moveBackward(double distance);
@@ -28,6 +28,4 @@ public interface FLine extends Algebra<FLine>, Extension<FLine>, Development<FLi
     Optional<FPoint> getFPointAtZ(double z);
 
     Optional<FPoint> getCommonFPoint(FLine ref);
-
-    Object clone();
 }
