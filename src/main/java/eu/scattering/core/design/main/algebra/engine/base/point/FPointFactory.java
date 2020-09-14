@@ -23,5 +23,4 @@ public interface FPointFactory {
 
         return getFPoint().set(fPoint);
     }
-
 }

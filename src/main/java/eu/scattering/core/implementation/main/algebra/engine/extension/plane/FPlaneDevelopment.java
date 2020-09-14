@@ -293,6 +293,19 @@ public class FPlaneDevelopment extends AlgebraPresetDevelopment<FPlane> implemen
     }
 
     @Override
+    public Function<Engine, List<Double>> getDistanceP2() {
+
+        String name = "getDistanceP2()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getDistanceP2();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
     public Function<Engine, List<Boolean>> isPartOf() {
 
         String name = "isPartOf()";

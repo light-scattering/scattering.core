@@ -8,5 +8,4 @@ public interface FComplexFactory {
 
         return getFComplex().set(re, im);
     }
-
 }

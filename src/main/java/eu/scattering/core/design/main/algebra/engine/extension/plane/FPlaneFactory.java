@@ -10,5 +10,4 @@ public interface FPlaneFactory {
 
         return getFPlane().setOriginRef(fVector);
     }
-
 }

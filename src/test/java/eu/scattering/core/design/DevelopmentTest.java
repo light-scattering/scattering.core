@@ -396,7 +396,7 @@ public class DevelopmentTest {
         }
 
         @Test
-        @DisplayName("Describe instance class statistics")
+        @DisplayName("Describe class statistics")
         @Disabled("The method prints a message to the output stream")
         void getDescClassStatistics() {
 

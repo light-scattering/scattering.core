@@ -4,6 +4,7 @@ import eu.scattering.core.Config;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
+import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPresetDefault;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import org.json.JSONArray;
@@ -157,6 +158,18 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
     }
 
     @Override
+    public Function<Engine, List<Double>> getDistanceP2() {
+
+        if (getOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return (e) -> e.disassemble().stream()
+                .map(p -> p.getDistanceP2(projectFPoint(p.copy())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Consumer<Engine> setDistance(double distance) {
 
         if (getOrigin().isNonDirectional()) {
@@ -201,6 +214,19 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
         return (e) -> e.disassemble().stream()
                 .map(this::isPartOfSegment)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Consumer<Engine> rotate(double angle) {
+
+        if (getOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        FRotation rotation = factory.getFRotation(getOrigin(), angle);
+
+        return (e) -> e.disassemble()
+                .forEach(p -> p.ext(rotation.rotate()));
     }
 
     @Override

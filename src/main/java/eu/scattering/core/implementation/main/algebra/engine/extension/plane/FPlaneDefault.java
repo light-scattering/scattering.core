@@ -159,6 +159,18 @@ public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPl
     }
 
     @Override
+    public Function<Engine, List<Double>> getDistanceP2() {
+
+        if (getOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return (e) -> e.disassemble().stream()
+                .map(p -> p.getDistanceP2(projectOnPlane(p.copy())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Consumer<Engine> setDistance(double distance) {
 
         if (getOrigin().isNonDirectional()) {

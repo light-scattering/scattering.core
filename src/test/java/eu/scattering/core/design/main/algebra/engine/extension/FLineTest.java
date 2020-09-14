@@ -515,27 +515,7 @@ public class FLineTest {
             fPoint.add(relocation);
 
             assertEquals(Math.sqrt(6), fPoint.extDouble(fLine.getDistance()).get(0),
-                    "The distance is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get distance (position base)")
-        void getDistancePositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
-            FPoint fPoint = factory.getFPoint(0, -9, 0);
-
-            fPoint.extDouble(fLine.getDistance());
-        }
-
-        @Test
-        @DisplayName("Get distance (position head)")
-        void getDistancePositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
-            FPoint fPoint = factory.getFPoint(0, 9, 0);
-
-            fPoint.extDouble(fLine.getDistance());
+                    Config.getJitter(), "The distance is erroneous");
         }
 
         @Test
@@ -554,6 +534,39 @@ public class FLineTest {
             FLine fLine = factory.getFLine(factory.getFVector(1, 1, 1));
 
             FLineTestHelper.testValue(FLine::getDistance, fLine);
+        }
+
+        @Test
+        @DisplayName("Get distance P2")
+        void getDistanceP2() {
+            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint relocation = RandomHelper.getTestPoint();
+
+            fLine.getOrigin().add(relocation);
+            fPoint.add(relocation);
+
+            assertEquals(6, fPoint.extDouble(fLine.getDistanceP2()).get(0),
+                    "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 (throw IllegalStateException)")
+        void getDistanceP2ThrowIllegalStateException() {
+            FLine fLine = factory.getFLine(factory.getFVector());
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            assertThrows(IllegalStateException.class, () -> fPoint.extDouble(fLine.getDistanceP2()),
+                    "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 (validate)")
+        void getDistanceP2Validate() {
+            FLine fLine = factory.getFLine(factory.getFVector(1, 1, 1));
+
+            FLineTestHelper.testValue(FLine::getDistanceP2, fLine);
         }
 
         @Test
@@ -834,6 +847,48 @@ public class FLineTest {
             FLine fLine = factory.getFLine(factory.getFVector());
 
             FLineTestHelper.testValue(e -> e.moveBackward(1), fLine);
+        }
+
+        @Test
+        @DisplayName("Rotate (simple)")
+        void rotateSimple() {
+            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+            FLine fLine = factory.getFLine(factory.getFVector(0, 1, 0));
+
+            fVector.ext(fLine.rotate(Math.PI * 0.5));
+
+            assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate (simple, negative)")
+        void rotateSimpleNegative() {
+            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+            FLine fLine = factory.getFLine(factory.getFVector(0, 1, 0));
+
+            fVector.ext(fLine.rotate(-(Math.PI * 0.5)));
+
+            assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate  (throw IllegalStateException)")
+        void rotateThrowIllegalStateException() {
+            FVector fVector = RandomHelper.getTestVector();
+            FLine fLine = factory.getFLine(factory.getFVector());
+
+            assertThrows(IllegalStateException.class, () -> fVector.ext(fLine.rotate(Math.PI * 0.5)),
+                    "The direction of the FLine is not defined");
+        }
+
+        @Test
+        @DisplayName("Rotate (validate)")
+        void rotateValidate() {
+            FLine fLine = factory.getFLine(RandomHelper.getTestVector());
+
+            FLineTestHelper.testValue(e -> e.rotate(Math.PI * 0.5), fLine);
         }
 
         @Test

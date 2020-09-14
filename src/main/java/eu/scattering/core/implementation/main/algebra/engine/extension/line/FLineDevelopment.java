@@ -227,6 +227,19 @@ public class FLineDevelopment extends AlgebraPresetDevelopment<FLine> implements
     }
 
     @Override
+    public Function<Engine, List<Double>> getDistanceP2() {
+
+        String name = "getDistanceP2()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getDistanceP2();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
     public Function<Engine, List<Boolean>> isPartOf() {
 
         String name = "isPartOf()";
@@ -285,6 +298,19 @@ public class FLineDevelopment extends AlgebraPresetDevelopment<FLine> implements
         long time = System.currentTimeMillis();
 
         var res = getCore().isPartOfSegment();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public Consumer<Engine> rotate(double angle) {
+
+        String name = "rotate(double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().rotate(angle);
 
         updateStats(name, time);
 

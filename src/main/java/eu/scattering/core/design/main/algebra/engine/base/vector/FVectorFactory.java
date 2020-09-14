@@ -41,5 +41,4 @@ public interface FVectorFactory extends FPointFactory {
 
         return getFVector().set(fVector);
     }
-
 }

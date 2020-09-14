@@ -449,6 +449,39 @@ public class FPlaneTest {
         }
 
         @Test
+        @DisplayName("Get distance P2")
+        void getDistanceP2() {
+            FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint relocation = RandomHelper.getTestPoint();
+
+            fPlane.getOrigin().add(relocation);
+            fPoint.add(relocation);
+
+            assertEquals(3, fPoint.extDouble(fPlane.getDistanceP2()).get(0),
+                    Config.getJitter(), "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 (throw IllegalStateException)")
+        void getDistanceP2ThrowIllegalStateException() {
+            FPlane fPlane = factory.getFPlane(factory.getFVector());
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            assertThrows(IllegalStateException.class, () -> fPoint.extDouble(fPlane.getDistanceP2()),
+                    "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 (validate)")
+        void getDistanceP2Validate() {
+            FPlane fPlane = factory.getFPlane(RandomHelper.getTestVector());
+
+            FPlaneTestHelper.testValue(FPlane::getDistanceP2, fPlane);
+        }
+
+        @Test
         @DisplayName("Set distance")
         void setDistance() {
             FPlane fPlane = factory.getFPlane(RandomHelper.getTestVector());
