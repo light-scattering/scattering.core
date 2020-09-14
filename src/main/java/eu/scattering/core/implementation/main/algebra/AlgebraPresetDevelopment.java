@@ -30,9 +30,6 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     protected abstract long getNumberOfInstances();
     protected abstract void setNumberOfInstances(long numberOfInstances);
 
-    @Override
-    public abstract boolean equals(Object object);
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

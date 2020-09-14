@@ -951,17 +951,4 @@ public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implemen
 
         return res;
     }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPoint) {
-            return getCore().equals(object);
-        }
-
-        return false;
-    }
-
 }

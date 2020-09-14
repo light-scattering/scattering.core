@@ -7,14 +7,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static eu.scattering.core.Config.factory;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Timeout(5)
 @DisplayName("Playground")
 public class PlaygroundTest {
 
     @Test
-    void playground() {
+    void playground1() {
 
 //        System.out.println(mainFactory.getFPosition(1,2 , 3).toString());
 
@@ -33,4 +38,24 @@ public class PlaygroundTest {
        fPoint.devDescNumberOfInstances();
 
     }
+    
+    @Test
+    void playground2() {
+        FPoint fPointA = factory.getFPoint(1, 2, 3);
+        FPoint fPointB = factory.getFPoint(1, 2, 3);
+        FPoint fPointC = factory.getFPoint(1, 2, 3);
+        
+        assertTrue(fPointA.isExact(fPointB));
+        assertNotSame(fPointA, fPointB);
+
+        Set<FPoint> set = new HashSet<>();
+        set.add(fPointA);
+        set.add(fPointB);
+        set.add(fPointC);
+        set.add(fPointB);
+        System.out.println(set.size());
+
+    }
+
+
 }

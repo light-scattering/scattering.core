@@ -28,9 +28,9 @@ public final class FVectorTestHelper {
         assertSame(result, ref, "The FVector reference should not change");
 
         assertAll("Validate positions",
-                () -> assertEquals(argBasePositionSnapshot, arg.getBase(),
+                () -> assertTrue(argBasePositionSnapshot.isExact(arg.getBase()),
                         "The argument base position should not change"),
-                () -> assertEquals(argHeadPositionSnapshot, arg.getHead(),
+                () -> assertTrue(argHeadPositionSnapshot.isExact(arg.getHead()),
                         "The argument head position should not change")
         );
 
@@ -61,7 +61,7 @@ public final class FVectorTestHelper {
         assertSame(result, ref, "The FVector reference should not change");
 
         assertAll("Validate positions",
-                () -> assertEquals(argSnapshot, arg,
+                () -> assertTrue(argSnapshot.isExact(arg),
                         "The argument position should not change")
         );
 
@@ -108,13 +108,13 @@ public final class FVectorTestHelper {
         exe.apply(ref, arg);
 
         assertAll("Validate positions",
-                () -> assertEquals(refBasePositionSnapshot, ref.getBase(),
+                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getBase()),
                         "The input base position should not change"),
-                () -> assertEquals(refHeadPositionSnapshot, ref.getHead(),
+                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getHead()),
                         "The input head position should not change"),
-                () -> assertEquals(argBasePositionSnapshot, arg.getBase(),
+                () -> assertTrue(argBasePositionSnapshot.isExact(arg.getBase()),
                         "The argument base position should not change"),
-                () -> assertEquals(argHeadPositionSnapshot, arg.getHead(),
+                () -> assertTrue(argHeadPositionSnapshot.isExact(arg.getHead()),
                         "The argument head position should not change")
         );
 
@@ -144,11 +144,11 @@ public final class FVectorTestHelper {
         exe.apply(ref, arg);
 
         assertAll("Validate positions",
-                () -> assertEquals(refBasePositionSnapshot, ref.getBase(),
+                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getBase()),
                         "The input base position should not change"),
-                () -> assertEquals(refHeadPositionSnapshot, ref.getHead(),
+                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getHead()),
                         "The input head position should not change"),
-                () -> assertEquals(argPositionSnapshot, arg,
+                () -> assertTrue(argPositionSnapshot.isExact(arg),
                         "The argument position should not change")
         );
 
@@ -170,9 +170,9 @@ public final class FVectorTestHelper {
         exe.apply(ref);
 
         assertAll("Validate positions",
-                () -> assertEquals(refBasePositionSnapshot, ref.getBase(),
+                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getBase()),
                         "The input base position should not change"),
-                () -> assertEquals(refHeadPositionSnapshot, ref.getHead(),
+                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getHead()),
                         "The input head position should not change")
         );
 

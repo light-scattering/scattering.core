@@ -1342,9 +1342,9 @@ public class FPointTest {
             assertAll("Validate copy",
                     () -> assertNotSame(fPointRef, fPoint,
                             "FPoints represent different objects"),
-                    () -> assertEquals(fPointRef, fPoint,
+                    () -> assertTrue(fPointRef.isExact(fPoint),
                             "FPoints should have the same values"),
-                    () -> assertNotEquals(fPointRef, fPoint.add(fPointRef),
+                    () -> assertFalse(fPointRef.isExact(fPoint.add(fPointRef)),
                             "FPoints should have different values")
             );
         }

@@ -331,16 +331,4 @@ public class FPlaneDevelopment extends AlgebraPresetDevelopment<FPlane> implemen
         return res;
     }
 
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPlane) {
-            return getCore().equals(object);
-        }
-
-        return false;
-    }
-
 }

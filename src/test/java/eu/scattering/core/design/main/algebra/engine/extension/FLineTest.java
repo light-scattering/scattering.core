@@ -37,7 +37,7 @@ public class FLineTest {
         void constructValidatePositions() {
             FLine fLine = factory.getFLine();
 
-            assertEquals(factory.getFVector(), fLine.getOrigin(),
+            assertTrue(factory.getFVector().isExact(fLine.getOrigin()),
                     "The initial FVector values are erroneous");
         }
 
@@ -120,7 +120,7 @@ public class FLineTest {
             FVector fVector = RandomHelper.getTestVector();
             FLine fLine = factory.getFLine(fVector.copy());
 
-            assertEquals(fVector, fLine.getOrigin(), "The FVector positions are erroneous");
+            assertTrue(fVector.isExact(fLine.getOrigin()), "The FVector positions are erroneous");
         }
 
     }
@@ -139,7 +139,7 @@ public class FLineTest {
             assertAll("Validate JSON parser",
                     () -> assertNotSame(fLineA, fLineB,
                             "FLine references should point at different objects"),
-                    () -> assertEquals(fLineA.getOrigin(), fLineB.getOrigin(),
+                    () -> assertTrue(fLineA.getOrigin().isExact(fLineB.getOrigin()),
                             "The origin of FLines should be exact")
             );
         }
@@ -321,7 +321,7 @@ public class FLineTest {
             assertAll("Validate copy",
                     () -> assertNotSame(fLineA, fLineB,
                             "FLines represent different objects"),
-                    () -> assertEquals(fLineA, fLineB,
+                    () -> assertTrue(fLineA.isExact(fLineB),
                             "FLines should have the same values")
             );
         }
@@ -924,7 +924,8 @@ public class FLineTest {
 
             fLine.getFPoint(0);
 
-            assertEquals(fVectorOrigin, fLine.getOrigin(), "The position should remain unchanged");
+            assertTrue(fVectorOrigin.isExact(fLine.getOrigin()),
+                    "The position should remain unchanged");
         }
 
         @Test
@@ -1179,7 +1180,7 @@ public class FLineTest {
             assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
 
             assertAll("Validate FPoint",
-                    () -> assertEquals(fPointRes.get(), factory.getFPoint(1, 1, 0),
+                    () -> assertTrue(fPointRes.get().isExact(factory.getFPoint(1, 1, 0)),
                             "The FPoint is erroneous"),
                     () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The FPoint should be part of FLine 1 " +
@@ -1201,7 +1202,7 @@ public class FLineTest {
             assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
 
             assertAll("Validate FPoint",
-                    () -> assertEquals(fPointRes.get(), factory.getFPoint(1, 1, 0),
+                    () -> assertTrue(fPointRes.get().isExact(factory.getFPoint(1, 1, 0)),
                             "The FPoint is erroneous"),
                     () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The FPoint should be part of FLine 1 " +
@@ -1224,7 +1225,7 @@ public class FLineTest {
             assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
 
             assertAll("Validate FPoint",
-                    () -> assertEquals(fPointRes.get(), factory.getFPoint(1, 1, 1),
+                    () -> assertTrue(fPointRes.get().isExact(factory.getFPoint(1, 1, 1)),
                             "The FPoint is erroneous"),
                     () -> assertTrue(fPointRes.get().extBoolean(fLineA.isPartOf()).get(0),
                             "The FPoint should be part of FLine 1 " +

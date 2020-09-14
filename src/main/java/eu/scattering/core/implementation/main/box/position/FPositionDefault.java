@@ -40,18 +40,6 @@ public final class FPositionDefault implements FPosition {
     }
 
     @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPosition) {
-            FPosition ref = (FPosition) object;
-
-            return (x == ref.getX()) && (y == ref.getY()) && (z == ref.getZ());
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString() {
 
         return exportToJSON().toString();

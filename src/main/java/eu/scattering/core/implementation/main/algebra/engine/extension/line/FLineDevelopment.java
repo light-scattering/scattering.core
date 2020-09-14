@@ -395,16 +395,4 @@ public class FLineDevelopment extends AlgebraPresetDevelopment<FLine> implements
         return res;
     }
 
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FLine) {
-            return getCore().equals(object);
-        }
-
-        return false;
-    }
-
 }

@@ -1441,9 +1441,9 @@ public class FQuaternionTest {
             assertAll("Validate copy",
                     () -> assertNotSame(fQuaternionRef, fQuaternion,
                             "FQuaternion objects contain different values"),
-                    () -> assertEquals(fQuaternionRef, fQuaternion,
+                    () -> assertTrue(fQuaternionRef.isExact(fQuaternion),
                             "FQuaternion values should be the same"),
-                    () -> assertNotEquals(fQuaternionRef, fQuaternion.add(fQuaternionRef),
+                    () -> assertFalse(fQuaternionRef.isExact(fQuaternion.add(fQuaternionRef)),
                             "FQuaternion values should be different")
             );
         }
