@@ -21,12 +21,12 @@ public class DevelopmentTest {
 
     private Development<?> getTestInstance() {
 
-        return factory.getFPoint();
+        return factory.getFVector();
     }
 
     private Development<?> getTestInstanceDevelopment() {
 
-        return factoryDevelopment.getFPoint();
+        return factoryDevelopment.getFVector();
     }
 
     @BeforeEach
