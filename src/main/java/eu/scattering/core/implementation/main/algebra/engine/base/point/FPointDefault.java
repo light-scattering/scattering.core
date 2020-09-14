@@ -2,7 +2,7 @@ package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
 import eu.scattering.core.Config;
 import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
+import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 
-public class FPointDefault extends BasePreset<FPoint> implements FPoint {
+public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -146,7 +146,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-        return mainFactory.getFPoint().set(this);
+        return factory.getFPoint().set(this);
     }
 
     @Override
@@ -399,13 +399,13 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public boolean isExact(double x, double y, double z) {
 
-        return isExact(mainFactory.getFPoint(x, y, z));
+        return isExact(factory.getFPoint(x, y, z));
     }
 
     @Override
     public boolean isSimilar(double x, double y, double z) {
 
-        return isSimilar(mainFactory.getFPoint(x, y, z));
+        return isSimilar(factory.getFPoint(x, y, z));
     }
 
     @Override
@@ -488,7 +488,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     public FPoint setAngle(FPoint ref, double angle) {
 
         FPoint axis = copy().setCrossProduct(ref);
-        FRotation rotor = mainFactory.getFRotation(axis, angle);
+        FRotation rotor = factory.getFRotation(axis, angle);
 
         ref.copy().ext(rotor.rotate()).imprint(this);
 
@@ -498,7 +498,7 @@ public class FPointDefault extends BasePreset<FPoint> implements FPoint {
     @Override
     public FPoint rotate(FPoint ref, double angle) {
 
-        FRotation rotor = mainFactory.getFRotation(ref, angle);
+        FRotation rotor = factory.getFRotation(ref, angle);
         ext(rotor.rotate());
 
         return this;

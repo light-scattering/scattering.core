@@ -1,12 +1,11 @@
 package eu.scattering.core.implementation.main.algebra.engine.extension.line;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPreset;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -14,55 +13,43 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
-public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
+public class FLineDevelopment extends AlgebraPresetDevelopment<FLine> implements FLine {
 
+    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
-
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
-    private final Statistics statsObject = developmentFactory.getStatistics();
-
-    private final FLine core;
-
-    private FLineDevelopment(FLine core) {
-
-        numberOfInstances++;
-
-        this.core = core;
-    }
 
     public static FLine create(FLine core) {
 
+        numberOfInstances++;
         return new FLineDevelopment(core);
     }
 
-    public FLine objectStatisticsEnable() {
+    @Override
+    protected Statistics getClassStatistics() {
 
-        statsObject.setEnabled();
-
-        return this;
-    }
-
-    public FLine objectStatisticsDisable() {
-
-        statsObject.setDisabled();
-
-        return this;
+        return classStatistics;
     }
 
     @Override
-    public FLine devDescribe() {
+    protected long getNumberOfInstances() {
 
-        String name = "devDescribe()";
-        long time = System.currentTimeMillis();
-
-        var res = core.devDescribe();
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
+        return numberOfInstances;
     }
+
+    @Override
+    protected void setNumberOfInstances(long numberOfInstances) {
+
+        this.numberOfInstances = numberOfInstances;
+    }
+
+    private FLineDevelopment(FLine core) {
+
+        setCore(core);
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isExact(FLine element) {
@@ -70,7 +57,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "isExact(FLine)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(element);
+        var res = getCore().isExact(element);
 
         updateStats(name, time);
 
@@ -83,7 +70,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "isSimilar(FLine)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(element);
+        var res = getCore().isSimilar(element);
 
         updateStats(name, time);
 
@@ -96,7 +83,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "exportToJSON()";
         long time = System.currentTimeMillis();
 
-        var res = core.exportToJSON();
+        var res = getCore().exportToJSON();
 
         updateStats(name, time);
 
@@ -109,11 +96,11 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        var res = core.importFromJSON(json);
+        var res = getCore().importFromJSON(json);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -122,11 +109,11 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = core.copy();
+        var res = getCore().copy();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -141,7 +128,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getOrigin()";
         long time = System.currentTimeMillis();
 
-        var res = core.getOrigin();
+        var res = getCore().getOrigin();
 
         updateStats(name, time);
 
@@ -154,11 +141,11 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "setOriginRef(FVector)";
         long time = System.currentTimeMillis();
 
-        var res = core.setOriginRef(origin);
+        var res = getCore().setOriginRef(origin);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -167,7 +154,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getBase()";
         long time = System.currentTimeMillis();
 
-        var res = core.getBase();
+        var res = getCore().getBase();
 
         updateStats(name, time);
 
@@ -180,7 +167,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getHead()";
         long time = System.currentTimeMillis();
 
-        var res = core.getHead();
+        var res = getCore().getHead();
 
         updateStats(name, time);
 
@@ -193,7 +180,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "project()";
         long time = System.currentTimeMillis();
 
-        var res = core.project();
+        var res = getCore().project();
 
         updateStats(name, time);
 
@@ -206,7 +193,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "reflect()";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect();
+        var res = getCore().reflect();
 
         updateStats(name, time);
 
@@ -219,7 +206,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "setDistance(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setDistance(distance);
+        var res = getCore().setDistance(distance);
 
         updateStats(name, time);
 
@@ -232,7 +219,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getDistance()";
         long time = System.currentTimeMillis();
 
-        var res = core.getDistance();
+        var res = getCore().getDistance();
 
         updateStats(name, time);
 
@@ -245,7 +232,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "isPartOf()";
         long time = System.currentTimeMillis();
 
-        var res = core.isPartOf();
+        var res = getCore().isPartOf();
 
         updateStats(name, time);
 
@@ -258,7 +245,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "moveForward(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveForward(distance);
+        var res = getCore().moveForward(distance);
 
         updateStats(name, time);
 
@@ -271,7 +258,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "moveBackward(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.moveBackward(distance);
+        var res = getCore().moveBackward(distance);
 
         updateStats(name, time);
 
@@ -284,7 +271,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "isPartOfRay()";
         long time = System.currentTimeMillis();
 
-        var res = core.isPartOfRay();
+        var res = getCore().isPartOfRay();
 
         updateStats(name, time);
 
@@ -297,7 +284,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "isPartOfSegment()";
         long time = System.currentTimeMillis();
 
-        var res = core.isPartOfSegment();
+        var res = getCore().isPartOfSegment();
 
         updateStats(name, time);
 
@@ -310,7 +297,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getFPoint(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.getFPoint(length);
+        var res = getCore().getFPoint(length);
 
         updateStats(name, time);
 
@@ -323,7 +310,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getFPointAtX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.getFPointAtX(x);
+        var res = getCore().getFPointAtX(x);
 
         updateStats(name, time);
 
@@ -336,7 +323,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getFPointAtY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.getFPointAtY(y);
+        var res = getCore().getFPointAtY(y);
 
         updateStats(name, time);
 
@@ -349,7 +336,7 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getFPointAtZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.getFPointAtZ(z);
+        var res = getCore().getFPointAtZ(z);
 
         updateStats(name, time);
 
@@ -362,7 +349,20 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
         String name = "getCommonFPoint(FLine)";
         long time = System.currentTimeMillis();
 
-        var res = core.getCommonFPoint(ref);
+        var res = getCore().getCommonFPoint(ref);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public List<FPoint> disassemble() {
+
+        String name = "disassemble()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().disassemble();
 
         updateStats(name, time);
 
@@ -374,89 +374,17 @@ public class FLineDevelopment extends ExtensionPreset<FLine> implements FLine {
     @Override
     public Object clone() {
 
-        return create((FLine) core.clone());
-
-    }
-
-    @Override
-    public String toString() {
-
-        return core.toString();
-    }
-
-    @Override
-    public int hashCode() {
-
-        return core.hashCode();
+        return create((FLine) getCore().clone());
     }
 
     @Override
     public boolean equals(Object object) {
 
         if (object instanceof FLine) {
-            return core.equals(object);
+            return getCore().equals(object);
         }
 
         return false;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.of(numberOfInstances);
-    }
-
-    @Override
-    public FLine devResetNumberOfInstances() {
-
-        numberOfInstances = 0;
-
-        return self();
-    }
-
-    @Override
-    public FLine devDescribeStatistics() {
-
-        Config.getDebugPrintStream().println(statsObject.toString());
-
-        return self();
-    }
-
-    @Override
-    public FLine devDescribeClassStatistics() {
-
-        Config.getDebugPrintStream().println(statsClass.toString());
-
-        return self();
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-
-        return Optional.of(statsObject);
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-
-        return Optional.of(statsClass);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private void updateStats(String name, long startTime) {
-
-        long time = System.currentTimeMillis() - startTime;
-
-        statsClass.recordEvent(name, time);
-
-        if (statsObject.isEnabled()) {
-            return;
-        }
-
-        statsObject.recordEvent(name, time);
     }
 
 }

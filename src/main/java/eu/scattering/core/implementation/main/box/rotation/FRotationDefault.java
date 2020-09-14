@@ -10,12 +10,12 @@ import org.json.JSONObject;
 
 import java.util.function.Consumer;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 
 public class FRotationDefault implements FRotation {
 
-    private final FPoint offset = mainFactory.getFPoint();
-    private final FQuaternion core = mainFactory.getFQuaternion();
+    private final FPoint offset = factory.getFPoint();
+    private final FQuaternion core = factory.getFQuaternion();
     private final double[][] rotation = new double[3][3];
 
     private FRotationDefault(FVector axis, double angle) {
@@ -120,8 +120,8 @@ public class FRotationDefault implements FRotation {
     public FVector getRotationAxis() {
         double factor = 1 / Math.sqrt(1 - (core.getRe() * core.getRe()));
 
-        FPoint head = mainFactory.getFPoint(core.getI(), core.getJ(), core.getK()).mul(factor).add(offset);
-        FVector axis = mainFactory.getFVector(offset.copy(), head);
+        FPoint head = factory.getFPoint(core.getI(), core.getJ(), core.getK()).mul(factor).add(offset);
+        FVector axis = factory.getFVector(offset.copy(), head);
 
         return axis;
     }

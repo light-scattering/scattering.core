@@ -1,54 +1,53 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.Engine;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePreset;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static eu.scattering.core.Config.developmentFactory;
+import static eu.scattering.core.Config.factory;
 
-public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
+public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implements FPoint {
 
+    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
-
-    private static final Statistics statsClass = developmentFactory.getStatistics().setEnabled();
-    private final Statistics statsObject = developmentFactory.getStatistics();
-
-    private final FPoint core;
-
-    private FPointDevelopment(FPoint core) {
-
-        numberOfInstances++;
-
-        this.core = core;
-    }
 
     public static FPoint create(FPoint core) {
 
+        numberOfInstances++;
         return new FPointDevelopment(core);
     }
 
-    public FPoint objectStatisticsEnable() {
+    @Override
+    protected Statistics getClassStatistics() {
 
-        statsObject.setEnabled();
-
-        return this;
+        return classStatistics;
     }
 
-    public FPoint objectStatisticsDisable() {
+    @Override
+    protected long getNumberOfInstances() {
 
-        statsObject.setDisabled();
-
-        return this;
+        return numberOfInstances;
     }
+
+    @Override
+    protected void setNumberOfInstances(long numberOfInstances) {
+
+        this.numberOfInstances = numberOfInstances;
+    }
+
+    private FPointDevelopment(FPoint core) {
+
+        setCore(core);
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FPoint set(double x, double y, double z) {
@@ -56,11 +55,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "set(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(x, y, z);
+        var res = getCore().set(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getX()";
         long time = System.currentTimeMillis();
 
-        var res = core.getX();
+        var res = getCore().getX();
 
         updateStats(name, time);
 
@@ -82,11 +81,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setX(x);
+        var res = getCore().setX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -95,7 +94,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getY()";
         long time = System.currentTimeMillis();
 
-        var res = core.getY();
+        var res = getCore().getY();
 
         updateStats(name, time);
 
@@ -108,11 +107,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setY(y);
+        var res = getCore().setY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -121,7 +120,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getZ()";
         long time = System.currentTimeMillis();
 
-        var res = core.getZ();
+        var res = getCore().getZ();
 
         updateStats(name, time);
 
@@ -134,24 +133,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setZ(z);
+        var res = getCore().setZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public FPoint devDescribe() {
-
-        String name = "devDescribe()";
-        long time = System.currentTimeMillis();
-
-        var res = core.devDescribe();
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -160,7 +146,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "isExact(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(element);
+        var res = getCore().isExact(element);
 
         updateStats(name, time);
 
@@ -173,7 +159,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "isSimilar(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(element);
+        var res = getCore().isSimilar(element);
 
         updateStats(name, time);
 
@@ -186,7 +172,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "exportToJSON()";
         long time = System.currentTimeMillis();
 
-        var res = core.exportToJSON();
+        var res = getCore().exportToJSON();
 
         updateStats(name, time);
 
@@ -199,11 +185,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        var res = core.importFromJSON(json);
+        var res = getCore().importFromJSON(json);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -212,7 +198,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = create(core.copy());
+        var res = create(getCore().copy());
 
         updateStats(name, time);
 
@@ -231,11 +217,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "add(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(fPoint);
+        var res = getCore().add(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -244,11 +230,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "add(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(x, y, z);
+        var res = getCore().add(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -257,11 +243,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(factor);
+        var res = getCore().add(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -270,11 +256,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addX(x);
+        var res = getCore().addX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -283,11 +269,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "addY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addY(y);
+        var res = getCore().addY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -296,11 +282,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "addZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addZ(z);
+        var res = getCore().addZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -309,11 +295,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "sub(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(fPoint);
+        var res = getCore().sub(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -322,11 +308,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "sub(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(x, y, z);
+        var res = getCore().sub(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -335,11 +321,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "sub(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(factor);
+        var res = getCore().sub(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -348,11 +334,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "subX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subX(x);
+        var res = getCore().subX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -361,11 +347,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "subY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subY(y);
+        var res = getCore().subY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -374,11 +360,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "subZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subZ(z);
+        var res = getCore().subZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -387,11 +373,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "mul(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(fPoint);
+        var res = getCore().mul(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -400,11 +386,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "mul(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(x, y, z);
+        var res = getCore().mul(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -413,11 +399,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "mul(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(factor);
+        var res = getCore().mul(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -426,11 +412,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "mulX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulX(x);
+        var res = getCore().mulX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -439,11 +425,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "mulY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulY(y);
+        var res = getCore().mulY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -452,11 +438,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "mulZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulZ(z);
+        var res = getCore().mulZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -465,11 +451,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "div(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(fPoint);
+        var res = getCore().div(fPoint);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -478,11 +464,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "div(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(x, y, z);
+        var res = getCore().div(x, y, z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -491,11 +477,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "div(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(factor);
+        var res = getCore().div(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -504,11 +490,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "divX(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divX(x);
+        var res = getCore().divX(x);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -517,11 +503,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "divY(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divY(y);
+        var res = getCore().divY(y);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -530,11 +516,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "divZ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divZ(z);
+        var res = getCore().divZ(z);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -543,11 +529,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "set(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(element);
+        var res = getCore().set(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -556,11 +542,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "imprint(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.imprint(element);
+        var res = getCore().imprint(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -569,11 +555,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "trans(Consumer<FPoint> exp)";
         long time = System.currentTimeMillis();
 
-        var res = core.trans(exp);
+        var res = getCore().trans(exp);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -582,7 +568,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "transDouble(Function<FPoint, Double>)";
         long time = System.currentTimeMillis();
 
-        var res = core.transDouble(exp);
+        var res = getCore().transDouble(exp);
 
         updateStats(name, time);
 
@@ -595,7 +581,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "transBoolean(Predicate<FPoint>)";
         long time = System.currentTimeMillis();
 
-        var res = core.transBoolean(exp);
+        var res = getCore().transBoolean(exp);
 
         updateStats(name, time);
 
@@ -608,11 +594,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "ext(Consumer<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.ext(exp);
+        var res = getCore().ext(exp);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -621,7 +607,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "extDouble(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extDouble(exp);
+        var res = getCore().extDouble(exp);
 
         updateStats(name, time);
 
@@ -634,7 +620,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "extBoolean(Function<IBaseExtensionAssembly>)";
         long time = System.currentTimeMillis();
 
-        var res = core.extBoolean(exp);
+        var res = getCore().extBoolean(exp);
 
         updateStats(name, time);
 
@@ -647,7 +633,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "disassemble()";
         long time = System.currentTimeMillis();
 
-        var res = core.disassemble();
+        var res = getCore().disassemble();
 
         updateStats(name, time);
 
@@ -660,11 +646,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setSphericalCoordinates(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setSphericalCoordinates(inclination, azimuth);
+        var res = getCore().setSphericalCoordinates(inclination, azimuth);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -673,11 +659,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setRandomAngle(FPoint...)";
         long time = System.currentTimeMillis();
 
-        var res = core.setRandomAngle(exclude);
+        var res = getCore().setRandomAngle(exclude);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -686,7 +672,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "isExact(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(x, y, z);
+        var res = getCore().isExact(x, y, z);
 
         updateStats(name, time);
 
@@ -699,7 +685,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "isSimilar(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(x, y, z);
+        var res = getCore().isSimilar(x, y, z);
 
         updateStats(name, time);
 
@@ -712,11 +698,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "reflect()";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect();
+        var res = getCore().reflect();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -725,24 +711,24 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "reflect(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.reflect(ref);
+        var res = getCore().reflect(ref);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
-    public FPoint normalize() throws IllegalStateException {
+    public FPoint normalize() {
 
         String name = "normalize()";
         long time = System.currentTimeMillis();
 
-        var res = core.normalize();
+        var res = getCore().normalize();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -751,7 +737,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getLength()";
         long time = System.currentTimeMillis();
 
-        var res = core.getLength();
+        var res = getCore().getLength();
 
         updateStats(name, time);
 
@@ -764,7 +750,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getLengthP2()";
         long time = System.currentTimeMillis();
 
-        var res = core.getLengthP2();
+        var res = getCore().getLengthP2();
 
         updateStats(name, time);
 
@@ -772,16 +758,16 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint setLength(double length) throws IllegalStateException {
+    public FPoint setLength(double length) {
 
         String name = "setLength(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setLength(length);
+        var res = getCore().setLength(length);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -790,7 +776,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getInclination()";
         long time = System.currentTimeMillis();
 
-        var res = core.getInclination();
+        var res = getCore().getInclination();
 
         updateStats(name, time);
 
@@ -803,11 +789,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setInclination(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setInclination(inclination);
+        var res = getCore().setInclination(inclination);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -816,7 +802,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getAzimuth()";
         long time = System.currentTimeMillis();
 
-        var res = core.getAzimuth();
+        var res = getCore().getAzimuth();
 
         updateStats(name, time);
 
@@ -829,20 +815,20 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setAzimuth(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setAzimuth(azimuth);
+        var res = getCore().setAzimuth(azimuth);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
-    public double getAngle(FPoint ref) throws IllegalStateException {
+    public double getAngle(FPoint ref) {
 
         String name = "getAngle(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.getAngle(ref);
+        var res = getCore().getAngle(ref);
 
         updateStats(name, time);
 
@@ -855,11 +841,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setAngle(FPoint, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setAngle(ref, angle);
+        var res = getCore().setAngle(ref, angle);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -868,11 +854,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "rotate(FPoint, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.rotate(ref, angle);
+        var res = getCore().rotate(ref, angle);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -881,7 +867,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getDistance(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.getDistance(ref);
+        var res = getCore().getDistance(ref);
 
         updateStats(name, time);
 
@@ -894,7 +880,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getDistanceP2(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.getDistanceP2(ref);
+        var res = getCore().getDistanceP2(ref);
 
         updateStats(name, time);
 
@@ -902,16 +888,16 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint setDistance(FPoint ref, double distance) throws IllegalStateException {
+    public FPoint setDistance(FPoint ref, double distance) {
 
         String name = "setDistance(FPoint, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setDistance(ref, distance);
+        var res = getCore().setDistance(ref, distance);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -920,7 +906,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "getDotProduct(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.getDotProduct(ref);
+        var res = getCore().getDotProduct(ref);
 
         updateStats(name, time);
 
@@ -933,11 +919,11 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "setCrossProduct(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = core.setCrossProduct(ref);
+        var res = getCore().setCrossProduct(ref);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -946,7 +932,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "isNonDirectional()";
         long time = System.currentTimeMillis();
 
-        var res = core.isNonDirectional();
+        var res = getCore().isNonDirectional();
 
         updateStats(name, time);
 
@@ -959,7 +945,7 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
         String name = "isZero()";
         long time = System.currentTimeMillis();
 
-        var res = core.isZero();
+        var res = getCore().isZero();
 
         updateStats(name, time);
 
@@ -971,84 +957,17 @@ public class FPointDevelopment extends BasePreset<FPoint> implements FPoint {
     @Override
     public Object clone() {
 
-        return create((FPoint) core.clone());
-
-    }
-
-    @Override
-    public String toString() {
-
-        return core.toString();
-    }
-
-    @Override
-    public int hashCode() {
-
-        return core.hashCode();
+        return create((FPoint) getCore().clone());
     }
 
     @Override
     public boolean equals(Object object) {
 
         if (object instanceof FPoint) {
-            return core.equals(object);
+            return getCore().equals(object);
         }
 
         return false;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.of(numberOfInstances);
-    }
-
-    @Override
-    public FPoint devResetNumberOfInstances() {
-
-        numberOfInstances = 0;
-
-        return self();
-    }
-
-    @Override
-    public FPoint devDescribeStatistics() {
-
-        Config.getDebugPrintStream().println(statsObject.toString());
-
-        return self();
-    }
-
-    @Override
-    public FPoint devDescribeClassStatistics() {
-
-        Config.getDebugPrintStream().println(statsClass.toString());
-
-        return self();
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-
-        return Optional.of(statsObject);
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-
-        return Optional.of(statsClass);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private void updateStats(String name, long startTime) {
-
-        long time = System.currentTimeMillis() - startTime;
-
-        statsClass.recordEvent(name, time);
-        statsObject.recordEvent(name, time);
     }
 
 }

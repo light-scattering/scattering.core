@@ -8,7 +8,7 @@ import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static eu.scattering.core.Config.mainFactory;
+import static eu.scattering.core.Config.factory;
 
 public final class RandomHelper {
 
@@ -35,12 +35,12 @@ public final class RandomHelper {
     }
 
     public static FPoint getTestPoint(FPoint... exclude) {
-        FPoint fPointZero = mainFactory.getFPoint();
-        FPoint fPoint = mainFactory.getFPoint();
+        FPoint fPointZero = factory.getFPoint();
+        FPoint fPoint = factory.getFPoint();
 
         mainLoop:
         while (fPoint.isSimilar(fPointZero)) {
-            fPoint = mainFactory.getFPoint(getTestValue(), getTestValue(), getTestValue());
+            fPoint = factory.getFPoint(getTestValue(), getTestValue(), getTestValue());
 
             for (FPoint singularity : exclude) {
                 if (fPoint.isSimilar(singularity)) {
@@ -53,12 +53,12 @@ public final class RandomHelper {
     }
 
     public static FVector getTestVector(FVector... exclude) {
-        FVector fVectorZero = mainFactory.getFVector(mainFactory.getFPoint());
-        FVector fVector = mainFactory.getFVector();
+        FVector fVectorZero = factory.getFVector(factory.getFPoint());
+        FVector fVector = factory.getFVector();
 
         mainLoop:
         while (fVector.isSimilar(fVectorZero)) {
-            fVector = mainFactory.getFVector(getTestPoint(), getTestPoint());
+            fVector = factory.getFVector(getTestPoint(), getTestPoint());
 
             for (FVector singularity : exclude) {
                 if (fVector.isSimilar(singularity)) {
@@ -71,12 +71,12 @@ public final class RandomHelper {
     }
 
     public static FComplex getTestComplex(FComplex... exclude) {
-        FComplex fComplexZero = mainFactory.getFComplex();
-        FComplex fComplex = mainFactory.getFComplex();
+        FComplex fComplexZero = factory.getFComplex();
+        FComplex fComplex = factory.getFComplex();
 
         mainLoop:
         while (fComplex.isSimilar(fComplexZero)) {
-            fComplex = mainFactory.getFComplex(getTestValue(), getTestValue());
+            fComplex = factory.getFComplex(getTestValue(), getTestValue());
 
             for (FComplex singularity : exclude) {
                 if (fComplex.isSimilar(singularity)) {
@@ -89,12 +89,12 @@ public final class RandomHelper {
     }
 
     public static FQuaternion getTestQuaternion(FQuaternion... exclude) {
-        FQuaternion fQuaternionZero = mainFactory.getFQuaternion();
-        FQuaternion fQuaternion = mainFactory.getFQuaternion();
+        FQuaternion fQuaternionZero = factory.getFQuaternion();
+        FQuaternion fQuaternion = factory.getFQuaternion();
 
         mainLoop:
         while (fQuaternion.isSimilar(fQuaternionZero)) {
-            fQuaternion = mainFactory.getFQuaternion(getTestValue(), getTestValue(), getTestValue(), getTestValue());
+            fQuaternion = factory.getFQuaternion(getTestValue(), getTestValue(), getTestValue(), getTestValue());
 
             for (FQuaternion singularity : exclude) {
                 if (fQuaternion.isSimilar(singularity)) {
