@@ -117,7 +117,7 @@ public class FRotationTest {
 
         fVectorRef.invertDirection().setLength(RandomHelper.getTestValue());
 
-        assertTrue(coreRef.equals(fRotationRef.getCore()), "The instance is mutable");
+        assertTrue(coreRef.isExact(fRotationRef.getCore()), "The instance is mutable");
     }
 
     @Test

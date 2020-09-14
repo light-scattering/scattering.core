@@ -6,7 +6,7 @@ import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 
 public interface FVector extends FVectorAdvanced,
-        Algebra<FVector>, Base<FVector>, Development<FVector>, Cloneable {
+        Algebra<FVector>, Base<FVector>, Development<FVector> {
 
     FVector set(FPoint base, FPoint head);
     FVector setRef(FPoint baseRef, FPoint headRef);
@@ -18,6 +18,4 @@ public interface FVector extends FVectorAdvanced,
     FPoint getHead();
     FVector setHead(FPoint head);
     FVector setHeadRef(FPoint headRef);
-
-    Object clone();
 }

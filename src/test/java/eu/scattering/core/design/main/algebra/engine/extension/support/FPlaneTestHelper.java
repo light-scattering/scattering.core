@@ -30,9 +30,9 @@ public class FPlaneTestHelper {
         exe.apply(ref, arg);
 
         assertAll("Validate positions",
-                () -> assertEquals(refOriginPositionSnapshot, ref.getOrigin(),
+                () -> assertTrue(refOriginPositionSnapshot.isExact(ref.getOrigin()),
                         "The input origin position should not change"),
-                () -> assertEquals(argOriginPositionSnapshot, arg.getOrigin(),
+                () -> assertTrue(argOriginPositionSnapshot.isExact(arg.getOrigin()),
                         "The argument origin position should not change")
         );
 
@@ -61,7 +61,7 @@ public class FPlaneTestHelper {
         exe.apply(ref);
 
         assertAll("Validate positions",
-                () -> assertEquals(refOriginPositionSnapshot, ref.getOrigin(),
+                () -> assertTrue(refOriginPositionSnapshot.isExact(ref.getOrigin()),
                         "The input origin position should not change")
         );
 

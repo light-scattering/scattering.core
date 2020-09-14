@@ -145,22 +145,6 @@ public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements F
         return hashCode;
     }
 
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FComplex) {
-            return isExact((FComplex) object);
-        }
-
-        return false;
-    }
-
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override

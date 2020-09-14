@@ -37,7 +37,7 @@ public class FPlaneTest {
         void constructValidate() {
             FPlane fPlane = factory.getFPlane();
 
-            assertEquals(factory.getFVector(), fPlane.getOrigin(),
+            assertTrue(factory.getFVector().isExact(fPlane.getOrigin()),
                     "The initial FVector values are erroneous");
         }
 
@@ -137,7 +137,7 @@ public class FPlaneTest {
             FVector fVector = RandomHelper.getTestVector();
             FPlane fPlane = factory.getFPlane(fVector.copy());
 
-            assertEquals(fVector, fPlane.getOrigin(), "The FVector positions are erroneous");
+            assertTrue(fVector.isExact(fPlane.getOrigin()), "The FVector positions are erroneous");
         }
     }
 
@@ -155,7 +155,7 @@ public class FPlaneTest {
             assertAll("Validate JSON parser",
                     () -> assertNotSame(fPlaneA, fPlaneB,
                             "FPlane references should point at different objects"),
-                    () -> assertEquals(fPlaneA.getOrigin(), fPlaneB.getOrigin(),
+                    () -> assertTrue(fPlaneA.getOrigin().isExact(fPlaneB.getOrigin()),
                             "The origin of FPlanes should be exact")
             );
         }
@@ -293,7 +293,7 @@ public class FPlaneTest {
             assertAll("Validate copy",
                     () -> assertNotSame(fPlaneA, fPlaneB,
                             "FPlanes represent different objects"),
-                    () -> assertEquals(fPlaneA, fPlaneB,
+                    () -> assertTrue(fPlaneA.isExact(fPlaneB),
                             "FPlanes should have the same values")
             );
         }

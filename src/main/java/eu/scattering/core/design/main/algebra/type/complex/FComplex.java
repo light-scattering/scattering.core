@@ -2,8 +2,7 @@ package eu.scattering.core.design.main.algebra.type.complex;
 
 import eu.scattering.core.design.main.algebra.type.Type;
 
-public interface FComplex extends FComplexAdvanced,
-        Type<FComplex>, Cloneable {
+public interface FComplex extends FComplexAdvanced, Type<FComplex> {
 
     FComplex set(FComplex fComplex);
     FComplex set(double re, double im);
@@ -13,6 +12,4 @@ public interface FComplex extends FComplexAdvanced,
 
     double getIm();
     FComplex setIm(double im);
-
-    Object clone();
 }

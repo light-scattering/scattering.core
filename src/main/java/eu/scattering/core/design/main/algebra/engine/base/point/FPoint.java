@@ -5,7 +5,7 @@ import eu.scattering.core.design.main.algebra.Algebra;
 import eu.scattering.core.design.development.Development;
 
 public interface FPoint extends FPointAdvanced,
-        Algebra<FPoint>, Base<FPoint>, Development<FPoint>, Cloneable {
+        Algebra<FPoint>, Base<FPoint>, Development<FPoint> {
 
     FPoint set(double x, double y, double z);
 
@@ -17,6 +17,4 @@ public interface FPoint extends FPointAdvanced,
 
     double getZ();
     FPoint setZ(double z);
-
-    Object clone();
 }

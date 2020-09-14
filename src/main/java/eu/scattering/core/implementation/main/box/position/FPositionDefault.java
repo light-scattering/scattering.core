@@ -43,9 +43,9 @@ public final class FPositionDefault implements FPosition {
     public boolean equals(Object object) {
 
         if (object instanceof FPosition) {
-            FPosition ref = (FPosition) object;
+            FPosition fPosition = (FPosition) object;
 
-            return (x == ref.getX()) && (y == ref.getY()) && (z == ref.getZ());
+            return x == fPosition.getX() && y == fPosition.getY() && z == fPosition.getZ();
         }
 
         return false;

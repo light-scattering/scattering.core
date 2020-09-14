@@ -83,9 +83,9 @@ public class FRotationDefault implements FRotation {
     public boolean equals(Object object) {
 
         if (object instanceof FRotation) {
-            FRotation ref = (FRotation) object;
+            FRotation fRotation = (FRotation) object;
 
-            return getCore().equals(ref.getCore());
+            return getCore().isExact(fRotation.getCore());
         }
 
         return false;

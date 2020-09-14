@@ -95,24 +95,6 @@ public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPl
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPlane) {
-            return isExact((FPlane) object);
-        }
-
-        return false;
-    }
-
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
     public Consumer<Engine> project() {
 
         if (getOrigin().isNonDirectional()) {

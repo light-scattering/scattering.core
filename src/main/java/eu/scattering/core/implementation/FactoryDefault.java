@@ -21,6 +21,8 @@ import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefau
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import eu.scattering.core.implementation.main.box.position.FPositionDefault;
 import eu.scattering.core.implementation.main.box.rotation.FRotationDefault;
+import eu.scattering.core.implementation.support.helper.AngleHelperDefault;
+import eu.scattering.core.implementation.support.helper.SignalHelperDefault;
 
 public final class FactoryDefault implements Factory {
 
@@ -98,11 +100,13 @@ public final class FactoryDefault implements Factory {
 
     @Override
     public AngleHelper getHelperAngle() {
-        return null;
+
+        return AngleHelperDefault.INSTANCE;
     }
 
     @Override
     public SignalHelper getHelperSignal() {
-        return null;
+
+        return SignalHelperDefault.INSTANCE;
     }
 }

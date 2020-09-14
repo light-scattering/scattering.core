@@ -22,7 +22,7 @@ public class FComplexTestHelper {
 
         assertAll("Validate method",
                 () -> assertSame(result, ref, "The reference should not change"),
-                () -> assertEquals(argSnapshot, arg, "The argument should not be modified")
+                () -> assertTrue(argSnapshot.isExact(arg), "The argument should not be modified")
         );
     }
 
@@ -44,8 +44,8 @@ public class FComplexTestHelper {
         exe.apply(ref, arg);
 
         assertAll("Validate method",
-                () -> assertEquals(ref, refSnapshot, "The input should not be modified"),
-                () -> assertEquals(arg, argSnapshot, "The argument should not be modified")
+                () -> assertTrue(ref.isExact(refSnapshot), "The input should not be modified"),
+                () -> assertTrue(arg.isExact(argSnapshot), "The argument should not be modified")
         );
     }
 
@@ -54,6 +54,6 @@ public class FComplexTestHelper {
 
         exe.apply(ref);
 
-        assertEquals(ref, refSnapshot, "The input should not be modified");
+        assertTrue(ref.isExact(refSnapshot), "The input should not be modified");
     }
 }

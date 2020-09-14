@@ -188,22 +188,6 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
         return hashCode;
     }
 
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FVector) {
-            return isExact((FVector) object);
-        }
-
-        return false;
-    }
-
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
 //--------------------------------------------------
 
     @Override
@@ -727,7 +711,7 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
     @Override
     public boolean isNonDirectional() {
 
-        return getBase().equals(getHead());
+        return getBase().isSimilar(getHead());
     }
 
     @Override

@@ -42,7 +42,7 @@ public class FPlaneDevelopment extends AlgebraPresetDevelopment<FPlane> implemen
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        this.numberOfInstances = numberOfInstances;
+        FPlaneDevelopment.numberOfInstances = numberOfInstances;
     }
 
     private FPlaneDevelopment(FPlane core) {
@@ -329,31 +329,6 @@ public class FPlaneDevelopment extends AlgebraPresetDevelopment<FPlane> implemen
         updateStats(name, time);
 
         return res;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Object clone() {
-
-        String name = "clone()";
-        long time = System.currentTimeMillis();
-
-        var res = getCore().clone();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPlane) {
-            return getCore().equals(object);
-        }
-
-        return false;
     }
 
 }

@@ -168,22 +168,6 @@ public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
         return hashCode;
     }
 
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPoint) {
-            return isExact((FPoint) object);
-        }
-
-        return false;
-    }
-
-    @Override
-    public Object clone() {
-
-        return copy();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
