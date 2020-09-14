@@ -1,43 +1,47 @@
 package eu.scattering.core.implementation.main.algebra.type.quaternion;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
-
-import java.util.Optional;
 
 import static eu.scattering.core.Config.factory;
 
-public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> implements FQuaternion {
+public class FQuaternionDevelopment extends AlgebraPresetDevelopment<FQuaternion> implements FQuaternion {
 
+    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
-
-    private static final Statistics statsClass = factory.getStatistics().setEnabled(true);
-    private final Statistics statsObject = factory.getStatistics();
-
-    private final FQuaternion core;
-
-    private FQuaternionDevelopment(FQuaternion core) {
-
-        numberOfInstances++;
-
-        this.core = core;
-    }
 
     public static FQuaternion create(FQuaternion core) {
 
+        numberOfInstances++;
         return new FQuaternionDevelopment(core);
     }
 
     @Override
-    public FQuaternion devSetStatisticsEnabled(boolean enabled) {
+    protected Statistics getClassStatistics() {
 
-        statsObject.setEnabled(enabled);
-
-        return this;
+        return classStatistics;
     }
+
+    @Override
+    protected long getNumberOfInstances() {
+
+        return numberOfInstances;
+    }
+
+    @Override
+    protected void setNumberOfInstances(long numberOfInstances) {
+
+        this.numberOfInstances = numberOfInstances;
+    }
+
+    private FQuaternionDevelopment(FQuaternion core) {
+
+        setCore(core);
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FQuaternion set(FQuaternion fQuaternion) {
@@ -45,11 +49,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "set(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(fQuaternion);
+        var res = getCore().set(fQuaternion);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -58,11 +62,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "set(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(re, i, j, k);
+        var res = getCore().set(re, i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "getRe()";
         long time = System.currentTimeMillis();
 
-        var res = core.getRe();
+        var res = getCore().getRe();
 
         updateStats(name, time);
 
@@ -84,11 +88,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "setRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setRe(re);
+        var res = getCore().setRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -97,7 +101,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "getI()";
         long time = System.currentTimeMillis();
 
-        var res = core.getI();
+        var res = getCore().getI();
 
         updateStats(name, time);
 
@@ -110,11 +114,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "setI(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setI(i);
+        var res = getCore().setI(i);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -123,7 +127,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "getJ()";
         long time = System.currentTimeMillis();
 
-        var res = core.getJ();
+        var res = getCore().getJ();
 
         updateStats(name, time);
 
@@ -136,11 +140,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "setJ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setJ(j);
+        var res = getCore().setJ(j);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -149,7 +153,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "getK()";
         long time = System.currentTimeMillis();
 
-        var res = core.getK();
+        var res = getCore().getK();
 
         updateStats(name, time);
 
@@ -162,11 +166,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "setK(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setK(k);
+        var res = getCore().setK(k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -175,7 +179,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "isExact(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(element);
+        var res = getCore().isExact(element);
 
         updateStats(name, time);
 
@@ -188,7 +192,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "isSimilar(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(element);
+        var res = getCore().isSimilar(element);
 
         updateStats(name, time);
 
@@ -201,7 +205,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "exportToJSON()";
         long time = System.currentTimeMillis();
 
-        var res = core.exportToJSON();
+        var res = getCore().exportToJSON();
 
         updateStats(name, time);
 
@@ -214,11 +218,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        var res = core.importFromJSON(json);
+        var res = getCore().importFromJSON(json);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -227,11 +231,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = create(core.copy());
+        var res = create(getCore().copy());
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -247,11 +251,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "add(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(element);
+        var res = getCore().add(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -260,11 +264,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "sub(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(element);
+        var res = getCore().sub(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -273,11 +277,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mul(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(element);
+        var res = getCore().mul(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -286,11 +290,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "div(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(element);
+        var res = getCore().div(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -299,11 +303,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(factor);
+        var res = getCore().add(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -312,11 +316,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "sub(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(factor);
+        var res = getCore().sub(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -325,11 +329,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mul(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(factor);
+        var res = getCore().mul(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -338,11 +342,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "div(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(factor);
+        var res = getCore().div(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
 
@@ -352,11 +356,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "add(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(re, i, j, k);
+        var res = getCore().add(re, i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -365,11 +369,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "addRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addRe(re);
+        var res = getCore().addRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -378,11 +382,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "addIm(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addIm(i, j, k);
+        var res = getCore().addIm(i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -391,11 +395,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "addI(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addI(i);
+        var res = getCore().addI(i);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -404,11 +408,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "addJ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addJ(j);
+        var res = getCore().addJ(j);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -417,11 +421,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "addK(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addK(k);
+        var res = getCore().addK(k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -430,11 +434,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "sub(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(re, i, j, k);
+        var res = getCore().sub(re, i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -443,11 +447,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "subRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subRe(re);
+        var res = getCore().subRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -456,11 +460,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "subIm(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subIm(i, j, k);
+        var res = getCore().subIm(i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -469,11 +473,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "subI(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subI(i);
+        var res = getCore().subI(i);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -482,11 +486,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "subJ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subJ(j);
+        var res = getCore().subJ(j);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -495,11 +499,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "subK(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subK(k);
+        var res = getCore().subK(k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -508,11 +512,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mul(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(re, i, j, k);
+        var res = getCore().mul(re, i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -521,11 +525,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mulRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulRe(re);
+        var res = getCore().mulRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -534,11 +538,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mulIm(double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulIm(i, j, k);
+        var res = getCore().mulIm(i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -547,11 +551,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mulI(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulI(i);
+        var res = getCore().mulI(i);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -560,11 +564,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mulJ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulJ(j);
+        var res = getCore().mulJ(j);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -573,11 +577,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "mulK(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulK(k);
+        var res = getCore().mulK(k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -586,11 +590,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "div(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(re, i, j, k);
+        var res = getCore().div(re, i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -599,11 +603,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "divRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divRe(re);
+        var res = getCore().divRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -612,11 +616,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "divIm(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divIm(i, j, k);
+        var res = getCore().divIm(i, j, k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -625,11 +629,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "divI(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divI(i);
+        var res = getCore().divI(i);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -638,11 +642,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "divJ(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divJ(j);
+        var res = getCore().divJ(j);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -651,50 +655,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "divK(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divK(k);
+        var res = getCore().divK(k);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public FQuaternion devDesc() {
-
-        String name = "devDescribe()";
-        long time = System.currentTimeMillis();
-
-        var res = core.devDesc();
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public String devGetLabel() {
-
-        String name = "devGetLabel()";
-        long time = System.currentTimeMillis();
-
-        var res = core.devGetLabel();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
-    public FQuaternion devSetLabel(String label) {
-
-        String name = "devSetLabel(String)";
-        long time = System.currentTimeMillis();
-
-        var res = core.devSetLabel(label);
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -703,7 +668,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "getMagnitude()";
         long time = System.currentTimeMillis();
 
-        var res = core.getMagnitude();
+        var res = getCore().getMagnitude();
 
         updateStats(name, time);
 
@@ -716,11 +681,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "setMagnitude(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setMagnitude(magnitude);
+        var res = getCore().setMagnitude(magnitude);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -729,11 +694,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "pow(int)";
         long time = System.currentTimeMillis();
 
-        var res = core.pow(n);
+        var res = getCore().pow(n);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -742,11 +707,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "negate()";
         long time = System.currentTimeMillis();
 
-        var res = core.negate();
+        var res = getCore().negate();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -755,11 +720,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "inverse()";
         long time = System.currentTimeMillis();
 
-        var res = core.inverse();
+        var res = getCore().inverse();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -768,11 +733,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "conjugate()";
         long time = System.currentTimeMillis();
 
-        var res = core.conjugate();
+        var res = getCore().conjugate();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -781,11 +746,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "normalize()";
         long time = System.currentTimeMillis();
 
-        var res = core.normalize();
+        var res = getCore().normalize();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -794,11 +759,11 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "imprint(FQuaternion)";
         long time = System.currentTimeMillis();
 
-        var res = core.imprint(element);
+        var res = getCore().imprint(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -807,7 +772,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "isZero()";
         long time = System.currentTimeMillis();
 
-        var res = core.isZero();
+        var res = getCore().isZero();
 
         updateStats(name, time);
 
@@ -820,7 +785,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "isExact(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(re, i, j, k);
+        var res = getCore().isExact(re, i, j, k);
 
         updateStats(name, time);
 
@@ -833,7 +798,7 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
         String name = "isSimilar(double, double, double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(re, i, j, k);
+        var res = getCore().isSimilar(re, i, j, k);
 
         updateStats(name, time);
 
@@ -845,93 +810,17 @@ public class FQuaternionDevelopment extends AlgebraPresetDefault<FQuaternion> im
     @Override
     public Object clone() {
 
-        return create((FQuaternion) core.clone());
-    }
-
-    @Override
-    public String toString() {
-
-        return core.toString();
-    }
-
-    @Override
-    public int hashCode() {
-
-        return core.hashCode();
+        return create((FQuaternion) getCore().clone());
     }
 
     @Override
     public boolean equals(Object object) {
 
         if (object instanceof FQuaternion) {
-            return core.equals(object);
+            return getCore().equals(object);
         }
 
         return false;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.of(numberOfInstances);
-    }
-
-    @Override
-    public FQuaternion devResetNumberOfInstances() {
-
-        numberOfInstances = 0;
-
-        return self();
-    }
-
-    @Override
-    public FQuaternion devDescStatistics() {
-
-        Config.getDebugPrintStream().println(statsObject.toString());
-
-        return self();
-    }
-
-    @Override
-    public FQuaternion devDescClassStatistics() {
-
-        Config.getDebugPrintStream().println(statsClass.toString());
-
-        return self();
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-
-        return Optional.of(statsObject);
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-
-        return Optional.of(statsClass);
-    }
-
-    @Override
-    public FQuaternion devDescNumberOfInstances() {
-
-        String data = "Number of instances for FQuaternionDevelopment: " + numberOfInstances + "\n";
-
-        Config.getDebugPrintStream().println(data);
-
-        return self();
-    };
-
-    // -------------------------------------------------------------------------------------------------
-
-    private void updateStats(String name, long startTime) {
-
-        long time = System.currentTimeMillis() - startTime;
-
-        statsClass.recordEvent(name, time);
-        statsObject.recordEvent(name, time);
     }
 
 }

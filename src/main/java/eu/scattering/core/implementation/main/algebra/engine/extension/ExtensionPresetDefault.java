@@ -6,7 +6,8 @@ import eu.scattering.core.design.main.algebra.engine.extension.Extension;
 
 import java.util.List;
 
-public abstract class ExtensionPresetDefault<T extends Extension<T>> extends AlgebraPresetDefault<T> implements Extension<T> {
+public abstract class ExtensionPresetDefault<T extends Extension<T>>
+        extends AlgebraPresetDefault<T> implements Extension<T> {
 
     @Override
     public int hashCode() {
@@ -51,6 +52,4 @@ public abstract class ExtensionPresetDefault<T extends Extension<T>> extends Alg
         return getOrigin().disassemble();
     }
 
-
 }
-

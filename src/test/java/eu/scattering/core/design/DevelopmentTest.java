@@ -21,12 +21,12 @@ public class DevelopmentTest {
 
     private Development<?> getTestInstance() {
 
-        return factory.getFVector();
+        return factory.getFQuaternion();
     }
 
     private Development<?> getTestInstanceDevelopment() {
 
-        return factoryDevelopment.getFVector();
+        return factoryDevelopment.getFQuaternion();
     }
 
     @BeforeEach
@@ -379,7 +379,7 @@ public class DevelopmentTest {
 
         @Test
         @DisplayName("Describe")
-        @Disabled("The method prints message to the output stream")
+        @Disabled("The method prints a message to the output stream")
         void getDesc() {
 
             getTestInstanceDevelopment().devDesc();
@@ -387,7 +387,7 @@ public class DevelopmentTest {
 
         @Test
         @DisplayName("Describe instance statistics")
-        @Disabled("The method prints message to the output stream")
+        @Disabled("The method prints a message to the output stream")
         void getDescStatistics() {
             Development<?> instance = getTestInstanceDevelopment();
             instance.devSetStatisticsEnabled(true);
@@ -397,7 +397,7 @@ public class DevelopmentTest {
 
         @Test
         @DisplayName("Describe instance class statistics")
-        @Disabled("The method prints message to the output stream")
+        @Disabled("The method prints a message to the output stream")
         void getDescClassStatistics() {
 
             getTestInstanceDevelopment().devDescClassStatistics();
@@ -405,7 +405,7 @@ public class DevelopmentTest {
 
         @Test
         @DisplayName("Describe number of instances")
-        @Disabled("The method prints message to the output stream")
+        @Disabled("The method prints a message to the output stream")
         void getDescNumberOfInstances() {
 
             getTestInstanceDevelopment().devDescNumberOfInstances();

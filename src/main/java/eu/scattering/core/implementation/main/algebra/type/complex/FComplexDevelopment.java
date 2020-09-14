@@ -1,43 +1,47 @@
 package eu.scattering.core.implementation.main.algebra.type.complex;
 
-import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
+import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
-
-import java.util.Optional;
 
 import static eu.scattering.core.Config.factory;
 
-public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implements FComplex {
+public class FComplexDevelopment extends AlgebraPresetDevelopment<FComplex> implements FComplex {
 
+    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
-
-    private static final Statistics statsClass = factory.getStatistics().setEnabled(true);
-    private final Statistics statsObject = factory.getStatistics();
-
-    private final FComplex core;
-
-    private FComplexDevelopment(FComplex core) {
-
-        numberOfInstances++;
-
-        this.core = core;
-    }
 
     public static FComplex create(FComplex core) {
 
+        numberOfInstances++;
         return new FComplexDevelopment(core);
     }
 
     @Override
-    public FComplex devSetStatisticsEnabled(boolean enabled) {
+    protected Statistics getClassStatistics() {
 
-        statsObject.setEnabled(enabled);
-
-        return this;
+        return classStatistics;
     }
+
+    @Override
+    protected long getNumberOfInstances() {
+
+        return numberOfInstances;
+    }
+
+    @Override
+    protected void setNumberOfInstances(long numberOfInstances) {
+
+        this.numberOfInstances = numberOfInstances;
+    }
+
+    private FComplexDevelopment(FComplex core) {
+
+        setCore(core);
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FComplex set(FComplex fComplex) {
@@ -45,11 +49,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "set(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(fComplex);
+        var res = getCore().set(fComplex);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -58,11 +62,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "set(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.set(re, im);
+        var res = getCore().set(re, im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "getRe()";
         long time = System.currentTimeMillis();
 
-        var res = core.getRe();
+        var res = getCore().getRe();
 
         updateStats(name, time);
 
@@ -84,11 +88,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "setRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setRe(re);
+        var res = getCore().setRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -97,7 +101,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "getIm()";
         long time = System.currentTimeMillis();
 
-        var res = core.getIm();
+        var res = getCore().getIm();
 
         updateStats(name, time);
 
@@ -110,11 +114,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "setIm(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setIm(im);
+        var res = getCore().setIm(im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -123,7 +127,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "isExact(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(element);
+        var res = getCore().isExact(element);
 
         updateStats(name, time);
 
@@ -136,7 +140,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "isSimilar(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(element);
+        var res = getCore().isSimilar(element);
 
         updateStats(name, time);
 
@@ -149,7 +153,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "exportToJSON()";
         long time = System.currentTimeMillis();
 
-        var res = core.exportToJSON();
+        var res = getCore().exportToJSON();
 
         updateStats(name, time);
 
@@ -162,11 +166,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "importFromJSON(JSONObject)";
         long time = System.currentTimeMillis();
 
-        var res = core.importFromJSON(json);
+        var res = getCore().importFromJSON(json);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -175,7 +179,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "copy()";
         long time = System.currentTimeMillis();
 
-        var res = create(core.copy());
+        var res = create(getCore().copy());
 
         updateStats(name, time);
 
@@ -194,11 +198,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "add(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(element);
+        var res = getCore().add(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -207,11 +211,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "sub(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(element);
+        var res = getCore().sub(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -220,11 +224,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "mul(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(element);
+        var res = getCore().mul(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -233,11 +237,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "div(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(element);
+        var res = getCore().div(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -246,11 +250,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "add(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(factor);
+        var res = getCore().add(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -259,11 +263,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "sub(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(factor);
+        var res = getCore().sub(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -272,11 +276,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "mul(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(factor);
+        var res = getCore().mul(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -285,11 +289,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "div(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(factor);
+        var res = getCore().div(factor);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -298,7 +302,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "getMagnitude()";
         long time = System.currentTimeMillis();
 
-        var res = core.getMagnitude();
+        var res = getCore().getMagnitude();
 
         updateStats(name, time);
 
@@ -311,11 +315,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "setMagnitude(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setMagnitude(magnitude);
+        var res = getCore().setMagnitude(magnitude);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -324,11 +328,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "pow(int)";
         long time = System.currentTimeMillis();
 
-        var res = core.pow(n);
+        var res = getCore().pow(n);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -337,7 +341,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "root(int)";
         long time = System.currentTimeMillis();
 
-        var res = core.root(n);
+        var res = getCore().root(n);
 
         updateStats(name, time);
 
@@ -350,11 +354,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "negate()";
         long time = System.currentTimeMillis();
 
-        var res = core.negate();
+        var res = getCore().negate();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -363,11 +367,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "inverse()";
         long time = System.currentTimeMillis();
 
-        var res = core.inverse();
+        var res = getCore().inverse();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -376,11 +380,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "conjugate()";
         long time = System.currentTimeMillis();
 
-        var res = core.conjugate();
+        var res = getCore().conjugate();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -389,11 +393,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "normalize()";
         long time = System.currentTimeMillis();
 
-        var res = core.normalize();
+        var res = getCore().normalize();
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -402,11 +406,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "imprint(FComplex)";
         long time = System.currentTimeMillis();
 
-        var res = core.imprint(element);
+        var res = getCore().imprint(element);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -415,50 +419,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "isZero()";
         long time = System.currentTimeMillis();
 
-        var res = core.isZero();
+        var res = getCore().isZero();
 
         updateStats(name, time);
 
         return res;
-    }
-
-    @Override
-    public FComplex devDesc() {
-
-        String name = "devDescribe()";
-        long time = System.currentTimeMillis();
-
-        var res = core.devDesc();
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
-    }
-
-    @Override
-    public String devGetLabel() {
-
-        String name = "devGetLabel()";
-        long time = System.currentTimeMillis();
-
-        var res = core.devGetLabel();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
-    public FComplex devSetLabel(String label) {
-
-        String name = "devSetLabel(String)";
-        long time = System.currentTimeMillis();
-
-        var res = core.devSetLabel(label);
-
-        updateStats(name, time);
-
-        return res == core ? this : create(res);
     }
 
     @Override
@@ -467,7 +432,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "isExact(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isExact(re, im);
+        var res = getCore().isExact(re, im);
 
         updateStats(name, time);
 
@@ -480,7 +445,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "isSimilar(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.isSimilar(re, im);
+        var res = getCore().isSimilar(re, im);
 
         updateStats(name, time);
 
@@ -493,7 +458,7 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "getPhase()";
         long time = System.currentTimeMillis();
 
-        var res = core.getPhase();
+        var res = getCore().getPhase();
 
         updateStats(name, time);
 
@@ -506,11 +471,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "setPhase(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.setPhase(phase);
+        var res = getCore().setPhase(phase);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -519,11 +484,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "add(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.add(re, im);
+        var res = getCore().add(re, im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -532,11 +497,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "addRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addRe(re);
+        var res = getCore().addRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -545,11 +510,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "addIm(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.addIm(im);
+        var res = getCore().addIm(im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -558,11 +523,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "sub(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.sub(re, im);
+        var res = getCore().sub(re, im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -571,11 +536,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "subRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subRe(re);
+        var res = getCore().subRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -584,11 +549,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "subIm(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.subIm(re);
+        var res = getCore().subIm(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -597,11 +562,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "mul(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mul(re, im);
+        var res = getCore().mul(re, im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -610,11 +575,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "mulRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulRe(re);
+        var res = getCore().mulRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -623,11 +588,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "mulIm(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.mulIm(im);
+        var res = getCore().mulIm(im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -636,11 +601,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "div(double, double)";
         long time = System.currentTimeMillis();
 
-        var res = core.div(re, im);
+        var res = getCore().div(re, im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -649,11 +614,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "divRe(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divRe(re);
+        var res = getCore().divRe(re);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     @Override
@@ -662,11 +627,11 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
         String name = "divIm(double)";
         long time = System.currentTimeMillis();
 
-        var res = core.divIm(im);
+        var res = getCore().divIm(im);
 
         updateStats(name, time);
 
-        return res == core ? this : create(res);
+        return res == getCore() ? this : create(res);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -674,93 +639,17 @@ public class FComplexDevelopment extends AlgebraPresetDefault<FComplex> implemen
     @Override
     public Object clone() {
 
-        return create((FComplex) core.clone());
-    }
-
-    @Override
-    public String toString() {
-
-        return core.toString();
-    }
-
-    @Override
-    public int hashCode() {
-
-        return core.hashCode();
+        return create((FComplex) getCore().clone());
     }
 
     @Override
     public boolean equals(Object object) {
 
         if (object instanceof FComplex) {
-            return core.equals(object);
+            return getCore().equals(object);
         }
 
         return false;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Optional<Long> devGetNumberOfInstances() {
-
-        return Optional.of(numberOfInstances);
-    }
-
-    @Override
-    public FComplex devResetNumberOfInstances() {
-
-        numberOfInstances = 0;
-
-        return self();
-    }
-
-    @Override
-    public FComplex devDescStatistics() {
-
-        Config.getDebugPrintStream().println(statsObject.toString());
-
-        return self();
-    }
-
-    @Override
-    public FComplex devDescClassStatistics() {
-
-        Config.getDebugPrintStream().println(statsClass.toString());
-
-        return self();
-    }
-
-    @Override
-    public Optional<Statistics> devGetStatistics() {
-
-        return Optional.of(statsObject);
-    }
-
-    @Override
-    public Optional<Statistics> devGetClassStatistics() {
-
-        return Optional.of(statsClass);
-    }
-
-    @Override
-    public FComplex devDescNumberOfInstances() {
-
-        String data = "Number of instances for FComplexDevelopment: " + numberOfInstances + "\n";
-
-        Config.getDebugPrintStream().println(data);
-
-        return self();
-    };
-
-    // -------------------------------------------------------------------------------------------------
-
-    private void updateStats(String name, long startTime) {
-
-        long time = System.currentTimeMillis() - startTime;
-
-        statsClass.recordEvent(name, time);
-        statsObject.recordEvent(name, time);
     }
 
 }

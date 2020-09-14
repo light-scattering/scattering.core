@@ -10,7 +10,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class BasePresetDefault<T extends Base<T>> extends AlgebraPresetDefault<T> implements Base<T> {
+public abstract class BasePresetDefault<T extends Base<T>>
+        extends AlgebraPresetDefault<T> implements Base<T> {
 
     @Override
     public int hashCode() {
