@@ -18,15 +18,16 @@ public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implemen
     private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
     private static long numberOfInstances = 0;
 
-    private FPointDevelopment(FPoint core) {
-        super(core);
-
-        numberOfInstances++;
-    }
-
     public static FPoint create(FPoint core) {
 
+        numberOfInstances++;
         return new FPointDevelopment(core);
+    }
+
+    @Override
+    protected Statistics getClassStatistics() {
+
+        return classStatistics;
     }
 
     @Override
@@ -41,10 +42,9 @@ public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implemen
         this.numberOfInstances = numberOfInstances;
     }
 
-    @Override
-    protected Statistics getClassStatistics() {
+    private FPointDevelopment(FPoint core) {
 
-        return classStatistics;
+        setCore(core);
     }
 
     // -------------------------------------------------------------------------------------------------

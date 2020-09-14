@@ -3,10 +3,6 @@ package eu.scattering.core.implementation.main.algebra;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.Algebra;
-import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.Optional;
@@ -14,22 +10,25 @@ import java.util.Optional;
 import static eu.scattering.core.Config.factory;
 
 public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
+    private final LocalTime creationTime = LocalTime.now();
+    private final Statistics statistics = factory.getStatistics().setEnabled(false);
+    private final String id = self().getClass().getSimpleName() + ":" + getNumberOfInstances();
+    private String label = "";
+    private T core;
 
-    @Getter(AccessLevel.PROTECTED) private final T core;
-    @Getter(AccessLevel.PRIVATE) private final Statistics instanceStatistics = factory.getStatistics().setEnabled(false);
-    @Getter(AccessLevel.PRIVATE) private final LocalTime instanceCreationTime = LocalTime.now();
-    @Getter(AccessLevel.PRIVATE) private final String instanceId = self().getClass().getSimpleName() + ":" + getNumberOfInstances();
+    protected T getCore() {
 
-    @Getter(AccessLevel.PRIVATE) @Setter(AccessLevel.PRIVATE) private String instanceLabel = "";
+        return core;
+    }
 
-    protected AlgebraPresetDevelopment(T core) {
+    protected void setCore(T core) {
 
         this.core = core;
     }
 
+    protected abstract Statistics getClassStatistics();
     protected abstract long getNumberOfInstances();
     protected abstract void setNumberOfInstances(long numberOfInstances);
-    protected abstract Statistics getClassStatistics();
 
     @Override
     public abstract Object clone();
@@ -56,57 +55,56 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     @Override
     public boolean devIsStatisticsEnabled() {
 
-        return instanceStatistics.isEnabled();
+        return statistics.isEnabled();
     }
 
     @Override
     public T devSetStatisticsEnabled(boolean enabled) {
 
-        instanceStatistics.setEnabled(enabled);
+        statistics.setEnabled(enabled);
 
         return self();
     }
 
     @Override
     public T devDesc() {
+        var json = exportToJSON();
+        var date = LocalTime.now().toString();
+        var result = date + " - " + id + " (created at " + creationTime + ") - " + json + "\n";
 
-        String data = LocalTime.now().toString() + " - " + instanceId + " (created at " + instanceCreationTime + ") - " +
-                exportToJSON() + "\n";
-
-        Config.getDebugPrintStream().println(data);
+        Config.getDebugPrintStream().println(result);
 
         return self();
     }
 
     @Override
     public T devDescStatistics() {
+        var postfix = statistics.isEnabled() ? statistics.toString() : "EVENT LOGGING DISABLED\n";
+        var result = "Object statistics for " + id + " (created at " + creationTime + "):\n" + postfix;
 
-
-        String postfix = instanceStatistics.isEnabled() ? instanceStatistics.toString() : "EVENT LOGGING DISABLED\n";
-        String data = "Object statistics for " + instanceId + " (created at " + instanceCreationTime + "):\n" + postfix;
-
-        Config.getDebugPrintStream().println(data);
+        Config.getDebugPrintStream().println(result);
 
         return self();
     }
 
     @Override
     public T devDescClassStatistics() {
+        var name = self().getClass().getSimpleName();
+        var stats = getClassStatistics().toString();
+        var result = "Class statistics for " + name + ":\n" + stats;
 
-        String data = "Class statistics for " + self().getClass().getSimpleName() + ":\n" +
-                getClassStatistics().toString();
-
-        Config.getDebugPrintStream().println(data);
+        Config.getDebugPrintStream().println(result);
 
         return self();
     }
 
     @Override
     public T devDescNumberOfInstances() {
+        var name = self().getClass().getSimpleName();
+        var instances = getNumberOfInstances();
+        var result = "Number of instances for " + name + ": " +  instances + "\n";
 
-        String data = "Number of instances for " + self().getClass().getSimpleName() + ": " + getNumberOfInstances() + "\n";
-
-        Config.getDebugPrintStream().println(data);
+        Config.getDebugPrintStream().println(result);
 
         return self();
     };
@@ -128,7 +126,7 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     @Override
     public Optional<Statistics> devGetStatistics() {
 
-        return Optional.of(instanceStatistics);
+        return Optional.of(statistics);
     }
 
     @Override
@@ -140,13 +138,13 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     @Override
     public String devGetLabel() {
 
-        return instanceLabel;
+        return label;
     }
 
     @Override
     public T devSetLabel(String label) {
 
-        this.instanceLabel = label;
+        this.label = label;
 
         return self();
     }
@@ -158,7 +156,7 @@ public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
         long time = System.currentTimeMillis() - startTime;
 
         getClassStatistics().recordEvent(methodName, time);
-        instanceStatistics.recordEvent(methodName, time);
+        statistics.recordEvent(methodName, time);
     }
 
 }

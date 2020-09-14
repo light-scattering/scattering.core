@@ -88,7 +88,7 @@ public class StatisticsDefault implements Statistics {
         }
 
         if (methodExecutionTime < 0) {
-            throw new ArithmeticException("The execution time cannot be lower than zero");
+            throw new IllegalArgumentException("The execution time cannot be lower than zero");
         }
 
         if (!recordingEnabled) {

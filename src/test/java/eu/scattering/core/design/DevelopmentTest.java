@@ -16,17 +16,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Development")
 public class DevelopmentTest {
 
-    private Factory mainFactory = new FactoryDefault();
-    private Factory mainFactoryDevelopment = new FactoryDevelopment();
+    private Factory factory = new FactoryDefault();
+    private Factory factoryDevelopment = new FactoryDevelopment();
 
     private Development<?> getTestInstance() {
 
-        return mainFactory.getFPoint();
+        return factory.getFPoint();
     }
 
     private Development<?> getTestInstanceDevelopment() {
 
-        return mainFactoryDevelopment.getFPoint();
+        return factoryDevelopment.getFPoint();
     }
 
     @BeforeEach
@@ -85,12 +85,12 @@ public class DevelopmentTest {
             }
 
             @Test
-            @DisplayName("Register single class event (throw ArithmeticException)")
+            @DisplayName("Register single class event (throw IllegalArgumentException)")
             void registerSingleClassEventThrowArithmeticException() {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
-                assertThrows(ArithmeticException.class,
+                assertThrows(IllegalArgumentException.class,
                         () -> statistics.recordEvent("test event 1", -10L),
                         "The event time must be represented by a positive value");
             }
@@ -166,8 +166,8 @@ public class DevelopmentTest {
             }
 
             @Test
-            @DisplayName("Validate inactive status")
-            void validateInactiveStatusTrue() {
+            @DisplayName("Validate active status (false)")
+            void validateActiveStatusFalse() {
                 Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
                 Statistics statistics = statisticsOptional.orElseGet(() -> fail("Empty optional"));
 
@@ -350,6 +350,68 @@ public class DevelopmentTest {
     class DevelopmentMethods {
 
         @Test
+        @DisplayName("Is statistics enabled (false)")
+        void isStatisticsEnabledFalse() {
+
+            assertFalse(getTestInstanceDevelopment().devIsStatisticsEnabled(),
+                    "The instance statistics should be disabled by default");
+        }
+
+        @Test
+        @DisplayName("Is statistics enabled (true)")
+        void isStatisticsEnabledTrue() {
+            Development<?> instance = getTestInstanceDevelopment();
+            instance.devSetStatisticsEnabled(true);
+
+            assertTrue(instance.devIsStatisticsEnabled(),
+                    "The instance statistics should be enabled");
+        }
+
+        @Test
+        @DisplayName("Is statistics enabled (production)")
+        void isStatisticsEnabledProduction() {
+            Development<?> instance = getTestInstance();
+            instance.devSetStatisticsEnabled(true);
+
+            assertFalse(instance.devIsStatisticsEnabled(),
+                    "The instance statistics should not be enabled in production");
+        }
+
+        @Test
+        @DisplayName("Describe")
+        @Disabled("The method prints message to the output stream")
+        void getDesc() {
+
+            getTestInstanceDevelopment().devDesc();
+        }
+
+        @Test
+        @DisplayName("Describe instance statistics")
+        @Disabled("The method prints message to the output stream")
+        void getDescStatistics() {
+            Development<?> instance = getTestInstanceDevelopment();
+            instance.devSetStatisticsEnabled(true);
+
+            instance.devDescStatistics();
+        }
+
+        @Test
+        @DisplayName("Describe instance class statistics")
+        @Disabled("The method prints message to the output stream")
+        void getDescClassStatistics() {
+
+            getTestInstanceDevelopment().devDescClassStatistics();
+        }
+
+        @Test
+        @DisplayName("Describe number of instances")
+        @Disabled("The method prints message to the output stream")
+        void getDescNumberOfInstances() {
+
+            getTestInstanceDevelopment().devDescNumberOfInstances();
+        }
+
+        @Test
         @DisplayName("Number of instances (initial)")
         void getNumberOfInstancesInitial() {
 
@@ -399,23 +461,23 @@ public class DevelopmentTest {
         }
 
         @Test
-        @DisplayName("Get meta-data")
-        void getMetaData() {
+        @DisplayName("Get label")
+        void getLabel() {
 
             assertEquals("", getTestInstanceDevelopment().devGetLabel(),
-                    "The meta-data should be empty");
+                    "The label should be empty");
         }
 
         @Test
-        @DisplayName("Set meta-data")
-        void setMetaData() {
+        @DisplayName("Set label")
+        void setLabel() {
 
             Development<?> element = getTestInstanceDevelopment();
 
             element.devSetLabel("test");
 
             assertEquals("test", element.devGetLabel(),
-                    "The meta-data is incorrect");
+                    "The label is incorrect");
         }
 
     }
