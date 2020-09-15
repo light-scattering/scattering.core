@@ -2,14 +2,13 @@ package eu.scattering.core.implementation.main.algebra.type.complex;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
+import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
 import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
-import static eu.scattering.core.Config.factory;
-
 public class FComplexDevelopment extends AlgebraPresetDevelopment<FComplex> implements FComplex {
 
-    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FComplex create(FComplex core) {

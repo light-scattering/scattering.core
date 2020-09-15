@@ -1,14 +1,26 @@
 package eu.scattering.core.implementation.main.algebra.type.complex;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
+import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static eu.scattering.core.Config.factory;
-
 public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements FComplex {
+
+    private static Factory factory = new FactoryDefault();
+    private static double jitter = 1E-8;
+
+    public static void setFactory(Factory factory) {
+
+        FComplexDefault.factory = factory;
+    }
+
+    public static void setJitter(double jitter) {
+
+        FComplexDefault.jitter = jitter;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -98,7 +110,7 @@ public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements F
         double distanceRe = Math.abs(getRe() - fComplex.getRe());
         double distanceIm = Math.abs(getIm() - fComplex.getIm());
 
-        return distanceRe < Config.getJitter() && distanceIm < Config.getJitter();
+        return distanceRe < jitter && distanceIm < jitter;
     }
 
     @Override
@@ -300,7 +312,7 @@ public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements F
         double distanceRe = Math.abs(getRe() - re);
         double distanceIm = Math.abs(getIm() - im);
 
-        return distanceRe < Config.getJitter() && distanceIm < Config.getJitter();
+        return distanceRe < jitter && distanceIm < jitter;
     }
 
     @Override

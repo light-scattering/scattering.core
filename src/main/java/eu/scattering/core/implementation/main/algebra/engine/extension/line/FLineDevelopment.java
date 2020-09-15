@@ -5,6 +5,7 @@ import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
+import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
 import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
@@ -13,11 +14,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static eu.scattering.core.Config.factory;
-
 public class FLineDevelopment extends AlgebraPresetDevelopment<FLine> implements FLine {
 
-    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FLine create(FLine core) {

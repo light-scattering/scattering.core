@@ -1,10 +1,12 @@
 package eu.scattering.core.implementation.main.algebra.engine.extension.line;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.box.rotation.FRotation;
+import eu.scattering.core.implementation.FactoryDefault;
+import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
 import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPresetDefault;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import org.json.JSONArray;
@@ -16,9 +18,20 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static eu.scattering.core.Config.factory;
-
 public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine {
+
+    private static Factory factory = new FactoryDefault();
+    private static double jitter = 1E-8;
+
+    public static void setFactory(Factory factory) {
+
+        FLineDefault.factory = factory;
+    }
+
+    public static void setJitter(double jitter) {
+
+        FLineDefault.jitter = jitter;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -123,7 +136,7 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
         }
 
         return (e) -> e.disassemble().stream()
-                .map(p -> p.getDistance(projectFPoint(p.copy())) < Config.getJitter())
+                .map(p -> p.getDistance(projectFPoint(p.copy())) < jitter)
                 .collect(Collectors.toList());
     }
 
@@ -464,11 +477,11 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
 
-        if ((distanceBase < magnitude + Config.getJitter()) && (distanceHead < magnitude + Config.getJitter())) {
+        if ((distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter)) {
             return true;
         }
 
-        return distanceHead < distanceBase + Config.getJitter();
+        return distanceHead < distanceBase + jitter;
     }
 
     private boolean isPartOfSegment(FPoint projection) {
@@ -477,7 +490,7 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
 
-        return (distanceBase < magnitude + Config.getJitter()) && (distanceHead < magnitude + Config.getJitter());
+        return (distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter);
     }
 
     private FPoint moveForward(FPoint ref, double distance) {

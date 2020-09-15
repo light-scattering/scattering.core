@@ -1,22 +1,35 @@
 package eu.scattering.core.design;
 
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
-import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Timeout(5)
 @DisplayName("Playground")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class PlaygroundTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Test
     void playground1() {

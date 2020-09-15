@@ -3,15 +3,14 @@ package eu.scattering.core.implementation.main.algebra;
 import eu.scattering.core.Config;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.Algebra;
+import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
 
 import java.time.LocalTime;
 import java.util.Optional;
 
-import static eu.scattering.core.Config.factory;
-
 public abstract class AlgebraPresetDevelopment<T> implements Algebra<T> {
     private final LocalTime creationTime = LocalTime.now();
-    private final Statistics statistics = factory.getStatistics().setEnabled(false);
+    private final Statistics statistics = StatisticsDefault.create().setEnabled(false);
     private final String id = self().getClass().getSimpleName() + ":" + getNumberOfInstances();
     private String label = "";
     private T core;

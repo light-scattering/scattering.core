@@ -1,6 +1,7 @@
 package eu.scattering.core.design.main.box;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
@@ -9,13 +10,25 @@ import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FRotation")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FRotationTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Test
     @DisplayName("Create with FPoint (positive angle)")
@@ -27,7 +40,7 @@ public class FRotationTest {
 
         assertAll("Validate FPoint",
                 () -> assertEquals(angle, fRotation.getRotationAngle(),
-                        Config.getJitter(), "The angle is incorrect"),
+                        jitter, "The angle is incorrect"),
                 () -> assertTrue(fRotation.getRotationAxis().isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
@@ -43,7 +56,7 @@ public class FRotationTest {
 
         assertAll("Validate FPoint",
                 () -> assertEquals(-angle, fRotation.getRotationAngle(),
-                        Config.getJitter(), "The angle is incorrect"),
+                        jitter, "The angle is incorrect"),
                 () -> assertTrue(fRotation.getRotationAxis().isAntiParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
@@ -59,7 +72,7 @@ public class FRotationTest {
 
         assertAll("Validate FPoint",
                 () -> assertEquals(angle, fRotation.getRotationAngle(),
-                        Config.getJitter(), "The angle is incorrect"),
+                        jitter, "The angle is incorrect"),
                 () -> assertTrue(fRotation.getRotationAxis().isParallel(axis),
                         "The axis is incorrect")
         );
@@ -75,7 +88,7 @@ public class FRotationTest {
 
         assertAll("Validate FPoint",
                 () -> assertEquals(-angle, fRotation.getRotationAngle(),
-                        Config.getJitter(), "The angle is incorrect"),
+                        jitter, "The angle is incorrect"),
                 () -> assertTrue(fRotation.getRotationAxis().isAntiParallel(axis),
                         "The axis is incorrect")
         );
@@ -130,7 +143,7 @@ public class FRotationTest {
         FRotation fRotationRefB = factory.getFRotation(fVectorRefB, 1);
 
         assertEquals(fRotationRefA.hashCode(), fRotationRefB.hashCode(),
-                Config.getJitter(), "The hash code is erroneous");
+                jitter, "The hash code is erroneous");
     }
 
     @Test
@@ -143,7 +156,7 @@ public class FRotationTest {
         FRotation fRotationRefB = factory.getFRotation(fVectorRefB, 1);
 
         assertNotEquals(fRotationRefA.hashCode(), fRotationRefB.hashCode(),
-                Config.getJitter(), "The hash code is erroneous");
+                jitter, "The hash code is erroneous");
     }
 
     @Test
@@ -193,7 +206,7 @@ public class FRotationTest {
 
         fPoint.ext(fRotation.rotate());
 
-        assertEquals(length, fPoint.getLength(), Config.getJitter(),
+        assertEquals(length, fPoint.getLength(), jitter,
                 "The magnitude is invalid");
     }
 

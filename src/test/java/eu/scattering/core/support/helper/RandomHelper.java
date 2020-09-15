@@ -1,16 +1,22 @@
 package eu.scattering.core.support.helper;
 
 import eu.scattering.core.Config;
-import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
+import eu.scattering.core.design.main.algebra.type.complex.FComplex;
+import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
+import eu.scattering.core.implementation.FactoryDevelopment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static eu.scattering.core.Config.factory;
-
 public final class RandomHelper {
+
+    private static double jitter = 1E-10;
+
+    private static Factory factory = new FactoryDevelopment();
 
     private RandomHelper() { }
 
@@ -21,11 +27,11 @@ public final class RandomHelper {
         double value = 0;
 
         mainLoop:
-        while (value > -Config.getJitter() && value < Config.getJitter()) {
+        while (value > -jitter && value < jitter) {
             value = ThreadLocalRandom.current().nextDouble(valueMin, valueMax);
 
             for (double singularity : exclude) {
-                if (value > (singularity - Config.getJitter()) && value < (singularity + Config.getJitter())) {
+                if (value > (singularity - jitter) && value < (singularity + jitter)) {
                     continue mainLoop;
                 }
             }

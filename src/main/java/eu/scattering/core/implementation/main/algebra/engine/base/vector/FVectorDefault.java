@@ -1,7 +1,8 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.box.rotation.FRotation;
+import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
@@ -11,9 +12,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.scattering.core.Config.factory;
-
 public class FVectorDefault extends BasePresetDefault<FVector> implements FVector {
+
+    private static Factory factory = new FactoryDefault();
+    private static double jitter = 1E-8;
+
+    public static void setFactory(Factory factory) {
+
+        FVectorDefault.factory = factory;
+    }
+
+    public static void setJitter(double jitter) {
+
+        FVectorDefault.jitter = jitter;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -681,8 +693,7 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
-        return (Math.abs(getDotProduct(ref)) < Config.getJitter())
-                || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < Config.getJitter());
+        return (Math.abs(getDotProduct(ref)) < jitter) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter);
     }
 
     @Override

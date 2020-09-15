@@ -3,6 +3,7 @@ package eu.scattering.core.implementation.main.algebra.engine.base.point;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
+import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
 import eu.scattering.core.implementation.main.algebra.AlgebraPresetDevelopment;
 import org.json.JSONObject;
 
@@ -11,11 +12,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static eu.scattering.core.Config.factory;
-
 public class FPointDevelopment extends AlgebraPresetDevelopment<FPoint> implements FPoint {
 
-    private static final Statistics classStatistics = factory.getStatistics().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FPoint create(FPoint core) {

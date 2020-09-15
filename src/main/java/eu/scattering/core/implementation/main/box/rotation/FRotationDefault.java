@@ -1,18 +1,32 @@
 package eu.scattering.core.implementation.main.box.rotation;
 
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.box.rotation.FRotation;
+import eu.scattering.core.implementation.FactoryDefault;
+import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.function.Consumer;
 
-import static eu.scattering.core.Config.factory;
-
 public class FRotationDefault implements FRotation {
+
+    private static Factory factory = new FactoryDefault();
+    private static double jitter = 1E-8;
+
+    public static void setFactory(Factory factory) {
+
+        FRotationDefault.factory = factory;
+    }
+
+    public static void setJitter(double jitter) {
+
+        FRotationDefault.jitter = jitter;
+    }
 
     private final FPoint offset = factory.getFPoint();
     private final FQuaternion core = factory.getFQuaternion();

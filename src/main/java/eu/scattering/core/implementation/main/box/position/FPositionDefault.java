@@ -1,10 +1,26 @@
 package eu.scattering.core.implementation.main.box.position;
 
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.box.position.FPosition;
+import eu.scattering.core.implementation.FactoryDefault;
+import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public final class FPositionDefault implements FPosition {
+
+    private static Factory factory = new FactoryDefault();
+    private static double jitter = 1E-8;
+
+    public static void setFactory(Factory factory) {
+
+        FPositionDefault.factory = factory;
+    }
+
+    public static void setJitter(double jitter) {
+
+        FPositionDefault.jitter = jitter;
+    }
 
     private final int x;
     private final int y;

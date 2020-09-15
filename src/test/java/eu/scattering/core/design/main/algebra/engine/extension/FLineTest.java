@@ -1,27 +1,42 @@
 package eu.scattering.core.design.main.algebra.engine.extension;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.support.FLineTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FLine")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FLineTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FLineBase {
 
         @Test
@@ -127,6 +142,8 @@ public class FLineTest {
 
     @Nested
     @DisplayName("Core features")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class ICoreFeatures {
 
         @Test
@@ -170,7 +187,7 @@ public class FLineTest {
         void isExactFail() {
             FVector fVector = RandomHelper.getTestVector();
             FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy().add(0.5 * Config.getJitter()));
+            FLine fLineB = factory.getFLine(fVector.copy().add(0.5 * jitter));
 
             assertAll("Validate exactness",
                     () -> assertFalse(fLineA.isExact(fLineB), "FLines should not be equal"),
@@ -192,7 +209,7 @@ public class FLineTest {
         void isSimilar() {
             FVector fVector = RandomHelper.getTestVector();
             FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy().add(0.5 * Config.getJitter()));
+            FLine fLineB = factory.getFLine(fVector.copy().add(0.5 * jitter));
 
             assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
@@ -338,6 +355,8 @@ public class FLineTest {
 
     @Nested
     @DisplayName("Functionality - Advanced")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FLineAdvanced {
 
         @Test
@@ -449,7 +468,7 @@ public class FLineTest {
         @DisplayName("Location")
         void isPartOf() {
             FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * Config.getJitter());
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * jitter);
 
             assertTrue(fPoint.extBoolean(fLine.isPartOf()).get(0),
                     "The distance should be negligible");
@@ -459,7 +478,7 @@ public class FLineTest {
         @DisplayName("Location (fail)")
         void isPartOfFail() {
             FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * Config.getJitter());
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * jitter);
 
             assertFalse(fPoint.extBoolean(fLine.isPartOf()).get(0),
                     "The distance should not be negligible");
@@ -470,7 +489,7 @@ public class FLineTest {
         void isPartOfPositionBase() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
             FLine fLine = factory.getFLine(fVector.copy());
-            FPoint fPoint = factory.getFPoint(-4, -4, -4).addY(0.5 * Config.getJitter());
+            FPoint fPoint = factory.getFPoint(-4, -4, -4).addY(0.5 * jitter);
 
             fPoint.extBoolean(fLine.isPartOf());
         }
@@ -480,7 +499,7 @@ public class FLineTest {
         void isPartOfPositionHead() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
             FLine fLine = factory.getFLine(fVector.copy());
-            FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * Config.getJitter());
+            FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
             fPoint.extBoolean(fLine.isPartOf());
         }
@@ -515,7 +534,7 @@ public class FLineTest {
             fPoint.add(relocation);
 
             assertEquals(Math.sqrt(6), fPoint.extDouble(fLine.getDistance()).get(0),
-                    Config.getJitter(), "The distance is erroneous");
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -582,7 +601,7 @@ public class FLineTest {
 
             fPoint.ext(fLine.setDistance(1));
 
-            assertTrue(Math.abs(fPoint.extDouble(fLine.getDistance()).get(0) - 1) < Config.getJitter(),
+            assertTrue(Math.abs(fPoint.extDouble(fLine.getDistance()).get(0) - 1) < jitter,
                     "The distance is erroneous");
         }
 
@@ -619,7 +638,7 @@ public class FLineTest {
 
             fPoint.ext(fLine.setDistance(-1));
 
-            assertTrue(Math.abs(fPoint.extDouble(fLine.getDistance()).get(0) - 1) < Config.getJitter(),
+            assertTrue(Math.abs(fPoint.extDouble(fLine.getDistance()).get(0) - 1) < jitter,
                     "The distance between FPoints is erroneous");
         }
 
@@ -637,7 +656,7 @@ public class FLineTest {
             FPoint fPointA = fPoint.copy().ext(fLine.setDistance(1));
             FPoint fPointB = fPoint.copy().ext(fLine.setDistance(-1));
 
-            assertTrue(fPointA.getDistance(fPointB) - 2 < Config.getJitter(),
+            assertTrue(fPointA.getDistance(fPointB) - 2 < jitter,
                     "The distance between FPoints is erroneous");
         }
 
@@ -1255,7 +1274,7 @@ public class FLineTest {
 
             FVector fVectorDrift = fLineA.getOrigin().copy()
                     .setCrossProduct(fLineBOrigin)
-                    .setLength(1.5 * Config.getJitter());
+                    .setLength(1.5 * jitter);
 
             fLineBOrigin.getBase().set(fVectorDrift.getHead());
 

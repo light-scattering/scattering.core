@@ -1,17 +1,32 @@
 package eu.scattering.core.design.main.box;
 
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.box.position.FPosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static eu.scattering.core.Config.factory;
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Timeout(5)
 @DisplayName("FPosition")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPositionTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Test
     @DisplayName("Create with parameters")

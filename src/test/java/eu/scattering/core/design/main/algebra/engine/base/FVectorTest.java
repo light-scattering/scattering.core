@@ -1,24 +1,39 @@
 package eu.scattering.core.design.main.algebra.engine.base;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.base.support.FVectorTestHelper;
+import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FVector")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FVectorTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FVectorBase {
 
         @Test
@@ -831,6 +846,8 @@ public class FVectorTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FVectorAdvanced {
 
         @Test
@@ -850,11 +867,11 @@ public class FVectorTest {
                     () -> assertEquals(0, fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(1, fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(1, fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(1, fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -912,11 +929,11 @@ public class FVectorTest {
                     () -> assertEquals(fPointRel.getZ(), fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -950,11 +967,11 @@ public class FVectorTest {
                     () -> assertEquals(fPointRel.getZ(), fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -986,11 +1003,11 @@ public class FVectorTest {
                     () -> assertEquals(0, fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -1023,11 +1040,11 @@ public class FVectorTest {
                     () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(fPointRel.getX(), fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(fPointRel.getY(), fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(fPointRel.getZ(), fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -1061,11 +1078,11 @@ public class FVectorTest {
                     () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(fPointRel.getX(), fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(fPointRel.getY(), fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(fPointRel.getZ(), fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -1097,11 +1114,11 @@ public class FVectorTest {
                     () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(0, fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(0, fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -1248,11 +1265,11 @@ public class FVectorTest {
                     () -> assertEquals(fVector.getBase().getZ(), fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -1283,11 +1300,11 @@ public class FVectorTest {
                     () -> assertEquals(fVector.getBase().getZ(), fVector.getBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
-                            Config.getJitter(), "Head - The X value is incorrect"),
+                            jitter, "Head - The X value is incorrect"),
                     () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
-                            Config.getJitter(), "Head - The Y value is incorrect"),
+                            jitter, "Head - The Y value is incorrect"),
                     () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
-                            Config.getJitter(), "Head - The Z value is incorrect")
+                            jitter, "Head - The Z value is incorrect")
             );
         }
 
@@ -1364,7 +1381,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(2, 2, 2);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertEquals(Math.sqrt(3), fVector.getLength(), Config.getJitter(), "The length is erroneous");
+            assertEquals(Math.sqrt(3), fVector.getLength(), jitter, "The length is erroneous");
         }
 
         @Test
@@ -1374,7 +1391,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertEquals(0, fVector.getLength(), Config.getJitter(), "The length should be zero");
+            assertEquals(0, fVector.getLength(), jitter, "The length should be zero");
         }
 
         @Test
@@ -1390,7 +1407,7 @@ public class FVectorTest {
             double radius = Math.sqrt(dimX + dimY + dimZ);
 
             assertEquals(radius, fVector.getLength(),
-                    Config.getJitter(), "The radius is erroneous");
+                    jitter, "The radius is erroneous");
         }
 
         @Test
@@ -1409,7 +1426,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
             assertEquals(3, fVector.getLengthP2(),
-                    Config.getJitter(), "The P2 length is erroneous");
+                    jitter, "The P2 length is erroneous");
         }
 
         @Test
@@ -1465,7 +1482,7 @@ public class FVectorTest {
 
             fVector.setLength(1);
 
-            assertEquals(1, fVector.getLength(), Config.getJitter(), "The length is erroneous");
+            assertEquals(1, fVector.getLength(), jitter, "The length is erroneous");
         }
 
         @Test
@@ -1494,7 +1511,7 @@ public class FVectorTest {
 
             fVector.normalize();
 
-            assertEquals(1, fVector.getLength(), Config.getJitter(), "The length is incorrect");
+            assertEquals(1, fVector.getLength(), jitter, "The length is incorrect");
         }
 
         @Test
@@ -1684,7 +1701,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(2, 2, 0);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertEquals(Math.PI * 0.25, fVector.getInclination(), Config.getJitter(),
+            assertEquals(Math.PI * 0.25, fVector.getInclination(), jitter,
                     "The FVector inclination is incorrect");
         }
 
@@ -1736,7 +1753,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(2, 1, 1);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertEquals(Math.PI * 0.25, fVector.getAzimuth(), Config.getJitter(),
+            assertEquals(Math.PI * 0.25, fVector.getAzimuth(), jitter,
                     "The FVector inclination is incorrect");
         }
 
@@ -1797,9 +1814,9 @@ public class FVectorTest {
 
             assertAll("Validate results",
                     () -> assertEquals(Math.PI * 0.5, fVectorA.getAngle(fVectorB),
-                            Config.getJitter(), "The angle is incorrect"),
+                            jitter, "The angle is incorrect"),
                     () -> assertEquals(Math.PI * 0.5, fVectorB.getAngle(fVectorA),
-                            Config.getJitter(), "The angle is incorrect")
+                            jitter, "The angle is incorrect")
             );
         }
 
@@ -1813,7 +1830,7 @@ public class FVectorTest {
             fVectorB.moveBase(RandomHelper.getTestPoint());
 
             assertEquals(0, fVectorA.getAngle(fVectorB),
-                    Config.getJitter(), "The angle is incorrect");
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1826,7 +1843,7 @@ public class FVectorTest {
             fVectorB.moveBase(RandomHelper.getTestPoint());
 
             assertEquals(0, fVectorA.getAngle(fVectorB),
-                    Config.getJitter(), "The angle is incorrect");
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1839,7 +1856,7 @@ public class FVectorTest {
             fVectorB.moveBase(RandomHelper.getTestPoint());
 
             assertEquals(Math.PI * 0.5, fVectorA.getAngle(fVectorB),
-                    Config.getJitter(), "The angle is incorrect");
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1881,7 +1898,7 @@ public class FVectorTest {
             fVector.moveBase(fPointRel);
             fPoint.add(fPointRel);
 
-            assertEquals(Math.PI * 0.5, fVector.getAngle(fPoint), Config.getJitter(),
+            assertEquals(Math.PI * 0.5, fVector.getAngle(fPoint), jitter,
                     "The angle is incorrect");
         }
 
@@ -1924,7 +1941,7 @@ public class FVectorTest {
             fVector.setAngle(fPoint, angle);
 
             assertEquals(angle, fVector.getAngle(fPoint),
-                    Config.getJitter(), "The angle is incorrect");
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1937,7 +1954,7 @@ public class FVectorTest {
             fVector.setAngle(fPoint, angle);
 
             assertEquals(angle, -fVector.getAngle(fPoint),
-                    Config.getJitter(), "The angle is incorrect");
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1981,7 +1998,7 @@ public class FVectorTest {
             fVectorA.setAngle(fVectorB, angle);
 
             assertEquals(angle, fVectorA.getAngle(fVectorB),
-                    Config.getJitter(), "The angle is incorrect");
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1994,7 +2011,7 @@ public class FVectorTest {
             fVectorA.setAngle(fVectorB, angle);
 
             assertEquals(angle, -fVectorA.getAngle(fVectorB),
-                    Config.getJitter(), "The angle is incorrect");
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -2139,7 +2156,7 @@ public class FVectorTest {
             double dimY = fPointA.getY() * fPointB.getY();
             double dimZ = fPointA.getZ() * fPointB.getZ();
 
-            assertEquals(dimX + dimY + dimZ, result, Config.getJitter(), "The value is erroneous");
+            assertEquals(dimX + dimY + dimZ, result, jitter, "The value is erroneous");
         }
 
         @Test
@@ -2176,7 +2193,7 @@ public class FVectorTest {
             double dimY = fPoint.getY() * fVector.getHead().getY();
             double dimZ = fPoint.getZ() * fVector.getHead().getZ();
 
-            assertEquals(dimX + dimY + dimZ, result, Config.getJitter(), "The value is not correct");
+            assertEquals(dimX + dimY + dimZ, result, jitter, "The value is not correct");
         }
 
         @Test
@@ -2598,7 +2615,7 @@ public class FVectorTest {
             FVector fVectorA = RandomHelper.getTestVector();
             FVector fVectorB = RandomHelper.getTestVector();
 
-            while (fVectorA.getDotProduct(fVectorB) < Config.getJitter()) {
+            while (fVectorA.getDotProduct(fVectorB) < jitter) {
                 fVectorB = RandomHelper.getTestVector();
             }
 
@@ -2802,6 +2819,8 @@ public class FVectorTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class IFCoreFeatures {
 
         @Test
@@ -2906,7 +2925,7 @@ public class FVectorTest {
             FPoint fPointHead = RandomHelper.getTestPoint();
 
             FVector fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FVector fVectorB = factory.getFVector(fPointBase.addX(Config.getJitter() * 0.5), fPointHead);
+            FVector fVectorB = factory.getFVector(fPointBase.addX(jitter * 0.5), fPointHead);
 
             assertTrue(fVectorA.isSimilar(fVectorB), "FVectors should be similar");
         }
@@ -2927,7 +2946,7 @@ public class FVectorTest {
             FPoint fPointHead = RandomHelper.getTestPoint();
 
             FVector fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FVector fVectorB = factory.getFVector(fPointBase.addX(Config.getJitter() * 1.5), fPointHead);
+            FVector fVectorB = factory.getFVector(fPointBase.addX(jitter * 1.5), fPointHead);
 
             assertFalse(fVectorA.isSimilar(fVectorB), "FVectors should not be similar");
         }
@@ -2952,8 +2971,8 @@ public class FVectorTest {
             double hZ = RandomHelper.getTestValue();
 
             FVector fVector = factory.getFVector(
-                    bX + (0.5 * Config.getJitter()), bY + (0.5 * Config.getJitter()), bZ + (0.5 * Config.getJitter()),
-                    hX + (0.5 * Config.getJitter()), hY + (0.5 * Config.getJitter()), hZ + (0.5 * Config.getJitter()));
+                    bX + (0.5 * jitter), bY + (0.5 * jitter), bZ + (0.5 * jitter),
+                    hX + (0.5 * jitter), hY + (0.5 * jitter), hZ + (0.5 * jitter));
 
             assertTrue(fVector.isSimilar(bX, bY, bZ, hX, hY, hZ),
                     "FVector values should be equal");
@@ -2970,8 +2989,8 @@ public class FVectorTest {
             double hZ = RandomHelper.getTestValue();
 
             FVector fVector = factory.getFVector(
-                    bX + (1.5 * Config.getJitter()), bY + (1.5 * Config.getJitter()), bZ + (1.5 * Config.getJitter()),
-                    hX + (1.5 * Config.getJitter()), hY + (1.5 * Config.getJitter()), hZ + (1.5 * Config.getJitter()));
+                    bX + (1.5 * jitter), bY + (1.5 * jitter), bZ + (1.5 * jitter),
+                    hX + (1.5 * jitter), hY + (1.5 * jitter), hZ + (1.5 * jitter));
 
             assertFalse(fVector.isSimilar(bX, bY, bZ, hX, hY, hZ),
                     "FVector values should not be equal");
@@ -3050,6 +3069,8 @@ public class FVectorTest {
     @Nested
     @Tag("Algebra")
     @DisplayName("Base algebra")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class IBaseAlgebra {
 
         @Test

@@ -1,21 +1,36 @@
 package eu.scattering.core.design.main.algebra.type;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.support.FComplexTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FComplex")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FComplexTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FComplexBase {
 
         @Test
@@ -110,6 +125,8 @@ public class FComplexTest {
     @Nested
     @Tag("Algebra")
     @DisplayName("Base algebra")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class BaseAlgebra {
 
         private double refRe, refIm;
@@ -369,9 +386,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex values",
                     () -> assertEquals(valueRe, fComplex.getRe(),
-                            Config.getJitter(), "The real part is incorrect"),
+                            jitter, "The real part is incorrect"),
                     () -> assertEquals(valueIm, fComplex.getIm(),
-                            Config.getJitter(), "The imaginary part is incorrect")
+                            jitter, "The imaginary part is incorrect")
             );
         }
 
@@ -683,6 +700,8 @@ public class FComplexTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class CoreFeatures {
 
         private double refRe, refIm;
@@ -726,7 +745,7 @@ public class FComplexTest {
         @DisplayName("Exactness (fail)")
         void isExactFail() {
             FComplex fComplexRef = factory.getFComplex(refRe, refIm);
-            FComplex fComplexOp = fComplexRef.copy().add(0.5 * Config.getJitter());
+            FComplex fComplexOp = fComplexRef.copy().add(0.5 * jitter);
 
             assertAll("Validate exactness",
                     () -> assertFalse(fComplexRef.isExact(fComplexOp),
@@ -774,7 +793,7 @@ public class FComplexTest {
         @DisplayName("Similarity")
         void isSimilar() {
             FComplex fComplexRef = factory.getFComplex(refRe, refIm);
-            double ref = Config.getJitter() * 0.5;
+            double ref = jitter * 0.5;
 
             assertAll("Check combinations (true)",
                     () -> assertTrue(fComplexRef
@@ -799,7 +818,7 @@ public class FComplexTest {
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
             FComplex fComplexRef = factory.getFComplex(refRe, refIm);
-            double ref = Config.getJitter() * 2;
+            double ref = jitter * 2;
 
             assertAll("Check combinations (true)",
                     () -> assertFalse(fComplexRef
@@ -830,11 +849,11 @@ public class FComplexTest {
         @DisplayName("Similarity with parameters")
         void isSimilarWithParameters() {
             FComplex fComplexRef = factory.getFComplex(refRe, refIm);
-            double jitter = 0.5 * Config.getJitter();
+            double error = 0.5 * jitter;
 
             assertTrue(fComplexRef.isSimilar(
-                    refRe + jitter,
-                    refIm + jitter),
+                    refRe + error,
+                    refIm + error),
                     "FComplex values should be similar");
         }
 
@@ -844,8 +863,8 @@ public class FComplexTest {
             FComplex fComplexRef = factory.getFComplex(refRe, refIm);
 
             assertFalse(fComplexRef.isSimilar(
-                    refRe + (1.5 * Config.getJitter()),
-                    refRe + (1.5 * Config.getJitter())),
+                    refRe + (1.5 * jitter),
+                    refRe + (1.5 * jitter)),
                     "FComplex values should not be similar");
         }
 
@@ -912,6 +931,8 @@ public class FComplexTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FComplexAdvanced {
 
         @Test
@@ -941,7 +962,7 @@ public class FComplexTest {
             fComplex.setMagnitude(magnitude);
 
             assertEquals(magnitude, fComplex.getMagnitude(),
-                    Config.getJitter(), "The magnitude is erroneous");
+                    jitter, "The magnitude is erroneous");
         }
 
         @Test
@@ -982,7 +1003,7 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertNotEquals(Math.PI, fComplex.getPhase(),
-                    Config.getJitter(), "The phase is erroneous");
+                    jitter, "The phase is erroneous");
         }
 
         @Test
@@ -994,7 +1015,7 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(0, fComplex.getPhase(),
-                    Config.getJitter(), "The phase is erroneous");
+                    jitter, "The phase is erroneous");
         }
 
         @Test
@@ -1006,7 +1027,7 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI, fComplex.getPhase(),
-                    Config.getJitter(), "The phase is erroneous");
+                    jitter, "The phase is erroneous");
         }
 
         @Test
@@ -1018,7 +1039,7 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI * +0.25, fComplex.getPhase(),
-                    Config.getJitter(), "The phase is erroneous");
+                    jitter, "The phase is erroneous");
         }
 
         @Test
@@ -1030,7 +1051,7 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI * -0.25, fComplex.getPhase(),
-                    Config.getJitter(), "The phase is erroneous");
+                    jitter, "The phase is erroneous");
         }
 
         @Test
@@ -1058,7 +1079,7 @@ public class FComplexTest {
             fComplex.setPhase(phase);
 
             assertEquals(phase, fComplex.getPhase(),
-                    Config.getJitter(), "The phase is erroneous");
+                    jitter, "The phase is erroneous");
         }
 
         @Test
@@ -1080,9 +1101,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex",
                     () -> assertEquals(-re, fComplex.getRe(),
-                            Config.getJitter(), "The Re value is erroneous"),
+                            jitter, "The Re value is erroneous"),
                     () -> assertEquals(-im, fComplex.getIm(),
-                            Config.getJitter(), "The Im value is erroneous")
+                            jitter, "The Im value is erroneous")
             );
         }
 
@@ -1106,9 +1127,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex",
                     () -> assertEquals(1, fComplex.getRe(),
-                            Config.getJitter(), "The Re value is erroneous"),
+                            jitter, "The Re value is erroneous"),
                     () -> assertEquals(0, fComplex.getIm(),
-                            Config.getJitter(), "The Im value is erroneous")
+                            jitter, "The Im value is erroneous")
             );
         }
 
@@ -1131,9 +1152,9 @@ public class FComplexTest {
 
             assertAll("Validate FComplex",
                     () -> assertEquals(re, fComplex.getRe(),
-                            Config.getJitter(), "The Re value is erroneous"),
+                            jitter, "The Re value is erroneous"),
                     () -> assertEquals(-im, fComplex.getIm(),
-                            Config.getJitter(), "The Im value is erroneous"));
+                            jitter, "The Im value is erroneous"));
         }
 
         @Test
@@ -1152,7 +1173,7 @@ public class FComplexTest {
             fComplex.normalize();
 
             assertEquals(1, fComplex.getMagnitude(),
-                    Config.getJitter(), "The magnitude is erroneous");
+                    jitter, "The magnitude is erroneous");
         }
 
         @Test

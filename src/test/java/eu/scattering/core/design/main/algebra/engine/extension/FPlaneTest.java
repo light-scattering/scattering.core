@@ -1,6 +1,7 @@
 package eu.scattering.core.design.main.algebra.engine.extension;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
@@ -8,20 +9,34 @@ import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.engine.extension.support.FPlaneTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FPlane")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPlaneTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FPlaneBase {
 
         @Test
@@ -143,6 +158,8 @@ public class FPlaneTest {
 
     @Nested
     @DisplayName("Core features")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class ICoreFeatures {
 
         @Test
@@ -186,7 +203,7 @@ public class FPlaneTest {
         void isExactFail() {
             FVector fVector = RandomHelper.getTestVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
-            FPlane fPlaneB = factory.getFPlane(fVector.copy().add(0.5 * Config.getJitter()));
+            FPlane fPlaneB = factory.getFPlane(fVector.copy().add(0.5 * jitter));
 
             assertAll("Validate exactness",
                     () -> assertFalse(fPlaneA.isExact(fPlaneB), "FPlanes should not be equal"),
@@ -208,7 +225,7 @@ public class FPlaneTest {
         void isSimilar() {
             FVector fVector = RandomHelper.getTestVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
-            FPlane fPlaneB = factory.getFPlane(fVector.copy().add(0.5 * Config.getJitter()));
+            FPlane fPlaneB = factory.getFPlane(fVector.copy().add(0.5 * jitter));
 
             assertAll("Validate exactness",
                     () -> assertTrue(fPlaneA.isSimilar(fPlaneB), "FPlanes should be similar"),
@@ -236,7 +253,7 @@ public class FPlaneTest {
         void isSimilarFail() {
             FVector fVector = RandomHelper.getTestVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
-            FPlane fPlaneB = factory.getFPlane(fVector.copy().moveForward(1.5 * Config.getJitter()));
+            FPlane fPlaneB = factory.getFPlane(fVector.copy().moveForward(1.5 * jitter));
 
             assertAll("Validate exactness",
                     () -> assertFalse(fPlaneA.isSimilar(fPlaneB), "FPlanes should not be similar"),
@@ -310,6 +327,8 @@ public class FPlaneTest {
 
     @Nested
     @DisplayName("Functionality - Advanced")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FPlaneAdvanced {
 
         @Test
@@ -381,7 +400,7 @@ public class FPlaneTest {
         @DisplayName("Location")
         void isPartOf() {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
-            FPoint fPoint = factory.getFPoint(-1, 2, -1).add(0.5 * Config.getJitter());
+            FPoint fPoint = factory.getFPoint(-1, 2, -1).add(0.5 * jitter);
 
             assertTrue(fPoint.extBoolean(fPlane.isPartOf()).get(0),
                     "The distance should be negligible");
@@ -391,7 +410,7 @@ public class FPlaneTest {
         @DisplayName("Location (fail)")
         void isPartOfFail() {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
-            FPoint fPoint = factory.getFPoint(-1, 2, -1).add(1.5 * Config.getJitter());
+            FPoint fPoint = factory.getFPoint(-1, 2, -1).add(1.5 * jitter);
 
             assertFalse(fPoint.extBoolean(fPlane.isPartOf()).get(0),
                     "The distance should not be negligible");
@@ -460,7 +479,7 @@ public class FPlaneTest {
             fPoint.add(relocation);
 
             assertEquals(3, fPoint.extDouble(fPlane.getDistanceP2()).get(0),
-                    Config.getJitter(), "The distance is erroneous");
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -490,7 +509,7 @@ public class FPlaneTest {
             fPoint.ext(fPlane.setDistance(1));
 
             assertEquals(1, fPoint.extDouble(fPlane.getDistance()).get(0),
-                    Config.getJitter(), "The distance is erroneous");
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -516,7 +535,7 @@ public class FPlaneTest {
         void isInHalfSpace() {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFVector(1, 1, 1)
-                    .mul(Config.getJitter())
+                    .mul(jitter)
                     .moveBase(-1, 2, -1)
                     .getHead();
 
@@ -533,7 +552,7 @@ public class FPlaneTest {
         void isInHalfSpaceFail() {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFVector(1, 1, 1)
-                    .mul(Config.getJitter())
+                    .mul(jitter)
                     .reflectHead()
                     .moveBase(-1, 2, -1)
                     .getHead();

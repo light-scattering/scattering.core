@@ -1,21 +1,36 @@
 package eu.scattering.core.design.main.algebra.type;
 
-import eu.scattering.core.Config;
-import eu.scattering.core.design.main.algebra.type.support.FQuaternionTestHelper;
+import eu.scattering.core.SpringConfigCore;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
+import eu.scattering.core.design.main.algebra.type.support.FQuaternionTestHelper;
 import eu.scattering.core.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static eu.scattering.core.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FQuaternion")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FQuaternionTest {
+
+    @Value("${jitter}")
+    private double jitter;
+
+    @Autowired
+    private Factory factory;
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FQuaternionBase {
 
         @Test
@@ -189,6 +204,8 @@ public class FQuaternionTest {
     @Nested
     @Tag("Algebra")
     @DisplayName("Base algebra")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class BaseAlgebra {
 
         private double refRe, refI, refJ, refK;
@@ -860,13 +877,13 @@ public class FQuaternionTest {
 
             assertAll("Validate FQuaternion values",
                     () -> assertEquals(0.478260869565, fQuaternionRef.getRe(),
-                            Config.getJitter(), "The real part is incorrect"),
+                            jitter, "The real part is incorrect"),
                     () -> assertEquals(0.034782608696, fQuaternionRef.getI(),
-                            Config.getJitter(), "The imaginary part (I) is incorrect"),
+                            jitter, "The imaginary part (I) is incorrect"),
                     () -> assertEquals(0.000000000000, fQuaternionRef.getJ(),
-                            Config.getJitter(), "The imaginary part (J) is incorrect"),
+                            jitter, "The imaginary part (J) is incorrect"),
                     () -> assertEquals(0.069565217391, fQuaternionRef.getK(),
-                            Config.getJitter(), "The imaginary part (K) is incorrect")
+                            jitter, "The imaginary part (K) is incorrect")
             );
         }
 
@@ -1199,6 +1216,8 @@ public class FQuaternionTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class CoreFeatures {
 
         private double refRe, refI, refJ, refK;
@@ -1248,7 +1267,7 @@ public class FQuaternionTest {
         @DisplayName("Exactness (fail)")
         void isExactFail() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * Config.getJitter());
+            FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * jitter);
 
             assertAll("Validate exactness",
                     () -> assertFalse(fQuaternionRef.isExact(fQuaternionOp),
@@ -1262,7 +1281,7 @@ public class FQuaternionTest {
         @DisplayName("Exactness (validate)")
         void isExactValidate() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * Config.getJitter());
+            FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * jitter);
 
             FQuaternionTestHelper.testValue(FQuaternion::isExact, fQuaternionRef, fQuaternionOp);
         }
@@ -1297,7 +1316,7 @@ public class FQuaternionTest {
         @DisplayName("Similarity")
         void isSimilar() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            double ref = Config.getJitter() * 0.5;
+            double ref = jitter * 0.5;
 
             assertAll("Check combinations (true)",
                     () -> assertTrue(fQuaternionRef
@@ -1334,7 +1353,7 @@ public class FQuaternionTest {
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            double ref = Config.getJitter() * 2;
+            double ref = jitter * 2;
 
             assertAll("Check combinations (true)",
                     () -> assertFalse(fQuaternionRef
@@ -1368,7 +1387,7 @@ public class FQuaternionTest {
         @DisplayName("Similarity (validate)")
         void isSimilarValidate() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * Config.getJitter());
+            FQuaternion fQuaternionOp = fQuaternionRef.copy().add(0.5 * jitter);
 
             FQuaternionTestHelper.testValue(FQuaternion::isSimilar, fQuaternionRef, fQuaternionOp);
         }
@@ -1377,11 +1396,11 @@ public class FQuaternionTest {
         @DisplayName("Similarity with parameters")
         void isSimilarWithParameters() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            double jitter = 0.5 * Config.getJitter();
+            double error = 0.5 * jitter;
 
             assertTrue(fQuaternionRef.isSimilar(
-                    refRe + jitter,
-                    refI + jitter, refJ + jitter, refK + jitter),
+                    refRe + error,
+                    refI + error, refJ + error, refK + error),
                     "FQuaternion values should be similar");
         }
 
@@ -1389,11 +1408,11 @@ public class FQuaternionTest {
         @DisplayName("Similarity with parameters (fail)")
         void isSimilarWithParametersFail() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            double jitter = 0.5 * Config.getJitter();
+            double error = 0.5 * jitter;
 
             assertTrue(fQuaternionRef.isSimilar(
-                    refRe + jitter,
-                    refI + jitter, refJ + jitter, refK + jitter),
+                    refRe + error,
+                    refI + error, refJ + error, refK + error),
                     "FQuaternion values should be similar");
         }
 
@@ -1460,6 +1479,8 @@ public class FQuaternionTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
+    @ExtendWith(SpringExtension.class)
+    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FQuaternionAdvanced {
 
         @Test
@@ -1494,7 +1515,7 @@ public class FQuaternionTest {
             fQuaternion.setMagnitude(magnitude);
 
             assertEquals(magnitude, fQuaternion.getMagnitude(),
-                    Config.getJitter(), "The magnitude is erroneous");
+                    jitter, "The magnitude is erroneous");
         }
 
         @Test
@@ -1536,13 +1557,13 @@ public class FQuaternionTest {
 
             assertAll("Validate FQuaternion",
                     () -> assertEquals(0.037037037037, fComplex.getRe(),
-                            Config.getJitter(), "The Re value is erroneous"),
+                            jitter, "The Re value is erroneous"),
                     () -> assertEquals(-0.055555555556, fComplex.getI(),
-                            Config.getJitter(), "The I value is erroneous"),
+                            jitter, "The I value is erroneous"),
                     () -> assertEquals(-0.074074074074, fComplex.getJ(),
-                            Config.getJitter(), "The J value is erroneous"),
+                            jitter, "The J value is erroneous"),
                     () -> assertEquals(-0.092592592593, fComplex.getK(),
-                            Config.getJitter(), "The K value is erroneous")
+                            jitter, "The K value is erroneous")
             );
         }
 
@@ -1567,13 +1588,13 @@ public class FQuaternionTest {
 
             assertAll("Validate FQuaternion",
                     () -> assertEquals(re, fComplex.getRe(),
-                            Config.getJitter(), "The Re value is erroneous"),
+                            jitter, "The Re value is erroneous"),
                     () -> assertEquals(-i, fComplex.getI(),
-                            Config.getJitter(), "The I value is erroneous"),
+                            jitter, "The I value is erroneous"),
                     () -> assertEquals(-j, fComplex.getJ(),
-                            Config.getJitter(), "The J value is erroneous"),
+                            jitter, "The J value is erroneous"),
                     () -> assertEquals(-k, fComplex.getK(),
-                            Config.getJitter(), "The K value is erroneous")
+                            jitter, "The K value is erroneous")
             );
         }
 
@@ -1593,7 +1614,7 @@ public class FQuaternionTest {
             fQuaternion.normalize();
 
             assertEquals(1, fQuaternion.getMagnitude(),
-                    Config.getJitter(), "The magnitude is erroneous");
+                    jitter, "The magnitude is erroneous");
         }
 
         @Test

@@ -1,14 +1,26 @@
 package eu.scattering.core.implementation.main.algebra.type.quaternion;
 
-import eu.scattering.core.Config;
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
+import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static eu.scattering.core.Config.factory;
-
 public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implements FQuaternion {
+
+    private static Factory factory = new FactoryDefault();
+    private static double jitter = 1E-8;
+
+    public static void setFactory(Factory factory) {
+
+        FQuaternionDefault.factory = factory;
+    }
+
+    public static void setJitter(double jitter) {
+
+        FQuaternionDefault.jitter = jitter;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -129,8 +141,7 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
         double distanceJ = Math.abs(getJ() - fQuaternion.getJ());
         double distanceK = Math.abs(getK() - fQuaternion.getK());
 
-        return distanceRe < Config.getJitter() && distanceI < Config.getJitter() &&
-                distanceJ < Config.getJitter() && distanceK < Config.getJitter();
+        return distanceRe < jitter && distanceI < jitter && distanceJ < jitter && distanceK < jitter;
     }
 
     @Override
@@ -423,8 +434,7 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
         double distanceJ = Math.abs(getJ() - j);
         double distanceK = Math.abs(getK() - k);
 
-        return distanceRe < Config.getJitter() && distanceI < Config.getJitter() &&
-                distanceJ < Config.getJitter() && distanceK < Config.getJitter();
+        return distanceRe < jitter && distanceI < jitter && distanceJ < jitter && distanceK < jitter;
     }
 
     @Override
