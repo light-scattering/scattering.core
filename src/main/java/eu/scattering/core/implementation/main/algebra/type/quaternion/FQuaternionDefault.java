@@ -444,6 +444,12 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
     }
 
     @Override
+    public double getMagnitudeP2() {
+
+        return (getRe() * getRe()) + (getI() * getI()) + (getJ() * getJ())+ (getK() * getK());
+    }
+
+    @Override
     public FQuaternion setMagnitude(double magnitude) {
 
         if (isZero()) {
@@ -453,6 +459,26 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
         mul(Math.abs(magnitude) / getMagnitude());
 
         return magnitude > 0 ? this : negate();
+    }
+
+    @Override
+    public double getDistance(FQuaternion element) {
+        double distanceRe = Math.pow(Math.abs(getRe() - element.getRe()), 2);
+        double distanceI = Math.pow(Math.abs(getI() - element.getI()), 2);
+        double distanceJ = Math.pow(Math.abs(getJ() - element.getI()), 2);
+        double distanceK = Math.pow(Math.abs(getK() - element.getK()), 2);
+
+        return Math.sqrt(distanceRe + distanceI + distanceJ + distanceK);
+    }
+
+    @Override
+    public double getDistanceP2(FQuaternion element) {
+        double distanceRe = Math.pow(Math.abs(getRe() - element.getRe()), 2);
+        double distanceI = Math.pow(Math.abs(getI() - element.getI()), 2);
+        double distanceJ = Math.pow(Math.abs(getJ() - element.getI()), 2);
+        double distanceK = Math.pow(Math.abs(getK() - element.getK()), 2);
+
+        return distanceRe + distanceI + distanceJ + distanceK;
     }
 
     @Override

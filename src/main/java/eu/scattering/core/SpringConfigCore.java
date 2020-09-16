@@ -25,13 +25,22 @@ public class SpringConfigCore {
     @Value("${jitter}")
     private double jitter;
 
+    @Value("${random.range}")
+    private double random_range;
+
+    @Value("${random.separation}")
+    private double random_separation;
+
     @Bean
     public Factory getFactory() {
+
         return new FactoryDevelopment();
     }
 
     @PostConstruct
     public void postConstruct() {
+
+        Factory factory = getFactory();
 
         FPointDefault.setJitter(jitter);
         FVectorDefault.setJitter(jitter);
@@ -42,16 +51,16 @@ public class SpringConfigCore {
         FPositionDefault.setJitter(jitter);
         FRotationDefault.setJitter(jitter);
 
+        FPointDefault.setFactory(factory);
+        FVectorDefault.setFactory(factory);
+        FLineDefault.setFactory(factory);
+        FPlaneDefault.setFactory(factory);
+        FComplexDefault.setFactory(factory);
+        FQuaternionDefault.setFactory(factory);
+        FPositionDefault.setFactory(factory);
+        FRotationDefault.setFactory(factory);
 
-
-        FPointDefault.setFactory(getFactory());
-        FVectorDefault.setFactory(getFactory());
-        FLineDefault.setFactory(getFactory());
-        FPlaneDefault.setFactory(getFactory());
-        FComplexDefault.setFactory(getFactory());
-        FQuaternionDefault.setFactory(getFactory());
-        FPositionDefault.setFactory(getFactory());
-        FRotationDefault.setFactory(getFactory());
+        factory.getRandomHelper().configure(factory, random_range, random_separation);
     }
 
 }

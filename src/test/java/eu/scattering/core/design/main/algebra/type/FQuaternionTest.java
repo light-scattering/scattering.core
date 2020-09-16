@@ -1495,7 +1495,7 @@ public class FQuaternionTest {
 
             double res = Math.sqrt(resRe + resI + resJ + resK);
 
-            assertEquals(res, fQuaternion.getMagnitude(), "The magnitude is erroneous");
+            assertEquals(res, fQuaternion.getMagnitude(), jitter, "The magnitude is erroneous");
         }
 
         @Test
@@ -1504,6 +1504,79 @@ public class FQuaternionTest {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
             FQuaternionTestHelper.testValue(FQuaternion::getMagnitude, fQuaternion);
+        }
+
+        @Test
+        @DisplayName("Get magnitude P2")
+        void getMagnitudeP2() {
+            FQuaternion fQuaternion = RandomHelper.getTestQuaternion();
+
+            double resRe = fQuaternion.getRe() * fQuaternion.getRe();
+            double resI = fQuaternion.getI() * fQuaternion.getI();
+            double resJ = fQuaternion.getJ() * fQuaternion.getJ();
+            double resK = fQuaternion.getK() * fQuaternion.getK();
+
+            double res = resRe + resI + resJ + resK;
+
+            assertEquals(res, fQuaternion.getMagnitudeP2(), jitter, "The magnitude is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get magnitude P2 (validate)")
+        void getMagnitudeP2Validate() {
+            FQuaternion fQuaternion = factory.getFQuaternion();
+
+            FQuaternionTestHelper.testValue(FQuaternion::getMagnitudeP2, fQuaternion);
+        }
+
+        @Test
+        @DisplayName("Get distance")
+        void getDistance() {
+            FQuaternion fQuaternionA = RandomHelper.getTestQuaternion();
+            FQuaternion fQuaternionB = RandomHelper.getTestQuaternion(fQuaternionA);
+
+            double distanceRe = Math.pow(Math.abs(fQuaternionA.getRe() - fQuaternionB.getRe()), 2);
+            double distanceI = Math.pow(Math.abs(fQuaternionA.getI() - fQuaternionB.getI()), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternionA.getJ() - fQuaternionB.getI()), 2);
+            double distanceK = Math.pow(Math.abs(fQuaternionA.getK() - fQuaternionB.getK()), 2);
+
+            double res = Math.sqrt(distanceRe + distanceI + distanceJ + distanceK);
+
+            assertEquals(res, fQuaternionA.getDistance(fQuaternionB), jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance (validate)")
+        void getDistanceValidate() {
+            FQuaternion fQuaternionA = factory.getFQuaternion();
+            FQuaternion fQuaternionB = factory.getFQuaternion();
+
+            FQuaternionTestHelper.testValue(FQuaternion::getDistance, fQuaternionA, fQuaternionB);
+        }
+
+        @Test
+        @DisplayName("Get distance P2")
+        void getDistanceP2() {
+            FQuaternion fQuaternionA = RandomHelper.getTestQuaternion();
+            FQuaternion fQuaternionB = RandomHelper.getTestQuaternion(fQuaternionA);
+
+            double distanceRe = Math.pow(Math.abs(fQuaternionA.getRe() - fQuaternionB.getRe()), 2);
+            double distanceI = Math.pow(Math.abs(fQuaternionA.getI() - fQuaternionB.getI()), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternionA.getJ() - fQuaternionB.getI()), 2);
+            double distanceK = Math.pow(Math.abs(fQuaternionA.getK() - fQuaternionB.getK()), 2);
+
+            double res = distanceRe + distanceI + distanceJ + distanceK;
+
+            assertEquals(res, fQuaternionA.getDistanceP2(fQuaternionB), jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 (validate)")
+        void getDistanceP2Validate() {
+            FQuaternion fQuaternionA = factory.getFQuaternion();
+            FQuaternion fQuaternionB = factory.getFQuaternion();
+
+            FQuaternionTestHelper.testValue(FQuaternion::getDistanceP2, fQuaternionA, fQuaternionB);
         }
 
         @Test

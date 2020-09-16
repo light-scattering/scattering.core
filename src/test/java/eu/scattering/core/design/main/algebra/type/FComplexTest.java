@@ -954,6 +954,68 @@ public class FComplexTest {
         }
 
         @Test
+        @DisplayName("Get magnitude P2")
+        void getMagnitudeP2() {
+            FComplex fComplex = RandomHelper.getTestComplex();
+
+            double res = (fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm());
+
+            assertEquals(res, fComplex.getMagnitudeP2(), "The magnitude is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get magnitude P2 (validate)")
+        void getMagnitudeP2Validate() {
+            FComplex fComplex = factory.getFComplex();
+
+            FComplexTestHelper.testValue(FComplex::getMagnitudeP2, fComplex);
+        }
+
+        @Test
+        @DisplayName("Get distance")
+        void getDistance() {
+            FComplex fComplexA = RandomHelper.getTestComplex();
+            FComplex fComplexB = RandomHelper.getTestComplex(fComplexA);
+
+            double distanceRe = Math.pow(Math.abs(fComplexA.getRe() - fComplexB.getRe()), 2);
+            double distanceIm = Math.pow(Math.abs(fComplexA.getIm() - fComplexB.getIm()), 2);
+            double res = Math.sqrt(distanceRe + distanceIm);
+
+            assertEquals(res, fComplexA.getDistance(fComplexB), jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance (validate)")
+        void getDistanceValidate() {
+            FComplex fComplexA = factory.getFComplex();
+            FComplex fComplexB = factory.getFComplex();
+
+            FComplexTestHelper.testValue(FComplex::getDistance, fComplexA, fComplexB);
+        }
+
+        @Test
+        @DisplayName("Get distance P2")
+        void getDistanceP2() {
+            FComplex fComplexA = RandomHelper.getTestComplex();
+            FComplex fComplexB = RandomHelper.getTestComplex(fComplexA);
+
+            double distanceRe = Math.pow(Math.abs(fComplexA.getRe() - fComplexB.getRe()), 2);
+            double distanceIm = Math.pow(Math.abs(fComplexA.getIm() - fComplexB.getIm()), 2);
+            double res = distanceRe + distanceIm;
+
+            assertEquals(res, fComplexA.getDistanceP2(fComplexB), jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 (validate)")
+        void getDistanceP2Validate() {
+            FComplex fComplexA = factory.getFComplex();
+            FComplex fComplexB = factory.getFComplex();
+
+            FComplexTestHelper.testValue(FComplex::getDistanceP2, fComplexA, fComplexB);
+        }
+
+        @Test
         @DisplayName("Set magnitude")
         void setMagnitude() {
             FComplex fComplex = RandomHelper.getTestComplex();

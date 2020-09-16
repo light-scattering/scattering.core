@@ -322,10 +322,32 @@ public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements F
     }
 
     @Override
+    public double getMagnitudeP2() {
+
+        return (getRe() * getRe()) + (getIm() * getIm());
+    }
+
+    @Override
     public FComplex setMagnitude(double magnitude) {
         double phase = getPhase();
 
         return setRe(magnitude * Math.cos(phase)).setIm(magnitude * Math.sin(phase));
+    }
+
+    @Override
+    public double getDistance(FComplex element) {
+        double distanceRe = Math.abs(getRe() - element.getRe());
+        double distanceIm = Math.abs(getIm() - element.getIm());
+
+        return Math.sqrt((distanceRe * distanceRe) + (distanceIm * distanceIm));
+    }
+
+    @Override
+    public double getDistanceP2(FComplex element) {
+        double distanceRe = Math.abs(getRe() - element.getRe());
+        double distanceIm = Math.abs(getIm() - element.getIm());
+
+        return (distanceRe * distanceRe) + (distanceIm * distanceIm);
     }
 
     @Override

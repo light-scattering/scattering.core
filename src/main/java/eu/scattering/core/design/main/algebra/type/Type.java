@@ -15,7 +15,11 @@ public interface Type<T> extends Algebra<T> {
     T div(double factor);
 
     double getMagnitude();
+    double getMagnitudeP2();
     T setMagnitude(double magnitude);
+
+    double getDistance(T element);
+    double getDistanceP2(T element);
 
     T pow(int n);
 

@@ -675,6 +675,19 @@ public class FQuaternionDevelopment extends AlgebraPresetDevelopment<FQuaternion
     }
 
     @Override
+    public double getMagnitudeP2() {
+
+        String name = "getMagnitudeP2()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getMagnitudeP2();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
     public FQuaternion setMagnitude(double magnitude) {
 
         String name = "setMagnitude(double)";
@@ -685,6 +698,32 @@ public class FQuaternionDevelopment extends AlgebraPresetDevelopment<FQuaternion
         updateStats(name, time);
 
         return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public double getDistance(FQuaternion element) {
+
+        String name = "getDistance(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getDistance(element);
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public double getDistanceP2(FQuaternion element) {
+
+        String name = "getDistanceP2(FQuaternion)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getDistanceP2(element);
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override

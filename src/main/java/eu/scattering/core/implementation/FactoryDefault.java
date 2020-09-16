@@ -11,6 +11,7 @@ import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.box.position.FPosition;
 import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.design.support.helper.AngleHelper;
+import eu.scattering.core.design.support.helper.RandomHelper;
 import eu.scattering.core.design.support.helper.SignalHelper;
 import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
@@ -22,6 +23,7 @@ import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternio
 import eu.scattering.core.implementation.main.box.position.FPositionDefault;
 import eu.scattering.core.implementation.main.box.rotation.FRotationDefault;
 import eu.scattering.core.implementation.support.helper.AngleHelperDefault;
+import eu.scattering.core.implementation.support.helper.RandomHelperDefault;
 import eu.scattering.core.implementation.support.helper.SignalHelperDefault;
 
 public final class FactoryDefault implements Factory {
@@ -93,12 +95,6 @@ public final class FactoryDefault implements Factory {
     }
 
     @Override
-    public Statistics getStatistics() {
-
-        return StatisticsDefault.create();
-    }
-
-    @Override
     public AngleHelper getHelperAngle() {
 
         return AngleHelperDefault.INSTANCE;
@@ -108,5 +104,11 @@ public final class FactoryDefault implements Factory {
     public SignalHelper getHelperSignal() {
 
         return SignalHelperDefault.INSTANCE;
+    }
+
+    @Override
+    public RandomHelper getRandomHelper() {
+
+        return RandomHelperDefault.INSTANCE;
     }
 }
