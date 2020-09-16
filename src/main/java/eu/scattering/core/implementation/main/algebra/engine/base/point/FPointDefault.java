@@ -1,16 +1,15 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.point;
 
 import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
-import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
 
@@ -359,37 +358,10 @@ public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint setRandomAngle(FPoint... exclude) {
+    public FPoint setRandomAngle(FPoint... exclusion) {
         double radius = getLength();
 
-        FPoint[] excludeList = new FPoint[exclude.length];
-        for (int i = 0 ; i < exclude.length ; i++ ) {
-            excludeList[i] = exclude[i].copy();
-        }
-
-        mainLoop:
-        while (true) {
-            double x1 = 0, x2 = 0, f = 10;
-
-            while (f >= 1) {
-                x1 = 2 * ThreadLocalRandom.current().nextDouble() - 1;
-                x2 = 2 * ThreadLocalRandom.current().nextDouble() - 1;
-                f = x1 * x1 + x2 * x2;
-            }
-
-            setX(2 * x1 * Math.sqrt(1 - f));
-            setY(2 * x2 * Math.sqrt(1 - f));
-            setZ(1 - 2 * f);
-
-            for (FPoint singularity : excludeList) {
-                if (isSimilar(singularity)) {
-                    continue mainLoop;
-                }
-            }
-
-            return setLength(radius);
-        }
-
+        return set(factory.getRandomHelper().getTestPoint(exclusion)).setLength(radius);
     }
 
     @Override
