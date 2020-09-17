@@ -34,7 +34,7 @@ public class SpringConfigCore {
     @Resource(name = "prod")
     private Factory factory;
 
-    @Bean("prod")
+    @Bean("prod") // INIT METHOD
     public Factory getFactoryDefault() {
 
         return FactoryDefault.create();

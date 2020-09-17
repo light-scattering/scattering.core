@@ -121,7 +121,7 @@ public final class FactoryDefault implements Factory {
     public Factory setJitter(double jitter) {
 
         FPointDefault.setJitter(jitter);
-        FVectorDefault.setJitter(jitter);
+        FVectorDefault.setJitter(jitter); // CONFIGURE VALUES ONLY IN FACTORIES
         FLineDefault.setJitter(jitter);
         FPlaneDefault.setJitter(jitter);
         FComplexDefault.setJitter(jitter);
