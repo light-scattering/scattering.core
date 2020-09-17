@@ -361,7 +361,7 @@ public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
     public FPoint setRandomAngle(FPoint... exclusion) {
         double radius = getLength();
 
-        return set(factory.getRandomHelper().getTestPoint(exclusion)).setLength(radius);
+        return set(factory.getRandomHelper().getFPoint(exclusion)).setLength(radius);
     }
 
     @Override

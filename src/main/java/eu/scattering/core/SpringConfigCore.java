@@ -1,7 +1,6 @@
 package eu.scattering.core;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.implementation.FactoryDevelopment;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.vector.FVectorDefault;
@@ -28,8 +27,8 @@ public class SpringConfigCore {
     @Value("${random.range}")
     private double random_range;
 
-    @Value("${random.separation}")
-    private double random_separation;
+    @Value("${random.spacing}")
+    private double random_spacing;
 
     @Bean
     public Factory getFactory() {
@@ -60,7 +59,9 @@ public class SpringConfigCore {
         FPositionDefault.setFactory(factory);
         FRotationDefault.setFactory(factory);
 
-        factory.getRandomHelper().configure(factory, random_range, random_separation);
+        factory.getRandomHelper().setFactory(factory);
+        factory.getRandomHelper().setSpacing(random_spacing);
+        factory.getRandomHelper().setRange(random_range);
     }
 
 }

@@ -14,27 +14,37 @@ public enum RandomHelperDefault implements RandomHelper {
     INSTANCE {
 
         private Factory factory = new FactoryDefault();
+        private double spacing = 1E-8;
         private double range = 10000;
-        private double separation = 1E-8;
 
         @Override
-        public void configure(Factory factory, double range, double separation) {
+        public void setFactory(Factory factory) {
 
             this.factory = factory;
-            this.range = range;
-            this.separation = separation;
         }
 
         @Override
-        public double getTestValue(double... exclusion) {
-            double value = 0;
+        public void setSpacing(double spacing) {
+
+            this.spacing = spacing;
+        }
+
+        @Override
+        public void setRange(double range) {
+
+            this.range = range;
+        }
+
+        @Override
+        public double getDouble(double... exclusion) {
+            double value;
 
             mainLoop:
             while (true) {
                 value = getRandomValue();
 
                 for (double singularity : exclusion) {
-                    if (Math.abs(value - singularity) < separation) {
+                    if (Math.abs(value - singularity) < spacing) {
                         continue mainLoop;
                     }
                 }
@@ -49,7 +59,7 @@ public enum RandomHelperDefault implements RandomHelper {
         }
 
         @Override
-        public FPoint getTestPoint(FPoint... exclusion) {
+        public FPoint getFPoint(FPoint... exclusion) {
             FPoint value;
 
             mainLoop:
@@ -57,7 +67,7 @@ public enum RandomHelperDefault implements RandomHelper {
                 value = getRandomFPoint();
 
                 for (FPoint singularity : exclusion) {
-                    if (value.getDistance(singularity) < separation) {
+                    if (value.getDistance(singularity) < spacing) {
                         continue mainLoop;
                     }
                 }
@@ -79,11 +89,11 @@ public enum RandomHelperDefault implements RandomHelper {
             double y = 2 * x2 * Math.sqrt(1 - f);
             double z = 1 - 2 * f;
 
-            return factory.getFPoint(x, y, z).setLength(Math.abs(getTestValue()));
+            return factory.getFPoint(x, y, z).setLength(Math.abs(getDouble()));
         }
 
         @Override
-        public FVector getTestVector(FVector... exclusion) {
+        public FVector getFVector(FVector... exclusion) {
             FVector value;
 
             mainLoop:
@@ -91,10 +101,10 @@ public enum RandomHelperDefault implements RandomHelper {
                 value = getRandomFVector();
 
                 for (FVector singularity : exclusion) {
-                    boolean conditionBaseA = value.getBase().getDistance(singularity.getBase()) < separation;
-                    boolean conditionBaseB = value.getBase().getDistance(singularity.getHead()) < separation;
-                    boolean conditionHeadA = value.getHead().getDistance(singularity.getBase()) < separation;
-                    boolean conditionHeadB = value.getHead().getDistance(singularity.getHead()) < separation;
+                    boolean conditionBaseA = value.getBase().getDistance(singularity.getBase()) < spacing;
+                    boolean conditionBaseB = value.getBase().getDistance(singularity.getHead()) < spacing;
+                    boolean conditionHeadA = value.getHead().getDistance(singularity.getBase()) < spacing;
+                    boolean conditionHeadB = value.getHead().getDistance(singularity.getHead()) < spacing;
 
                     if (conditionBaseA || conditionBaseB || conditionHeadA || conditionHeadB) {
                         continue mainLoop;
@@ -108,13 +118,12 @@ public enum RandomHelperDefault implements RandomHelper {
         private FVector getRandomFVector() {
             FPoint base, head;
 
-            mainLoop:
             while (true) {
                 base = getRandomFPoint();
                 head = getRandomFPoint();
 
-                if (base.getDistance(head) < separation) {
-                    continue mainLoop;
+                if (base.getDistance(head) < spacing) {
+                    continue;
                 }
 
                 break;
@@ -124,7 +133,7 @@ public enum RandomHelperDefault implements RandomHelper {
         }
 
         @Override
-        public FComplex getTestComplex(FComplex... exclusion) {
+        public FComplex getFComplex(FComplex... exclusion) {
             FComplex value;
 
             mainLoop:
@@ -132,7 +141,7 @@ public enum RandomHelperDefault implements RandomHelper {
                 value = getRandomFComplex();
 
                 for (FComplex singularity : exclusion) {
-                    if (value.getDistance(singularity) < separation) {
+                    if (value.getDistance(singularity) < spacing) {
                         continue mainLoop;
                     }
                 }
@@ -143,11 +152,11 @@ public enum RandomHelperDefault implements RandomHelper {
 
         private FComplex getRandomFComplex() {
 
-            return factory.getFComplex(getTestValue(), getTestValue());
+            return factory.getFComplex(getDouble(), getDouble());
         }
 
         @Override
-        public FQuaternion getTestQuaternion(FQuaternion... exclusion) {
+        public FQuaternion getFQuaternion(FQuaternion... exclusion) {
             FQuaternion value;
 
             mainLoop:
@@ -155,7 +164,7 @@ public enum RandomHelperDefault implements RandomHelper {
                 value = getRandomFQuaternion();
 
                 for (FQuaternion singularity : exclusion) {
-                    if (value.getDistance(singularity) < separation) {
+                    if (value.getDistance(singularity) < spacing) {
                         continue mainLoop;
                     }
                 }
@@ -166,7 +175,7 @@ public enum RandomHelperDefault implements RandomHelper {
 
         private FQuaternion getRandomFQuaternion() {
 
-            return factory.getFQuaternion(getTestValue(), getTestValue(), getTestValue(), getTestValue());
+            return factory.getFQuaternion(getDouble(), getDouble(), getDouble(), getDouble());
         }
     }
 }

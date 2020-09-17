@@ -8,11 +8,17 @@ import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 
 public interface RandomHelper {
 
-    void configure(Factory factory, double range, double separation);
+    void setFactory(Factory factory);
+    void setSpacing(double spacing);
+    void setRange(double range);
 
-    double getTestValue(double... exclusion);
-    FPoint getTestPoint(FPoint... exclusion);
-    FVector getTestVector(FVector... exclusion);
-    FComplex getTestComplex(FComplex... exclusion);
-    FQuaternion getTestQuaternion(FQuaternion... exclusion);
+    double getDouble(double... exclusion);
+
+    FPoint getFPoint(FPoint... exclusion);
+
+    FVector getFVector(FVector... exclusion);
+
+    FComplex getFComplex(FComplex... exclusion);
+
+    FQuaternion getFQuaternion(FQuaternion... exclusion);
 }
