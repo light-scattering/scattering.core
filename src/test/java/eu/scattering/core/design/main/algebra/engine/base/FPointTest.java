@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.util.List;
 
@@ -23,16 +24,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPointTest {
 
-    @Value("${jitter}")
-    private double jitter;
-
-    @Autowired
-    private Factory factory;
+    @Value("${jitter}") private double jitter;
+    @Autowired private Factory factory;
 
     private RandomHelper random;
 
-    @BeforeEach
-    void beforeEach() {
+    @PostConstruct
+    void postConstruct() {
 
         random = factory.getRandomHelper();
     }
@@ -44,14 +42,9 @@ public class FPointTest {
     @ContextConfiguration(classes = { SpringConfigCore.class })
     class FPointBase {
 
-        private double refX, refY, refZ;
-
-        @BeforeEach
-        void beforeEach() {
-            refX = random.getDouble();
-            refY = random.getDouble();
-            refZ = random.getDouble();
-        }
+        private double refX = random.getDouble();
+        private double refY = random.getDouble();
+        private double refZ = random.getDouble();
 
         @Test
         @DisplayName("Construct")
@@ -1181,15 +1174,9 @@ public class FPointTest {
     @ContextConfiguration(classes = { SpringConfigCore.class })
     class CoreFeatures {
 
-        private double refX, refY, refZ;
-
-        @BeforeEach
-        void beforeEach() {
-
-            refX = random.getDouble();
-            refY = random.getDouble();
-            refZ = random.getDouble();
-        }
+        private double refX = random.getDouble();
+        private double refY = random.getDouble();
+        private double refZ = random.getDouble();
 
         @Test
         @DisplayName("JSON parser")
@@ -1387,19 +1374,16 @@ public class FPointTest {
     @ContextConfiguration(classes = { SpringConfigCore.class })
     class BaseAlgebra {
 
-        private double refX, refY, refZ;
-        private double opX, opY, opZ;
+        private double refX = random.getDouble();
+        private double refY = random.getDouble();
+        private double refZ = random.getDouble();
+        private double opX = random.getDouble();
+        private double opY = random.getDouble();
+        private double opZ = random.getDouble();
         private FPoint fPoint;
 
         @BeforeEach
         void beforeEach() {
-            refX = random.getDouble();
-            refY = random.getDouble();
-            refZ = random.getDouble();
-
-            opX = random.getDouble();
-            opY = random.getDouble();
-            opZ = random.getDouble();
 
             fPoint = factory.getFPoint(refX, refY, refZ);
         }

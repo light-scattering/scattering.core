@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,16 +27,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPlaneTest {
 
-    @Value("${jitter}")
-    private double jitter;
-
-    @Autowired
-    private Factory factory;
+    @Value("${jitter}") private double jitter;
+    @Autowired private Factory factory;
 
     private RandomHelper random;
 
-    @BeforeEach
-    void beforeEach() {
+    @PostConstruct
+    void postConstruct() {
 
         random = factory.getRandomHelper();
     }

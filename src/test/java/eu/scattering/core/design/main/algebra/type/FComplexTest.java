@@ -4,12 +4,15 @@ import eu.scattering.core.SpringConfigCore;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.support.FComplexTestHelper;
+import eu.scattering.core.design.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import javax.annotation.PostConstruct;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,11 +22,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = { SpringConfigCore.class })
 public class FComplexTest {
 
-    @Value("${jitter}")
-    private double jitter;
+    @Value("${jitter}") private double jitter;
+    @Autowired private Factory factory;
 
-    @Autowired
-    private Factory factory;
+    private RandomHelper random;
+
+    @PostConstruct
+    void postConstruct() {
+
+        random = factory.getRandomHelper();
+    }
 
     @Nested
     @Tag("Basic")
