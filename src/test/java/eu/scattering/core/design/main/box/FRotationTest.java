@@ -36,7 +36,7 @@ public class FRotationTest {
     @BeforeEach
     void beforeEach() {
 
-        random = factory.getRandomHelper();
+        random = factory.getHelperRandom();
     }
 
     @Test

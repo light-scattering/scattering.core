@@ -10,5 +10,5 @@ public interface SupportFactory {
 
     SignalHelper getHelperSignal();
 
-    RandomHelper getRandomHelper();
+    RandomHelper getHelperRandom();
 }

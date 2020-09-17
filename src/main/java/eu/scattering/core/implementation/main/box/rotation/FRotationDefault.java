@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 public class FRotationDefault implements FRotation {
 
-    private static Factory factory = new FactoryDefault();
+    private static Factory factory = FactoryDefault.create();
     private static double jitter = 1E-8;
 
     public static void setFactory(Factory factory) {

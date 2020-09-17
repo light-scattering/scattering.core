@@ -35,7 +35,7 @@ public class FLineTest {
     @PostConstruct
     void postConstruct() {
 
-        random = factory.getRandomHelper();
+        random = factory.getHelperRandom();
     }
 
     @Nested

@@ -35,7 +35,7 @@ public class FPositionTest {
     @BeforeEach
     void beforeEach() {
 
-        random = factory.getRandomHelper();
+        random = factory.getHelperRandom();
     }
 
     @Test

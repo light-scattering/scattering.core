@@ -1,7 +1,6 @@
 package eu.scattering.core.implementation;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
@@ -13,7 +12,6 @@ import eu.scattering.core.design.main.box.rotation.FRotation;
 import eu.scattering.core.design.support.helper.AngleHelper;
 import eu.scattering.core.design.support.helper.RandomHelper;
 import eu.scattering.core.design.support.helper.SignalHelper;
-import eu.scattering.core.implementation.development.statistics.StatisticsDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.vector.FVectorDefault;
 import eu.scattering.core.implementation.main.algebra.engine.extension.line.FLineDefault;
@@ -27,6 +25,13 @@ import eu.scattering.core.implementation.support.helper.RandomHelperDefault;
 import eu.scattering.core.implementation.support.helper.SignalHelperDefault;
 
 public final class FactoryDefault implements Factory {
+
+    private FactoryDefault() { }
+
+    public static Factory create() {
+
+        return new FactoryDefault();
+    }
 
     @Override
     public FPoint getFPoint() {
@@ -107,8 +112,23 @@ public final class FactoryDefault implements Factory {
     }
 
     @Override
-    public RandomHelper getRandomHelper() {
+    public RandomHelper getHelperRandom() {
 
         return RandomHelperDefault.INSTANCE;
+    }
+
+    @Override
+    public Factory setJitter(double jitter) {
+
+        FPointDefault.setJitter(jitter);
+        FVectorDefault.setJitter(jitter);
+        FLineDefault.setJitter(jitter);
+        FPlaneDefault.setJitter(jitter);
+        FComplexDefault.setJitter(jitter);
+        FQuaternionDefault.setJitter(jitter);
+        FPositionDefault.setJitter(jitter);
+        FRotationDefault.setJitter(jitter);
+
+        return this;
     }
 }

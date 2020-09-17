@@ -32,7 +32,7 @@ public class FVectorTest {
     @PostConstruct
     void postConstruct() {
 
-        random = factory.getRandomHelper();
+        random = factory.getHelperRandom();
     }
 
     @Nested

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements FComplex {
 
-    private static Factory factory = new FactoryDefault();
+    private static Factory factory = FactoryDefault.create();
     private static double jitter = 1E-8;
 
     public static void setFactory(Factory factory) {

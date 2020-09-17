@@ -1,6 +1,7 @@
 package eu.scattering.core;
 
 import eu.scattering.core.design.Factory;
+import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.FactoryDevelopment;
 import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.vector.FVectorDefault;
@@ -10,12 +11,12 @@ import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefau
 import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import eu.scattering.core.implementation.main.box.position.FPositionDefault;
 import eu.scattering.core.implementation.main.box.rotation.FRotationDefault;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 @Configuration
 @PropertySource("core.properties")
@@ -30,38 +31,30 @@ public class SpringConfigCore {
     @Value("${random.spacing}")
     private double random_spacing;
 
-    @Bean
-    public Factory getFactory() {
+    @Resource(name = "prod")
+    private Factory factory;
 
-        return new FactoryDevelopment();
+    @Bean("prod")
+    public Factory getFactoryDefault() {
+
+        return FactoryDefault.create();
+    }
+
+    @Primary
+    @Bean("dev")
+    @Profile("dev")
+    public Factory getFactoryDevelopment() {
+
+        return FactoryDevelopment.create(factory);
     }
 
     @PostConstruct
     public void postConstruct() {
 
-        Factory factory = getFactory();
-
-        FPointDefault.setJitter(jitter);
-        FVectorDefault.setJitter(jitter);
-        FLineDefault.setJitter(jitter);
-        FPlaneDefault.setJitter(jitter);
-        FComplexDefault.setJitter(jitter);
-        FQuaternionDefault.setJitter(jitter);
-        FPositionDefault.setJitter(jitter);
-        FRotationDefault.setJitter(jitter);
-
-        FPointDefault.setFactory(factory);
-        FVectorDefault.setFactory(factory);
-        FLineDefault.setFactory(factory);
-        FPlaneDefault.setFactory(factory);
-        FComplexDefault.setFactory(factory);
-        FQuaternionDefault.setFactory(factory);
-        FPositionDefault.setFactory(factory);
-        FRotationDefault.setFactory(factory);
-
-        factory.getRandomHelper().setFactory(factory);
-        factory.getRandomHelper().setSpacing(random_spacing);
-        factory.getRandomHelper().setRange(random_range);
+        factory.setJitter(jitter);
+        factory.getHelperRandom().setFactory(factory); // Doesn't make much sense
+        factory.getHelperRandom().setSpacing(random_spacing);
+        factory.getHelperRandom().setRange(random_range);
     }
 
 }

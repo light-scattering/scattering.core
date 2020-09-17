@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Development")
 public class DevelopmentTest {
 
-    private Factory factory = new FactoryDefault();
-    private Factory factoryDevelopment = new FactoryDevelopment();
+    private Factory factory = FactoryDefault.create();
+    private Factory factoryDevelopment = FactoryDevelopment.create(FactoryDefault.create());
 
     private Development<?> getTestInstance() {
 

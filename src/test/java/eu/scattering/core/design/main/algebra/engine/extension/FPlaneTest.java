@@ -35,7 +35,7 @@ public class FPlaneTest {
     @PostConstruct
     void postConstruct() {
 
-        random = factory.getRandomHelper();
+        random = factory.getHelperRandom();
     }
 
     @Nested

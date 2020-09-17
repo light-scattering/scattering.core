@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
 
-    private static Factory factory = new FactoryDefault();
+    private static Factory factory = FactoryDefault.create();
     private static double jitter = 1E-8;
 
     public static void setFactory(Factory factory) {
@@ -361,7 +361,7 @@ public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
     public FPoint setRandomAngle(FPoint... exclusion) {
         double radius = getLength();
 
-        return set(factory.getRandomHelper().getFPoint(exclusion)).setLength(radius);
+        return set(factory.getHelperRandom().getFPoint(exclusion)).setLength(radius);
     }
 
     @Override

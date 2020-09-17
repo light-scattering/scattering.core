@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FPoint")
+@ActiveProfiles("dev")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPointTest {
@@ -32,7 +34,7 @@ public class FPointTest {
     @PostConstruct
     void postConstruct() {
 
-        random = factory.getRandomHelper();
+        random = factory.getHelperRandom();
     }
 
     @Nested
@@ -109,7 +111,7 @@ public class FPointTest {
             FPoint fPoint = factory.getFPoint(fPointRef);
 
             assertNotSame(fPointRef, fPoint, "References to the two created FPoints should be different");
-            assertNotNull(fPointRef, "The instance is null");
+            assertNotNull(fPoint, "The instance is null");
 
             assertAll("Updated values are incorrect",
                     () -> assertEquals(fPointRef.getX(), fPoint.getX(), "The X value is incorrect"),

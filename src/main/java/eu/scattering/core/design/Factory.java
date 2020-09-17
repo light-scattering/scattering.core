@@ -4,4 +4,6 @@ import eu.scattering.core.design.main.MainFactory;
 import eu.scattering.core.design.support.SupportFactory;
 
 public interface Factory extends MainFactory, SupportFactory {
+
+    Factory setJitter(double jitter);
 }

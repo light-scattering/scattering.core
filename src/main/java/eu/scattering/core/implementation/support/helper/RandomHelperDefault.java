@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public enum RandomHelperDefault implements RandomHelper {
     INSTANCE {
 
-        private Factory factory = new FactoryDefault();
+        private Factory factory = FactoryDefault.create();
         private double spacing = 1E-8;
         private double range = 10000;
 
