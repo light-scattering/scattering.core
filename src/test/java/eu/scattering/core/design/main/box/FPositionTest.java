@@ -3,6 +3,8 @@ package eu.scattering.core.design.main.box;
 import eu.scattering.core.SpringConfigCore;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.box.position.FPosition;
+import eu.scattering.core.design.support.helper.RandomHelper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -27,6 +29,14 @@ public class FPositionTest {
 
     @Autowired
     private Factory factory;
+
+    private RandomHelper random;
+
+    @BeforeEach
+    void beforeEach() {
+
+        random = factory.getRandomHelper();
+    }
 
     @Test
     @DisplayName("Create with parameters")

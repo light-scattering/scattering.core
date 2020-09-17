@@ -6,7 +6,8 @@ import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.support.helper.RandomHelper;
+import eu.scattering.core.design.support.helper.RandomHelper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -30,11 +31,19 @@ public class FRotationTest {
     @Autowired
     private Factory factory;
 
+    private RandomHelper random;
+
+    @BeforeEach
+    void beforeEach() {
+
+        random = factory.getRandomHelper();
+    }
+
     @Test
     @DisplayName("Create with FPoint (positive angle)")
     public void createWithFPointPositiveAngle() {
-        FPoint axis = RandomHelper.getTestPoint();
-        double angle = Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
+        FPoint axis = random.getTestPoint();
+        double angle = Math.abs(random.getTestValue() % (2 * Math.PI));
 
         FRotation fRotation = factory.getFRotation(axis, angle);
 
@@ -49,8 +58,8 @@ public class FRotationTest {
     @Test
     @DisplayName("Create with FPoint (negative angle)")
     public void createWithFPointNegativeAngle() {
-        FPoint axis = RandomHelper.getTestPoint();
-        double angle = -Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
+        FPoint axis = random.getTestPoint();
+        double angle = -Math.abs(random.getTestValue() % (2 * Math.PI));
 
         FRotation fRotation = factory.getFRotation(axis, angle);
 
@@ -65,8 +74,8 @@ public class FRotationTest {
     @Test
     @DisplayName("Create with FVector (positive angle)")
     public void createWithFVectorPositiveAngle() {
-        FVector axis = RandomHelper.getTestVector();
-        double angle = Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
+        FVector axis = random.getTestVector();
+        double angle = Math.abs(random.getTestValue() % (2 * Math.PI));
 
         FRotation fRotation = factory.getFRotation(axis, angle);
 
@@ -81,8 +90,8 @@ public class FRotationTest {
     @Test
     @DisplayName("Create with FVector (negative angle)")
     public void createWithFVectorNegativeAngle() {
-        FVector axis = RandomHelper.getTestVector();
-        double angle = -Math.abs(RandomHelper.getTestValue() % (2 * Math.PI));
+        FVector axis = random.getTestVector();
+        double angle = -Math.abs(random.getTestValue() % (2 * Math.PI));
 
         FRotation fRotation = factory.getFRotation(axis, angle);
 
@@ -114,7 +123,7 @@ public class FRotationTest {
     @Test
     @DisplayName("Parse JSON")
     public void parseJSON() {
-        FRotation fRotationRefA = factory.getFRotation(RandomHelper.getTestVector(), RandomHelper.getTestValue());
+        FRotation fRotationRefA = factory.getFRotation(random.getTestVector(), random.getTestValue());
         FRotation fRotationRefB = factory.getFRotation(fRotationRefA.exportToJSON().toString());
 
         assertTrue(fRotationRefA.equals(fRotationRefB), "The generated JSON object is erroneous");
@@ -123,12 +132,12 @@ public class FRotationTest {
     @Test
     @DisplayName("Mutability")
     public void mutability() {
-        FVector fVectorRef = RandomHelper.getTestVector();
+        FVector fVectorRef = random.getTestVector();
         FRotation fRotationRef = factory.getFRotation(fVectorRef, 1);
 
         FQuaternion coreRef = fRotationRef.getCore();
 
-        fVectorRef.invertDirection().setLength(RandomHelper.getTestValue());
+        fVectorRef.invertDirection().setLength(random.getTestValue());
 
         assertTrue(coreRef.isExact(fRotationRef.getCore()), "The instance is mutable");
     }
@@ -136,7 +145,7 @@ public class FRotationTest {
     @Test
     @DisplayName("Get hash code")
     public void getHashCode() {
-        FVector fVectorRefA = RandomHelper.getTestVector();
+        FVector fVectorRefA = random.getTestVector();
         FVector fVectorRefB = fVectorRefA.copy();
 
         FRotation fRotationRefA = factory.getFRotation(fVectorRefA, 1);
@@ -149,8 +158,8 @@ public class FRotationTest {
     @Test
     @DisplayName("Get hash code (fail)")
     public void getHashCodeFail() {
-        FVector fVectorRefA = RandomHelper.getTestVector();
-        FVector fVectorRefB = RandomHelper.getTestVector();
+        FVector fVectorRefA = random.getTestVector();
+        FVector fVectorRefB = random.getTestVector();
 
         FRotation fRotationRefA = factory.getFRotation(fVectorRefA, 1);
         FRotation fRotationRefB = factory.getFRotation(fVectorRefB, 1);
@@ -162,7 +171,7 @@ public class FRotationTest {
     @Test
     @DisplayName("Equals")
     public void equals() {
-        FVector fVector = RandomHelper.getTestVector();
+        FVector fVector = random.getTestVector();
 
         FRotation fRotationRefA = factory.getFRotation(fVector, 1);
         FRotation fRotationRefB = factory.getFRotation(fVector, 1);
@@ -174,8 +183,8 @@ public class FRotationTest {
     @Test
     @DisplayName("Equals (false, wrong axis)")
     public void equalsFalseAxis() {
-        FVector fVectorRefA = RandomHelper.getTestVector();
-        FVector fVectorRefB = RandomHelper.getTestVector();
+        FVector fVectorRefA = random.getTestVector();
+        FVector fVectorRefB = random.getTestVector();
 
         FRotation fRotationRefA = factory.getFRotation(fVectorRefA, 1);
         FRotation fRotationRefB = factory.getFRotation(fVectorRefB, 1);
@@ -187,7 +196,7 @@ public class FRotationTest {
     @Test
     @DisplayName("Equals (false, wrong angle)")
     public void equalsFalseAngle() {
-        FVector fVector = RandomHelper.getTestVector();
+        FVector fVector = random.getTestVector();
 
         FRotation fRotationRefA = factory.getFRotation(fVector, 1);
         FRotation fRotationRefB = factory.getFRotation(fVector, 2);
@@ -199,10 +208,10 @@ public class FRotationTest {
     @Test
     @DisplayName("Rotate (validate magnitude)")
     public void rotateValidateLength() {
-        FPoint fPoint = RandomHelper.getTestPoint();
+        FPoint fPoint = random.getTestPoint();
         double length = fPoint.getLength();
-        double angle = RandomHelper.getTestValue() % (2 * Math.PI);
-        FRotation fRotation = factory.getFRotation(RandomHelper.getTestPoint(), angle);
+        double angle = random.getTestValue() % (2 * Math.PI);
+        FRotation fRotation = factory.getFRotation(random.getTestPoint(), angle);
 
         fPoint.ext(fRotation.rotate());
 
