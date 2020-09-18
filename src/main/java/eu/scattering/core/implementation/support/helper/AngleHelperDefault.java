@@ -2,19 +2,24 @@ package eu.scattering.core.implementation.support.helper;
 
 import eu.scattering.core.design.support.helper.AngleHelper;
 
-public enum AngleHelperDefault implements AngleHelper {
-    INSTANCE {
+public class AngleHelperDefault implements AngleHelper {
 
-        @Override
-        public double radToDeg(double radian) {
+    private AngleHelperDefault() { }
 
-            return radian * 180 / Math.PI;
-        }
+    public static AngleHelper create() {
 
-        @Override
-        public double degToRad(double degree) {
+        return new AngleHelperDefault();
+    }
 
-            return degree * Math.PI / 180;
-        }
+    @Override
+    public double radToDeg(double radian) {
+
+        return radian * 180 / Math.PI;
+    }
+
+    @Override
+    public double degToRad(double degree) {
+
+        return degree * Math.PI / 180;
     }
 }

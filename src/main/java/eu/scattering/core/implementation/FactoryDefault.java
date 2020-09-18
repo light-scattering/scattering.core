@@ -26,8 +26,10 @@ import eu.scattering.core.implementation.support.helper.SignalHelperDefault;
 
 public final class FactoryDefault implements Factory {
 
+    private final RandomHelper helperRandom = RandomHelperDefault.create(this);
+    private final SignalHelper helperSignal = SignalHelperDefault.create();
+    private final AngleHelper helperAngle = AngleHelperDefault.create();
     private double jitter = 1E-8;
-    private final RandomHelper randomHelper = RandomHelperDefault.create(this);
 
     private FactoryDefault() { }
 
@@ -44,6 +46,8 @@ public final class FactoryDefault implements Factory {
 
     @Override
     public Factory setJitter(double jitter) {
+
+        this.jitter = jitter;
 
         return this;
     }
@@ -117,18 +121,18 @@ public final class FactoryDefault implements Factory {
     @Override
     public AngleHelper getHelperAngle() {
 
-        return AngleHelperDefault.INSTANCE;
+        return helperAngle;
     }
 
     @Override
     public SignalHelper getHelperSignal() {
 
-        return SignalHelperDefault.INSTANCE;
+        return helperSignal;
     }
 
     @Override
     public RandomHelper getHelperRandom() {
 
-        return randomHelper;
+        return helperRandom;
     }
 }
