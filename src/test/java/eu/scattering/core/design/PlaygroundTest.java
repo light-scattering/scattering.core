@@ -1,8 +1,8 @@
 package eu.scattering.core.design;
 
-import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
-import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
+import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
+import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
+import eu.scattering.core.design.main.mutable.geometry.extension.plane.FPlane;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Timeout;
 import java.util.HashSet;
 import java.util.Set;
 
-import static eu.scattering.core.Config.factory;
+import static eu.scattering.core.Configuration.factory;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

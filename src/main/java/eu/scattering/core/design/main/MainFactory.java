@@ -1,7 +1,7 @@
 package eu.scattering.core.design.main;
 
-import eu.scattering.core.design.main.algebra.AlgebraFactory;
-import eu.scattering.core.design.main.box.BoxFactory;
+import eu.scattering.core.design.main.mutable.MutableFactory;
+import eu.scattering.core.design.main.fixed.FixedFactory;
 
-public interface MainFactory extends AlgebraFactory, BoxFactory {
+public interface MainFactory extends MutableFactory, FixedFactory {
 }
