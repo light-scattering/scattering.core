@@ -1,9 +1,6 @@
 package eu.scattering.core;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.implementation.FactoryDefault;
-import eu.scattering.core.implementation.FactoryDevelopment;
-import eu.scattering.core.implementation.main.algebra.type.complex.FComplexDefault;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Application {

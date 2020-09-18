@@ -1,9 +1,9 @@
 package eu.scattering.core.design.support.helper;
 
-import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
-import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
+import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
+import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
+import eu.scattering.core.design.main.mutable.number.complex.FComplex;
+import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
 
 public interface RandomHelper {
 
