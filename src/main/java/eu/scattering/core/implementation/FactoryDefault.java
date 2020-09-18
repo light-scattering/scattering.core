@@ -26,6 +26,9 @@ import eu.scattering.core.implementation.support.helper.SignalHelperDefault;
 
 public final class FactoryDefault implements Factory {
 
+    private double jitter = 1E-8;
+    private final RandomHelper randomHelper = RandomHelperDefault.create(this);
+
     private FactoryDefault() { }
 
     public static Factory create() {
@@ -34,69 +37,81 @@ public final class FactoryDefault implements Factory {
     }
 
     @Override
+    public double getJitter() {
+
+        return jitter;
+    }
+
+    @Override
+    public Factory setJitter(double jitter) {
+
+        return this;
+    }
+
+    @Override
     public FPoint getFPoint() {
 
-        return FPointDefault.create();
+        return FPointDefault.create(this);
     }
 
     @Override
     public FVector getFVector() {
 
-        return FVectorDefault.create();
+        return FVectorDefault.create(this);
     }
 
     @Override
     public FLine getFLine() {
 
-        return FLineDefault.create();
+        return FLineDefault.create(this);
     }
 
     @Override
     public FPlane getFPlane() {
 
-        return FPlaneDefault.create();
+        return FPlaneDefault.create(this);
     }
 
     @Override
     public FComplex getFComplex() {
 
-        return FComplexDefault.create();
+        return FComplexDefault.create(this);
     }
 
     @Override
     public FQuaternion getFQuaternion() {
 
-        return FQuaternionDefault.create();
+        return FQuaternionDefault.create(this);
     }
 
     @Override
     public FPosition getFPosition(int x, int y, int z) {
 
-        return FPositionDefault.create(x, y, z);
+        return FPositionDefault.create(this, x, y, z);
     }
 
     @Override
     public FPosition getFPosition(String structure) {
 
-        return FPositionDefault.parse(structure);
+        return FPositionDefault.parse(this, structure);
     }
 
     @Override
     public FRotation getFRotation(FVector axis, double angle) {
 
-        return FRotationDefault.create(axis, angle);
+        return FRotationDefault.create(this, axis, angle);
     }
 
     @Override
     public FRotation getFRotation(FPoint axis, double angle) {
 
-        return FRotationDefault.create(axis, angle);
+        return FRotationDefault.create(this, axis, angle);
     }
 
     @Override
     public FRotation getFRotation(String structure) {
 
-        return FRotationDefault.parse(structure);
+        return FRotationDefault.parse(this, structure);
     }
 
     @Override
@@ -114,21 +129,6 @@ public final class FactoryDefault implements Factory {
     @Override
     public RandomHelper getHelperRandom() {
 
-        return RandomHelperDefault.INSTANCE;
-    }
-
-    @Override
-    public Factory setJitter(double jitter) {
-
-        FPointDefault.setJitter(jitter);
-        FVectorDefault.setJitter(jitter); // CONFIGURE VALUES ONLY IN FACTORIES
-        FLineDefault.setJitter(jitter);
-        FPlaneDefault.setJitter(jitter);
-        FComplexDefault.setJitter(jitter);
-        FQuaternionDefault.setJitter(jitter);
-        FPositionDefault.setJitter(jitter);
-        FRotationDefault.setJitter(jitter);
-
-        return this;
+        return randomHelper;
     }
 }

@@ -1,11 +1,10 @@
 package eu.scattering.core.implementation.main.algebra.engine.base.vector;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.implementation.FactoryDefault;
-import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
+import eu.scattering.core.design.main.box.rotation.FRotation;
+import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,29 +13,20 @@ import java.util.List;
 
 public class FVectorDefault extends BasePresetDefault<FVector> implements FVector {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FVectorDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FVectorDefault.jitter = jitter;
-    }
-
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final FPoint[] origin = new FPoint[2];
+    private final Factory factory;
 
-    private FVectorDefault() { }
+    private FVectorDefault(Factory factory) {
 
-    public static FVectorDefault create() {
-        FVectorDefault fVector = new FVectorDefault();
+        this.factory = factory;
+    }
+
+    public static FVectorDefault create(Factory factory) {
+        FVectorDefault fVector = new FVectorDefault(factory);
 
         fVector.origin[0] = factory.getFPoint();
         fVector.origin[1] = factory.getFPoint();
@@ -173,8 +163,8 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
     }
 
     @Override
-    public FVectorDefault copy() {
-        FVectorDefault fVector = new FVectorDefault();
+    public FVector copy() {
+        FVector fVector = factory.getFVector();
 
         fVector.setBaseRef(factory.getFPoint(getBase()));
         fVector.setHeadRef(factory.getFPoint(getHead()));
@@ -692,6 +682,8 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
         if (ref.isNonDirectional()) {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
+
+        double jitter = factory.getJitter();
 
         return (Math.abs(getDotProduct(ref)) < jitter) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter);
     }

@@ -1,48 +1,25 @@
 package eu.scattering.core.design.main.algebra.engine.extension;
 
-import eu.scattering.core.SpringConfigCore;
-import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
 import eu.scattering.core.design.main.algebra.engine.extension.support.FPlaneTestHelper;
-import eu.scattering.core.design.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
+import static eu.scattering.core.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FPlane")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPlaneTest {
-
-    @Value("${jitter}") private double jitter;
-    @Autowired private Factory factory;
-
-    private RandomHelper random;
-
-    @PostConstruct
-    void postConstruct() {
-
-        random = factory.getHelperRandom();
-    }
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FPlaneBase {
 
         @Test
@@ -164,8 +141,6 @@ public class FPlaneTest {
 
     @Nested
     @DisplayName("Core features")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class ICoreFeatures {
 
         @Test
@@ -333,8 +308,6 @@ public class FPlaneTest {
 
     @Nested
     @DisplayName("Functionality - Advanced")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FPlaneAdvanced {
 
         @Test

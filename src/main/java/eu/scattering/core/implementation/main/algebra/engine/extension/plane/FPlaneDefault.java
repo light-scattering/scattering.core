@@ -6,7 +6,6 @@ import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
 import eu.scattering.core.design.main.algebra.engine.extension.plane.FPlane;
-import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,30 +18,21 @@ import java.util.stream.Collectors;
 
 public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPlane {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FPlaneDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FPlaneDefault.jitter = jitter;
-    }
-
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    FVector origin;
+    private FVector origin;
+    private final Factory factory;
 
-    private FPlaneDefault() { }
+    private FPlaneDefault(Factory factory) {
 
-    public static FPlane create() {
+        this.factory = factory;
+    }
 
-        return new FPlaneDefault().setOriginRef(factory.getFVector());
+    public static FPlane create(Factory factory) {
+
+        return new FPlaneDefault(factory).setOriginRef(factory.getFVector());
     }
 
     @Override
@@ -134,6 +124,8 @@ public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPl
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
+
+        double jitter = factory.getJitter();
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectOnPlane(p.copy())) < jitter)
@@ -281,6 +273,8 @@ public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPl
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
+
+        double jitter = factory.getJitter();
 
         if ((distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter)) {
             return true;

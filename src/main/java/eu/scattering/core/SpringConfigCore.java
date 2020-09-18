@@ -52,7 +52,6 @@ public class SpringConfigCore {
     public void postConstruct() {
 
         factory.setJitter(jitter);
-        factory.getHelperRandom().setFactory(factory); // Doesn't make much sense
         factory.getHelperRandom().setSpacing(random_spacing);
         factory.getHelperRandom().setRange(random_range);
     }

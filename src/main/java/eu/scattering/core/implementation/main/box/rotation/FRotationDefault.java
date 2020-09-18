@@ -6,8 +6,6 @@ import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
 import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.implementation.FactoryDefault;
-import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,68 +13,64 @@ import java.util.function.Consumer;
 
 public class FRotationDefault implements FRotation {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FRotationDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FRotationDefault.jitter = jitter;
-    }
-
-    private final FPoint offset = factory.getFPoint();
-    private final FQuaternion core = factory.getFQuaternion();
+    private final FPoint offset;
+    private final FQuaternion core;
     private final double[][] rotation = new double[3][3];
+    private final Factory factory;
 
-    private FRotationDefault(FVector axis, double angle) {
+    private FRotationDefault(Factory factory, FVector axis, double angle) {
 
         if (axis.isNonDirectional()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
         }
 
-        offset.set(axis.getBase());
+        this.factory = factory;
+        this.offset = factory.getFPoint().set(axis.getBase());
+        this.core = factory.getFQuaternion();
 
         initializeCore(axis.copy().moveBase().getHead(), angle);
         initializeRotor();
     }
 
-    private FRotationDefault(FPoint axis, double angle) {
+    private FRotationDefault(Factory factory, FPoint axis, double angle) {
 
         if (axis.isZero()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
         }
 
+        this.factory = factory;
+        this.offset = factory.getFPoint();
+        this.core = factory.getFQuaternion();
+
         initializeCore(axis.copy(), angle);
         initializeRotor();
     }
 
-    private FRotationDefault(double re, double i, double j, double k) {
+    private FRotationDefault(Factory factory, double re, double i, double j, double k) {
         double direction = 1 - (re * re);
 
         if (direction <= 0) {
             throw new IllegalArgumentException("The rotation axis is not defined");
         }
 
-        this.core.set(re, i, j, k);
+        this.factory = factory;
+        this.offset = factory.getFPoint();
+        this.core = factory.getFQuaternion().set(re, i, j, k);
 
         initializeRotor();
     }
 
-    public static FRotation create(FPoint axis, double angle) {
+    public static FRotation create(Factory factory, FPoint axis, double angle) {
 
-        return new FRotationDefault(axis, angle);
+        return new FRotationDefault(factory, axis, angle);
     }
 
-    public static FRotation create(FVector axis, double angle) {
+    public static FRotation create(Factory factory, FVector axis, double angle) {
 
-        return new FRotationDefault(axis, angle);
+        return new FRotationDefault(factory, axis, angle);
     }
 
-    public static FRotation parse(String json) {
+    public static FRotation parse(Factory factory, String json) {
         JSONArray structure = (new JSONObject(json)).getJSONArray("rotor");
 
         double re = structure.getDouble(0);
@@ -84,7 +78,7 @@ public class FRotationDefault implements FRotation {
         double j = structure.getDouble(2);
         double k = structure.getDouble(3);
 
-        return new FRotationDefault(re, i, j, k);
+        return new FRotationDefault(factory, re, i, j, k);
     }
 
     @Override

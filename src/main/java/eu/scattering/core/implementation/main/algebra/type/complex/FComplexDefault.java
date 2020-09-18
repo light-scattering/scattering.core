@@ -2,37 +2,27 @@ package eu.scattering.core.implementation.main.algebra.type.complex;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
-import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements FComplex {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FComplexDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FComplexDefault.jitter = jitter;
-    }
-
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0 };
+    private final Factory factory;
 
-    private FComplexDefault() { }
+    private FComplexDefault(Factory factory) {
 
-    public static FComplex create() {
+        this.factory = factory;
+    }
 
-        return new FComplexDefault();
+    public static FComplex create(Factory factory) {
+
+        return new FComplexDefault(factory);
     }
 
     @Override
@@ -109,6 +99,8 @@ public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements F
 
         double distanceRe = Math.abs(getRe() - fComplex.getRe());
         double distanceIm = Math.abs(getIm() - fComplex.getIm());
+
+        double jitter = factory.getJitter();
 
         return distanceRe < jitter && distanceIm < jitter;
     }
@@ -311,6 +303,8 @@ public class FComplexDefault extends AlgebraPresetDefault<FComplex> implements F
     public boolean isSimilar(double re, double im) {
         double distanceRe = Math.abs(getRe() - re);
         double distanceIm = Math.abs(getIm() - im);
+
+        double jitter = factory.getJitter();
 
         return distanceRe < jitter && distanceIm < jitter;
     }

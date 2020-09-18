@@ -2,46 +2,37 @@ package eu.scattering.core.implementation.main.box.position;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.box.position.FPosition;
-import eu.scattering.core.implementation.FactoryDefault;
-import eu.scattering.core.implementation.main.algebra.type.quaternion.FQuaternionDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public final class FPositionDefault implements FPosition {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FPositionDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FPositionDefault.jitter = jitter;
-    }
-
     private final int x;
     private final int y;
     private final int z;
+    private final Factory factory;
 
-    private FPositionDefault(int x, int y, int z) {
+    private FPositionDefault(Factory factory, int x, int y, int z) {
 
+        this.factory = factory;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public static FPosition create(int x, int y, int z) {
+    public static FPosition create(Factory factory, int x, int y, int z) {
 
-        return new FPositionDefault(x, y, z);
+        return new FPositionDefault(factory, x, y, z);
     }
 
-    public static FPosition parse(String json) {
+    public static FPosition parse(Factory factory, String json) {
         JSONArray structure = (new JSONObject(json)).getJSONArray("dipole");
 
-        return new FPositionDefault(structure.getInt(0), structure.getInt(1), structure.getInt(2));
+        int x = structure.getInt(0);
+        int y = structure.getInt(1);
+        int z = structure.getInt(2);
+
+        return new FPositionDefault(factory, x, y, z);
     }
 
     @Override

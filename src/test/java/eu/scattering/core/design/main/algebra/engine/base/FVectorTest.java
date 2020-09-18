@@ -1,45 +1,22 @@
 package eu.scattering.core.design.main.algebra.engine.base;
 
-import eu.scattering.core.SpringConfigCore;
-import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.support.FVectorTestHelper;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.design.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
+import static eu.scattering.core.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FVector")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FVectorTest {
-
-    @Value("${jitter}") private double jitter;
-    @Autowired private Factory factory;
-
-    private RandomHelper random;
-
-    @PostConstruct
-    void postConstruct() {
-
-        random = factory.getHelperRandom();
-    }
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FVectorBase {
 
         @Test
@@ -852,8 +829,6 @@ public class FVectorTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FVectorAdvanced {
 
         @Test
@@ -2825,8 +2800,6 @@ public class FVectorTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class IFCoreFeatures {
 
         @Test
@@ -3075,8 +3048,6 @@ public class FVectorTest {
     @Nested
     @Tag("Algebra")
     @DisplayName("Base algebra")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class IBaseAlgebra {
 
         @Test

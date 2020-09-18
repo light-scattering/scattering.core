@@ -33,6 +33,21 @@ public final class FactoryDevelopment implements Factory {
         return new FactoryDevelopment(factory);
     }
 
+
+    @Override
+    public double getJitter() {
+
+        return factory.getJitter();
+    }
+
+    @Override
+    public Factory setJitter(double jitter) {
+
+        factory.setJitter(jitter);
+
+        return this;
+    }
+
     @Override
     public FPoint getFPoint() {
 
@@ -115,13 +130,5 @@ public final class FactoryDevelopment implements Factory {
     public RandomHelper getHelperRandom() {
 
         return factory.getHelperRandom();
-    }
-
-    @Override
-    public Factory setJitter(double jitter) {
-
-        factory.setJitter(jitter);
-
-        return this;
     }
 }

@@ -4,11 +4,9 @@ import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.Engine;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.vector.FVector;
-import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.implementation.FactoryDefault;
-import eu.scattering.core.implementation.main.algebra.engine.base.point.FPointDefault;
-import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPresetDefault;
 import eu.scattering.core.design.main.algebra.engine.extension.line.FLine;
+import eu.scattering.core.design.main.box.rotation.FRotation;
+import eu.scattering.core.implementation.main.algebra.engine.extension.ExtensionPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,30 +18,21 @@ import java.util.stream.Collectors;
 
 public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FLineDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FLineDefault.jitter = jitter;
-    }
-
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    FVector origin;
+    private FVector origin;
+    private final Factory factory;
 
-    private FLineDefault() { }
+    private FLineDefault(Factory factory) {
 
-    public static FLine create() {
+        this.factory = factory;
+    }
 
-        return new FLineDefault().setOriginRef(factory.getFVector());
+    public static FLine create(Factory factory) {
+
+        return new FLineDefault(factory).setOriginRef(factory.getFVector());
     }
 
     @Override
@@ -134,6 +123,8 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
+
+        double jitter = factory.getJitter();
 
         return (e) -> e.disassemble().stream()
                 .map(p -> p.getDistance(projectFPoint(p.copy())) < jitter)
@@ -477,6 +468,8 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
 
+        double jitter = factory.getJitter();
+
         if ((distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter)) {
             return true;
         }
@@ -489,6 +482,8 @@ public class FLineDefault extends ExtensionPresetDefault<FLine> implements FLine
 
         double distanceBase = getOrigin().getBase().getDistance(projection);
         double distanceHead = getOrigin().getHead().getDistance(projection);
+
+        double jitter = factory.getJitter();
 
         return (distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter);
     }

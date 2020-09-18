@@ -14,29 +14,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static eu.scattering.core.Configuration.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Timeout(5)
 @DisplayName("FPosition")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPositionTest {
-
-    @Value("${jitter}")
-    private double jitter;
-
-    @Autowired
-    private Factory factory;
-
-    private RandomHelper random;
-
-    @BeforeEach
-    void beforeEach() {
-
-        random = factory.getHelperRandom();
-    }
 
     @Test
     @DisplayName("Create with parameters")

@@ -1,43 +1,20 @@
 package eu.scattering.core.design.main.algebra.type;
 
-import eu.scattering.core.SpringConfigCore;
-import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.complex.FComplex;
 import eu.scattering.core.design.main.algebra.type.support.FComplexTestHelper;
-import eu.scattering.core.design.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.annotation.PostConstruct;
-
+import static eu.scattering.core.Configuration.factory;
+import static eu.scattering.core.Configuration.jitter;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FComplex")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FComplexTest {
-
-    @Value("${jitter}") private double jitter;
-    @Autowired private Factory factory;
-
-    private RandomHelper random;
-
-    @PostConstruct
-    void postConstruct() {
-
-        random = factory.getHelperRandom();
-    }
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FComplexBase {
 
         @Test
@@ -132,8 +109,6 @@ public class FComplexTest {
     @Nested
     @Tag("Algebra")
     @DisplayName("Base algebra")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class BaseAlgebra {
 
         private double refRe, refIm;
@@ -707,8 +682,6 @@ public class FComplexTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class CoreFeatures {
 
         private double refRe, refIm;
@@ -938,8 +911,6 @@ public class FComplexTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FComplexAdvanced {
 
         @Test

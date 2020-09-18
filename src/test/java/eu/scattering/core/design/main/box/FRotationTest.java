@@ -17,27 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static eu.scattering.core.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FRotation")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FRotationTest {
-
-    @Value("${jitter}")
-    private double jitter;
-
-    @Autowired
-    private Factory factory;
-
-    private RandomHelper random;
-
-    @BeforeEach
-    void beforeEach() {
-
-        random = factory.getHelperRandom();
-    }
 
     @Test
     @DisplayName("Create with FPoint (positive angle)")

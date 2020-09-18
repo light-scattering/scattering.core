@@ -3,7 +3,6 @@ package eu.scattering.core.implementation.main.algebra.engine.base.point;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.box.rotation.FRotation;
-import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.engine.base.BasePresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,30 +12,21 @@ import java.util.List;
 
 public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FPointDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FPointDefault.jitter = jitter;
-    }
-
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0, 0.0 };
+    private final Factory factory;
 
-    private FPointDefault() { }
+    private FPointDefault(Factory factory) {
 
-    public static FPoint create() {
+        this.factory = factory;
+    }
 
-        return new FPointDefault();
+    public static FPoint create(Factory factory) {
+
+        return new FPointDefault(factory);
     }
 
     @Override
@@ -128,6 +118,8 @@ public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
         double distanceX = Math.abs(getX() - fPoint.getX());
         double distanceY = Math.abs(getY() - fPoint.getY());
         double distanceZ = Math.abs(getZ() - fPoint.getZ());
+
+        double jitter = factory.getJitter();
 
         return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
     }

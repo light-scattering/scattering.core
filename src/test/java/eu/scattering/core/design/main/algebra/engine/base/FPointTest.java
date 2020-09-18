@@ -1,47 +1,22 @@
 package eu.scattering.core.design.main.algebra.engine.base;
 
-import eu.scattering.core.SpringConfigCore;
-import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.engine.base.point.FPoint;
 import eu.scattering.core.design.main.algebra.engine.base.support.FPointTestHelper;
-import eu.scattering.core.design.support.helper.RandomHelper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.util.List;
 
+import static eu.scattering.core.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FPoint")
-@ActiveProfiles("dev")
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { SpringConfigCore.class })
 public class FPointTest {
-
-    @Value("${jitter}") private double jitter;
-    @Autowired private Factory factory;
-
-    private RandomHelper random;
-
-    @PostConstruct
-    void postConstruct() {
-
-        random = factory.getHelperRandom();
-    }
 
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FPointBase {
 
         private double refX = random.getDouble();
@@ -198,8 +173,6 @@ public class FPointTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class FPointAdvanced {
 
         @Test
@@ -1172,8 +1145,6 @@ public class FPointTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class CoreFeatures {
 
         private double refX = random.getDouble();
@@ -1372,8 +1343,6 @@ public class FPointTest {
     @Nested
     @Tag("Algebra")
     @DisplayName("Base algebra")
-    @ExtendWith(SpringExtension.class)
-    @ContextConfiguration(classes = { SpringConfigCore.class })
     class BaseAlgebra {
 
         private double refX = random.getDouble();

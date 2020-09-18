@@ -9,7 +9,7 @@ public final class Configuration {
 
     private Configuration() { }
 
-    static final Factory factory = FactoryDevelopment.create(FactoryDefault.create());
-    static final RandomHelper random = factory.getHelperRandom();
-    static final double jitter = 1E-8;
+    public static final Factory factory = FactoryDevelopment.create(FactoryDefault.create());
+    public static final RandomHelper random = factory.getHelperRandom();
+    public static final double jitter = factory.getJitter();
 }

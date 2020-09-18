@@ -2,37 +2,27 @@ package eu.scattering.core.implementation.main.algebra.type.quaternion;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.algebra.type.quaternion.FQuaternion;
-import eu.scattering.core.implementation.FactoryDefault;
 import eu.scattering.core.implementation.main.algebra.AlgebraPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implements FQuaternion {
 
-    private static Factory factory = FactoryDefault.create();
-    private static double jitter = 1E-8;
-
-    public static void setFactory(Factory factory) {
-
-        FQuaternionDefault.factory = factory;
-    }
-
-    public static void setJitter(double jitter) {
-
-        FQuaternionDefault.jitter = jitter;
-    }
-
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0, 0.0, 0.0 };
+    private final Factory factory;
 
-    private FQuaternionDefault() { }
+    private FQuaternionDefault(Factory factory) {
 
-    public static FQuaternion create() {
+        this.factory = factory;
+    }
 
-        return new FQuaternionDefault();
+    public static FQuaternion create(Factory factory) {
+
+        return new FQuaternionDefault(factory);
     }
 
     @Override
@@ -140,6 +130,8 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
         double distanceI = Math.abs(getI() - fQuaternion.getI());
         double distanceJ = Math.abs(getJ() - fQuaternion.getJ());
         double distanceK = Math.abs(getK() - fQuaternion.getK());
+
+        double jitter = factory.getJitter();
 
         return distanceRe < jitter && distanceI < jitter && distanceJ < jitter && distanceK < jitter;
     }
@@ -433,6 +425,8 @@ public class FQuaternionDefault extends AlgebraPresetDefault<FQuaternion> implem
         double distanceI = Math.abs(getI() - i);
         double distanceJ = Math.abs(getJ() - j);
         double distanceK = Math.abs(getK() - k);
+
+        double jitter = factory.getJitter();
 
         return distanceRe < jitter && distanceI < jitter && distanceJ < jitter && distanceK < jitter;
     }
