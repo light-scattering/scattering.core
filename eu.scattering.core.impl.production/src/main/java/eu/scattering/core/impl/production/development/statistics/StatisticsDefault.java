@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.development.statistics;
 
-import eu.scattering.core.design.development.statistics.Statistics;
+import eu.scattering.core.test.design.development.statistics.Statistics;
 
 import java.time.LocalTime;
 import java.util.*;

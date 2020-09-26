@@ -22,98 +22,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
-      <change afterPath="$PROJECT_DIR$/eu.scattering.core.design/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eu.scattering.core.impl.development/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/Config.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/SpringConfigCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/SpringConfigCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/Factory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/development/Development.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/development/Development.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/development/statistics/Statistics.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/development/statistics/Statistics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/MainFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/MainFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/fixed/FixedFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/fixed/FixedFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/fixed/position/FPosition.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/fixed/position/FPosition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/fixed/position/FPositionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/fixed/position/FPositionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/fixed/rotation/FRotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/fixed/rotation/FRotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/fixed/rotation/FRotationFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/fixed/rotation/FRotationFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/Mutable.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/Mutable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/MutableFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/MutableFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/Geometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/GeometryFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/GeometryFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/Base.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/Base.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/BaseFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/BaseFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/point/FPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/point/FPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/point/FPointFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/point/FPointFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/vector/FVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/vector/FVector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/vector/FVectorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/base/vector/FVectorFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/Extension.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/Extension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/ExtensionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/ExtensionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/line/FLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/line/FLine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/line/FLineFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/line/FLineFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/plane/FPlane.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/plane/FPlane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/plane/FPlaneFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/extension/plane/FPlaneFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/shape/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/shape/Shape.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/shape/ShapeFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/shape/ShapeFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/geometry/shape/ball/FBallFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/geometry/shape/ball/FBallFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/number/Number.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/number/Number.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/number/NumberFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/number/NumberFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/number/complex/FComplex.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/number/complex/FComplex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/number/complex/FComplexFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/number/complex/FComplexFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/number/quaternion/FQuaternion.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/number/quaternion/FQuaternion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/main/mutable/number/quaternion/FQuaternionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/main/mutable/number/quaternion/FQuaternionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/support/SupportFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/support/SupportFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/support/helper/AngleHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/support/helper/AngleHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/support/helper/RandomHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/support/helper/RandomHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/design/support/helper/SignalHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/support/helper/SignalHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/FactoryDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/FactoryDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/FactoryDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/FactoryDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/development/statistics/StatisticsDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/development/statistics/StatisticsDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/fixed/position/FPositionDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/fixed/position/FPositionDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/fixed/rotation/FRotationDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/fixed/rotation/FRotationDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/MutablePresetDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/MutablePresetDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/MutablePresetDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/MutablePresetDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/base/BasePresetDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/base/BasePresetDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/base/point/FPointDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/base/point/FPointDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/base/point/FPointDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/base/point/FPointDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/base/vector/FVectorDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/base/vector/FVectorDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/base/vector/FVectorDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/base/vector/FVectorDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/extension/ExtensionPresetDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/extension/ExtensionPresetDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/extension/line/FLineDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/extension/line/FLineDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/extension/line/FLineDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/extension/line/FLineDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/extension/plane/FPlaneDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/extension/plane/FPlaneDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/geometry/extension/plane/FPlaneDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/geometry/extension/plane/FPlaneDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/number/complex/FComplexDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/number/complex/FComplexDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/number/complex/FComplexDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/number/complex/FComplexDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/number/quaternion/FQuaternionDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/number/quaternion/FQuaternionDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/main/mutable/number/quaternion/FQuaternionDevelopment.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/main/mutable/number/quaternion/FQuaternionDevelopment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/support/helper/AngleHelperDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/support/helper/AngleHelperDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/support/helper/RandomHelperDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/support/helper/RandomHelperDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/eu/scattering/core/implementation/support/helper/SignalHelperDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/support/helper/SignalHelperDefault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/core.properties" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/resources/core.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/DevelopmentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/DevelopmentTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/PlaygroundTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/PlaygroundTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/fixed/FPositionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/fixed/FPositionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/fixed/FRotationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/fixed/FRotationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/FPointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/FPointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/FVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/FVectorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/support/FPointTestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/support/FPointTestHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/support/FVectorTestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/base/support/FVectorTestHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/FLineTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/FLineTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/FPlaneTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/FPlaneTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/support/FLineTestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/support/FLineTestHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/support/FPlaneTestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/geometry/extension/support/FPlaneTestHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/number/FComplexTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/number/FComplexTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/number/FQuaternionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/number/FQuaternionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/number/support/FComplexTestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/number/support/FComplexTestHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/eu/scattering/core/design/main/mutable/number/support/FQuaternionTestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/design/main/mutable/number/support/FQuaternionTestHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lombok.config" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,16 +153,8 @@
       <recent name="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in core.eu.scattering.core.test.test (4)">
+  <component name="RunManager" selected="JUnit.All in core.eu.scattering.core.test.test (1)">
     <configuration name="All in core.eu.scattering.core.test.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.eu.scattering.core.test.test" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="All in core.eu.scattering.core.test.test (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="core.eu.scattering.core.test.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -272,6 +178,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="All in core.eu.scattering.core.test.test (5)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="core.eu.scattering.core.test.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="All in core.eu.scattering.core.test.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="core.eu.scattering.core.test.test" />
       <option name="PACKAGE_NAME" value="" />
@@ -282,11 +196,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (4)" />
-        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (3)" />
-        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (2)" />
         <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (1)" />
         <item itemvalue="JUnit.All in core.eu.scattering.core.test.test" />
+        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (5)" />
+        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (4)" />
+        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (3)" />
       </list>
     </recent_temporary>
   </component>
@@ -428,7 +342,14 @@
       <option name="project" value="LOCAL" />
       <updated>1597872211891</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="update">
+      <created>1601162587996</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1601162587996</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -486,13 +407,13 @@
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
     <state x="1656" y="910" width="518" height="346" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1593205476525" />
-    <state x="1050" y="149" width="912" height="1087" key="CommitChangelistDialog2" timestamp="1601159600635">
+    <state x="659" y="149" width="1303" height="1087" key="CommitChangelistDialog2" timestamp="1601162587793">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state x="1497" y="149" key="CommitChangelistDialog2/0.27.5760.2133@0.27.5760.2133" timestamp="1593728464897" />
     <state x="998" y="149" width="1204" height="1355" key="CommitChangelistDialog2/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1597874967938" />
     <state x="551" y="87" width="912" height="669" key="CommitChangelistDialog2/70.27.1850.1053@70.27.1850.1053" timestamp="1594586913022" />
-    <state x="1050" y="149" width="912" height="1087" key="CommitChangelistDialog2/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601159600635" />
+    <state x="659" y="149" width="1303" height="1087" key="CommitChangelistDialog2/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601162587793" />
     <state x="1142" y="637" width="1536" height="901" key="DiffContextDialog" timestamp="1594153841970">
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
@@ -501,8 +422,8 @@
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
     <state x="1182" y="391" width="424" height="491" key="FileChooserDialogImpl/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1593204178084" />
-    <state width="2330" height="425" key="GridCell.Tab.0.bottom" timestamp="1597874967984">
-      <screen x="0" y="27" width="3840" height="2133" />
+    <state width="2242" height="519" key="GridCell.Tab.0.bottom" timestamp="1601162965137">
+      <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.bottom/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506977" />
     <state width="1874" height="204" key="GridCell.Tab.0.bottom/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1593444349668" />
@@ -510,8 +431,9 @@
     <state width="902" height="120" key="GridCell.Tab.0.bottom/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.bottom/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950049" />
     <state width="902" height="226" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354766" />
-    <state width="2330" height="425" key="GridCell.Tab.0.center" timestamp="1597874967984">
-      <screen x="0" y="27" width="3840" height="2133" />
+    <state width="2242" height="519" key="GridCell.Tab.0.bottom/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601162965137" />
+    <state width="2242" height="519" key="GridCell.Tab.0.center" timestamp="1601162965137">
+      <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.center/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506977" />
     <state width="1874" height="204" key="GridCell.Tab.0.center/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1593444349668" />
@@ -519,8 +441,9 @@
     <state width="902" height="120" key="GridCell.Tab.0.center/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.center/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950048" />
     <state width="902" height="226" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354766" />
-    <state width="2330" height="425" key="GridCell.Tab.0.left" timestamp="1597874967984">
-      <screen x="0" y="27" width="3840" height="2133" />
+    <state width="2242" height="519" key="GridCell.Tab.0.center/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601162965137" />
+    <state width="2242" height="519" key="GridCell.Tab.0.left" timestamp="1601162965137">
+      <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.left/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506976" />
     <state width="1874" height="204" key="GridCell.Tab.0.left/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1593444349668" />
@@ -528,8 +451,9 @@
     <state width="902" height="120" key="GridCell.Tab.0.left/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.left/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950048" />
     <state width="902" height="226" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354765" />
-    <state width="2330" height="425" key="GridCell.Tab.0.right" timestamp="1597874967984">
-      <screen x="0" y="27" width="3840" height="2133" />
+    <state width="2242" height="519" key="GridCell.Tab.0.left/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601162965137" />
+    <state width="2242" height="519" key="GridCell.Tab.0.right" timestamp="1601162965137">
+      <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.right/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506977" />
     <state width="1874" height="204" key="GridCell.Tab.0.right/1920.0.1920.1080/3840.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1593444349668" />
@@ -537,6 +461,7 @@
     <state width="902" height="120" key="GridCell.Tab.0.right/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.right/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950049" />
     <state width="902" height="226" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354766" />
+    <state width="2242" height="519" key="GridCell.Tab.0.right/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601162965137" />
     <state width="1897" height="531" key="GridCell.Tab.1.bottom" timestamp="1596294721054">
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
@@ -573,12 +498,13 @@
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
     <state x="887" y="207" width="1024" height="852" key="SettingsEditor/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1596227041896" />
-    <state x="1110" y="530" width="528" height="265" key="Vcs.Push.Dialog.v2" timestamp="1597872218192">
-      <screen x="0" y="27" width="3840" height="2133" />
+    <state x="1160" y="530" width="528" height="265" key="Vcs.Push.Dialog.v2" timestamp="1601162592305">
+      <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state x="1665" y="530" key="Vcs.Push.Dialog.v2/0.27.5760.2133@0.27.5760.2133" timestamp="1593728471188" />
     <state x="1110" y="530" width="800" height="535" key="Vcs.Push.Dialog.v2/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1597872218192" />
     <state x="605" y="275" width="528" height="265" key="Vcs.Push.Dialog.v2/70.27.1850.1053@70.27.1850.1053" timestamp="1594586921325" />
+    <state x="1160" y="530" width="528" height="265" key="Vcs.Push.Dialog.v2/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601162592305" />
     <state x="1688" y="1020" width="449" height="141" key="git4idea.pull.GitPullDialog" timestamp="1594416590260">
       <screen x="0" y="27" width="3840" height="2133" />
     </state>

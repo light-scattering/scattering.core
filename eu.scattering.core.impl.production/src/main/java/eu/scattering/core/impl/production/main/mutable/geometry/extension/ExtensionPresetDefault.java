@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.production.main.mutable.geometry.extension;
 
 import eu.scattering.core.impl.production.main.mutable.MutablePresetDefault;
-import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
-import eu.scattering.core.design.main.mutable.geometry.extension.Extension;
+import eu.scattering.core.test.design.main.mutable.geometry.base.point.FPoint;
+import eu.scattering.core.test.design.main.mutable.geometry.extension.Extension;
 
 import java.util.List;
 

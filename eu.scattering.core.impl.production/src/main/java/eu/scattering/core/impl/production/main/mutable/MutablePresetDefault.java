@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.production.main.mutable;
 
-import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.design.main.mutable.Mutable;
+import eu.scattering.core.test.design.development.statistics.Statistics;
+import eu.scattering.core.test.design.main.mutable.Mutable;
 
 import java.time.LocalTime;
 import java.util.Optional;

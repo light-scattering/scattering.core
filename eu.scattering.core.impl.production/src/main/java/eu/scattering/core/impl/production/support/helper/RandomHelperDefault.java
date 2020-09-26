@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.production.support.helper;
 
-import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
-import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
-import eu.scattering.core.design.main.mutable.number.complex.FComplex;
-import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
-import eu.scattering.core.design.support.helper.RandomHelper;
+import eu.scattering.core.test.design.Factory;
+import eu.scattering.core.test.design.main.mutable.geometry.base.point.FPoint;
+import eu.scattering.core.test.design.main.mutable.geometry.base.vector.FVector;
+import eu.scattering.core.test.design.main.mutable.number.complex.FComplex;
+import eu.scattering.core.test.design.main.mutable.number.quaternion.FQuaternion;
+import eu.scattering.core.test.design.support.helper.RandomHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
 

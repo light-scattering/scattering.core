@@ -1,7 +1,6 @@
 package eu.scattering.core.impl.production;
 
-import eu.scattering.core.design.Factory;
-import eu.scattering.core.impl.production.SpringConfigCore;
+import eu.scattering.core.test.design.Factory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Application {
