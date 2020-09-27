@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.production;
+package test;
 
 import eu.scattering.core.design.Factory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
