@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production;
 
-import eu.scattering.core.test.design.Factory;
+import eu.scattering.core.design.Factory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 

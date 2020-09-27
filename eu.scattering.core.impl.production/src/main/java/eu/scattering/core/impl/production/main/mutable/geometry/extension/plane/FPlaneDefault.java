@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.production.main.mutable.geometry.extension.plane;
 
-import eu.scattering.core.test.design.Factory;
-import eu.scattering.core.test.design.main.mutable.geometry.Geometry;
-import eu.scattering.core.test.design.main.mutable.geometry.base.point.FPoint;
-import eu.scattering.core.test.design.main.mutable.geometry.base.vector.FVector;
-import eu.scattering.core.test.design.main.mutable.geometry.extension.line.FLine;
-import eu.scattering.core.test.design.main.mutable.geometry.extension.plane.FPlane;
+import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.main.mutable.geometry.Geometry;
+import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
+import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
+import eu.scattering.core.design.main.mutable.geometry.extension.line.FLine;
+import eu.scattering.core.design.main.mutable.geometry.extension.plane.FPlane;
 import eu.scattering.core.impl.production.main.mutable.geometry.extension.ExtensionPresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;

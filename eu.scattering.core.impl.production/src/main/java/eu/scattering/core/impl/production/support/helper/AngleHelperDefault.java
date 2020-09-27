@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.support.helper;
 
-import eu.scattering.core.test.design.support.helper.AngleHelper;
+import eu.scattering.core.design.support.helper.AngleHelper;
 
 public class AngleHelperDefault implements AngleHelper {
 

@@ -1,5 +1,5 @@
 module eu.scattering.core.impl.production {
-    requires eu.scattering.core.design;
+    requires transitive eu.scattering.core.design;
     requires java.annotation;
     requires spring.context;
     requires spring.beans;

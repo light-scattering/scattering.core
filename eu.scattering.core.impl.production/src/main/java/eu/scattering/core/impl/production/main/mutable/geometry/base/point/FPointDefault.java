@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.production.main.mutable.geometry.base.point;
 
-import eu.scattering.core.test.design.Factory;
-import eu.scattering.core.test.design.main.mutable.geometry.base.point.FPoint;
-import eu.scattering.core.test.design.main.fixed.rotation.FRotation;
+import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
+import eu.scattering.core.design.main.fixed.rotation.FRotation;
 import eu.scattering.core.impl.production.main.mutable.geometry.base.BasePresetDefault;
 import org.json.JSONArray;
 import org.json.JSONObject;
