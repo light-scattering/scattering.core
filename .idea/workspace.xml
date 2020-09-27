@@ -23,7 +23,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.development/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,23 +50,50 @@
         <task path="$PROJECT_DIR$">
           <activation />
         </task>
+        <task path="$PROJECT_DIR$/eu.scattering.core.test">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="core" type="f1a62948:ProjectNode" />
+                <item name="scattering.core" type="f1a62948:ProjectNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="core" type="f1a62948:ProjectNode" />
+                <item name="scattering.core" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="core" type="f1a62948:ProjectNode" />
+                <item name="scattering.core" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="scattering.core" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="scattering.core" type="f1a62948:ProjectNode" />
+                <item name="eu.scattering.core.test" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="scattering.core" type="f1a62948:ProjectNode" />
+                <item name="eu.scattering.core.test" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="scattering.core" type="f1a62948:ProjectNode" />
+                <item name="eu.scattering.core.test" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -71,6 +107,7 @@
       <list>
         <option value="Class" />
         <option value="Interface" />
+        <option value="package-info" />
         <option value="module-info" />
       </list>
     </option>
@@ -120,8 +157,8 @@
       <recent name="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.scattering.core [test]">
-    <configuration name="scattering.core [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="JUnit.All in scattering.core.eu.scattering.core.test.test (2)">
+    <configuration name="scattering.core [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -132,7 +169,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="test" />
+            <option value="clean" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -140,53 +177,45 @@
       <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="All in core.eu.scattering.core.test.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.eu.scattering.core.test.test" />
+    <configuration name="All in scattering.core.eu.scattering.core.test.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="scattering.core.eu.scattering.core.test.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in core.eu.scattering.core.test.test (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.eu.scattering.core.test.test" />
+    <configuration name="All in scattering.core.eu.scattering.core.test.test (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="scattering.core.eu.scattering.core.test.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in core.eu.scattering.core.test.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.eu.scattering.core.test.test" />
+    <configuration name="All in scattering.core.eu.scattering.core.test.test (4)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="scattering.core.eu.scattering.core.test.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="FComplexTest$CoreFeatures.isSimilarWithParametersFail" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="core.eu.scattering.core.test.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="eu.scattering.core.test.design.main.mutable.number.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="eu.scattering.core.test.design.main.mutable.number" />
-      <option name="MAIN_CLASS_NAME" value="eu.scattering.core.test.design.main.mutable.number.FComplexTest$CoreFeatures" />
-      <option name="METHOD_NAME" value="isSimilarWithParametersFail" />
-      <option name="TEST_OBJECT" value="method" />
+    <configuration name="All in scattering.core.eu.scattering.core.test.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="scattering.core.eu.scattering.core.test.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.scattering.core [test]" />
-        <item itemvalue="JUnit.FComplexTest$CoreFeatures.isSimilarWithParametersFail" />
-        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (2)" />
-        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test (1)" />
-        <item itemvalue="JUnit.All in core.eu.scattering.core.test.test" />
+        <item itemvalue="JUnit.All in scattering.core.eu.scattering.core.test.test (2)" />
+        <item itemvalue="JUnit.All in scattering.core.eu.scattering.core.test.test (1)" />
+        <item itemvalue="JUnit.All in scattering.core.eu.scattering.core.test.test" />
+        <item itemvalue="Gradle.scattering.core [clean]" />
+        <item itemvalue="JUnit.All in scattering.core.eu.scattering.core.test.test (4)" />
       </list>
     </recent_temporary>
   </component>
@@ -342,7 +371,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601163227032</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="update">
+      <created>1601163364830</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1601163364830</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -386,11 +422,11 @@
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
     <state x="1716" y="744" width="398" height="686" key="#com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1593204730134" />
-    <state x="1399" y="1004" width="1246" height="158" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1601163065993">
+    <state x="1399" y="1004" width="1246" height="158" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1601232932630">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state x="1354" y="1004" width="1131" height="158" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1597873713219" />
-    <state x="1399" y="1004" width="1246" height="158" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163065993" />
+    <state x="1399" y="1004" width="1246" height="158" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601232932630" />
     <state x="1272" y="20" width="901" height="2140" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1597874741319">
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
@@ -400,13 +436,13 @@
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
     <state x="1656" y="910" width="518" height="346" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1593205476525" />
-    <state x="659" y="149" width="1303" height="1087" key="CommitChangelistDialog2" timestamp="1601163226891">
+    <state x="659" y="149" width="1303" height="1087" key="CommitChangelistDialog2" timestamp="1601163364785">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state x="1497" y="149" key="CommitChangelistDialog2/0.27.5760.2133@0.27.5760.2133" timestamp="1593728464897" />
     <state x="998" y="149" width="1204" height="1355" key="CommitChangelistDialog2/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1597874967938" />
     <state x="551" y="87" width="912" height="669" key="CommitChangelistDialog2/70.27.1850.1053@70.27.1850.1053" timestamp="1594586913022" />
-    <state x="659" y="149" width="1303" height="1087" key="CommitChangelistDialog2/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163226891" />
+    <state x="659" y="149" width="1303" height="1087" key="CommitChangelistDialog2/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163364785" />
     <state x="1142" y="637" width="1536" height="901" key="DiffContextDialog" timestamp="1594153841970">
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
@@ -415,7 +451,7 @@
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
     <state x="1182" y="391" width="424" height="491" key="FileChooserDialogImpl/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1593204178084" />
-    <state width="2242" height="519" key="GridCell.Tab.0.bottom" timestamp="1601163325930">
+    <state width="2238" height="519" key="GridCell.Tab.0.bottom" timestamp="1601230890287">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.bottom/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506977" />
@@ -424,8 +460,8 @@
     <state width="902" height="120" key="GridCell.Tab.0.bottom/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.bottom/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950049" />
     <state width="902" height="226" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354766" />
-    <state width="2242" height="519" key="GridCell.Tab.0.bottom/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163325930" />
-    <state width="2242" height="519" key="GridCell.Tab.0.center" timestamp="1601163325930">
+    <state width="2238" height="519" key="GridCell.Tab.0.bottom/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601230890287" />
+    <state width="2238" height="519" key="GridCell.Tab.0.center" timestamp="1601230890287">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.center/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506977" />
@@ -434,8 +470,8 @@
     <state width="902" height="120" key="GridCell.Tab.0.center/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.center/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950048" />
     <state width="902" height="226" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354766" />
-    <state width="2242" height="519" key="GridCell.Tab.0.center/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163325930" />
-    <state width="2242" height="519" key="GridCell.Tab.0.left" timestamp="1601163325930">
+    <state width="2238" height="519" key="GridCell.Tab.0.center/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601230890287" />
+    <state width="2238" height="519" key="GridCell.Tab.0.left" timestamp="1601230890286">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.left/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506976" />
@@ -444,8 +480,8 @@
     <state width="902" height="120" key="GridCell.Tab.0.left/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.left/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950048" />
     <state width="902" height="226" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354765" />
-    <state width="2242" height="519" key="GridCell.Tab.0.left/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163325930" />
-    <state width="2242" height="519" key="GridCell.Tab.0.right" timestamp="1601163325930">
+    <state width="2238" height="519" key="GridCell.Tab.0.left/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601230890286" />
+    <state width="2238" height="519" key="GridCell.Tab.0.right" timestamp="1601230890287">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state width="1897" height="354" key="GridCell.Tab.0.right/0.27.5760.2133@0.27.5760.2133" timestamp="1593728506977" />
@@ -454,7 +490,7 @@
     <state width="902" height="120" key="GridCell.Tab.0.right/3840.0.1920.1080/0.27.3840.2133@3840.0.1920.1080" timestamp="1592930972605" />
     <state width="902" height="354" key="GridCell.Tab.0.right/3840.0.1920.1080/70.27.1850.1053@70.27.1850.1053" timestamp="1594052950049" />
     <state width="902" height="226" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1594548354766" />
-    <state width="2242" height="519" key="GridCell.Tab.0.right/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163325930" />
+    <state width="2238" height="519" key="GridCell.Tab.0.right/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601230890287" />
     <state width="1897" height="531" key="GridCell.Tab.1.bottom" timestamp="1596294721054">
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
@@ -491,13 +527,13 @@
       <screen x="0" y="27" width="3840" height="2133" />
     </state>
     <state x="887" y="207" width="1024" height="852" key="SettingsEditor/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1596227041896" />
-    <state x="1160" y="530" width="528" height="265" key="Vcs.Push.Dialog.v2" timestamp="1601163235689">
+    <state x="1160" y="530" width="528" height="265" key="Vcs.Push.Dialog.v2" timestamp="1601163372937">
       <screen x="70" y="27" width="3770" height="2133" />
     </state>
     <state x="1665" y="530" key="Vcs.Push.Dialog.v2/0.27.5760.2133@0.27.5760.2133" timestamp="1593728471188" />
     <state x="1110" y="530" width="800" height="535" key="Vcs.Push.Dialog.v2/3840.0.1920.1080/0.27.3840.2133@0.27.3840.2133" timestamp="1597872218192" />
     <state x="605" y="275" width="528" height="265" key="Vcs.Push.Dialog.v2/70.27.1850.1053@70.27.1850.1053" timestamp="1594586921325" />
-    <state x="1160" y="530" width="528" height="265" key="Vcs.Push.Dialog.v2/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163235689" />
+    <state x="1160" y="530" width="528" height="265" key="Vcs.Push.Dialog.v2/70.27.3770.2133/3840.0.1920.1080@70.27.3770.2133" timestamp="1601163372937" />
     <state x="1688" y="1020" width="449" height="141" key="git4idea.pull.GitPullDialog" timestamp="1594416590260">
       <screen x="0" y="27" width="3840" height="2133" />
     </state>

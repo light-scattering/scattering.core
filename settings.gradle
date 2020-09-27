@@ -1,4 +1,4 @@
-rootProject.name = 'core'
+rootProject.name = 'scattering.core'
 include 'eu.scattering.core.design'
 include 'eu.scattering.core.impl.default'
 include 'eu.scattering.core.impl.development'

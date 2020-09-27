@@ -1,15 +1,15 @@
-plugins {
-    id 'java-library'
-    id 'idea'
-}
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'idea'
 
-group 'eu.scattering'
-version '1.0-SNAPSHOT'
+    group 'eu.scattering'
+    version '1.0-SNAPSHOT'
 
-test {
-    useJUnitPlatform()
-}
+    java {
+        modularity.inferModulePath = true
+    }
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
 }

@@ -1,14 +1,6 @@
-plugins {
-    id 'java'
-}
-
-group 'eu.scattering'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation project(':eu.scattering.core.design')
+    implementation project(':eu.scattering.core.impl.production')
+    implementation 'org.springframework:spring-context:5.2.8.RELEASE'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 }

@@ -16,4 +16,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.test.design.main.mutable.geometry.base;
     exports eu.scattering.core.test.design.main.mutable.geometry.extension;
     exports eu.scattering.core.test.design.main.mutable;
+    exports eu.scattering.core.test.design.development;
 }
