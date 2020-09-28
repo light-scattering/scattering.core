@@ -5,6 +5,9 @@ plugins {
 group 'eu.scattering'
 version '1.0-SNAPSHOT'
 
+sourceCompatibility = 11
+targetCompatibility = 11
+
 java {
     modularity.inferModulePath = true
 }
@@ -36,6 +39,9 @@ subprojects {
 
     group 'eu.scattering'
     version '1.0-SNAPSHOT'
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
 
     java {
         modularity.inferModulePath = true
