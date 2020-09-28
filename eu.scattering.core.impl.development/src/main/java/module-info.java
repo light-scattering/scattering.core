@@ -4,4 +4,5 @@ module eu.scattering.core.impl.development {
     requires spring.context;
     requires spring.beans;
     exports eu.scattering.core.impl.development;
+    opens eu.scattering.core.impl.development;
 }

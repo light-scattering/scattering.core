@@ -1,3 +1,7 @@
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     testImplementation project(':eu.scattering.core.design')
     testImplementation project(':eu.scattering.core.impl.production')

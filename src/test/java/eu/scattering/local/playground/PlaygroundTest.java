@@ -1,8 +1,11 @@
-package eu.scattering.core.test;
+package eu.scattering.local.playground;
 
+import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.extension.plane.FPlane;
+import eu.scattering.core.impl.development.FactoryDev;
+import eu.scattering.core.impl.production.FactoryProd;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,12 +14,11 @@ import org.junit.jupiter.api.Timeout;
 import java.util.HashSet;
 import java.util.Set;
 
-import static eu.scattering.core.test.Configuration.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @Timeout(5)
 @DisplayName("Playground")
 public class PlaygroundTest {
+
+    Factory factory = FactoryDev.create(FactoryProd.create());
 
     @Test
     void playground1() {
@@ -45,7 +47,7 @@ public class PlaygroundTest {
         FPoint fPointB = factory.getFPoint(1, 2, 3);
         FPoint fPointC = factory.getFPoint(1, 2, 3);
         
-        assertTrue(fPointA.isExact(fPointB));
+        Assertions.assertTrue(fPointA.isExact(fPointB));
         Assertions.assertNotSame(fPointA, fPointB);
 
         Set<FPoint> set = new HashSet<>();

@@ -1,5 +1,5 @@
 module eu.scattering.core.design {
-    requires transitive org.json;
+    requires org.json;
     exports eu.scattering.core.design;
     exports eu.scattering.core.design.development;
     exports eu.scattering.core.design.development.statistics;

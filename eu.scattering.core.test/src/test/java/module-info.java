@@ -2,6 +2,7 @@ module eu.scattering.core.test {
     requires eu.scattering.core.impl.development;
     requires org.junit.jupiter.api;
     requires org.assertj.core;
+    requires org.json;
     opens eu.scattering.core.test.main.mutable.geometry.base;
     opens eu.scattering.core.test.main.mutable.geometry.extension;
     opens eu.scattering.core.test.main.mutable.number;
