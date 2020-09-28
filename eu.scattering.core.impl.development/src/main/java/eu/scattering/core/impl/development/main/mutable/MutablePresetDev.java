@@ -2,14 +2,14 @@ package eu.scattering.core.impl.development.main.mutable;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.mutable.Mutable;
-import eu.scattering.core.impl.production.development.statistics.StatisticsDefault;
+import eu.scattering.core.impl.production.development.statistics.StatisticsProd;
 
 import java.time.LocalTime;
 import java.util.Optional;
 
-public abstract class MutablePresetDevelopment<T> implements Mutable<T> {
+public abstract class MutablePresetDev<T> implements Mutable<T> {
     private final LocalTime creationTime = LocalTime.now();
-    private final Statistics statistics = StatisticsDefault.create().setEnabled(false);
+    private final Statistics statistics = StatisticsProd.create().setEnabled(false);
     private final String id = self().getClass().getSimpleName() + ":" + getNumberOfInstances();
     private String label = "";
     private T core;

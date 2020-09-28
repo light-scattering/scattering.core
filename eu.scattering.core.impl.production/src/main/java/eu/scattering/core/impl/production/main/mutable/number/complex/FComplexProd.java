@@ -2,11 +2,11 @@ package eu.scattering.core.impl.production.main.mutable.number.complex;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.mutable.number.complex.FComplex;
-import eu.scattering.core.impl.production.main.mutable.MutablePresetDefault;
+import eu.scattering.core.impl.production.main.mutable.MutablePresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FComplexDefault extends MutablePresetDefault<FComplex> implements FComplex {
+public class FComplexProd extends MutablePresetProd<FComplex> implements FComplex {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -15,14 +15,14 @@ public class FComplexDefault extends MutablePresetDefault<FComplex> implements F
     private final double[] origin = { 0.0, 0.0 };
     private final Factory factory;
 
-    private FComplexDefault(Factory factory) {
+    private FComplexProd(Factory factory) {
 
         this.factory = factory;
     }
 
     public static FComplex create(Factory factory) {
 
-        return new FComplexDefault(factory);
+        return new FComplexProd(factory);
     }
 
     @Override

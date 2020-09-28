@@ -2,13 +2,13 @@ package eu.scattering.core.impl.production.support.helper;
 
 import eu.scattering.core.design.support.helper.AngleHelper;
 
-public class AngleHelperDefault implements AngleHelper {
+public class AngleHelperProd implements AngleHelper {
 
-    private AngleHelperDefault() { }
+    private AngleHelperProd() { }
 
     public static AngleHelper create() {
 
-        return new AngleHelperDefault();
+        return new AngleHelperProd();
     }
 
     @Override

@@ -4,14 +4,14 @@ import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.fixed.rotation.FRotation;
-import eu.scattering.core.impl.production.main.mutable.geometry.base.BasePresetDefault;
+import eu.scattering.core.impl.production.main.mutable.geometry.base.BasePresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FVectorDefault extends BasePresetDefault<FVector> implements FVector {
+public class FVectorProd extends BasePresetProd<FVector> implements FVector {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -20,13 +20,13 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
     private final FPoint[] origin = new FPoint[2];
     private final Factory factory;
 
-    private FVectorDefault(Factory factory) {
+    private FVectorProd(Factory factory) {
 
         this.factory = factory;
     }
 
-    public static FVectorDefault create(Factory factory) {
-        FVectorDefault fVector = new FVectorDefault(factory);
+    public static FVectorProd create(Factory factory) {
+        FVectorProd fVector = new FVectorProd(factory);
 
         fVector.origin[0] = factory.getFPoint();
         fVector.origin[1] = factory.getFPoint();
@@ -84,7 +84,7 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FVectorDefault setBase(FPoint base) {
+    public FVectorProd setBase(FPoint base) {
         getBase().set(base);
 
         return this;
@@ -98,7 +98,7 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
     }
 
     @Override
-    public FVectorDefault set(FVector fVector) {
+    public FVectorProd set(FVector fVector) {
         setBase(fVector.getBase());
         setHead(fVector.getHead());
 
@@ -106,7 +106,7 @@ public class FVectorDefault extends BasePresetDefault<FVector> implements FVecto
     }
 
     @Override
-    public FVectorDefault set(FPoint base, FPoint head) {
+    public FVectorProd set(FPoint base, FPoint head) {
         setBase(base);
         setHead(head);
 

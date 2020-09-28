@@ -6,7 +6,7 @@ import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.extension.line.FLine;
 import eu.scattering.core.design.main.mutable.geometry.extension.plane.FPlane;
-import eu.scattering.core.impl.production.main.mutable.geometry.extension.ExtensionPresetDefault;
+import eu.scattering.core.impl.production.main.mutable.geometry.extension.ExtensionPresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPlane {
+public class FPlaneProd extends ExtensionPresetProd<FPlane> implements FPlane {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -25,14 +25,14 @@ public class FPlaneDefault extends ExtensionPresetDefault<FPlane> implements FPl
     private FVector origin;
     private final Factory factory;
 
-    private FPlaneDefault(Factory factory) {
+    private FPlaneProd(Factory factory) {
 
         this.factory = factory;
     }
 
     public static FPlane create(Factory factory) {
 
-        return new FPlaneDefault(factory).setOriginRef(factory.getFVector());
+        return new FPlaneProd(factory).setOriginRef(factory.getFVector());
     }
 
     @Override

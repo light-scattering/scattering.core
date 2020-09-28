@@ -3,8 +3,8 @@ package eu.scattering.core.impl.development.main.mutable.geometry.base.point;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.mutable.geometry.Geometry;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
-import eu.scattering.core.impl.production.development.statistics.StatisticsDefault;
-import eu.scattering.core.impl.development.main.mutable.MutablePresetDevelopment;
+import eu.scattering.core.impl.production.development.statistics.StatisticsProd;
+import eu.scattering.core.impl.development.main.mutable.MutablePresetDev;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -12,15 +12,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class FPointDevelopment extends MutablePresetDevelopment<FPoint> implements FPoint {
+public class FPointDev extends MutablePresetDev<FPoint> implements FPoint {
 
-    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsProd.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FPoint create(FPoint core) {
 
         numberOfInstances++;
-        return new FPointDevelopment(core);
+        return new FPointDev(core);
     }
 
     @Override
@@ -38,10 +38,10 @@ public class FPointDevelopment extends MutablePresetDevelopment<FPoint> implemen
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        FPointDevelopment.numberOfInstances = numberOfInstances;
+        FPointDev.numberOfInstances = numberOfInstances;
     }
 
-    private FPointDevelopment(FPoint core) {
+    private FPointDev(FPoint core) {
 
         setCore(core);
     }

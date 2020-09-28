@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.development;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.impl.production.FactoryDefault;
+import eu.scattering.core.impl.production.FactoryProd;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 
@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 
 @Configuration
 @PropertySource("core.properties")
-public class SpringConfigCore {
+public class SpringDev {
 
     @Value("${jitter}")
     private double jitter;
@@ -27,7 +27,7 @@ public class SpringConfigCore {
     @Bean("prod")
     public Factory getFactoryDefault() {
 
-        return FactoryDefault.create();
+        return FactoryProd.create();
     }
 
     @Primary
@@ -35,7 +35,7 @@ public class SpringConfigCore {
     @Profile("dev")
     public Factory getFactoryDevelopment() {
 
-        return FactoryDevelopment.create(factory);
+        return FactoryDev.create(factory);
     }
 
     @PostConstruct

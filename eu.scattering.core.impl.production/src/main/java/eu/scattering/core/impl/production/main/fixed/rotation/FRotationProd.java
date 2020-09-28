@@ -11,14 +11,14 @@ import org.json.JSONObject;
 
 import java.util.function.Consumer;
 
-public class FRotationDefault implements FRotation {
+public class FRotationProd implements FRotation {
 
     private final FPoint offset;
     private final FQuaternion core;
     private final double[][] rotation = new double[3][3];
     private final Factory factory;
 
-    private FRotationDefault(Factory factory, FVector axis, double angle) {
+    private FRotationProd(Factory factory, FVector axis, double angle) {
 
         if (axis.isNonDirectional()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
@@ -32,7 +32,7 @@ public class FRotationDefault implements FRotation {
         initializeRotor();
     }
 
-    private FRotationDefault(Factory factory, FPoint axis, double angle) {
+    private FRotationProd(Factory factory, FPoint axis, double angle) {
 
         if (axis.isZero()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
@@ -46,7 +46,7 @@ public class FRotationDefault implements FRotation {
         initializeRotor();
     }
 
-    private FRotationDefault(Factory factory, double re, double i, double j, double k) {
+    private FRotationProd(Factory factory, double re, double i, double j, double k) {
         double direction = 1 - (re * re);
 
         if (direction <= 0) {
@@ -62,12 +62,12 @@ public class FRotationDefault implements FRotation {
 
     public static FRotation create(Factory factory, FPoint axis, double angle) {
 
-        return new FRotationDefault(factory, axis, angle);
+        return new FRotationProd(factory, axis, angle);
     }
 
     public static FRotation create(Factory factory, FVector axis, double angle) {
 
-        return new FRotationDefault(factory, axis, angle);
+        return new FRotationProd(factory, axis, angle);
     }
 
     public static FRotation parse(Factory factory, String json) {
@@ -78,7 +78,7 @@ public class FRotationDefault implements FRotation {
         double j = structure.getDouble(2);
         double k = structure.getDouble(3);
 
-        return new FRotationDefault(factory, re, i, j, k);
+        return new FRotationProd(factory, re, i, j, k);
     }
 
     @Override

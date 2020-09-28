@@ -3,14 +3,14 @@ package eu.scattering.core.impl.production.main.mutable.geometry.base.point;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.fixed.rotation.FRotation;
-import eu.scattering.core.impl.production.main.mutable.geometry.base.BasePresetDefault;
+import eu.scattering.core.impl.production.main.mutable.geometry.base.BasePresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
+public class FPointProd extends BasePresetProd<FPoint> implements FPoint {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -19,14 +19,14 @@ public class FPointDefault extends BasePresetDefault<FPoint> implements FPoint {
     private final double[] origin = { 0.0, 0.0, 0.0 };
     private final Factory factory;
 
-    private FPointDefault(Factory factory) {
+    private FPointProd(Factory factory) {
 
         this.factory = factory;
     }
 
     public static FPoint create(Factory factory) {
 
-        return new FPointDefault(factory);
+        return new FPointProd(factory);
     }
 
     @Override

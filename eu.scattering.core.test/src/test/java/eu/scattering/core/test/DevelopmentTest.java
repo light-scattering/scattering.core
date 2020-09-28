@@ -3,8 +3,8 @@ package eu.scattering.core.test;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.development.statistics.Statistics;
-import eu.scattering.core.impl.production.FactoryDefault;
-import eu.scattering.core.impl.development.FactoryDevelopment;
+import eu.scattering.core.impl.production.FactoryProd;
+import eu.scattering.core.impl.development.FactoryDev;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Development")
 public class DevelopmentTest {
 
-    private Factory factory = FactoryDefault.create();
-    private Factory factoryDevelopment = FactoryDevelopment.create(FactoryDefault.create());
+    private Factory factory = FactoryProd.create();
+    private Factory factoryDevelopment = FactoryDev.create(FactoryProd.create());
 
     private Development<?> getTestInstance() {
 

@@ -5,14 +5,14 @@ import eu.scattering.core.design.main.fixed.position.FPosition;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public final class FPositionDefault implements FPosition {
+public final class FPositionProd implements FPosition {
 
     private final int x;
     private final int y;
     private final int z;
     private final Factory factory;
 
-    private FPositionDefault(Factory factory, int x, int y, int z) {
+    private FPositionProd(Factory factory, int x, int y, int z) {
 
         this.factory = factory;
         this.x = x;
@@ -22,7 +22,7 @@ public final class FPositionDefault implements FPosition {
 
     public static FPosition create(Factory factory, int x, int y, int z) {
 
-        return new FPositionDefault(factory, x, y, z);
+        return new FPositionProd(factory, x, y, z);
     }
 
     public static FPosition parse(Factory factory, String json) {
@@ -32,7 +32,7 @@ public final class FPositionDefault implements FPosition {
         int y = structure.getInt(1);
         int z = structure.getInt(2);
 
-        return new FPositionDefault(factory, x, y, z);
+        return new FPositionProd(factory, x, y, z);
     }
 
     @Override

@@ -2,19 +2,19 @@ package eu.scattering.core.impl.development.main.mutable.number.complex;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.mutable.number.complex.FComplex;
-import eu.scattering.core.impl.production.development.statistics.StatisticsDefault;
-import eu.scattering.core.impl.development.main.mutable.MutablePresetDevelopment;
+import eu.scattering.core.impl.production.development.statistics.StatisticsProd;
+import eu.scattering.core.impl.development.main.mutable.MutablePresetDev;
 import org.json.JSONObject;
 
-public class FComplexDevelopment extends MutablePresetDevelopment<FComplex> implements FComplex {
+public class FComplexDev extends MutablePresetDev<FComplex> implements FComplex {
 
-    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsProd.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FComplex create(FComplex core) {
 
         numberOfInstances++;
-        return new FComplexDevelopment(core);
+        return new FComplexDev(core);
     }
 
     @Override
@@ -32,10 +32,10 @@ public class FComplexDevelopment extends MutablePresetDevelopment<FComplex> impl
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        FComplexDevelopment.numberOfInstances = numberOfInstances;
+        FComplexDev.numberOfInstances = numberOfInstances;
     }
 
-    private FComplexDevelopment(FComplex core) {
+    private FComplexDev(FComplex core) {
 
         setCore(core);
     }

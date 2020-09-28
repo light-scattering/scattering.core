@@ -2,11 +2,11 @@ package eu.scattering.core.impl.production.main.mutable.number.quaternion;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
-import eu.scattering.core.impl.production.main.mutable.MutablePresetDefault;
+import eu.scattering.core.impl.production.main.mutable.MutablePresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FQuaternionDefault extends MutablePresetDefault<FQuaternion> implements FQuaternion {
+public class FQuaternionProd extends MutablePresetProd<FQuaternion> implements FQuaternion {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -15,14 +15,14 @@ public class FQuaternionDefault extends MutablePresetDefault<FQuaternion> implem
     private final double[] origin = { 0.0, 0.0, 0.0, 0.0 };
     private final Factory factory;
 
-    private FQuaternionDefault(Factory factory) {
+    private FQuaternionProd(Factory factory) {
 
         this.factory = factory;
     }
 
     public static FQuaternion create(Factory factory) {
 
-        return new FQuaternionDefault(factory);
+        return new FQuaternionProd(factory);
     }
 
     @Override

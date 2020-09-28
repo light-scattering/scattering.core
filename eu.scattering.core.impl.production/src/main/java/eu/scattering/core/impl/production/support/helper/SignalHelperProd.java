@@ -2,13 +2,13 @@ package eu.scattering.core.impl.production.support.helper;
 
 import eu.scattering.core.design.support.helper.SignalHelper;
 
-public class SignalHelperDefault implements SignalHelper {
+public class SignalHelperProd implements SignalHelper {
 
-    private SignalHelperDefault() { }
+    private SignalHelperProd() { }
 
     public static SignalHelper create() {
 
-        return new SignalHelperDefault();
+        return new SignalHelperProd();
     }
 
     @Override

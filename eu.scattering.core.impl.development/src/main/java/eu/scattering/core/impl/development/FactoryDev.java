@@ -12,25 +12,25 @@ import eu.scattering.core.design.main.fixed.rotation.FRotation;
 import eu.scattering.core.design.support.helper.AngleHelper;
 import eu.scattering.core.design.support.helper.RandomHelper;
 import eu.scattering.core.design.support.helper.SignalHelper;
-import eu.scattering.core.impl.development.main.mutable.geometry.base.point.FPointDevelopment;
-import eu.scattering.core.impl.development.main.mutable.geometry.base.vector.FVectorDevelopment;
-import eu.scattering.core.impl.development.main.mutable.geometry.extension.line.FLineDevelopment;
-import eu.scattering.core.impl.development.main.mutable.geometry.extension.plane.FPlaneDevelopment;
-import eu.scattering.core.impl.development.main.mutable.number.complex.FComplexDevelopment;
-import eu.scattering.core.impl.development.main.mutable.number.quaternion.FQuaternionDevelopment;
+import eu.scattering.core.impl.development.main.mutable.geometry.base.point.FPointDev;
+import eu.scattering.core.impl.development.main.mutable.geometry.base.vector.FVectorDev;
+import eu.scattering.core.impl.development.main.mutable.geometry.extension.line.FLineDev;
+import eu.scattering.core.impl.development.main.mutable.geometry.extension.plane.FPlaneDev;
+import eu.scattering.core.impl.development.main.mutable.number.complex.FComplexDev;
+import eu.scattering.core.impl.development.main.mutable.number.quaternion.FQuaternionDev;
 
-public final class FactoryDevelopment implements Factory {
+public final class FactoryDev implements Factory {
 
     private final Factory factory;
 
-    private FactoryDevelopment(Factory factory) {
+    private FactoryDev(Factory factory) {
 
         this.factory = factory;
     }
 
     public static Factory create(Factory factory) {
 
-        return new FactoryDevelopment(factory);
+        return new FactoryDev(factory);
     }
 
 
@@ -51,37 +51,37 @@ public final class FactoryDevelopment implements Factory {
     @Override
     public FPoint getFPoint() {
 
-        return FPointDevelopment.create(factory.getFPoint());
+        return FPointDev.create(factory.getFPoint());
     }
 
     @Override
     public FVector getFVector() {
 
-        return FVectorDevelopment.create(factory.getFVector());
+        return FVectorDev.create(factory.getFVector());
     }
 
     @Override
     public FLine getFLine() {
 
-        return FLineDevelopment.create(factory.getFLine());
+        return FLineDev.create(factory.getFLine());
     }
 
     @Override
     public FPlane getFPlane() {
 
-        return FPlaneDevelopment.create(factory.getFPlane());
+        return FPlaneDev.create(factory.getFPlane());
     }
 
     @Override
     public FComplex getFComplex() {
 
-        return FComplexDevelopment.create(factory.getFComplex());
+        return FComplexDev.create(factory.getFComplex());
     }
 
     @Override
     public FQuaternion getFQuaternion() {
 
-        return FQuaternionDevelopment.create(factory.getFQuaternion());
+        return FQuaternionDev.create(factory.getFQuaternion());
     }
 
     @Override

@@ -5,7 +5,7 @@ import eu.scattering.core.design.development.statistics.Statistics;
 import java.time.LocalTime;
 import java.util.*;
 
-public class StatisticsDefault implements Statistics {
+public class StatisticsProd implements Statistics {
 
     private class Record {
         private int iterations = 0;
@@ -27,11 +27,11 @@ public class StatisticsDefault implements Statistics {
     private boolean recordingEnabled = false;
     private final Map<String, Record> executionData = new HashMap<>();
 
-    private StatisticsDefault() { }
+    private StatisticsProd() { }
 
     public static Statistics create() {
 
-        return new StatisticsDefault();
+        return new StatisticsProd();
     }
 
     @Override

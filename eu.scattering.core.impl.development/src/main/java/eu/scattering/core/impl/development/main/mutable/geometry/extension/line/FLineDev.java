@@ -5,8 +5,8 @@ import eu.scattering.core.design.main.mutable.geometry.Geometry;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.extension.line.FLine;
-import eu.scattering.core.impl.production.development.statistics.StatisticsDefault;
-import eu.scattering.core.impl.development.main.mutable.MutablePresetDevelopment;
+import eu.scattering.core.impl.production.development.statistics.StatisticsProd;
+import eu.scattering.core.impl.development.main.mutable.MutablePresetDev;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -14,15 +14,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class FLineDevelopment extends MutablePresetDevelopment<FLine> implements FLine {
+public class FLineDev extends MutablePresetDev<FLine> implements FLine {
 
-    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsProd.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FLine create(FLine core) {
 
         numberOfInstances++;
-        return new FLineDevelopment(core);
+        return new FLineDev(core);
     }
 
     @Override
@@ -40,10 +40,10 @@ public class FLineDevelopment extends MutablePresetDevelopment<FLine> implements
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        FLineDevelopment.numberOfInstances = numberOfInstances;
+        FLineDev.numberOfInstances = numberOfInstances;
     }
 
-    private FLineDevelopment(FLine core) {
+    private FLineDev(FLine core) {
 
         setCore(core);
     }

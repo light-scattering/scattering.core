@@ -1,13 +1,13 @@
 package eu.scattering.core.impl.production.main.mutable.geometry.extension;
 
-import eu.scattering.core.impl.production.main.mutable.MutablePresetDefault;
+import eu.scattering.core.impl.production.main.mutable.MutablePresetProd;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.extension.Extension;
 
 import java.util.List;
 
-public abstract class ExtensionPresetDefault<T extends Extension<T>>
-        extends MutablePresetDefault<T> implements Extension<T> {
+public abstract class ExtensionPresetProd<T extends Extension<T>>
+        extends MutablePresetProd<T> implements Extension<T> {
 
     @Override
     public int hashCode() {

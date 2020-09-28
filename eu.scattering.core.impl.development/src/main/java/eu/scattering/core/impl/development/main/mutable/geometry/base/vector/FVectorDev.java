@@ -4,8 +4,8 @@ import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.mutable.geometry.Geometry;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
-import eu.scattering.core.impl.production.development.statistics.StatisticsDefault;
-import eu.scattering.core.impl.development.main.mutable.MutablePresetDevelopment;
+import eu.scattering.core.impl.production.development.statistics.StatisticsProd;
+import eu.scattering.core.impl.development.main.mutable.MutablePresetDev;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -13,15 +13,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class FVectorDevelopment extends MutablePresetDevelopment<FVector> implements FVector {
+public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
 
-    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsProd.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FVector create(FVector core) {
 
         numberOfInstances++;
-        return new FVectorDevelopment(core);
+        return new FVectorDev(core);
     }
 
 
@@ -40,11 +40,11 @@ public class FVectorDevelopment extends MutablePresetDevelopment<FVector> implem
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        FVectorDevelopment.numberOfInstances = numberOfInstances;
+        FVectorDev.numberOfInstances = numberOfInstances;
     }
 
 
-    private FVectorDevelopment(FVector core) {
+    private FVectorDev(FVector core) {
 
         setCore(core);
     }

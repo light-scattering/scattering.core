@@ -9,20 +9,20 @@ import eu.scattering.core.design.support.helper.RandomHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomHelperDefault implements RandomHelper {
+public class RandomHelperProd implements RandomHelper {
 
     private final Factory factory;
     private double spacing = 1E-8;
     private double range = 10000;
 
-    private RandomHelperDefault(Factory factory) {
+    private RandomHelperProd(Factory factory) {
 
         this.factory = factory;
     }
 
     public static RandomHelper create(Factory factory) {
 
-        return new RandomHelperDefault(factory);
+        return new RandomHelperProd(factory);
     }
 
     @Override

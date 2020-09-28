@@ -6,7 +6,7 @@ import eu.scattering.core.design.main.mutable.Mutable;
 import java.time.LocalTime;
 import java.util.Optional;
 
-public abstract class MutablePresetDefault<T> implements Mutable<T> {
+public abstract class MutablePresetProd<T> implements Mutable<T> {
 
     @Override
     public String toString() {

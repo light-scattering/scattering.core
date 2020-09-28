@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.main.mutable.geometry.base;
 
-import eu.scattering.core.impl.production.main.mutable.MutablePresetDefault;
+import eu.scattering.core.impl.production.main.mutable.MutablePresetProd;
 import eu.scattering.core.design.main.mutable.geometry.base.Base;
 import eu.scattering.core.design.main.mutable.geometry.Geometry;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class BasePresetDefault<T extends Base<T>>
-        extends MutablePresetDefault<T> implements Base<T> {
+public abstract class BasePresetProd<T extends Base<T>>
+        extends MutablePresetProd<T> implements Base<T> {
 
     @Override
     public int hashCode() {

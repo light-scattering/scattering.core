@@ -2,19 +2,19 @@ package eu.scattering.core.impl.development.main.mutable.number.quaternion;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
-import eu.scattering.core.impl.production.development.statistics.StatisticsDefault;
-import eu.scattering.core.impl.development.main.mutable.MutablePresetDevelopment;
+import eu.scattering.core.impl.production.development.statistics.StatisticsProd;
+import eu.scattering.core.impl.development.main.mutable.MutablePresetDev;
 import org.json.JSONObject;
 
-public class FQuaternionDevelopment extends MutablePresetDevelopment<FQuaternion> implements FQuaternion {
+public class FQuaternionDev extends MutablePresetDev<FQuaternion> implements FQuaternion {
 
-    private static final Statistics classStatistics = StatisticsDefault.create().setEnabled(true);
+    private static final Statistics classStatistics = StatisticsProd.create().setEnabled(true);
     private static long numberOfInstances = 0;
 
     public static FQuaternion create(FQuaternion core) {
 
         numberOfInstances++;
-        return new FQuaternionDevelopment(core);
+        return new FQuaternionDev(core);
     }
 
     @Override
@@ -32,10 +32,10 @@ public class FQuaternionDevelopment extends MutablePresetDevelopment<FQuaternion
     @Override
     protected void setNumberOfInstances(long numberOfInstances) {
 
-        FQuaternionDevelopment.numberOfInstances = numberOfInstances;
+        FQuaternionDev.numberOfInstances = numberOfInstances;
     }
 
-    private FQuaternionDevelopment(FQuaternion core) {
+    private FQuaternionDev(FQuaternion core) {
 
         setCore(core);
     }
