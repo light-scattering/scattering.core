@@ -4,7 +4,7 @@ import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.development.Development;
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.impl.production.FactoryDefault;
-import eu.scattering.core.impl.production.FactoryDevelopment;
+import eu.scattering.core.impl.development.FactoryDevelopment;
 import org.junit.jupiter.api.*;
 
 import java.util.List;

@@ -1,5 +1,5 @@
 module eu.scattering.core.test {
-    requires eu.scattering.core.impl.production;
+    requires eu.scattering.core.impl.development;
     requires org.junit.jupiter.api;
     requires org.assertj.core;
     opens eu.scattering.core.test.main.mutable.geometry.base;

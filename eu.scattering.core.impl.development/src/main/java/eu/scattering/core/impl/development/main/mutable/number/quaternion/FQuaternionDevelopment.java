@@ -1,9 +1,9 @@
-package eu.scattering.core.impl.production.main.mutable.number.quaternion;
+package eu.scattering.core.impl.development.main.mutable.number.quaternion;
 
 import eu.scattering.core.design.development.statistics.Statistics;
 import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
 import eu.scattering.core.impl.production.development.statistics.StatisticsDefault;
-import eu.scattering.core.impl.production.main.mutable.MutablePresetDevelopment;
+import eu.scattering.core.impl.development.main.mutable.MutablePresetDevelopment;
 import org.json.JSONObject;
 
 public class FQuaternionDevelopment extends MutablePresetDevelopment<FQuaternion> implements FQuaternion {

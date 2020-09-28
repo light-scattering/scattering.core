@@ -3,7 +3,7 @@ package eu.scattering.core.test;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.support.helper.RandomHelper;
 import eu.scattering.core.impl.production.FactoryDefault;
-import eu.scattering.core.impl.production.FactoryDevelopment;
+import eu.scattering.core.impl.development.FactoryDevelopment;
 
 public final class Configuration {
 
