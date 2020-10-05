@@ -39,6 +39,16 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     }
 
     @Override
+    protected double getAlgebraicVolume() {
+        return 0;
+    }
+
+    @Override
+    protected double getAlgebraicSurface() {
+        return 0;
+    }
+
+    @Override
     public boolean intersectsWith(Shape shape) {
         return false;
     }

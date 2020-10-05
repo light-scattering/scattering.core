@@ -33,6 +33,9 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
         return axisOZ;
     }
 
+    protected abstract double getAlgebraicVolume();
+    protected abstract double getAlgebraicSurface();
+
     @Override
     public boolean intersectsWith(Shape shape) {
         return false;
