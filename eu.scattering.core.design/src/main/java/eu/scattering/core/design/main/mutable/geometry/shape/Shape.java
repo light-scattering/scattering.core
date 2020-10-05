@@ -19,10 +19,9 @@ public interface Shape<T> {
     double getSurface(Shape... exclusion);
 
     double getRadius();
+    double getRadiusP2();
     double getInnerRadius();
+    double getInnerRadiusP2();
 
-    Shape scale(double factor);
-
-    FPoint getPosition();
-    Shape setPosition(FPoint position);
+    T setPosition(FPoint position);
 }

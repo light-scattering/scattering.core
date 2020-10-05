@@ -12,9 +12,10 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.main.mutable.geometry.extension;
     exports eu.scattering.core.design.main.mutable.geometry.extension.line;
     exports eu.scattering.core.design.main.mutable.geometry.extension.plane;
-    exports eu.scattering.core.design.main.mutable.geometry.shape.ball;
+    exports eu.scattering.core.design.main.mutable.geometry.shape.sphere;
     exports eu.scattering.core.design.main.mutable.number.complex;
     exports eu.scattering.core.design.main.mutable.number.quaternion;
     exports eu.scattering.core.design.main.fixed.position;
     exports eu.scattering.core.design.main.fixed.rotation;
+    exports eu.scattering.core.design.main.mutable.geometry.shape;
 }
