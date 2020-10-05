@@ -7,25 +7,22 @@ import java.util.List;
 
 public interface Shape<T> {
 
-    boolean isPartOf(FPoint fPoint);
+    boolean contains(FPoint fPoint);
 
-    List<FPosition> getMesh();
+    boolean intersectsWith(Shape shape);
+    Shape[] getIntersectingShapes(Shape... shapes);
 
-    double getVolume();
+    Iterable<FPoint> getVolumeMesh(double distance);
+    Iterable<FPoint> getSurfaceMesh(double distance);
 
-    double getVolume(List<Shape> shapes);
+    double getVolume(Shape... exclusion);
+    double getSurface(Shape... exclusion);
 
-    double getSurface();
+    double getRadius();
+    double getInnerRadius();
 
-    double getSurface(List<Shape> shapes);
+    Shape scale(double factor);
 
-    double getRadiusOuter();
-
-    double getRadiusInner();
-
-    List<Shape> getIntersections(List<Shape> shapes);
-
-    List<Shape> getCollisions(FPoint direction, List<Shape> shapes);
-
-    T project(FPoint direction, List<Shape> shapes);
+    FPoint getPosition();
+    Shape setPosition(FPoint position);
 }
