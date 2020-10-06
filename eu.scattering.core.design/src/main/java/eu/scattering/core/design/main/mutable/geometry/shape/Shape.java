@@ -1,11 +1,12 @@
 package eu.scattering.core.design.main.mutable.geometry.shape;
 
+import eu.scattering.core.design.main.mutable.geometry.Geometry;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.fixed.position.FPosition;
 
 import java.util.List;
 
-public interface Shape<T> {
+public interface Shape<T> extends Geometry {
 
     boolean contains(FPoint fPoint);
 
@@ -20,8 +21,11 @@ public interface Shape<T> {
 
     double getRadius();
     double getRadiusP2();
+    T setRadius(double radius);
+
     double getInnerRadius();
     double getInnerRadiusP2();
+    T setInnerRadius(double innerRadius);
 
     T setPosition(FPoint position);
 }

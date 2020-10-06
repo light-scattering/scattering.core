@@ -5,6 +5,7 @@ import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.extension.line.FLine;
 import eu.scattering.core.design.main.mutable.geometry.extension.plane.FPlane;
+import eu.scattering.core.design.main.mutable.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.main.mutable.number.complex.FComplex;
 import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
 import eu.scattering.core.design.main.fixed.position.FPosition;
@@ -70,6 +71,11 @@ public final class FactoryDev implements Factory {
     public FPlane getFPlane() {
 
         return FPlaneDev.create(factory.getFPlane());
+    }
+
+    @Override
+    public FSphere getFSphere() {
+        return null;
     }
 
     @Override

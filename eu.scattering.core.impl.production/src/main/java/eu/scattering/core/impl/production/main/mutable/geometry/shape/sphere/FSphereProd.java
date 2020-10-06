@@ -8,6 +8,9 @@ import eu.scattering.core.design.main.mutable.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.production.main.mutable.geometry.shape.ShapePresetProd;
 import org.json.JSONObject;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
 
     // -------------------------------------------------------------------------------------------------
@@ -16,21 +19,22 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
 
     private final Factory factory;
 
-    private FSphereProd(Factory factory, double radius) {
+    private FSphereProd(Factory factory) {
 
         this.factory = factory;
 
         FPoint center = factory.getFPoint();
-        FVector axisOX = factory.getFVector(center, radius, 0, 0);
+
+        FVector axisOX = factory.getFVector(center, 1, 0, 0);
         FVector axisOY = factory.getFVector(center, 0, 1, 0);
         FVector axisOZ = factory.getFVector(center, 0, 0, 1);
 
         setAxes(axisOX, axisOY, axisOZ);
     }
 
-    public static FSphere create(Factory factory, double radius) {
+    public static FSphere create(Factory factory) {
 
-        return new FSphereProd(factory, radius);
+        return new FSphereProd(factory);
     }
 
     @Override
@@ -40,12 +44,14 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
 
     @Override
     protected double getAlgebraicVolume() {
-        return 0;
+
+        return (4 * Math.PI * Math.pow(getRadius(), 3)) / 3;
     }
 
     @Override
     protected double getAlgebraicSurface() {
-        return 0;
+
+        return 4 * Math.PI * getRadiusP2();
     }
 
     @Override
@@ -65,7 +71,70 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
 
     @Override
     public Iterable<FPoint> getSurfaceMesh(double distance) {
-        return null;
+
+        class SurfaceMeshIterator implements Iterator<FPoint> {
+
+            final FPoint reference = factory.getFPoint();
+            final FPoint sphereCenter;
+            final double sphereRadius;
+            final int numberOfPoints;
+
+            final double tmp1;
+            final double tmp2;
+
+            int index;
+
+            SurfaceMeshIterator(FPoint sphereCenter, double sphereRadius, int numberOfPoints) {
+                this.sphereCenter = sphereCenter;
+                this.sphereRadius = sphereRadius;
+                this.numberOfPoints = numberOfPoints;
+                this.tmp1 = Math.PI * (3 - Math.sqrt(5));
+                this.tmp2 = 2 / (double) numberOfPoints;
+            }
+
+            @Override
+            public boolean hasNext() {
+
+                if (index < numberOfPoints) {
+                    return true;
+                } else {
+                    index = 0;
+                    return false;
+                }
+            }
+
+            @Override
+            public FPoint next() {
+
+                double op1 = (index * tmp2) - 1 + (tmp2 / (double) 2);
+                double op2 = Math.sqrt(1 - (op1 * op1));
+                double op3 = index * tmp1;
+
+                reference.set(Math.cos(op3) * op2, op1, Math.sin(op3) * op2);
+                reference.setLength(sphereRadius);
+                reference.add(sphereCenter);
+
+                index++;
+
+                return reference;
+            }
+
+        }
+
+        class SurfaceMeshIterable implements Iterable<FPoint> {
+
+            final FPoint sphereCenter = getAxisOX().getBase();
+            final double sphereRadius = getRadius();
+            final int numberOfPoints = (int) Math.round(getAlgebraicSurface() / (distance * distance));
+
+            @Override
+            public Iterator<FPoint> iterator() {
+
+                return new SurfaceMeshIterator(sphereCenter.copy(), sphereRadius, numberOfPoints);
+            }
+        }
+
+        return new SurfaceMeshIterable();
     }
 
     @Override
@@ -132,4 +201,19 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     public JSONObject exportToJSON() {
         return null;
     }
+
+    @Override
+    public FSphere setRadius(double radius) {
+
+        getAxisOX().setLength(radius);
+
+        return this;
+    }
+
+    @Override
+    public FSphere setInnerRadius(double innerRadius) {
+
+        return setRadius(innerRadius);
+    }
+
 }

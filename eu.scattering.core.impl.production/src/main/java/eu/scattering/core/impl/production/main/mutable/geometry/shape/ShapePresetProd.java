@@ -3,7 +3,11 @@ package eu.scattering.core.impl.production.main.mutable.geometry.shape;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.shape.Shape;
+import eu.scattering.core.design.main.mutable.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.production.main.mutable.MutablePresetProd;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements Shape<T> {
 
@@ -31,6 +35,11 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
     protected FVector getAxisOZ() {
 
         return axisOZ;
+    }
+
+    protected FPoint getCenter() {
+
+        return getAxisOX().getBase();
     }
 
     protected abstract double getAlgebraicVolume();
@@ -79,7 +88,43 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
     @Override
     public T setPosition(FPoint position) {
 
+        return self();
+    }
+
+    @Override
+    public T setRadius(double radius) {
+        double factor = radius / getRadius();
+
+        getAxisOX().setLength(getAxisOX().getLength() * factor);
+        getAxisOY().setLength(getAxisOY().getLength() * factor);
+        getAxisOZ().setLength(getAxisOZ().getLength() * factor);
 
         return self();
     }
+
+    @Override
+    public T setInnerRadius(double innerRadius) {
+        double factor = innerRadius / getInnerRadius();
+
+        getAxisOX().setLength(getAxisOX().getLength() * factor);
+        getAxisOY().setLength(getAxisOY().getLength() * factor);
+        getAxisOZ().setLength(getAxisOZ().getLength() * factor);
+
+        return self();
+    }
+
+    @Override
+    public List<FPoint> disassemble() {
+
+        List<FPoint> fPointList = new ArrayList<>();
+
+        fPointList.add(getCenter());
+
+        fPointList.add(getAxisOX().getHead());
+        fPointList.add(getAxisOY().getHead());
+        fPointList.add(getAxisOZ().getHead());
+
+        return fPointList;
+    }
+
 }

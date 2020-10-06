@@ -5,6 +5,7 @@ import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.extension.line.FLine;
 import eu.scattering.core.design.main.mutable.geometry.extension.plane.FPlane;
+import eu.scattering.core.design.main.mutable.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.main.mutable.number.complex.FComplex;
 import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
 import eu.scattering.core.design.main.fixed.position.FPosition;
@@ -16,6 +17,7 @@ import eu.scattering.core.impl.production.main.mutable.geometry.base.point.FPoin
 import eu.scattering.core.impl.production.main.mutable.geometry.base.vector.FVectorProd;
 import eu.scattering.core.impl.production.main.mutable.geometry.extension.line.FLineProd;
 import eu.scattering.core.impl.production.main.mutable.geometry.extension.plane.FPlaneProd;
+import eu.scattering.core.impl.production.main.mutable.geometry.shape.sphere.FSphereProd;
 import eu.scattering.core.impl.production.main.mutable.number.complex.FComplexProd;
 import eu.scattering.core.impl.production.main.mutable.number.quaternion.FQuaternionProd;
 import eu.scattering.core.impl.production.main.fixed.position.FPositionProd;
@@ -77,6 +79,12 @@ public final class FactoryProd implements Factory {
     }
 
     @Override
+    public FSphere getFSphere() {
+
+        return FSphereProd.create(this);
+    }
+
+    @Override
     public FComplex getFComplex() {
 
         return FComplexProd.create(this);
@@ -135,4 +143,6 @@ public final class FactoryProd implements Factory {
 
         return helperRandom;
     }
+
+
 }
