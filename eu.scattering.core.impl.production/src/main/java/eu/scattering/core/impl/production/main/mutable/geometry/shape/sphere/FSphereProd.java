@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.production.main.mutable.geometry.shape.sphere;
 
 import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.main.fixed.position.FPosition;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.shape.Shape;
@@ -9,7 +10,6 @@ import eu.scattering.core.impl.production.main.mutable.geometry.shape.ShapePrese
 import org.json.JSONObject;
 
 import java.util.Iterator;
-import java.util.List;
 
 public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
 
@@ -45,32 +45,47 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     @Override
     protected double getAlgebraicVolume() {
 
-        return (4 * Math.PI * Math.pow(getRadius(), 3)) / 3;
+        return (4 * Math.PI * Math.pow(this.getOuterRadius(), 3)) / 3;
     }
 
     @Override
     protected double getAlgebraicSurface() {
 
-        return 4 * Math.PI * getRadiusP2();
+        return 4 * Math.PI * getOuterRadiusP2();
     }
 
     @Override
-    public boolean intersectsWith(Shape shape) {
+    public boolean intersectsStronglyWith(Shape shape) {
         return false;
     }
 
     @Override
-    public Shape[] getIntersectingShapes(Shape... shapes) {
+    public boolean intersectsLooselyWith(Shape shape) {
+        return false;
+    }
+
+    @Override
+    public Shape[] getStronglyIntersectingShapes(Shape... shapes) {
         return new Shape[0];
     }
 
     @Override
-    public Iterable<FPoint> getVolumeMesh(double distance) {
+    public Shape[] getLooselyIntersectingShapes(Shape... shapes) {
+        return new Shape[0];
+    }
+
+    @Override
+    public Iterable<FPoint> getDoubleVolumeMesh(double distance) {
         return null;
     }
 
     @Override
-    public Iterable<FPoint> getSurfaceMesh(double distance) {
+    public Iterable<FPosition> getIntegerVolumeMesh(double distance) {
+        return null;
+    }
+
+    @Override
+    public Iterable<FPoint> getDoubleSurfaceMesh(double distance) {
 
         class SurfaceMeshIterator implements Iterator<FPoint> {
 
@@ -124,7 +139,7 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
         class SurfaceMeshIterable implements Iterable<FPoint> {
 
             final FPoint sphereCenter = getAxisOX().getBase();
-            final double sphereRadius = getRadius();
+            final double sphereRadius = FSphereProd.this.getOuterRadius();
             final int numberOfPoints = (int) Math.round(getAlgebraicSurface() / (distance * distance));
 
             @Override
@@ -138,7 +153,22 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     }
 
     @Override
+    public Iterable<FPosition> getIntegerSurfaceMesh(double distance) {
+        return null;
+    }
+
+    @Override
     public double getVolume(Shape... exclusion) {
+        return 0;
+    }
+
+    @Override
+    public double getExactVolume(Shape... exclusion) {
+        return 0;
+    }
+
+    @Override
+    public double getApproximateVolume(Shape... exclusion) {
         return 0;
     }
 
@@ -148,13 +178,23 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     }
 
     @Override
-    public double getRadius() {
+    public double getExactSurface(Shape... exclusion) {
+        return 0;
+    }
+
+    @Override
+    public double getApproximateSurface(Shape... exclusion) {
+        return 0;
+    }
+
+    @Override
+    public double getOuterRadius() {
 
         return getAxisOX().getLength();
     }
 
     @Override
-    public double getRadiusP2() {
+    public double getOuterRadiusP2() {
 
         return getAxisOX().getLengthP2();
     }
@@ -162,13 +202,13 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     @Override
     public double getInnerRadius() {
 
-        return getRadius();
+        return this.getOuterRadius();
     }
 
     @Override
     public double getInnerRadiusP2() {
 
-        return getRadiusP2();
+        return getOuterRadiusP2();
     }
 
     @Override
@@ -203,7 +243,7 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     }
 
     @Override
-    public FSphere setRadius(double radius) {
+    public FSphere setOuterRadius(double radius) {
 
         getAxisOX().setLength(radius);
 
@@ -213,7 +253,7 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     @Override
     public FSphere setInnerRadius(double innerRadius) {
 
-        return setRadius(innerRadius);
+        return this.setOuterRadius(innerRadius);
     }
 
 }

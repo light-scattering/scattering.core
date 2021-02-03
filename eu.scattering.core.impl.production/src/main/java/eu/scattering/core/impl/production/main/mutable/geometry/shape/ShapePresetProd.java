@@ -3,7 +3,6 @@ package eu.scattering.core.impl.production.main.mutable.geometry.shape;
 import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
 import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
 import eu.scattering.core.design.main.mutable.geometry.shape.Shape;
-import eu.scattering.core.design.main.mutable.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.production.main.mutable.MutablePresetProd;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements Shape<T> {
 
-    private FVector axisOX;
+    private FVector axisOX;//OrientationBox
     private FVector axisOY;
     private FVector axisOZ;
 
@@ -37,7 +36,7 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
         return axisOZ;
     }
 
-    protected FPoint getCenter() {
+    public FPoint getCenter() { // must make a copy (a single point cannot be extracted)
 
         return getAxisOX().getBase();
     }
@@ -46,37 +45,37 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
     protected abstract double getAlgebraicSurface();
 
     @Override
-    public boolean intersectsWith(Shape shape) {
+    public boolean intersectsStronglyWith(Shape shape) {
         return false;
     }
 
     @Override
-    public Shape[] getIntersectingShapes(Shape[] shapes) {
+    public Shape[] getStronglyIntersectingShapes(Shape[] shapes) {
         return new Shape[0];
     }
 
     @Override
-    public Iterable<FPoint> getVolumeMesh(double distance) {
+    public Iterable<FPoint> getDoubleVolumeMesh(double distance) {
         return null;
     }
 
     @Override
-    public Iterable<FPoint> getSurfaceMesh(double distance) {
+    public Iterable<FPoint> getDoubleSurfaceMesh(double distance) {
         return null;
     }
 
     @Override
-    public double getVolume(Shape[] exclusion) {
+    public double getExactVolume(Shape[] exclusion) {
         return 0;
     }
 
     @Override
-    public double getSurface(Shape[] exclusion) {
+    public double getExactSurface(Shape[] exclusion) {
         return 0;
     }
 
     @Override
-    public double getRadius() {
+    public double getOuterRadius() {
         return 0;
     }
 
@@ -86,14 +85,14 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
     }
 
     @Override
-    public T setPosition(FPoint position) {
+    public T setCenter(FPoint position) {
 
         return self();
     }
 
     @Override
-    public T setRadius(double radius) {
-        double factor = radius / getRadius();
+    public T setOuterRadius(double radius) {
+        double factor = radius / getOuterRadius();
 
         getAxisOX().setLength(getAxisOX().getLength() * factor);
         getAxisOY().setLength(getAxisOY().getLength() * factor);
