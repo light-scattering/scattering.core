@@ -8,16 +8,16 @@ public interface FSphereFactory {
 
     default FSphere getFSphere(FPoint position) {
 
-        return getFSphere().setPosition(position);
+        return getFSphere().setCenter(position);
     }
 
     default FSphere getFSphere(double radius) {
 
-        return getFSphere().setRadius(radius);
+        return getFSphere().setOuterRadius(radius);
     }
 
     default FSphere getFSphere(FPoint position, double radius) {
 
-        return getFSphere().setPosition(position).setRadius(radius);
+        return getFSphere().setCenter(position).setOuterRadius(radius);
     }
 }

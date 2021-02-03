@@ -10,22 +10,34 @@ public interface Shape<T> extends Geometry {
 
     boolean contains(FPoint fPoint);
 
-    boolean intersectsWith(Shape shape);
-    Shape[] getIntersectingShapes(Shape... shapes);
+    boolean intersectsStronglyWith(Shape shape);
+    boolean intersectsLooselyWith(Shape shape);
 
-    Iterable<FPoint> getVolumeMesh(double distance);
-    Iterable<FPoint> getSurfaceMesh(double distance);
+    Shape[] getStronglyIntersectingShapes(Shape... shapes);
+    Shape[] getLooselyIntersectingShapes(Shape... shapes);
+
+    Iterable<FPoint> getDoubleVolumeMesh(double distance);
+    Iterable<FPosition> getIntegerVolumeMesh(double distance);
+
+    Iterable<FPoint> getDoubleSurfaceMesh(double distance);
+    Iterable<FPosition> getIntegerSurfaceMesh(double distance);
 
     double getVolume(Shape... exclusion);
-    double getSurface(Shape... exclusion);
+    double getExactVolume(Shape... exclusion);
+    double getApproximateVolume(Shape... exclusion);
 
-    double getRadius();
-    double getRadiusP2();
-    T setRadius(double radius);
+    double getSurface(Shape... exclusion);
+    double getExactSurface(Shape... exclusion);
+    double getApproximateSurface(Shape... exclusion);
+
+    double getOuterRadius();
+    double getOuterRadiusP2();
+    T setOuterRadius(double radius);
 
     double getInnerRadius();
     double getInnerRadiusP2();
     T setInnerRadius(double innerRadius);
 
-    T setPosition(FPoint position);
+    FPoint getCenter();
+    T setCenter(FPoint position);
 }
