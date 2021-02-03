@@ -1,2 +1,6 @@
-rootProject.name = 'core'
+rootProject.name = 'scattering.core'
+include 'eu.scattering.core.design'
+include 'eu.scattering.core.impl.development'
+include 'eu.scattering.core.impl.production'
+include 'eu.scattering.core.test'
 
