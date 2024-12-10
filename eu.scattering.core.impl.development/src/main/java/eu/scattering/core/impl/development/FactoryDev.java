@@ -1,24 +1,24 @@
 package eu.scattering.core.impl.development;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.main.mutable.geometry.base.point.FPoint;
-import eu.scattering.core.design.main.mutable.geometry.base.vector.FVector;
-import eu.scattering.core.design.main.mutable.geometry.extension.line.FLine;
-import eu.scattering.core.design.main.mutable.geometry.extension.plane.FPlane;
-import eu.scattering.core.design.main.mutable.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.main.mutable.number.complex.FComplex;
-import eu.scattering.core.design.main.mutable.number.quaternion.FQuaternion;
-import eu.scattering.core.design.main.fixed.position.FPosition;
-import eu.scattering.core.design.main.fixed.rotation.FRotation;
+import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
+import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
+import eu.scattering.core.design.core.mutable.geometry.advanced.line.FLine;
+import eu.scattering.core.design.core.mutable.geometry.advanced.plane.FPlane;
+import eu.scattering.core.design.core.mutable.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.core.mutable.number.complex.FComplex;
+import eu.scattering.core.design.core.mutable.number.quaternion.FQuaternion;
+import eu.scattering.core.design.core.immutable.position.FPosition;
+import eu.scattering.core.design.core.immutable.rotation.FRotation;
 import eu.scattering.core.design.support.helper.AngleHelper;
 import eu.scattering.core.design.support.helper.RandomHelper;
 import eu.scattering.core.design.support.helper.SignalHelper;
-import eu.scattering.core.impl.development.main.mutable.geometry.base.point.FPointDev;
-import eu.scattering.core.impl.development.main.mutable.geometry.base.vector.FVectorDev;
-import eu.scattering.core.impl.development.main.mutable.geometry.extension.line.FLineDev;
-import eu.scattering.core.impl.development.main.mutable.geometry.extension.plane.FPlaneDev;
-import eu.scattering.core.impl.development.main.mutable.number.complex.FComplexDev;
-import eu.scattering.core.impl.development.main.mutable.number.quaternion.FQuaternionDev;
+import eu.scattering.core.impl.development.core.mutable.geometry.simple.point.FPointDev;
+import eu.scattering.core.impl.development.core.mutable.geometry.simple.vector.FVectorDev;
+import eu.scattering.core.impl.development.core.mutable.geometry.advanced.line.FLineDev;
+import eu.scattering.core.impl.development.core.mutable.geometry.advanced.plane.FPlaneDev;
+import eu.scattering.core.impl.development.core.mutable.number.complex.FComplexDev;
+import eu.scattering.core.impl.development.core.mutable.number.quaternion.FQuaternionDev;
 
 public final class FactoryDev implements Factory {
 

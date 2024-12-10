@@ -1,8 +1,8 @@
 package eu.scattering.core.test;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.development.Development;
-import eu.scattering.core.design.development.statistics.Statistics;
+import eu.scattering.core.design.debug.Debug;
+import eu.scattering.core.design.debug.stats.Stats;
 import eu.scattering.core.impl.production.FactoryProd;
 import eu.scattering.core.impl.development.FactoryDev;
 import org.junit.jupiter.api.*;
@@ -20,12 +20,12 @@ public class DevelopmentTest {
     private Factory factory = FactoryProd.create();
     private Factory factoryDevelopment = FactoryDev.create(FactoryProd.create());
 
-    private Development<?> getTestInstance() {
+    private Debug<?> getTestInstance() {
 
         return factory.getFQuaternion();
     }
 
-    private Development<?> getTestInstanceDevelopment() {
+    private Debug<?> getTestInstanceDevelopment() {
 
         return factoryDevelopment.getFQuaternion();
     }
@@ -35,7 +35,7 @@ public class DevelopmentTest {
 
         getTestInstanceDevelopment().devResetNumberOfInstances();
         getTestInstanceDevelopment().devGetClassStatistics().ifPresent(e -> e.setEnabled(true));
-        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(Statistics::reset);
+        getTestInstanceDevelopment().devGetClassStatistics().ifPresent(Stats::reset);
     }
 
     @Nested
@@ -65,8 +65,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Validate number of initially registered events for classes")
             void validateNumberOfInitiallyRegisteredEventsForClasses() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 assertThat(statistics.getMethodNames())
                         .hasSize(0);
@@ -75,8 +75,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register single class event")
             void registerSingleClassEvent() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
 
@@ -88,8 +88,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register single class event (throw IllegalArgumentException)")
             void registerSingleClassEventThrowArithmeticException() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 Assertions.assertThrows(IllegalArgumentException.class,
                         () -> statistics.recordEvent("test event 1", -10L),
@@ -99,8 +99,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register single class event (throw NullPointerException)")
             void registerSingleClassEventThrowNullPointerException() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 Assertions.assertThrows(NullPointerException.class,
                         () -> statistics.recordEvent(null, 10L),
@@ -110,8 +110,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register multiple unique events")
             void registerMultipleUniqueEvents() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
                 statistics.recordEvent("test event 2", 10L);
@@ -125,8 +125,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register multiple mixed events")
             void registerMultipleMixedEvents() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
                 statistics.recordEvent("test event 1", 10L);
@@ -140,8 +140,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Reset events")
             void resetEvents() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
                 statistics.recordEvent("test event 2", 10L);
@@ -159,8 +159,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Validate active status")
             void validateActiveStatus() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 assertTrue(statistics.isEnabled(),
                         "The registration of events is not consistent with the default value");
@@ -169,8 +169,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Validate active status (false)")
             void validateActiveStatusFalse() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.setEnabled(false);
 
@@ -181,8 +181,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register event in the suspended state")
             void recordEventSuspended() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.setEnabled(false);
                 statistics.recordEvent("test event 1", 10L);
@@ -216,8 +216,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Validate number of initially registered events for objects")
             void validateNumberOfInitiallyRegisteredEventsForObjects() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 assertThat(statistics.getMethodNames())
                         .hasSize(0);
@@ -226,11 +226,11 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register single object event (enabled)")
             void registerSingleObjectEventEnabled() {
-                Development<?> element = getTestInstanceDevelopment();
+                Debug<?> element = getTestInstanceDevelopment();
                 element.devSetStatisticsEnabled(true);
 
-                Optional<Statistics> statisticsOptional = element.devGetStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = element.devGetStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
 
@@ -242,8 +242,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Register single object event (disabled)")
             void registerSingleObjectEventDisabled() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
 
@@ -260,8 +260,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Get method")
             void getMethod() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
 
@@ -277,8 +277,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Get method (throw NullPointerException)")
             void getMethodThrowNullPointerException() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
 
@@ -293,8 +293,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Get non-existent method")
             void getNonExistentMethod() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
 
@@ -310,8 +310,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Get execution times")
             void getExecutionTimes() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
                 statistics.recordEvent("test event 1", 20L);
@@ -328,8 +328,8 @@ public class DevelopmentTest {
             @Test
             @DisplayName("Get number of iterations")
             void getNumberOfIterations() {
-                Optional<Statistics> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
-                Statistics statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
+                Optional<Stats> statisticsOptional = getTestInstanceDevelopment().devGetClassStatistics();
+                Stats statistics = statisticsOptional.orElseGet(() -> Assertions.fail("Empty optional"));
 
                 statistics.recordEvent("test event 1", 10L);
                 statistics.recordEvent("test event 1", 20L);
@@ -361,7 +361,7 @@ public class DevelopmentTest {
         @Test
         @DisplayName("Is statistics enabled (true)")
         void isStatisticsEnabledTrue() {
-            Development<?> instance = getTestInstanceDevelopment();
+            Debug<?> instance = getTestInstanceDevelopment();
             instance.devSetStatisticsEnabled(true);
 
             assertTrue(instance.devIsStatisticsEnabled(),
@@ -371,7 +371,7 @@ public class DevelopmentTest {
         @Test
         @DisplayName("Is statistics enabled (production)")
         void isStatisticsEnabledProduction() {
-            Development<?> instance = getTestInstance();
+            Debug<?> instance = getTestInstance();
             instance.devSetStatisticsEnabled(true);
 
             assertFalse(instance.devIsStatisticsEnabled(),
@@ -390,7 +390,7 @@ public class DevelopmentTest {
         @DisplayName("Describe instance statistics")
         @Disabled("The method prints a message to the output stream")
         void getDescStatistics() {
-            Development<?> instance = getTestInstanceDevelopment();
+            Debug<?> instance = getTestInstanceDevelopment();
             instance.devSetStatisticsEnabled(true);
 
             instance.devDescStatistics();
@@ -473,7 +473,7 @@ public class DevelopmentTest {
         @DisplayName("Set label")
         void setLabel() {
 
-            Development<?> element = getTestInstanceDevelopment();
+            Debug<?> element = getTestInstanceDevelopment();
 
             element.devSetLabel("test");
 
