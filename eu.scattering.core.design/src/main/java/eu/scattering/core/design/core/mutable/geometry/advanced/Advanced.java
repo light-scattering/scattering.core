@@ -1,5 +1,6 @@
 package eu.scattering.core.design.core.mutable.geometry.advanced;
 
+import eu.scattering.core.design.core.mutable.Mutable;
 import eu.scattering.core.design.core.mutable.geometry.Geometry;
 import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
 import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface Advanced<T> extends Geometry {
+public interface Advanced<T> extends Geometry, Mutable<T> {
 
     FVector getOrigin();
 

@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface FLine extends Mutable<FLine>, Advanced<FLine>, Debug<FLine> {
+public interface FLine extends Advanced<FLine> {
 
     FPoint getFPoint(double length);
 

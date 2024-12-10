@@ -1,8 +1,8 @@
 package eu.scattering.core.design.core.immutable.position;
 
-import eu.scattering.core.design.core.Core;
+import eu.scattering.core.design.core.immutable.Immutable;
 
-public interface FPosition extends Core<FPosition> {
+public interface FPosition extends Immutable<FPosition> {
 
     int[] get();
 

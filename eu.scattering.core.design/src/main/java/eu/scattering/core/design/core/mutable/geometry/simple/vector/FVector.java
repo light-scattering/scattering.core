@@ -5,11 +5,10 @@ import eu.scattering.core.design.core.mutable.Mutable;
 import eu.scattering.core.design.debug.Debug;
 import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
 
-public interface FVector extends Mutable<FVector>, Simple<FVector>, Debug<FVector> {
+public interface FVector extends Simple<FVector> {
 
     FVector set(FPoint base, FPoint head);
     FVector setRef(FPoint baseRef, FPoint headRef);
-    FVector setRandomAngle(FPoint... exclude);
 
     FPoint getBase();
     FVector setBase(FPoint base);
@@ -90,4 +89,10 @@ public interface FVector extends Mutable<FVector>, Simple<FVector>, Debug<FVecto
 
     double getAzimuth();
     FVector setAzimuth(double azimuth);
+
+    //--------------------------------------------------
+    // Randomization
+    //--------------------------------------------------
+
+    FVector setRandomAngle(FPoint... exclude);
 }

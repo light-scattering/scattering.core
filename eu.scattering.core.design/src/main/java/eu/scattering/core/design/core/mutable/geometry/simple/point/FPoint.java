@@ -4,10 +4,9 @@ import eu.scattering.core.design.core.mutable.geometry.simple.Simple;
 import eu.scattering.core.design.core.mutable.Mutable;
 import eu.scattering.core.design.debug.Debug;
 
-public interface FPoint extends Mutable<FPoint>, Simple<FPoint>, Debug<FPoint> {
+public interface FPoint extends Simple<FPoint> {
 
     FPoint set(double x, double y, double z);
-    FPoint setRandomAngle(FPoint...exclude);
 
     double getX();
     FPoint setX(double x);
@@ -57,4 +56,10 @@ public interface FPoint extends Mutable<FPoint>, Simple<FPoint>, Debug<FPoint> {
 
     double getAzimuth();
     FPoint setAzimuth(double azimuth);
+
+    //--------------------------------------------------
+    // Randomization
+    //--------------------------------------------------
+
+    FPoint setRandomAngle(FPoint... exclude);
 }

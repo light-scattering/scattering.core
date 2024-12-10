@@ -1,5 +1,6 @@
 package eu.scattering.core.design.core.mutable.geometry.simple;
 
+import eu.scattering.core.design.core.mutable.Mutable;
 import eu.scattering.core.design.core.mutable.geometry.Geometry;
 import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
 
@@ -8,7 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public interface Simple<T> extends Geometry {
+public interface Simple<T> extends Geometry, Mutable<T> {
 
     T add(FPoint fPoint);
     T add(double x, double y, double z);

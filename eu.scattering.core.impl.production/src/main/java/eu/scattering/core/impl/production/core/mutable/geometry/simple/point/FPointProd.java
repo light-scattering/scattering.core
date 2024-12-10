@@ -538,7 +538,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public boolean isNonDirectional() {
 
-        return getX() == 0 && getY() == 0 && getZ() == 0;
+        return isSimilar(0, 0, 0);
     }
 
     @Override

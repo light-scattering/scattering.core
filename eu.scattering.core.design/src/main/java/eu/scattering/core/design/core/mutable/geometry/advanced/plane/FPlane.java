@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface FPlane extends Mutable<FPlane>, Advanced<FPlane>, Debug<FPlane> {
+public interface FPlane extends Advanced<FPlane> {
 
     boolean isCut(Geometry assembly);
 
