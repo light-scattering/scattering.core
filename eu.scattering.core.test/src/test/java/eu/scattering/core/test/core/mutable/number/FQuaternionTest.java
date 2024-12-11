@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.mutable.number;
 
-import eu.scattering.core.design.core.mutable.number.quaternion.FQuaternion;
+import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.test.core.mutable.number.support.FQuaternionTestHelper;
 import org.junit.jupiter.api.*;
 

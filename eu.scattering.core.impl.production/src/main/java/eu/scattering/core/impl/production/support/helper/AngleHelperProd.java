@@ -1,12 +1,12 @@
 package eu.scattering.core.impl.production.support.helper;
 
-import eu.scattering.core.design.support.helper.AngleHelper;
+import eu.scattering.core.design.helper.angle.FAngleHelper;
 
-public class AngleHelperProd implements AngleHelper {
+public class AngleHelperProd implements FAngleHelper {
 
     private AngleHelperProd() { }
 
-    public static AngleHelper create() {
+    public static FAngleHelper create() {
 
         return new AngleHelperProd();
     }

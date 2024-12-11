@@ -1,9 +1,9 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.simple.vector;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
-import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
-import eu.scattering.core.design.core.immutable.rotation.FRotation;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.core.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;

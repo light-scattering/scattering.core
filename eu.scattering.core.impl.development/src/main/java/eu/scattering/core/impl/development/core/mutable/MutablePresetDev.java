@@ -1,13 +1,13 @@
 package eu.scattering.core.impl.development.core.mutable;
 
 import eu.scattering.core.design.debug.stats.Stats;
-import eu.scattering.core.design.core.mutable.Mutable;
+import eu.scattering.core.design.core.algebra.Algebra;
 import eu.scattering.core.impl.production.debug.stats.StatsProd;
 
 import java.time.LocalTime;
 import java.util.Optional;
 
-public abstract class MutablePresetDev<T> implements Mutable<T> {
+public abstract class MutablePresetDev<T> implements Algebra<T> {
     private final LocalTime creationTime = LocalTime.now();
     private final Stats statistics = StatsProd.create().setEnabled(false);
     private final String id = self().getClass().getSimpleName() + ":" + getNumberOfInstances();

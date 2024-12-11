@@ -1,9 +1,9 @@
 package eu.scattering.core.test.core.immutable;
 
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
-import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
-import eu.scattering.core.design.core.mutable.number.quaternion.FQuaternion;
-import eu.scattering.core.design.core.immutable.rotation.FRotation;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.core.engine.rotation.FRotation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

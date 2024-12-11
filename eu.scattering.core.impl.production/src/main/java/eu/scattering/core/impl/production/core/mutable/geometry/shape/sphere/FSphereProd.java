@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.shape.sphere;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.immutable.position.FPosition;
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
-import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
-import eu.scattering.core.design.core.mutable.geometry.shape.Shape;
-import eu.scattering.core.design.core.mutable.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.core.algebra.geometry.shape.Shape;
+import eu.scattering.core.design.core.algebra.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.production.core.mutable.geometry.shape.ShapePresetProd;
 import org.json.JSONObject;
 
@@ -80,7 +80,7 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     }
 
     @Override
-    public Iterable<FPosition> getIntegerVolumeMesh(double distance) {
+    public Iterable<FPos3DI> getIntegerVolumeMesh(double distance) {
         return null;
     }
 
@@ -153,7 +153,7 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
     }
 
     @Override
-    public Iterable<FPosition> getIntegerSurfaceMesh(double distance) {
+    public Iterable<FPos3DI> getIntegerSurfaceMesh(double distance) {
         return null;
     }
 

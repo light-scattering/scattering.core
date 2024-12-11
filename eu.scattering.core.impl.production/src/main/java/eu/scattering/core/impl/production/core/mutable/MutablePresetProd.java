@@ -1,12 +1,12 @@
 package eu.scattering.core.impl.production.core.mutable;
 
 import eu.scattering.core.design.debug.stats.Stats;
-import eu.scattering.core.design.core.mutable.Mutable;
+import eu.scattering.core.design.core.algebra.Algebra;
 
 import java.time.LocalTime;
 import java.util.Optional;
 
-public abstract class MutablePresetProd<T> implements Mutable<T> {
+public abstract class MutablePresetProd<T> implements Algebra<T> {
 
     @Override
     public String toString() {

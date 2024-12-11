@@ -1,8 +1,8 @@
 package eu.scattering.core.test.core.mutable.geometry.simple;
 
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.test.core.mutable.geometry.simple.support.FVectorTestHelper;
-import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
+import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
 import org.junit.jupiter.api.*;
 
 import java.util.List;

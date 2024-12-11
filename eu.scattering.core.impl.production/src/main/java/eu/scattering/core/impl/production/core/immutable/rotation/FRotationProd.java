@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.production.core.immutable.rotation;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.mutable.geometry.Geometry;
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
-import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
-import eu.scattering.core.design.core.mutable.number.quaternion.FQuaternion;
-import eu.scattering.core.design.core.immutable.rotation.FRotation;
+import eu.scattering.core.design.core.algebra.geometry.Geometry;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.core.engine.rotation.FRotation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -42,7 +42,7 @@ public class SpringDev {
     public void postConstruct() {
 
         factory.setJitter(jitter);
-        factory.getHelperRandom().setSpacing(random_spacing);
-        factory.getHelperRandom().setRange(random_range);
+        factory.getFRandomHelper().setSpacing(random_spacing);
+        factory.getFRandomHelper().setRange(random_range);
     }
 }

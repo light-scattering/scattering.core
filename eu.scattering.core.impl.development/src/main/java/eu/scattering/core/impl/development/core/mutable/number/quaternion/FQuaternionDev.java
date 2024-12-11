@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.development.core.mutable.number.quaternion;
 
 import eu.scattering.core.design.debug.stats.Stats;
-import eu.scattering.core.design.core.mutable.number.quaternion.FQuaternion;
+import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.impl.production.debug.stats.StatsProd;
 import eu.scattering.core.impl.development.core.mutable.MutablePresetDev;
 import org.json.JSONObject;

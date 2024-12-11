@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.shape;
 
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
-import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
-import eu.scattering.core.design.core.mutable.geometry.shape.Shape;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.core.algebra.geometry.shape.Shape;
 import eu.scattering.core.impl.production.core.mutable.MutablePresetProd;
 
 import java.util.ArrayList;

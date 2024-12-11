@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.mutable.number.support;
 
-import eu.scattering.core.design.core.mutable.number.complex.FComplex;
+import eu.scattering.core.design.core.algebra.number.complex.FComplex;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.function.BiFunction;

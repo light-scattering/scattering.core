@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.immutable;
 
-import eu.scattering.core.design.core.immutable.position.FPosition;
+import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,33 +17,24 @@ public class FPositionTest {
     @Test
     @DisplayName("Create with parameters")
     public void createWithParameters() {
-        FPosition fPosition = factory.getFPosition(1, 2, 3);
+        FPos3DI fPosition = factory.getFPos3DI(1, 2, 3);
 
         Assertions.assertAll("Check values",
-                () -> assertEquals(1, fPosition.getX(), "The X value is incorrect"),
-                () -> assertEquals(2, fPosition.getY(), "The Y value is incorrect"),
-                () -> assertEquals(3, fPosition.getZ(), "The Z value is incorrect")
+                () -> assertEquals(1, fPosition.getD0(), "The X value is incorrect"),
+                () -> assertEquals(2, fPosition.getD1(), "The Y value is incorrect"),
+                () -> assertEquals(3, fPosition.getD2(), "The Z value is incorrect")
         );
     }
 
     @Test
     @DisplayName("Create with String")
     public void createWithString() {
-        FPosition fPosition = factory.getFPosition("{\"dipole\":[1,2,3]}");
+        FPos3DI fPosition = factory.getFPos3DI("{\"pos3DI\":[1,2,3]}");
 
         Assertions.assertAll("Check values",
-                () -> assertEquals(1, fPosition.getX(), "The X value is incorrect"),
-                () -> assertEquals(2, fPosition.getY(), "The Y value is incorrect"),
-                () -> assertEquals(3, fPosition.getZ(), "The Z value is incorrect")
+                () -> assertEquals(1, fPosition.getD0(), "The X value is incorrect"),
+                () -> assertEquals(2, fPosition.getD1(), "The Y value is incorrect"),
+                () -> assertEquals(3, fPosition.getD2(), "The Z value is incorrect")
         );
     }
-
-    @Test
-    @DisplayName("Get values")
-    public void getValues() {
-        FPosition fPosition = factory.getFPosition(1, 2, 3);
-
-        assertThat(fPosition.get()).containsExactly(1, 2, 3);
-    }
-
 }

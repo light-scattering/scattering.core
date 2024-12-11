@@ -1,13 +1,13 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.advanced;
 
 import eu.scattering.core.impl.production.core.mutable.MutablePresetProd;
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
-import eu.scattering.core.design.core.mutable.geometry.advanced.Advanced;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.construct.Construct;
 
 import java.util.List;
 
-public abstract class AdvancedPresetProd<T extends Advanced<T>>
-        extends MutablePresetProd<T> implements Advanced<T> {
+public abstract class AdvancedPresetProd<T extends Construct<T>>
+        extends MutablePresetProd<T> implements Construct<T> {
 
     @Override
     public int hashCode() {

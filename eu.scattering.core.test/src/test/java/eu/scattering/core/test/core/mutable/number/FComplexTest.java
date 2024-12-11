@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.mutable.number;
 
-import eu.scattering.core.design.core.mutable.number.complex.FComplex;
+import eu.scattering.core.design.core.algebra.number.complex.FComplex;
 import eu.scattering.core.test.core.mutable.number.support.FComplexTestHelper;
 import org.junit.jupiter.api.*;
 
@@ -116,11 +116,11 @@ public class FComplexTest {
 
         @BeforeEach
         void beforeEach() {
-            refRe = factory.getHelperRandom().getDouble();
-            refIm = factory.getHelperRandom().getDouble();
+            refRe = factory.getFRandomHelper().getDouble();
+            refIm = factory.getFRandomHelper().getDouble();
 
-            opRe = factory.getHelperRandom().getDouble();
-            opIm = factory.getHelperRandom().getDouble();
+            opRe = factory.getFRandomHelper().getDouble();
+            opIm = factory.getFRandomHelper().getDouble();
 
             fComplex = factory.getFComplex(refRe, refIm);
         }
@@ -166,7 +166,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Add primitives (validate)")
         void addPrimitivesValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.add(0, 0), fComplex);
         }
@@ -189,7 +189,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Add factor (validate)")
         void addFactorValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.add(1), fComplex);
         }
@@ -211,7 +211,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Add Re (validate)")
         void addReValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.addRe(1), fComplex);
         }
@@ -233,7 +233,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Add Im (validate)")
         void addImValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.addIm(1), fComplex);
         }
@@ -279,7 +279,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Sub primitives (validate)")
         void subPrimitivesValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.sub(0, 0), fComplex);
         }
@@ -302,7 +302,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Sub factor (validate)")
         void subFactorValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.sub(1), fComplex);
         }
@@ -324,7 +324,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Sub Re (validate)")
         void subReValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.subRe(1), fComplex);
         }
@@ -346,7 +346,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Sub Im (validate)")
         void subImValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.subIm(1), fComplex);
         }
@@ -399,7 +399,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Mul primitives (validate)")
         void mulPrimitivesValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.mul(1, 1), fComplex);
         }
@@ -422,7 +422,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Mul factor (validate)")
         void mulFactorValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.mul(1), fComplex);
         }
@@ -444,7 +444,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Mul Re (validate)")
         void mulReValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.mulRe(1), fComplex);
         }
@@ -466,7 +466,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Mul Im (validate)")
         void mulImValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.mulIm(1), fComplex);
         }
@@ -543,7 +543,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Div primitives (validate)")
         void divPrimitivesValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.div(1, 1), fComplex);
         }
@@ -575,7 +575,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Div factor (validate)")
         void divFactorValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.div(1), fComplex);
         }
@@ -606,7 +606,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Div Re (validate)")
         void divReValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.divRe(1), fComplex);
         }
@@ -637,7 +637,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Div Im (validate)")
         void divImValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.divIm(1), fComplex);
         }
@@ -688,8 +688,8 @@ public class FComplexTest {
         @BeforeEach
         void beforeEach() {
 
-            refRe = factory.getHelperRandom().getDouble();
-            refIm = factory.getHelperRandom().getDouble();
+            refRe = factory.getFRandomHelper().getDouble();
+            refIm = factory.getFRandomHelper().getDouble();
         }
 
         @Test
@@ -901,7 +901,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testValue(FComplex::copy, fComplex);
         }
@@ -915,7 +915,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get magnitude")
         void getMagnitude() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             double res = Math.sqrt((fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm()));
 
@@ -933,7 +933,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get magnitude P2")
         void getMagnitudeP2() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             double res = (fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm());
 
@@ -951,8 +951,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Get distance")
         void getDistance() {
-            FComplex fComplexA = factory.getHelperRandom().getFComplex();
-            FComplex fComplexB = factory.getHelperRandom().getFComplex(fComplexA);
+            FComplex fComplexA = factory.getFRandomHelper().getFComplex();
+            FComplex fComplexB = factory.getFRandomHelper().getFComplex(fComplexA);
 
             double distanceRe = Math.pow(Math.abs(fComplexA.getRe() - fComplexB.getRe()), 2);
             double distanceIm = Math.pow(Math.abs(fComplexA.getIm() - fComplexB.getIm()), 2);
@@ -973,8 +973,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Get distance P2")
         void getDistanceP2() {
-            FComplex fComplexA = factory.getHelperRandom().getFComplex();
-            FComplex fComplexB = factory.getHelperRandom().getFComplex(fComplexA);
+            FComplex fComplexA = factory.getFRandomHelper().getFComplex();
+            FComplex fComplexB = factory.getFRandomHelper().getFComplex(fComplexA);
 
             double distanceRe = Math.pow(Math.abs(fComplexA.getRe() - fComplexB.getRe()), 2);
             double distanceIm = Math.pow(Math.abs(fComplexA.getIm() - fComplexB.getIm()), 2);
@@ -995,8 +995,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Set magnitude")
         void setMagnitude() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
-            double magnitude = Math.abs(factory.getHelperRandom().getDouble());
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
+            double magnitude = Math.abs(factory.getFRandomHelper().getDouble());
 
             fComplex.setMagnitude(magnitude);
 
@@ -1007,9 +1007,9 @@ public class FComplexTest {
         @Test
         @DisplayName("Set magnitude (negative)")
         void setMagnitudeNegative() {
-            FComplex fComplexA = factory.getHelperRandom().getFComplex();
+            FComplex fComplexA = factory.getFRandomHelper().getFComplex();
             FComplex fComplexB = fComplexA.copy().negate();
-            double magnitude = Math.abs(factory.getHelperRandom().getDouble());
+            double magnitude = Math.abs(factory.getFRandomHelper().getDouble());
 
             fComplexA.setMagnitude(-magnitude);
             fComplexB.setMagnitude(magnitude);
@@ -1036,8 +1036,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Get phase")
         void getPhase() {
-            double re = factory.getHelperRandom().getDouble();
-            double im = factory.getHelperRandom().getDouble();
+            double re = factory.getFRandomHelper().getDouble();
+            double im = factory.getFRandomHelper().getDouble();
 
             FComplex fComplex = factory.getFComplex(re, im);
 
@@ -1048,7 +1048,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get phase (zero)")
         void getPhaseZero() {
-            double re = Math.abs(factory.getHelperRandom().getDouble());
+            double re = Math.abs(factory.getFRandomHelper().getDouble());
             double im = 0;
 
             FComplex fComplex = factory.getFComplex(re, im);
@@ -1060,7 +1060,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get phase (pi)")
         void getPhasePi() {
-            double re = -Math.abs(factory.getHelperRandom().getDouble());
+            double re = -Math.abs(factory.getFRandomHelper().getDouble());
             double im = 0;
 
             FComplex fComplex = factory.getFComplex(re, im);
@@ -1113,7 +1113,7 @@ public class FComplexTest {
         @DisplayName("Set phase")
         void setPhase() {
             FComplex fComplex = factory.getFComplex(1, 1);
-            double phase = factory.getHelperRandom().getDouble() % Math.PI;
+            double phase = factory.getFRandomHelper().getDouble() % Math.PI;
 
             fComplex.setPhase(phase);
 
@@ -1132,8 +1132,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Negate")
         public void negate() {
-            double re = factory.getHelperRandom().getDouble();
-            double im = factory.getHelperRandom().getDouble();
+            double re = factory.getFRandomHelper().getDouble();
+            double im = factory.getFRandomHelper().getDouble();
             FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.negate();
@@ -1157,8 +1157,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Inverse")
         public void inverse() {
-            double re = factory.getHelperRandom().getDouble();
-            double im = factory.getHelperRandom().getDouble();
+            double re = factory.getFRandomHelper().getDouble();
+            double im = factory.getFRandomHelper().getDouble();
             FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.inverse();
@@ -1183,8 +1183,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Conjugate")
         public void conjugate() {
-            double re = factory.getHelperRandom().getDouble();
-            double im = factory.getHelperRandom().getDouble();
+            double re = factory.getFRandomHelper().getDouble();
+            double im = factory.getFRandomHelper().getDouble();
             FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.conjugate();
@@ -1207,7 +1207,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Normalize")
         public void normalize() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             fComplex.normalize();
 
@@ -1242,7 +1242,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Is zero (fail)")
         public void isZeroFail() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             assertFalse(fComplex.isZero(), "The FComplex value should not be zero");
         }
@@ -1281,7 +1281,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Power (zero)")
         public void powZero() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             assertTrue(fComplex.pow(0).isExact(1, 0), "The value is erroneous");
         }
@@ -1289,7 +1289,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Power (validate)")
         public void powValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testReference(e -> e.pow(3), fComplex);
         }
@@ -1297,7 +1297,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Root")
         public void root() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplex[] fComplexRes = fComplex.root(3);
 
@@ -1314,7 +1314,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Root (size)")
         public void rootSize() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplex[] fComplexRes = fComplex.root(3);
 
@@ -1326,14 +1326,14 @@ public class FComplexTest {
         @DisplayName("Root (throw IllegalArgumentException)")
         public void rootThrowIllegalArgumentException() {
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> factory.getHelperRandom().getFComplex().root(-1),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> factory.getFRandomHelper().getFComplex().root(-1),
                     "The root value must be greater than zero");
         }
 
         @Test
         @DisplayName("Root (validate)")
         public void rootValidate() {
-            FComplex fComplex = factory.getHelperRandom().getFComplex();
+            FComplex fComplex = factory.getFRandomHelper().getFComplex();
 
             FComplexTestHelper.testValue(e -> e.root(3), fComplex);
         }

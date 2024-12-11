@@ -1,15 +1,15 @@
 package eu.scattering.core.impl.production.support.helper;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.mutable.geometry.simple.point.FPoint;
-import eu.scattering.core.design.core.mutable.geometry.simple.vector.FVector;
-import eu.scattering.core.design.core.mutable.number.complex.FComplex;
-import eu.scattering.core.design.core.mutable.number.quaternion.FQuaternion;
-import eu.scattering.core.design.support.helper.RandomHelper;
+import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.core.algebra.number.complex.FComplex;
+import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.helper.random.FRandomHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomHelperProd implements RandomHelper {
+public class RandomHelperProd implements FRandomHelper {
 
     private final Factory factory;
     private double spacing = 1E-8;
@@ -20,7 +20,7 @@ public class RandomHelperProd implements RandomHelper {
         this.factory = factory;
     }
 
-    public static RandomHelper create(Factory factory) {
+    public static FRandomHelper create(Factory factory) {
 
         return new RandomHelperProd(factory);
     }
