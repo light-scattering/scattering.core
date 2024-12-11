@@ -2,7 +2,7 @@ package eu.scattering.core.design.core.algebra.geometry.shape;
 
 import eu.scattering.core.design.core.algebra.geometry.Geometry;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
+import eu.scattering.core.design.core.data.position.FPos3DI;
 
 public interface Shape<T> extends Geometry {
 

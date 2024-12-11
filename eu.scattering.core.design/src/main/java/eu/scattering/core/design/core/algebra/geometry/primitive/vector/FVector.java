@@ -2,19 +2,41 @@ package eu.scattering.core.design.core.algebra.geometry.primitive.vector;
 
 import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.data.position.FTuplePos3D;
 
 public interface FVector extends Primitive<FVector> {
 
     FVector set(FPoint base, FPoint head);
-    FVector setRef(FPoint baseRef, FPoint headRef);
+//    FVector set(FPos3D base, FPos3D head);
+    FVector set(FTuplePos3D position);
 
-    FPoint getBase();
+    FVector setBase(double bX, double bY, double bZ);
     FVector setBase(FPoint base);
-    FVector setBaseRef(FPoint baseRef);
+//   FVector setBase(FPos3D base);
 
-    FPoint getHead();
+    FVector setHead(double hX, double hY, double hZ);
     FVector setHead(FPoint head);
-    FVector setHeadRef(FPoint headRef);
+//  FVector setHead(FPos3D head);
+
+    double getBaseX();
+    FVector setBaseX(double bX);
+
+    double getBaseY();
+    FVector setBaseY(double bY);
+
+    double getBaseZ();
+    FVector setBaseZ(double bZ);
+
+    double getHeadX();
+    FVector setHeadX(double hX);
+
+    double getHeadY();
+    FVector setHeadY(double hY);
+
+    double getHeadZ();
+    FVector setHeadZ(double hZ);
+
+    //--------------------------------------------------
 
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
@@ -37,7 +59,6 @@ public interface FVector extends Primitive<FVector> {
     FVector sub(FVector vector);
 
     double getLength();
-    double getLengthP2();
     FVector setLength(double length);
 
     double getLengthX();
@@ -75,6 +96,28 @@ public interface FVector extends Primitive<FVector> {
 
     boolean isOrthogonal(FVector ref);
     FVector setOrthogonal(FVector ref);
+
+    //--------------------------------------------------
+
+    double getLengthP2();
+
+    //--------------------------------------------------
+    // Parsers
+    //--------------------------------------------------
+
+    FTuplePos3D toTuplePos3D();
+
+    //--------------------------------------------------
+    // Unsafe
+    //--------------------------------------------------
+
+    FVector setRef(FPoint baseRef, FPoint headRef);
+
+    FPoint getBaseRef();
+    FVector setBaseRef(FPoint baseRef);
+
+    FPoint getHeadRef();
+    FVector setHeadRef(FPoint headRef);
 
     //--------------------------------------------------
     // Spherical coordinates

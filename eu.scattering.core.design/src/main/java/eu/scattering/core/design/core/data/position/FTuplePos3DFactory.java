@@ -1,7 +1,5 @@
-package eu.scattering.core.design.core.data.tuplePos3D;
+package eu.scattering.core.design.core.data.position;
 
-import eu.scattering.core.design.core.data.pos3D.FPos3D;
-import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
 import org.json.JSONObject;
 
 public interface FTuplePos3DFactory {

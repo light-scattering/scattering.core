@@ -1,42 +1,38 @@
-package eu.scattering.core.design.core.data.pos3DI;
+package eu.scattering.core.design.core.data.position;
 
 import eu.scattering.core.design.core.Core;
-import eu.scattering.core.design.core.data.pos3D.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FPos3DI implements Core<FPos3DI> {
-    private static final String JSON_TAG = "pos3DI";
+public class FPos2DI implements Core<FPos2DI> {
+    private static final String JSON_TAG = "pos2DI";
 
     private final int d0;
     private final int d1;
-    private final int d2;
 
-    private FPos3DI(int d0, int d1, int d2) {
+    private FPos2DI(int d0, int d1) {
 
         this.d0 = d0;
         this.d1 = d1;
-        this.d2 = d2;
     }
 
-    public static FPos3DI create(int d0, int d1, int d2) {
+    protected static FPos2DI create(int d0, int d1) {
 
-        return new FPos3DI(d0, d1, d2);
+        return new FPos2DI(d0, d1);
     }
 
-    public static FPos3DI create(String json) {
+    protected static FPos2DI create(String json) {
 
         return create(new JSONObject(json));
     }
 
-    public static FPos3DI create(JSONObject json) {
+    protected static FPos2DI create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 
         int d0 = structure.getInt(0);
         int d1 = structure.getInt(1);
-        int d2 = structure.getInt(2);
 
-        return new FPos3DI(d0, d1, d2);
+        return new FPos2DI(d0, d1);
     }
 
     public int getD0() {
@@ -49,13 +45,8 @@ public class FPos3DI implements Core<FPos3DI> {
         return d1;
     }
 
-    public int getD2() {
-
-        return d2;
-    }
-
-    public FPos3D toDouble() {
-        return FPos3D.create(d0, d1, d2);
+    public FPos2D toDouble() {
+        return FPos2D.create(d0, d1);
     }
 
 //--------------------------------------------------
@@ -66,7 +57,6 @@ public class FPos3DI implements Core<FPos3DI> {
 
         json.append(JSON_TAG, getD0());
         json.append(JSON_TAG, getD1());
-        json.append(JSON_TAG, getD2());
 
         return json;
     }
@@ -79,7 +69,6 @@ public class FPos3DI implements Core<FPos3DI> {
 
         hashCode = 31 * hashCode + d0;
         hashCode = 31 * hashCode + d1;
-        hashCode = 31 * hashCode + d2;
 
         return hashCode;
     }
@@ -87,10 +76,10 @@ public class FPos3DI implements Core<FPos3DI> {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FPos3DI) {
-            FPos3DI fPosition = (FPos3DI) object;
+        if (object instanceof FPos2DI) {
+            FPos2DI fPosition = (FPos2DI) object;
 
-            return d0 == fPosition.getD0() && d1 == fPosition.getD1() && d2 == fPosition.getD2();
+            return d0 == fPosition.getD0() && d1 == fPosition.getD1();
         }
 
         return false;

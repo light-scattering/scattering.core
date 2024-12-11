@@ -900,7 +900,7 @@ public class FLineTest {
                             "The FPoint base is incorrect"),
                     () -> assertTrue(fLine.getFPoint(length).isSimilar(fLine.getHead()),
                             "The FPoint head is incorrect"),
-                    () -> assertTrue(fLine.getFPoint(-length).isSimilar(fLine.getOrigin().reflectHead().getHead()),
+                    () -> assertTrue(fLine.getFPoint(-length).isSimilar(fLine.getOrigin().reflectHead().getHeadRef()),
                             "The FPoint inverse head is incorrect")
             );
         }
@@ -1067,14 +1067,14 @@ public class FLineTest {
             FVector fLineAOrigin = random.getFVector();
             FLine fLineA = factory.getFLine(fLineAOrigin);
 
-            fLineAOrigin.getBase().setZ(0);
-            fLineAOrigin.getHead().setZ(0);
+            fLineAOrigin.getBaseRef().setZ(0);
+            fLineAOrigin.getHeadRef().setZ(0);
 
             while (fLineAOrigin.isNonDirectional()) {
                 fLineAOrigin.set(random.getFVector());
 
-                fLineAOrigin.getBase().setZ(0);
-                fLineAOrigin.getHead().setZ(0);
+                fLineAOrigin.getBaseRef().setZ(0);
+                fLineAOrigin.getHeadRef().setZ(0);
             }
 
             FPoint fLineBOriginBase = random.getFPoint();
@@ -1255,7 +1255,7 @@ public class FLineTest {
                     .setCrossProduct(fLineBOrigin)
                     .setLength(1.5 * jitter);
 
-            fLineBOrigin.getBase().set(fVectorDrift.getHead());
+            fLineBOrigin.getBaseRef().set(fVectorDrift.getHeadRef());
 
             assertTrue(fLineA.getCommonFPoint(fLineB).isEmpty(),
                     "The intersecting point should be non-existent");

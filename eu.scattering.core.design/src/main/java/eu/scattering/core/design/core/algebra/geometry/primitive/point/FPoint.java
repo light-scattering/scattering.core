@@ -5,6 +5,7 @@ import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
 public interface FPoint extends Primitive<FPoint> {
 
     FPoint set(double x, double y, double z);
+//    FPoint set(FPos3D position);
 
     double getX();
     FPoint setX(double x);
@@ -14,6 +15,8 @@ public interface FPoint extends Primitive<FPoint> {
 
     double getZ();
     FPoint setZ(double z);
+
+//    FPos3D toFPos3D();
 
     //--------------------------------------------------
 
@@ -29,11 +32,9 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint reflect(FPoint ref);
 
     double getLength();
-    double getLengthP2();
     FPoint setLength(double length);
 
     double getDistance(FPoint ref);
-    double getDistanceP2(FPoint ref);
     FPoint setDistance(FPoint ref, double distance);
 
     double getAngle(FPoint ref);
@@ -44,6 +45,11 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setCrossProduct(FPoint ref);
 
     FPoint rotate(FPoint ref, double angle);
+
+    //--------------------------------------------------
+
+    double getLengthP2();
+    double getDistanceP2(FPoint ref);
 
     //--------------------------------------------------
     // Spherical coordinates

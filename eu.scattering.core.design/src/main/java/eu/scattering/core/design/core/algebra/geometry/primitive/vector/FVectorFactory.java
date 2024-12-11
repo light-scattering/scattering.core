@@ -7,6 +7,8 @@ public interface FVectorFactory extends FPointFactory {
 
     FVector getFVector();
 
+    //--------------------------------------------------
+
     default FVector getFVector(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         return getFVector().setRef(getFPoint(bX, bY, bZ), getFPoint(hX, hY, hZ));

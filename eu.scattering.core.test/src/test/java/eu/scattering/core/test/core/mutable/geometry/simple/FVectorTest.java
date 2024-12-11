@@ -25,17 +25,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector();
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -48,7 +48,7 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                    () -> assertNotSame(fVector.getBaseRef(), fVector.getHeadRef(),
                             "FPoints should have different references")
             );
         }
@@ -65,17 +65,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(valAX, valAY, valAZ, valBX, valBY, valBZ);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(valAX, fVector.getBase().getX(),
+                    () -> assertEquals(valAX, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(valAY, fVector.getBase().getY(),
+                    () -> assertEquals(valAY, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(valAZ, fVector.getBase().getZ(),
+                    () -> assertEquals(valAZ, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(valBX, fVector.getHead().getX(),
+                    () -> assertEquals(valBX, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(valBY, fVector.getHead().getY(),
+                    () -> assertEquals(valBY, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(valBZ, fVector.getHead().getZ(),
+                    () -> assertEquals(valBZ, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -89,17 +89,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(valX, valY, valZ);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(valX, fVector.getHead().getX(),
+                    () -> assertEquals(valX, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getHead().getY(),
+                    () -> assertEquals(valY, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getHead().getZ(),
+                    () -> assertEquals(valZ, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -111,17 +111,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(fPointHead);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointHead.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointHead.getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointHead.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointHead.getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointHead.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -135,9 +135,9 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertSame(fPointHead, fVector.getHead(),
+                    () -> assertSame(fPointHead, fVector.getHeadRef(),
                             "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                    () -> assertNotSame(fVector.getBaseRef(), fVector.getHeadRef(),
                             "FPoints should have different references")
             );
         }
@@ -151,17 +151,17 @@ public class FVectorTest {
             fPointHead.set(0, 0, 0);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -176,17 +176,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(valX, valY, valZ, fPointHead);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(valX, fVector.getBase().getX(),
+                    () -> assertEquals(valX, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getBase().getY(),
+                    () -> assertEquals(valY, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getBase().getZ(),
+                    () -> assertEquals(valZ, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointHead.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointHead.getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointHead.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointHead.getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointHead.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -203,9 +203,9 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertSame(fPointHead, fVector.getHead(),
+                    () -> assertSame(fPointHead, fVector.getHeadRef(),
                             "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                    () -> assertNotSame(fVector.getBaseRef(), fVector.getHeadRef(),
                             "FPoints should have different references")
             );
         }
@@ -222,17 +222,17 @@ public class FVectorTest {
             fPointHead.set(0, 0, 0);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(valX, fVector.getBase().getX(),
+                    () -> assertEquals(valX, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getBase().getY(),
+                    () -> assertEquals(valY, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getBase().getZ(),
+                    () -> assertEquals(valZ, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -247,17 +247,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(fPointBase, valX, valY, valZ);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointBase.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointBase.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointBase.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointBase.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointBase.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointBase.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(valX, fVector.getHead().getX(),
+                    () -> assertEquals(valX, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getHead().getY(),
+                    () -> assertEquals(valY, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getHead().getZ(),
+                    () -> assertEquals(valZ, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -274,9 +274,9 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertSame(fPointBase, fVector.getBase(),
+                    () -> assertSame(fPointBase, fVector.getBaseRef(),
                             "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                    () -> assertNotSame(fVector.getBaseRef(), fVector.getHeadRef(),
                             "FPoints should have different references")
             );
         }
@@ -293,17 +293,17 @@ public class FVectorTest {
             fPointBase.set(0, 0, 0);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(valX, fVector.getHead().getX(),
+                    () -> assertEquals(valX, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getHead().getY(),
+                    () -> assertEquals(valY, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getHead().getZ(),
+                    () -> assertEquals(valZ, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -316,17 +316,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointBase.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointBase.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointBase.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointBase.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointBase.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointBase.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointHead.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointHead.getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointHead.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointHead.getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointHead.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -341,11 +341,11 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertSame(fPointBase, fVector.getBase(),
+                    () -> assertSame(fPointBase, fVector.getBaseRef(),
                             "The base FPoint reference is erroneous"),
-                    () -> assertSame(fPointHead, fVector.getHead(),
+                    () -> assertSame(fPointHead, fVector.getHeadRef(),
                             "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                    () -> assertNotSame(fVector.getBaseRef(), fVector.getHeadRef(),
                             "FPoints should have different references")
             );
         }
@@ -361,17 +361,17 @@ public class FVectorTest {
             fPointHead.set(0, 0, 0);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -392,17 +392,17 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(fVectorRef);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVectorRef.getBase().getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fVectorRef.getBaseRef().getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fVectorRef.getBase().getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fVectorRef.getBaseRef().getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fVectorRef.getBase().getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fVectorRef.getBaseRef().getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fVectorRef.getHead().getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fVectorRef.getHeadRef().getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fVectorRef.getHead().getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fVectorRef.getHeadRef().getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fVectorRef.getHead().getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fVectorRef.getHeadRef().getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -416,11 +416,11 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertNotSame(fVectorRef.getBase(), fVector.getBase(),
+                    () -> assertNotSame(fVectorRef.getBaseRef(), fVector.getBaseRef(),
                             "The base FPoint reference is erroneous"),
-                    () -> assertNotSame(fVectorRef.getHead(), fVector.getHead(),
+                    () -> assertNotSame(fVectorRef.getHeadRef(), fVector.getHeadRef(),
                             "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getBase(), fVector.getHead(),
+                    () -> assertNotSame(fVector.getBaseRef(), fVector.getHeadRef(),
                             "FPoints should have different references")
             );
         }
@@ -432,7 +432,7 @@ public class FVectorTest {
             FPoint fPointHead = random.getFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertSame(fVector.getBase(), fPointBase, "The FPoint reference is erroneous");
+            assertSame(fVector.getBaseRef(), fPointBase, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -445,17 +445,17 @@ public class FVectorTest {
             fVector.setBase(factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointHead.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointHead.getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointHead.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointHead.getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointHead.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -469,7 +469,7 @@ public class FVectorTest {
 
             fVector.setBase(factory.getFPoint());
 
-            assertSame(fVector.getBase(), fPointBase, "The FPoint reference is erroneous");
+            assertSame(fVector.getBaseRef(), fPointBase, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -493,17 +493,17 @@ public class FVectorTest {
             fVector.setBaseRef(factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointHead.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointHead.getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointHead.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointHead.getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointHead.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -517,7 +517,7 @@ public class FVectorTest {
 
             fVector.setBaseRef(factory.getFPoint());
 
-            assertNotSame(fVector.getBase(), fPointBase, "The FPoint reference is erroneous");
+            assertNotSame(fVector.getBaseRef(), fPointBase, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -549,7 +549,7 @@ public class FVectorTest {
             FPoint fPointHead = random.getFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertSame(fVector.getHead(), fPointHead, "The FPoint reference is erroneous");
+            assertSame(fVector.getHeadRef(), fPointHead, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -562,17 +562,17 @@ public class FVectorTest {
             fVector.setHead(factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointBase.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointBase.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointBase.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointBase.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointBase.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointBase.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -586,7 +586,7 @@ public class FVectorTest {
 
             fVector.setHead(factory.getFPoint());
 
-            assertSame(fVector.getHead(), fPointHead, "The FPoint reference is erroneous");
+            assertSame(fVector.getHeadRef(), fPointHead, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -610,17 +610,17 @@ public class FVectorTest {
             fVector.setHeadRef(factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointBase.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointBase.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointBase.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointBase.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointBase.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointBase.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -634,7 +634,7 @@ public class FVectorTest {
 
             fVector.setHeadRef(factory.getFPoint());
 
-            assertNotSame(fVector.getHead(), fPointHead, "The FPoint reference is incorrect");
+            assertNotSame(fVector.getHeadRef(), fPointHead, "The FPoint reference is incorrect");
         }
 
         @Test
@@ -669,17 +669,17 @@ public class FVectorTest {
             fVector.set(factory.getFPoint(), factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -694,8 +694,8 @@ public class FVectorTest {
             fVector.set(factory.getFPoint(), factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint references",
-                    () -> assertSame(fPointBase, fVector.getBase(), "The base FPoint is incorrect"),
-                    () -> assertSame(fPointHead, fVector.getHead(), "The head FPoint is incorrect")
+                    () -> assertSame(fPointBase, fVector.getBaseRef(), "The base FPoint is incorrect"),
+                    () -> assertSame(fPointHead, fVector.getHeadRef(), "The head FPoint is incorrect")
             );
         }
 
@@ -726,17 +726,17 @@ public class FVectorTest {
             fVector.setRef(factory.getFPoint(), factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -751,8 +751,8 @@ public class FVectorTest {
             fVector.setRef(factory.getFPoint(), factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint references",
-                    () -> assertNotSame(fVector.getBase(), fPointBase, "The base FPoint is incorrect"),
-                    () -> assertNotSame(fVector.getHead(), fPointHead, "The head FPoint is incorrect")
+                    () -> assertNotSame(fVector.getBaseRef(), fPointBase, "The base FPoint is incorrect"),
+                    () -> assertNotSame(fVector.getHeadRef(), fPointHead, "The head FPoint is incorrect")
             );
         }
 
@@ -793,17 +793,17 @@ public class FVectorTest {
             fVector.set(fVectorRef);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVectorRef.getBase().getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fVectorRef.getBaseRef().getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fVectorRef.getBase().getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fVectorRef.getBaseRef().getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fVectorRef.getBase().getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fVectorRef.getBaseRef().getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fVectorRef.getHead().getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fVectorRef.getHeadRef().getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fVectorRef.getHead().getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fVectorRef.getHeadRef().getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fVectorRef.getHead().getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fVectorRef.getHeadRef().getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -817,9 +817,9 @@ public class FVectorTest {
             fVector.set(fVectorRef);
 
             Assertions.assertAll("Validate FPoint references",
-                    () -> assertNotSame(fVectorRef.getBase(), fVector.getBase(),
+                    () -> assertNotSame(fVectorRef.getBaseRef(), fVector.getBaseRef(),
                             "The base FPoint is incorrect"),
-                    () -> assertNotSame(fVectorRef.getHead(), fVector.getHead(),
+                    () -> assertNotSame(fVectorRef.getHeadRef(), fVector.getHeadRef(),
                             "The head FPoint is incorrect")
             );
         }
@@ -841,17 +841,17 @@ public class FVectorTest {
             fVector.setSphericalCoordinates(Math.PI * 0.5, Math.PI * 0.5);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(1, fVector.getBase().getX(),
+                    () -> assertEquals(1, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getBase().getY(),
+                    () -> assertEquals(1, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getX(),
+                    () -> assertEquals(1, fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getY(),
+                    () -> assertEquals(1, fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getZ(),
+                    () -> assertEquals(1, fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -874,9 +874,9 @@ public class FVectorTest {
             fVector.setRandomAngle(fPointHead);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getBase()),
+                    () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getBaseRef()),
                     "The base FPoint is erroneous"),
-                    () -> assertFalse(factory.getFPoint(2, 1, 0).isExact(fVector.getHead()),
+                    () -> assertFalse(factory.getFPoint(2, 1, 0).isExact(fVector.getHeadRef()),
                     "The head FPoint has not been randomized")
             );
         }
@@ -903,17 +903,17 @@ public class FVectorTest {
             fVector.moveBase(fPointRel);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRel.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointRel.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointRel.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointRel.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -941,17 +941,17 @@ public class FVectorTest {
             fVector.moveBase(fPointRel.getX(), fPointRel.getY(), fPointRel.getZ());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRel.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointRel.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointRel.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointRel.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -977,17 +977,17 @@ public class FVectorTest {
             fVector.moveBase();
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getBase().getX(),
+                    () -> assertEquals(0, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getY(),
+                    () -> assertEquals(0, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1014,17 +1014,17 @@ public class FVectorTest {
             fVector.moveHead(fPointRel);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRel.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRel.getX(), fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRel.getY(), fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRel.getZ(), fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1052,17 +1052,17 @@ public class FVectorTest {
             fVector.moveHead(fPointRel.getX(), fPointRel.getY(), fPointRel.getZ());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRel.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRel.getX(), fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRel.getY(), fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRel.getZ(), fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1088,17 +1088,17 @@ public class FVectorTest {
             fVector.moveHead();
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getX(),
+                    () -> assertEquals(0, fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getY(),
+                    () -> assertEquals(0, fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1120,7 +1120,7 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy()
                     .moveBase(fVector.copy()
                             .setLength(distance)
-                            .getHead());
+                            .getHeadRef());
 
             fVector.moveForward(distance);
 
@@ -1179,7 +1179,7 @@ public class FVectorTest {
                     .moveBase(fVector.copy()
                             .setLength(distance)
                             .reflectHead()
-                            .getHead());
+                            .getHeadRef());
 
             fVector.moveBackward(distance);
 
@@ -1234,22 +1234,22 @@ public class FVectorTest {
             FVector fVectorSum = factory.getFVector(random.getFPoint(), random.getFPoint());
             FVector fVector = factory.getFVector(random.getFPoint(), random.getFPoint());
 
-            FPoint fPointRef = fVector.getHead().copy().add(fVectorSum.getHead().copy().sub(fVectorSum.getBase()));
+            FPoint fPointRef = fVector.getHeadRef().copy().add(fVectorSum.getHeadRef().copy().sub(fVectorSum.getBaseRef()));
 
             fVector.add(fVectorSum);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVector.getBase().getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fVector.getBaseRef().getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fVector.getBase().getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fVector.getBaseRef().getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fVector.getBase().getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fVector.getBaseRef().getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1269,22 +1269,22 @@ public class FVectorTest {
             FVector fVectorSub = factory.getFVector(random.getFPoint(), random.getFPoint());
             FVector fVector = factory.getFVector(random.getFPoint(), random.getFPoint());
 
-            FPoint fPointRef = fVector.getHead().copy().sub(fVectorSub.getHead().copy().sub(fVectorSub.getBase()));
+            FPoint fPointRef = fVector.getHeadRef().copy().sub(fVectorSub.getHeadRef().copy().sub(fVectorSub.getBaseRef()));
 
             fVector.sub(fVectorSub);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVector.getBase().getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fVector.getBaseRef().getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fVector.getBase().getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fVector.getBaseRef().getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fVector.getBase().getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fVector.getBaseRef().getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHeadRef().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHeadRef().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHeadRef().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1303,9 +1303,9 @@ public class FVectorTest {
         void getLengthX() {
             FVector fVector = factory.getFVector(random.getFPoint(), random.getFPoint());
 
-            assertEquals(Math.abs(fVector.getHead().getX() - fVector.getBase().getX()), fVector.getLengthX(),
+            assertEquals(Math.abs(fVector.getHeadRef().getX() - fVector.getBaseRef().getX()), fVector.getLengthX(),
                     "The X length is incorrect");
-            assertEquals(Math.abs(fVector.getBase().getX() - fVector.getHead().getX()), fVector.getLengthX(),
+            assertEquals(Math.abs(fVector.getBaseRef().getX() - fVector.getHeadRef().getX()), fVector.getLengthX(),
                     "The X length is incorrect");
         }
 
@@ -1322,9 +1322,9 @@ public class FVectorTest {
         void getLengthY() {
             FVector fVector = factory.getFVector(random.getFPoint(), random.getFPoint());
 
-            assertEquals(Math.abs(fVector.getHead().getY() - fVector.getBase().getY()), fVector.getLengthY(),
+            assertEquals(Math.abs(fVector.getHeadRef().getY() - fVector.getBaseRef().getY()), fVector.getLengthY(),
                     "The Y length is incorrect");
-            assertEquals(Math.abs(fVector.getBase().getY() - fVector.getHead().getY()), fVector.getLengthY(),
+            assertEquals(Math.abs(fVector.getBaseRef().getY() - fVector.getHeadRef().getY()), fVector.getLengthY(),
                     "The Y length is incorrect");
         }
 
@@ -1341,9 +1341,9 @@ public class FVectorTest {
         void getLengthZ() {
             FVector fVector = factory.getFVector(random.getFPoint(), random.getFPoint());
 
-            assertEquals(Math.abs(fVector.getHead().getZ() - fVector.getBase().getZ()), fVector.getLengthZ(),
+            assertEquals(Math.abs(fVector.getHeadRef().getZ() - fVector.getBaseRef().getZ()), fVector.getLengthZ(),
                     "The Z length is incorrect");
-            assertEquals(Math.abs(fVector.getBase().getZ() - fVector.getHead().getZ()), fVector.getLengthZ(),
+            assertEquals(Math.abs(fVector.getBaseRef().getZ() - fVector.getHeadRef().getZ()), fVector.getLengthZ(),
                     "The Z length is incorrect");
         }
 
@@ -1428,17 +1428,17 @@ public class FVectorTest {
             fVector.setLength(Math.sqrt(3));
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(3, fVector.getBase().getX(),
+                    () -> assertEquals(3, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(3, fVector.getBase().getY(),
+                    () -> assertEquals(3, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getBase().getZ(),
+                    () -> assertEquals(3, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(4, fVector.getHead().getX(),
+                    () -> assertEquals(4, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(4, fVector.getHead().getY(),
+                    () -> assertEquals(4, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(4, fVector.getHead().getZ(),
+                    () -> assertEquals(4, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1524,17 +1524,17 @@ public class FVectorTest {
             fVector.reflectHead();
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(1, fVector.getBase().getX(),
+                    () -> assertEquals(1, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getBase().getY(),
+                    () -> assertEquals(2, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getBase().getZ(),
+                    () -> assertEquals(3, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getHead().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getHead().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getHead().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1559,17 +1559,17 @@ public class FVectorTest {
             fVector.reflectBase();
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getBase().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getBase().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getBase().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getX(),
+                    () -> assertEquals(1, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getY(),
+                    () -> assertEquals(2, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getHead().getZ(),
+                    () -> assertEquals(3, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1582,17 +1582,17 @@ public class FVectorTest {
             fVector.reflectBase();
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(3, fVector.getBase().getX(),
+                    () -> assertEquals(3, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(3, fVector.getBase().getY(),
+                    () -> assertEquals(3, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getBase().getZ(),
+                    () -> assertEquals(3, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getX(),
+                    () -> assertEquals(2, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getY(),
+                    () -> assertEquals(2, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getZ(),
+                    () -> assertEquals(2, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1613,8 +1613,8 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
             FPoint fPoint = random.getFPoint();
 
-            FVector fVectorRef = factory.getFVector(fVector.getBase().copy().reflect(fPoint),
-                    fVector.getHead().copy().reflect(fPoint));
+            FVector fVectorRef = factory.getFVector(fVector.getBaseRef().copy().reflect(fPoint),
+                    fVector.getHeadRef().copy().reflect(fPoint));
 
             fVector.reflect(fPoint);
 
@@ -1652,17 +1652,17 @@ public class FVectorTest {
             fVector.invertDirection();
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(4, fVector.getBase().getX(),
+                    () -> assertEquals(4, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(5, fVector.getBase().getY(),
+                    () -> assertEquals(5, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(6, fVector.getBase().getZ(),
+                    () -> assertEquals(6, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getX(),
+                    () -> assertEquals(1, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getY(),
+                    () -> assertEquals(2, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getHead().getZ(),
+                    () -> assertEquals(3, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1704,17 +1704,17 @@ public class FVectorTest {
             fVector.setInclination(Math.PI * 0.5);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(1, fVector.getBase().getX(),
+                    () -> assertEquals(1, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getBase().getY(),
+                    () -> assertEquals(1, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(2, fVector.getHead().getX(),
+                    () -> assertEquals(2, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getY(),
+                    () -> assertEquals(1, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getHead().getZ(),
+                    () -> assertEquals(0, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1756,17 +1756,17 @@ public class FVectorTest {
             fVector.setAzimuth(Math.PI * 0.5);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(1, fVector.getBase().getX(),
+                    () -> assertEquals(1, fVector.getBaseRef().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getBase().getY(),
+                    () -> assertEquals(1, fVector.getBaseRef().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getBase().getZ(),
+                    () -> assertEquals(0, fVector.getBaseRef().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getX(),
+                    () -> assertEquals(1, fVector.getHeadRef().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getY(),
+                    () -> assertEquals(1, fVector.getHeadRef().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(1, fVector.getHead().getZ(),
+                    () -> assertEquals(1, fVector.getHeadRef().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1897,7 +1897,7 @@ public class FVectorTest {
         @DisplayName("Get angle with FPoint (throw IllegalStateException, position)")
         void getAngleWithFPointThrowIllegalStateExceptionPosition() {
             FVector fVector = random.getFVector();
-            FPoint fPoint = fVector.getBase().copy();
+            FPoint fPoint = fVector.getBaseRef().copy();
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVector.getAngle(fPoint),
                     "The argument FPoint is at the same position as the base FPoint");
@@ -1942,7 +1942,7 @@ public class FVectorTest {
         @DisplayName("Set angle with FPoint (throw IllegalStateException, base)")
         void setAngleWithFPointThrowIllegalStateExceptionBase() {
             FVector fVector = random.getFVector();
-            FPoint fPoint = fVector.getBase().copy();
+            FPoint fPoint = fVector.getBaseRef().copy();
             double angle = Math.abs(random.getDouble() % Math.PI);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVector.setAngle(fPoint, angle),
@@ -1953,7 +1953,7 @@ public class FVectorTest {
         @DisplayName("Set angle with FPoint (throw IllegalStateException, head)")
         void setAngleWithFPointThrowIllegalStateExceptionHead() {
             FVector fVector = random.getFVector();
-            FPoint fPoint = fVector.getHead().copy();
+            FPoint fPoint = fVector.getHeadRef().copy();
             double angle = Math.abs(random.getDouble() % Math.PI);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVector.setAngle(fPoint, angle),
@@ -2054,7 +2054,7 @@ public class FVectorTest {
         @DisplayName("Rotate with FPoint (throw IllegalStateException)")
         void rotateWithFPointThrowIllegalStateException() {
             FVector fVector = random.getFVector();
-            FPoint fPoint = fVector.getBase().copy();
+            FPoint fPoint = fVector.getBaseRef().copy();
             double angle = Math.abs(random.getDouble() % Math.PI);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVector.rotate(fPoint, angle),
@@ -2130,8 +2130,8 @@ public class FVectorTest {
             fVectorA.moveBase(factory.getFPoint());
             fVectorB.moveBase(factory.getFPoint());
 
-            FPoint fPointA = fVectorA.getHead();
-            FPoint fPointB = fVectorB.getHead();
+            FPoint fPointA = fVectorA.getHeadRef();
+            FPoint fPointB = fVectorB.getHeadRef();
 
             double dimX = fPointA.getX() * fPointB.getX();
             double dimY = fPointA.getY() * fPointB.getY();
@@ -2167,12 +2167,12 @@ public class FVectorTest {
 
             double result = fVector.getDotProduct(fPoint);
 
-            fPoint.sub(fVector.getBase());
+            fPoint.sub(fVector.getBaseRef());
             fVector.moveBase();
 
-            double dimX = fPoint.getX() * fVector.getHead().getX();
-            double dimY = fPoint.getY() * fVector.getHead().getY();
-            double dimZ = fPoint.getZ() * fVector.getHead().getZ();
+            double dimX = fPoint.getX() * fVector.getHeadRef().getX();
+            double dimY = fPoint.getY() * fVector.getHeadRef().getY();
+            double dimZ = fPoint.getZ() * fVector.getHeadRef().getZ();
 
             Assertions.assertEquals(dimX + dimY + dimZ, result, jitter, "The value is not correct");
         }
@@ -2194,13 +2194,13 @@ public class FVectorTest {
 
             FVector fVectorRes = fVectorA.copy().setCrossProduct(fVectorB);
 
-            FPoint fPointRel = fVectorA.getBase().copy();
+            FPoint fPointRel = fVectorA.getBaseRef().copy();
 
             fVectorA.moveBase(factory.getFPoint());
             fVectorB.moveBase(factory.getFPoint());
 
-            FPoint fPointA = fVectorA.getHead();
-            FPoint fPointB = fVectorB.getHead();
+            FPoint fPointA = fVectorA.getHeadRef();
+            FPoint fPointB = fVectorB.getHeadRef();
 
             double dimX = (fPointA.getY() * fPointB.getZ()) - (fPointA.getZ() * fPointB.getY());
             double dimY = (fPointA.getZ() * fPointB.getX()) - (fPointA.getX() * fPointB.getZ());
@@ -2243,14 +2243,14 @@ public class FVectorTest {
             FPoint fPoint = random.getFPoint();
 
             FVector fVectorRes = fVector.copy().setCrossProduct(fPoint);
-            FPoint fPointRel = fVector.getBase().copy();
+            FPoint fPointRel = fVector.getBaseRef().copy();
 
             fPoint.sub(fPointRel);
             fVector.moveBase(0, 0, 0);
 
-            double dimX = (fVector.getHead().getY() * fPoint.getZ()) - (fVector.getHead().getZ() * fPoint.getY());
-            double dimY = (fVector.getHead().getZ() * fPoint.getX()) - (fVector.getHead().getX() * fPoint.getZ());
-            double dimZ = (fVector.getHead().getX() * fPoint.getY()) - (fVector.getHead().getY() * fPoint.getX());
+            double dimX = (fVector.getHeadRef().getY() * fPoint.getZ()) - (fVector.getHeadRef().getZ() * fPoint.getY());
+            double dimY = (fVector.getHeadRef().getZ() * fPoint.getX()) - (fVector.getHeadRef().getX() * fPoint.getZ());
+            double dimZ = (fVector.getHeadRef().getX() * fPoint.getY()) - (fVector.getHeadRef().getY() * fPoint.getX());
 
             FVector fVectorRef = factory.getFVector(factory.getFPoint(dimX, dimY, dimZ));
             fVectorRef.moveBase(fPointRel);
@@ -2313,7 +2313,7 @@ public class FVectorTest {
         @DisplayName("Is collinear (fail)")
         void isCollinearFail() {
             FVector fVectorA = factory.getFVector(random.getFPoint());
-            FVector fVectorB = factory.getFVector(random.getFPoint(fVectorA.getHead()));
+            FVector fVectorB = factory.getFVector(random.getFPoint(fVectorA.getHeadRef()));
 
             fVectorA.moveBase(random.getFPoint());
             fVectorB.moveBase(random.getFPoint());
@@ -2375,7 +2375,7 @@ public class FVectorTest {
         @DisplayName("Is parallel (fail)")
         void isParallelFail() {
             FVector fVectorA = factory.getFVector(random.getFPoint());
-            FVector fVectorB = factory.getFVector(random.getFPoint(fVectorA.getHead()));
+            FVector fVectorB = factory.getFVector(random.getFPoint(fVectorA.getHeadRef()));
 
             fVectorA.moveBase(random.getFPoint());
             fVectorB.moveBase(random.getFPoint());
@@ -2489,7 +2489,7 @@ public class FVectorTest {
         @DisplayName("Is anti-parallel (fail)")
         void isAntiParallelFail() {
             FVector fVectorA = factory.getFVector(random.getFPoint());
-            FVector fVectorB = factory.getFVector(random.getFPoint(fVectorA.getHead()));
+            FVector fVectorB = factory.getFVector(random.getFPoint(fVectorA.getHeadRef()));
 
             fVectorA.moveBase(random.getFPoint());
             fVectorB.moveBase(random.getFPoint());
@@ -2667,8 +2667,8 @@ public class FVectorTest {
         void setOrthogonalSameBase() {
             FVector fVectorA = random.getFVector();
 
-            FPoint fVectorBHead = random.getFPoint(fVectorA.getHead());
-            FVector fVectorB = factory.getFVector(fVectorA.getBase().copy(), fVectorBHead);
+            FPoint fVectorBHead = random.getFPoint(fVectorA.getHeadRef());
+            FVector fVectorB = factory.getFVector(fVectorA.getBaseRef().copy(), fVectorBHead);
 
             fVectorA.setOrthogonal(fVectorB);
 
@@ -2704,8 +2704,8 @@ public class FVectorTest {
         void setOrthogonalSameHead() {
             FVector fVectorA = random.getFVector();
 
-            FPoint fVectorBBase = random.getFPoint(fVectorA.getBase());
-            FVector fVectorB = factory.getFVector(fVectorBBase, fVectorA.getHead().copy());
+            FPoint fVectorBBase = random.getFPoint(fVectorA.getBaseRef());
+            FVector fVectorB = factory.getFVector(fVectorBBase, fVectorA.getHeadRef().copy());
 
             fVectorA.setOrthogonal(fVectorB);
 
@@ -2809,9 +2809,9 @@ public class FVectorTest {
             FVector fVector = factory.getFVector().importFromJSON(fVectorRef.exportToJSON());
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertTrue(fVectorRef.getBase().isExact(fVector.getBase()),
+                    () -> assertTrue(fVectorRef.getBaseRef().isExact(fVector.getBaseRef()),
                             "The base FPoint is incorrect"),
-                    () -> assertTrue(fVectorRef.getHead().isExact(fVector.getHead()),
+                    () -> assertTrue(fVectorRef.getHeadRef().isExact(fVector.getHeadRef()),
                             "The head FPoint is incorrect")
             );
         }
@@ -3028,9 +3028,9 @@ public class FVectorTest {
                             "FVectors represent different objects"),
                     () -> assertTrue(fVectorA.isExact(fVectorB),
                             "FVectors should have the same values"),
-                    () -> assertNotSame(fVectorA.getBase(), fVectorB.getBase(),
+                    () -> assertNotSame(fVectorA.getBaseRef(), fVectorB.getBaseRef(),
                             "The base FPoints should be different"),
-                    () -> assertNotSame(fVectorA.getHead(), fVectorB.getHead(),
+                    () -> assertNotSame(fVectorA.getHeadRef(), fVectorB.getHeadRef(),
                             "The head FPoints should be different")
             );
         }
@@ -3060,9 +3060,9 @@ public class FVectorTest {
             fVector.add(fPoint);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().add(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().add(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3086,9 +3086,9 @@ public class FVectorTest {
             fVector.add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().add(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().add(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3111,9 +3111,9 @@ public class FVectorTest {
             fVector.add(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().add(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().add(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().add(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().add(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3136,9 +3136,9 @@ public class FVectorTest {
             fVector.addX(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().addX(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().addX(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().addX(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().addX(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3161,9 +3161,9 @@ public class FVectorTest {
             fVector.addY(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().addY(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().addY(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().addY(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().addY(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3186,9 +3186,9 @@ public class FVectorTest {
             fVector.addZ(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().addZ(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().addZ(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().addZ(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().addZ(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3211,9 +3211,9 @@ public class FVectorTest {
             fVector.sub(fPoint);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().sub(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().sub(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3237,9 +3237,9 @@ public class FVectorTest {
             fVector.sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().sub(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().sub(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3262,9 +3262,9 @@ public class FVectorTest {
             fVector.sub(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().sub(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().sub(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().sub(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().sub(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3287,9 +3287,9 @@ public class FVectorTest {
             fVector.subX(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().subX(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().subX(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().subX(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().subX(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3312,9 +3312,9 @@ public class FVectorTest {
             fVector.subY(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().subY(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().subY(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().subY(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().subY(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3337,9 +3337,9 @@ public class FVectorTest {
             fVector.subZ(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().subZ(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().subZ(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().subZ(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().subZ(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3362,9 +3362,9 @@ public class FVectorTest {
             fVector.mul(fPoint);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().mul(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().mul(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3388,9 +3388,9 @@ public class FVectorTest {
             fVector.mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().mul(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().mul(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3413,9 +3413,9 @@ public class FVectorTest {
             fVector.mul(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().mul(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().mul(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().mul(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().mul(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3438,9 +3438,9 @@ public class FVectorTest {
             fVector.mulX(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().mulX(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().mulX(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().mulX(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().mulX(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3463,9 +3463,9 @@ public class FVectorTest {
             fVector.mulY(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().mulY(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().mulY(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().mulY(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().mulY(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3488,9 +3488,9 @@ public class FVectorTest {
             fVector.mulZ(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().mulZ(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().mulZ(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().mulZ(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().mulZ(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3513,9 +3513,9 @@ public class FVectorTest {
             fVector.div(fPoint);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().div(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().div(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3557,9 +3557,9 @@ public class FVectorTest {
             fVector.div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().div(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().div(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3597,9 +3597,9 @@ public class FVectorTest {
             fVector.div(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().div(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().div(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().div(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().div(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3631,9 +3631,9 @@ public class FVectorTest {
             fVector.divX(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().divX(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().divX(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().divX(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().divX(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3664,9 +3664,9 @@ public class FVectorTest {
             fVector.divY(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().divY(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().divY(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().divY(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().divY(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3697,9 +3697,9 @@ public class FVectorTest {
             fVector.divZ(value);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fVector.getBase().isExact(fVectorRef.getBase().copy().divZ(value)),
+                    () -> assertTrue(fVector.getBaseRef().isExact(fVectorRef.getBaseRef().copy().divZ(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getHead().isExact(fVectorRef.getHead().copy().divZ(value)),
+                    () -> assertTrue(fVector.getHeadRef().isExact(fVectorRef.getHeadRef().copy().divZ(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -3729,8 +3729,8 @@ public class FVectorTest {
 
             Assertions.assertAll("Validate FPoint list",
                     () -> Assertions.assertEquals(2, list.size(), "The size of the list is incorrect"),
-                    () -> assertSame(fVector.getBase(), list.get(0), "The base FPoint is incorrect"),
-                    () -> assertSame(fVector.getHead(), list.get(1), "The head FPoint is incorrect")
+                    () -> assertSame(fVector.getBaseRef(), list.get(0), "The base FPoint is incorrect"),
+                    () -> assertSame(fVector.getHeadRef(), list.get(1), "The head FPoint is incorrect")
             );
         }
 
@@ -3751,8 +3751,8 @@ public class FVectorTest {
             fVectorRef.imprint(fVector);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVector.getBase(), fVector.getBase(), "The base FPoint is incorrect"),
-                    () -> assertEquals(fVector.getHead(), fVector.getHead(), "The head FPoint is incorrect")
+                    () -> assertEquals(fVector.getBaseRef(), fVector.getBaseRef(), "The base FPoint is incorrect"),
+                    () -> assertEquals(fVector.getHeadRef(), fVector.getHeadRef(), "The head FPoint is incorrect")
             );
         }
 
@@ -3767,9 +3767,9 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotSame(fVectorRef, fVector,
                             "FVectors should point to different objects"),
-                    () -> assertNotSame(fVectorRef.getBase(), fVector.getBase(),
+                    () -> assertNotSame(fVectorRef.getBaseRef(), fVector.getBaseRef(),
                             "The base FPoint reference is incorrect"),
-                    () -> assertNotSame(fVectorRef.getHead(), fVector.getHead(),
+                    () -> assertNotSame(fVectorRef.getHeadRef(), fVector.getHeadRef(),
                             "The head FPoint reference is incorrect")
             );
         }

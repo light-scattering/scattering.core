@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.immutable;
 
-import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
+import eu.scattering.core.design.core.data.position.FPos3DI;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

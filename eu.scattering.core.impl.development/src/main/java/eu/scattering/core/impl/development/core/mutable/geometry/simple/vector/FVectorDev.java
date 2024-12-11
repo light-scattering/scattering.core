@@ -1,5 +1,6 @@
 package eu.scattering.core.impl.development.core.mutable.geometry.simple.vector;
 
+import eu.scattering.core.design.core.data.position.FTuplePos3D;
 import eu.scattering.core.design.debug.stats.Stats;
 import eu.scattering.core.design.core.algebra.geometry.Geometry;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
@@ -1163,6 +1164,19 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
+    public FTuplePos3D toTuplePos3D() {
+
+        String name = "toTuplePos3D()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().toTuplePos3D();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
     public boolean isNonDirectional() {
 
         String name = "isNonDirectional()";
@@ -1202,6 +1216,32 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
+    public FVector set(FTuplePos3D tuple) {
+
+        String name = "set(FTuplePos3D)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(tuple);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector setBase(double bX, double bY, double bZ) {
+
+        String name = "setBase(double,double,double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setBase(bX, bY, bZ);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
     public FVector setRef(FPoint baseRef, FPoint headRef) {
 
         String name = "setRef(FPoint, FPoint)";
@@ -1215,12 +1255,12 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
-    public FPoint getBase() {
+    public FPoint getBaseRef() {
 
         String name = "getBase()";
         long time = System.currentTimeMillis();
 
-        var res = getCore().getBase();
+        var res = getCore().getBaseRef();
 
         updateStats(name, time);
 
@@ -1241,6 +1281,19 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
+    public FVector setHead(double hX, double hY, double hZ) {
+
+        String name = "setHead(double,double,double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setHead(hX, hY, hZ);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
     public FVector setBaseRef(FPoint baseRef) {
 
         String name = "setBaseRef(FPoint)";
@@ -1254,12 +1307,12 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
-    public FPoint getHead() {
+    public FPoint getHeadRef() {
 
         String name = "getHead()";
         long time = System.currentTimeMillis();
 
-        var res = getCore().getHead();
+        var res = getCore().getHeadRef();
 
         updateStats(name, time);
 
@@ -1273,6 +1326,162 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
         long time = System.currentTimeMillis();
 
         var res = getCore().setHead(head);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public double getBaseX() {
+
+        String name = "getBaseX()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getBaseX();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FVector setBaseX(double bX) {
+
+        String name = "setBaseX(double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setBaseX(bX);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public double getBaseY() {
+
+        String name = "getBaseY()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getBaseY();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FVector setBaseY(double bY) {
+
+        String name = "setBaseY(double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setBaseY(bY);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public double getBaseZ() {
+
+        String name = "getBaseZ()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getBaseZ();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FVector setBaseZ(double bZ) {
+
+        String name = "setBaseZ(double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setBaseZ(bZ);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public double getHeadX() {
+
+        String name = "getHeadX()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getHeadX();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FVector setHeadX(double hX) {
+
+        String name = "setHeadX(double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setHeadX(hX);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public double getHeadY() {
+
+        String name = "getHeadY()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getHeadY();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FVector setHeadY(double hY) {
+
+        String name = "setHeadY(double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setHeadY(hY);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public double getHeadZ() {
+
+        String name = "getHeadZ()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().getHeadZ();
+
+        updateStats(name, time);
+
+        return res;
+    }
+
+    @Override
+    public FVector setHeadZ(double hZ) {
+
+        String name = "setHeadZ(double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setHeadZ(hZ);
 
         updateStats(name, time);
 

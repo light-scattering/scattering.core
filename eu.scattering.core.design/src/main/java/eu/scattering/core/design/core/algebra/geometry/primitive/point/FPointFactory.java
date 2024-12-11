@@ -4,6 +4,8 @@ public interface FPointFactory {
 
     FPoint getFPoint();
 
+    //--------------------------------------------------
+
     default FPoint getFPoint(double x) {
 
         return getFPoint().setX(x);

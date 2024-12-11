@@ -1,4 +1,4 @@
-package eu.scattering.core.design.core.data.pos2DI;
+package eu.scattering.core.design.core.data.position;
 
 import org.json.JSONObject;
 

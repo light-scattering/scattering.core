@@ -102,10 +102,10 @@ public class RandomHelperProd implements FRandomHelper {
             value = getRandomFVector();
 
             for (FVector singularity : exclusion) {
-                boolean conditionBaseA = value.getBase().getDistance(singularity.getBase()) < spacing;
-                boolean conditionBaseB = value.getBase().getDistance(singularity.getHead()) < spacing;
-                boolean conditionHeadA = value.getHead().getDistance(singularity.getBase()) < spacing;
-                boolean conditionHeadB = value.getHead().getDistance(singularity.getHead()) < spacing;
+                boolean conditionBaseA = value.getBaseRef().getDistance(singularity.getBaseRef()) < spacing;
+                boolean conditionBaseB = value.getBaseRef().getDistance(singularity.getHeadRef()) < spacing;
+                boolean conditionHeadA = value.getHeadRef().getDistance(singularity.getBaseRef()) < spacing;
+                boolean conditionHeadB = value.getHeadRef().getDistance(singularity.getHeadRef()) < spacing;
 
                 if (conditionBaseA || conditionBaseB || conditionHeadA || conditionHeadB) {
                     continue mainLoop;

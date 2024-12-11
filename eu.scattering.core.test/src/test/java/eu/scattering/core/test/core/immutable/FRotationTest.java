@@ -27,7 +27,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FPoint",
                 () -> assertEquals(angle, fRotation.getRotationAngle(),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(fRotation.getRotationAxis().isParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector().set(fRotation.getRotationAxis()).isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -43,7 +43,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FPoint",
                 () -> assertEquals(-angle, fRotation.getRotationAngle(),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(fRotation.getRotationAxis().isAntiParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector().set(fRotation.getRotationAxis()).isAntiParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -59,7 +59,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FPoint",
                 () -> assertEquals(angle, fRotation.getRotationAngle(),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(fRotation.getRotationAxis().isParallel(axis),
+                () -> assertTrue(factory.getFVector().set(fRotation.getRotationAxis()).isParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -75,7 +75,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FPoint",
                 () -> assertEquals(-angle, fRotation.getRotationAngle(),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(fRotation.getRotationAxis().isAntiParallel(axis),
+                () -> assertTrue(factory.getFVector().set(fRotation.getRotationAxis()).isAntiParallel(axis),
                         "The axis is incorrect")
         );
     }

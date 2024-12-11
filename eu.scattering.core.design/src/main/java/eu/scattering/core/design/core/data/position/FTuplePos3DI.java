@@ -1,8 +1,6 @@
-package eu.scattering.core.design.core.data.tuplePos3DI;
+package eu.scattering.core.design.core.data.position;
 
 import eu.scattering.core.design.core.Core;
-import eu.scattering.core.design.core.data.pos3D.FPos3D;
-import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,17 +16,17 @@ public class FTuplePos3DI implements Core<FTuplePos3DI> {
         this.posB = posB;
     }
 
-    public static FTuplePos3DI create(FPos3DI posA, FPos3DI posB) {
+    protected static FTuplePos3DI create(FPos3DI posA, FPos3DI posB) {
 
         return new FTuplePos3DI(posA, posB);
     }
 
-    public static FTuplePos3DI create(String text) {
+    protected static FTuplePos3DI create(String text) {
 
         return create(new JSONObject(text));
     }
 
-    public static FTuplePos3DI create(JSONObject json) {
+    protected static FTuplePos3DI create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 
         FPos3DI posA = FPos3DI.create(structure.getJSONObject(0));

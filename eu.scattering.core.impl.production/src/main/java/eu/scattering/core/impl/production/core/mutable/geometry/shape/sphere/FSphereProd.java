@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.shape.sphere;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
+import eu.scattering.core.design.core.data.position.FPos3DI;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.core.algebra.geometry.shape.Shape;
@@ -138,7 +138,7 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
 
         class SurfaceMeshIterable implements Iterable<FPoint> {
 
-            final FPoint sphereCenter = getAxisOX().getBase();
+            final FPoint sphereCenter = getAxisOX().getBaseRef();
             final double sphereRadius = FSphereProd.this.getOuterRadius();
             final int numberOfPoints = (int) Math.round(getAlgebraicSurface() / (distance * distance));
 

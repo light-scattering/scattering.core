@@ -8,7 +8,7 @@ import eu.scattering.core.design.core.algebra.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.core.algebra.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.core.algebra.number.complex.FComplex;
 import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
+import eu.scattering.core.design.core.data.position.FPos3DI;
 import eu.scattering.core.design.core.engine.rotation.FRotation;
 import eu.scattering.core.design.helper.angle.FAngleHelper;
 import eu.scattering.core.design.helper.random.FRandomHelper;

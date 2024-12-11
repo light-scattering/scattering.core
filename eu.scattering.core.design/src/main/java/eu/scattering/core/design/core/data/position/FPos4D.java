@@ -1,4 +1,4 @@
-package eu.scattering.core.design.core.data.pos4D;
+package eu.scattering.core.design.core.data.position;
 
 import eu.scattering.core.design.core.Core;
 import org.json.JSONArray;
@@ -20,17 +20,17 @@ public class FPos4D implements Core<FPos4D> {
         this.d3 = d3;
     }
 
-    public static FPos4D create(double d0, double d1, double d2, double d3) {
+    protected static FPos4D create(double d0, double d1, double d2, double d3) {
 
         return new FPos4D(d0, d1, d2, d3);
     }
 
-    public static FPos4D create(String json) {
+    protected static FPos4D create(String json) {
 
         return create(new JSONObject(json));
     }
 
-    public static FPos4D create(JSONObject json) {
+    protected static FPos4D create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 
         double d0 = structure.getInt(0);

@@ -1,10 +1,5 @@
-package eu.scattering.core.design.core.data.pos4D;
+package eu.scattering.core.design.core.data.position;
 
-import eu.scattering.core.design.core.data.pos2D.FPos2D;
-import eu.scattering.core.design.core.data.pos2DI.FPos2DI;
-import eu.scattering.core.design.core.data.pos3D.FPos3D;
-import eu.scattering.core.design.core.data.pos3DI.FPos3DI;
-import eu.scattering.core.design.core.data.pos4DI.FPos4DI;
 import org.json.JSONObject;
 
 public interface FPos4DFactory {
