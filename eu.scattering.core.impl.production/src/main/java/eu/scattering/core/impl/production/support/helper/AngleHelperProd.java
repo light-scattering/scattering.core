@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.support.helper;
 
-import eu.scattering.core.design.helper.angle.FAngleHelper;
+import eu.scattering.core.design.helpers.angle.FAngleHelper;
 
 public class AngleHelperProd implements FAngleHelper {
 

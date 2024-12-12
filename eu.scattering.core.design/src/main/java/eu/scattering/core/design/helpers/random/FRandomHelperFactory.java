@@ -1,4 +1,4 @@
-package eu.scattering.core.design.helper.random;
+package eu.scattering.core.design.helpers.random;
 
 public interface FRandomHelperFactory {
 

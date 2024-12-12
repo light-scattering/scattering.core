@@ -37,13 +37,13 @@ public abstract class AdvancedPresetProd<T extends Construct<T>>
     @Override
     public FPoint getBase() {
 
-        return getOrigin().getBaseRef();
+        return getOrigin().getRefBase();
     }
 
     @Override
     public FPoint getHead() {
 
-        return getOrigin().getHeadRef();
+        return getOrigin().getRefHead();
     }
 
     @Override

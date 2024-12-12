@@ -5,7 +5,7 @@ import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.core.algebra.number.complex.FComplex;
 import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.design.helper.random.FRandomHelper;
+import eu.scattering.core.design.helpers.random.FRandomHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -102,10 +102,10 @@ public class RandomHelperProd implements FRandomHelper {
             value = getRandomFVector();
 
             for (FVector singularity : exclusion) {
-                boolean conditionBaseA = value.getBaseRef().getDistance(singularity.getBaseRef()) < spacing;
-                boolean conditionBaseB = value.getBaseRef().getDistance(singularity.getHeadRef()) < spacing;
-                boolean conditionHeadA = value.getHeadRef().getDistance(singularity.getBaseRef()) < spacing;
-                boolean conditionHeadB = value.getHeadRef().getDistance(singularity.getHeadRef()) < spacing;
+                boolean conditionBaseA = value.getRefBase().getDistance(singularity.getRefBase()) < spacing;
+                boolean conditionBaseB = value.getRefBase().getDistance(singularity.getRefHead()) < spacing;
+                boolean conditionHeadA = value.getRefHead().getDistance(singularity.getRefBase()) < spacing;
+                boolean conditionHeadB = value.getRefHead().getDistance(singularity.getRefHead()) < spacing;
 
                 if (conditionBaseA || conditionBaseB || conditionHeadA || conditionHeadB) {
                     continue mainLoop;

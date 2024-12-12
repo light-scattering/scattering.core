@@ -205,16 +205,16 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint vPlane = getOrigin().copy().moveBase().normalize().getHeadRef();
-        FPoint vLine = ref.getOrigin().copy().moveBase().normalize().getHeadRef();
+        FPoint vPlane = getOrigin().copy().moveBase().normalize().getRefHead();
+        FPoint vLine = ref.getOrigin().copy().moveBase().normalize().getRefHead();
 
-        double dividend = vPlane.getDotProduct(getOrigin().getBaseRef().copy().sub(ref.getOrigin().getBaseRef()));
+        double dividend = vPlane.getDotProduct(getOrigin().getRefBase().copy().sub(ref.getOrigin().getRefBase()));
         double divisor = vPlane.getDotProduct(vLine);
         double distance = dividend / divisor;
 
         FVector extension = ref.getOrigin().copy().setLength(distance);
 
-        return Optional.of(extension.getHeadRef());
+        return Optional.of(extension.getRefHead());
     }
 
     @Override
@@ -224,10 +224,10 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint vPlane1 = getOrigin().copy().moveBase().getHeadRef();
+        FPoint vPlane1 = getOrigin().copy().moveBase().getRefHead();
         double d1 = -vPlane1.getDotProduct(getBase());
 
-        FPoint vPlane2 = ref.getOrigin().copy().moveBase().getHeadRef();
+        FPoint vPlane2 = ref.getOrigin().copy().moveBase().getRefHead();
         double d2 = -vPlane2.getDotProduct(ref.getBase());
 
         FPoint vPlanePar = vPlane1.copy().setCrossProduct(vPlane2);
@@ -241,38 +241,38 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectOnPlane(FPoint fPoint) {
-        FPoint opA = factory.getFPoint(getOrigin().getHeadRef())
-                .sub(getOrigin().getBaseRef())
+        FPoint opA = factory.getFPoint(getOrigin().getRefHead())
+                .sub(getOrigin().getRefBase())
                 .div(getOrigin().getLength());
 
         FPoint opB = factory.getFPoint(fPoint)
-                .sub(getOrigin().getBaseRef());
+                .sub(getOrigin().getRefBase());
 
         FPoint opC = factory.getFPoint()
-                .set(getOrigin().getBaseRef().copy().add(opA.mul(opB.getDotProduct(opA))));
+                .set(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         FVector translation = factory.getFVector(opC, fPoint.copy())
-                .moveBase(getOrigin().getBaseRef());
+                .moveBase(getOrigin().getRefBase());
 
-        return fPoint.set(translation.getHeadRef());
+        return fPoint.set(translation.getRefHead());
     }
 
     private FPoint projectOnLine(FPoint fPoint) {
-        FPoint opA = factory.getFPoint(getOrigin().getHeadRef())
-                .sub(getOrigin().getBaseRef())
+        FPoint opA = factory.getFPoint(getOrigin().getRefHead())
+                .sub(getOrigin().getRefBase())
                 .div(getOrigin().getLength());
 
         FPoint opB = factory.getFPoint(fPoint)
-                .sub(getOrigin().getBaseRef());
+                .sub(getOrigin().getRefBase());
 
-        return fPoint.set(getOrigin().getBaseRef().copy().add(opA.mul(opB.getDotProduct(opA))));
+        return fPoint.set(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
     }
 
     private boolean isInHalfSpace(FPoint projection) {
         double magnitude = getOrigin().getLength();
 
-        double distanceBase = getOrigin().getBaseRef().getDistance(projection);
-        double distanceHead = getOrigin().getHeadRef().getDistance(projection);
+        double distanceBase = getOrigin().getRefBase().getDistance(projection);
+        double distanceHead = getOrigin().getRefHead().getDistance(projection);
 
         double jitter = factory.getJitter();
 

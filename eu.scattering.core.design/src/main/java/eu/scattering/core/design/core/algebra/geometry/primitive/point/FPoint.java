@@ -1,11 +1,13 @@
 package eu.scattering.core.design.core.algebra.geometry.primitive.point;
 
+import eu.scattering.core.design.annotations.Radian;
+import eu.scattering.core.design.annotations.SphericalCoordinates;
+import eu.scattering.core.design.annotations.Utility;
 import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
 
 public interface FPoint extends Primitive<FPoint> {
 
     FPoint set(double x, double y, double z);
-//    FPoint set(FPos3D position);
 
     double getX();
     FPoint setX(double x);
@@ -15,6 +17,10 @@ public interface FPoint extends Primitive<FPoint> {
 
     double getZ();
     FPoint setZ(double z);
+
+    //--------------------------------------------------
+
+//    FPoint set(FPos3D position);
 
 //    FPos3D toFPos3D();
 
@@ -38,30 +44,41 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setDistance(FPoint ref, double distance);
 
     double getAngle(FPoint ref);
-    FPoint setAngle(FPoint ref, double angle);
+    FPoint setAngle(FPoint ref, @Radian double angle);
 
     double getDotProduct(FPoint ref);
 
     FPoint setCrossProduct(FPoint ref);
 
-    FPoint rotate(FPoint ref, double angle);
+    FPoint rotate(FPoint ref, @Radian double angle);
 
-    //--------------------------------------------------
+    @SphericalCoordinates
+    FPoint setSphericalCoordinates(@Radian double inclination, @Radian double azimuth);
 
+    @SphericalCoordinates
+    double getInclination();
+    @SphericalCoordinates
+    FPoint setInclination(@Radian double inclination);
+
+    @SphericalCoordinates
+    double getAzimuth();
+    @SphericalCoordinates
+    FPoint setAzimuth(@Radian double azimuth);
+
+    @Utility("Length squared")
     double getLengthP2();
+    @Utility("Distance squared")
     double getDistanceP2(FPoint ref);
 
-    //--------------------------------------------------
-    // Spherical coordinates
-    //--------------------------------------------------
 
-    FPoint setSphericalCoordinates(double inclination, double azimuth);
 
-    double getInclination();
-    FPoint setInclination(double inclination);
 
-    double getAzimuth();
-    FPoint setAzimuth(double azimuth);
+
+
+
+
+
+
 
     //--------------------------------------------------
     // Randomization

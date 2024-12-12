@@ -1190,19 +1190,6 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
-    public boolean isZero() {
-
-        String name = "isZero()";
-        long time = System.currentTimeMillis();
-
-        var res = getCore().isZero();
-
-        updateStats(name, time);
-
-        return res;
-    }
-
-    @Override
     public FVector set(FPoint base, FPoint head) {
 
         String name = "set(FPoint, FPoint)";
@@ -1255,12 +1242,12 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
-    public FPoint getBaseRef() {
+    public FPoint getRefBase() {
 
         String name = "getBase()";
         long time = System.currentTimeMillis();
 
-        var res = getCore().getBaseRef();
+        var res = getCore().getRefBase();
 
         updateStats(name, time);
 
@@ -1294,12 +1281,12 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
-    public FVector setBaseRef(FPoint baseRef) {
+    public FVector setRefBase(FPoint refBase) {
 
         String name = "setBaseRef(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = getCore().setBaseRef(baseRef);
+        var res = getCore().setRefBase(refBase);
 
         updateStats(name, time);
 
@@ -1307,12 +1294,12 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
-    public FPoint getHeadRef() {
+    public FPoint getRefHead() {
 
         String name = "getHead()";
         long time = System.currentTimeMillis();
 
-        var res = getCore().getHeadRef();
+        var res = getCore().getRefHead();
 
         updateStats(name, time);
 
@@ -1489,12 +1476,12 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
-    public FVector setHeadRef(FPoint headRef) {
+    public FVector setRefHead(FPoint refHead) {
 
         String name = "setHeadRef(FPoint)";
         long time = System.currentTimeMillis();
 
-        var res = getCore().setHeadRef(headRef);
+        var res = getCore().setRefHead(refHead);
 
         updateStats(name, time);
 

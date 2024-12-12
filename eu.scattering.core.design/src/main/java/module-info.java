@@ -17,7 +17,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.core.algebra.number.quaternion;
     exports eu.scattering.core.design.core.engine.rotation;
     exports eu.scattering.core.design.core.algebra.geometry.shape;
-    exports eu.scattering.core.design.helper.angle;
-    exports eu.scattering.core.design.helper.random;
+    exports eu.scattering.core.design.helpers.angle;
+    exports eu.scattering.core.design.helpers.random;
     exports eu.scattering.core.design.core.data.position;
 }

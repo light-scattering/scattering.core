@@ -516,7 +516,7 @@ public class FPlaneTest {
             FPoint fPoint = factory.getFVector(1, 1, 1)
                     .mul(jitter)
                     .moveBase(-1, 2, -1)
-                    .getHeadRef();
+                    .getRefHead();
 
             FPoint relocation = random.getFPoint();
 
@@ -534,7 +534,7 @@ public class FPlaneTest {
                     .mul(jitter)
                     .reflectHead()
                     .moveBase(-1, 2, -1)
-                    .getHeadRef();
+                    .getRefHead();
 
             FPoint relocation = random.getFPoint();
 
@@ -697,7 +697,7 @@ public class FPlaneTest {
                 fVector2 = factory.getFVector(1, 0, 0);
 
                 fVector1.setRandomAngle();
-                fVector2.setRandomAngle(fVector1.getHeadRef());
+                fVector2.setRandomAngle(fVector1.getRefHead());
 
                 fVector1.moveBase(random.getFPoint().div(100));
                 fVector2.moveBase(random.getFPoint().div(100));

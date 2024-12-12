@@ -1,5 +1,6 @@
 package eu.scattering.core.design.core.engine.rotation;
 
+import eu.scattering.core.design.annotations.GeometryExtension;
 import eu.scattering.core.design.core.algebra.geometry.Geometry;
 import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.core.data.position.FTuplePos3D;
@@ -14,9 +15,6 @@ public interface FRotation extends Engine<FRotation> {
     FTuplePos3D getRotationAxis();
     double getRotationAngle();
 
-    //--------------------------------------------------
-    // Extensions
-    //--------------------------------------------------
-
+    @GeometryExtension
     Consumer<Geometry> rotate();
 }

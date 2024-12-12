@@ -222,12 +222,12 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FPoint fPoint = getOrigin().getHeadRef().copy().sub(getOrigin().getBaseRef());
+        FPoint fPoint = getOrigin().getRefHead().copy().sub(getOrigin().getRefBase());
         double tmp = length / getOrigin().getLength();
 
-        fPoint.setX(getOrigin().getBaseRef().getX() + (fPoint.getX() * tmp));
-        fPoint.setY(getOrigin().getBaseRef().getY() + (fPoint.getY() * tmp));
-        fPoint.setZ(getOrigin().getBaseRef().getZ() + (fPoint.getZ() * tmp));
+        fPoint.setX(getOrigin().getRefBase().getX() + (fPoint.getX() * tmp));
+        fPoint.setY(getOrigin().getRefBase().getY() + (fPoint.getY() * tmp));
+        fPoint.setZ(getOrigin().getRefBase().getZ() + (fPoint.getZ() * tmp));
 
         return fPoint;
     }
@@ -239,16 +239,16 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        if (getOrigin().getBaseRef().getX() == getOrigin().getHeadRef().getX()) {
+        if (getOrigin().getRefBase().getX() == getOrigin().getRefHead().getX()) {
             return Optional.empty();
         }
 
-        double l = getOrigin().getHeadRef().getX() - getOrigin().getBaseRef().getX();
-        double m = getOrigin().getHeadRef().getY() - getOrigin().getBaseRef().getY();
-        double n = getOrigin().getHeadRef().getZ() - getOrigin().getBaseRef().getZ();
+        double l = getOrigin().getRefHead().getX() - getOrigin().getRefBase().getX();
+        double m = getOrigin().getRefHead().getY() - getOrigin().getRefBase().getY();
+        double n = getOrigin().getRefHead().getZ() - getOrigin().getRefBase().getZ();
 
-        double y = getOrigin().getBaseRef().getY() + (m / l * (x - getOrigin().getBaseRef().getX()));
-        double z = getOrigin().getBaseRef().getZ() + (n / l * (x - getOrigin().getBaseRef().getX()));
+        double y = getOrigin().getRefBase().getY() + (m / l * (x - getOrigin().getRefBase().getX()));
+        double z = getOrigin().getRefBase().getZ() + (n / l * (x - getOrigin().getRefBase().getX()));
 
         return Optional.of(factory.getFPoint(x, y, z));
     }
@@ -260,16 +260,16 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        if (getOrigin().getBaseRef().getY() == getOrigin().getHeadRef().getY()) {
+        if (getOrigin().getRefBase().getY() == getOrigin().getRefHead().getY()) {
             return Optional.empty();
         }
 
-        double l = getOrigin().getHeadRef().getX() - getOrigin().getBaseRef().getX();
-        double m = getOrigin().getHeadRef().getY() - getOrigin().getBaseRef().getY();
-        double n = getOrigin().getHeadRef().getZ() - getOrigin().getBaseRef().getZ();
+        double l = getOrigin().getRefHead().getX() - getOrigin().getRefBase().getX();
+        double m = getOrigin().getRefHead().getY() - getOrigin().getRefBase().getY();
+        double n = getOrigin().getRefHead().getZ() - getOrigin().getRefBase().getZ();
 
-        double x = getOrigin().getBaseRef().getX() + (l / m * (y - getOrigin().getBaseRef().getY()));
-        double z = getOrigin().getBaseRef().getZ() + (n / m * (y - getOrigin().getBaseRef().getY()));
+        double x = getOrigin().getRefBase().getX() + (l / m * (y - getOrigin().getRefBase().getY()));
+        double z = getOrigin().getRefBase().getZ() + (n / m * (y - getOrigin().getRefBase().getY()));
 
         return Optional.of(factory.getFPoint(x, y, z));
     }
@@ -281,16 +281,16 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        if (getOrigin().getBaseRef().getZ() == getOrigin().getHeadRef().getZ()) {
+        if (getOrigin().getRefBase().getZ() == getOrigin().getRefHead().getZ()) {
             return Optional.empty();
         }
 
-        double l = getOrigin().getHeadRef().getX() - getOrigin().getBaseRef().getX();
-        double m = getOrigin().getHeadRef().getY() - getOrigin().getBaseRef().getY();
-        double n = getOrigin().getHeadRef().getZ() - getOrigin().getBaseRef().getZ();
+        double l = getOrigin().getRefHead().getX() - getOrigin().getRefBase().getX();
+        double m = getOrigin().getRefHead().getY() - getOrigin().getRefBase().getY();
+        double n = getOrigin().getRefHead().getZ() - getOrigin().getRefBase().getZ();
 
-        double x = getOrigin().getBaseRef().getX() + (l / n * (z - getOrigin().getBaseRef().getZ()));
-        double y = getOrigin().getBaseRef().getY() + (m / n * (z - getOrigin().getBaseRef().getZ()));
+        double x = getOrigin().getRefBase().getX() + (l / n * (z - getOrigin().getRefBase().getZ()));
+        double y = getOrigin().getRefBase().getY() + (m / n * (z - getOrigin().getRefBase().getZ()));
 
         return Optional.of(factory.getFPoint(x, y, z));
     }
@@ -306,7 +306,7 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
         FVector u = projectOnPlane(dir, getOrigin().copy());
         FVector v = projectOnPlane(dir, ref.getOrigin().copy());
-        FVector w = factory.getFVector(v.getBaseRef(), u.getBaseRef());
+        FVector w = factory.getFVector(v.getRefBase(), u.getRefBase());
 
         v = getCrossProduct(dir, v);
 
@@ -344,18 +344,18 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
         switch (dir) {
             case "XY":
-                ref.getBaseRef().setZ(0);
-                ref.getHeadRef().setZ(0);
+                ref.getRefBase().setZ(0);
+                ref.getRefHead().setZ(0);
 
                 return ref;
             case "YZ":
-                ref.getBaseRef().setX(0);
-                ref.getHeadRef().setX(0);
+                ref.getRefBase().setX(0);
+                ref.getRefHead().setX(0);
 
                 return ref;
             case "XZ":
-                ref.getBaseRef().setY(0);
-                ref.getHeadRef().setY(0);
+                ref.getRefBase().setY(0);
+                ref.getRefHead().setY(0);
 
                 return ref;
         }
@@ -367,11 +367,11 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
         switch (dir) {
             case "XY":
-                return ref.setCrossProduct(ref.getBaseRef().copy().setZ(1));
+                return ref.setCrossProduct(ref.getRefBase().copy().setZ(1));
             case "YZ":
-                return ref.setCrossProduct(ref.getBaseRef().copy().setX(1));
+                return ref.setCrossProduct(ref.getRefBase().copy().setX(1));
             case "XZ":
-                return ref.setCrossProduct(ref.getBaseRef().copy().setY(1));
+                return ref.setCrossProduct(ref.getRefBase().copy().setY(1));
         }
 
         throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);
@@ -379,7 +379,7 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private FPoint getCandidate2D(FVector ref, double scaleFactor) {
 
-        return ref.copy().mul(scaleFactor).moveBase(ref.getBaseRef()).getHeadRef();
+        return ref.copy().mul(scaleFactor).moveBase(ref.getRefBase()).getRefHead();
     }
 
     private Optional<FPoint> getCandidate3D(String dir, FPoint ref) {
@@ -450,14 +450,14 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectFPoint(FPoint fPoint) {
-        FPoint opA = factory.getFPoint(getOrigin().getHeadRef())
-                .sub(getOrigin().getBaseRef())
+        FPoint opA = factory.getFPoint(getOrigin().getRefHead())
+                .sub(getOrigin().getRefBase())
                 .div(getOrigin().getLength());
 
         FPoint opB = factory.getFPoint(fPoint)
-                .sub(getOrigin().getBaseRef());
+                .sub(getOrigin().getRefBase());
 
-        fPoint.set(origin.getBaseRef().copy().add(opA.mul(opB.getDotProduct(opA))));
+        fPoint.set(origin.getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         return fPoint;
     }
@@ -465,8 +465,8 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
     private boolean isPartOfRay(FPoint projection) {
         double magnitude = getOrigin().getLength();
 
-        double distanceBase = getOrigin().getBaseRef().getDistance(projection);
-        double distanceHead = getOrigin().getHeadRef().getDistance(projection);
+        double distanceBase = getOrigin().getRefBase().getDistance(projection);
+        double distanceHead = getOrigin().getRefHead().getDistance(projection);
 
         double jitter = factory.getJitter();
 
@@ -480,8 +480,8 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
     private boolean isPartOfSegment(FPoint projection) {
         double magnitude = getOrigin().getLength();
 
-        double distanceBase = getOrigin().getBaseRef().getDistance(projection);
-        double distanceHead = getOrigin().getHeadRef().getDistance(projection);
+        double distanceBase = getOrigin().getRefBase().getDistance(projection);
+        double distanceHead = getOrigin().getRefHead().getDistance(projection);
 
         double jitter = factory.getJitter();
 
@@ -490,12 +490,12 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private FPoint moveForward(FPoint ref, double distance) {
 
-        return ref.set(getOrigin().copy().moveBase(ref).moveForward(distance).getBaseRef());
+        return ref.set(getOrigin().copy().moveBase(ref).moveForward(distance).getRefBase());
     }
 
     private FPoint moveBackward(FPoint ref, double distance) {
 
-        return ref.set(getOrigin().copy().moveBase(ref).moveBackward(distance).getBaseRef());
+        return ref.set(getOrigin().copy().moveBase(ref).moveBackward(distance).getRefBase());
     }
 
 }

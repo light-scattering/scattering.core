@@ -138,7 +138,7 @@ public class FSphereProd extends ShapePresetProd<FSphere> implements FSphere {
 
         class SurfaceMeshIterable implements Iterable<FPoint> {
 
-            final FPoint sphereCenter = getAxisOX().getBaseRef();
+            final FPoint sphereCenter = getAxisOX().getRefBase();
             final double sphereRadius = FSphereProd.this.getOuterRadius();
             final int numberOfPoints = (int) Math.round(getAlgebraicSurface() / (distance * distance));
 

@@ -1,5 +1,9 @@
 package eu.scattering.core.design.core.algebra.geometry.primitive.vector;
 
+import eu.scattering.core.design.annotations.Radian;
+import eu.scattering.core.design.annotations.SphericalCoordinates;
+import eu.scattering.core.design.annotations.Unsafe;
+import eu.scattering.core.design.annotations.Utility;
 import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.core.data.position.FTuplePos3D;
@@ -7,16 +11,12 @@ import eu.scattering.core.design.core.data.position.FTuplePos3D;
 public interface FVector extends Primitive<FVector> {
 
     FVector set(FPoint base, FPoint head);
-//    FVector set(FPos3D base, FPos3D head);
-    FVector set(FTuplePos3D position);
 
     FVector setBase(double bX, double bY, double bZ);
     FVector setBase(FPoint base);
-//   FVector setBase(FPos3D base);
 
     FVector setHead(double hX, double hY, double hZ);
     FVector setHead(FPoint head);
-//  FVector setHead(FPos3D head);
 
     double getBaseX();
     FVector setBaseX(double bX);
@@ -38,10 +38,19 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
+    FVector set(FTuplePos3D position);
+//  FVector set(FPos3D base, FPos3D head);
+
+//  FVector setBase(FPos3D base);
+//  FVector setHead(FPos3D head);
+
+    FTuplePos3D toTuplePos3D();
+
+    //--------------------------------------------------
+
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
 
-    boolean isZero();
     boolean isNonDirectional();
 
     FVector moveBase();
@@ -74,11 +83,11 @@ public interface FVector extends Primitive<FVector> {
 
     double getAngle(FPoint ref);
     double getAngle(FVector ref);
-    FVector setAngle(FPoint ref, double angle);
-    FVector setAngle(FVector ref, double angle);
+    FVector setAngle(FPoint ref, @Radian double angle);
+    FVector setAngle(FVector ref, @Radian double angle);
 
-    FVector rotate(FPoint ref, double angle);
-    FVector rotate(FVector ref, double angle);
+    FVector rotate(FPoint ref, @Radian double angle);
+    FVector rotate(FVector ref, @Radian double angle);
 
     double getDotProduct(FPoint ref);
     double getDotProduct(FVector ref);
@@ -99,37 +108,42 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
+    @SphericalCoordinates
+    FVector setSphericalCoordinates(@Radian double inclination, @Radian double azimuth);
+
+    @SphericalCoordinates
+    double getInclination();
+    @SphericalCoordinates
+    FVector setInclination(@Radian double inclination);
+
+    @SphericalCoordinates
+    double getAzimuth();
+    FVector setAzimuth(@Radian double azimuth);
+
+    @Utility("Length squared")
     double getLengthP2();
 
-    //--------------------------------------------------
-    // Parsers
-    //--------------------------------------------------
-
-    FTuplePos3D toTuplePos3D();
-
-    //--------------------------------------------------
-    // Unsafe
-    //--------------------------------------------------
-
+    @Unsafe("Interferes with the internal structure of the object")
     FVector setRef(FPoint baseRef, FPoint headRef);
 
-    FPoint getBaseRef();
-    FVector setBaseRef(FPoint baseRef);
+    @Unsafe("Interferes with the internal structure of the object")
+    FPoint getRefBase();
+    @Unsafe("Interferes with the internal structure of the object")
+    FVector setRefBase(FPoint refBase);
 
-    FPoint getHeadRef();
-    FVector setHeadRef(FPoint headRef);
+    @Unsafe("Interferes with the internal structure of the object")
+    FPoint getRefHead();
+    @Unsafe("Interferes with the internal structure of the object")
+    FVector setRefHead(FPoint refHead);
 
-    //--------------------------------------------------
-    // Spherical coordinates
-    //--------------------------------------------------
 
-    FVector setSphericalCoordinates(double inclination, double azimuth);
 
-    double getInclination();
-    FVector setInclination(double inclination);
 
-    double getAzimuth();
-    FVector setAzimuth(double azimuth);
+
+
+
+
+
 
     //--------------------------------------------------
     // Randomization

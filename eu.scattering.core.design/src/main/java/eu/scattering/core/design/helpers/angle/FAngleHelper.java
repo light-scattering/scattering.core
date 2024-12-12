@@ -1,4 +1,4 @@
-package eu.scattering.core.design.helper.angle;
+package eu.scattering.core.design.helpers.angle;
 
 public interface FAngleHelper {
 

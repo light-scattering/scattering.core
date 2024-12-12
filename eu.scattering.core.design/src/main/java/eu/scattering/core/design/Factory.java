@@ -1,7 +1,7 @@
 package eu.scattering.core.design;
 
 import eu.scattering.core.design.core.CoreFactory;
-import eu.scattering.core.design.helper.HelperFactory;
+import eu.scattering.core.design.helpers.HelperFactory;
 
 public interface Factory extends CoreFactory, HelperFactory {
 

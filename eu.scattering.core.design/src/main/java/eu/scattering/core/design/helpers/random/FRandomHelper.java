@@ -1,4 +1,4 @@
-package eu.scattering.core.design.helper.random;
+package eu.scattering.core.design.helpers.random;
 
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;

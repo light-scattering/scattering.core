@@ -1,7 +1,7 @@
 package eu.scattering.core.test;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.helper.random.FRandomHelper;
+import eu.scattering.core.design.helpers.random.FRandomHelper;
 import eu.scattering.core.impl.production.FactoryProd;
 import eu.scattering.core.impl.development.FactoryDev;
 

@@ -17,10 +17,10 @@ public final class FVectorTestHelper {
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");
 
-        FPoint refBaseSnapshot = ref.getBaseRef();
-        FPoint refHeadSnapshot = ref.getHeadRef();
-        FPoint argBaseSnapshot = arg.getBaseRef();
-        FPoint argHeadSnapshot = arg.getHeadRef();
+        FPoint refBaseSnapshot = ref.getRefBase();
+        FPoint refHeadSnapshot = ref.getRefHead();
+        FPoint argBaseSnapshot = arg.getRefBase();
+        FPoint argHeadSnapshot = arg.getRefHead();
         FPoint argBasePositionSnapshot = argBaseSnapshot.copy();
         FPoint argHeadPositionSnapshot = argHeadSnapshot.copy();
 
@@ -29,20 +29,20 @@ public final class FVectorTestHelper {
         assertSame(result, ref, "The FVector reference should not change");
 
         Assertions.assertAll("Validate positions",
-                () -> assertTrue(argBasePositionSnapshot.isExact(arg.getBaseRef()),
+                () -> assertTrue(argBasePositionSnapshot.isExact(arg.getRefBase()),
                         "The argument base position should not change"),
-                () -> assertTrue(argHeadPositionSnapshot.isExact(arg.getHeadRef()),
+                () -> assertTrue(argHeadPositionSnapshot.isExact(arg.getRefHead()),
                         "The argument head position should not change")
         );
 
         Assertions.assertAll("Validate references",
-                () -> assertSame(refBaseSnapshot, result.getBaseRef(),
+                () -> assertSame(refBaseSnapshot, result.getRefBase(),
                         "The input base reference should not change"),
-                () -> assertSame(refHeadSnapshot, result.getHeadRef(),
+                () -> assertSame(refHeadSnapshot, result.getRefHead(),
                         "The input head reference should not change"),
-                () -> assertSame(argBaseSnapshot, arg.getBaseRef(),
+                () -> assertSame(argBaseSnapshot, arg.getRefBase(),
                         "The argument base reference should not change"),
-                () -> assertSame(argHeadSnapshot, arg.getHeadRef(),
+                () -> assertSame(argHeadSnapshot, arg.getRefHead(),
                         "The argument head reference should not change")
         );
     }
@@ -53,8 +53,8 @@ public final class FVectorTestHelper {
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");
 
-        FPoint refBaseSnapshot = ref.getBaseRef();
-        FPoint refHeadSnapshot = ref.getHeadRef();
+        FPoint refBaseSnapshot = ref.getRefBase();
+        FPoint refHeadSnapshot = ref.getRefHead();
         FPoint argSnapshot = arg.copy();
 
         FVector result = exe.apply(ref, arg);
@@ -67,26 +67,26 @@ public final class FVectorTestHelper {
         );
 
         Assertions.assertAll("Validate references",
-                () -> assertSame(refBaseSnapshot, result.getBaseRef(),
+                () -> assertSame(refBaseSnapshot, result.getRefBase(),
                         "The input base reference should not change"),
-                () -> assertSame(refHeadSnapshot, result.getHeadRef(),
+                () -> assertSame(refHeadSnapshot, result.getRefHead(),
                         "The input head reference should not change")
         );
     }
 
     public static void testReference(Function<FVector, FVector> exe, FVector ref) {
 
-        FPoint refBaseSnapshot = ref.getBaseRef();
-        FPoint refHeadSnapshot = ref.getHeadRef();
+        FPoint refBaseSnapshot = ref.getRefBase();
+        FPoint refHeadSnapshot = ref.getRefHead();
 
         FVector result = exe.apply(ref);
 
         assertSame(result, ref, "The FVector reference should not change");
 
         Assertions.assertAll("Validate references",
-                () -> assertSame(refBaseSnapshot, result.getBaseRef(),
+                () -> assertSame(refBaseSnapshot, result.getRefBase(),
                         "The input base reference should not change"),
-                () -> assertSame(refHeadSnapshot, result.getHeadRef(),
+                () -> assertSame(refHeadSnapshot, result.getRefHead(),
                         "The input head reference should not change")
         );
     }
@@ -97,36 +97,36 @@ public final class FVectorTestHelper {
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");
 
-        FPoint refBaseSnapshot = ref.getBaseRef();
-        FPoint refHeadSnapshot = ref.getHeadRef();
+        FPoint refBaseSnapshot = ref.getRefBase();
+        FPoint refHeadSnapshot = ref.getRefHead();
         FPoint refBasePositionSnapshot = refBaseSnapshot.copy();
         FPoint refHeadPositionSnapshot = refHeadSnapshot.copy();
-        FPoint argBaseSnapshot = arg.getBaseRef();
-        FPoint argHeadSnapshot = arg.getHeadRef();
+        FPoint argBaseSnapshot = arg.getRefBase();
+        FPoint argHeadSnapshot = arg.getRefHead();
         FPoint argBasePositionSnapshot = argBaseSnapshot.copy();
         FPoint argHeadPositionSnapshot = argHeadSnapshot.copy();
 
         exe.apply(ref, arg);
 
         Assertions.assertAll("Validate positions",
-                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getBaseRef()),
+                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getRefBase()),
                         "The input base position should not change"),
-                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getHeadRef()),
+                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getRefHead()),
                         "The input head position should not change"),
-                () -> assertTrue(argBasePositionSnapshot.isExact(arg.getBaseRef()),
+                () -> assertTrue(argBasePositionSnapshot.isExact(arg.getRefBase()),
                         "The argument base position should not change"),
-                () -> assertTrue(argHeadPositionSnapshot.isExact(arg.getHeadRef()),
+                () -> assertTrue(argHeadPositionSnapshot.isExact(arg.getRefHead()),
                         "The argument head position should not change")
         );
 
         Assertions.assertAll("Validate references",
-                () -> assertSame(refBaseSnapshot, ref.getBaseRef(),
+                () -> assertSame(refBaseSnapshot, ref.getRefBase(),
                         "The input base reference should not change"),
-                () -> assertSame(refHeadSnapshot, ref.getHeadRef(),
+                () -> assertSame(refHeadSnapshot, ref.getRefHead(),
                         "The input head reference should not change"),
-                () -> assertSame(argBaseSnapshot, arg.getBaseRef(),
+                () -> assertSame(argBaseSnapshot, arg.getRefBase(),
                         "The argument base reference should not change"),
-                () -> assertSame(argHeadSnapshot, arg.getHeadRef(),
+                () -> assertSame(argHeadSnapshot, arg.getRefHead(),
                         "The argument head reference should not change")
         );
     }
@@ -136,8 +136,8 @@ public final class FVectorTestHelper {
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");
 
-        FPoint refBaseSnapshot = ref.getBaseRef();
-        FPoint refHeadSnapshot = ref.getHeadRef();
+        FPoint refBaseSnapshot = ref.getRefBase();
+        FPoint refHeadSnapshot = ref.getRefHead();
         FPoint refBasePositionSnapshot = refBaseSnapshot.copy();
         FPoint refHeadPositionSnapshot = refHeadSnapshot.copy();
         FPoint argPositionSnapshot = arg.copy();
@@ -145,42 +145,42 @@ public final class FVectorTestHelper {
         exe.apply(ref, arg);
 
         Assertions.assertAll("Validate positions",
-                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getBaseRef()),
+                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getRefBase()),
                         "The input base position should not change"),
-                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getHeadRef()),
+                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getRefHead()),
                         "The input head position should not change"),
                 () -> assertTrue(argPositionSnapshot.isExact(arg),
                         "The argument position should not change")
         );
 
         Assertions.assertAll("Validate references",
-                () -> assertSame(refBaseSnapshot, ref.getBaseRef(),
+                () -> assertSame(refBaseSnapshot, ref.getRefBase(),
                         "The input base reference should not change"),
-                () -> assertSame(refHeadSnapshot, ref.getHeadRef(),
+                () -> assertSame(refHeadSnapshot, ref.getRefHead(),
                         "The input head reference should not change")
         );
     }
 
     public static void testValue(Function<FVector, Object> exe, FVector ref) {
 
-        FPoint refBaseSnapshot = ref.getBaseRef();
-        FPoint refHeadSnapshot = ref.getHeadRef();
+        FPoint refBaseSnapshot = ref.getRefBase();
+        FPoint refHeadSnapshot = ref.getRefHead();
         FPoint refBasePositionSnapshot = refBaseSnapshot.copy();
         FPoint refHeadPositionSnapshot = refHeadSnapshot.copy();
 
         exe.apply(ref);
 
         Assertions.assertAll("Validate positions",
-                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getBaseRef()),
+                () -> assertTrue(refBasePositionSnapshot.isExact(ref.getRefBase()),
                         "The input base position should not change"),
-                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getHeadRef()),
+                () -> assertTrue(refHeadPositionSnapshot.isExact(ref.getRefHead()),
                         "The input head position should not change")
         );
 
         Assertions.assertAll("Validate references",
-                () -> assertSame(refBaseSnapshot, ref.getBaseRef(),
+                () -> assertSame(refBaseSnapshot, ref.getRefBase(),
                         "The input base reference should not change"),
-                () -> assertSame(refHeadSnapshot, ref.getHeadRef(),
+                () -> assertSame(refHeadSnapshot, ref.getRefHead(),
                         "The input head reference should not change")
         );
     }

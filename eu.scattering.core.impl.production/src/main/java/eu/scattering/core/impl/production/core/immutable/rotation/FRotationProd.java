@@ -26,10 +26,10 @@ public class FRotationProd implements FRotation {
         }
 
         this.factory = factory;
-        this.offset = factory.getFPoint().set(axis.getBaseRef());
+        this.offset = factory.getFPoint().set(axis.getRefBase());
         this.core = factory.getFQuaternion();
 
-        initializeCore(axis.copy().moveBase().getHeadRef(), angle);
+        initializeCore(axis.copy().moveBase().getRefHead(), angle);
         initializeRotor();
     }
 

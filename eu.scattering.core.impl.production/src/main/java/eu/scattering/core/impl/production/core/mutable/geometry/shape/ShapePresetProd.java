@@ -38,7 +38,7 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
 
     public FPoint getCenter() { // must make a copy (a single point cannot be extracted)
 
-        return getAxisOX().getBaseRef();
+        return getAxisOX().getRefBase();
     }
 
     protected abstract double getAlgebraicVolume();
@@ -119,9 +119,9 @@ public abstract class ShapePresetProd<T> extends MutablePresetProd<T> implements
 
         fPointList.add(getCenter());
 
-        fPointList.add(getAxisOX().getHeadRef());
-        fPointList.add(getAxisOY().getHeadRef());
-        fPointList.add(getAxisOZ().getHeadRef());
+        fPointList.add(getAxisOX().getRefHead());
+        fPointList.add(getAxisOY().getRefHead());
+        fPointList.add(getAxisOZ().getRefHead());
 
         return fPointList;
     }
