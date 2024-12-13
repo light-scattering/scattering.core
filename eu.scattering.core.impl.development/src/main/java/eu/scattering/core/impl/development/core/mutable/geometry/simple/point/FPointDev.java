@@ -1,5 +1,6 @@
 package eu.scattering.core.impl.development.core.mutable.geometry.simple.point;
 
+import eu.scattering.core.design.core.data.position.FPos3D;
 import eu.scattering.core.design.debug.stats.Stats;
 import eu.scattering.core.design.core.algebra.geometry.Geometry;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
@@ -59,6 +60,32 @@ public class FPointDev extends MutablePresetDev<FPoint> implements FPoint {
         updateStats(name, time);
 
         return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FPoint set(FPos3D position) {
+
+        String name = "set(FPos3D)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(position);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FPos3D toFPos3D() {
+
+        String name = "toFPos3D()";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().toFPos3D();
+
+        updateStats(name, time);
+
+        return res;
     }
 
     @Override
@@ -653,12 +680,12 @@ public class FPointDev extends MutablePresetDev<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint setRandomAngle(FPoint... exclude) {
+    public FPoint randomize(FPoint... exclusion) {
 
         String name = "setRandomAngle(FPoint...)";
         long time = System.currentTimeMillis();
 
-        var res = getCore().setRandomAngle(exclude);
+        var res = getCore().randomize(exclusion);
 
         updateStats(name, time);
 

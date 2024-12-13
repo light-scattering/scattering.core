@@ -1,6 +1,7 @@
 package eu.scattering.core.test.core.mutable.geometry.simple;
 
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.data.position.FPos3D;
 import eu.scattering.core.test.core.mutable.geometry.simple.support.FPointTestHelper;
 import org.junit.jupiter.api.*;
 
@@ -96,6 +97,21 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Construct with FPos3D")
+        void constructWithFPos3D() {
+            FPos3D fPos3DRef = factory.getFPos3D(refX, refY, refZ);
+            FPoint fPoint = factory.getFPoint(fPos3DRef);
+
+            assertNotNull(fPoint, "The instance is null");
+
+            Assertions.assertAll("Updated values are incorrect",
+                    () -> assertEquals(fPos3DRef.getD0(), fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(fPos3DRef.getD1(), fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(fPos3DRef.getD2(), fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Set values with primitives")
         void setWithPrimitives() {
             FPoint fPoint = factory.getFPoint();
@@ -110,7 +126,7 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Set values with an FPoint")
+        @DisplayName("Set values with FPoint")
         void setWithFPoint() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
             FPoint fPoint = factory.getFPoint();
@@ -118,6 +134,21 @@ public class FPointTest {
             fPoint.set(fPointRef);
 
             assertNotSame(fPointRef, fPoint, "References to the two created FPoints should be different");
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Set values with FPos3D")
+        void setWithFPos3D() {
+            FPos3D fPos3DRef = factory.getFPos3D(refX, refY, refZ);
+            FPoint fPoint = factory.getFPoint();
+
+            fPoint.set(fPos3DRef);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
@@ -168,6 +199,21 @@ public class FPointTest {
             );
         }
 
+        @Test
+        @DisplayName("Export to FPos3D")
+        void toFPos3D() {
+            FPoint fPoint = factory.getFPoint();
+
+            fPoint.set(refX, refY, refZ);
+
+            FPos3D fPos3D = fPoint.toFPos3D();
+
+            Assertions.assertAll("Updated values are incorrect",
+                    () -> assertEquals(refX, fPos3D.getD0(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPos3D.getD1(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPos3D.getD2(), "The Z value is incorrect")
+            );
+        }
     }
 
     @Nested
@@ -251,7 +297,7 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Reflect (validate)")
+        @DisplayName("Reflect by point (validate)")
         void reflectByFPointValidate() {
             FPoint fPointA = random.getFPoint();
             FPoint fPointB = random.getFPoint(fPointA);
@@ -431,7 +477,7 @@ public class FPointTest {
         void setRandomAngleValidateMagnitude() {
             double radius = Math.abs(random.getDouble());
 
-            FPoint fPoint = factory.getFPoint(radius).setRandomAngle();
+            FPoint fPoint = factory.getFPoint(radius).randomize();
 
             assertEquals(radius, fPoint.getLength(),
                     jitter, "The radius is invalid");
@@ -442,8 +488,8 @@ public class FPointTest {
         void setRandomAngleValidateCorrectness() {
             double radius = Math.abs(random.getDouble());
 
-            FPoint fPointA = factory.getFPoint(radius).setRandomAngle();
-            FPoint fPointB = factory.getFPoint(radius).setRandomAngle(fPointA);
+            FPoint fPointA = factory.getFPoint(radius).randomize();
+            FPoint fPointB = factory.getFPoint(radius).randomize(fPointA);
 
             assertNotEquals(fPointA, fPointB, "Two randomly generated points should be different");
         }
@@ -454,7 +500,7 @@ public class FPointTest {
             double radius = Math.abs(random.getDouble());
             FPoint fPoint = factory.getFPoint(radius);
 
-            Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> fPoint.setRandomAngle(fPoint));
+            Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> fPoint.randomize(fPoint));
         }
 
         @Test
@@ -462,7 +508,7 @@ public class FPointTest {
         void setRandomAngleValidate() {
             FPoint fPoint = random.getFPoint();
 
-            FPointTestHelper.testReference(FPoint::setRandomAngle, fPoint);
+            FPointTestHelper.testReference(FPoint::randomize, fPoint);
         }
 
         @Test

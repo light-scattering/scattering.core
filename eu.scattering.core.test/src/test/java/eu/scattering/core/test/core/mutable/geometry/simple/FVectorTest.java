@@ -479,7 +479,7 @@ public class FVectorTest {
             FPoint fPointHead = random.getFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            Assertions.assertThrows(NullPointerException.class, () -> fVector.setBase(null),
+            Assertions.assertThrows(NullPointerException.class, () -> fVector.setBase((FPoint) null),
                     "The reference must not be null");
         }
 
@@ -596,7 +596,7 @@ public class FVectorTest {
             FPoint fPointHead = random.getFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            Assertions.assertThrows(NullPointerException.class, () -> fVector.setHead(null),
+            Assertions.assertThrows(NullPointerException.class, () -> fVector.setHead((FPoint) null),
                     "The reference must not be null");
         }
 
@@ -711,7 +711,7 @@ public class FVectorTest {
                             "The base FPoint must not be null"),
                     () -> Assertions.assertThrows(NullPointerException.class, () -> fVector.set(fPointBase, null),
                             "The head FPoint must not be null"),
-                    () -> Assertions.assertThrows(NullPointerException.class, () -> fVector.set(null, null),
+                    () -> Assertions.assertThrows(NullPointerException.class, () -> fVector.set((FPoint) null, null),
                             "The reference FPoints must not be null")
             );
         }

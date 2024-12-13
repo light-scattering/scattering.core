@@ -6,10 +6,14 @@ import eu.scattering.core.design.annotations.Unsafe;
 import eu.scattering.core.design.annotations.Utility;
 import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.data.position.FPos3D;
 import eu.scattering.core.design.core.data.position.FTuplePos3D;
 
 public interface FVector extends Primitive<FVector> {
 
+    FVector set(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    FVector set(FPoint base, double hX, double hY, double hZ);
+    FVector set(double bX, double bY, double bZ, FPoint head);
     FVector set(FPoint base, FPoint head);
 
     FVector setBase(double bX, double bY, double bZ);
@@ -39,10 +43,13 @@ public interface FVector extends Primitive<FVector> {
     //--------------------------------------------------
 
     FVector set(FTuplePos3D position);
-//  FVector set(FPos3D base, FPos3D head);
 
-//  FVector setBase(FPos3D base);
-//  FVector setHead(FPos3D head);
+    FVector set(FPos3D base, double hX, double hY, double hZ);
+    FVector set(double bX, double bY, double bZ, FPos3D head);
+    FVector set(FPos3D base, FPos3D head);
+
+    FVector setBase(FPos3D base);
+    FVector setHead(FPos3D head);
 
     FTuplePos3D toTuplePos3D();
 
@@ -143,7 +150,7 @@ public interface FVector extends Primitive<FVector> {
 
 
 
-
+// TODO Remove
 
     //--------------------------------------------------
     // Randomization

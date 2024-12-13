@@ -3,6 +3,7 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.vector;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.core.data.position.FPos3D;
 import eu.scattering.core.design.core.data.position.FTuplePos3D;
 import eu.scattering.core.design.core.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
@@ -93,6 +94,30 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
+    public FVector set(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+        setBase(bX, bY, bZ);
+        setHead(hX, hY, hZ);
+
+        return this;
+    }
+
+    @Override
+    public FVector set(FPoint base, double hX, double hY, double hZ) {
+        setBase(base);
+        setHead(hX, hY, hZ);
+
+        return this;
+    }
+
+    @Override
+    public FVector set(double bX, double bY, double bZ, FPoint head) {
+        setBase(bX, bY, bZ);
+        setHead(head);
+
+        return this;
+    }
+
+    @Override
     public FVector set(FVector fVector) {
         setBase(fVector.getRefBase());
         setHead(fVector.getRefHead());
@@ -109,10 +134,10 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector set(FTuplePos3D tuple) {
+    public FVector set(FTuplePos3D position) {
 
-        setBase(tuple.getPosA().getD0(), tuple.getPosA().getD1(), tuple.getPosA().getD2());
-        setHead(tuple.getPosB().getD0(), tuple.getPosB().getD1(), tuple.getPosB().getD2());
+        setBase(position.getPosA());
+        setHead(position.getPosB());
 
         return this;
     }
@@ -223,6 +248,44 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         return this;
     }
 
+    @Override
+    public FVector set(FPos3D base, double hX, double hY, double hZ) {
+        setBase(base);
+        setHead(hX, hY, hZ);
+
+        return this;
+    }
+
+    @Override
+    public FVector set(double bX, double bY, double bZ, FPos3D head) {
+        setBase(bX, bY, bZ);
+        setHead(head);
+
+        return this;
+    }
+
+    @Override
+    public FVector set(FPos3D base, FPos3D head) {
+        setBase(base);
+        setHead(head);
+
+        return this;
+    }
+
+    @Override
+    public FVector setBase(FPos3D base) {
+        setBase(base.getD0(), base.getD1(), base.getD2());
+
+        return this;
+    }
+
+    @Override
+    public FVector setHead(FPos3D head) {
+        setHead(head.getD0(), head.getD1(), head.getD2());
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -248,6 +311,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     @Override
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
+
         json.append("vector", getRefBase().exportToJSON());
         json.append("vector", getRefHead().exportToJSON());
 
@@ -325,7 +389,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             excludeShift[i] = exclude[i].copy().sub(getRefBase());
         }
 
-        fCopyLocal.getRefHead().setRandomAngle(excludeShift);
+        fCopyLocal.getRefHead().randomize(excludeShift);
         fCopyLocal.moveBase(getRefBase());
 
         return set(fCopyLocal);
@@ -357,7 +421,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector moveBase(FPoint base) {
-        FPoint translation = factory.getFPoint().set(base).sub(getRefBase());
+        FPoint translation = factory.getFPoint(base).sub(getRefBase());
 
         getRefBase().set(base);
         getRefHead().add(translation);

@@ -2,6 +2,7 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.point;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.core.data.position.FPos3D;
 import eu.scattering.core.design.core.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
 import org.json.JSONArray;
@@ -77,51 +78,79 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public FPoint set(double x, double y, double z) {
+
+        return setX(x).setY(y).setZ(z);
+    }
+
+    @Override
     public FPoint set(FPoint fPoint) {
 
         return set(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public FPoint set(double x, double y, double z) {
+    public FPoint set(FPos3D position) {
 
-        return setX(x).setY(y).setZ(z);
+        return set(position.getD0(), position.getD1(), position.getD2());
+    }
+
+    @Override
+    public FPos3D toFPos3D() {
+
+        return factory.getFPos3D(getX(), getY(), getZ());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public boolean isExact(double x, double y, double z) {
+
+        return getX() == x && getY() == y && getZ() == z;
+    }
+
+    @Override
     public boolean isExact(FPoint fPoint) {
 
         if (fPoint == null) {
-            throw new NullPointerException("The reference FPoint cannot be null");
+            throw new NullPointerException("The reference FPoint is null");
         }
 
-        if (this == fPoint) {
-            return true;
-        }
+        return isExact(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
 
-        return getX() == fPoint.getX() && getY() == fPoint.getY() && getZ() == fPoint.getZ();
+    @Override
+    public boolean isSimilar(double x, double y, double z) {
+
+        double distanceX = Math.abs(getX() - x);
+        double distanceY = Math.abs(getY() - y);
+        double distanceZ = Math.abs(getZ() - z);
+
+        double jitter = factory.getJitter();
+
+        return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
     }
 
     @Override
     public boolean isSimilar(FPoint fPoint) {
 
         if (fPoint == null) {
-            throw new NullPointerException("The reference FPoint cannot be null");
+            throw new NullPointerException("The reference FPoint is null");
         }
 
-        if (this == fPoint) {
-            return true;
-        }
+        return isSimilar(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
 
-        double distanceX = Math.abs(getX() - fPoint.getX());
-        double distanceY = Math.abs(getY() - fPoint.getY());
-        double distanceZ = Math.abs(getZ() - fPoint.getZ());
+    @Override
+    public boolean isZero() {
 
-        double jitter = factory.getJitter();
+        return getX() == 0 && getY() == 0 && getZ() == 0;
+    }
 
-        return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
+    @Override
+    public boolean isNonDirectional() {
+
+        return isSimilar(0, 0, 0);
     }
 
     @Override
@@ -149,7 +178,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-        return factory.getFPoint().set(this);
+        return factory.getFPoint(this);
     }
 
     @Override
@@ -164,9 +193,9 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     public int hashCode() {
         int hashCode = 7;
 
-        hashCode = 31 * hashCode + (int) (getX() * 100);
-        hashCode = 31 * hashCode + (int) (getY() * 100);
-        hashCode = 31 * hashCode + (int) (getZ() * 100);
+        hashCode = 31 * hashCode + (int) (getX() * 1000);
+        hashCode = 31 * hashCode + (int) (getY() * 1000);
+        hashCode = 31 * hashCode + (int) (getZ() * 1000);
 
         return hashCode;
     }
@@ -176,21 +205,22 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public List<FPoint> disassemble() {
         List<FPoint> fPointList = new ArrayList<>();
+
         fPointList.add(this);
 
         return fPointList;
     }
 
     @Override
-    public FPoint add(FPoint fPoint) {
-
-        return add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
-    }
-
-    @Override
     public FPoint add(double x, double y, double z) {
 
         return addX(x).addY(y).addZ(z);
+    }
+
+    @Override
+    public FPoint add(FPoint fPoint) {
+
+        return add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
@@ -218,15 +248,15 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint sub(FPoint fPoint) {
-
-        return sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
-    }
-
-    @Override
     public FPoint sub(double x, double y, double z) {
 
         return subX(x).subY(y).subZ(z);
+    }
+
+    @Override
+    public FPoint sub(FPoint fPoint) {
+
+        return sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
@@ -254,15 +284,15 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint mul(FPoint fPoint) {
-
-        return mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
-    }
-
-    @Override
     public FPoint mul(double x, double y, double z) {
 
         return mulX(x).mulY(y).mulZ(z);
+    }
+
+    @Override
+    public FPoint mul(FPoint fPoint) {
+
+        return mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
@@ -290,21 +320,30 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint div(FPoint fPoint) {
-
-        return div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
-    }
-
-    @Override
     public FPoint div(double x, double y, double z) {
 
         return divX(x).divY(y).divZ(z);
     }
 
     @Override
+    public FPoint div(FPoint fPoint) {
+
+        return div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
+
+    @Override
     public FPoint div(double factor) {
 
         return div(factor, factor, factor);
+    }
+
+    @Override
+    public FPoint divY(double y) {
+
+        if (y == 0) {
+            throw new ArithmeticException("Division by zero");
+        }
+        return setY(getY() / y);
     }
 
     @Override
@@ -315,15 +354,6 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
         }
 
         return setX(getX() / x);
-    }
-
-    @Override
-    public FPoint divY(double y) {
-
-        if (y == 0) {
-            throw new ArithmeticException("Division by zero");
-        }
-        return setY(getY() / y);
     }
 
     @Override
@@ -339,33 +369,50 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FPoint setSphericalCoordinates(double inclination, double azimuth) {
-        double radius = getLength();
+    public double getDistanceP2(FPoint ref) {
+        double dimX = ref.getX() - getX();
+        double dimY = ref.getY() - getY();
+        double dimZ = ref.getZ() - getZ();
 
-        setX(Math.cos(azimuth) * Math.sin(inclination));
-        setY(Math.cos(inclination));
-        setZ(Math.sin(azimuth) * Math.sin(inclination));
-
-        return setLength(radius);
+        return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
     }
 
     @Override
-    public FPoint setRandomAngle(FPoint... exclusion) {
-        double radius = getLength();
+    public double getDistance(FPoint ref) {
 
-        return set(factory.getFRandomHelper().getFPoint(exclusion)).setLength(radius);
+        return Math.sqrt(getDistanceP2(ref));
     }
 
     @Override
-    public boolean isExact(double x, double y, double z) {
+    public FPoint setDistance(FPoint ref, double distance) throws IllegalStateException {
 
-        return isExact(factory.getFPoint(x, y, z));
+        if (equals(ref)) {
+            throw new IllegalStateException("FPoints must not be on the same position");
+        }
+
+        return sub(ref).setLength(distance).add(ref);
     }
 
     @Override
-    public boolean isSimilar(double x, double y, double z) {
+    public double getLengthP2() {
 
-        return isSimilar(factory.getFPoint(x, y, z));
+        return (getX() * getX()) + (getY() * getY()) + (getZ() * getZ());
+    }
+
+    @Override
+    public double getLength() {
+
+        return Math.sqrt(getLengthP2());
+    }
+
+    @Override
+    public FPoint setLength(double length) {
+
+        if (isNonDirectional()) {
+            throw new IllegalStateException("The vector is non-directional (the position is too close to zero)");
+        }
+
+        return mul(length / getLength());
     }
 
     @Override
@@ -387,52 +434,14 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public double getInclination() {
+    public double getAngle(FPoint ref) {
 
-        return Math.acos(getY() / Math.sqrt((getX() * getX()) + (getY() * getY()) + (getZ() * getZ())));
-    }
-
-    @Override
-    public FPoint setInclination(double polar) {
-        double radius = getLength();
-
-        return setSphericalCoordinates(polar, getAzimuth()).setLength(radius);
-    }
-
-    @Override
-    public double getAzimuth() {
-        double r2 = Math.sqrt((getX() * getX()) + (getZ() * getZ()));
-        double azimuthal;
-
-        if (getZ() >= 0) {
-            azimuthal = Math.acos(getX() / r2);
-        } else {
-            azimuthal = -Math.acos(getX() / r2);
+        if (isNonDirectional()) {
+            throw new IllegalStateException("The input vector is non-directional");
         }
 
-        if (Double.isNaN(azimuthal)) {
-            return 0;
-        } else {
-            return azimuthal;
-        }
-    }
-
-    @Override
-    public FPoint setAzimuth(double azimuthal) {
-        double radius = getLength();
-
-        return setSphericalCoordinates(getInclination(), azimuthal).setLength(radius);
-    }
-
-    @Override
-    public double getAngle(FPoint ref) throws IllegalStateException {
-
-        if (isZero()) {
-            throw new IllegalStateException("The input FPoint is zero");
-        }
-
-        if (ref.isZero()) {
-            throw new IllegalStateException("The reference FPoint is zero");
+        if (ref.isNonDirectional()) {
+            throw new IllegalStateException("The reference vector is non-directional");
         }
 
         double angle, dProd, magAB;
@@ -465,31 +474,6 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public double getDistance(FPoint ref) {
-
-        return Math.sqrt(getDistanceP2(ref));
-    }
-
-    @Override
-    public double getDistanceP2(FPoint ref) {
-        double dimX = ref.getX() - getX();
-        double dimY = ref.getY() - getY();
-        double dimZ = ref.getZ() - getZ();
-
-        return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
-    }
-
-    @Override
-    public FPoint setDistance(FPoint ref, double distance) throws IllegalStateException {
-
-        if (equals(ref)) {
-            throw new IllegalStateException("FPoints must not be on the same position");
-        }
-
-        return sub(ref).setLength(distance).add(ref);
-    }
-
-    @Override
     public double getDotProduct(FPoint ref) {
         double dProd, dimX, dimY, dimZ;
 
@@ -514,37 +498,65 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public double getLength() {
+    public FPoint setSphericalCoordinates(double inclination, double azimuth) {
+        double radius = getLength();
 
-        return Math.sqrt(getLengthP2());
+        setX(Math.cos(azimuth) * Math.sin(inclination));
+        setY(Math.cos(inclination));
+        setZ(Math.sin(azimuth) * Math.sin(inclination));
+
+        return setLength(radius);
     }
 
     @Override
-    public double getLengthP2() {
+    public double getInclination() {
 
-        return (getX() * getX()) + (getY() * getY()) + (getZ() * getZ());
+        return Math.acos(getY() / getLength());
     }
 
     @Override
-    public FPoint setLength(double length) throws IllegalStateException {
+    public FPoint setInclination(double polar) {
+        double radius = getLength();
 
-        if (getX() == 0 && getY() == 0 && getZ() == 0) {
-            throw new IllegalStateException("The origin is at the same position as the given point");
+        return setSphericalCoordinates(polar, getAzimuth()).setLength(radius);
+    }
+
+    @Override
+    public double getAzimuth() {
+        double r2 = Math.sqrt((getX() * getX()) + (getZ() * getZ()));
+        double azimuthal;
+
+        if (getZ() >= 0) {
+            azimuthal = Math.acos(getX() / r2);
+        } else {
+            azimuthal = -Math.acos(getX() / r2);
         }
 
-        return mul(length / getLength());
+        if (Double.isNaN(azimuthal)) {
+            return 0;
+        }
+
+        return azimuthal;
     }
 
     @Override
-    public boolean isNonDirectional() {
+    public FPoint setAzimuth(double azimuthal) {
+        double radius = getLength();
 
-        return isSimilar(0, 0, 0);
+        return setSphericalCoordinates(getInclination(), azimuthal).setLength(radius);
     }
 
-    @Override
-    public boolean isZero() {
 
-        return getX() == 0 && getY() == 0 && getZ() == 0;
+
+
+
+// TODO rewrite
+
+    @Override
+    public FPoint randomize(FPoint... exclusion) {
+        double radius = getLength();
+
+        return set(factory.getFRandomHelper().getFPoint(exclusion)).setLength(radius);
     }
 
 }

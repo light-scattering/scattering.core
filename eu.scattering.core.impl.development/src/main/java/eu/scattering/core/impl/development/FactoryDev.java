@@ -9,6 +9,7 @@ import eu.scattering.core.design.core.algebra.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.core.algebra.number.complex.FComplex;
 import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.core.data.position.FPos3DI;
+import eu.scattering.core.design.core.engine.random.FRandom;
 import eu.scattering.core.design.core.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.angle.FAngleHelper;
 import eu.scattering.core.design.helpers.random.FRandomHelper;
@@ -129,5 +130,11 @@ public final class FactoryDev implements Factory {
     public FRandomHelper getFRandomHelper() {
 
         return factory.getFRandomHelper();
+    }
+
+    @Override
+    public FRandom getFRandom() {
+
+        return factory.getFRandom();
     }
 }

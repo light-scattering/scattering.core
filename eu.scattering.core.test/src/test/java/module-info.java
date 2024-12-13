@@ -7,5 +7,6 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.core.mutable.geometry.advanced;
     opens eu.scattering.core.test.core.mutable.number;
     opens eu.scattering.core.test.core.immutable;
+    opens eu.scattering.core.test.core.engine;
     opens eu.scattering.core.test;
 }

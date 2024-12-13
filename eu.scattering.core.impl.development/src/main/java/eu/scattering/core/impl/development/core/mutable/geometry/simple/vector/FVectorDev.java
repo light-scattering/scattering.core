@@ -1,5 +1,6 @@
 package eu.scattering.core.impl.development.core.mutable.geometry.simple.vector;
 
+import eu.scattering.core.design.core.data.position.FPos3D;
 import eu.scattering.core.design.core.data.position.FTuplePos3D;
 import eu.scattering.core.design.debug.stats.Stats;
 import eu.scattering.core.design.core.algebra.geometry.Geometry;
@@ -1190,6 +1191,45 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
     }
 
     @Override
+    public FVector set(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        String name = "set(double, double, double, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(bX, bY, bZ, hX, hY, hZ);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector set(FPoint base, double hX, double hY, double hZ) {
+
+        String name = "set(FPoint, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(base, hX, hY, hZ);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector set(double bX, double bY, double bZ, FPoint head) {
+
+        String name = "set(double, double, double, FPoint)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(bX, bY, bZ, head);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
     public FVector set(FPoint base, FPoint head) {
 
         String name = "set(FPoint, FPoint)";
@@ -1209,6 +1249,71 @@ public class FVectorDev extends MutablePresetDev<FVector> implements FVector {
         long time = System.currentTimeMillis();
 
         var res = getCore().set(tuple);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector set(FPos3D base, double hX, double hY, double hZ) {
+
+        String name = "set(FPos3D, double, double, double)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(base, hX, hY, hZ);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector set(double bX, double bY, double bZ, FPos3D head) {
+
+        String name = "set(double, double, double, FPos3D)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(bX, bY, bZ, head);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector set(FPos3D base, FPos3D head) {
+
+        String name = "set(FPos3D, FPos3D)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().set(base, head);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector setBase(FPos3D base) {
+
+        String name = "setBase(FPos3D)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setBase(base);
+
+        updateStats(name, time);
+
+        return res == getCore() ? this : create(res);
+    }
+
+    @Override
+    public FVector setHead(FPos3D head) {
+
+        String name = "setHead(FPos3D)";
+        long time = System.currentTimeMillis();
+
+        var res = getCore().setHead(head);
 
         updateStats(name, time);
 

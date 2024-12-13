@@ -8,9 +8,11 @@ import eu.scattering.core.design.core.algebra.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.core.algebra.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.core.algebra.number.complex.FComplex;
 import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.core.engine.random.FRandom;
 import eu.scattering.core.design.core.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.angle.FAngleHelper;
 import eu.scattering.core.design.helpers.random.FRandomHelper;
+import eu.scattering.core.impl.production.core.engine.random.FRandomProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.point.FPointProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.vector.FVectorProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.line.FLineProd;
@@ -24,11 +26,16 @@ import eu.scattering.core.impl.production.support.helper.RandomHelperProd;
 
 public final class FactoryProd implements Factory {
 
+    private final FRandom fRandom;
+
     private final FRandomHelper helperRandom = RandomHelperProd.create(this);
     private final FAngleHelper helperAngle = AngleHelperProd.create();
     private double jitter = 1E-8;
 
-    private FactoryProd() { }
+    private FactoryProd() {
+
+        fRandom = FRandomProd.create(this);
+    }
 
     public static Factory create() {
 
@@ -122,4 +129,9 @@ public final class FactoryProd implements Factory {
     }
 
 
+    @Override
+    public FRandom getFRandom() {
+
+        return fRandom;
+    }
 }

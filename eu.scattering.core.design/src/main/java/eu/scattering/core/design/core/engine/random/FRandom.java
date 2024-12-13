@@ -8,5 +8,5 @@ public interface FRandom extends Engine<FRandom> {
 
     long getSeed();
 
-    FPos3D getPositionOnSphere(CoordinateSystem coordinates);
+    FPos3D getPositionOnUnitSphere();
 }

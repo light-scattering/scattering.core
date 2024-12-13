@@ -20,4 +20,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.helpers.angle;
     exports eu.scattering.core.design.helpers.random;
     exports eu.scattering.core.design.core.data.position;
+    exports eu.scattering.core.design.core.engine.random;
 }

@@ -11,8 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class FPointTestHelper {
 
-    public static void testReference(BiFunction<FPoint, FPoint, FPoint> exe,
-                                     FPoint ref, FPoint arg) {
+    public static void testReference(BiFunction<FPoint, FPoint, FPoint> exe, FPoint ref, FPoint arg) {
 
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");

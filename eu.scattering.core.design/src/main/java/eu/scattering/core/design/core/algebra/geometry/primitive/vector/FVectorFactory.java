@@ -2,6 +2,8 @@ package eu.scattering.core.design.core.algebra.geometry.primitive.vector;
 
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPointFactory;
+import eu.scattering.core.design.core.data.position.FPos3D;
+import eu.scattering.core.design.core.data.position.FTuplePos3D;
 
 public interface FVectorFactory extends FPointFactory {
 
@@ -43,4 +45,28 @@ public interface FVectorFactory extends FPointFactory {
 
         return getFVector().set(fVector);
     }
+
+    default FVector getFVector(FPos3D base, double hX, double hY, double hZ) {
+
+        return getFVector().setBase(base).setHead(getFPoint(hX, hY, hZ));
+    }
+
+    default FVector getFVector(double bX, double bY, double bZ, FPos3D head) {
+
+        return getFVector().setBase(getFPoint(bX, bY, bZ)).setHead(head);
+    }
+
+    default FVector getFVector(FPos3D base, FPos3D head) {
+
+        return getFVector().set(base, head);
+    }
+
+    default FVector getFVector(FTuplePos3D position) {
+
+        return getFVector().set(position);
+    }
+
+
+
+
 }

@@ -1,9 +1,9 @@
 package eu.scattering.core.design.core.algebra.geometry.primitive.point;
 
-import eu.scattering.core.design.annotations.Radian;
 import eu.scattering.core.design.annotations.SphericalCoordinates;
 import eu.scattering.core.design.annotations.Utility;
 import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
+import eu.scattering.core.design.core.data.position.FPos3D;
 
 public interface FPoint extends Primitive<FPoint> {
 
@@ -20,9 +20,9 @@ public interface FPoint extends Primitive<FPoint> {
 
     //--------------------------------------------------
 
-//    FPoint set(FPos3D position);
+    FPoint set(FPos3D position);
 
-//    FPos3D toFPos3D();
+    FPos3D toFPos3D();
 
     //--------------------------------------------------
 
@@ -44,45 +44,31 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setDistance(FPoint ref, double distance);
 
     double getAngle(FPoint ref);
-    FPoint setAngle(FPoint ref, @Radian double angle);
+    FPoint setAngle(FPoint ref, double angle);
 
     double getDotProduct(FPoint ref);
 
     FPoint setCrossProduct(FPoint ref);
 
-    FPoint rotate(FPoint ref, @Radian double angle);
+    FPoint rotate(FPoint ref, double angle);
+
+    FPoint randomize(FPoint... exclusion);
 
     @SphericalCoordinates
-    FPoint setSphericalCoordinates(@Radian double inclination, @Radian double azimuth);
+    FPoint setSphericalCoordinates(double inclination, double azimuth);
 
     @SphericalCoordinates
     double getInclination();
     @SphericalCoordinates
-    FPoint setInclination(@Radian double inclination);
+    FPoint setInclination(double inclination);
 
     @SphericalCoordinates
     double getAzimuth();
     @SphericalCoordinates
-    FPoint setAzimuth(@Radian double azimuth);
+    FPoint setAzimuth(double azimuth);
 
     @Utility("Length squared")
     double getLengthP2();
     @Utility("Distance squared")
     double getDistanceP2(FPoint ref);
-
-
-
-
-
-
-
-
-
-
-
-    //--------------------------------------------------
-    // Randomization
-    //--------------------------------------------------
-
-    FPoint setRandomAngle(FPoint... exclude);
 }

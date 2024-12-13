@@ -1,5 +1,7 @@
 package eu.scattering.core.design.core.algebra.geometry.primitive.point;
 
+import eu.scattering.core.design.core.data.position.FPos3D;
+
 public interface FPointFactory {
 
     FPoint getFPoint();
@@ -24,5 +26,10 @@ public interface FPointFactory {
     default FPoint getFPoint(FPoint fPoint) {
 
         return getFPoint().set(fPoint);
+    }
+
+    default FPoint getFPoint(FPos3D position) {
+
+        return getFPoint().set(position);
     }
 }
