@@ -26,11 +26,11 @@ import eu.scattering.core.impl.production.support.helper.RandomHelperProd;
 
 public final class FactoryProd implements Factory {
 
-    private final FRandom fRandom;
+    private FRandom fRandom;
+    private double jitter = 1E-8;
 
     private final FRandomHelper helperRandom = RandomHelperProd.create(this);
     private final FAngleHelper helperAngle = AngleHelperProd.create();
-    private double jitter = 1E-8;
 
     private FactoryProd() {
 
@@ -41,6 +41,8 @@ public final class FactoryProd implements Factory {
 
         return new FactoryProd();
     }
+
+    //--------------------------------------------------
 
     @Override
     public double getJitter() {
@@ -55,6 +57,20 @@ public final class FactoryProd implements Factory {
 
         return this;
     }
+
+    @Override
+    public FRandom getInternalFRandom() {
+
+        return fRandom;
+    }
+
+    @Override
+    public void setInternalFRandom(FRandom fRandom) {
+
+        this.fRandom = fRandom;
+    }
+
+    //--------------------------------------------------
 
     @Override
     public FPoint getFPoint() {
@@ -128,10 +144,17 @@ public final class FactoryProd implements Factory {
         return helperRandom;
     }
 
+//--------------------------------------------------
 
     @Override
     public FRandom getFRandom() {
 
-        return fRandom;
+        return FRandomProd.create(this);
+    }
+
+    @Override
+    public FRandom getFRandom(long seed) {
+
+        return FRandomProd.create(this, seed);
     }
 }

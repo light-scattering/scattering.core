@@ -50,6 +50,16 @@ public final class FactoryDev implements Factory {
     }
 
     @Override
+    public FRandom getInternalFRandom() {
+        return null;
+    }
+
+    @Override
+    public void setInternalFRandom(FRandom fRandom) {
+
+    }
+
+    @Override
     public FPoint getFPoint() {
 
         return FPointDev.create(factory.getFPoint());
@@ -136,5 +146,10 @@ public final class FactoryDev implements Factory {
     public FRandom getFRandom() {
 
         return factory.getFRandom();
+    }
+
+    @Override
+    public FRandom getFRandom(long seed) {
+        return null;
     }
 }
