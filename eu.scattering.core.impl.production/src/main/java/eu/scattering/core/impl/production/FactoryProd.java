@@ -1,15 +1,15 @@
 package eu.scattering.core.impl.production;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.core.algebra.geometry.construct.line.FLine;
-import eu.scattering.core.design.core.algebra.geometry.construct.plane.FPlane;
-import eu.scattering.core.design.core.algebra.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.core.algebra.number.complex.FComplex;
-import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.design.core.engine.random.FRandom;
-import eu.scattering.core.design.core.engine.rotation.FRotation;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
+import eu.scattering.core.design.elements.algebra.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.elements.algebra.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
+import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.angle.FAngleHelper;
 import eu.scattering.core.design.helpers.random.FRandomHelper;
 import eu.scattering.core.impl.production.core.engine.random.FRandomProd;

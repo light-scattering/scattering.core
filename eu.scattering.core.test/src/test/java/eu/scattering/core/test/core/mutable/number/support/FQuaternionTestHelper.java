@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.mutable.number.support;
 
-import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.function.BiFunction;

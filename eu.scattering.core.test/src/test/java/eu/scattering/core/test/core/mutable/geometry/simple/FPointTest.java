@@ -1,7 +1,7 @@
 package eu.scattering.core.test.core.mutable.geometry.simple;
 
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.core.data.position.FPos3D;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.data.position.FPos3D;
 import eu.scattering.core.test.core.mutable.geometry.simple.support.FPointTestHelper;
 import org.junit.jupiter.api.*;
 

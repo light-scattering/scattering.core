@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.mutable.geometry.simple.support;
 
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.function.BiFunction;

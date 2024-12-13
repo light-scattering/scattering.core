@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.advanced;
 
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.core.algebra.geometry.construct.Construct;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.construct.Construct;
 
 import java.util.List;
 

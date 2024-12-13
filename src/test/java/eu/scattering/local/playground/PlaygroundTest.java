@@ -1,9 +1,9 @@
 package eu.scattering.local.playground;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.core.algebra.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.elements.algebra.geometry.construct.plane.FPlane;
 import eu.scattering.core.impl.development.FactoryDev;
 import eu.scattering.core.impl.production.FactoryProd;
 import org.junit.jupiter.api.Assertions;

@@ -1,6 +1,6 @@
 package eu.scattering.core.test.core.mutable.number;
 
-import eu.scattering.core.design.core.algebra.number.complex.FComplex;
+import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
 import eu.scattering.core.test.core.mutable.number.support.FComplexTestHelper;
 import org.junit.jupiter.api.*;
 

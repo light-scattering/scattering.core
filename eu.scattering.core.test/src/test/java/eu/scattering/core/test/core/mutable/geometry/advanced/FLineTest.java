@@ -1,8 +1,8 @@
 package eu.scattering.core.test.core.mutable.geometry.advanced;
 
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.core.algebra.geometry.construct.line.FLine;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
 import eu.scattering.core.test.core.mutable.geometry.advanced.support.FLineTestHelper;
 import org.junit.jupiter.api.*;
 

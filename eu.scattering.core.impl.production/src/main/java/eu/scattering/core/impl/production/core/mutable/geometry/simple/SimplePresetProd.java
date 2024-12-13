@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.simple;
 
-import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
-import eu.scattering.core.design.core.algebra.geometry.Geometry;
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.Primitive;
+import eu.scattering.core.design.elements.algebra.geometry.Geometry;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 
 import java.util.List;
 import java.util.function.Consumer;

@@ -1,10 +1,10 @@
 package eu.scattering.core.impl.production.support.helper;
 
 import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.core.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.core.algebra.number.complex.FComplex;
-import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
+import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.helpers.random.FRandomHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
