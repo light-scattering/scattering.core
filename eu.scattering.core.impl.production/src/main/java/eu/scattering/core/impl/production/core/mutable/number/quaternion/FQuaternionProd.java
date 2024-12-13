@@ -2,11 +2,10 @@ package eu.scattering.core.impl.production.core.mutable.number.quaternion;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.core.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.impl.production.core.mutable.MutablePresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FQuaternionProd extends MutablePresetProd<FQuaternion> implements FQuaternion {
+public class FQuaternionProd implements FQuaternion {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.

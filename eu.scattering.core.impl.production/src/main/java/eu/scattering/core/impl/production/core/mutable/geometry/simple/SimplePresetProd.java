@@ -1,6 +1,5 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.simple;
 
-import eu.scattering.core.impl.production.core.mutable.MutablePresetProd;
 import eu.scattering.core.design.core.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.core.algebra.geometry.Geometry;
 import eu.scattering.core.design.core.algebra.geometry.primitive.point.FPoint;
@@ -10,8 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class SimplePresetProd<T extends Primitive<T>>
-        extends MutablePresetProd<T> implements Primitive<T> {
+public abstract class SimplePresetProd<T extends Primitive<T>> implements Primitive<T> {
 
     @Override
     public int hashCode() {

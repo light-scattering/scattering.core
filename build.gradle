@@ -23,7 +23,6 @@ test {
 dependencies {
     implementation project(':eu.scattering.core.design')
     implementation project(':eu.scattering.core.impl.production')
-    implementation project(':eu.scattering.core.impl.development')
     implementation 'org.springframework:spring-context:5.2.8.RELEASE'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0-M1'

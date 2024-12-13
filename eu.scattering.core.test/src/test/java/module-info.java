@@ -1,8 +1,9 @@
 module eu.scattering.core.test {
-    requires eu.scattering.core.impl.development;
     requires org.junit.jupiter.api;
     requires org.assertj.core;
     requires org.json;
+    requires eu.scattering.core.design;
+    requires eu.scattering.core.impl.production;
     opens eu.scattering.core.test.core.mutable.geometry.simple;
     opens eu.scattering.core.test.core.mutable.geometry.advanced;
     opens eu.scattering.core.test.core.mutable.number;

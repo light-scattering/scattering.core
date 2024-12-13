@@ -2,8 +2,6 @@ module eu.scattering.core.design {
     requires org.json;
     exports eu.scattering.core.design;
     exports eu.scattering.core.design.core.data;
-    exports eu.scattering.core.design.debug;
-    exports eu.scattering.core.design.debug.stats;
     exports eu.scattering.core.design.core.algebra;
     exports eu.scattering.core.design.core.algebra.geometry;
     exports eu.scattering.core.design.core.algebra.geometry.primitive;

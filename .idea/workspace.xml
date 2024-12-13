@@ -24,10 +24,20 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/Factory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/core/engine/random/FRandomFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/core/engine/random/FRandomFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/FactoryProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/FactoryProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/engine/random/FRandomProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/engine/random/FRandomProd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/FactoryDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/SpringDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/core/mutable/MutablePresetDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/core/mutable/geometry/advanced/line/FLineDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/core/mutable/geometry/advanced/plane/FPlaneDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/core/mutable/geometry/simple/point/FPointDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/core/mutable/geometry/simple/vector/FVectorDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/core/mutable/number/complex/FComplexDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/eu/scattering/core/impl/development/core/mutable/number/quaternion/FQuaternionDev.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.development/src/main/resources/core.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

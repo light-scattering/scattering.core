@@ -17,7 +17,6 @@ import eu.scattering.core.impl.production.core.mutable.geometry.simple.point.FPo
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.vector.FVectorProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.line.FLineProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.plane.FPlaneProd;
-import eu.scattering.core.impl.production.core.mutable.geometry.shape.sphere.FSphereProd;
 import eu.scattering.core.impl.production.core.mutable.number.complex.FComplexProd;
 import eu.scattering.core.impl.production.core.mutable.number.quaternion.FQuaternionProd;
 import eu.scattering.core.impl.production.core.immutable.rotation.FRotationProd;
@@ -99,7 +98,7 @@ public final class FactoryProd implements Factory {
     @Override
     public FSphere getFSphere() {
 
-        return FSphereProd.create(this);
+        return null;
     }
 
     @Override
