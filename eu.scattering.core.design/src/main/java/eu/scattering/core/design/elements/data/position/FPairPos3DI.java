@@ -4,43 +4,48 @@ import eu.scattering.core.design.elements.Core;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FTuplePos3D implements Core<FTuplePos3D> {
-    private static final String JSON_TAG = "tuplePos3D";
+public class FPairPos3DI implements Core<FPairPos3DI> {
+    private static final String JSON_TAG = "pairPos3DI";
 
-    private final FPos3D posA;
-    private final FPos3D posB;
+    private final FPos3DI posA;
+    private final FPos3DI posB;
 
-    private FTuplePos3D(FPos3D posA, FPos3D posB) {
+    private FPairPos3DI(FPos3DI posA, FPos3DI posB) {
 
         this.posA = posA;
         this.posB = posB;
     }
 
-    protected static FTuplePos3D create(FPos3D posA, FPos3D posB) {
+    protected static FPairPos3DI create(FPos3DI posA, FPos3DI posB) {
 
-        return new FTuplePos3D(posA, posB);
+        return new FPairPos3DI(posA, posB);
     }
 
-    protected static FTuplePos3D create(String text) {
+    protected static FPairPos3DI create(String text) {
 
         return create(new JSONObject(text));
     }
 
-    protected static FTuplePos3D create(JSONObject json) {
+    protected static FPairPos3DI create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 
-        FPos3D posA = FPos3D.create(structure.getJSONObject(0));
-        FPos3D posB = FPos3D.create(structure.getJSONObject(1));
+        FPos3DI posA = FPos3DI.create(structure.getJSONObject(0));
+        FPos3DI posB = FPos3DI.create(structure.getJSONObject(1));
 
-        return new FTuplePos3D(posA, posB);
+        return new FPairPos3DI(posA, posB);
     }
 
-    public FPos3D getPosA() {
+    public FPos3DI getPosA() {
         return posA;
     }
 
-    public FPos3D getPosB() {
+    public FPos3DI getPosB() {
         return posB;
+    }
+
+    public FPairPos3D toDouble() {
+
+        return FPairPos3D.create(posA.toDouble(), posB.toDouble());
     }
 
     //--------------------------------------------------
@@ -70,8 +75,8 @@ public class FTuplePos3D implements Core<FTuplePos3D> {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FTuplePos3D) {
-            FTuplePos3D fPosition = (FTuplePos3D) object;
+        if (object instanceof FPairPos3DI) {
+            FPairPos3DI fPosition = (FPairPos3DI) object;
 
             return getPosA().equals(fPosition.getPosA()) && getPosB().equals(fPosition.getPosB());
         }

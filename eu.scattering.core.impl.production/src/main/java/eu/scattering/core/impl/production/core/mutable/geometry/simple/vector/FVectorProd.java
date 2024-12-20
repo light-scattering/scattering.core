@@ -4,7 +4,7 @@ import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.data.position.FPos3D;
-import eu.scattering.core.design.elements.data.position.FTuplePos3D;
+import eu.scattering.core.design.elements.data.position.FPairPos3D;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
 import org.json.JSONArray;
@@ -134,7 +134,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector set(FTuplePos3D position) {
+    public FVector set(FPairPos3D position) {
 
         setBase(position.getPosA());
         setHead(position.getPosB());
@@ -884,12 +884,12 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FTuplePos3D toTuplePos3D() {
+    public FPairPos3D toTuplePos3D() {
 
         var posA = factory.getFPos3D(getBaseX(), getBaseY(), getBaseZ());
         var posB = factory.getFPos3D(getHeadX(), getHeadY(), getHeadZ());
 
-        return factory.getFTuplePos3D(posA, posB);
+        return factory.getFPairPos3D(posA, posB);
     }
 
 }

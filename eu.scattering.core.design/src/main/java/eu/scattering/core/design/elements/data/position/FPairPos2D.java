@@ -4,42 +4,42 @@ import eu.scattering.core.design.elements.Core;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FTuplePos3DI implements Core<FTuplePos3DI> {
-    private static final String JSON_TAG = "tuplePos3DI";
+public class FPairPos2D implements Core<FPairPos2D> {
+    private static final String JSON_TAG = "pairPos2D";
 
-    private final FPos3DI posA;
-    private final FPos3DI posB;
+    private final FPos2D posA;
+    private final FPos2D posB;
 
-    private FTuplePos3DI(FPos3DI posA, FPos3DI posB) {
+    private FPairPos2D(FPos2D posA, FPos2D posB) {
 
         this.posA = posA;
         this.posB = posB;
     }
 
-    protected static FTuplePos3DI create(FPos3DI posA, FPos3DI posB) {
+    protected static FPairPos2D create(FPos2D posA, FPos2D posB) {
 
-        return new FTuplePos3DI(posA, posB);
+        return new FPairPos2D(posA, posB);
     }
 
-    protected static FTuplePos3DI create(String text) {
+    protected static FPairPos2D create(String text) {
 
         return create(new JSONObject(text));
     }
 
-    protected static FTuplePos3DI create(JSONObject json) {
+    protected static FPairPos2D create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 
-        FPos3DI posA = FPos3DI.create(structure.getJSONObject(0));
-        FPos3DI posB = FPos3DI.create(structure.getJSONObject(1));
+        FPos2D posA = FPos2D.create(structure.getJSONObject(0));
+        FPos2D posB = FPos2D.create(structure.getJSONObject(1));
 
-        return new FTuplePos3DI(posA, posB);
+        return new FPairPos2D(posA, posB);
     }
 
-    public FPos3DI getPosA() {
+    public FPos2D getPosA() {
         return posA;
     }
 
-    public FPos3DI getPosB() {
+    public FPos2D getPosB() {
         return posB;
     }
 
@@ -70,8 +70,8 @@ public class FTuplePos3DI implements Core<FTuplePos3DI> {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FTuplePos3DI) {
-            FTuplePos3DI fPosition = (FTuplePos3DI) object;
+        if (object instanceof FPairPos2D) {
+            FPairPos2D fPosition = (FPairPos2D) object;
 
             return getPosA().equals(fPosition.getPosA()) && getPosB().equals(fPosition.getPosB());
         }

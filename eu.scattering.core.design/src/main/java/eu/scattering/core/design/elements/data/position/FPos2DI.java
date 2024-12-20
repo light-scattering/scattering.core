@@ -46,6 +46,7 @@ public class FPos2DI implements Core<FPos2DI> {
     }
 
     public FPos2D toDouble() {
+
         return FPos2D.create(d0, d1);
     }
 

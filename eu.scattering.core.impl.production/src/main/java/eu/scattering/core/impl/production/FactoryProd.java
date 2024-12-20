@@ -33,7 +33,7 @@ public final class FactoryProd implements Factory {
 
     private FactoryProd() {
 
-        fRandom = FRandomProd.create(this);
+        fRandom = FRandomProd.create();
     }
 
     public static Factory create() {
@@ -148,12 +148,12 @@ public final class FactoryProd implements Factory {
     @Override
     public FRandom getFRandom() {
 
-        return FRandomProd.create(this);
+        return FRandomProd.create();
     }
 
     @Override
     public FRandom getFRandom(long seed) {
 
-        return FRandomProd.create(this, seed);
+        return FRandomProd.create(seed);
     }
 }

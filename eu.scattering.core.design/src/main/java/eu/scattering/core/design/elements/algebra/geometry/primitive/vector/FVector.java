@@ -7,7 +7,7 @@ import eu.scattering.core.design.annotations.Utility;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.data.position.FPos3D;
-import eu.scattering.core.design.elements.data.position.FTuplePos3D;
+import eu.scattering.core.design.elements.data.position.FPairPos3D;
 
 public interface FVector extends Primitive<FVector> {
 
@@ -42,7 +42,7 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
-    FVector set(FTuplePos3D position);
+    FVector set(FPairPos3D position);
 
     FVector set(FPos3D base, double hX, double hY, double hZ);
     FVector set(double bX, double bY, double bZ, FPos3D head);
@@ -51,7 +51,7 @@ public interface FVector extends Primitive<FVector> {
     FVector setBase(FPos3D base);
     FVector setHead(FPos3D head);
 
-    FTuplePos3D toTuplePos3D();
+    FPairPos3D toTuplePos3D();
 
     //--------------------------------------------------
 

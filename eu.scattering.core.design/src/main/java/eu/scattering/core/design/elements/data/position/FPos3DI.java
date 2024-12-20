@@ -54,6 +54,7 @@ public class FPos3DI implements Core<FPos3DI> {
     }
 
     public FPos3D toDouble() {
+
         return FPos3D.create(d0, d1, d2);
     }
 
