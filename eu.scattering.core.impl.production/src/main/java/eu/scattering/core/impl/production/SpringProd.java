@@ -16,11 +16,8 @@ public class SpringProd {
     @Value("${jitter}")
     private double jitter;
 
-    @Value("${random.range}")
-    private double random_range;
-
-    @Value("${random.spacing}")
-    private double random_spacing;
+    @Value("${random.separation}")
+    private double separationDistance;
 
     @Resource(name = "prod")
     private Factory factory;
@@ -33,9 +30,5 @@ public class SpringProd {
 
     @PostConstruct
     public void postConstruct() {
-
-        factory.setJitter(jitter);
-        factory.getFRandomHelper().setSpacing(random_spacing);
-        factory.getFRandomHelper().setRange(random_range);
     }
 }

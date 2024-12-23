@@ -5,6 +5,7 @@ import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
+import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.AdvancedPresetProd;
 import org.json.JSONArray;
@@ -24,15 +25,19 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private FVector origin;
     private final Factory factory;
+    private final FRandom random;
+    private final double epsilon;
 
-    private FLineProd(Factory factory) {
+    private FLineProd(Factory factory, FRandom random, double epsilon) {
 
         this.factory = factory;
+        this.random = random;
+        this.epsilon = epsilon;
     }
 
-    public static FLine create(Factory factory) {
+    public static FLine create(Factory factory, FRandom random, double epsilon) {
 
-        return new FLineProd(factory).setOriginRef(factory.getFVector());
+        return new FLineProd(factory, random, epsilon).setOriginRef(factory.getFVector());
     }
 
     @Override
@@ -124,10 +129,8 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        double jitter = factory.getJitter();
-
         return (e) -> e.disassemble().stream()
-                .map(p -> p.getDistance(projectFPoint(p.copy())) < jitter)
+                .map(p -> p.getDistance(projectFPoint(p.copy())) < epsilon)
                 .collect(Collectors.toList());
     }
 
@@ -468,13 +471,11 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
         double distanceBase = getOrigin().getRefBase().getDistance(projection);
         double distanceHead = getOrigin().getRefHead().getDistance(projection);
 
-        double jitter = factory.getJitter();
-
-        if ((distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter)) {
+        if ((distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon)) {
             return true;
         }
 
-        return distanceHead < distanceBase + jitter;
+        return distanceHead < distanceBase + epsilon;
     }
 
     private boolean isPartOfSegment(FPoint projection) {
@@ -483,9 +484,7 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
         double distanceBase = getOrigin().getRefBase().getDistance(projection);
         double distanceHead = getOrigin().getRefHead().getDistance(projection);
 
-        double jitter = factory.getJitter();
-
-        return (distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter);
+        return (distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon);
     }
 
     private FPoint moveForward(FPoint ref, double distance) {

@@ -4,6 +4,7 @@ import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoin
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
 import eu.scattering.core.design.elements.algebra.geometry.construct.plane.FPlane;
+import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.core.mutable.geometry.advanced.support.FPlaneTestHelper;
 import org.junit.jupiter.api.*;
 
@@ -42,7 +43,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Construct with FVector")
         void constructWithFVector() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlane = factory.getFPlane(fVector);
 
             assertNotNull(fPlane, "The instance is null");
@@ -51,7 +52,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Construct with FVector (validate references)")
         void constructWithFVectorValidateReferences() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlane = factory.getFPlane(fVector);
 
             assertSame(fVector, fPlane.getOrigin(), "The FVector reference is erroneous");
@@ -60,12 +61,12 @@ public class FPlaneTest {
         @Test
         @DisplayName("Construct with FVector (validate positions)")
         void constructWithFVectorValidatePositions() {
-            double refAX = random.getDouble();
-            double refAY = random.getDouble();
-            double refAZ = random.getDouble();
-            double refBX = random.getDouble();
-            double refBY = random.getDouble();
-            double refBZ = random.getDouble();
+            double refAX = random.nextDouble();
+            double refAY = random.nextDouble();
+            double refAZ = random.nextDouble();
+            double refBX = random.nextDouble();
+            double refBY = random.nextDouble();
+            double refBZ = random.nextDouble();
             FPoint fPointBase = factory.getFPoint(refAX, refAY, refAZ);
             FPoint fPointHead = factory.getFPoint(refBX, refBY, refBZ);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
@@ -98,8 +99,8 @@ public class FPlaneTest {
         @Test
         @DisplayName("Set origin ref")
         void setOriginRef() {
-            FVector fVectorA = random.getFVector();
-            FVector fVectorB = random.getFVector(fVectorA);
+            FVector fVectorA = TestHelper.getRandomFVector();
+            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
             FPlane fPlane = factory.getFPlane(fVectorA);
 
             FPlane fPlaneRef = fPlane.setOriginRef(fVectorB);
@@ -114,7 +115,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Set origin ref (throw NullPointerException)")
         void setOriginRefThrowNullPointerException() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             Assertions.assertThrows(NullPointerException.class, () -> fPlane.setOriginRef(null),
                     "The reference cannot be null");
@@ -123,7 +124,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get origin")
         void getOrigin() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlane = factory.getFPlane(fVector);
 
             assertSame(fVector, fPlane.getOrigin(), "The FVector reference is erroneous");
@@ -132,7 +133,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get origin (validate positions)")
         void getOriginValidatePositions() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlane = factory.getFPlane(fVector.copy());
 
             assertTrue(fVector.isExact(fPlane.getOrigin()), "The FVector positions are erroneous");
@@ -146,7 +147,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("JSON parser")
         void parseJSON() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector);
             FPlane fPlaneB = factory.getFPlane().importFromJSON(fPlaneA.exportToJSON());
 
@@ -169,7 +170,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Exactness")
         void isExact() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
             FPlane fPlaneB = factory.getFPlane(fVector.copy());
 
@@ -182,7 +183,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Exactness (fail)")
         void isExactFail() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
             FPlane fPlaneB = factory.getFPlane(fVector.copy().add(0.5 * jitter));
 
@@ -204,7 +205,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Similarity")
         void isSimilar() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
             FPlane fPlaneB = factory.getFPlane(fVector.copy().add(0.5 * jitter));
 
@@ -217,10 +218,10 @@ public class FPlaneTest {
         @Test
         @DisplayName("Similarity (inverted)")
         void isSimilarInverted() {
-            FPlane fPlaneA = factory.getFPlane(random.getFVector());
+            FPlane fPlaneA = factory.getFPlane(TestHelper.getRandomFVector());
             FPlane fPlaneB = fPlaneA.copy();
 
-            fPlaneB.getOrigin().reflectHead().moveBase(random.getFPoint());
+            fPlaneB.getOrigin().reflectHead().moveBase(TestHelper.getRandomFPoint());
             fPlaneB.getOrigin().moveBase(fPlaneB.copy().getBase().ext(fPlaneA.project()));
 
             Assertions.assertAll("Validate exactness",
@@ -232,7 +233,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
             FPlane fPlaneB = factory.getFPlane(fVector.copy().moveForward(1.5 * jitter));
 
@@ -254,7 +255,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get hash code")
         void getHashCode() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
             FPlane fPlaneB = factory.getFPlane(fVector.copy());
 
@@ -265,9 +266,9 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector);
-            FPlane fPlaneB = factory.getFPlane(random.getFVector(fVector));
+            FPlane fPlaneB = factory.getFPlane(TestHelper.getRandomFVector(fVector));
 
             assertNotEquals(fPlaneA.hashCode(), fPlaneB.hashCode(),
                     "Two different FPlanes should not have the same hash code");
@@ -284,7 +285,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Copy")
         void copy() {
-            FVector fVector = random.getFVector();
+            FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector);
             FPlane fPlaneB = fPlaneA.copy();
 
@@ -316,7 +317,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = random.getFPoint();
+            FPoint relocation = TestHelper.getRandomFPoint();
 
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
@@ -340,7 +341,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Project (validate)")
         void projectValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(FPlane::project, fPlane);
         }
@@ -370,7 +371,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Reflect (validate)")
         void reflectValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(FPlane::reflect, fPlane);
         }
@@ -408,7 +409,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Location (validate)")
         void locationValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(FPlane::isPartOf, fPlane);
         }
@@ -419,7 +420,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = random.getFPoint();
+            FPoint relocation = TestHelper.getRandomFPoint();
 
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
@@ -441,7 +442,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get distance (validate)")
         void getDistanceValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(FPlane::getDistance, fPlane);
         }
@@ -452,7 +453,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = random.getFPoint();
+            FPoint relocation = TestHelper.getRandomFPoint();
 
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
@@ -474,7 +475,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get distance P2 (validate)")
         void getDistanceP2Validate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(FPlane::getDistanceP2, fPlane);
         }
@@ -482,8 +483,8 @@ public class FPlaneTest {
         @Test
         @DisplayName("Set distance")
         void setDistance() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
-            FPoint fPoint = random.getFPoint();
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
+            FPoint fPoint = TestHelper.getRandomFPoint();
 
             fPoint.ext(fPlane.setDistance(1));
 
@@ -504,7 +505,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Set distance (validate)")
         void setDistanceValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(e -> e.setDistance(1), fPlane);
         }
@@ -518,7 +519,7 @@ public class FPlaneTest {
                     .moveBase(-1, 2, -1)
                     .getRefHead();
 
-            FPoint relocation = random.getFPoint();
+            FPoint relocation = TestHelper.getRandomFPoint();
 
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
@@ -536,7 +537,7 @@ public class FPlaneTest {
                     .moveBase(-1, 2, -1)
                     .getRefHead();
 
-            FPoint relocation = random.getFPoint();
+            FPoint relocation = TestHelper.getRandomFPoint();
 
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
@@ -557,7 +558,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Determine half-space (validate)")
         void isInHalfSpaceValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(FPlane::isInHalfSpace, fPlane);
         }
@@ -611,7 +612,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Determine intersection (validate)")
         void isCutValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
             FVector fVector = factory.getFVector();
 
             FPlaneTestHelper.testValue(e -> e.isCut(fVector), fPlane);
@@ -624,7 +625,7 @@ public class FPlaneTest {
             FLine fLine = factory.getFLine(
                     factory.getFVector(-1, 1, 0, 1, -1, 0));
 
-            FPoint fPointRel = random.getFPoint();
+            FPoint fPointRel = TestHelper.getRandomFPoint();
 
             fPlane.getOrigin().add(fPointRel);
             fLine.getOrigin().add(fPointRel);
@@ -648,7 +649,7 @@ public class FPlaneTest {
             FLine fLine = factory.getFLine(
                     factory.getFVector(-1, 1, 0, 1, 1, 0));
 
-            FPoint fPointRel = random.getFPoint();
+            FPoint fPointRel = TestHelper.getRandomFPoint();
 
             fPlane.getOrigin().add(fPointRel);
             fLine.getOrigin().add(fPointRel);
@@ -680,8 +681,8 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get common FPoint (validate)")
         void getCommonFPointValidate() {
-            FPlane fPlane = factory.getFPlane(random.getFVector());
-            FLine fLine = factory.getFLine(random.getFVector());
+            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
+            FLine fLine = factory.getFLine(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(e -> fPlane.getCommonFPoint(fLine), fPlane);
         }
@@ -699,8 +700,8 @@ public class FPlaneTest {
                 fVector1.setRandomAngle();
                 fVector2.setRandomAngle(fVector1.getRefHead());
 
-                fVector1.moveBase(random.getFPoint().div(100));
-                fVector2.moveBase(random.getFPoint().div(100));
+                fVector1.moveBase(TestHelper.getRandomFPoint().div(100));
+                fVector2.moveBase(TestHelper.getRandomFPoint().div(100));
             }
 
             FPlane fPlane1 = factory.getFPlane(fVector1);
@@ -732,7 +733,7 @@ public class FPlaneTest {
             FVector fVector1 = factory.getFVector(1, 0, 0);
             FVector fVector2 = factory.getFVector(1, 0, 0);
 
-            FPoint fPoint = random.getFPoint();
+            FPoint fPoint = TestHelper.getRandomFPoint();
 
             fVector1.moveBase(fPoint);
             fVector2.moveBase(fPoint);
@@ -776,8 +777,8 @@ public class FPlaneTest {
         @Test
         @DisplayName("Get common FLine (validate)")
         void getCommonFLineValidate() {
-            FPlane fPlane1 = factory.getFPlane(random.getFVector());
-            FPlane fPlane2 = factory.getFPlane(random.getFVector());
+            FPlane fPlane1 = factory.getFPlane(TestHelper.getRandomFVector());
+            FPlane fPlane2 = factory.getFPlane(TestHelper.getRandomFVector());
 
             FPlaneTestHelper.testValue(FPlane::getCommonFLine, fPlane1, fPlane2);
         }

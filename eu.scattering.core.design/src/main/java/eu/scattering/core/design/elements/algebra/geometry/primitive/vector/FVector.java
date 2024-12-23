@@ -1,13 +1,11 @@
 package eu.scattering.core.design.elements.algebra.geometry.primitive.vector;
 
-import eu.scattering.core.design.annotations.Radian;
-import eu.scattering.core.design.annotations.SphericalCoordinates;
-import eu.scattering.core.design.annotations.Unsafe;
-import eu.scattering.core.design.annotations.Utility;
+import eu.scattering.core.design.annotations.MutableState;
+import eu.scattering.core.design.annotations.IntermediateResults;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.data.position.FPos3D;
-import eu.scattering.core.design.elements.data.position.FPairPos3D;
+import eu.scattering.core.design.transfers.position.FPos3D;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
 
 public interface FVector extends Primitive<FVector> {
 
@@ -90,11 +88,11 @@ public interface FVector extends Primitive<FVector> {
 
     double getAngle(FPoint ref);
     double getAngle(FVector ref);
-    FVector setAngle(FPoint ref, @Radian double angle);
-    FVector setAngle(FVector ref, @Radian double angle);
+    FVector setAngle(FPoint ref, double angle);
+    FVector setAngle(FVector ref, double angle);
 
-    FVector rotate(FPoint ref, @Radian double angle);
-    FVector rotate(FVector ref, @Radian double angle);
+    FVector rotate(FPoint ref, double angle);
+    FVector rotate(FVector ref, double angle);
 
     double getDotProduct(FPoint ref);
     double getDotProduct(FVector ref);
@@ -115,32 +113,28 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
-    @SphericalCoordinates
-    FVector setSphericalCoordinates(@Radian double inclination, @Radian double azimuth);
+    FVector setSphericalCoordinates(double inclination, double azimuth);
 
-    @SphericalCoordinates
     double getInclination();
-    @SphericalCoordinates
-    FVector setInclination(@Radian double inclination);
+    FVector setInclination(double inclination);
 
-    @SphericalCoordinates
     double getAzimuth();
-    FVector setAzimuth(@Radian double azimuth);
+    FVector setAzimuth(double azimuth);
 
-    @Utility("Length squared")
+    @IntermediateResults("Length squared")
     double getLengthP2();
 
-    @Unsafe("Interferes with the internal structure of the object")
+    @MutableState("Interferes with the internal structure of the object")
     FVector setRef(FPoint baseRef, FPoint headRef);
 
-    @Unsafe("Interferes with the internal structure of the object")
+    @MutableState("Interferes with the internal structure of the object")
     FPoint getRefBase();
-    @Unsafe("Interferes with the internal structure of the object")
+    @MutableState("Interferes with the internal structure of the object")
     FVector setRefBase(FPoint refBase);
 
-    @Unsafe("Interferes with the internal structure of the object")
+    @MutableState("Interferes with the internal structure of the object")
     FPoint getRefHead();
-    @Unsafe("Interferes with the internal structure of the object")
+    @MutableState("Interferes with the internal structure of the object")
     FVector setRefHead(FPoint refHead);
 
 

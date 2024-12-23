@@ -6,6 +6,7 @@ import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoin
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
 import eu.scattering.core.design.elements.algebra.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.AdvancedPresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,15 +25,19 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
 
     private FVector origin;
     private final Factory factory;
+    private final FRandom random;
+    private final double epsilon;
 
-    private FPlaneProd(Factory factory) {
+    private FPlaneProd(Factory factory, FRandom random, double epsilon) {
 
         this.factory = factory;
+        this.random = random;
+        this.epsilon = epsilon;
     }
 
-    public static FPlane create(Factory factory) {
+    public static FPlane create(Factory factory, FRandom random, double epsilon) {
 
-        return new FPlaneProd(factory).setOriginRef(factory.getFVector());
+        return new FPlaneProd(factory, random, epsilon).setOriginRef(factory.getFVector());
     }
 
     @Override
@@ -125,10 +130,8 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        double jitter = factory.getJitter();
-
         return (e) -> e.disassemble().stream()
-                .map(p -> p.getDistance(projectOnPlane(p.copy())) < jitter)
+                .map(p -> p.getDistance(projectOnPlane(p.copy())) < epsilon)
                 .collect(Collectors.toList());
     }
 
@@ -274,13 +277,11 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
         double distanceBase = getOrigin().getRefBase().getDistance(projection);
         double distanceHead = getOrigin().getRefHead().getDistance(projection);
 
-        double jitter = factory.getJitter();
-
-        if ((distanceBase < magnitude + jitter) && (distanceHead < magnitude + jitter)) {
+        if ((distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon)) {
             return true;
         }
 
-        return distanceHead < distanceBase + jitter;
+        return distanceHead < distanceBase + epsilon;
     }
 
 }

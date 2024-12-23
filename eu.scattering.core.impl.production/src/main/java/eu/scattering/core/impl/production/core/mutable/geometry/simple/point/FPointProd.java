@@ -2,13 +2,16 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.point;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.data.position.FPos3D;
+import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
+import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
@@ -19,15 +22,19 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
 
     private final double[] origin = { 0.0, 0.0, 0.0 };
     private final Factory factory;
+    private final FRandom random;
+    private final double epsilon;
 
-    private FPointProd(Factory factory) {
+    private FPointProd(Factory factory, FRandom random, double epsilon) {
 
         this.factory = factory;
+        this.random = random;
+        this.epsilon = epsilon;
     }
 
-    public static FPoint create(Factory factory) {
+    public static FPoint create(Factory factory, FRandom random, double epsilon) {
 
-        return new FPointProd(factory);
+        return new FPointProd(factory, random, epsilon);
     }
 
     @Override
@@ -126,9 +133,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
         double distanceY = Math.abs(getY() - y);
         double distanceZ = Math.abs(getZ() - z);
 
-        double jitter = factory.getJitter();
-
-        return distanceX < jitter && distanceY < jitter && distanceZ < jitter;
+        return distanceX < epsilon && distanceY < epsilon && distanceZ < epsilon;
     }
 
     @Override
@@ -178,7 +183,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-        return factory.getFPoint(this);
+    return FPointProd.create(factory, random, epsilon).set(this);
     }
 
     @Override
@@ -546,17 +551,25 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
         return setSphericalCoordinates(getInclination(), azimuthal).setLength(radius);
     }
 
-
-
-
-
-// TODO rewrite
-
     @Override
-    public FPoint randomize(FPoint... exclusion) {
+    public FPoint randomizeAngle(FPoint... exclusion) {
         double radius = getLength();
 
-        return set(factory.getFRandomHelper().getFPoint(exclusion)).setLength(radius);
+        return set(random.nextDoubleOnSphere(radius));
+    }
+
+    @Override
+    public FPoint randomizePosition(FPairPos3D range, FPoint... exclusion) {
+        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
+
+        return set(random.nextDouble3D(range, exc));
+    }
+
+    @Override
+    public FPoint randomizePosition(double radius, FPoint... exclusion) {
+        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
+
+        return set(random.nextDoubleInSphere(radius, exc));
     }
 
 }

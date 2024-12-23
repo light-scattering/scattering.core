@@ -5,7 +5,7 @@ import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.design.elements.data.position.FPairPos3D;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import org.json.JSONArray;
 import org.json.JSONObject;

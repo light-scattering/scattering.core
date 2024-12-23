@@ -2,6 +2,7 @@ package eu.scattering.core.impl.production.core.mutable.number.quaternion;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.elements.engine.random.FRandom;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,15 +14,19 @@ public class FQuaternionProd implements FQuaternion {
 
     private final double[] origin = { 0.0, 0.0, 0.0, 0.0 };
     private final Factory factory;
+    private final FRandom random;
+    private final double epsilon;
 
-    private FQuaternionProd(Factory factory) {
+    private FQuaternionProd(Factory factory, FRandom random, double epsilon) {
 
         this.factory = factory;
+        this.random = random;
+        this.epsilon = epsilon;
     }
 
-    public static FQuaternion create(Factory factory) {
+    public static FQuaternion create(Factory factory, FRandom random, double epsilon) {
 
-        return new FQuaternionProd(factory);
+        return new FQuaternionProd(factory, random, epsilon);
     }
 
     @Override
@@ -130,9 +135,7 @@ public class FQuaternionProd implements FQuaternion {
         double distanceJ = Math.abs(getJ() - fQuaternion.getJ());
         double distanceK = Math.abs(getK() - fQuaternion.getK());
 
-        double jitter = factory.getJitter();
-
-        return distanceRe < jitter && distanceI < jitter && distanceJ < jitter && distanceK < jitter;
+        return distanceRe < epsilon && distanceI < epsilon && distanceJ < epsilon && distanceK < epsilon;
     }
 
     @Override
@@ -164,7 +167,7 @@ public class FQuaternionProd implements FQuaternion {
     @Override
     public FQuaternion copy() {
 
-        return factory.getFQuaternion().set(this);
+        return FQuaternionProd.create(factory, random, epsilon).set(this);
     }
 
     @Override
@@ -425,9 +428,7 @@ public class FQuaternionProd implements FQuaternion {
         double distanceJ = Math.abs(getJ() - j);
         double distanceK = Math.abs(getK() - k);
 
-        double jitter = factory.getJitter();
-
-        return distanceRe < jitter && distanceI < jitter && distanceJ < jitter && distanceK < jitter;
+        return distanceRe < epsilon && distanceI < epsilon && distanceJ < epsilon && distanceK < epsilon;
     }
 
     @Override

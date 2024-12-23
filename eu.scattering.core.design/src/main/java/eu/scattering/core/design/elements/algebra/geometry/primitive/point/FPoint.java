@@ -1,9 +1,9 @@
 package eu.scattering.core.design.elements.algebra.geometry.primitive.point;
 
-import eu.scattering.core.design.annotations.SphericalCoordinates;
-import eu.scattering.core.design.annotations.Utility;
+import eu.scattering.core.design.annotations.IntermediateResults;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.Primitive;
-import eu.scattering.core.design.elements.data.position.FPos3D;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
+import eu.scattering.core.design.transfers.position.FPos3D;
 
 public interface FPoint extends Primitive<FPoint> {
 
@@ -52,23 +52,20 @@ public interface FPoint extends Primitive<FPoint> {
 
     FPoint rotate(FPoint ref, double angle);
 
-    FPoint randomize(FPoint... exclusion);
+    FPoint randomizeAngle(FPoint... exclusion);
+    FPoint randomizePosition(FPairPos3D range, FPoint... exclusion);
+    FPoint randomizePosition(double radius, FPoint... exclusion);
 
-    @SphericalCoordinates
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
-    @SphericalCoordinates
     double getInclination();
-    @SphericalCoordinates
     FPoint setInclination(double inclination);
 
-    @SphericalCoordinates
     double getAzimuth();
-    @SphericalCoordinates
     FPoint setAzimuth(double azimuth);
 
-    @Utility("Length squared")
+    @IntermediateResults("Length squared")
     double getLengthP2();
-    @Utility("Distance squared")
+    @IntermediateResults("Distance squared")
     double getDistanceP2(FPoint ref);
 }

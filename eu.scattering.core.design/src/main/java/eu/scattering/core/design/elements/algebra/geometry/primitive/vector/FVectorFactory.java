@@ -2,8 +2,8 @@ package eu.scattering.core.design.elements.algebra.geometry.primitive.vector;
 
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPointFactory;
-import eu.scattering.core.design.elements.data.position.FPos3D;
-import eu.scattering.core.design.elements.data.position.FPairPos3D;
+import eu.scattering.core.design.transfers.position.FPos3D;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
 
 public interface FVectorFactory extends FPointFactory {
 

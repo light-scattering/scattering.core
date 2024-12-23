@@ -5,7 +5,6 @@ import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVec
 
 public interface FRotationFactory {
 
-    FRotation getFRotation(FVector axis, double angle);
     FRotation getFRotation(FPoint axis, double angle);
-    FRotation getFRotation(String structure);
+    FRotation getFRotation(FVector axis, double angle);
 }

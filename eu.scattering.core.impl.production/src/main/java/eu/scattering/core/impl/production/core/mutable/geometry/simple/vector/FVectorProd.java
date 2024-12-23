@@ -3,8 +3,9 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.vector;
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.elements.data.position.FPos3D;
-import eu.scattering.core.design.elements.data.position.FPairPos3D;
+import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.design.transfers.position.FPos3D;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
 import org.json.JSONArray;
@@ -21,14 +22,18 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     private final FPoint[] origin = new FPoint[2];
     private final Factory factory;
+    private final FRandom random;
+    private final double epsilon;
 
-    private FVectorProd(Factory factory) {
+    private FVectorProd(Factory factory, FRandom random, double epsilon) {
 
         this.factory = factory;
+        this.random = random;
+        this.epsilon = epsilon;
     }
 
-    public static FVector create(Factory factory) {
-        FVectorProd fVector = new FVectorProd(factory);
+    public static FVector create(Factory factory, FRandom random, double epsilon) {
+        FVectorProd fVector = new FVectorProd(factory, random, epsilon);
 
         fVector.origin[0] = factory.getFPoint();
         fVector.origin[1] = factory.getFPoint();
@@ -389,7 +394,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             excludeShift[i] = exclude[i].copy().sub(getRefBase());
         }
 
-        fCopyLocal.getRefHead().randomize(excludeShift);
+        fCopyLocal.getRefHead().randomizeAngle(excludeShift);
         fCopyLocal.moveBase(getRefBase());
 
         return set(fCopyLocal);
@@ -849,9 +854,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
-        double jitter = factory.getJitter();
-
-        return (Math.abs(getDotProduct(ref)) < jitter) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < jitter);
+        return (Math.abs(getDotProduct(ref)) < epsilon) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < epsilon);
     }
 
     @Override

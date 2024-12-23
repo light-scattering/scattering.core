@@ -1,7 +1,7 @@
 module eu.scattering.core.design {
     requires org.json;
     exports eu.scattering.core.design;
-    exports eu.scattering.core.design.elements.data;
+    exports eu.scattering.core.design.transfers;
     exports eu.scattering.core.design.elements.algebra;
     exports eu.scattering.core.design.elements.algebra.geometry;
     exports eu.scattering.core.design.elements.algebra.geometry.primitive;
@@ -15,8 +15,8 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.elements.algebra.number.quaternion;
     exports eu.scattering.core.design.elements.engine.rotation;
     exports eu.scattering.core.design.elements.algebra.geometry.shape;
-    exports eu.scattering.core.design.helpers.angle;
-    exports eu.scattering.core.design.helpers.random;
-    exports eu.scattering.core.design.elements.data.position;
+    exports eu.scattering.core.design.helpers.auxiliary;
+    exports eu.scattering.core.design.transfers.position;
     exports eu.scattering.core.design.elements.engine.random;
+    exports eu.scattering.core.design.helpers.transfer;
 }

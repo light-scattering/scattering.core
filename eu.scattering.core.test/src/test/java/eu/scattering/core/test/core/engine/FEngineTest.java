@@ -1,10 +1,10 @@
 package eu.scattering.core.test.core.engine;
 
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.data.position.FPairPos2D;
-import eu.scattering.core.design.elements.data.position.FPairPos3D;
-import eu.scattering.core.design.elements.data.position.FPos2D;
-import eu.scattering.core.design.elements.data.position.FPos3D;
+import eu.scattering.core.design.transfers.position.FPairPos2D;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
+import eu.scattering.core.design.transfers.position.FPos2D;
+import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import org.junit.jupiter.api.*;
 
@@ -75,7 +75,7 @@ public class FEngineTest {
             FRandom fRandom = factory.getFRandom();
 
             Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.empty(), fRandom.getSeparationDistance()));
+                    () -> assertEquals(Optional.empty(), fRandom.getProximityThreshold()));
         }
 
         @Test
@@ -85,10 +85,10 @@ public class FEngineTest {
 
             FRandom fRandom = factory.getFRandom();
 
-            fRandom.setSeparationDistance(value);
+            fRandom.setProximityThreshold(value);
 
             Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.of(value), fRandom.getSeparationDistance()));
+                    () -> assertEquals(Optional.of(value), fRandom.getProximityThreshold()));
         }
 
         @Test
@@ -99,7 +99,7 @@ public class FEngineTest {
             FRandom fRandom = factory.getFRandom();
 
             assertThrows(IllegalArgumentException.class,
-                    () -> fRandom.setSeparationDistance(value));
+                    () -> fRandom.setProximityThreshold(value));
         }
 
         @Test
@@ -109,11 +109,11 @@ public class FEngineTest {
 
             FRandom fRandom = factory.getFRandom();
 
-            fRandom.setSeparationDistance(value);
-            fRandom.clearSeparationDistance();
+            fRandom.setProximityThreshold(value);
+            fRandom.clearProximityThreshold();
 
             Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.empty(), fRandom.getSeparationDistance()));
+                    () -> assertEquals(Optional.empty(), fRandom.getProximityThreshold()));
         }
 
         @Test
@@ -204,7 +204,7 @@ public class FEngineTest {
             double min = 0;
             double max = 1.5;
 
-            fRandom.setSeparationDistance(separationDistance);
+            fRandom.setProximityThreshold(separationDistance);
 
             double value = fRandom.nextDouble(min, max, 0);
 
@@ -223,7 +223,7 @@ public class FEngineTest {
             double min = 0;
             double max = 0.5;
 
-            fRandom.setSeparationDistance(separationDistance);
+            fRandom.setProximityThreshold(separationDistance);
             fRandom.setRetryLimit(retryLimit);
 
             assertThrows(ArithmeticException.class,
@@ -302,7 +302,7 @@ public class FEngineTest {
             double exc1 = -1;
             double exc2 = 1;
 
-            fRandom.setSeparationDistance(separationDistance);
+            fRandom.setProximityThreshold(separationDistance);
 
             Assertions.assertAll("Validate 1D point",
                     () -> assertTrue(fRandom.valExc1D(0.85, exc1, exc2)),
@@ -328,7 +328,7 @@ public class FEngineTest {
             FPos2D exc3 = factory.getFPos2D(0, -1);
             FPos2D exc4 = factory.getFPos2D(0, 1);
 
-            fRandom.setSeparationDistance(separationDistance);
+            fRandom.setProximityThreshold(separationDistance);
 
             Assertions.assertAll("Validate 2D point",
                     () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(0.85, 0), exc1, exc2, exc3, exc4)),
@@ -363,7 +363,7 @@ public class FEngineTest {
             FPos3D exc5 = factory.getFPos3D(0, 0, 1);
             FPos3D exc6 = factory.getFPos3D(0, 0, -1);
 
-            fRandom.setSeparationDistance(separationDistance);
+            fRandom.setProximityThreshold(separationDistance);
 
             Assertions.assertAll("Validate 2D point",
                     () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0.85, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
@@ -428,7 +428,7 @@ public class FEngineTest {
             FPos2D rangeMax = factory.getFPos2D(range, range);
             FPairPos2D range2D = factory.getFPairPos2D(rangeMin, rangeMax);
 
-            fRandom.setSeparationDistance(separationDistance);
+            fRandom.setProximityThreshold(separationDistance);
 
             FPos2D value = fRandom.nextDouble2D(range2D, factory.getFPos2D(0, 0));
 
@@ -471,7 +471,7 @@ public class FEngineTest {
             FPos3D rangeMax = factory.getFPos3D(range, range, range);
             FPairPos3D range3D = factory.getFPairPos3D(rangeMin, rangeMax);
 
-            fRandom.setSeparationDistance(separationDistance);
+            fRandom.setProximityThreshold(separationDistance);
 
             FPos3D value = fRandom.nextDouble3D(range3D, factory.getFPos3D(0, 0, 0));
 
@@ -485,10 +485,10 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position on unit sphere - Seed enabled")
-        void getPositionOnUnitSphereWithSeed() {
+        @DisplayName("Get position on sphere - Seed enabled")
+        void getPositionOnSphereWithSeed() {
             long seed = 12345;
-            double radius = 1;
+            double radius = 5;
             double jitter = 1E-8;
 
             FRandom randomA = factory.getFRandom(seed);
@@ -510,9 +510,9 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position on unit sphere - Seed disabled")
-        void getPositionOnUnitSphereWithoutSeed() {
-            double radius = 1;
+        @DisplayName("Get position on sphere - Seed disabled")
+        void getPositionOnSphereWithoutSeed() {
+            double radius = 5;
             double jitter = 1E-8;
 
             FRandom randomA = factory.getFRandom();
@@ -534,10 +534,10 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position in unit sphere - Seed enabled")
-        void getPositionInUnitSphereWithSeed() {
+        @DisplayName("Get position in sphere - Seed enabled")
+        void getPositionInSphereWithSeed() {
             long seed = 12345;
-            double radius = 1;
+            double radius = 5;
 
             FRandom randomA = factory.getFRandom(seed);
             FPos3D posA = randomA.nextDoubleInSphere(radius);
@@ -558,9 +558,9 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position in unit sphere - Seed disabled")
-        void getPositionInUnitSphereWithoutSeed() {
-            double radius = 1;
+        @DisplayName("Get position in sphere - Seed disabled")
+        void getPositionInSphereWithoutSeed() {
+            double radius = 5;
 
             FRandom randomA = factory.getFRandom();
             FPos3D posA = randomA.nextDoubleInSphere(radius);
@@ -581,10 +581,10 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position on unit circle - Seed enabled")
-        void getPositionOnUnitCircleWithSeed() {
+        @DisplayName("Get position on circle - Seed enabled")
+        void getPositionOnCircleWithSeed() {
             long seed = 12345;
-            double radius = 1;
+            double radius = 5;
             double jitter = 1E-8;
 
             FRandom randomA = factory.getFRandom(seed);
@@ -606,9 +606,9 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position on unit circle - Seed disabled")
-        void getPositionOnUnitCircleWithoutSeed() {
-            double radius = 1;
+        @DisplayName("Get position on circle - Seed disabled")
+        void getPositionOnCircleWithoutSeed() {
+            double radius = 5;
             double jitter = 1E-8;
 
             FRandom randomA = factory.getFRandom();
@@ -630,10 +630,10 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position in unit circle - Seed enabled")
-        void getPositionInUnitCircleWithSeed() {
+        @DisplayName("Get position in circle - Seed enabled")
+        void getPositionInCircleWithSeed() {
             long seed = 12345;
-            double radius = 1;
+            double radius = 5;
 
             FRandom randomA = factory.getFRandom(seed);
             FPos2D posA = randomA.nextDoubleInCircle(radius);
@@ -654,9 +654,9 @@ public class FEngineTest {
         }
 
         @Test
-        @DisplayName("Get position in unit circle - Seed disabled")
-        void getPositionInUnitCircleWithoutSeed() {
-            double radius = 1;
+        @DisplayName("Get position in circle - Seed disabled")
+        void getPositionInCircleWithoutSeed() {
+            double radius = 5;
 
             FRandom randomA = factory.getFRandom();
             FPos2D posA = randomA.nextDoubleInCircle(radius);

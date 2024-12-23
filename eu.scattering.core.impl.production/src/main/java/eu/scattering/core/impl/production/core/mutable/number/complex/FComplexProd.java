@@ -2,6 +2,7 @@ package eu.scattering.core.impl.production.core.mutable.number.complex;
 
 import eu.scattering.core.design.Factory;
 import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
+import eu.scattering.core.design.elements.engine.random.FRandom;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,15 +14,19 @@ public class FComplexProd implements FComplex {
 
     private final double[] origin = { 0.0, 0.0 };
     private final Factory factory;
+    private final FRandom random;
+    private final double epsilon;
 
-    private FComplexProd(Factory factory) {
+    private FComplexProd(Factory factory, FRandom random, double epsilon) {
 
         this.factory = factory;
+        this.random = random;
+        this.epsilon = epsilon;
     }
 
-    public static FComplex create(Factory factory) {
+    public static FComplex create(Factory factory, FRandom random, double epsilon) {
 
-        return new FComplexProd(factory);
+        return new FComplexProd(factory, random, epsilon);
     }
 
     @Override
@@ -99,9 +104,7 @@ public class FComplexProd implements FComplex {
         double distanceRe = Math.abs(getRe() - fComplex.getRe());
         double distanceIm = Math.abs(getIm() - fComplex.getIm());
 
-        double jitter = factory.getJitter();
-
-        return distanceRe < jitter && distanceIm < jitter;
+        return distanceRe < epsilon && distanceIm < epsilon;
     }
 
     @Override
@@ -127,7 +130,7 @@ public class FComplexProd implements FComplex {
     @Override
     public FComplex copy() {
 
-        return factory.getFComplex().set(this);
+        return FComplexProd.create(factory, random, epsilon).set(this);
     }
 
     @Override
@@ -303,9 +306,7 @@ public class FComplexProd implements FComplex {
         double distanceRe = Math.abs(getRe() - re);
         double distanceIm = Math.abs(getIm() - im);
 
-        double jitter = factory.getJitter();
-
-        return distanceRe < jitter && distanceIm < jitter;
+        return distanceRe < epsilon && distanceIm < epsilon;
     }
 
     @Override
@@ -439,5 +440,4 @@ public class FComplexProd implements FComplex {
 
         return getRe() == 0 && getIm() == 0;
     }
-
 }

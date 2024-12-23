@@ -1,10 +1,10 @@
 package eu.scattering.core.impl.production.core.engine.random;
 
-import eu.scattering.core.design.FactoryPrimitive;
-import eu.scattering.core.design.elements.data.position.FPairPos2D;
-import eu.scattering.core.design.elements.data.position.FPairPos3D;
-import eu.scattering.core.design.elements.data.position.FPos2D;
-import eu.scattering.core.design.elements.data.position.FPos3D;
+import eu.scattering.core.design.FactoryTransfers;
+import eu.scattering.core.design.transfers.position.FPairPos2D;
+import eu.scattering.core.design.transfers.position.FPairPos3D;
+import eu.scattering.core.design.transfers.position.FPos2D;
+import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.random.FRandomCore;
 import org.json.JSONObject;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class FRandomProd implements FRandom {
 
-    private static final FactoryPrimitive factory = FactoryPrimitive.create();
+    private static final FactoryTransfers factory = FactoryTransfers.create();
 
     private static final FPos2D posZero2D = factory.getFPos2D(0, 0);
     private static final FPos3D posZero3D = factory.getFPos3D(0, 0, 0);
@@ -22,8 +22,8 @@ public class FRandomProd implements FRandom {
 
     private int retryLimit = -1;
 
-    private double separationDistance = -1;
-    private double separationDistanceP2 = -1;
+    private double proximityThreshold = -1;
+    private double proximityThresholdP2 = -1;
 
     //--------------------------------------------------
 
@@ -55,29 +55,29 @@ public class FRandomProd implements FRandom {
     }
 
     @Override
-    public Optional<Double> getSeparationDistance() {
+    public Optional<Double> getProximityThreshold() {
 
-        if (this.separationDistance >= 0) {
-            return Optional.of(this.separationDistance);
+        if (this.proximityThreshold >= 0) {
+            return Optional.of(this.proximityThreshold);
         }
         return Optional.empty();
     }
 
     @Override
-    public void setSeparationDistance(double separationDistance) {
+    public void setProximityThreshold(double proximityThreshold) {
 
-        if (separationDistance < 0) {
+        if (proximityThreshold < 0) {
             throw new IllegalArgumentException("The separation distance cannot be lower than zero");
         }
 
-        this.separationDistance = separationDistance;
-        this.separationDistanceP2 = separationDistance * separationDistance;
+        this.proximityThreshold = proximityThreshold;
+        this.proximityThresholdP2 = proximityThreshold * proximityThreshold;
     }
 
     @Override
-    public void clearSeparationDistance() {
+    public void clearProximityThreshold() {
 
-        this.separationDistance = -1;
+        this.proximityThreshold = -1;
     }
 
     @Override
@@ -198,8 +198,8 @@ public class FRandomProd implements FRandom {
     public FPos2D nextDoubleOnCircle(double radius, FPos2D... exclude) {
         double rnd = nextDouble(0, 2 * Math.PI);
 
-        double d0 = Math.sin(rnd);
-        double d1 = Math.cos(rnd);
+        double d0 = Math.sin(rnd) * radius;
+        double d1 = Math.cos(rnd) * radius;
 
         return factory.getFPos2D(d0, d1);
     }
@@ -218,7 +218,7 @@ public class FRandomProd implements FRandom {
         while (true) {
             FPos2D rnd = nextDouble2D(range, exclude);
 
-            if (distP22D(this.posZero2D, rnd) < radiusP2) {
+            if (distP22D(posZero2D, rnd) < radiusP2) {
                 if (this.retryLimit > 0) {
                     if (retries > this.retryLimit) {
                         throw new ArithmeticException("The retry limit has been reached");
@@ -244,9 +244,9 @@ public class FRandomProd implements FRandom {
             f = x1 * x1 + x2 * x2;
         }
 
-        double x = 2 * x1 * Math.sqrt(1 - f);
-        double y = 2 * x2 * Math.sqrt(1 - f);
-        double z = 1 - 2 * f;
+        double x = 2 * x1 * Math.sqrt(1 - f) * radius;
+        double y = 2 * x2 * Math.sqrt(1 - f) * radius;
+        double z = (1 - 2 * f) * radius;
 
         return factory.getFPos3D(x, y, z);
     }
@@ -287,7 +287,7 @@ public class FRandomProd implements FRandom {
     public boolean valExc1D(double val, double... exc) {
 
         for (double point : exc) {
-            if (dist(val, point) < this.separationDistance) {
+            if (dist(val, point) < this.proximityThreshold) {
                 return false;
             }
         }
@@ -299,7 +299,7 @@ public class FRandomProd implements FRandom {
     public boolean valExc2D(FPos2D val, FPos2D... exc) {
 
         for (FPos2D point : exc) {
-            if (distP22D(val, point) < this.separationDistanceP2) {
+            if (distP22D(val, point) < this.proximityThresholdP2) {
                 return false;
             }
         }
@@ -310,7 +310,7 @@ public class FRandomProd implements FRandom {
     public boolean valExc3D(FPos3D val, FPos3D... exc) {
 
         for (FPos3D point : exc) {
-            if (distP23D(val, point) < this.separationDistanceP2) {
+            if (distP23D(val, point) < this.proximityThresholdP2) {
                 return false;
             }
         }

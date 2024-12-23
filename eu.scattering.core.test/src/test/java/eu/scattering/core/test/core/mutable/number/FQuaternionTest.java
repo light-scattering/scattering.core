@@ -1,6 +1,7 @@
 package eu.scattering.core.test.core.mutable.number;
 
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.core.mutable.number.support.FQuaternionTestHelper;
 import org.junit.jupiter.api.*;
 
@@ -195,15 +196,15 @@ public class FQuaternionTest {
 
         @BeforeEach
         void beforeEach() {
-            refRe = random.getDouble();
-            refI = random.getDouble();
-            refJ = random.getDouble();
-            refK = random.getDouble();
+            refRe = random.nextDouble();
+            refI = random.nextDouble();
+            refJ = random.nextDouble();
+            refK = random.nextDouble();
 
-            opRe = random.getDouble();
-            opI = random.getDouble();
-            opJ = random.getDouble();
-            opK = random.getDouble();
+            opRe = random.nextDouble();
+            opI = random.nextDouble();
+            opJ = random.nextDouble();
+            opK = random.nextDouble();
 
             fQuaternion = factory.getFQuaternion(refRe, refI, refJ, refK);
         }
@@ -1204,10 +1205,10 @@ public class FQuaternionTest {
         @BeforeEach
         void beforeEach() {
 
-            refRe = random.getDouble();
-            refI = random.getDouble();
-            refJ = random.getDouble();
-            refK = random.getDouble();
+            refRe = random.nextDouble();
+            refI = random.nextDouble();
+            refJ = random.nextDouble();
+            refK = random.nextDouble();
         }
 
         @Test
@@ -1463,7 +1464,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Get magnitude")
         void getMagnitude() {
-            FQuaternion fQuaternion = random.getFQuaternion();
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
             double resRe = fQuaternion.getRe() * fQuaternion.getRe();
             double resI = fQuaternion.getI() * fQuaternion.getI();
@@ -1486,7 +1487,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Get magnitude P2")
         void getMagnitudeP2() {
-            FQuaternion fQuaternion = random.getFQuaternion();
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
             double resRe = fQuaternion.getRe() * fQuaternion.getRe();
             double resI = fQuaternion.getI() * fQuaternion.getI();
@@ -1509,8 +1510,8 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Get distance")
         void getDistance() {
-            FQuaternion fQuaternionA = random.getFQuaternion();
-            FQuaternion fQuaternionB = random.getFQuaternion(fQuaternionA);
+            FQuaternion fQuaternionA = TestHelper.getRandomFQuaternion();
+            FQuaternion fQuaternionB = TestHelper.getRandomFQuaternion(fQuaternionA);
 
             double distanceRe = Math.pow(Math.abs(fQuaternionA.getRe() - fQuaternionB.getRe()), 2);
             double distanceI = Math.pow(Math.abs(fQuaternionA.getI() - fQuaternionB.getI()), 2);
@@ -1534,8 +1535,8 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Get distance P2")
         void getDistanceP2() {
-            FQuaternion fQuaternionA = random.getFQuaternion();
-            FQuaternion fQuaternionB = random.getFQuaternion(fQuaternionA);
+            FQuaternion fQuaternionA = TestHelper.getRandomFQuaternion();
+            FQuaternion fQuaternionB = TestHelper.getRandomFQuaternion(fQuaternionA);
 
             double distanceRe = Math.pow(Math.abs(fQuaternionA.getRe() - fQuaternionB.getRe()), 2);
             double distanceI = Math.pow(Math.abs(fQuaternionA.getI() - fQuaternionB.getI()), 2);
@@ -1559,8 +1560,8 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Set magnitude")
         void setMagnitude() {
-            FQuaternion fQuaternion = random.getFQuaternion();
-            double magnitude = Math.abs(random.getDouble());
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
+            double magnitude = Math.abs(random.nextDouble());
 
             fQuaternion.setMagnitude(magnitude);
 
@@ -1571,9 +1572,9 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Set magnitude (negative)")
         void setMagnitudeNegative() {
-            FQuaternion fQuaternionA = random.getFQuaternion();
+            FQuaternion fQuaternionA = TestHelper.getRandomFQuaternion();
             FQuaternion fQuaternionB = fQuaternionA.copy().negate();
-            double magnitude = Math.abs(random.getDouble());
+            double magnitude = Math.abs(random.nextDouble());
 
             fQuaternionA.setMagnitude(-magnitude);
             fQuaternionB.setMagnitude(magnitude);
@@ -1628,10 +1629,10 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Conjugate")
         public void conjugate() {
-            double re = random.getDouble();
-            double i = random.getDouble();
-            double j = random.getDouble();
-            double k = random.getDouble();
+            double re = random.nextDouble();
+            double i = random.nextDouble();
+            double j = random.nextDouble();
+            double k = random.nextDouble();
             FQuaternion fComplex = factory.getFQuaternion(re, i, j, k);
 
             fComplex.conjugate();
@@ -1659,7 +1660,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Normalize")
         public void normalize() {
-            FQuaternion fQuaternion = random.getFQuaternion();
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
             fQuaternion.normalize();
 
@@ -1694,7 +1695,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Is zero (fail)")
         public void isZeroFail() {
-            FQuaternion fQuaternion = random.getFQuaternion();
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
             assertFalse(fQuaternion.isZero(), "The FQuaternion value should not be zero");
         }
@@ -1733,7 +1734,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Power (zero)")
         public void powZero() {
-            FQuaternion fQuaternion = random.getFQuaternion();
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
             assertTrue(fQuaternion.pow(0).isExact(1, 0, 0, 0), "The value is erroneous");
         }
@@ -1741,7 +1742,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Power (validate)")
         public void powValidate() {
-            FQuaternion fQuaternion = random.getFQuaternion();
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
             FQuaternionTestHelper.restReference(e -> e.pow(3), fQuaternion);
         }
