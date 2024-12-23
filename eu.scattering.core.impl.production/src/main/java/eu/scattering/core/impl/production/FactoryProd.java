@@ -45,7 +45,7 @@ public final class FactoryProd implements Factory {
     }
 
     {
-        fPositionHelper = FPositionHelperProd.create(this);
+        fPositionHelper = FPositionHelperProd.create();
         fAngleHelper = FAngleHelperProd.create();
     }
 

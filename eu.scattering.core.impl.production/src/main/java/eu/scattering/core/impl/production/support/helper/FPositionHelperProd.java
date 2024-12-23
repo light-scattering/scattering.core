@@ -1,24 +1,21 @@
 package eu.scattering.core.impl.production.support.helper;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryTransfers;
 import eu.scattering.core.design.helpers.transfer.FPositionHelper;
-import eu.scattering.core.design.transfers.position.FPairPos2D;
-import eu.scattering.core.design.transfers.position.FPairPos3D;
-import eu.scattering.core.design.transfers.position.FPos2D;
-import eu.scattering.core.design.transfers.position.FPos3D;
+import eu.scattering.core.design.transfers.position.*;
 
 public class FPositionHelperProd implements FPositionHelper {
 
-    private final Factory factory;
+    private final FactoryTransfers factory;
 
-    private FPositionHelperProd(Factory factory) {
+    private FPositionHelperProd() {
 
-        this.factory = factory;
+        this.factory = FactoryTransfers.create();
     }
 
-    public static FPositionHelper create(Factory factory) {
+    public static FPositionHelper create() {
 
-        return new FPositionHelperProd(factory);
+        return new FPositionHelperProd();
     }
 
     @Override
@@ -38,6 +35,14 @@ public class FPositionHelperProd implements FPositionHelper {
     }
 
     @Override
+    public FPairPos4D getFPairPos4DWithRange(double range) {
+        FPos4D min = factory.getFPos4D(-range, -range, -range, -range);
+        FPos4D max = factory.getFPos4D(range, range, range, range);
+
+        return factory.getFPairPos4D(min, max);
+    }
+
+    @Override
     public FPairPos2D getFPairPos2DWithRange(double rangeX, double rangeY) {
         FPos2D min = factory.getFPos2D(-rangeX, -rangeY);
         FPos2D max = factory.getFPos2D(rangeX, rangeY);
@@ -51,5 +56,13 @@ public class FPositionHelperProd implements FPositionHelper {
         FPos3D max = factory.getFPos3D(rangeX, rangeY, rangeZ);
 
         return factory.getFPairPos3D(min, max);
+    }
+
+    @Override
+    public FPairPos4D getFPairPos4DWithRange(double rangeX, double rangeY, double rangeZ, double rangeW) {
+        FPos4D min = factory.getFPos4D(-rangeX, -rangeY, -rangeZ, -rangeW);
+        FPos4D max = factory.getFPos4D(rangeX, rangeY, rangeZ, rangeW);
+
+        return factory.getFPairPos4D(min, max);
     }
 }
