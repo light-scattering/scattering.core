@@ -238,9 +238,9 @@ public abstract class SimplePresetProd<T extends Primitive<T>> implements Primit
     }
 
     @Override
-    public T imprint(T element) {
+    public T applyStateTo(T ref) {
 
-        element.set(self());
+        ref.applyStateFrom(self());
 
         return self();
     }

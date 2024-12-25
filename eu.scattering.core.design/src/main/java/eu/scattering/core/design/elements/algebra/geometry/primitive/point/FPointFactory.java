@@ -25,7 +25,7 @@ public interface FPointFactory {
 
     default FPoint getFPoint(FPoint fPoint) {
 
-        return getFPoint().set(fPoint);
+        return getFPoint().applyStateFrom(fPoint);
     }
 
     default FPoint getFPoint(FPos3D position) {

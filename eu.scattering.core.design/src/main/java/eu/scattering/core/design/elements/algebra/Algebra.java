@@ -7,8 +7,8 @@ public interface Algebra<T> extends Core<T> {
 
     T importFromJSON(JSONObject json);
 
-    boolean isSimilar(T element);
-    boolean isExact(T element);
+    boolean isSimilar(T ref);
+    boolean isExact(T ref);
 
     T copy();
     T self();

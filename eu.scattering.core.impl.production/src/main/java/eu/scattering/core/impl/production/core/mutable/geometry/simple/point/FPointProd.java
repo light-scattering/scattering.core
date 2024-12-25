@@ -91,9 +91,9 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint set(FPoint fPoint) {
+    public FPoint applyStateFrom(FPoint ref) {
 
-        return set(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        return set(ref.getX(), ref.getY(), ref.getZ());
     }
 
     @Override
@@ -117,13 +117,13 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public boolean isExact(FPoint fPoint) {
+    public boolean isExact(FPoint ref) {
 
-        if (fPoint == null) {
+        if (ref == null) {
             throw new NullPointerException("The reference FPoint is null");
         }
 
-        return isExact(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        return isExact(ref.getX(), ref.getY(), ref.getZ());
     }
 
     @Override
@@ -137,13 +137,13 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public boolean isSimilar(FPoint fPoint) {
+    public boolean isSimilar(FPoint ref) {
 
-        if (fPoint == null) {
+        if (ref == null) {
             throw new NullPointerException("The reference FPoint is null");
         }
 
-        return isSimilar(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        return isSimilar(ref.getX(), ref.getY(), ref.getZ());
     }
 
     @Override
@@ -183,7 +183,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-    return FPointProd.create(factory, random, epsilon).set(this);
+    return FPointProd.create(factory, random, epsilon).applyStateFrom(this);
     }
 
     @Override
@@ -464,7 +464,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
         FPoint axis = copy().setCrossProduct(ref);
         FRotation rotor = factory.getFRotation(axis, angle);
 
-        ref.copy().ext(rotor.rotate()).imprint(this);
+        ref.copy().ext(rotor.rotate()).applyStateTo(this);
 
         return this;
     }

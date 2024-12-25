@@ -43,7 +43,7 @@ public interface FVectorFactory extends FPointFactory {
 
     default FVector getFVector(FVector fVector) {
 
-        return getFVector().set(fVector);
+        return getFVector().applyStateFrom(fVector);
     }
 
     default FVector getFVector(FPos3D base, double hX, double hY, double hZ) {

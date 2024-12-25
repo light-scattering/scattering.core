@@ -123,9 +123,9 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector set(FVector fVector) {
-        setBase(fVector.getRefBase());
-        setHead(fVector.getRefHead());
+    public FVector applyStateFrom(FVector ref) {
+        setBase(ref.getRefBase());
+        setHead(ref.getRefHead());
 
         return this;
     }
@@ -156,7 +156,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector setBase(FPoint base) {
-        getRefBase().set(base);
+        getRefBase().applyStateFrom(base);
 
         return this;
     }
@@ -170,7 +170,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector setHead(FPoint head) {
-        getRefHead().set(head);
+        getRefHead().applyStateFrom(head);
 
         return this;
     }
@@ -294,23 +294,23 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isExact(FVector fVector) {
+    public boolean isExact(FVector ref) {
 
-        if (this == fVector) {
+        if (this == ref) {
             return true;
         }
 
-        return getRefBase().isExact(fVector.getRefBase()) && getRefHead().isExact(fVector.getRefHead());
+        return getRefBase().isExact(ref.getRefBase()) && getRefHead().isExact(ref.getRefHead());
     }
 
     @Override
-    public boolean isSimilar(FVector fVector) {
+    public boolean isSimilar(FVector ref) {
 
-        if (this == fVector) {
+        if (this == ref) {
             return true;
         }
 
-        return getRefBase().isSimilar(fVector.getRefBase()) && getRefHead().isSimilar(fVector.getRefHead());
+        return getRefBase().isSimilar(ref.getRefBase()) && getRefHead().isSimilar(ref.getRefHead());
     }
 
     @Override
@@ -381,7 +381,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().setSphericalCoordinates(inclination, azimuth);
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -397,7 +397,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().randomizeAngle(excludeShift);
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -428,7 +428,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     public FVector moveBase(FPoint base) {
         FPoint translation = factory.getFPoint(base).sub(getRefBase());
 
-        getRefBase().set(base);
+        getRefBase().applyStateFrom(base);
         getRefHead().add(translation);
 
         return this;
@@ -448,10 +448,10 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector moveHead(FPoint head) {
-        FPoint translation = factory.getFPoint().set(head).sub(getRefHead());
+        FPoint translation = factory.getFPoint().applyStateFrom(head).sub(getRefHead());
 
         getRefBase().add(translation);
-        getRefHead().set(head);
+        getRefHead().applyStateFrom(head);
 
         return this;
     }
@@ -502,7 +502,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().add(fCopyExternal.getRefHead());
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -513,7 +513,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().sub(fCopyExternal.getRefHead());
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -541,7 +541,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().normalize();
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -551,7 +551,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefBase().reflect();
         fCopyLocal.moveHead(getRefHead());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -561,7 +561,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().reflect();
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -577,8 +577,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     public FVector invertDirection() {
         FPoint container = getRefHead().copy();
 
-        getRefHead().set(getRefBase());
-        getRefBase().set(container);
+        getRefHead().applyStateFrom(getRefBase());
+        getRefBase().applyStateFrom(container);
 
         return this;
     }
@@ -605,7 +605,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().setLength(length);
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -622,7 +622,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().setInclination(inclination);
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -639,7 +639,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().setAzimuth(azimuth);
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -691,7 +691,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().setAngle(fCopyExternal, angle);
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -711,7 +711,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().setAngle(fCopyExternal.getRefHead(), angle);
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -766,7 +766,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fCopyLocal.getRefHead().setCrossProduct(fCopyExternal.getRefHead());
         fCopyLocal.moveBase(getRefBase());
 
-        return set(fCopyLocal);
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -806,7 +806,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         double magnitude = getLength();
         FPoint baseCopy = getRefBase().copy();
 
-        return set(ref).setLength(magnitude).moveBase(baseCopy);
+        return applyStateFrom(ref).setLength(magnitude).moveBase(baseCopy);
     }
 
     @Override
@@ -840,7 +840,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         double magnitude = getLength();
         FPoint baseCopy = getRefBase().copy();
 
-        return set(ref).setLength(magnitude).moveBase(baseCopy).reflectHead();
+        return applyStateFrom(ref).setLength(magnitude).moveBase(baseCopy).reflectHead();
     }
 
     @Override
@@ -875,7 +875,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         fVectorRef.setCrossProduct(fVectorRot).setLength(magnitude);
         fVectorRef.moveBase(getRefBase());
 
-        set(fVectorRef);
+        applyStateFrom(fVectorRef);
 
         return this;
     }

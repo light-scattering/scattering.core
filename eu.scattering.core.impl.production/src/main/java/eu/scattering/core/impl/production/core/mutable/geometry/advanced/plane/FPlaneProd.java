@@ -75,7 +75,7 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
     public FPlane importFromJSON(JSONObject json) {
         JSONArray structure = json.getJSONArray("plane");
 
-        getOrigin().set(factory.getFVector().importFromJSON(structure.getJSONObject(0)));
+        getOrigin().applyStateFrom(factory.getFVector().importFromJSON(structure.getJSONObject(0)));
 
         return this;
     }
@@ -252,12 +252,12 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
                 .sub(getOrigin().getRefBase());
 
         FPoint opC = factory.getFPoint()
-                .set(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+                .applyStateFrom(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         FVector translation = factory.getFVector(opC, fPoint.copy())
                 .moveBase(getOrigin().getRefBase());
 
-        return fPoint.set(translation.getRefHead());
+        return fPoint.applyStateFrom(translation.getRefHead());
     }
 
     private FPoint projectOnLine(FPoint fPoint) {
@@ -268,7 +268,7 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
         FPoint opB = factory.getFPoint(fPoint)
                 .sub(getOrigin().getRefBase());
 
-        return fPoint.set(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+        return fPoint.applyStateFrom(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
     }
 
     private boolean isInHalfSpace(FPoint projection) {

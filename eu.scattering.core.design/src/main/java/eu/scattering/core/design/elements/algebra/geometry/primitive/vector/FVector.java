@@ -121,20 +121,20 @@ public interface FVector extends Primitive<FVector> {
     double getAzimuth();
     FVector setAzimuth(double azimuth);
 
-    @IntermediateResults("Length squared")
+    @IntermediateResults
     double getLengthP2();
 
-    @MutableState("Interferes with the internal structure of the object")
+    @MutableState
     FVector setRef(FPoint baseRef, FPoint headRef);
 
-    @MutableState("Interferes with the internal structure of the object")
+    @MutableState
     FPoint getRefBase();
-    @MutableState("Interferes with the internal structure of the object")
+    @MutableState
     FVector setRefBase(FPoint refBase);
 
-    @MutableState("Interferes with the internal structure of the object")
+    @MutableState
     FPoint getRefHead();
-    @MutableState("Interferes with the internal structure of the object")
+    @MutableState
     FVector setRefHead(FPoint refHead);
 
 

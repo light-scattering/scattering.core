@@ -91,9 +91,9 @@ public class FQuaternionProd implements FQuaternion {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FQuaternion set(FQuaternion fQuaternion) {
+    public FQuaternion applyStateFrom(FQuaternion ref) {
 
-        return set(fQuaternion.getRe(), fQuaternion.getI(), fQuaternion.getJ(), fQuaternion.getK());
+        return set(ref.getRe(), ref.getI(), ref.getJ(), ref.getK());
     }
 
     @Override
@@ -105,35 +105,35 @@ public class FQuaternionProd implements FQuaternion {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isExact(FQuaternion fQuaternion) {
+    public boolean isExact(FQuaternion ref) {
 
-        if (fQuaternion == null) {
+        if (ref == null) {
             throw new NullPointerException("The reference FQuaternion cannot be null");
         }
 
-        if (this == fQuaternion) {
+        if (this == ref) {
             return true;
         }
 
-        return getRe() == fQuaternion.getRe() && getI() == fQuaternion.getI() &&
-                getJ() == fQuaternion.getJ() && getK() == fQuaternion.getK();
+        return getRe() == ref.getRe() && getI() == ref.getI() &&
+                getJ() == ref.getJ() && getK() == ref.getK();
     }
 
     @Override
-    public boolean isSimilar(FQuaternion fQuaternion) {
+    public boolean isSimilar(FQuaternion ref) {
 
-        if (fQuaternion == null) {
+        if (ref == null) {
             throw new NullPointerException("The reference FQuaternion cannot be null");
         }
 
-        if (this == fQuaternion) {
+        if (this == ref) {
             return true;
         }
 
-        double distanceRe = Math.abs(getRe() - fQuaternion.getRe());
-        double distanceI = Math.abs(getI() - fQuaternion.getI());
-        double distanceJ = Math.abs(getJ() - fQuaternion.getJ());
-        double distanceK = Math.abs(getK() - fQuaternion.getK());
+        double distanceRe = Math.abs(getRe() - ref.getRe());
+        double distanceI = Math.abs(getI() - ref.getI());
+        double distanceJ = Math.abs(getJ() - ref.getJ());
+        double distanceK = Math.abs(getK() - ref.getK());
 
         return distanceRe < epsilon && distanceI < epsilon && distanceJ < epsilon && distanceK < epsilon;
     }
@@ -167,7 +167,7 @@ public class FQuaternionProd implements FQuaternion {
     @Override
     public FQuaternion copy() {
 
-        return FQuaternionProd.create(factory, random, epsilon).set(this);
+        return FQuaternionProd.create(factory, random, epsilon).applyStateFrom(this);
     }
 
     @Override
@@ -193,9 +193,9 @@ public class FQuaternionProd implements FQuaternion {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FQuaternion add(FQuaternion element) {
+    public FQuaternion add(FQuaternion ref) {
 
-        return add(element.getRe(), element.getI(), element.getJ(), element.getK());
+        return add(ref.getRe(), ref.getI(), ref.getJ(), ref.getK());
     }
 
     @Override
@@ -241,9 +241,9 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public FQuaternion sub(FQuaternion element) {
+    public FQuaternion sub(FQuaternion ref) {
 
-        return sub(element.getRe(), element.getI(), element.getJ(), element.getK());
+        return sub(ref.getRe(), ref.getI(), ref.getJ(), ref.getK());
     }
 
     @Override
@@ -289,16 +289,16 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public FQuaternion mul(FQuaternion element) {
+    public FQuaternion mul(FQuaternion ref) {
 
-        double valueRe = (element.getRe() * getRe()) - (element.getI() * getI()) -
-                (element.getJ() * getJ()) - (element.getK() * getK());
-        double valueI = (element.getRe() * getI()) + (element.getI() * getRe()) -
-                (element.getJ() * getK()) + (element.getK() * getJ());
-        double valueJ = (element.getRe() * getJ()) + (element.getI() * getK()) +
-                (element.getJ() * getRe()) - (element.getK() * getI());
-        double valueK = (element.getRe() * getK()) - (element.getI() * getJ()) +
-                (element.getJ() * getI()) + (element.getK() * getRe());
+        double valueRe = (ref.getRe() * getRe()) - (ref.getI() * getI()) -
+                (ref.getJ() * getJ()) - (ref.getK() * getK());
+        double valueI = (ref.getRe() * getI()) + (ref.getI() * getRe()) -
+                (ref.getJ() * getK()) + (ref.getK() * getJ());
+        double valueJ = (ref.getRe() * getJ()) + (ref.getI() * getK()) +
+                (ref.getJ() * getRe()) - (ref.getK() * getI());
+        double valueK = (ref.getRe() * getK()) - (ref.getI() * getJ()) +
+                (ref.getJ() * getI()) + (ref.getK() * getRe());
 
         return set(valueRe, valueI, valueJ, valueK);
     }
@@ -346,13 +346,13 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public FQuaternion div(FQuaternion element) {
+    public FQuaternion div(FQuaternion ref) {
 
-        if (element.isZero()) {
+        if (ref.isZero()) {
             throw new ArithmeticException("The divisor cannot be zero");
         }
 
-        return mul(element.copy().inverse());
+        return mul(ref.copy().inverse());
     }
 
     @Override
@@ -456,27 +456,33 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public double getDistance(FQuaternion element) {
-        double distanceRe = Math.pow(Math.abs(getRe() - element.getRe()), 2);
-        double distanceI = Math.pow(Math.abs(getI() - element.getI()), 2);
-        double distanceJ = Math.pow(Math.abs(getJ() - element.getI()), 2);
-        double distanceK = Math.pow(Math.abs(getK() - element.getK()), 2);
+    public double getDistance(FQuaternion ref) {
+        double distanceRe = Math.pow(Math.abs(getRe() - ref.getRe()), 2);
+        double distanceI = Math.pow(Math.abs(getI() - ref.getI()), 2);
+        double distanceJ = Math.pow(Math.abs(getJ() - ref.getI()), 2);
+        double distanceK = Math.pow(Math.abs(getK() - ref.getK()), 2);
 
         return Math.sqrt(distanceRe + distanceI + distanceJ + distanceK);
     }
 
+    // TODO Not implemented
     @Override
-    public double getDistanceP2(FQuaternion element) {
-        double distanceRe = Math.pow(Math.abs(getRe() - element.getRe()), 2);
-        double distanceI = Math.pow(Math.abs(getI() - element.getI()), 2);
-        double distanceJ = Math.pow(Math.abs(getJ() - element.getI()), 2);
-        double distanceK = Math.pow(Math.abs(getK() - element.getK()), 2);
+    public FQuaternion setDistance(FQuaternion ref, double distance) {
+        return null;
+    }
+
+    @Override
+    public double getDistanceP2(FQuaternion ref) {
+        double distanceRe = Math.pow(Math.abs(getRe() - ref.getRe()), 2);
+        double distanceI = Math.pow(Math.abs(getI() - ref.getI()), 2);
+        double distanceJ = Math.pow(Math.abs(getJ() - ref.getI()), 2);
+        double distanceK = Math.pow(Math.abs(getK() - ref.getK()), 2);
 
         return distanceRe + distanceI + distanceJ + distanceK;
     }
 
     @Override
-    public FQuaternion pow(int n) {
+    public FQuaternion power(int n) {
 
         if (n == 0) {
             return set(1, 0, 0, 0);
@@ -489,6 +495,12 @@ public class FQuaternionProd implements FQuaternion {
         }
 
         return n > 0 ? this : inverse();
+    }
+
+    // TODO Not implemented
+    @Override
+    public FQuaternion[] root(int n) {
+        return new FQuaternion[0];
     }
 
     @Override
@@ -523,9 +535,9 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public FQuaternion imprint(FQuaternion element) {
+    public FQuaternion applyStateTo(FQuaternion ref) {
 
-        element.set(this);
+        ref.applyStateFrom(this);
 
         return this;
     }

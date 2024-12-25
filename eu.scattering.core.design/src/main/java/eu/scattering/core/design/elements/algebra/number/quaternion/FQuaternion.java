@@ -4,7 +4,6 @@ import eu.scattering.core.design.elements.algebra.number.Number;
 
 public interface FQuaternion extends Number<FQuaternion> {
 
-    FQuaternion set(FQuaternion fQuaternion);
     FQuaternion set(double re, double i, double j, double k);
 
     double getRe();

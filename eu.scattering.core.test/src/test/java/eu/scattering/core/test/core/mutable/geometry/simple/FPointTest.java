@@ -132,7 +132,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
             FPoint fPoint = factory.getFPoint();
 
-            fPoint.set(fPointRef);
+            fPoint.applyStateFrom(fPointRef);
 
             assertNotSame(fPointRef, fPoint, "References to the two created FPoints should be different");
 
@@ -1999,7 +1999,7 @@ public class FPointTest {
         void imprint() {
             FPoint fPointRef = factory.getFPoint();
 
-            fPoint.imprint(fPointRef);
+            fPoint.applyStateTo(fPointRef);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX, fPoint.getX(), "The reference X value is incorrect"),
@@ -2016,7 +2016,7 @@ public class FPointTest {
         void imprintValidate() {
             FPoint fPointOp = factory.getFPoint();
 
-            FPoint fPointRef = fPointOp.imprint(fPoint);
+            FPoint fPointRef = fPointOp.applyStateTo(fPoint);
 
             Assertions.assertAll("Validate references",
                     () -> assertNotSame(fPoint, fPointOp, "FPoint references should be different"),

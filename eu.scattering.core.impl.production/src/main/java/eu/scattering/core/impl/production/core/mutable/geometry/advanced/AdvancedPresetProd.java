@@ -21,15 +21,15 @@ public abstract class AdvancedPresetProd<T extends Construct<T>> implements Cons
     }
 
     @Override
-    public boolean isExact(T element) {
+    public boolean isExact(T ref) {
 
-        return getOrigin().isExact(element.getOrigin());
+        return getOrigin().isExact(ref.getOrigin());
     }
 
     @Override
-    public boolean isSimilar(T element) {
+    public boolean isSimilar(T ref) {
 
-        return getOrigin().isSimilar(element.getOrigin());
+        return getOrigin().isSimilar(ref.getOrigin());
     }
 
     @Override

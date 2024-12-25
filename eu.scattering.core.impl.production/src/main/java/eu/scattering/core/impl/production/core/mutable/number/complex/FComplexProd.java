@@ -63,9 +63,9 @@ public class FComplexProd implements FComplex {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FComplex set(FComplex fComplex) {
+    public FComplex applyStateFrom(FComplex ref) {
 
-        return set(fComplex.getRe(), fComplex.getIm());
+        return set(ref.getRe(), ref.getIm());
     }
 
     @Override
@@ -77,32 +77,32 @@ public class FComplexProd implements FComplex {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isExact(FComplex fComplex) {
+    public boolean isExact(FComplex ref) {
 
-        if (fComplex == null) {
+        if (ref == null) {
             throw new NullPointerException("The reference FComplex cannot be null");
         }
 
-        if (this == fComplex) {
+        if (this == ref) {
             return true;
         }
 
-        return getRe() == fComplex.getRe() && getIm() == fComplex.getIm();
+        return getRe() == ref.getRe() && getIm() == ref.getIm();
     }
 
     @Override
-    public boolean isSimilar(FComplex fComplex) {
+    public boolean isSimilar(FComplex ref) {
 
-        if (fComplex == null) {
+        if (ref == null) {
             throw new NullPointerException("The reference FComplex cannot be null");
         }
 
-        if (this == fComplex) {
+        if (this == ref) {
             return true;
         }
 
-        double distanceRe = Math.abs(getRe() - fComplex.getRe());
-        double distanceIm = Math.abs(getIm() - fComplex.getIm());
+        double distanceRe = Math.abs(getRe() - ref.getRe());
+        double distanceIm = Math.abs(getIm() - ref.getIm());
 
         return distanceRe < epsilon && distanceIm < epsilon;
     }
@@ -130,7 +130,7 @@ public class FComplexProd implements FComplex {
     @Override
     public FComplex copy() {
 
-        return FComplexProd.create(factory, random, epsilon).set(this);
+        return FComplexProd.create(factory, random, epsilon).applyStateFrom(this);
     }
 
     @Override
@@ -154,9 +154,9 @@ public class FComplexProd implements FComplex {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FComplex add(FComplex element) {
+    public FComplex add(FComplex ref) {
 
-        return add(element.getRe(), element.getIm());
+        return add(ref.getRe(), ref.getIm());
     }
 
     @Override
@@ -184,9 +184,9 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public FComplex sub(FComplex element) {
+    public FComplex sub(FComplex ref) {
 
-        return sub(element.getRe(), element.getIm());
+        return sub(ref.getRe(), ref.getIm());
     }
 
     @Override
@@ -214,10 +214,10 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public FComplex mul(FComplex element) {
+    public FComplex mul(FComplex ref) {
 
-        double valueRe = getRe() * element.getRe() - getIm() * element.getIm();
-        double valueIm = getRe() * element.getIm() + getIm() * element.getRe();
+        double valueRe = getRe() * ref.getRe() - getIm() * ref.getIm();
+        double valueIm = getRe() * ref.getIm() + getIm() * ref.getRe();
 
         return set(valueRe, valueIm);
     }
@@ -247,15 +247,15 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public FComplex div(FComplex element) {
+    public FComplex div(FComplex ref) {
 
-        if (element.isZero()) {
+        if (ref.isZero()) {
             throw new ArithmeticException("The divisor cannot be zero");
         }
 
-        double nominatorRe = (getRe() * element.getRe()) + (getIm() * element.getIm());
-        double nominatorIm = (getIm() * element.getRe()) - (getRe() * element.getIm());
-        double denominator = (element.getRe() * element.getRe()) + (element.getIm() * element.getIm());
+        double nominatorRe = (getRe() * ref.getRe()) + (getIm() * ref.getIm());
+        double nominatorIm = (getIm() * ref.getRe()) - (getRe() * ref.getIm());
+        double denominator = (ref.getRe() * ref.getRe()) + (ref.getIm() * ref.getIm());
 
         return set(nominatorRe / denominator, nominatorIm / denominator);
     }
@@ -329,17 +329,24 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public double getDistance(FComplex element) {
-        double distanceRe = Math.abs(getRe() - element.getRe());
-        double distanceIm = Math.abs(getIm() - element.getIm());
+    public double getDistance(FComplex ref) {
+        double distanceRe = Math.abs(getRe() - ref.getRe());
+        double distanceIm = Math.abs(getIm() - ref.getIm());
 
         return Math.sqrt((distanceRe * distanceRe) + (distanceIm * distanceIm));
     }
 
+    // TODO Not implemented
     @Override
-    public double getDistanceP2(FComplex element) {
-        double distanceRe = Math.abs(getRe() - element.getRe());
-        double distanceIm = Math.abs(getIm() - element.getIm());
+    public FComplex setDistance(FComplex ref, double distance) {
+
+        return null;
+    }
+
+    @Override
+    public double getDistanceP2(FComplex ref) {
+        double distanceRe = Math.abs(getRe() - ref.getRe());
+        double distanceIm = Math.abs(getIm() - ref.getIm());
 
         return (distanceRe * distanceRe) + (distanceIm * distanceIm);
     }
@@ -373,7 +380,7 @@ public class FComplexProd implements FComplex {
 
 
     @Override
-    public FComplex pow(int n) {
+    public FComplex power(int n) {
         double power = Math.pow(getMagnitude(), n);
         double phase = getPhase();
 
@@ -410,7 +417,7 @@ public class FComplexProd implements FComplex {
     @Override
     public FComplex inverse() {
 
-        factory.getFComplex(1, 0).div(this).imprint(this);
+        factory.getFComplex(1, 0).div(this).applyStateTo(this);
 
         return this;
     }
@@ -428,9 +435,9 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public FComplex imprint(FComplex element) {
+    public FComplex applyStateTo(FComplex ref) {
 
-        element.set(this);
+        ref.applyStateFrom(this);
 
         return this;
     }

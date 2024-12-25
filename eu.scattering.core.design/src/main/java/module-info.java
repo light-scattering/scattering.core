@@ -19,4 +19,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.transfers.position;
     exports eu.scattering.core.design.elements.engine.random;
     exports eu.scattering.core.design.helpers.transfer;
+    exports eu.scattering.core.design.helpers.engine;
 }

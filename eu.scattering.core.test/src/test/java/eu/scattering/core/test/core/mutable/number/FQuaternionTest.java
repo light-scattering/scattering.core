@@ -94,7 +94,7 @@ public class FQuaternionTest {
         void setWithFQuaternion() {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
-            fQuaternion.set(factory.getFQuaternion(1, 2, 3, 4));
+            fQuaternion.applyStateFrom(factory.getFQuaternion(1, 2, 3, 4));
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(1, fQuaternion.getRe(),
@@ -1157,7 +1157,7 @@ public class FQuaternionTest {
         void imprint() {
             FQuaternion fComplexRef = factory.getFQuaternion();
 
-            fQuaternion.imprint(fComplexRef);
+            fQuaternion.applyStateTo(fComplexRef);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe, fQuaternion.getRe(),
@@ -1184,7 +1184,7 @@ public class FQuaternionTest {
         void imprintValidate() {
             FQuaternion fQuaternionOp = factory.getFQuaternion();
 
-            FQuaternion fQuaternionRef = fQuaternionOp.imprint(fQuaternion);
+            FQuaternion fQuaternionRef = fQuaternionOp.applyStateTo(fQuaternion);
 
             Assertions.assertAll("Validate references",
                     () -> assertNotSame(fQuaternion, fQuaternionOp,
@@ -1716,7 +1716,7 @@ public class FQuaternionTest {
 
             FQuaternion res = fQuaternion.copy().mul(fQuaternion).mul(fQuaternion);
 
-            assertTrue(fQuaternion.pow(n).isSimilar(res), "The value is erroneous");
+            assertTrue(fQuaternion.power(n).isSimilar(res), "The value is erroneous");
         }
 
         @Test
@@ -1728,7 +1728,7 @@ public class FQuaternionTest {
             FQuaternion res = factory.getFQuaternion(1)
                     .div(fQuaternion.copy().mul(fQuaternion).mul(fQuaternion));
 
-            assertTrue(fQuaternion.pow(n).isSimilar(res), "The value is erroneous");
+            assertTrue(fQuaternion.power(n).isSimilar(res), "The value is erroneous");
         }
 
         @Test
@@ -1736,7 +1736,7 @@ public class FQuaternionTest {
         public void powZero() {
             FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
-            assertTrue(fQuaternion.pow(0).isExact(1, 0, 0, 0), "The value is erroneous");
+            assertTrue(fQuaternion.power(0).isExact(1, 0, 0, 0), "The value is erroneous");
         }
 
         @Test
@@ -1744,7 +1744,7 @@ public class FQuaternionTest {
         public void powValidate() {
             FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
-            FQuaternionTestHelper.restReference(e -> e.pow(3), fQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.power(3), fQuaternion);
         }
     }
 }

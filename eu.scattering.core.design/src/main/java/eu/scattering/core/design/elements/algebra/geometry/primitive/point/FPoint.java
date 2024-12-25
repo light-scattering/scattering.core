@@ -64,8 +64,8 @@ public interface FPoint extends Primitive<FPoint> {
     double getAzimuth();
     FPoint setAzimuth(double azimuth);
 
-    @IntermediateResults("Length squared")
+    @IntermediateResults
     double getLengthP2();
-    @IntermediateResults("Distance squared")
+    @IntermediateResults
     double getDistanceP2(FPoint ref);
 }

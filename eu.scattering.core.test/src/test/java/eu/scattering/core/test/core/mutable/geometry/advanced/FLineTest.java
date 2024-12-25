@@ -1072,7 +1072,7 @@ public class FLineTest {
             fLineAOrigin.getRefHead().setZ(0);
 
             while (fLineAOrigin.isNonDirectional()) {
-                fLineAOrigin.set(TestHelper.getRandomFVector());
+                fLineAOrigin.applyStateFrom(TestHelper.getRandomFVector());
 
                 fLineAOrigin.getRefBase().setZ(0);
                 fLineAOrigin.getRefHead().setZ(0);
@@ -1087,7 +1087,7 @@ public class FLineTest {
             fLineBOriginBase.setZ(0);
 
             while (fLineBOriginBase.extBoolean(fLineA.isPartOf()).get(0)) {
-                fLineBOriginBase.set(TestHelper.getRandomFPoint());
+                fLineBOriginBase.applyStateFrom(TestHelper.getRandomFPoint());
 
                 fLineBOriginBase.setZ(0);
             }
@@ -1151,7 +1151,7 @@ public class FLineTest {
             FLine fLineB = factory.getFLine(factory.getFVector(fLineBOriginBase, fLineBOriginHead));
 
             while (fLineBOriginBase.extBoolean(fLineA.isPartOf()).get(0)) {
-                fLineBOriginBase.set(TestHelper.getRandomFPoint());
+                fLineBOriginBase.applyStateFrom(TestHelper.getRandomFPoint());
             }
 
             Optional<FPoint> fPointRes = fLineA.getCommonFPoint(fLineB);
@@ -1256,7 +1256,7 @@ public class FLineTest {
                     .setCrossProduct(fLineBOrigin)
                     .setLength(1.5 * jitter);
 
-            fLineBOrigin.getRefBase().set(fVectorDrift.getRefHead());
+            fLineBOrigin.getRefBase().applyStateFrom(fVectorDrift.getRefHead());
 
             assertTrue(fLineA.getCommonFPoint(fLineB).isEmpty(),
                     "The intersecting point should be non-existent");

@@ -75,7 +75,7 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
     public FLine importFromJSON(JSONObject json) {
         JSONArray structure = json.getJSONArray("line");
 
-        getOrigin().set(factory.getFVector().importFromJSON(structure.getJSONObject(0)));
+        getOrigin().applyStateFrom(factory.getFVector().importFromJSON(structure.getJSONObject(0)));
 
         return this;
     }
@@ -460,7 +460,7 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
         FPoint opB = factory.getFPoint(fPoint)
                 .sub(getOrigin().getRefBase());
 
-        fPoint.set(origin.getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+        fPoint.applyStateFrom(origin.getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         return fPoint;
     }
@@ -489,12 +489,12 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private FPoint moveForward(FPoint ref, double distance) {
 
-        return ref.set(getOrigin().copy().moveBase(ref).moveForward(distance).getRefBase());
+        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).moveForward(distance).getRefBase());
     }
 
     private FPoint moveBackward(FPoint ref, double distance) {
 
-        return ref.set(getOrigin().copy().moveBase(ref).moveBackward(distance).getRefBase());
+        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).moveBackward(distance).getRefBase());
     }
 
 }

@@ -26,7 +26,7 @@ public class FRotationProd implements FRotation {
         }
 
         this.factory = factory;
-        this.offset = factory.getFPoint().set(axis.getRefBase());
+        this.offset = factory.getFPoint().applyStateFrom(axis.getRefBase());
         this.core = factory.getFQuaternion();
 
         initializeCore(axis.copy().moveBase().getRefHead(), angle);

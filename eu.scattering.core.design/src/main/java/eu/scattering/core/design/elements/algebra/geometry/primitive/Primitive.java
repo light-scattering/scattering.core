@@ -39,8 +39,8 @@ public interface Primitive<T> extends Geometry, Algebra<T> {
     T divY(double y);
     T divZ(double z);
 
-    T set(T element);
-    T imprint(T element);
+    T applyStateFrom(T ref);
+    T applyStateTo(T ref);
 
     T trans(Consumer<T> exp);
     double transDouble(Function<T, Double> exp);

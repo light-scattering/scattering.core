@@ -65,7 +65,7 @@ public class FComplexTest {
         void setWithFComplex() {
             FComplex fComplex = factory.getFComplex();
 
-            fComplex.set(factory.getFComplex(1, 2));
+            fComplex.applyStateFrom(factory.getFComplex(1, 2));
 
             Assertions.assertAll("Updated values are incorrect",
                     () -> assertEquals(1, fComplex.getRe(),
@@ -648,7 +648,7 @@ public class FComplexTest {
         void imprint() {
             FComplex fComplexRef = factory.getFComplex();
 
-            fComplex.imprint(fComplexRef);
+            fComplex.applyStateTo(fComplexRef);
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplex.getRe(),
@@ -667,7 +667,7 @@ public class FComplexTest {
         void imprintValidate() {
             FComplex fComplexOp = factory.getFComplex();
 
-            FComplex fComplexRef = fComplexOp.imprint(fComplex);
+            FComplex fComplexRef = fComplexOp.applyStateTo(fComplex);
 
             Assertions.assertAll("Validate references",
                     () -> assertNotSame(fComplex, fComplexOp,
@@ -1264,7 +1264,7 @@ public class FComplexTest {
 
             FComplex res = fComplex.copy().mul(fComplex).mul(fComplex);
 
-            assertTrue(fComplex.pow(n).isSimilar(res), "The value is erroneous");
+            assertTrue(fComplex.power(n).isSimilar(res), "The value is erroneous");
         }
 
         @Test
@@ -1276,7 +1276,7 @@ public class FComplexTest {
             FComplex res = factory.getFComplex(1, 0)
                     .div(fComplex.copy().mul(fComplex).mul(fComplex));
 
-            assertTrue(fComplex.pow(n).isSimilar(res), "The value is erroneous");
+            assertTrue(fComplex.power(n).isSimilar(res), "The value is erroneous");
         }
 
         @Test
@@ -1284,7 +1284,7 @@ public class FComplexTest {
         public void powZero() {
             FComplex fComplex = TestHelper.getRandomFComplex();
 
-            assertTrue(fComplex.pow(0).isExact(1, 0), "The value is erroneous");
+            assertTrue(fComplex.power(0).isExact(1, 0), "The value is erroneous");
         }
 
         @Test
@@ -1292,7 +1292,7 @@ public class FComplexTest {
         public void powValidate() {
             FComplex fComplex = TestHelper.getRandomFComplex();
 
-            FComplexTestHelper.testReference(e -> e.pow(3), fComplex);
+            FComplexTestHelper.testReference(e -> e.power(3), fComplex);
         }
 
         @Test
@@ -1303,11 +1303,11 @@ public class FComplexTest {
             FComplex[] fComplexRes = fComplex.root(3);
 
             Assertions.assertAll("Validate root values",
-                    () -> assertTrue(fComplex.isSimilar(fComplexRes[0].pow(3)),
+                    () -> assertTrue(fComplex.isSimilar(fComplexRes[0].power(3)),
                             "The root value 0 is erroneous"),
-                    () -> assertTrue(fComplex.isSimilar(fComplexRes[1].pow(3)),
+                    () -> assertTrue(fComplex.isSimilar(fComplexRes[1].power(3)),
                             "The root value 1 is erroneous"),
-                    () -> assertTrue(fComplex.isSimilar(fComplexRes[2].pow(3)),
+                    () -> assertTrue(fComplex.isSimilar(fComplexRes[2].power(3)),
                             "The root value 2 is erroneous")
             );
         }
