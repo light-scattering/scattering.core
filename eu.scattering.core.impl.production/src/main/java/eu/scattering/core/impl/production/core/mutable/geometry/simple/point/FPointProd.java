@@ -2,16 +2,12 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.point;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
-import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
@@ -22,19 +18,17 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
 
     private final double[] origin = { 0.0, 0.0, 0.0 };
     private final FactoryDesignConcrete factory;
-    private final FRandom random;
     private final double epsilon;
 
-    private FPointProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    private FPointProd(FactoryDesignConcrete factory, double epsilon) {
 
         this.factory = factory;
-        this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FPoint create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    public static FPoint create(FactoryDesignConcrete factory, double epsilon) {
 
-        return new FPointProd(factory, random, epsilon);
+        return new FPointProd(factory, epsilon);
     }
 
     @Override
@@ -183,7 +177,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-    return FPointProd.create(factory, random, epsilon).applyStateFrom(this);
+    return FPointProd.create(factory, epsilon).applyStateFrom(this);
     }
 
     @Override
@@ -550,26 +544,4 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
 
         return setSphericalCoordinates(getInclination(), azimuthal).setLength(radius);
     }
-
-    @Override
-    public FPoint randomizeAngle(FPoint... exclusion) {
-        double radius = getLength();
-
-        return set(random.nextDoubleOnSphere(radius));
-    }
-
-    @Override
-    public FPoint randomizePosition(FPairPos3D range, FPoint... exclusion) {
-        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
-
-        return set(random.nextDouble3D(range, exc));
-    }
-
-    @Override
-    public FPoint randomizePosition(double radius, FPoint... exclusion) {
-        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
-
-        return set(random.nextDoubleInSphere(radius, exc));
-    }
-
 }

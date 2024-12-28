@@ -1,31 +1,74 @@
 package eu.scattering.core.impl.production.support.helper;
 
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.helpers.engine.FRandomHelper;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+
+import java.util.Arrays;
 
 public class FRandomHelperProd implements FRandomHelper {
+    private final FRandom random;
 
+    private FRandomHelperProd(FRandom random) {
 
-    @Override
-    public void rndPosition(FComplex origin, FPairPos2D range, FComplex... exclusion) {
+        this.random = random;
+    }
 
+    public static FRandomHelper create(FRandom random) {
+
+        return new FRandomHelperProd(random);
     }
 
     @Override
-    public void rndPosition(FComplex origin, double radius, FComplex... exclusion) {
-
+    public FComplex rndPosition(FComplex origin, FPairPos2D range, FComplex... exclusion) {
+        return null;
     }
 
     @Override
-    public void rndPosition(FQuaternion origin, FPairPos4D range, FQuaternion... exclusion) {
-
+    public FComplex rndPosition(FComplex origin, double radius, FComplex... exclusion) {
+        return null;
     }
 
     @Override
-    public void rndPosition(FQuaternion origin, double radius, FQuaternion... exclusion) {
+    public FQuaternion rndPosition(FQuaternion origin, FPairPos4D range, FQuaternion... exclusion) {
+        return null;
+    }
 
+    @Override
+    public FQuaternion rndPosition(FQuaternion origin, double radius, FQuaternion... exclusion) {
+        return null;
+    }
+
+    @Override
+    public FPoint rndAngle(FPoint origin, FPoint... exclusion) {
+        double radius = origin.getLength();
+
+        origin.set(random.nextDoubleOnSphere(radius));
+
+        return origin;
+    }
+
+    @Override
+    public FPoint rndPosition(FPoint origin, FPairPos3D range, FPoint... exclusion) {
+        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
+
+        origin.set(random.nextDouble3D(range, exc));
+
+        return origin;
+    }
+
+    @Override
+    public FPoint rndPosition(FPoint origin, double radius, FPoint... exclusion) {
+        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
+
+        origin.set(random.nextDoubleInSphere(radius, exc));
+
+        return origin;
     }
 }

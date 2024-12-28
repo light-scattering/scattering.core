@@ -11,6 +11,7 @@ import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.auxiliary.FAngleHelper;
+import eu.scattering.core.design.helpers.engine.FRandomHelper;
 import eu.scattering.core.impl.production.core.engine.random.FRandomProd;
 import eu.scattering.core.impl.production.core.immutable.rotation.FRotationProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.line.FLineProd;
@@ -20,11 +21,13 @@ import eu.scattering.core.impl.production.core.mutable.geometry.simple.vector.FV
 import eu.scattering.core.impl.production.core.mutable.number.complex.FComplexProd;
 import eu.scattering.core.impl.production.core.mutable.number.quaternion.FQuaternionProd;
 import eu.scattering.core.impl.production.support.helper.FAngleHelperProd;
+import eu.scattering.core.impl.production.support.helper.FRandomHelperProd;
 
 public final class FactoryProd extends FactoryDesignConcrete {
     private final FAngleHelper fAngleHelper;
 
     private final FRandom fRandomInternal;
+    private final FRandomHelper fRandomHelper;
 
     private final double proximityThreshold = 1E-6;
     private final double epsilon = 1E-8;
@@ -33,12 +36,16 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
         fRandomInternal = FRandomProd.create();
         fRandomInternal.setProximityThreshold(proximityThreshold);
+
+        fRandomHelper = FRandomHelperProd.create(fRandomInternal);
     }
 
     private FactoryProd(long seed) {
 
         fRandomInternal = FRandomProd.create(seed);
         fRandomInternal.setProximityThreshold(proximityThreshold);
+
+        fRandomHelper = FRandomHelperProd.create(fRandomInternal);
     }
 
     {
@@ -60,7 +67,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FPoint getFPoint() {
 
-        return FPointProd.create(this, fRandomInternal, epsilon);
+        return FPointProd.create(this, epsilon);
     }
 
     @Override
@@ -107,6 +114,12 @@ public final class FactoryProd extends FactoryDesignConcrete {
     public FAngleHelper getFAngleHelper() {
 
         return fAngleHelper;
+    }
+
+    @Override
+    public FRandomHelper getFRandomHelper() {
+
+        return fRandomHelper;
     }
 
 //--------------------------------------------------

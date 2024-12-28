@@ -6,7 +6,6 @@ import eu.scattering.core.test.core.mutable.geometry.simple.support.FPointTestHe
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
-import java.time.Duration;
 import java.util.List;
 
 import static eu.scattering.core.test.Configuration.*;
@@ -471,45 +470,6 @@ public class FPointTest {
             FPoint fPoint = TestHelper.getRandomFPoint();
 
             FPointTestHelper.testReference(e -> e.setLength(1), fPoint);
-        }
-
-        @Test
-        @DisplayName("Set random angle (validate vector magnitude)")
-        void setRandomAngleValidateMagnitude() {
-            double radius = Math.abs(random.nextDouble());
-
-            FPoint fPoint = factory.getFPoint(radius).randomizeAngle();
-
-            assertEquals(radius, fPoint.getLength(),
-                    jitter, "The radius is invalid");
-        }
-
-        @Test
-        @DisplayName("Set random angle (validate correctness)")
-        void setRandomAngleValidateCorrectness() {
-            double radius = Math.abs(random.nextDouble());
-
-            FPoint fPointA = factory.getFPoint(radius).randomizeAngle();
-            FPoint fPointB = factory.getFPoint(radius).randomizeAngle(fPointA);
-
-            assertNotEquals(fPointA, fPointB, "Two randomly generated points should be different");
-        }
-
-        @Test
-        @DisplayName("Set random angle (validate timeout)")
-        void setRandomAngleValidateTimeout() {
-            double radius = Math.abs(random.nextDouble());
-            FPoint fPoint = factory.getFPoint(radius);
-
-            Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> fPoint.randomizeAngle(fPoint));
-        }
-
-        @Test
-        @DisplayName("Set random angle (validate)")
-        void setRandomAngleValidate() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FPointTestHelper.testReference(FPoint::randomizeAngle, fPoint);
         }
 
         @Test

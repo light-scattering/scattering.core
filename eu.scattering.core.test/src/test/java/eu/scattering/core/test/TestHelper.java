@@ -18,7 +18,7 @@ public class TestHelper {
 
     public static FPoint getRandomFPoint(FPoint... exc) {
 
-        return factory.getFPoint().randomizePosition(range3D, exc);
+        return factory.getFRandomHelper().rndPosition(factory.getFPoint(), range3D, exc);
     }
 
     public static FVector getRandomFVector(FVector... exc) {

@@ -4,6 +4,6 @@ import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 
 public interface FComplexEngineRandom {
 
-    void rndPosition(FComplex origin, FPairPos2D range, FComplex... exclusion);
-    void rndPosition(FComplex origin, double radius, FComplex... exclusion);
+    FComplex rndPosition(FComplex origin, FPairPos2D range, FComplex... exclusion);
+    FComplex rndPosition(FComplex origin, double radius, FComplex... exclusion);
 }

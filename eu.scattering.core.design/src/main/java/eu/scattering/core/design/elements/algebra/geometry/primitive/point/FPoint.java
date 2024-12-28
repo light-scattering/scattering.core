@@ -52,10 +52,6 @@ public interface FPoint extends Primitive<FPoint> {
 
     FPoint rotate(FPoint ref, double angle);
 
-    FPoint randomizeAngle(FPoint... exclusion);
-    FPoint randomizePosition(FPairPos3D range, FPoint... exclusion);
-    FPoint randomizePosition(double radius, FPoint... exclusion);
-
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
     double getInclination();

@@ -5,6 +5,7 @@ import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoin
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
+import eu.scattering.core.design.helpers.engine.FRandomHelper;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
@@ -394,7 +395,12 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             excludeShift[i] = exclude[i].copy().sub(getRefBase());
         }
 
-        fCopyLocal.getRefHead().randomizeAngle(excludeShift);
+        FRandomHelper random = factory.getFRandomHelper();
+
+        FPoint localHead = fCopyLocal.getRefHead();
+
+        random.rndAngle(localHead, excludeShift);
+
         fCopyLocal.moveBase(getRefBase());
 
         return applyStateFrom(fCopyLocal);
