@@ -2,7 +2,6 @@ package eu.scattering.core.design.elements.algebra.geometry.primitive.point;
 
 import eu.scattering.core.design.annotations.IntermediateResults;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.Primitive;
-import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 public interface FPoint extends Primitive<FPoint> {
@@ -59,6 +58,8 @@ public interface FPoint extends Primitive<FPoint> {
 
     double getAzimuth();
     FPoint setAzimuth(double azimuth);
+
+    //--------------------------------------------------
 
     @IntermediateResults
     double getLengthP2();

@@ -697,8 +697,8 @@ public class FPlaneTest {
                 fVector1 = factory.getFVector(1, 0, 0);
                 fVector2 = factory.getFVector(1, 0, 0);
 
-                fVector1.setRandomAngle();
-                fVector2.setRandomAngle(fVector1.getRefHead());
+                factory.getFRandomHelper().rndAngle(fVector1);
+                factory.getFRandomHelper().rndAngle(fVector2, fVector1.getRefHead());
 
                 fVector1.moveBase(TestHelper.getRandomFPoint().div(100));
                 fVector2.moveBase(TestHelper.getRandomFPoint().div(100));

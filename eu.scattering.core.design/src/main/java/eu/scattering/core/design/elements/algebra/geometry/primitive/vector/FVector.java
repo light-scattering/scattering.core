@@ -136,19 +136,4 @@ public interface FVector extends Primitive<FVector> {
     FPoint getRefHead();
     @MutableState
     FVector setRefHead(FPoint refHead);
-
-
-
-
-
-
-
-
-// TODO Remove
-
-    //--------------------------------------------------
-    // Randomization
-    //--------------------------------------------------
-
-    FVector setRandomAngle(FPoint... exclude);
 }

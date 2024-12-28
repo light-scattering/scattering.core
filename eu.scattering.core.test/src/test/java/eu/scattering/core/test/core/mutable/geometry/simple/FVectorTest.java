@@ -866,31 +866,6 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set random angle")
-        void setRandomAngle() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 0);
-            FPoint fPointHead = factory.getFPoint(2, 1, 0);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
-
-            fVector.setRandomAngle(fPointHead);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
-                    "The base FPoint is erroneous"),
-                    () -> assertFalse(factory.getFPoint(2, 1, 0).isExact(fVector.getRefHead()),
-                    "The head FPoint has not been randomized")
-            );
-        }
-
-        @Test
-        @DisplayName("Set random angle (validate)")
-        void setRandomAngleValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-
-            FVectorTestHelper.testReference(FVector::setRandomAngle, fVector);
-        }
-
-        @Test
         @DisplayName("Move base")
         void moveBase() {
             FPoint fPointBase = TestHelper.getRandomFPoint();

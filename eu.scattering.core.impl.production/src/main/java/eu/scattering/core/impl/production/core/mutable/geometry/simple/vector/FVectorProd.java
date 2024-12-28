@@ -3,9 +3,7 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.vector;
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
-import eu.scattering.core.design.helpers.engine.FRandomHelper;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
@@ -23,18 +21,16 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     private final FPoint[] origin = new FPoint[2];
     private final FactoryDesignConcrete factory;
-    private final FRandom random;
     private final double epsilon;
 
-    private FVectorProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    private FVectorProd(FactoryDesignConcrete factory, double epsilon) {
 
         this.factory = factory;
-        this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FVector create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
-        FVectorProd fVector = new FVectorProd(factory, random, epsilon);
+    public static FVector create(FactoryDesignConcrete factory, double epsilon) {
+        FVectorProd fVector = new FVectorProd(factory, epsilon);
 
         fVector.origin[0] = factory.getFPoint();
         fVector.origin[1] = factory.getFPoint();
@@ -380,27 +376,6 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         FVector fCopyLocal = copy().moveBase();
 
         fCopyLocal.getRefHead().setSphericalCoordinates(inclination, azimuth);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
-    }
-
-    @Override
-    public FVector setRandomAngle(FPoint... exclude) {
-        FVector fCopyLocal = copy().moveBase();
-
-        FPoint[] excludeShift = new FPoint[exclude.length];
-
-        for (int i = 0; i < exclude.length ; i++ ) {
-            excludeShift[i] = exclude[i].copy().sub(getRefBase());
-        }
-
-        FRandomHelper random = factory.getFRandomHelper();
-
-        FPoint localHead = fCopyLocal.getRefHead();
-
-        random.rndAngle(localHead, excludeShift);
-
         fCopyLocal.moveBase(getRefBase());
 
         return applyStateFrom(fCopyLocal);
