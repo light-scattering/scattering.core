@@ -208,8 +208,8 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint vPlane = getOrigin().copy().moveBase().normalize().getRefHead();
-        FPoint vLine = ref.getOrigin().copy().moveBase().normalize().getRefHead();
+        FPoint vPlane = getOrigin().copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint vLine = ref.getOrigin().copy().moveBaseToCenter().normalize().getRefHead();
 
         double dividend = vPlane.getDotProduct(getOrigin().getRefBase().copy().sub(ref.getOrigin().getRefBase()));
         double divisor = vPlane.getDotProduct(vLine);
@@ -227,10 +227,10 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint vPlane1 = getOrigin().copy().moveBase().getRefHead();
+        FPoint vPlane1 = getOrigin().copy().moveBaseToCenter().getRefHead();
         double d1 = -vPlane1.getDotProduct(getBase());
 
-        FPoint vPlane2 = ref.getOrigin().copy().moveBase().getRefHead();
+        FPoint vPlane2 = ref.getOrigin().copy().moveBaseToCenter().getRefHead();
         double d2 = -vPlane2.getDotProduct(ref.getBase());
 
         FPoint vPlanePar = vPlane1.copy().setCrossProduct(vPlane2);

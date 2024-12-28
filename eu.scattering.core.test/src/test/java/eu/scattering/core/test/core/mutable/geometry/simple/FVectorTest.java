@@ -950,7 +950,7 @@ public class FVectorTest {
 
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            fVector.moveBase();
+            fVector.moveBaseToCenter();
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
@@ -973,7 +973,7 @@ public class FVectorTest {
         void moveBaseToOXValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testReference(FVector::moveBase, fVector);
+            FVectorTestHelper.testReference(FVector::moveBaseToCenter, fVector);
         }
 
         @Test
@@ -1061,7 +1061,7 @@ public class FVectorTest {
 
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            fVector.moveHead();
+            fVector.moveHeadToCenter();
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(fPointRef.getX(), fVector.getRefBase().getX(),
@@ -1084,7 +1084,7 @@ public class FVectorTest {
         void moveHeadToOXValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testReference(FVector::moveHead, fVector);
+            FVectorTestHelper.testReference(FVector::moveHeadToCenter, fVector);
         }
 
         @Test
@@ -2144,7 +2144,7 @@ public class FVectorTest {
             double result = fVector.getDotProduct(fPoint);
 
             fPoint.sub(fVector.getRefBase());
-            fVector.moveBase();
+            fVector.moveBaseToCenter();
 
             double dimX = fPoint.getX() * fVector.getRefHead().getX();
             double dimY = fPoint.getY() * fVector.getRefHead().getY();

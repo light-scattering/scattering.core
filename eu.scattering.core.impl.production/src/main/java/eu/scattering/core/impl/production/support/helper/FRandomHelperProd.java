@@ -79,7 +79,7 @@ public class FRandomHelperProd implements FRandomHelper {
 
     @Override
     public FVector rndAngle(FVector origin, FPoint... exclusion) {
-        FVector fCopyLocal = origin.copy().moveBase();
+        FVector fCopyLocal = origin.copy().moveBaseToCenter();
 
         FPoint[] exc = new FPoint[exclusion.length];
 

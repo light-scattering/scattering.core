@@ -373,7 +373,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector setSphericalCoordinates(double inclination, double azimuth) {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().setSphericalCoordinates(inclination, azimuth);
         fCopyLocal.moveBase(getRefBase());
@@ -394,7 +394,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector moveBase() {
+    public FVector moveBaseToCenter() {
 
         return moveBase(factory.getFPoint());
     }
@@ -416,7 +416,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector moveHead() {
+    public FVector moveHeadToCenter() {
 
         return moveHead(factory.getFPoint());
     }
@@ -477,8 +477,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector add(FVector vector) {
-        FVector fCopyLocal = copy().moveBase();
-        FVector fCopyExternal = vector.copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
+        FVector fCopyExternal = vector.copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().add(fCopyExternal.getRefHead());
         fCopyLocal.moveBase(getRefBase());
@@ -488,8 +488,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector sub(FVector vector) {
-        FVector fCopyLocal = copy().moveBase();
-        FVector fCopyExternal = vector.copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
+        FVector fCopyExternal = vector.copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().sub(fCopyExternal.getRefHead());
         fCopyLocal.moveBase(getRefBase());
@@ -517,7 +517,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector normalize() {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().normalize();
         fCopyLocal.moveBase(getRefBase());
@@ -527,7 +527,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector reflectBase() {
-        FVector fCopyLocal = copy().moveHead();
+        FVector fCopyLocal = copy().moveHeadToCenter();
 
         fCopyLocal.getRefBase().reflect();
         fCopyLocal.moveHead(getRefHead());
@@ -537,7 +537,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector reflectHead() {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().reflect();
         fCopyLocal.moveBase(getRefBase());
@@ -581,7 +581,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector setLength(double length) {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().setLength(length);
         fCopyLocal.moveBase(getRefBase());
@@ -591,14 +591,14 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public double getInclination() {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         return fCopyLocal.getRefHead().getInclination();
     }
 
     @Override
     public FVector setInclination(double inclination) {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().setInclination(inclination);
         fCopyLocal.moveBase(getRefBase());
@@ -608,14 +608,14 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public double getAzimuth() {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         return fCopyLocal.getRefHead().getAzimuth();
     }
 
     @Override
     public FVector setAzimuth(double azimuth) {
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().setAzimuth(azimuth);
         fCopyLocal.moveBase(getRefBase());
@@ -645,8 +645,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         }
 
         double angle, dProd, magAB;
-        FVector fCopyLocal = copy().moveBase();
-        FVector fCopyExternal = ref.copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
+        FVector fCopyExternal = ref.copy().moveBaseToCenter();
 
         dProd = fCopyLocal.getDotProduct(fCopyExternal);
         magAB = fCopyLocal.getRefHead().getLength() * fCopyExternal.getRefHead().getLength();
@@ -666,7 +666,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             throw new IllegalStateException("The provided FPoint is at the same position as the head FPoint");
         }
 
-        FVector fCopyLocal = copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
         FPoint fCopyExternal = ref.copy().sub(getRefBase());
 
         fCopyLocal.getRefHead().setAngle(fCopyExternal, angle);
@@ -686,8 +686,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             throw new IllegalStateException("The two FVectors are similar");
         }
 
-        FVector fCopyLocal = copy().moveBase();
-        FVector fCopyExternal = ref.copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
+        FVector fCopyExternal = ref.copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().setAngle(fCopyExternal.getRefHead(), angle);
         fCopyLocal.moveBase(getRefBase());
@@ -727,8 +727,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public double getDotProduct(FVector ref) {
-        FVector fCopyLocal = copy().moveBase();
-        FVector fCopyExternal = ref.copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
+        FVector fCopyExternal = ref.copy().moveBaseToCenter();
 
         return fCopyLocal.getRefHead().getDotProduct(fCopyExternal.getRefHead());
     }
@@ -741,8 +741,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector setCrossProduct(FVector ref) {
-        FVector fCopyLocal = copy().moveBase();
-        FVector fCopyExternal = ref.copy().moveBase();
+        FVector fCopyLocal = copy().moveBaseToCenter();
+        FVector fCopyExternal = ref.copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().setCrossProduct(fCopyExternal.getRefHead());
         fCopyLocal.moveBase(getRefBase());
@@ -767,8 +767,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
-        FPoint fCopyLocal = copy().moveBase().normalize().getRefHead();
-        FPoint fCopyExternal = ref.copy().moveBase().normalize().getRefHead();
+        FPoint fCopyLocal = copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint fCopyExternal = ref.copy().moveBaseToCenter().normalize().getRefHead();
 
         return fCopyLocal.isSimilar(fCopyExternal);
     }
@@ -801,8 +801,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
-        FPoint fCopyLocal = copy().moveBase().normalize().getRefHead();
-        FPoint fCopyExternal = ref.copy().moveBase().normalize().getRefHead();
+        FPoint fCopyLocal = copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint fCopyExternal = ref.copy().moveBaseToCenter().normalize().getRefHead();
 
         return fCopyLocal.isSimilar(fCopyExternal.reflect());
     }

@@ -58,11 +58,12 @@ public interface FVector extends Primitive<FVector> {
 
     boolean isNonDirectional();
 
-    FVector moveBase();
+    FVector moveBaseToCenter();
+    FVector moveHeadToCenter();
+
     FVector moveBase(double bX, double bY, double bZ);
     FVector moveBase(FPoint base);
 
-    FVector moveHead();
     FVector moveHead(double hX, double hY, double hZ);
     FVector moveHead(FPoint head);
 
@@ -111,8 +112,6 @@ public interface FVector extends Primitive<FVector> {
     boolean isOrthogonal(FVector ref);
     FVector setOrthogonal(FVector ref);
 
-    //--------------------------------------------------
-
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
     double getInclination();
@@ -121,8 +120,7 @@ public interface FVector extends Primitive<FVector> {
     double getAzimuth();
     FVector setAzimuth(double azimuth);
 
-    @IntermediateResults
-    double getLengthP2();
+    //--------------------------------------------------
 
     @MutableState
     FVector setRef(FPoint baseRef, FPoint headRef);
@@ -136,4 +134,9 @@ public interface FVector extends Primitive<FVector> {
     FPoint getRefHead();
     @MutableState
     FVector setRefHead(FPoint refHead);
+
+    //--------------------------------------------------
+
+    @IntermediateResults
+    double getLengthP2();
 }
