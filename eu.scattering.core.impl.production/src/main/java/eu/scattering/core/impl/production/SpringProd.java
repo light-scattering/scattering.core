@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,10 +20,10 @@ public class SpringProd {
     private double separationDistance;
 
     @Resource(name = "prod")
-    private Factory factory;
+    private FactoryDesignConcrete factory;
 
     @Bean("prod")
-    public Factory getFactoryDefault() {
+    public FactoryDesignConcrete getFactoryDefault() {
 
         return FactoryProd.create();
     }

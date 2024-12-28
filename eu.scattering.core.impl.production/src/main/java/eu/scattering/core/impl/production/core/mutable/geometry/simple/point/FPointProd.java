@@ -1,12 +1,12 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.simple.point;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.engine.random.FRandom;
-import eu.scattering.core.design.transfers.position.FPairPos3D;
-import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,18 +21,18 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0, 0.0 };
-    private final Factory factory;
+    private final FactoryDesignConcrete factory;
     private final FRandom random;
     private final double epsilon;
 
-    private FPointProd(Factory factory, FRandom random, double epsilon) {
+    private FPointProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         this.factory = factory;
         this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FPoint create(Factory factory, FRandom random, double epsilon) {
+    public static FPoint create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         return new FPointProd(factory, random, epsilon);
     }

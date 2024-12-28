@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.advanced.plane;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
@@ -24,18 +24,18 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     private FVector origin;
-    private final Factory factory;
+    private final FactoryDesignConcrete factory;
     private final FRandom random;
     private final double epsilon;
 
-    private FPlaneProd(Factory factory, FRandom random, double epsilon) {
+    private FPlaneProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         this.factory = factory;
         this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FPlane create(Factory factory, FRandom random, double epsilon) {
+    public static FPlane create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         return new FPlaneProd(factory, random, epsilon).setOriginRef(factory.getFVector());
     }

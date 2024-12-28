@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.core.mutable.number.quaternion;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import org.json.JSONArray;
@@ -13,18 +13,18 @@ public class FQuaternionProd implements FQuaternion {
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0, 0.0, 0.0 };
-    private final Factory factory;
+    private final FactoryDesignConcrete factory;
     private final FRandom random;
     private final double epsilon;
 
-    private FQuaternionProd(Factory factory, FRandom random, double epsilon) {
+    private FQuaternionProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         this.factory = factory;
         this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FQuaternion create(Factory factory, FRandom random, double epsilon) {
+    public static FQuaternion create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         return new FQuaternionProd(factory, random, epsilon);
     }

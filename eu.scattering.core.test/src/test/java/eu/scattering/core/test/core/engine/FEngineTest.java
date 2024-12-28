@@ -1,11 +1,11 @@
 package eu.scattering.core.test.core.engine;
 
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.transfers.position.FPairPos2D;
-import eu.scattering.core.design.transfers.position.FPairPos3D;
-import eu.scattering.core.design.transfers.position.FPos2D;
-import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;

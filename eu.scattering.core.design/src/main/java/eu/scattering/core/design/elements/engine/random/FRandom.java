@@ -1,11 +1,11 @@
 package eu.scattering.core.design.elements.engine.random;
 
 import eu.scattering.core.design.annotations.IntermediateResults;
-import eu.scattering.core.design.transfers.position.FPairPos2D;
-import eu.scattering.core.design.transfers.position.FPairPos3D;
-import eu.scattering.core.design.transfers.position.FPos2D;
-import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.design.elements.engine.Engine;
+import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 import java.util.Optional;
 

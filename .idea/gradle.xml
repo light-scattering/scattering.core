@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/eu.scattering.core.design" />
             <option value="$PROJECT_DIR$/eu.scattering.core.impl.production" />
             <option value="$PROJECT_DIR$/eu.scattering.core.test" />
+            <option value="$PROJECT_DIR$/eu.scattering.core.transfer" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -1,12 +1,12 @@
 package eu.scattering.core.test.core.immutable;
 
-import eu.scattering.core.design.transfers.position.FPos3DI;
+import eu.scattering.core.transfer.containers.position.FPos3DI.FPos3DI;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import static eu.scattering.core.test.Configuration.*;
+import static eu.scattering.core.test.Configuration.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Timeout(5)

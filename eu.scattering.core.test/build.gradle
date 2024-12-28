@@ -3,6 +3,7 @@ test {
 }
 
 dependencies {
+    testImplementation project(':eu.scattering.core.transfer')
     testImplementation project(':eu.scattering.core.design')
     testImplementation project(':eu.scattering.core.impl.production')
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0-M1'

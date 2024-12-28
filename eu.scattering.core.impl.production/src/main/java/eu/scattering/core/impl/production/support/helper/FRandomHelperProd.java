@@ -3,8 +3,8 @@ package eu.scattering.core.impl.production.support.helper;
 import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.helpers.engine.FRandomHelper;
-import eu.scattering.core.design.transfers.position.FPairPos2D;
-import eu.scattering.core.design.transfers.position.FPairPos4D;
+import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
 
 public class FRandomHelperProd implements FRandomHelper {
 

@@ -1,6 +1,6 @@
 package eu.scattering.core.design.elements.algebra.geometry.primitive.point;
 
-import eu.scattering.core.design.transfers.position.FPos3D;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 public interface FPointFactory {
 

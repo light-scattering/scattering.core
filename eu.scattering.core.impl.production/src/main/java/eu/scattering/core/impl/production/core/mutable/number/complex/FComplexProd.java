@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.core.mutable.number.complex;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import org.json.JSONArray;
@@ -13,18 +13,18 @@ public class FComplexProd implements FComplex {
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0 };
-    private final Factory factory;
+    private final FactoryDesignConcrete factory;
     private final FRandom random;
     private final double epsilon;
 
-    private FComplexProd(Factory factory, FRandom random, double epsilon) {
+    private FComplexProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         this.factory = factory;
         this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FComplex create(Factory factory, FRandom random, double epsilon) {
+    public static FComplex create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         return new FComplexProd(factory, random, epsilon);
     }

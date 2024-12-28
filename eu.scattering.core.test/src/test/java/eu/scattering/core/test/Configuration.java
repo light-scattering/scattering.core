@@ -1,6 +1,6 @@
 package eu.scattering.core.test;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.impl.production.FactoryProd;
 
@@ -9,7 +9,7 @@ public final class Configuration {
     private Configuration() {
     }
 
-    public static final Factory factory = FactoryProd.create();
+    public static final FactoryDesignConcrete factory = FactoryProd.create();
     public static final double jitter = 1E-8;
     public static final FRandom random = factory.getFRandom();
 

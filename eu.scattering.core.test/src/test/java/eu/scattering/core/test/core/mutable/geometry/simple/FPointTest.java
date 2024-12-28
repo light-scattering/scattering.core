@@ -1,9 +1,9 @@
 package eu.scattering.core.test.core.mutable.geometry.simple;
 
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.core.mutable.geometry.simple.support.FPointTestHelper;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
 import java.time.Duration;

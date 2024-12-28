@@ -4,7 +4,7 @@ import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoin
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.design.transfers.position.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 
 import java.util.Arrays;
 

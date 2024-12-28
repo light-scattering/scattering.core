@@ -1,6 +1,6 @@
 package eu.scattering.local;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.impl.production.SpringProd;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -11,7 +11,7 @@ public class Application {
         var context = new AnnotationConfigApplicationContext(SpringProd.class);
         context.registerShutdownHook();
 
-        Factory factorySpring = context.getBean(Factory.class);
+        FactoryDesignConcrete factorySpring = context.getBean(FactoryDesignConcrete.class);
         System.out.println(factorySpring.getEpsilon());
 
         System.out.println(factorySpring.getEpsilon());

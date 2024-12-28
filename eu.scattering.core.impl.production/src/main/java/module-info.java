@@ -4,6 +4,7 @@ module eu.scattering.core.impl.production {
     requires java.annotation;
     requires spring.context;
     requires spring.beans;
+    requires eu.scattering.core.transfer;
     exports eu.scattering.core.impl.production;
     opens eu.scattering.core.impl.production;
 }

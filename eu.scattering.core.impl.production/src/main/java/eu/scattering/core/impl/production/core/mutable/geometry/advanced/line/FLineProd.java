@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.advanced.line;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
@@ -24,18 +24,18 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     private FVector origin;
-    private final Factory factory;
+    private final FactoryDesignConcrete factory;
     private final FRandom random;
     private final double epsilon;
 
-    private FLineProd(Factory factory, FRandom random, double epsilon) {
+    private FLineProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         this.factory = factory;
         this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FLine create(Factory factory, FRandom random, double epsilon) {
+    public static FLine create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
 
         return new FLineProd(factory, random, epsilon).setOriginRef(factory.getFVector());
     }

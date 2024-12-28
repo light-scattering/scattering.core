@@ -1,19 +1,20 @@
 package eu.scattering.core.impl.production.core.engine.random;
 
-import eu.scattering.core.design.FactoryTransfers;
-import eu.scattering.core.design.transfers.position.FPairPos2D;
-import eu.scattering.core.design.transfers.position.FPairPos3D;
-import eu.scattering.core.design.transfers.position.FPos2D;
-import eu.scattering.core.design.transfers.position.FPos3D;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.random.FRandomCore;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import java.util.Optional;
 
 public class FRandomProd implements FRandom {
 
-    private static final FactoryTransfers factory = FactoryTransfers.create();
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     private static final FPos2D posZero2D = factory.getFPos2D(0, 0);
     private static final FPos3D posZero3D = factory.getFPos3D(0, 0, 0);

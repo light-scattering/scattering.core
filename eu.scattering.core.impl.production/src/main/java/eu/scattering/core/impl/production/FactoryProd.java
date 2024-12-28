@@ -1,30 +1,27 @@
 package eu.scattering.core.impl.production;
 
-import eu.scattering.core.design.Factory;
-import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
 import eu.scattering.core.design.elements.algebra.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.algebra.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.auxiliary.FAngleHelper;
-import eu.scattering.core.design.helpers.transfer.FPositionHelper;
 import eu.scattering.core.impl.production.core.engine.random.FRandomProd;
-import eu.scattering.core.impl.production.core.mutable.geometry.simple.point.FPointProd;
-import eu.scattering.core.impl.production.core.mutable.geometry.simple.vector.FVectorProd;
+import eu.scattering.core.impl.production.core.immutable.rotation.FRotationProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.line.FLineProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.plane.FPlaneProd;
+import eu.scattering.core.impl.production.core.mutable.geometry.simple.point.FPointProd;
+import eu.scattering.core.impl.production.core.mutable.geometry.simple.vector.FVectorProd;
 import eu.scattering.core.impl.production.core.mutable.number.complex.FComplexProd;
 import eu.scattering.core.impl.production.core.mutable.number.quaternion.FQuaternionProd;
-import eu.scattering.core.impl.production.core.immutable.rotation.FRotationProd;
 import eu.scattering.core.impl.production.support.helper.FAngleHelperProd;
-import eu.scattering.core.impl.production.support.helper.FPositionHelperProd;
 
-public final class FactoryProd implements Factory {
-    private final FPositionHelper fPositionHelper;
+public final class FactoryProd extends FactoryDesignConcrete {
     private final FAngleHelper fAngleHelper;
 
     private final FRandom fRandomInternal;
@@ -45,16 +42,15 @@ public final class FactoryProd implements Factory {
     }
 
     {
-        fPositionHelper = FPositionHelperProd.create();
         fAngleHelper = FAngleHelperProd.create();
     }
 
-    public static Factory create() {
+    public static FactoryDesignConcrete create() {
 
         return new FactoryProd();
     }
 
-    public static Factory create(long seed) {
+    public static FactoryDesignConcrete create(long seed) {
 
         return new FactoryProd(seed);
     }
@@ -111,12 +107,6 @@ public final class FactoryProd implements Factory {
     public FAngleHelper getFAngleHelper() {
 
         return fAngleHelper;
-    }
-
-    @Override
-    public FPositionHelper getFPositionHelper() {
-
-        return fPositionHelper;
     }
 
 //--------------------------------------------------

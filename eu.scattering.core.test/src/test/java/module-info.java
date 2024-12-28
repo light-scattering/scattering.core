@@ -4,6 +4,7 @@ module eu.scattering.core.test {
     requires org.json;
     requires eu.scattering.core.design;
     requires eu.scattering.core.impl.production;
+    requires eu.scattering.core.transfer;
     opens eu.scattering.core.test.core.mutable.geometry.simple;
     opens eu.scattering.core.test.core.mutable.geometry.advanced;
     opens eu.scattering.core.test.core.mutable.number;

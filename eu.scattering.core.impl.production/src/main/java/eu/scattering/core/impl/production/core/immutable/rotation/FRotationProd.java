@@ -1,12 +1,12 @@
 package eu.scattering.core.impl.production.core.immutable.rotation;
 
-import eu.scattering.core.design.Factory;
+import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.design.transfers.position.FPairPos3D;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,9 +17,9 @@ public class FRotationProd implements FRotation {
     private final FPoint offset;
     private final FQuaternion core;
     private final double[][] rotation = new double[3][3];
-    private final Factory factory;
+    private final FactoryDesignConcrete factory;
 
-    private FRotationProd(Factory factory, FVector axis, double angle) {
+    private FRotationProd(FactoryDesignConcrete factory, FVector axis, double angle) {
 
         if (axis.isNonDirectional()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
@@ -33,7 +33,7 @@ public class FRotationProd implements FRotation {
         initializeRotor();
     }
 
-    private FRotationProd(Factory factory, FPoint axis, double angle) {
+    private FRotationProd(FactoryDesignConcrete factory, FPoint axis, double angle) {
 
         if (axis.isZero()) {
             throw new IllegalArgumentException("The rotation axis is not defined");
@@ -47,7 +47,7 @@ public class FRotationProd implements FRotation {
         initializeRotor();
     }
 
-    private FRotationProd(Factory factory, double re, double i, double j, double k) {
+    private FRotationProd(FactoryDesignConcrete factory, double re, double i, double j, double k) {
         double direction = 1 - (re * re);
 
         if (direction <= 0) {
@@ -61,17 +61,17 @@ public class FRotationProd implements FRotation {
         initializeRotor();
     }
 
-    public static FRotation create(Factory factory, FPoint axis, double angle) {
+    public static FRotation create(FactoryDesignConcrete factory, FPoint axis, double angle) {
 
         return new FRotationProd(factory, axis, angle);
     }
 
-    public static FRotation create(Factory factory, FVector axis, double angle) {
+    public static FRotation create(FactoryDesignConcrete factory, FVector axis, double angle) {
 
         return new FRotationProd(factory, axis, angle);
     }
 
-    public static FRotation parse(Factory factory, String json) {
+    public static FRotation parse(FactoryDesignConcrete factory, String json) {
         JSONArray structure = (new JSONObject(json)).getJSONArray("rotor");
 
         double re = structure.getDouble(0);
