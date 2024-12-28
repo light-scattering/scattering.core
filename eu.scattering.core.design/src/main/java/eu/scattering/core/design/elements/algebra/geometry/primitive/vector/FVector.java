@@ -73,12 +73,12 @@ public interface FVector extends Primitive<FVector> {
     FVector add(FVector vector);
     FVector sub(FVector vector);
 
-    double getLength();
-    FVector setLength(double length);
-
     double getLengthX();
     double getLengthY();
     double getLengthZ();
+
+    double getLength();
+    FVector setLength(double length);
 
     FVector normalize();
 
@@ -87,18 +87,13 @@ public interface FVector extends Primitive<FVector> {
     FVector reflectHead();
     FVector invertDirection();
 
-    double getAngle(FPoint ref);
     double getAngle(FVector ref);
-    FVector setAngle(FPoint ref, double angle);
     FVector setAngle(FVector ref, double angle);
 
     FVector rotate(FPoint ref, double angle);
     FVector rotate(FVector ref, double angle);
 
-    double getDotProduct(FPoint ref);
     double getDotProduct(FVector ref);
-
-    FVector setCrossProduct(FPoint ref);
     FVector setCrossProduct(FVector ref);
 
     boolean isCollinear(FVector ref);
@@ -123,7 +118,12 @@ public interface FVector extends Primitive<FVector> {
     //--------------------------------------------------
 
     @MutableState
-    FVector setRef(FPoint baseRef, FPoint headRef);
+    FVector setRef(FPoint refBase, FPoint refHead);
+
+    @MutableState
+    FVector rstRefBase();
+    @MutableState
+    FVector rstRefHead();
 
     @MutableState
     FPoint getRefBase();

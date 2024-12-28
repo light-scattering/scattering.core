@@ -38,6 +38,11 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         return fVector;
     }
 
+    public static FVector createRef(FactoryDesignConcrete factory, double epsilon) {
+
+        return new FVectorProd(factory, epsilon);
+    }
+
     @Override
     public FPoint getRefBase() {
 
@@ -88,9 +93,23 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FVector setRef(FPoint baseRef, FPoint headRef) {
-        setRefBase(baseRef);
-        setRefHead(headRef);
+    public FVector setRef(FPoint refBase, FPoint refHead) {
+        setRefBase(refBase);
+        setRefHead(refHead);
+
+        return this;
+    }
+
+    @Override
+    public FVector rstRefBase() {
+        setRefBase(factory.getFPoint());
+
+        return this;
+    }
+
+    @Override
+    public FVector rstRefHead() {
+        setRefHead(factory.getFPoint());
 
         return this;
     }
@@ -624,16 +643,6 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public double getAngle(FPoint ref) {
-
-        if (getRefBase().isSimilar(ref)) {
-            throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
-        }
-
-        return getAngle(factory.getFVector(getRefBase(), ref));
-    }
-
-    @Override
     public double getAngle(FVector ref) {
 
         if (isNonDirectional()) {
@@ -653,26 +662,6 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
-    }
-
-    @Override
-    public FVector setAngle(FPoint ref, double angle) {
-
-        if (getRefBase().isSimilar(ref)) {
-            throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
-        }
-
-        if (getRefHead().isSimilar(ref)) {
-            throw new IllegalStateException("The provided FPoint is at the same position as the head FPoint");
-        }
-
-        FVector fCopyLocal = copy().moveBaseToCenter();
-        FPoint fCopyExternal = ref.copy().sub(getRefBase());
-
-        fCopyLocal.getRefHead().setAngle(fCopyExternal, angle);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -720,23 +709,11 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public double getDotProduct(FPoint ref) {
-
-        return getDotProduct(factory.getFVector(getRefBase(), ref));
-    }
-
-    @Override
     public double getDotProduct(FVector ref) {
         FVector fCopyLocal = copy().moveBaseToCenter();
         FVector fCopyExternal = ref.copy().moveBaseToCenter();
 
         return fCopyLocal.getRefHead().getDotProduct(fCopyExternal.getRefHead());
-    }
-
-    @Override
-    public FVector setCrossProduct(FPoint ref) {
-
-        return setCrossProduct(factory.getFVector(getRefBase(), ref));
     }
 
     @Override

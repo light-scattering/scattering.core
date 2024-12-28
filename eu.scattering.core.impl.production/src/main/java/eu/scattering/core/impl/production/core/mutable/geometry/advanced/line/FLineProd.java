@@ -370,11 +370,11 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
         switch (dir) {
             case "XY":
-                return ref.setCrossProduct(ref.getRefBase().copy().setZ(1));
+                return ref.setCrossProduct(factory.getFVectorRef(ref.getRefBase().copy().setZ(1)));
             case "YZ":
-                return ref.setCrossProduct(ref.getRefBase().copy().setX(1));
+                return ref.setCrossProduct(factory.getFVectorRef(ref.getRefBase().copy().setX(1)));
             case "XZ":
-                return ref.setCrossProduct(ref.getRefBase().copy().setY(1));
+                return ref.setCrossProduct(factory.getFVectorRef(ref.getRefBase().copy().setY(1)));
         }
 
         throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);

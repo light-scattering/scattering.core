@@ -1846,106 +1846,6 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Get angle with FPoint")
-        void getAngleWithFPoint() {
-            FVector fVector = factory.getFVector(2, 2, 0);
-            FPoint fPoint = factory.getFPoint(4, -4, 0);
-            FPoint fPointRel = TestHelper.getRandomFPoint();
-
-            fVector.moveBase(fPointRel);
-            fPoint.add(fPointRel);
-
-            assertEquals(Math.PI * 0.5, fVector.getAngle(fPoint), jitter,
-                    "The angle is incorrect");
-        }
-
-        @Test
-        @DisplayName("Get angle with FPoint (throw IllegalStateException, direction)")
-        void getAngleWithFPointThrowIllegalStateExceptionDirection() {
-            FVector fVector = factory.getFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.getAngle(fPoint),
-                    "The direction of the input FVector is not defined");
-        }
-
-        @Test
-        @DisplayName("Get angle with FPoint (throw IllegalStateException, position)")
-        void getAngleWithFPointThrowIllegalStateExceptionPosition() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = fVector.getRefBase().copy();
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.getAngle(fPoint),
-                    "The argument FPoint is at the same position as the base FPoint");
-        }
-
-        @Test
-        @DisplayName("Get angle with FPoint (validate)")
-        void getAngleWithFPointValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FVectorTestHelper.testValue(FVector::getAngle, fVector, fPoint);
-        }
-
-        @Test
-        @DisplayName("Set angle with FPoint")
-        void setAngleWithFPoint() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            fVector.setAngle(fPoint, angle);
-
-            assertEquals(angle, fVector.getAngle(fPoint),
-                    jitter, "The angle is incorrect");
-        }
-
-        @Test
-        @DisplayName("Set angle with FPoint (negative)")
-        void setAngleWithFPointNegative() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-            double angle = -Math.abs(random.nextDouble() % Math.PI);
-
-            fVector.setAngle(fPoint, angle);
-
-            assertEquals(angle, -fVector.getAngle(fPoint),
-                    jitter, "The angle is incorrect");
-        }
-
-        @Test
-        @DisplayName("Set angle with FPoint (throw IllegalStateException, base)")
-        void setAngleWithFPointThrowIllegalStateExceptionBase() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = fVector.getRefBase().copy();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.setAngle(fPoint, angle),
-                    "The argument FPoint is at the same position as the base FPoint");
-        }
-
-        @Test
-        @DisplayName("Set angle with FPoint (throw IllegalStateException, head)")
-        void setAngleWithFPointThrowIllegalStateExceptionHead() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = fVector.getRefHead().copy();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.setAngle(fPoint, angle),
-                    "The argument FPoint is at the same position as the head FPoint");
-        }
-
-        @Test
-        @DisplayName("Set angle with FPoint (validate)")
-        void setAngleWithFPointValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FVectorTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fVector, fPoint);
-        }
-
-        @Test
         @DisplayName("Set angle with FVector")
         void setAngleWithFVector() {
             FVector fVectorA = TestHelper.getRandomFVector();
@@ -2136,33 +2036,6 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Get dot product with FPoint")
-        void getDotProductWithFPoint() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            double result = fVector.getDotProduct(fPoint);
-
-            fPoint.sub(fVector.getRefBase());
-            fVector.moveBaseToCenter();
-
-            double dimX = fPoint.getX() * fVector.getRefHead().getX();
-            double dimY = fPoint.getY() * fVector.getRefHead().getY();
-            double dimZ = fPoint.getZ() * fVector.getRefHead().getZ();
-
-            Assertions.assertEquals(dimX + dimY + dimZ, result, jitter, "The value is not correct");
-        }
-
-        @Test
-        @DisplayName("Get dot product with FPoint (validate)")
-        void getDotProductWithFPointValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FVectorTestHelper.testValue(FVector::getDotProduct, fVector, fPoint);
-        }
-
-        @Test
         @DisplayName("Set cross product")
         void setCrossProduct() {
             FVector fVectorA = TestHelper.getRandomFVector();
@@ -2210,37 +2083,6 @@ public class FVectorTest {
             FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
 
             FVectorTestHelper.testReference(FVector::setCrossProduct, fVectorA, fVectorB);
-        }
-
-        @Test
-        @DisplayName("Set cross product with FPoint")
-        void setCrossProductWithFPoint() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FVector fVectorRes = fVector.copy().setCrossProduct(fPoint);
-            FPoint fPointRel = fVector.getRefBase().copy();
-
-            fPoint.sub(fPointRel);
-            fVector.moveBase(0, 0, 0);
-
-            double dimX = (fVector.getRefHead().getY() * fPoint.getZ()) - (fVector.getRefHead().getZ() * fPoint.getY());
-            double dimY = (fVector.getRefHead().getZ() * fPoint.getX()) - (fVector.getRefHead().getX() * fPoint.getZ());
-            double dimZ = (fVector.getRefHead().getX() * fPoint.getY()) - (fVector.getRefHead().getY() * fPoint.getX());
-
-            FVector fVectorRef = factory.getFVector(factory.getFPoint(dimX, dimY, dimZ));
-            fVectorRef.moveBase(fPointRel);
-
-            assertTrue(fVectorRes.isSimilar(fVectorRef),"The value is not correct");
-        }
-
-        @Test
-        @DisplayName("Set cross product with FPoint (validate)")
-        void setCrossProductWithFPointValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FVectorTestHelper.testReference(FVector::setCrossProduct, fVector, fPoint);
         }
 
         @Test

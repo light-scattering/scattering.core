@@ -283,7 +283,6 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
 
         return distanceHead < distanceBase + epsilon;
     }
-
 }
 
 // http://geomalgorithms.com/a05-_intersect-1.html

@@ -1,5 +1,6 @@
 package eu.scattering.core.design.elements.algebra.geometry.primitive.vector;
 
+import eu.scattering.core.design.annotations.MutableState;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPointFactory;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -8,6 +9,9 @@ import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 public interface FVectorFactory extends FPointFactory {
 
     FVector getFVector();
+
+    @MutableState
+    FVector getFVectorRef();
 
     //--------------------------------------------------
 
@@ -64,5 +68,17 @@ public interface FVectorFactory extends FPointFactory {
     default FVector getFVector(FPairPos3D position) {
 
         return getFVector().set(position);
+    }
+
+    @MutableState
+    default FVector getFVectorRef(FPoint base, FPoint head) {
+
+        return getFVectorRef().setRefBase(base).setRefHead(head);
+    }
+
+    @MutableState
+    default FVector getFVectorRef(FPoint head) {
+
+        return getFVectorRef().rstRefBase().setRefHead(head);
     }
 }
