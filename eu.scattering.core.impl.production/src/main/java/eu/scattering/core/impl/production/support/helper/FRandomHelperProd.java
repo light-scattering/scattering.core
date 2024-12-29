@@ -9,7 +9,9 @@ import eu.scattering.core.design.helpers.engine.FRandomHelper;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 
 import java.util.Arrays;
 
@@ -30,19 +32,32 @@ public class FRandomHelperProd implements FRandomHelper {
 
     @Override
     public FComplex rndPosition(FComplex origin, FPairPos2D range, FComplex... exclusion) {
-        return null;
+        FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
+
+        origin.set(fRandom.nextDouble2D(range, exc));
+
+        return origin;
     }
 
     @Override
     public FComplex rndPosition(FComplex origin, double radius, FComplex... exclusion) {
-        return null;
+        FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
+
+        origin.set(fRandom.nextDoubleOnCircle(radius, exc));
+
+        return origin;
     }
 
     @Override
     public FQuaternion rndPosition(FQuaternion origin, FPairPos4D range, FQuaternion... exclusion) {
-        return null;
+        FPos4D[] exc = Arrays.stream(exclusion).map(FQuaternion::toFPos4D).toArray(FPos4D[]::new);
+
+        origin.set(fRandom.nextDouble4D(range, exc));
+
+        return origin;
     }
 
+    // TODO - Not implemented
     @Override
     public FQuaternion rndPosition(FQuaternion origin, double radius, FQuaternion... exclusion) {
         return null;

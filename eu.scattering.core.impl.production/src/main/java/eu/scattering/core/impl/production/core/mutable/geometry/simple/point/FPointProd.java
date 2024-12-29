@@ -85,15 +85,15 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint applyStateFrom(FPoint ref) {
-
-        return set(ref.getX(), ref.getY(), ref.getZ());
-    }
-
-    @Override
     public FPoint set(FPos3D position) {
 
         return set(position.getD0(), position.getD1(), position.getD2());
+    }
+
+    @Override
+    public FPoint applyStateFrom(FPoint ref) {
+
+        return set(ref.getX(), ref.getY(), ref.getZ());
     }
 
     @Override

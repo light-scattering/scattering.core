@@ -3,6 +3,7 @@ package eu.scattering.core.impl.production.core.mutable.number.quaternion;
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,19 +15,17 @@ public class FQuaternionProd implements FQuaternion {
 
     private final double[] origin = { 0.0, 0.0, 0.0, 0.0 };
     private final FactoryDesignConcrete factory;
-    private final FRandom random;
     private final double epsilon;
 
-    private FQuaternionProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    private FQuaternionProd(FactoryDesignConcrete factory, double epsilon) {
 
         this.factory = factory;
-        this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FQuaternion create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    public static FQuaternion create(FactoryDesignConcrete factory, double epsilon) {
 
-        return new FQuaternionProd(factory, random, epsilon);
+        return new FQuaternionProd(factory, epsilon);
     }
 
     @Override
@@ -97,9 +96,21 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
+    public FQuaternion set(FPos4D position) {
+
+        return set(position.getD0(), position.getD1(), position.getD2(), position.getD3());
+    }
+
+    @Override
     public FQuaternion set(double re, double i, double j, double k) {
 
         return setRe(re).setI(i).setJ(j).setK(k);
+    }
+
+    @Override
+    public FPos4D toFPos4D() {
+
+        return factory.getFPos4D(getRe(), getI(), getJ(), getK());
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -167,7 +178,7 @@ public class FQuaternionProd implements FQuaternion {
     @Override
     public FQuaternion copy() {
 
-        return FQuaternionProd.create(factory, random, epsilon).applyStateFrom(this);
+        return FQuaternionProd.create(factory, epsilon).applyStateFrom(this);
     }
 
     @Override
@@ -465,7 +476,7 @@ public class FQuaternionProd implements FQuaternion {
         return Math.sqrt(distanceRe + distanceI + distanceJ + distanceK);
     }
 
-    // TODO Not implemented
+    // TODO - Not implemented
     @Override
     public FQuaternion setDistance(FQuaternion ref, double distance) {
         return null;
@@ -497,7 +508,7 @@ public class FQuaternionProd implements FQuaternion {
         return n > 0 ? this : inverse();
     }
 
-    // TODO Not implemented
+    // TODO - Not implemented
     @Override
     public FQuaternion[] root(int n) {
         return new FQuaternion[0];

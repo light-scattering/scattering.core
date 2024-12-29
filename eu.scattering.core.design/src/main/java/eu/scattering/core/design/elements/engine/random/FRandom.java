@@ -4,8 +4,10 @@ import eu.scattering.core.design.annotations.IntermediateResults;
 import eu.scattering.core.design.elements.engine.Engine;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 
 import java.util.Optional;
 
@@ -29,6 +31,7 @@ public interface FRandom extends FRandomCore, Engine<FRandom> {
 
     FPos2D nextDouble2D(FPairPos2D range, FPos2D... exclude);
     FPos3D nextDouble3D(FPairPos3D range, FPos3D... exclude);
+    FPos4D nextDouble4D(FPairPos4D range, FPos4D... exclude);
 
     FPos2D nextDoubleOnCircle(double radius, FPos2D... exclude);
     FPos2D nextDoubleInCircle(double radius, FPos2D... exclude);
@@ -36,10 +39,15 @@ public interface FRandom extends FRandomCore, Engine<FRandom> {
     FPos3D nextDoubleOnSphere(double radius, FPos3D... exclude);
     FPos3D nextDoubleInSphere(double radius, FPos3D... exclude);
 
+    FPos4D nextDoubleOnHyperSphere(double radius, FPos4D... exclude);
+    FPos4D nextDoubleInHyperSphere(double radius, FPos4D... exclude);
+
     @IntermediateResults
     boolean valExc1D(double value, double... exclude);
     @IntermediateResults
     boolean valExc2D(FPos2D value, FPos2D... exclude);
     @IntermediateResults
     boolean valExc3D(FPos3D value, FPos3D... exclude);
+    @IntermediateResults
+    boolean valExc4D(FPos4D value, FPos4D... exclude);
 }

@@ -6,8 +6,10 @@ import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONObject;
 
 import java.util.Optional;
@@ -196,6 +198,32 @@ public class FRandomProd implements FRandom {
     }
 
     @Override
+    public FPos4D nextDouble4D(FPairPos4D range, FPos4D... exclude) {
+        int retries = 0;
+
+        while (true) {
+            double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
+            double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
+            double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
+            double rndD3 = nextDouble(range.getPosA().getD3(), range.getPosB().getD3());
+
+            FPos4D rnd = factory.getFPos4D(rndD0, rndD1, rndD2, rndD3);
+
+            if (valExc4D(rnd, exclude)) {
+                return rnd;
+            }
+
+            if (this.retryLimit > 0) {
+                if (retries > this.retryLimit) {
+                    throw new ArithmeticException("The retry limit has been reached");
+                }
+            }
+
+            retries++;
+        }
+    }
+
+    @Override
     public FPos2D nextDoubleOnCircle(double radius, FPos2D... exclude) {
         double rnd = nextDouble(0, 2 * Math.PI);
 
@@ -282,6 +310,18 @@ public class FRandomProd implements FRandom {
         }
     }
 
+    // TODO - Not implemented
+    @Override
+    public FPos4D nextDoubleOnHyperSphere(double radius, FPos4D... exclude) {
+        return null;
+    }
+
+    // TODO - Not implemented
+    @Override
+    public FPos4D nextDoubleInHyperSphere(double radius, FPos4D... exclude) {
+        return null;
+    }
+
     //--------------------------------------------------
 
     @Override
@@ -319,6 +359,18 @@ public class FRandomProd implements FRandom {
         return true;
     }
 
+    @Override
+    public boolean valExc4D(FPos4D val, FPos4D... exc) {
+
+        for (FPos4D point : exc) {
+            if (distP24D(val, point) < this.proximityThresholdP2) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     //--------------------------------------------------
 
     private double dist(double val, double ref) {
@@ -333,16 +385,28 @@ public class FRandomProd implements FRandom {
 
     private double distP22D(FPos2D val, FPos2D ref) {
 
-        return distP2(val.getD0(), ref.getD0()) + distP2(val.getD1(), ref.getD1());
+        return distP2(val.getD0(), ref.getD0()) +
+                distP2(val.getD1(), ref.getD1());
     }
 
     private double distP23D(FPos3D val, FPos3D ref) {
 
-        return distP2(val.getD0(), ref.getD0()) + distP2(val.getD1(), ref.getD1()) + distP2(val.getD2(), ref.getD2());
+        return distP2(val.getD0(), ref.getD0()) +
+                distP2(val.getD1(), ref.getD1()) +
+                distP2(val.getD2(), ref.getD2());
+    }
+
+    private double distP24D(FPos4D val, FPos4D ref) {
+
+        return distP2(val.getD0(), ref.getD0()) +
+                distP2(val.getD1(), ref.getD1()) +
+                distP2(val.getD2(), ref.getD2()) +
+                distP2(val.getD3(), ref.getD3());
     }
 
     //--------------------------------------------------
 
+    // TODO - Not implemented
     @Override
     public JSONObject exportToJSON() {
         return null;

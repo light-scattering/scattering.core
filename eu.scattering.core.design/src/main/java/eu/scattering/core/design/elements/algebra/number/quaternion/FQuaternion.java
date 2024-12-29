@@ -1,6 +1,7 @@
 package eu.scattering.core.design.elements.algebra.number.quaternion;
 
 import eu.scattering.core.design.elements.algebra.number.Number;
+import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 
 public interface FQuaternion extends Number<FQuaternion> {
 
@@ -15,6 +16,14 @@ public interface FQuaternion extends Number<FQuaternion> {
     FQuaternion setJ(double j);
     double getK();
     FQuaternion setK(double k);
+
+    //--------------------------------------------------
+
+    FQuaternion set(FPos4D position);
+
+    FPos4D toFPos4D();
+
+    //--------------------------------------------------
 
     boolean isExact(double re, double i, double j, double k);
     boolean isSimilar(double re, double i, double j, double k);

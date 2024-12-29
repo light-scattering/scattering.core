@@ -1,6 +1,7 @@
 package eu.scattering.core.design.elements.algebra.number.complex;
 
 import eu.scattering.core.design.elements.algebra.number.Number;
+import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 
 public interface FComplex extends Number<FComplex> {
 
@@ -11,6 +12,14 @@ public interface FComplex extends Number<FComplex> {
 
     double getIm();
     FComplex setIm(double im);
+
+    //--------------------------------------------------
+
+    FComplex set(FPos2D position);
+
+    FPos2D toFPos2D();
+
+    //--------------------------------------------------
 
     boolean isExact(double re, double im);
     boolean isSimilar(double re, double im);

@@ -99,13 +99,13 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FComplex getFComplex() {
 
-        return FComplexProd.create(this, fRandomInternal, epsilon);
+        return FComplexProd.create(this, epsilon);
     }
 
     @Override
     public FQuaternion getFQuaternion() {
 
-        return FQuaternionProd.create(this, fRandomInternal, epsilon);
+        return FQuaternionProd.create(this, epsilon);
     }
 
 //--------------------------------------------------
@@ -124,7 +124,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
 //--------------------------------------------------
 
-    //TODO Maybe this one should be removed...
+    //TODO - Maybe this one should be removed...
     @Override
     public FRotation getFRotation(FPoint axis, double angle) {
 
