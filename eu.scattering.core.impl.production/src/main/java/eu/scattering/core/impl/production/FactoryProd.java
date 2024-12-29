@@ -79,13 +79,13 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FLine getFLine() {
 
-        return FLineProd.create(this, fRandomInternal, epsilon);
+        return FLineProd.create(this, epsilon);
     }
 
     @Override
     public FPlane getFPlane() {
 
-        return FPlaneProd.create(this, fRandomInternal, epsilon);
+        return FPlaneProd.create(this, epsilon);
     }
 
     @Override

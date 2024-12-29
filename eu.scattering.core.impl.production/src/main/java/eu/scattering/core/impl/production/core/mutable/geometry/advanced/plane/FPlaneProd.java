@@ -25,19 +25,17 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
 
     private FVector origin;
     private final FactoryDesignConcrete factory;
-    private final FRandom random;
     private final double epsilon;
 
-    private FPlaneProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    private FPlaneProd(FactoryDesignConcrete factory, double epsilon) {
 
         this.factory = factory;
-        this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FPlane create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    public static FPlane create(FactoryDesignConcrete factory, double epsilon) {
 
-        return new FPlaneProd(factory, random, epsilon).setOriginRef(factory.getFVector());
+        return new FPlaneProd(factory, epsilon).setOriginRef(factory.getFVector());
     }
 
     @Override

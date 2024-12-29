@@ -25,19 +25,17 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private FVector origin;
     private final FactoryDesignConcrete factory;
-    private final FRandom random;
     private final double epsilon;
 
-    private FLineProd(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    private FLineProd(FactoryDesignConcrete factory, double epsilon) {
 
         this.factory = factory;
-        this.random = random;
         this.epsilon = epsilon;
     }
 
-    public static FLine create(FactoryDesignConcrete factory, FRandom random, double epsilon) {
+    public static FLine create(FactoryDesignConcrete factory, double epsilon) {
 
-        return new FLineProd(factory, random, epsilon).setOriginRef(factory.getFVector());
+        return new FLineProd(factory, epsilon).setOriginRef(factory.getFVector());
     }
 
     @Override
