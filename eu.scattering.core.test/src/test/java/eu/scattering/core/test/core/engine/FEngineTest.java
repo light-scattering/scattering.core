@@ -75,7 +75,7 @@ public class FEngineTest {
             FRandom fRandom = factory.getFRandom();
 
             Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.empty(), fRandom.getProximityThreshold()));
+                    () -> assertEquals(Optional.empty(), fRandom.getProximityLimit()));
         }
 
         @Test
@@ -85,10 +85,10 @@ public class FEngineTest {
 
             FRandom fRandom = factory.getFRandom();
 
-            fRandom.setProximityThreshold(value);
+            fRandom.setProximityLimit(value);
 
             Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.of(value), fRandom.getProximityThreshold()));
+                    () -> assertEquals(Optional.of(value), fRandom.getProximityLimit()));
         }
 
         @Test
@@ -99,7 +99,7 @@ public class FEngineTest {
             FRandom fRandom = factory.getFRandom();
 
             assertThrows(IllegalArgumentException.class,
-                    () -> fRandom.setProximityThreshold(value));
+                    () -> fRandom.setProximityLimit(value));
         }
 
         @Test
@@ -109,11 +109,11 @@ public class FEngineTest {
 
             FRandom fRandom = factory.getFRandom();
 
-            fRandom.setProximityThreshold(value);
-            fRandom.clearProximityThreshold();
+            fRandom.setProximityLimit(value);
+            fRandom.clearProximityLimit();
 
             Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.empty(), fRandom.getProximityThreshold()));
+                    () -> assertEquals(Optional.empty(), fRandom.getProximityLimit()));
         }
 
         @Test
@@ -204,7 +204,7 @@ public class FEngineTest {
             double min = 0;
             double max = 1.5;
 
-            fRandom.setProximityThreshold(separationDistance);
+            fRandom.setProximityLimit(separationDistance);
 
             double value = fRandom.nextDouble(min, max, 0);
 
@@ -223,7 +223,7 @@ public class FEngineTest {
             double min = 0;
             double max = 0.5;
 
-            fRandom.setProximityThreshold(separationDistance);
+            fRandom.setProximityLimit(separationDistance);
             fRandom.setRetryLimit(retryLimit);
 
             assertThrows(ArithmeticException.class,
@@ -302,7 +302,7 @@ public class FEngineTest {
             double exc1 = -1;
             double exc2 = 1;
 
-            fRandom.setProximityThreshold(separationDistance);
+            fRandom.setProximityLimit(separationDistance);
 
             Assertions.assertAll("Validate 1D point",
                     () -> assertTrue(fRandom.valExc1D(0.85, exc1, exc2)),
@@ -328,7 +328,7 @@ public class FEngineTest {
             FPos2D exc3 = factory.getFPos2D(0, -1);
             FPos2D exc4 = factory.getFPos2D(0, 1);
 
-            fRandom.setProximityThreshold(separationDistance);
+            fRandom.setProximityLimit(separationDistance);
 
             Assertions.assertAll("Validate 2D point",
                     () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(0.85, 0), exc1, exc2, exc3, exc4)),
@@ -363,7 +363,7 @@ public class FEngineTest {
             FPos3D exc5 = factory.getFPos3D(0, 0, 1);
             FPos3D exc6 = factory.getFPos3D(0, 0, -1);
 
-            fRandom.setProximityThreshold(separationDistance);
+            fRandom.setProximityLimit(separationDistance);
 
             Assertions.assertAll("Validate 2D point",
                     () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0.85, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
@@ -428,7 +428,7 @@ public class FEngineTest {
             FPos2D rangeMax = factory.getFPos2D(range, range);
             FPairPos2D range2D = factory.getFPairPos2D(rangeMin, rangeMax);
 
-            fRandom.setProximityThreshold(separationDistance);
+            fRandom.setProximityLimit(separationDistance);
 
             FPos2D value = fRandom.nextDouble2D(range2D, factory.getFPos2D(0, 0));
 
@@ -471,7 +471,7 @@ public class FEngineTest {
             FPos3D rangeMax = factory.getFPos3D(range, range, range);
             FPairPos3D range3D = factory.getFPairPos3D(rangeMin, rangeMax);
 
-            fRandom.setProximityThreshold(separationDistance);
+            fRandom.setProximityLimit(separationDistance);
 
             FPos3D value = fRandom.nextDouble3D(range3D, factory.getFPos3D(0, 0, 0));
 

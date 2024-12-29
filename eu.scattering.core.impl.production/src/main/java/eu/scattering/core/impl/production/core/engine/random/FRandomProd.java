@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import java.util.Optional;
 
 public class FRandomProd implements FRandom {
-
     private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     private static final FPos2D posZero2D = factory.getFPos2D(0, 0);
@@ -25,12 +24,13 @@ public class FRandomProd implements FRandom {
 
     private int retryLimit = -1;
 
-    private double proximityThreshold = -1;
-    private double proximityThresholdP2 = -1;
+    private double proximityLimit = -1;
+    private double proximityLimitP2 = -1;
 
     //--------------------------------------------------
 
     private FRandomProd() {
+
         this.core = FRandomCoreOptimized.create();
     }
 
@@ -58,29 +58,30 @@ public class FRandomProd implements FRandom {
     }
 
     @Override
-    public Optional<Double> getProximityThreshold() {
+    public Optional<Double> getProximityLimit() {
 
-        if (this.proximityThreshold >= 0) {
-            return Optional.of(this.proximityThreshold);
+        if (this.proximityLimit >= 0) {
+            return Optional.of(this.proximityLimit);
         }
         return Optional.empty();
     }
 
     @Override
-    public void setProximityThreshold(double proximityThreshold) {
+    public void setProximityLimit(double proximityLimit) {
 
-        if (proximityThreshold < 0) {
-            throw new IllegalArgumentException("The separation distance cannot be lower than zero");
+        if (proximityLimit < 0) {
+            throw new IllegalArgumentException("The proximity limit cannot be lower than zero");
         }
 
-        this.proximityThreshold = proximityThreshold;
-        this.proximityThresholdP2 = proximityThreshold * proximityThreshold;
+        this.proximityLimit = proximityLimit;
+        this.proximityLimitP2 = proximityLimit * proximityLimit;
     }
 
     @Override
-    public void clearProximityThreshold() {
+    public void clearProximityLimit() {
 
-        this.proximityThreshold = -1;
+        this.proximityLimit = -1;
+        this.proximityLimitP2 = -1;
     }
 
     @Override
@@ -328,7 +329,7 @@ public class FRandomProd implements FRandom {
     public boolean valExc1D(double val, double... exc) {
 
         for (double point : exc) {
-            if (dist(val, point) < this.proximityThreshold) {
+            if (dist(val, point) < this.proximityLimit) {
                 return false;
             }
         }
@@ -340,7 +341,7 @@ public class FRandomProd implements FRandom {
     public boolean valExc2D(FPos2D val, FPos2D... exc) {
 
         for (FPos2D point : exc) {
-            if (distP22D(val, point) < this.proximityThresholdP2) {
+            if (distP22D(val, point) < this.proximityLimitP2) {
                 return false;
             }
         }
@@ -351,7 +352,7 @@ public class FRandomProd implements FRandom {
     public boolean valExc3D(FPos3D val, FPos3D... exc) {
 
         for (FPos3D point : exc) {
-            if (distP23D(val, point) < this.proximityThresholdP2) {
+            if (distP23D(val, point) < this.proximityLimitP2) {
                 return false;
             }
         }
@@ -363,7 +364,7 @@ public class FRandomProd implements FRandom {
     public boolean valExc4D(FPos4D val, FPos4D... exc) {
 
         for (FPos4D point : exc) {
-            if (distP24D(val, point) < this.proximityThresholdP2) {
+            if (distP24D(val, point) < this.proximityLimitP2) {
                 return false;
             }
         }

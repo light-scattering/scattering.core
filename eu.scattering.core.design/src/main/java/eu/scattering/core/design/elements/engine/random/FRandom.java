@@ -19,9 +19,9 @@ public interface FRandom extends FRandomCore, Engine<FRandom> {
     void setRetryLimit(int retryLimit);
     void clearRetryLimit();
 
-    Optional<Double> getProximityThreshold();
-    void setProximityThreshold(double proximityThreshold);
-    void clearProximityThreshold();
+    Optional<Double> getProximityLimit();
+    void setProximityLimit(double proximityLimit);
+    void clearProximityLimit();
 
     boolean nextBoolean();
 

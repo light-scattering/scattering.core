@@ -24,32 +24,28 @@ import eu.scattering.core.impl.production.support.helper.FAngleHelperProd;
 import eu.scattering.core.impl.production.support.helper.FRandomHelperProd;
 
 public final class FactoryProd extends FactoryDesignConcrete {
-    private final FAngleHelper fAngleHelper;
+    private final double epsilon = 1E-8;
+    private final double proximityLimit = 1E-6;
 
-    private final FRandom fRandomInternal;
+    private final FAngleHelper fAngleHelper;
     private final FRandomHelper fRandomHelper;
 
-    private final double proximityThreshold = 1E-6;
-    private final double epsilon = 1E-8;
-
     private FactoryProd() {
+        var fRandomInternal = FRandomProd.create();
 
-        fRandomInternal = FRandomProd.create();
-        fRandomInternal.setProximityThreshold(proximityThreshold);
+        fRandomInternal.setProximityLimit(proximityLimit);
 
-        fRandomHelper = FRandomHelperProd.create(fRandomInternal);
+        this.fRandomHelper = FRandomHelperProd.create(fRandomInternal);
+        this.fAngleHelper = FAngleHelperProd.create();
     }
 
     private FactoryProd(long seed) {
+        var fRandomInternal = FRandomProd.create(seed);
 
-        fRandomInternal = FRandomProd.create(seed);
-        fRandomInternal.setProximityThreshold(proximityThreshold);
+        fRandomInternal.setProximityLimit(proximityLimit);
 
-        fRandomHelper = FRandomHelperProd.create(fRandomInternal);
-    }
-
-    {
-        fAngleHelper = FAngleHelperProd.create();
+        this.fRandomHelper = FRandomHelperProd.create(fRandomInternal);
+        this.fAngleHelper = FAngleHelperProd.create();
     }
 
     public static FactoryDesignConcrete create() {
