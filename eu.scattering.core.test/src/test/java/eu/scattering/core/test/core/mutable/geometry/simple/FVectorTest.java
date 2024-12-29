@@ -1098,7 +1098,7 @@ public class FVectorTest {
                             .setLength(distance)
                             .getRefHead());
 
-            fVector.moveForward(distance);
+            fVector.shiftForward(distance);
 
             assertTrue(fVector.isSimilar(fVectorRef),
                     "The FVector is erroneous");
@@ -1109,7 +1109,7 @@ public class FVectorTest {
         void moveForwardSimple() {
             FVector fVector = factory.getFVector(1, 1, 1, 2, 2, 2);
 
-            fVector.moveForward(Math.sqrt(3));
+            fVector.shiftForward(Math.sqrt(3));
 
             assertTrue(fVector.isSimilar(factory.getFVector(2, 2, 2, 3, 3, 3)),
                     "The FVector is erroneous");
@@ -1122,8 +1122,8 @@ public class FVectorTest {
             FVector fVectorA = TestHelper.getRandomFVector();
             FVector fVectorB = fVectorA.copy();
 
-            fVectorA.moveForward(-distance);
-            fVectorB.moveBackward(distance);
+            fVectorA.shiftForward(-distance);
+            fVectorB.shiftBackward(distance);
 
             assertTrue(fVectorA.isSimilar(fVectorB), "The two operations should have the same effect");
         }
@@ -1133,7 +1133,7 @@ public class FVectorTest {
         void moveForwardThrowIllegalStateException() {
             FVector fVector = factory.getFVector();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.moveForward(1),
+            Assertions.assertThrows(IllegalStateException.class, () -> fVector.shiftForward(1),
                     "The direction of the FVector is unknown");
         }
 
@@ -1142,7 +1142,7 @@ public class FVectorTest {
         void moveForwardValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testReference(a -> a.moveForward(1), fVector);
+            FVectorTestHelper.testReference(a -> a.shiftForward(1), fVector);
         }
 
         @Test
@@ -1157,7 +1157,7 @@ public class FVectorTest {
                             .reflectHead()
                             .getRefHead());
 
-            fVector.moveBackward(distance);
+            fVector.shiftBackward(distance);
 
             assertTrue(fVector.isSimilar(fVectorRef),
                     "The FVector is erroneous");
@@ -1168,7 +1168,7 @@ public class FVectorTest {
         void moveBackwardSimple() {
             FVector fVector = factory.getFVector(1, 1, 1, 2, 2, 2);
 
-            fVector.moveBackward(Math.sqrt(3));
+            fVector.shiftBackward(Math.sqrt(3));
 
             assertTrue(fVector.isSimilar(factory.getFVector(0, 0, 0, 1, 1, 1)),
                     "The FVector is erroneous");
@@ -1181,8 +1181,8 @@ public class FVectorTest {
             FVector fVectorA = TestHelper.getRandomFVector();
             FVector fVectorB = fVectorA.copy();
 
-            fVectorA.moveBackward(-distance);
-            fVectorB.moveForward(distance);
+            fVectorA.shiftBackward(-distance);
+            fVectorB.shiftForward(distance);
 
             assertTrue(fVectorA.isSimilar(fVectorB), "The two operations should have the same effect");
         }
@@ -1192,7 +1192,7 @@ public class FVectorTest {
         void moveBackwardThrowIllegalStateException() {
             FVector fVector = factory.getFVector();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.moveBackward(1),
+            Assertions.assertThrows(IllegalStateException.class, () -> fVector.shiftBackward(1),
                     "The direction of the FVector is unknown");
         }
 
@@ -1201,7 +1201,7 @@ public class FVectorTest {
         void moveBackwardValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testReference(a -> a.moveBackward(1), fVector);
+            FVectorTestHelper.testReference(a -> a.shiftBackward(1), fVector);
         }
 
         @Test
@@ -1279,9 +1279,9 @@ public class FVectorTest {
         void getLengthX() {
             FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
 
-            assertEquals(Math.abs(fVector.getRefHead().getX() - fVector.getRefBase().getX()), fVector.getLengthX(),
+            assertEquals(Math.abs(fVector.getRefHead().getX() - fVector.getRefBase().getX()), fVector.getLengthAxisX(),
                     "The X length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getX() - fVector.getRefHead().getX()), fVector.getLengthX(),
+            assertEquals(Math.abs(fVector.getRefBase().getX() - fVector.getRefHead().getX()), fVector.getLengthAxisX(),
                     "The X length is incorrect");
         }
 
@@ -1290,7 +1290,7 @@ public class FVectorTest {
         void getLengthXValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testValue(FVector::getLengthX, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthAxisX, fVector);
         }
 
         @Test
@@ -1298,9 +1298,9 @@ public class FVectorTest {
         void getLengthY() {
             FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
 
-            assertEquals(Math.abs(fVector.getRefHead().getY() - fVector.getRefBase().getY()), fVector.getLengthY(),
+            assertEquals(Math.abs(fVector.getRefHead().getY() - fVector.getRefBase().getY()), fVector.getLengthAxisY(),
                     "The Y length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getY() - fVector.getRefHead().getY()), fVector.getLengthY(),
+            assertEquals(Math.abs(fVector.getRefBase().getY() - fVector.getRefHead().getY()), fVector.getLengthAxisY(),
                     "The Y length is incorrect");
         }
 
@@ -1309,7 +1309,7 @@ public class FVectorTest {
         void getLengthYValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testValue(FVector::getLengthY, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthAxisY, fVector);
         }
 
         @Test
@@ -1317,9 +1317,9 @@ public class FVectorTest {
         void getLengthZ() {
             FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
 
-            assertEquals(Math.abs(fVector.getRefHead().getZ() - fVector.getRefBase().getZ()), fVector.getLengthZ(),
+            assertEquals(Math.abs(fVector.getRefHead().getZ() - fVector.getRefBase().getZ()), fVector.getLengthAxisZ(),
                     "The Z length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getZ() - fVector.getRefHead().getZ()), fVector.getLengthZ(),
+            assertEquals(Math.abs(fVector.getRefBase().getZ() - fVector.getRefHead().getZ()), fVector.getLengthAxisZ(),
                     "The Z length is incorrect");
         }
 
@@ -1328,7 +1328,7 @@ public class FVectorTest {
         void getLengthZValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testValue(FVector::getLengthZ, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthAxisZ, fVector);
         }
 
         @Test
@@ -1358,9 +1358,9 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(TestHelper.getRandomFPoint());
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            double dimX = fVector.getLengthX() * fVector.getLengthX();
-            double dimY = fVector.getLengthY() * fVector.getLengthY();
-            double dimZ = fVector.getLengthZ() * fVector.getLengthZ();
+            double dimX = fVector.getLengthAxisX() * fVector.getLengthAxisX();
+            double dimY = fVector.getLengthAxisY() * fVector.getLengthAxisY();
+            double dimZ = fVector.getLengthAxisZ() * fVector.getLengthAxisZ();
             double radius = Math.sqrt(dimX + dimY + dimZ);
 
             assertEquals(radius, fVector.getLength(),

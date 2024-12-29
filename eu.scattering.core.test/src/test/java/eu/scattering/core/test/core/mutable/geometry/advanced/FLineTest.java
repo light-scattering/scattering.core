@@ -218,7 +218,7 @@ public class FLineTest {
             FLine fLineA = factory.getFLine(fVector.copy());
             FLine fLineB = factory.getFLine(fVector.copy());
 
-            fLineB.getOrigin().moveForward(10);
+            fLineB.getOrigin().shiftForward(10);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
@@ -233,7 +233,7 @@ public class FLineTest {
             FLine fLineA = factory.getFLine(fVector.copy());
             FLine fLineB = factory.getFLine(fVector.copy());
 
-            fLineB.getOrigin().moveForward(10).reflectHead();
+            fLineB.getOrigin().shiftForward(10).reflectHead();
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
@@ -248,7 +248,7 @@ public class FLineTest {
             FLine fLineA = factory.getFLine(fVector.copy());
             FLine fLineB = factory.getFLine(fVector.copy());
 
-            fLineB.getOrigin().moveBackward(10);
+            fLineB.getOrigin().shiftBackward(10);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
@@ -263,7 +263,7 @@ public class FLineTest {
             FLine fLineA = factory.getFLine(fVector.copy());
             FLine fLineB = factory.getFLine(fVector.copy());
 
-            fLineB.getOrigin().moveBackward(10).reflectHead();
+            fLineB.getOrigin().shiftBackward(10).reflectHead();
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),

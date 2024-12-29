@@ -25,11 +25,11 @@ public interface FPoint extends Primitive<FPoint> {
 
     //--------------------------------------------------
 
-    boolean isExact(double x, double y, double z);
-    boolean isSimilar(double x, double y, double z);
-
     boolean isZero();
     boolean isNonDirectional();
+
+    boolean isExact(double x, double y, double z);
+    boolean isSimilar(double x, double y, double z);
 
     FPoint normalize();
 

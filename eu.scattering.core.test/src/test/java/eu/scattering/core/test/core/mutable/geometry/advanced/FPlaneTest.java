@@ -235,7 +235,7 @@ public class FPlaneTest {
         void isSimilarFail() {
             FVector fVector = TestHelper.getRandomFVector();
             FPlane fPlaneA = factory.getFPlane(fVector.copy());
-            FPlane fPlaneB = factory.getFPlane(fVector.copy().moveForward(1.5 * jitter));
+            FPlane fPlaneB = factory.getFPlane(fVector.copy().shiftForward(1.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fPlaneA.isSimilar(fPlaneB), "FPlanes should not be similar"),

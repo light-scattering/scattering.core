@@ -53,10 +53,13 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
+    boolean isZero();
+    boolean isNonDirectional();
+
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
 
-    boolean isNonDirectional();
+    FVector normalize();
 
     FVector moveBaseToCenter();
     FVector moveHeadToCenter();
@@ -67,36 +70,29 @@ public interface FVector extends Primitive<FVector> {
     FVector moveHead(double hX, double hY, double hZ);
     FVector moveHead(FPoint head);
 
-    FVector moveForward(double distance);
-    FVector moveBackward(double distance);
+    FVector shiftForward(double distance);
+    FVector shiftBackward(double distance);
 
     FVector add(FVector vector);
     FVector sub(FVector vector);
-
-    double getLengthX();
-    double getLengthY();
-    double getLengthZ();
-
-    double getLength();
-    FVector setLength(double length);
-
-    FVector normalize();
 
     FVector reflect(FPoint center);
     FVector reflectBase();
     FVector reflectHead();
     FVector invertDirection();
 
+    double getLengthAxisX();
+    double getLengthAxisY();
+    double getLengthAxisZ();
+
+    double getLength();
+    FVector setLength(double length);
+
     double getAngle(FVector ref);
     FVector setAngle(FVector ref, double angle);
 
-    FVector rotate(FPoint ref, double angle);
-    FVector rotate(FVector ref, double angle);
-
-    double getDotProduct(FVector ref);
-    FVector setCrossProduct(FVector ref);
-
-    boolean isCollinear(FVector ref);
+    boolean isOrthogonal(FVector ref);
+    FVector setOrthogonal(FVector ref);
 
     boolean isParallel(FVector ref);
     FVector setParallel(FVector ref);
@@ -104,8 +100,14 @@ public interface FVector extends Primitive<FVector> {
     boolean isAntiParallel(FVector ref);
     FVector setAntiParallel(FVector ref);
 
-    boolean isOrthogonal(FVector ref);
-    FVector setOrthogonal(FVector ref);
+    boolean isCollinear(FVector ref);
+
+    double getDotProduct(FVector ref);
+
+    FVector setCrossProduct(FVector ref);
+
+    FVector rotate(FPoint ref, double angle);
+    FVector rotate(FVector ref, double angle);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
@@ -119,11 +121,6 @@ public interface FVector extends Primitive<FVector> {
 
     @MutableState
     FVector setRef(FPoint refBase, FPoint refHead);
-
-    @MutableState
-    FVector rstRefBase();
-    @MutableState
-    FVector rstRefHead();
 
     @MutableState
     FPoint getRefBase();

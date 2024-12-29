@@ -10,9 +10,6 @@ public interface FVectorFactory extends FPointFactory {
 
     FVector getFVector();
 
-    @MutableState
-    FVector getFVectorRef();
-
     //--------------------------------------------------
 
     default FVector getFVector(double bX, double bY, double bZ, double hX, double hY, double hZ) {
@@ -68,17 +65,5 @@ public interface FVectorFactory extends FPointFactory {
     default FVector getFVector(FPairPos3D position) {
 
         return getFVector().set(position);
-    }
-
-    @MutableState
-    default FVector getFVectorRef(FPoint base, FPoint head) {
-
-        return getFVectorRef().setRefBase(base).setRefHead(head);
-    }
-
-    @MutableState
-    default FVector getFVectorRef(FPoint head) {
-
-        return getFVectorRef().rstRefBase().setRefHead(head);
     }
 }

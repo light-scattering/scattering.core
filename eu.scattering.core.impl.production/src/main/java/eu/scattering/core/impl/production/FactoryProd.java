@@ -77,12 +77,6 @@ public final class FactoryProd extends FactoryDesignConcrete {
     }
 
     @Override
-    public FVector getFVectorRef() {
-
-        return FVectorProd.createRef(this, epsilon);
-    }
-
-    @Override
     public FLine getFLine() {
 
         return FLineProd.create(this, fRandomInternal, epsilon);

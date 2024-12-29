@@ -3,6 +3,7 @@ package eu.scattering.core.design.elements.algebra.geometry.primitive;
 import eu.scattering.core.design.elements.algebra.Algebra;
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -39,8 +40,8 @@ public interface Primitive<T> extends Geometry, Algebra<T> {
     T divY(double y);
     T divZ(double z);
 
-    T applyStateFrom(T ref);
     T applyStateTo(T ref);
+    T applyStateFrom(T ref);
 
     T trans(Consumer<T> exp);
     double transDouble(Function<T, Double> exp);

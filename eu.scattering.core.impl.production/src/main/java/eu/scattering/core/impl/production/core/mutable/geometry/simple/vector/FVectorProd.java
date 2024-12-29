@@ -101,20 +101,6 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector rstRefBase() {
-        setRefBase(factory.getFPoint());
-
-        return this;
-    }
-
-    @Override
-    public FVector rstRefHead() {
-        setRefHead(factory.getFPoint());
-
-        return this;
-    }
-
-    @Override
     public FVector set(double bX, double bY, double bZ, double hX, double hY, double hZ) {
         setBase(bX, bY, bZ);
         setHead(hX, hY, hZ);
@@ -457,14 +443,14 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector moveForward(double distance) {
+    public FVector shiftForward(double distance) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the IFVector is not defined");
         }
 
         if (distance < 0) {
-            return moveBackward(-distance);
+            return shiftBackward(-distance);
         }
 
         FVector fCopyLocal = copy();
@@ -476,14 +462,14 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public FVector moveBackward(double distance) {
+    public FVector shiftBackward(double distance) {
 
         if (isNonDirectional()) {
             throw new IllegalStateException("The direction of the IFVector is not defined");
         }
 
         if (distance < 0) {
-            return moveForward(-distance);
+            return shiftForward(-distance);
         }
 
         FVector fCopyLocal = copy().reflectHead();
@@ -517,19 +503,19 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     }
 
     @Override
-    public double getLengthX() {
+    public double getLengthAxisX() {
 
         return Math.abs(getRefHead().getX() - getRefBase().getX());
     }
 
     @Override
-    public double getLengthY() {
+    public double getLengthAxisY() {
 
         return Math.abs(getRefHead().getY() - getRefBase().getY());
     }
 
     @Override
-    public double getLengthZ() {
+    public double getLengthAxisZ() {
 
         return Math.abs(getRefHead().getZ() - getRefBase().getZ());
     }
@@ -836,6 +822,12 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         applyStateFrom(fVectorRef);
 
         return this;
+    }
+
+    @Override
+    public boolean isZero() {
+
+        return getRefBase().isZero() && getRefHead().isZero();
     }
 
     @Override

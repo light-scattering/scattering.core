@@ -322,20 +322,20 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private String getProjectionType(FVector ref) {
 
-        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthY() > 0) &&
-                (ref.getLengthX() > 0 || ref.getLengthY() > 0)) {
+        if ((getOrigin().getLengthAxisX() > 0 || getOrigin().getLengthAxisY() > 0) &&
+                (ref.getLengthAxisX() > 0 || ref.getLengthAxisY() > 0)) {
 
             return "XY";
         }
 
-        if ((getOrigin().getLengthY() > 0 || getOrigin().getLengthZ() > 0) &&
-                (ref.getLengthY() > 0 || ref.getLengthZ() > 0)) {
+        if ((getOrigin().getLengthAxisY() > 0 || getOrigin().getLengthAxisZ() > 0) &&
+                (ref.getLengthAxisY() > 0 || ref.getLengthAxisZ() > 0)) {
 
             return "YZ";
         }
 
-        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthZ() > 0) &&
-                (ref.getLengthX() > 0 || ref.getLengthZ() > 0)) {
+        if ((getOrigin().getLengthAxisX() > 0 || getOrigin().getLengthAxisZ() > 0) &&
+                (ref.getLengthAxisX() > 0 || ref.getLengthAxisZ() > 0)) {
 
             return "XZ";
         }
@@ -370,11 +370,11 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
         switch (dir) {
             case "XY":
-                return ref.setCrossProduct(factory.getFVectorRef(ref.getRefBase().copy().setZ(1)));
+                return ref.setCrossProduct(factory.getFVector(ref.getRefBase().copy().setZ(1)));
             case "YZ":
-                return ref.setCrossProduct(factory.getFVectorRef(ref.getRefBase().copy().setX(1)));
+                return ref.setCrossProduct(factory.getFVector(ref.getRefBase().copy().setX(1)));
             case "XZ":
-                return ref.setCrossProduct(factory.getFVectorRef(ref.getRefBase().copy().setY(1)));
+                return ref.setCrossProduct(factory.getFVector(ref.getRefBase().copy().setY(1)));
         }
 
         throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);
@@ -489,12 +489,12 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private FPoint moveForward(FPoint ref, double distance) {
 
-        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).moveForward(distance).getRefBase());
+        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).shiftForward(distance).getRefBase());
     }
 
     private FPoint moveBackward(FPoint ref, double distance) {
 
-        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).moveBackward(distance).getRefBase());
+        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).shiftBackward(distance).getRefBase());
     }
 
 }
