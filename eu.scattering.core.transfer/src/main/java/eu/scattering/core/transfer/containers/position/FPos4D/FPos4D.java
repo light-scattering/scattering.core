@@ -25,11 +25,6 @@ public class FPos4D implements Position<FPos4D> {
         return new FPos4D(d0, d1, d2, d3);
     }
 
-    protected static FPos4D create(String json) {
-
-        return create(new JSONObject(json));
-    }
-
     protected static FPos4D create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 

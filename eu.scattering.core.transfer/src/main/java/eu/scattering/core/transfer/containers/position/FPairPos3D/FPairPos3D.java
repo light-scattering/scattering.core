@@ -25,11 +25,6 @@ public class FPairPos3D implements Position<FPairPos3D> {
         return new FPairPos3D(posA, posB);
     }
 
-    protected static FPairPos3D create(String text) {
-
-        return create(new JSONObject(text));
-    }
-
     protected static FPairPos3D create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 

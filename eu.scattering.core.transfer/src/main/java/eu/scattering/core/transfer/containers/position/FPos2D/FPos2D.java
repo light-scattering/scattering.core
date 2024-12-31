@@ -21,11 +21,6 @@ public class FPos2D implements Position<FPos2D> {
         return new FPos2D(d0, d1);
     }
 
-    protected static FPos2D create(String text) {
-
-        return create(new JSONObject(text));
-    }
-
     protected static FPos2D create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 

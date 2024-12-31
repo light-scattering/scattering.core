@@ -11,11 +11,6 @@ public interface FPos4DIFactory {
         return FPos4DI.create(d0, d1, d2, d3);
     }
 
-    default FPos4DI getFPos4DI(FPos4DI pos) {
-
-        return getFPos4DI(pos.getD0(), pos.getD1(), pos.getD2(), pos.getD3());
-    }
-
     default FPos4DI getFPos4DI(FPos3DI pos, int d3) {
 
         return getFPos4DI(pos.getD0(), pos.getD1(), pos.getD2(), d3);

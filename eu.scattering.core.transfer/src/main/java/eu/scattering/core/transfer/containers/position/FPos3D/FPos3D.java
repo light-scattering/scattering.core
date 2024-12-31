@@ -23,11 +23,6 @@ public class FPos3D implements Position<FPos3D> {
         return new FPos3D(d0, d1, d2);
     }
 
-    protected static FPos3D create(String json) {
-
-        return create(new JSONObject(json));
-    }
-
     protected static FPos3D create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 

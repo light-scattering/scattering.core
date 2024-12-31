@@ -25,11 +25,6 @@ public class FPos2DI implements Container<FPos2DI> {
         return new FPos2DI(d0, d1);
     }
 
-    protected static FPos2DI create(String json) {
-
-        return create(new JSONObject(json));
-    }
-
     protected static FPos2DI create(JSONObject json) {
         JSONArray structure = json.getJSONArray(JSON_TAG);
 

@@ -2,10 +2,9 @@ package eu.scattering.core.impl.production.core.mutable.geometry.advanced.line;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
+import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.elements.algebra.geometry.construct.line.FLine;
-import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.AdvancedPresetProd;
 import org.json.JSONArray;
