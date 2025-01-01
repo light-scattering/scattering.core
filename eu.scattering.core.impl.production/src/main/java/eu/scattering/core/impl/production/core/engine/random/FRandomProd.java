@@ -386,23 +386,29 @@ public class FRandomProd implements FRandom {
 
     private double distP22D(FPos2D val, FPos2D ref) {
 
-        return distP2(val.getD0(), ref.getD0()) +
-                distP2(val.getD1(), ref.getD1());
+        var d0 = distP2(val.getD0(), ref.getD0());
+        var d1 = distP2(val.getD1(), ref.getD1());
+
+        return d0 + d1;
     }
 
     private double distP23D(FPos3D val, FPos3D ref) {
 
-        return distP2(val.getD0(), ref.getD0()) +
-                distP2(val.getD1(), ref.getD1()) +
-                distP2(val.getD2(), ref.getD2());
+        var d0 = distP2(val.getD0(), ref.getD0());
+        var d1 = distP2(val.getD1(), ref.getD1());
+        var d2 = distP2(val.getD2(), ref.getD2());
+
+        return d0 + d1 + d2;
     }
 
     private double distP24D(FPos4D val, FPos4D ref) {
 
-        return distP2(val.getD0(), ref.getD0()) +
-                distP2(val.getD1(), ref.getD1()) +
-                distP2(val.getD2(), ref.getD2()) +
-                distP2(val.getD3(), ref.getD3());
+        var d0 = distP2(val.getD0(), ref.getD0());
+        var d1 = distP2(val.getD1(), ref.getD1());
+        var d2 = distP2(val.getD2(), ref.getD2());
+        var d3 = distP2(val.getD3(), ref.getD3());
+
+        return d0 + d1 + d2 + d3;
     }
 
     //--------------------------------------------------
