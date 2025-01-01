@@ -7,9 +7,12 @@ import eu.scattering.core.transfer.containers.position.PositionFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
+
 public class FPos2DI implements Container<FPos2DI> {
     private static PositionFactory factory = PositionFactoryConcrete.create();
     private static final String JSON_TAG = "pos2DI";
+    private static final String JSON_VAL = "val";
 
     private final int d0;
     private final int d1;
@@ -26,10 +29,14 @@ public class FPos2DI implements Container<FPos2DI> {
     }
 
     protected static FPos2DI create(JSONObject json) {
-        JSONArray structure = json.getJSONArray(JSON_TAG);
 
-        int d0 = structure.getInt(0);
-        int d1 = structure.getInt(1);
+        if (json.get(JSON_TYPE) != JSON_TAG) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var d0 = structure.getInt(0);
+        var d1 = structure.getInt(1);
 
         return new FPos2DI(d0, d1);
     }
@@ -55,8 +62,9 @@ public class FPos2DI implements Container<FPos2DI> {
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        json.append(JSON_TAG, getD0());
-        json.append(JSON_TAG, getD1());
+        json.put(JSON_TYPE, JSON_TAG);
+        json.append(JSON_VAL, getD0());
+        json.append(JSON_VAL, getD1());
 
         return json;
     }

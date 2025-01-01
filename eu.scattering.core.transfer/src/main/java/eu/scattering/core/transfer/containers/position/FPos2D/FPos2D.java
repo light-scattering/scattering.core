@@ -4,8 +4,11 @@ import eu.scattering.core.transfer.containers.position.Position;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
+
 public class FPos2D implements Position<FPos2D> {
     private static final String JSON_TAG = "pos2D";
+    private static final String JSON_VAL = "val";
 
     private final double d0;
     private final double d1;
@@ -22,10 +25,14 @@ public class FPos2D implements Position<FPos2D> {
     }
 
     protected static FPos2D create(JSONObject json) {
-        JSONArray structure = json.getJSONArray(JSON_TAG);
 
-        double d0 = structure.getInt(0);
-        double d1 = structure.getInt(1);
+        if (json.get(JSON_TYPE) != JSON_TAG) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var d0 = structure.getDouble(0);
+        var d1 = structure.getDouble(1);
 
         return new FPos2D(d0, d1);
     }
@@ -46,8 +53,9 @@ public class FPos2D implements Position<FPos2D> {
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        json.append(JSON_TAG, getD0());
-        json.append(JSON_TAG, getD1());
+        json.put(JSON_TYPE, JSON_TAG);
+        json.append(JSON_VAL, getD0());
+        json.append(JSON_VAL, getD1());
 
         return json;
     }

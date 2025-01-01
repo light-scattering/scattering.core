@@ -7,9 +7,12 @@ import eu.scattering.core.transfer.containers.position.PositionFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
+
 public class FPos3DI implements Position<FPos3DI> {
     private static PositionFactory factory = PositionFactoryConcrete.create();
     private static final String JSON_TAG = "pos3DI";
+    private static final String JSON_VAL = "val";
 
     private final int d0;
     private final int d1;
@@ -33,11 +36,16 @@ public class FPos3DI implements Position<FPos3DI> {
     }
 
     protected static FPos3DI create(JSONObject json) {
-        JSONArray structure = json.getJSONArray(JSON_TAG);
 
-        int d0 = structure.getInt(0);
-        int d1 = structure.getInt(1);
-        int d2 = structure.getInt(2);
+        if (json.get(JSON_TYPE) != JSON_TAG) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var d0 = structure.getInt(0);
+        var d1 = structure.getInt(1);
+        var d2 = structure.getInt(2);
+
 
         return new FPos3DI(d0, d1, d2);
     }
@@ -68,9 +76,10 @@ public class FPos3DI implements Position<FPos3DI> {
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        json.append(JSON_TAG, getD0());
-        json.append(JSON_TAG, getD1());
-        json.append(JSON_TAG, getD2());
+        json.put(JSON_TYPE, JSON_TAG);
+        json.append(JSON_VAL, getD0());
+        json.append(JSON_VAL, getD1());
+        json.append(JSON_VAL, getD2());
 
         return json;
     }

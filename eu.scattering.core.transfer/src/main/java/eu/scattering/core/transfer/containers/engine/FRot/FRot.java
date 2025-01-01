@@ -5,47 +5,45 @@ import eu.scattering.core.transfer.containers.ContainerFactoryConcrete;
 import eu.scattering.core.transfer.containers.engine.Engine;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
-import eu.scattering.core.transfer.enums.FRotationEngine;
-import org.json.JSONArray;
 import org.json.JSONObject;
+
+import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
 
 public class FRot implements Engine<FRot> {
     private static ContainerFactory factory = ContainerFactoryConcrete.create();
-    private static final String JSON_TAG = "rotEng";
-
-    private final FRotationEngine rotEngine;
+    private static final String JSON_TAG = "engRot";
+    private static final String JSON_AXIS = "axis";
+    private static final String JSON_CORE = "core";
+    private static final String JSON_ANGLE = "angle";
 
     private final FPairPos3D rotAxis;
     private final double rotAngle;
 
-    private final FPos4D rotQuaternionCore;
+    private final FPos4D rotCore;
 
-    private FRot(FRotationEngine engine, FPairPos3D rotAxis, double rotAngle, FPos4D rotCore) {
+    private FRot(FPairPos3D rotAxis, double rotAngle, FPos4D rotCore) {
 
-        this.rotEngine = engine;
         this.rotAxis = rotAxis;
         this.rotAngle = rotAngle;
-        this.rotQuaternionCore = rotCore;
+        this.rotCore = rotCore;
     }
 
-    protected static FRot create(FRotationEngine engine, FPairPos3D rotAxis, double rotAngle, FPos4D rotCore) {
+    protected static FRot create(FPairPos3D rotAxis, double rotAngle, FPos4D rotCore) {
 
-        return new FRot(engine, rotAxis, rotAngle, rotCore);
+        return new FRot(rotAxis, rotAngle, rotCore);
     }
 
     protected static FRot create(JSONObject json) {
-        JSONArray structure = json.getJSONArray(JSON_TAG);
 
-        FRotationEngine rotEngine = FRotationEngine.valueOf(structure.getJSONObject(0).toString());
-        FPairPos3D rotAxis = factory.getFPairPos3D(structure.getJSONObject(1));
-        double rotAngle = structure.getDouble(2);
-        FPos4D rotQuaternionCore = factory.getFPos4D(structure.getJSONObject(3));
+        if (json.get(JSON_TYPE) != JSON_TAG) {
+           throw new IllegalArgumentException("The object type is incorrect");
+        }
 
-        return new FRot(rotEngine, rotAxis, rotAngle, rotQuaternionCore);
-    }
+        var rotAxis = factory.getFPairPos3D(json.getJSONObject(JSON_AXIS));
+        var rotAngle = json.getDouble(JSON_ANGLE);
+        var rotQuaternionCore = factory.getFPos4D(json.getJSONObject(JSON_CORE));
 
-    public FRotationEngine getEngineType() {
-        return rotEngine;
+        return new FRot(rotAxis, rotAngle, rotQuaternionCore);
     }
 
     public double getAngle() {
@@ -57,7 +55,7 @@ public class FRot implements Engine<FRot> {
     }
 
     public FPos4D getQuaternionCore() {
-        return rotQuaternionCore;
+        return rotCore;
     }
 
     //--------------------------------------------------
@@ -66,10 +64,10 @@ public class FRot implements Engine<FRot> {
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        json.append(JSON_TAG, getEngineType());
-        json.append(JSON_TAG, getAxis().exportToJSON());
-        json.append(JSON_TAG, getAngle());
-        json.append(JSON_TAG, getQuaternionCore().exportToJSON());
+        json.put(JSON_TYPE, JSON_TAG);
+        json.put(JSON_AXIS, getAxis().exportToJSON());
+        json.put(JSON_CORE, getQuaternionCore().exportToJSON());
+        json.put(JSON_ANGLE, getAngle());
 
         return json;
     }
@@ -80,8 +78,8 @@ public class FRot implements Engine<FRot> {
     public int hashCode() {
         double hashCode = 7;
 
-        hashCode = 31 * hashCode + getEngineType().hashCode();
         hashCode = 31 * hashCode + getAxis().hashCode();
+        hashCode = 31 * hashCode + getQuaternionCore().hashCode();
         hashCode = 31 * hashCode + getAngle();
 
         return (int) hashCode;
@@ -93,9 +91,7 @@ public class FRot implements Engine<FRot> {
         if (object instanceof FRot) {
             FRot fRot = (FRot) object;
 
-            return getEngineType().equals(fRot.getEngineType()) &&
-                    getAxis().equals(fRot.getAxis()) &&
-                    getAngle() == fRot.getAngle();
+            return getAxis().equals(fRot.getAxis()) && getAngle() == fRot.getAngle();
         }
 
         return false;

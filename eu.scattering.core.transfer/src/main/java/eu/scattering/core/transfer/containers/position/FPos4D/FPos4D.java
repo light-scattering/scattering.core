@@ -4,8 +4,11 @@ import eu.scattering.core.transfer.containers.position.Position;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
+
 public class FPos4D implements Position<FPos4D> {
     private static final String JSON_TAG = "pos4D";
+    private static final String JSON_VAL = "val";
 
     private final double d0;
     private final double d1;
@@ -26,12 +29,16 @@ public class FPos4D implements Position<FPos4D> {
     }
 
     protected static FPos4D create(JSONObject json) {
-        JSONArray structure = json.getJSONArray(JSON_TAG);
 
-        double d0 = structure.getInt(0);
-        double d1 = structure.getInt(1);
-        double d2 = structure.getInt(2);
-        double d3 = structure.getInt(3);
+        if (json.get(JSON_TYPE) != JSON_TAG) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var d0 = structure.getDouble(0);
+        var d1 = structure.getDouble(1);
+        var d2 = structure.getDouble(2);
+        var d3 = structure.getDouble(3);
 
         return new FPos4D(d0, d1, d2, d3);
     }
@@ -62,10 +69,11 @@ public class FPos4D implements Position<FPos4D> {
     public JSONObject exportToJSON() {
         JSONObject json = new JSONObject();
 
-        json.append(JSON_TAG, getD0());
-        json.append(JSON_TAG, getD1());
-        json.append(JSON_TAG, getD2());
-        json.append(JSON_TAG, getD3());
+        json.put(JSON_TYPE, JSON_TAG);
+        json.append(JSON_VAL, getD0());
+        json.append(JSON_VAL, getD1());
+        json.append(JSON_VAL, getD2());
+        json.append(JSON_VAL, getD3());
 
         return json;
     }

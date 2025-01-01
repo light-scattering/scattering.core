@@ -24,12 +24,18 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/advanced/line/FLineProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/advanced/line/FLineProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/ContainerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/ContainerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRot.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRotFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRotFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos2D/FPairPos2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos2D/FPairPos2D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos2DI/FPairPos2DI.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos2DI/FPairPos2DI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos3D/FPairPos3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos3D/FPairPos3D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos3DI/FPairPos3DI.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos3DI/FPairPos3DI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos4D/FPairPos4D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos4D/FPairPos4D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos4DI/FPairPos4DI.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPairPos4DI/FPairPos4DI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos2D/FPos2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos2D/FPos2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos2DI/FPos2DI.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos2DI/FPos2DI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos3D/FPos3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos3D/FPos3D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos4D/FPos4D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/position/FPos4D/FPos4D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/enums/FRotationEngine.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,8 +168,8 @@
       <recent name="eu.scattering.core.impl.development" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FPairPos2DInterface.parseJSONTest">
-    <configuration name="FPairPos2DBase.getValuesTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.FRotAdvancedTest.parseJSONTest (1)">
+    <configuration name="FPairPos2DAdvancedTest.parseJSONTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -176,7 +182,7 @@
           <list>
             <option value=":eu.scattering.core.transfer:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.containers.position.FPairPos2DTest$FPairPos2DBase.getValuesTest&quot;" />
+            <option value="&quot;eu.scattering.core.transfer.containers.position.FPairPos2DTest$FPairPos2DAdvancedTest.parseJSONTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -186,7 +192,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FPairPos2DInterface.parseJSONTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPairPos2DIAdvancedTest.parseJSONTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -199,7 +205,7 @@
           <list>
             <option value=":eu.scattering.core.transfer:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.containers.position.FPairPos2DTest$FPairPos2DInterface.parseJSONTest&quot;" />
+            <option value="&quot;eu.scattering.core.transfer.containers.position.FPairPos2DITest$FPairPos2DIAdvancedTest.parseJSONTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -209,7 +215,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FPos2DInterface.parseJSONTest (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FRotAdvancedTest.parseJSONTest (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -222,7 +228,7 @@
           <list>
             <option value=":eu.scattering.core.transfer:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.containers.position.FPos3DTest$FPos2DInterface.parseJSONTest&quot;" />
+            <option value="&quot;eu.scattering.core.transfer.containers.engine.FRotTest$FRotAdvancedTest.parseJSONTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -232,7 +238,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FPos4DTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -243,9 +249,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.containers.position.FPos4DTest&quot;" />
+            <option value=":eu.scattering.core.test:test" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -255,7 +259,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Tests in 'eu.scattering.core.transfer.containers.position'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.transfer.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -267,8 +271,6 @@
         <option name="taskNames">
           <list>
             <option value=":eu.scattering.core.transfer:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.containers.position.*&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -280,11 +282,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FPairPos2DInterface.parseJSONTest" />
-        <item itemvalue="Gradle.FPairPos2DBase.getValuesTest" />
-        <item itemvalue="Gradle.Tests in 'eu.scattering.core.transfer.containers.position'" />
-        <item itemvalue="Gradle.FPos4DTest" />
-        <item itemvalue="Gradle.FPos2DInterface.parseJSONTest (1)" />
+        <item itemvalue="Gradle.FRotAdvancedTest.parseJSONTest (1)" />
+        <item itemvalue="Gradle.FPairPos2DAdvancedTest.parseJSONTest" />
+        <item itemvalue="Gradle.FPairPos2DIAdvancedTest.parseJSONTest" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.transfer.test'" />
       </list>
     </recent_temporary>
   </component>
@@ -512,6 +514,21 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/advanced/FLineTest.java</url>
           <line>715</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/position/FPos4DTest.java</url>
+          <line>122</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/position/FPairPos2DITest.java</url>
+          <line>44</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/engine/FRotTest.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
