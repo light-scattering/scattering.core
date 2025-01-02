@@ -24,10 +24,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/elements/engine/rotation/FRotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/elements/engine/rotation/FRotation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/immutable/rotation/FRotationProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/immutable/rotation/FRotationProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/ContainerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/ContainerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRot.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRotFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRotFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/engine/FRotTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/engine/FRotTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,52 +161,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.transfer'">
-    <configuration name="FMatrix3x3DJavaTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.transfer:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.containers.grid.FMatrix3x3DTest$FMatrix3x3DJavaTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="FMatrix3x3DJavaTest.validateEqualityTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.transfer:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.containers.grid.FMatrix3x3DTest$FMatrix3x3DJavaTest.validateEqualityTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="FMatrix3x3DJavaTest.validateHashCodeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -253,6 +207,52 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="FRotAdvancedTest.parseJSONTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.transfer:test" />
+            <option value="--tests" />
+            <option value="&quot;eu.scattering.core.transfer.containers.engine.FRotTest$FRotAdvancedTest.parseJSONTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="FRotTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.transfer:test" />
+            <option value="--tests" />
+            <option value="&quot;eu.scattering.core.transfer.containers.engine.FRotTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Tests in 'scattering.core.eu.scattering.core.transfer'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -277,10 +277,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.transfer'" />
+        <item itemvalue="Gradle.FRotTest" />
+        <item itemvalue="Gradle.FRotAdvancedTest.parseJSONTest" />
         <item itemvalue="Gradle.FMatrix3x3DTest" />
         <item itemvalue="Gradle.FMatrix3x3DJavaTest.validateHashCodeTest" />
-        <item itemvalue="Gradle.FMatrix3x3DJavaTest.validateEqualityTest" />
-        <item itemvalue="Gradle.FMatrix3x3DJavaTest" />
       </list>
     </recent_temporary>
   </component>

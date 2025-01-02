@@ -3,6 +3,7 @@ package eu.scattering.core.transfer.containers.engine.FRot;
 import eu.scattering.core.transfer.containers.ContainerFactory;
 import eu.scattering.core.transfer.containers.ContainerFactoryConcrete;
 import eu.scattering.core.transfer.containers.engine.Engine;
+import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONObject;
@@ -13,24 +14,27 @@ public class FRot implements Engine<FRot> {
     private static ContainerFactory factory = ContainerFactoryConcrete.create();
     private static final String JSON_TAG = "engRot";
     private static final String JSON_AXIS = "axis";
-    private static final String JSON_CORE = "core";
     private static final String JSON_ANGLE = "angle";
+    private static final String JSON_CORE_CODE = "core";
+    private static final String JSON_CORE_MATRIX = "matrix";
 
-    private final FPairPos3D rotAxis;
     private final double rotAngle;
+    private final FPairPos3D rotAxis;
 
-    private final FPos4D rotCore;
+    private final FPos4D rotCoreCode;
+    private final FMatrix3x3D rotCoreMatrix;
 
-    private FRot(FPairPos3D rotAxis, double rotAngle, FPos4D rotCore) {
+    private FRot(FPairPos3D rotAxis, double rotAngle, FPos4D rotCoreCode, FMatrix3x3D rotCoreMatrix) {
 
         this.rotAxis = rotAxis;
         this.rotAngle = rotAngle;
-        this.rotCore = rotCore;
+        this.rotCoreCode = rotCoreCode;
+        this.rotCoreMatrix = rotCoreMatrix;
     }
 
-    protected static FRot create(FPairPos3D rotAxis, double rotAngle, FPos4D rotCore) {
+    protected static FRot create(FPairPos3D rotAxis, double rotAngle, FPos4D rotCoreCode, FMatrix3x3D rotCoreMatrix) {
 
-        return new FRot(rotAxis, rotAngle, rotCore);
+        return new FRot(rotAxis, rotAngle, rotCoreCode, rotCoreMatrix);
     }
 
     protected static FRot create(JSONObject json) {
@@ -41,9 +45,10 @@ public class FRot implements Engine<FRot> {
 
         var rotAxis = factory.getFPairPos3D(json.getJSONObject(JSON_AXIS));
         var rotAngle = json.getDouble(JSON_ANGLE);
-        var rotQuaternionCore = factory.getFPos4D(json.getJSONObject(JSON_CORE));
+        var rotCoreCode = factory.getFPos4D(json.getJSONObject(JSON_CORE_CODE));
+        var rotCoreMatrix = factory.getFMatrix3x3D(json.getJSONObject(JSON_CORE_MATRIX));
 
-        return new FRot(rotAxis, rotAngle, rotQuaternionCore);
+        return new FRot(rotAxis, rotAngle, rotCoreCode, rotCoreMatrix);
     }
 
     public double getAngle() {
@@ -54,8 +59,12 @@ public class FRot implements Engine<FRot> {
         return rotAxis;
     }
 
-    public FPos4D getQuaternionCore() {
-        return rotCore;
+    public FPos4D getCoreCode() {
+        return rotCoreCode;
+    }
+
+    public FMatrix3x3D getCoreMatrix() {
+        return rotCoreMatrix;
     }
 
     //--------------------------------------------------
@@ -66,8 +75,9 @@ public class FRot implements Engine<FRot> {
 
         json.put(JSON_TYPE, JSON_TAG);
         json.put(JSON_AXIS, getAxis().exportToJSON());
-        json.put(JSON_CORE, getQuaternionCore().exportToJSON());
+        json.put(JSON_CORE_CODE, getCoreCode().exportToJSON());
         json.put(JSON_ANGLE, getAngle());
+        json.put(JSON_CORE_MATRIX, getCoreMatrix().exportToJSON());
 
         return json;
     }
@@ -79,8 +89,9 @@ public class FRot implements Engine<FRot> {
         double hashCode = 7;
 
         hashCode = 31 * hashCode + getAxis().hashCode();
-        hashCode = 31 * hashCode + getQuaternionCore().hashCode();
+        hashCode = 31 * hashCode + getCoreCode().hashCode();
         hashCode = 31 * hashCode + getAngle();
+        hashCode = 31 * hashCode + getCoreMatrix().hashCode();
 
         return (int) hashCode;
     }

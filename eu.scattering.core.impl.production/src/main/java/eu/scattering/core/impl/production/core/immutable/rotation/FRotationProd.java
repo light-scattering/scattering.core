@@ -11,7 +11,6 @@ import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,10 +26,13 @@ public class FRotationProd implements FRotation {
     public FRot getRotation(FPairPos3D axis, double angle) {
         var rotVector = getRotVector(axis, angle);
 
-        var rotOffset = getRotOffset(axis);
-        var rotCore = getRotCore(rotVector, angle);
+        var rotCoreCode = getRotCoreCode(rotVector, angle);
+        var rotCoreMatrix = getRotCoreMatrix(rotCoreCode);
 
-        return null;
+        var rotAngle = getRotAngle(rotCoreCode);
+        var rotAxis = getRotAxis(axis, rotCoreCode);
+
+        return factory.getFRot(rotAxis, rotAngle, rotCoreCode, rotCoreMatrix);
     }
 
     private FVector getRotVector(FPairPos3D axis, double angle) {
@@ -48,13 +50,7 @@ public class FRotationProd implements FRotation {
         return rotVector;
     }
 
-    private FPos3D getRotOffset(FPairPos3D axis) {
-
-        return axis.getPosA();
-    }
-
-    private FPos4D getRotCore(FVector rotVector, double angle) {
-
+    private FPos4D getRotCoreCode(FVector rotVector, double angle) {
         var d0 = Math.cos(angle * 0.5);
         var d1 = rotVector.getRefHead().getX();
         var d2 = rotVector.getRefHead().getY();
@@ -63,21 +59,64 @@ public class FRotationProd implements FRotation {
         return factoryX.getFPos4D(d0, d1, d2, d3);
     }
 
-    private FMatrix3x3D getRotMatrix(FPos4D rotCore) {
-        var re = rotCore.getD0();
-        var i = rotCore.getD1();
-        var j = rotCore.getD2();
-        var k = rotCore.getD3();
+    private FMatrix3x3D getRotCoreMatrix(FPos4D rotCoreCode) {
+        var origin = new double[3][3];
 
-        rotation[0][0] = 1 - (2 * j * j) - (2 * k * k);
-        rotation[0][1] = 2 * ((core.getI() * core.getJ()) + (core.getRe() * core.getK()));
-        rotation[0][2] = 2 * ((core.getI() * core.getK()) - (core.getRe() * core.getJ()));
-        rotation[1][0] = 2 * ((core.getI() * core.getJ()) - (core.getRe() * core.getK()));
-        rotation[1][1] = 1 - (2 * core.getI() * core.getI()) - (2 * core.getK() * core.getK());
-        rotation[1][2] = 2 * ((core.getJ() * core.getK()) + (core.getRe() * core.getI()));
-        rotation[2][0] = 2 * ((core.getI() * core.getK()) + (core.getRe() * core.getJ()));
-        rotation[2][1] = 2 * ((core.getJ() * core.getK()) - (core.getRe() * core.getI()));
-        rotation[2][2] = 1 - (2 * core.getI() * core.getI()) - (2 * core.getJ() * core.getJ());
+        var re = rotCoreCode.getD0();
+        var i = rotCoreCode.getD1();
+        var j = rotCoreCode.getD2();
+        var k = rotCoreCode.getD3();
+
+        origin[0][0] = 1 - (2 * j * j) - (2 * k * k);
+        origin[0][1] = 2 * ((i * j) + (re * k));
+        origin[0][2] = 2 * ((i * k) - (re * j));
+        origin[1][0] = 2 * ((i * j) - (re * k));
+        origin[1][1] = 1 - (2 * i * i) - (2 * k * k);
+        origin[1][2] = 2 * ((j * k) + (re * i));
+        origin[2][0] = 2 * ((i * k) + (re * j));
+        origin[2][1] = 2 * ((j * k) - (re * i));
+        origin[2][2] = 1 - (2 * i * i) - (2 * j * j);
+
+        return factory.getFMatrix3x3D(origin);
+    }
+
+    private double getRotAngle(FPos4D rotCoreCode) {
+        var re = rotCoreCode.getD0();
+
+        if (re <= -1) {
+            return Math.PI * 2;
+        }
+
+        if (re >= 1) {
+            return 0;
+        }
+
+        return Math.acos(re) * 2;
+    }
+
+    private FPairPos3D getRotAxis(FPairPos3D axis, FPos4D rotCoreCode) {
+        var rotAxis = fVectorTemplate.copy();
+
+        var re = rotCoreCode.getD0();
+        var i = rotCoreCode.getD1();
+        var j = rotCoreCode.getD2();
+        var k = rotCoreCode.getD3();
+
+        double factor = 1 / Math.sqrt(1 - (re * re));
+
+        rotAxis.getRefHead()
+                .set(i, j, k)
+                .mul(factor)
+                .addX(axis.getPosA().getD0())
+                .addY(axis.getPosA().getD1())
+                .addZ(axis.getPosA().getD2());
+
+        rotAxis.getRefBase()
+                .setX(axis.getPosA().getD0())
+                .setY(axis.getPosA().getD1())
+                .setZ(axis.getPosA().getD2());
+
+        return rotAxis.toTuplePos3D();
     }
 
     //------------------------------------------------------------------------------------
