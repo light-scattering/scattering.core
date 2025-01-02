@@ -1983,42 +1983,5 @@ public class FPointTest {
                     () -> assertSame(fPointOp, fPointRef, "The FPoint reference should not change")
             );
         }
-
-        @Test
-        @DisplayName("Custom function - chain")
-        void trans() {
-
-            fPoint.trans(e -> e.addX(opX).addY(opY).addZ(opZ));
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(refX + opX, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(refY + opY, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(refZ + opZ, fPoint.getZ(), "The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Custom function - chain (validate)")
-        void transValidate() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FPointTestHelper.testReference(e -> e.addX(opX).addY(opY).addZ(opZ), fPoint);
-        }
-
-        @Test
-        @DisplayName("Custom function - value")
-        void transVal() {
-
-            assertEquals(refX + refY + refZ, fPoint.transDouble(e -> e.getX() + e.getY() + e.getZ()),
-                    "The resulting value is erroneous");
-        }
-
-        @Test
-        @DisplayName("Custom function - value")
-        void transLog() {
-
-            assertTrue(fPoint.transBoolean(e -> e.getX() != 0), "The resulting value is erroneous");
-        }
-
     }
 }

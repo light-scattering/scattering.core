@@ -1,13 +1,12 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.simple;
 
-import eu.scattering.core.design.elements.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.Primitive;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public abstract class SimplePresetProd<T extends Primitive<T>> implements Primitive<T> {
 
@@ -243,26 +242,6 @@ public abstract class SimplePresetProd<T extends Primitive<T>> implements Primit
         ref.applyStateFrom(self());
 
         return self();
-    }
-
-    @Override
-    public T trans(Consumer<T> exp) {
-
-        exp.accept(self());
-
-        return self();
-    }
-
-    @Override
-    public double transDouble(Function<T, Double> exp) {
-
-        return exp.apply(self());
-    }
-
-    @Override
-    public boolean transBoolean(Predicate<T> exp) {
-
-        return exp.test(self());
     }
 
     @Override

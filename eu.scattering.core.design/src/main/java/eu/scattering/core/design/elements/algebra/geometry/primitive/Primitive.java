@@ -43,10 +43,6 @@ public interface Primitive<T> extends Geometry, Algebra<T> {
     T applyStateTo(T ref);
     T applyStateFrom(T ref);
 
-    T trans(Consumer<T> exp);
-    double transDouble(Function<T, Double> exp);
-    boolean transBoolean(Predicate<T> exp);
-
     T ext(Consumer<Geometry> exp);
     List<Double> extDouble(Function<Geometry, List<Double>> exp);
     List<Boolean> extBoolean(Function<Geometry, List<Boolean>> exp);
