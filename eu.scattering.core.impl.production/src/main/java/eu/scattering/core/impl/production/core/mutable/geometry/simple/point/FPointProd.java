@@ -2,11 +2,12 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.point;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
+import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -454,20 +455,23 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
 
     @Override
     public FPoint setAngle(FPoint ref, double angle) {
+        var fRot = factory.getFRotation();
 
         FPoint axis = copy().setCrossProduct(ref);
-        FRotation rotor = factory.getFRotation(axis, angle);
+        FRot rotor = fRot.getRotation(axis.toFPos3D(), angle);
 
-        ref.copy().ext(rotor.rotate()).applyStateTo(this);
+        ref.copy().ext(fRot.rotate(rotor)).applyStateTo(this);
 
         return this;
     }
 
     @Override
     public FPoint rotate(FPoint ref, double angle) {
+        var fRot = factory.getFRotation();
 
-        FRotation rotor = factory.getFRotation(ref, angle);
-        ext(rotor.rotate());
+        FRot rotor = fRot.getRotation(ref.toFPos3D(), angle);
+
+        ext(fRot.rotate(rotor));
 
         return this;
     }

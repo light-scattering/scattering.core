@@ -7,6 +7,8 @@ import eu.scattering.core.transfer.containers.position.PositionFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
 
 public class FPos2DI implements Container<FPos2DI> {
@@ -73,12 +75,8 @@ public class FPos2DI implements Container<FPos2DI> {
 
     @Override
     public int hashCode() {
-        int hashCode = 7;
 
-        hashCode = 31 * hashCode + d0;
-        hashCode = 31 * hashCode + d1;
-
-        return hashCode;
+        return Objects.hash(d0, d1);
     }
 
     @Override

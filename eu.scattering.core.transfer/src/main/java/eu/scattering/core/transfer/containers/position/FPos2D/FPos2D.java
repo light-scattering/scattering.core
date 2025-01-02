@@ -4,6 +4,8 @@ import eu.scattering.core.transfer.containers.position.Position;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
 
 public class FPos2D implements Position<FPos2D> {
@@ -64,12 +66,8 @@ public class FPos2D implements Position<FPos2D> {
 
     @Override
     public int hashCode() {
-        double hashCode = 7;
 
-        hashCode = 31 * hashCode + (d0 * 1000);
-        hashCode = 31 * hashCode + (d1 * 1000);
-
-        return (int) hashCode;
+        return Objects.hash(d0, d1);
     }
 
     @Override

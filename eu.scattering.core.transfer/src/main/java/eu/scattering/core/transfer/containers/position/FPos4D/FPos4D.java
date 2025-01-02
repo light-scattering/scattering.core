@@ -4,6 +4,8 @@ import eu.scattering.core.transfer.containers.position.Position;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
 
 public class FPos4D implements Position<FPos4D> {
@@ -82,14 +84,8 @@ public class FPos4D implements Position<FPos4D> {
 
     @Override
     public int hashCode() {
-        double hashCode = 7;
 
-        hashCode = 31 * hashCode + (d0 * 1000);
-        hashCode = 31 * hashCode + (d1 * 1000);
-        hashCode = 31 * hashCode + (d2 * 1000);
-        hashCode = 31 * hashCode + (d3 * 1000);
-
-        return (int) hashCode;
+        return Objects.hash(d0, d1, d2, d3);
     }
 
     @Override

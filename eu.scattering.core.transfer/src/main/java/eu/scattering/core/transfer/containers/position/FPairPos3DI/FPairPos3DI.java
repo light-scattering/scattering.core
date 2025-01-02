@@ -8,6 +8,8 @@ import eu.scattering.core.transfer.containers.position.PositionFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
 
 public class FPairPos3DI implements Position<FPairPos3DI> {
@@ -72,12 +74,8 @@ public class FPairPos3DI implements Position<FPairPos3DI> {
 
     @Override
     public int hashCode() {
-        double hashCode = 7;
 
-        hashCode = 31 * hashCode + getPosA().hashCode();
-        hashCode = 31 * hashCode + getPosB().hashCode();
-
-        return (int) hashCode;
+        return Objects.hash(getPosA(), getPosB());
     }
 
     @Override

@@ -5,6 +5,7 @@ import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoin
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
+import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONArray;
@@ -672,26 +673,28 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector rotate(FPoint ref, double angle) {
+        var fRot = factory.getFRotation();
 
         if (getRefBase().isSimilar(ref)) {
             throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
         }
 
-        FRotation rotor = factory.getFRotation(factory.getFVector(getRefBase(), ref), angle);
+        FRot rotor = fRot.getRotation(factory.getFVector(getRefBase(), ref).toTuplePos3D(), angle);
 
-        return ext(rotor.rotate());
+        return ext(fRot.rotate(rotor));
     }
 
     @Override
     public FVector rotate(FVector ref, double angle) {
+        var fRot = factory.getFRotation();
 
         if (ref.isNonDirectional()) {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
         }
 
-        FRotation rotor = factory.getFRotation(ref, angle);
+        FRot rotor = fRot.getRotation(ref.toTuplePos3D(), angle);
 
-        return ext(rotor.rotate());
+        return ext(fRot.rotate(rotor));
     }
 
     @Override

@@ -7,6 +7,7 @@ import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoin
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.AdvancedPresetProd;
+import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -209,10 +210,12 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRotation rotation = factory.getFRotation(getOrigin(), angle);
+        var fRot = factory.getFRotation();
+
+        FRot rotation = fRot.getRotation(getOrigin().toTuplePos3D(), angle);
 
         return (e) -> e.disassemble()
-                .forEach(p -> p.ext(rotation.rotate()));
+                .forEach(p -> p.ext(fRot.rotate(rotation)));
     }
 
     @Override

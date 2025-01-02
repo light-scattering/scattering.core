@@ -23,6 +23,8 @@ import eu.scattering.core.impl.production.core.mutable.number.quaternion.FQuater
 import eu.scattering.core.impl.production.support.helper.FAngleHelperProd;
 import eu.scattering.core.impl.production.support.helper.FRandomHelperProd;
 
+import java.util.function.Supplier;
+
 public final class FactoryProd extends FactoryDesignConcrete {
     private final double epsilon = 1E-8;
     private final double proximityLimit = 1E-6;
@@ -120,17 +122,10 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
 //--------------------------------------------------
 
-    //TODO - Maybe this one should be removed...
     @Override
-    public FRotation getFRotation(FPoint axis, double angle) {
+    public FRotation getFRotation() {
 
-        return FRotationProd.create(this, axis, angle);
-    }
-
-    @Override
-    public FRotation getFRotation(FVector axis, double angle) {
-
-        return FRotationProd.create(this, axis, angle);
+        return FRotationProd.create(this::getFVector);
     }
 
     @Override

@@ -8,6 +8,8 @@ import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
 
 public class FRot implements Engine<FRot> {
@@ -86,14 +88,8 @@ public class FRot implements Engine<FRot> {
 
     @Override
     public int hashCode() {
-        double hashCode = 7;
 
-        hashCode = 31 * hashCode + getAxis().hashCode();
-        hashCode = 31 * hashCode + getCoreCode().hashCode();
-        hashCode = 31 * hashCode + getAngle();
-        hashCode = 31 * hashCode + getCoreMatrix().hashCode();
-
-        return (int) hashCode;
+        return Objects.hash(getAxis(), getAngle(), getCoreCode(), getCoreMatrix());
     }
 
     @Override

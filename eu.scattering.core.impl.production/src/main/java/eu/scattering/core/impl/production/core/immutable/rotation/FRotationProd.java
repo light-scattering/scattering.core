@@ -1,26 +1,34 @@
 package eu.scattering.core.impl.production.core.immutable.rotation;
 
-import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
-import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class FRotationProd implements FRotation {
-    private static final TransferFactory factoryX = TransferFactoryConcrete.create();
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
-    private FVector fVectorTemplate;
+    private Supplier<FVector> fVectorSupplier;
+
+    private FRotationProd(Supplier<FVector> fVectorSupplier) {
+
+        this.fVectorSupplier = fVectorSupplier;
+    }
+
+    public static FRotation create(Supplier<FVector> fVectorSupplier) {
+
+        return new FRotationProd(fVectorSupplier);
+    }
 
     @Override
     public FRot getRotation(FPairPos3D axis, double angle) {
@@ -29,14 +37,19 @@ public class FRotationProd implements FRotation {
         var rotCoreCode = getRotCoreCode(rotVector, angle);
         var rotCoreMatrix = getRotCoreMatrix(rotCoreCode);
 
-        var rotAngle = getRotAngle(rotCoreCode);
-        var rotAxis = getRotAxis(axis, rotCoreCode);
+        var rotRevAxis = getRotRevAxis(axis, rotCoreCode);
+        var rotRevAngle = getRotRevAngle(rotCoreCode);
 
-        return factory.getFRot(rotAxis, rotAngle, rotCoreCode, rotCoreMatrix);
+        return factory.getFRot(rotRevAxis, rotRevAngle, rotCoreCode, rotCoreMatrix);
+    }
+
+    public FRot getRotation(FPos3D axis, double angle) {
+
+        return getRotation(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
     }
 
     private FVector getRotVector(FPairPos3D axis, double angle) {
-        var rotVector = fVectorTemplate.copy();
+        var rotVector = fVectorSupplier.get().set(axis);
 
         if (rotVector.isNonDirectional()) {
             throw new IllegalArgumentException("The rotation axis is non-directional");
@@ -56,7 +69,7 @@ public class FRotationProd implements FRotation {
         var d2 = rotVector.getRefHead().getY();
         var d3 = rotVector.getRefHead().getZ();
 
-        return factoryX.getFPos4D(d0, d1, d2, d3);
+        return factory.getFPos4D(d0, d1, d2, d3);
     }
 
     private FMatrix3x3D getRotCoreMatrix(FPos4D rotCoreCode) {
@@ -80,7 +93,7 @@ public class FRotationProd implements FRotation {
         return factory.getFMatrix3x3D(origin);
     }
 
-    private double getRotAngle(FPos4D rotCoreCode) {
+    private double getRotRevAngle(FPos4D rotCoreCode) {
         var re = rotCoreCode.getD0();
 
         if (re <= -1) {
@@ -94,8 +107,8 @@ public class FRotationProd implements FRotation {
         return Math.acos(re) * 2;
     }
 
-    private FPairPos3D getRotAxis(FPairPos3D axis, FPos4D rotCoreCode) {
-        var rotAxis = fVectorTemplate.copy();
+    private FPairPos3D getRotRevAxis(FPairPos3D axis, FPos4D rotCoreCode) {
+        var rotAxis = fVectorSupplier.get();
 
         var re = rotCoreCode.getD0();
         var i = rotCoreCode.getD1();
@@ -121,173 +134,31 @@ public class FRotationProd implements FRotation {
 
     //------------------------------------------------------------------------------------
 
-    private final FPoint offset;
-    private final FQuaternion core;
-    private final double[][] rotation = new double[3][3];
-    private final FactoryDesignConcrete factory;
-
-    private FRotationProd(FactoryDesignConcrete factory, FVector axis, double angle) {
-
-        if (axis.isNonDirectional()) {
-            throw new IllegalArgumentException("The rotation axis is not defined");
-        }
-
-        this.factory = factory;
-        this.offset = factory.getFPoint().applyStateFrom(axis.getRefBase());
-        this.core = factory.getFQuaternion();
-
-        initializeCore2(axis.copy().moveBaseToCenter().getRefHead(), angle);
-        initializeRotor2();
-    }
-
-    private FRotationProd(FactoryDesignConcrete factory, FPoint axis, double angle) {
-
-        if (axis.isZero()) {
-            throw new IllegalArgumentException("The rotation axis is not defined");
-        }
-
-        this.factory = factory;
-        this.offset = factory.getFPoint();
-        this.core = factory.getFQuaternion();
-
-        initializeCore2(axis.copy(), angle);
-        initializeRotor2();
-    }
-
-    private FRotationProd(FactoryDesignConcrete factory, double re, double i, double j, double k) {
-        double direction = 1 - (re * re);
-
-        if (direction <= 0) {
-            throw new IllegalArgumentException("The rotation axis is not defined");
-        }
-
-        this.factory = factory;
-        this.offset = factory.getFPoint();
-        this.core = factory.getFQuaternion().set(re, i, j, k);
-
-        initializeRotor2();
-    }
-
-    public static FRotation create(FactoryDesignConcrete factory, FPoint axis, double angle) {
-
-        return new FRotationProd(factory, axis, angle);
-    }
-
-    public static FRotation create(FactoryDesignConcrete factory, FVector axis, double angle) {
-
-        return new FRotationProd(factory, axis, angle);
-    }
-
-    public static FRotation parse(FactoryDesignConcrete factory, String json) {
-        JSONArray structure = (new JSONObject(json)).getJSONArray("rotor");
-
-        double re = structure.getDouble(0);
-        double i = structure.getDouble(1);
-        double j = structure.getDouble(2);
-        double k = structure.getDouble(3);
-
-        return new FRotationProd(factory, re, i, j, k);
-    }
-
     @Override
-    public int hashCode() {
-
-        return getCore().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FRotation) {
-            FRotation fRotation = (FRotation) object;
-
-            return getCore().isExact(fRotation.getCore());
-        }
-
-        return false;
-    }
-
-    @Override
-    public String toString() {
-
-        return exportToJSON().toString();
-    }
-
-    private void initializeCore2(FPoint axis, double angle) {
-
-        axis.normalize().mul(Math.sin(angle * 0.5));
-        core.set(Math.cos(angle * 0.5), axis.getX(), axis.getY(), axis.getZ());
-    }
-
-    private void initializeRotor2() {
-
-        rotation[0][0] = 1 - (2 * core.getJ() * core.getJ()) - (2 * core.getK() * core.getK());
-        rotation[0][1] = 2 * ((core.getI() * core.getJ()) + (core.getRe() * core.getK()));
-        rotation[0][2] = 2 * ((core.getI() * core.getK()) - (core.getRe() * core.getJ()));
-        rotation[1][0] = 2 * ((core.getI() * core.getJ()) - (core.getRe() * core.getK()));
-        rotation[1][1] = 1 - (2 * core.getI() * core.getI()) - (2 * core.getK() * core.getK());
-        rotation[1][2] = 2 * ((core.getJ() * core.getK()) + (core.getRe() * core.getI()));
-        rotation[2][0] = 2 * ((core.getI() * core.getK()) + (core.getRe() * core.getJ()));
-        rotation[2][1] = 2 * ((core.getJ() * core.getK()) - (core.getRe() * core.getI()));
-        rotation[2][2] = 1 - (2 * core.getI() * core.getI()) - (2 * core.getJ() * core.getJ());
-    }
-
-    @Override
-    public FPairPos3D getRotationAxis() {
-        double factor = 1 / Math.sqrt(1 - (core.getRe() * core.getRe()));
-
-        FPoint head = factory.getFPoint(core.getI(), core.getJ(), core.getK()).mul(factor).add(offset);
-
-        var vector = factory.getFVector(offset.copy(), head);
-
-        return vector.toTuplePos3D();
-    }
-
-    @Override
-    public double getRotationAngle() {
-
-        if (core.getRe() <= -1) {
-            return Math.PI * 2;
-        }
-
-        if (core.getRe() >= 1) {
-            return 0;
-        }
-
-        return Math.acos(core.getRe()) * 2;
-    }
-
-
-
-    @Override
-    public FQuaternion getCore() {
-
-        return core.copy();
-    }
-
-    @Override
-    public Consumer<Geometry> rotate() {
+    public Consumer<Geometry> rotate(FRot core) {
+        var rotCoreMatrix = core.getCoreMatrix();
+        var rotOffset = core.getAxis().getPosA();
 
         return (e) -> e.disassemble().forEach(p -> p
-                .sub(offset)
+                .subX(rotOffset.getD0())
+                .subY(rotOffset.getD1())
+                .subZ(rotOffset.getD2())
                 .set(
-                        (rotation[0][0] * p.getX()) + (rotation[0][1] * p.getY()) + (rotation[0][2] * p.getZ()),
-                        (rotation[1][0] * p.getX()) + (rotation[1][1] * p.getY()) + (rotation[1][2] * p.getZ()),
-                        (rotation[2][0] * p.getX()) + (rotation[2][1] * p.getY()) + (rotation[2][2] * p.getZ())
+                        (rotCoreMatrix.get0x0() * p.getX()) + (rotCoreMatrix.get0x1() * p.getY()) + (rotCoreMatrix.get0x2() * p.getZ()),
+                        (rotCoreMatrix.get1x0() * p.getX()) + (rotCoreMatrix.get1x1() * p.getY()) + (rotCoreMatrix.get1x2() * p.getZ()),
+                        (rotCoreMatrix.get2x0() * p.getX()) + (rotCoreMatrix.get2x1() * p.getY()) + (rotCoreMatrix.get2x2() * p.getZ())
                 )
-                .add(offset));
+                .addX(rotOffset.getD0())
+                .addY(rotOffset.getD1())
+                .addZ(rotOffset.getD2())
+        );
     }
 
+    //--------------------------------------------------
+
+    // TODO - Not implemented
     @Override
     public JSONObject exportToJSON() {
-        JSONObject json = new JSONObject();
-
-        json.append("rotor", core.getRe());
-        json.append("rotor", core.getI());
-        json.append("rotor", core.getJ());
-        json.append("rotor", core.getK());
-
-        return json;
+        return null;
     }
-
 }
