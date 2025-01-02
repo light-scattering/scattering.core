@@ -211,11 +211,12 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
         }
 
         var fRot = factory.getFRotation();
+        var fRotHelper = factory.getFRotationHelper();
 
-        FRot rotation = fRot.getRotation(getOrigin().toTuplePos3D(), angle);
+        FRot rotor = fRot.getRotation(getOrigin().toTuplePos3D(), angle);
 
         return (e) -> e.disassemble()
-                .forEach(p -> p.ext(fRot.rotate(rotation)));
+                .forEach(p -> fRotHelper.rotate(p, rotor));
     }
 
     @Override

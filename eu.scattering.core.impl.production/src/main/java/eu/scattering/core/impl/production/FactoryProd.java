@@ -12,6 +12,7 @@ import eu.scattering.core.design.elements.engine.random.FRandom;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.auxiliary.FAngleHelper;
 import eu.scattering.core.design.helpers.engine.FRandomHelper;
+import eu.scattering.core.design.helpers.engine.FRotationHelper;
 import eu.scattering.core.impl.production.core.engine.random.FRandomProd;
 import eu.scattering.core.impl.production.core.immutable.rotation.FRotationProd;
 import eu.scattering.core.impl.production.core.mutable.geometry.advanced.line.FLineProd;
@@ -22,6 +23,7 @@ import eu.scattering.core.impl.production.core.mutable.number.complex.FComplexPr
 import eu.scattering.core.impl.production.core.mutable.number.quaternion.FQuaternionProd;
 import eu.scattering.core.impl.production.support.helper.FAngleHelperProd;
 import eu.scattering.core.impl.production.support.helper.FRandomHelperProd;
+import eu.scattering.core.impl.production.support.helper.FRotationHelperProd;
 
 import java.util.function.Supplier;
 
@@ -31,6 +33,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
     private final FAngleHelper fAngleHelper;
     private final FRandomHelper fRandomHelper;
+    private final FRotationHelper fRotationHelper;
 
     private FactoryProd() {
         var fRandomInternal = FRandomProd.create();
@@ -39,6 +42,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
         this.fRandomHelper = FRandomHelperProd.create(fRandomInternal);
         this.fAngleHelper = FAngleHelperProd.create();
+        this.fRotationHelper = FRotationHelperProd.create();
     }
 
     private FactoryProd(long seed) {
@@ -48,6 +52,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
         this.fRandomHelper = FRandomHelperProd.create(fRandomInternal);
         this.fAngleHelper = FAngleHelperProd.create();
+        this.fRotationHelper = FRotationHelperProd.create();
     }
 
     public static FactoryDesignConcrete create() {
@@ -118,6 +123,12 @@ public final class FactoryProd extends FactoryDesignConcrete {
     public FRandomHelper getFRandomHelper() {
 
         return fRandomHelper;
+    }
+
+    @Override
+    public FRotationHelper getFRotationHelper() {
+
+        return fRotationHelper;
     }
 
 //--------------------------------------------------

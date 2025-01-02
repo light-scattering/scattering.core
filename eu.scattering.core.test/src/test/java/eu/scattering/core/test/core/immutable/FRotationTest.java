@@ -3,6 +3,7 @@ package eu.scattering.core.test.core.immutable;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
+import eu.scattering.core.design.helpers.engine.FRotationHelper;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("FRotation")
 public class FRotationTest {
     private FRotation fRot = factory.getFRotation();
+    private FRotationHelper fRotHelper = factory.getFRotationHelper();
 
     @Test
     @DisplayName("Create with FPoint (positive angle)")
@@ -150,7 +152,7 @@ public class FRotationTest {
         double angle = random.nextDouble() % (2 * Math.PI);
         FRot rotor = fRot.getRotation(TestHelper.getRandomFPoint().toFPos3D(), angle);
 
-        fPoint.ext(fRot.rotate(rotor));
+        fRotHelper.rotate(fPoint, rotor);
 
         assertEquals(length, fPoint.getLength(), jitter, "The magnitude is invalid");
     }
@@ -161,7 +163,7 @@ public class FRotationTest {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
         FRot rotor = fRot.getRotation(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 0.5);
 
-        fPoint.ext(fRot.rotate(rotor));
+        fRotHelper.rotate(fPoint, rotor);
 
         assertTrue(factory.getFPoint(0, -1, 0).isSimilar(fPoint), "The position is invalid");
 
@@ -173,7 +175,7 @@ public class FRotationTest {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
         FRot rotor = fRot.getRotation(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 1.5);
 
-        fPoint.ext(fRot.rotate(rotor));
+        fRotHelper.rotate(fPoint, rotor);
 
         assertTrue(factory.getFPoint(0, 1, 0).isSimilar(fPoint), "The position is invalid");
 
@@ -185,9 +187,8 @@ public class FRotationTest {
         FPoint fPoint = factory.getFPoint(1, 1, 1);
         FRot rotor = fRot.getRotation(factory.getFPoint(-1, 1, 0).toFPos3D(), Math.PI);
 
-        fPoint.ext(fRot.rotate(rotor));
+        fRotHelper.rotate(fPoint, rotor);
 
         assertTrue(factory.getFPoint(-1, -1, -1).isSimilar(fPoint), "The position is invalid");
-
     }
 }

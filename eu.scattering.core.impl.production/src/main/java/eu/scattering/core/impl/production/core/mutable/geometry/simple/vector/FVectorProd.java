@@ -674,6 +674,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     @Override
     public FVector rotate(FPoint ref, double angle) {
         var fRot = factory.getFRotation();
+        var fRotHelper = factory.getFRotationHelper();
 
         if (getRefBase().isSimilar(ref)) {
             throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
@@ -681,12 +682,15 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
         FRot rotor = fRot.getRotation(factory.getFVector(getRefBase(), ref).toTuplePos3D(), angle);
 
-        return ext(fRot.rotate(rotor));
+        fRotHelper.rotate(this, rotor);
+
+        return this;
     }
 
     @Override
     public FVector rotate(FVector ref, double angle) {
         var fRot = factory.getFRotation();
+        var fRotHelper = factory.getFRotationHelper();
 
         if (ref.isNonDirectional()) {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
@@ -694,7 +698,9 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
         FRot rotor = fRot.getRotation(ref.toTuplePos3D(), angle);
 
-        return ext(fRot.rotate(rotor));
+        fRotHelper.rotate(this, rotor);
+
+        return this;
     }
 
     @Override

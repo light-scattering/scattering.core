@@ -132,28 +132,6 @@ public class FRotationProd implements FRotation {
         return rotAxis.toTuplePos3D();
     }
 
-    //------------------------------------------------------------------------------------
-
-    @Override
-    public Consumer<Geometry> rotate(FRot core) {
-        var rotCoreMatrix = core.getCoreMatrix();
-        var rotOffset = core.getAxis().getPosA();
-
-        return (e) -> e.disassemble().forEach(p -> p
-                .subX(rotOffset.getD0())
-                .subY(rotOffset.getD1())
-                .subZ(rotOffset.getD2())
-                .set(
-                        (rotCoreMatrix.get0x0() * p.getX()) + (rotCoreMatrix.get0x1() * p.getY()) + (rotCoreMatrix.get0x2() * p.getZ()),
-                        (rotCoreMatrix.get1x0() * p.getX()) + (rotCoreMatrix.get1x1() * p.getY()) + (rotCoreMatrix.get1x2() * p.getZ()),
-                        (rotCoreMatrix.get2x0() * p.getX()) + (rotCoreMatrix.get2x1() * p.getY()) + (rotCoreMatrix.get2x2() * p.getZ())
-                )
-                .addX(rotOffset.getD0())
-                .addY(rotOffset.getD1())
-                .addZ(rotOffset.getD2())
-        );
-    }
-
     //--------------------------------------------------
 
     // TODO - Not implemented

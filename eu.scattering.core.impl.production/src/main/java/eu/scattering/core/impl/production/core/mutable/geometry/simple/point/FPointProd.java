@@ -456,11 +456,15 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint setAngle(FPoint ref, double angle) {
         var fRot = factory.getFRotation();
+        var fRotHelper = factory.getFRotationHelper();
 
         FPoint axis = copy().setCrossProduct(ref);
         FRot rotor = fRot.getRotation(axis.toFPos3D(), angle);
 
-        ref.copy().ext(fRot.rotate(rotor)).applyStateTo(this);
+        var fPointCopy = ref.copy();
+        fRotHelper.rotate(fPointCopy, rotor);
+
+        applyStateFrom(fPointCopy);
 
         return this;
     }
@@ -468,10 +472,11 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint rotate(FPoint ref, double angle) {
         var fRot = factory.getFRotation();
+        var fRotHelper = factory.getFRotationHelper();
 
         FRot rotor = fRot.getRotation(ref.toFPos3D(), angle);
 
-        ext(fRot.rotate(rotor));
+        fRotHelper.rotate(this, rotor);
 
         return this;
     }
