@@ -1,9 +1,9 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.simple.point;
 
-import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
-import eu.scattering.core.transfer.containers.engine.FRot.FRot;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,24 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0, 0.0 };
-    private final FactoryDesignConcrete factory;
     private final double epsilon;
 
-    private FPointProd(FactoryDesignConcrete factory, double epsilon) {
+    private FPointProd(double epsilon) {
 
-        this.factory = factory;
         this.epsilon = epsilon;
     }
 
-    public static FPoint create(FactoryDesignConcrete factory, double epsilon) {
+    public static FPoint create(double epsilon) {
 
-        return new FPointProd(factory, epsilon);
+        return new FPointProd(epsilon);
     }
 
     @Override
@@ -178,7 +177,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-    return FPointProd.create(factory, epsilon).applyStateFrom(this);
+        return FPointProd.create(epsilon).applyStateFrom(this);
     }
 
     @Override
@@ -451,34 +450,6 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
-    }
-
-    @Override
-    public FPoint setAngle(FPoint ref, double angle) {
-        var fRot = factory.getFRotation();
-        var fRotHelper = factory.getFRotationHelper();
-
-        FPoint axis = copy().setCrossProduct(ref);
-        FRot rotor = fRot.getRotation(axis.toFPos3D(), angle);
-
-        var fPointCopy = ref.copy();
-        fRotHelper.rotate(fPointCopy, rotor);
-
-        applyStateFrom(fPointCopy);
-
-        return this;
-    }
-
-    @Override
-    public FPoint rotate(FPoint ref, double angle) {
-        var fRot = factory.getFRotation();
-        var fRotHelper = factory.getFRotationHelper();
-
-        FRot rotor = fRot.getRotation(ref.toFPos3D(), angle);
-
-        fRotHelper.rotate(this, rotor);
-
-        return this;
     }
 
     @Override

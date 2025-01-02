@@ -1,16 +1,22 @@
 package eu.scattering.core.impl.production.support.helper;
 
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.engine.FRotationHelper;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 
 public class FRotationHelperProd implements FRotationHelper {
+    private final FRotation rotor;
 
-    private FRotationHelperProd() {}
+    private FRotationHelperProd(FRotation rotor) {
 
-    public static FRotationHelper create() {
+        this.rotor = rotor;
+    }
 
-        return new FRotationHelperProd();
+    public static FRotationHelper create(FRotation rotor) {
+
+        return new FRotationHelperProd(rotor);
     }
 
     @Override
@@ -34,5 +40,22 @@ public class FRotationHelperProd implements FRotationHelper {
         ));
 
         return geometry;
+    }
+
+    @Override
+    public FPoint setAngle(FPoint origin, FPoint ref, double angle) {
+        var axis = origin.copy().setCrossProduct(ref);
+        var fPointCopy = ref.copy();
+
+        rotate(fPointCopy, rotor.getRotation(axis.toFPos3D(), angle));
+
+        return origin.applyStateFrom(fPointCopy);
+    }
+
+    @Override
+    public FPoint rotate(FPoint origin, FPoint ref, double angle) {
+        rotate(origin, rotor.getRotation(ref.toFPos3D(), angle));
+
+        return origin;
     }
 }

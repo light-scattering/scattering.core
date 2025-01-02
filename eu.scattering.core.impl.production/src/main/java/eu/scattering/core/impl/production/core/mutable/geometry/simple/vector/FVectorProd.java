@@ -665,7 +665,10 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         FVector fCopyLocal = copy().moveBaseToCenter();
         FVector fCopyExternal = ref.copy().moveBaseToCenter();
 
-        fCopyLocal.getRefHead().setAngle(fCopyExternal.getRefHead(), angle);
+        var fRotationHelper = factory.getFRotationHelper();
+
+        fRotationHelper.setAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
+
         fCopyLocal.moveBase(getRefBase());
 
         return applyStateFrom(fCopyLocal);

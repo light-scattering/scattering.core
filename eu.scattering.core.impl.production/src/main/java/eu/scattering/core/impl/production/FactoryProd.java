@@ -25,8 +25,6 @@ import eu.scattering.core.impl.production.support.helper.FAngleHelperProd;
 import eu.scattering.core.impl.production.support.helper.FRandomHelperProd;
 import eu.scattering.core.impl.production.support.helper.FRotationHelperProd;
 
-import java.util.function.Supplier;
-
 public final class FactoryProd extends FactoryDesignConcrete {
     private final double epsilon = 1E-8;
     private final double proximityLimit = 1E-6;
@@ -41,8 +39,8 @@ public final class FactoryProd extends FactoryDesignConcrete {
         fRandomInternal.setProximityLimit(proximityLimit);
 
         this.fRandomHelper = FRandomHelperProd.create(fRandomInternal);
+        this.fRotationHelper = FRotationHelperProd.create(getFRotation());
         this.fAngleHelper = FAngleHelperProd.create();
-        this.fRotationHelper = FRotationHelperProd.create();
     }
 
     private FactoryProd(long seed) {
@@ -51,8 +49,8 @@ public final class FactoryProd extends FactoryDesignConcrete {
         fRandomInternal.setProximityLimit(proximityLimit);
 
         this.fRandomHelper = FRandomHelperProd.create(fRandomInternal);
+        this.fRotationHelper = FRotationHelperProd.create(getFRotation());
         this.fAngleHelper = FAngleHelperProd.create();
-        this.fRotationHelper = FRotationHelperProd.create();
     }
 
     public static FactoryDesignConcrete create() {
@@ -70,7 +68,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FPoint getFPoint() {
 
-        return FPointProd.create(this, epsilon);
+        return FPointProd.create(epsilon);
     }
 
     @Override
@@ -134,12 +132,6 @@ public final class FactoryProd extends FactoryDesignConcrete {
 //--------------------------------------------------
 
     @Override
-    public FRotation getFRotation() {
-
-        return FRotationProd.create(this::getFVector);
-    }
-
-    @Override
     public FRandom getFRandom() {
 
         return FRandomProd.create();
@@ -149,5 +141,11 @@ public final class FactoryProd extends FactoryDesignConcrete {
     public FRandom getFRandom(long seed) {
 
         return FRandomProd.create(seed);
+    }
+
+    @Override
+    public FRotation getFRotation() {
+
+        return FRotationProd.create(this::getFVector);
     }
 }

@@ -840,7 +840,7 @@ public class FPointTest {
             FPoint fPointA = factory.getFPoint(1, 1, 0);
             FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-            fPointA.rotate(fPointB, Math.PI);
+            rotation.rotate(fPointA, fPointB, Math.PI);
 
             assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
                     "The position is incorrect");
@@ -852,7 +852,7 @@ public class FPointTest {
             FPoint fPointA = factory.getFPoint(1, 1, 0);
             FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-            fPointA.rotate(fPointB, -Math.PI);
+            rotation.rotate(fPointA, fPointB, -Math.PI);
 
             assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
                     "The position is incorrect");
@@ -864,7 +864,7 @@ public class FPointTest {
             FPoint fPointA = factory.getFPoint(1, 1, 0);
             FPoint fPointB = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fPointA.rotate(fPointB, Math.PI),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.rotate(fPointA, fPointB, Math.PI),
                     "The rotation axis is not defined");
         }
 
@@ -874,7 +874,7 @@ public class FPointTest {
             FPoint fPointA = TestHelper.getRandomFPoint();
             FPoint fPointB = TestHelper.getRandomFPoint(fPointA);
 
-            FPointTestHelper.testReference((a, b) -> a.rotate(b, Math.PI), fPointA, fPointB);
+            FPointTestHelper.testReference((a, b) -> rotation.rotate(a, b, Math.PI), fPointA, fPointB);
         }
 
         @Test
@@ -956,7 +956,7 @@ public class FPointTest {
             FPoint fPointA = factory.getFPoint(1, 0, 0);
             FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-            fPointA.setAngle(fPointB, Math.PI * 0.25);
+            rotation.setAngle(fPointA, fPointB, Math.PI * 0.25);
 
             double position = 1 / Math.sqrt(2);
 
@@ -974,7 +974,7 @@ public class FPointTest {
             FPoint fPointA = factory.getFPoint(-1, 0, 0);
             FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-            fPointA.setAngle(fPointB, Math.PI * 0.25);
+            rotation.setAngle(fPointA, fPointB, Math.PI * 0.25);
 
             double position = 1 / Math.sqrt(2);
 
@@ -992,7 +992,7 @@ public class FPointTest {
             FPoint fPointA = factory.getFPoint(1, 0, 0);
             FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-            fPointA.setAngle(fPointB, -Math.PI * 0.25);
+            rotation.setAngle(fPointA, fPointB, -Math.PI * 0.25);
 
             double position = 1 / Math.sqrt(2);
 
@@ -1012,7 +1012,7 @@ public class FPointTest {
 
             double magnitude = fPointA.getLength();
             double angle = random.nextDouble() % (Math.PI);
-            fPointA.setAngle(fPointB, angle);
+            rotation.setAngle(fPointA, fPointB, angle);
 
             Assertions.assertAll("Validate rotation",
                     () -> assertEquals(magnitude, fPointA.getLength(),
@@ -1027,7 +1027,7 @@ public class FPointTest {
         void setAngleThrowIllegalArgumentException() {
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fPoint.setAngle(factory.getFPoint(), Math.PI),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.setAngle(fPoint, factory.getFPoint(), Math.PI),
                     "The rotation axis is not defined");
         }
 
@@ -1037,7 +1037,7 @@ public class FPointTest {
             FPoint fPointA = TestHelper.getRandomFPoint();
             FPoint fPointB = TestHelper.getRandomFPoint(fPointA);
 
-            FPointTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fPointA, fPointB);
+            FPointTestHelper.testReference((a, b) -> rotation.setAngle(a, b, Math.PI), fPointA, fPointB);
         }
 
         @Test

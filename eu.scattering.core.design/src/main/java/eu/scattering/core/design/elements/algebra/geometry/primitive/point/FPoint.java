@@ -43,13 +43,10 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setDistance(FPoint ref, double distance);
 
     double getAngle(FPoint ref);
-    FPoint setAngle(FPoint ref, double angle);
 
     double getDotProduct(FPoint ref);
 
     FPoint setCrossProduct(FPoint ref);
-
-    FPoint rotate(FPoint ref, double angle);
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
