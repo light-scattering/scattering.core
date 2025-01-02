@@ -16,4 +16,6 @@ module eu.scattering.core.transfer {
     exports eu.scattering.core.transfer.containers.position.FPos4D;
     exports eu.scattering.core.transfer.containers.position.FPos4DI;
     exports eu.scattering.core.transfer.helpers.transfer;
+    exports eu.scattering.core.transfer.containers.engine.FRot;
+    exports eu.scattering.core.transfer.containers.grid.FMatrix3x3D;
 }
