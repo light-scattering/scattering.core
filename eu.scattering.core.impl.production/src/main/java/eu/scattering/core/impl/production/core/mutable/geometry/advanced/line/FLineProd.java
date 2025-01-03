@@ -85,6 +85,12 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
     }
 
     @Override
+    public FLine copyZero() {
+
+        return factory.getFLine();
+    }
+
+    @Override
     public FLine self() {
 
         return this;

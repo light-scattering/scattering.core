@@ -85,6 +85,12 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
     }
 
     @Override
+    public FPlane copyZero() {
+
+        return factory.getFPlane();
+    }
+
+    @Override
     public FPlane self() {
 
         return this;

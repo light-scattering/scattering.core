@@ -181,6 +181,12 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint copyZero() {
+
+        return FPointProd.create(epsilon);
+    }
+
+    @Override
     public FPoint self() {
 
         return this;

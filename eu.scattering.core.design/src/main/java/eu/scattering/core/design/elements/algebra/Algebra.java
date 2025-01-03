@@ -10,6 +10,8 @@ public interface Algebra<T> extends Core<T> {
     boolean isSimilar(T ref);
     boolean isExact(T ref);
 
-    T copy();
     T self();
+
+    T copy();
+    T copyZero();
 }

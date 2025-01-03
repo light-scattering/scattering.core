@@ -336,10 +336,20 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public FVector copy() {
-        FVector fVector = factory.getFVector();
+        FVector fVector = FVectorProd.create(factory, epsilon);
 
-        fVector.setRefBase(factory.getFPoint(getRefBase()));
-        fVector.setRefHead(factory.getFPoint(getRefHead()));
+        fVector.setRefBase(getRefBase().copy());
+        fVector.setRefHead(getRefHead().copy());
+
+        return fVector;
+    }
+
+    @Override
+    public FVector copyZero() {
+        FVector fVector = copy();
+
+        fVector.setRefBase(fVector.getRefBase().copyZero());
+        fVector.setRefHead(fVector.getRefHead().copyZero());
 
         return fVector;
     }

@@ -182,6 +182,12 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
+    public FQuaternion copyZero() {
+
+        return FQuaternionProd.create(factory, epsilon);
+    }
+
+    @Override
     public FQuaternion self() {
 
         return this;

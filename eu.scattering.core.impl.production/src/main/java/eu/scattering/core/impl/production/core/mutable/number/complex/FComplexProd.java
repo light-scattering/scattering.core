@@ -146,6 +146,12 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
+    public FComplex copyZero() {
+
+        return FComplexProd.create(factory, epsilon);
+    }
+
+    @Override
     public FComplex self() {
 
         return this;
