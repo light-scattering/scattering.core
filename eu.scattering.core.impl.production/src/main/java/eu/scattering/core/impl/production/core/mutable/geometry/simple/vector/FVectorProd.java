@@ -3,9 +3,7 @@ package eu.scattering.core.impl.production.core.mutable.geometry.simple.vector;
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
-import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONArray;
@@ -649,61 +647,6 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
-    }
-
-    @Override
-    public FVector setAngle(FVector ref, double angle) {
-
-        if (ref.isNonDirectional()) {
-            throw new IllegalArgumentException("The direction of the provided FVector is not defined");
-        }
-
-        if (isSimilar(ref)) {
-            throw new IllegalStateException("The two FVectors are similar");
-        }
-
-        FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = ref.copy().moveBaseToCenter();
-
-        var fRotationHelper = factory.getFRotationHelper();
-
-        fRotationHelper.setAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
-
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
-    }
-
-    @Override
-    public FVector rotate(FPoint ref, double angle) {
-        var fRot = factory.getFRotation();
-        var fRotHelper = factory.getFRotationHelper();
-
-        if (getRefBase().isSimilar(ref)) {
-            throw new IllegalStateException("The provided FPoint is at the same position as the base FPoint");
-        }
-
-        FRot rotor = fRot.getRotation(factory.getFVector(getRefBase(), ref).toTuplePos3D(), angle);
-
-        fRotHelper.rotate(this, rotor);
-
-        return this;
-    }
-
-    @Override
-    public FVector rotate(FVector ref, double angle) {
-        var fRot = factory.getFRotation();
-        var fRotHelper = factory.getFRotationHelper();
-
-        if (ref.isNonDirectional()) {
-            throw new IllegalArgumentException("The direction of the provided FVector is not defined");
-        }
-
-        FRot rotor = fRot.getRotation(ref.toTuplePos3D(), angle);
-
-        fRotHelper.rotate(this, rotor);
-
-        return this;
     }
 
     @Override

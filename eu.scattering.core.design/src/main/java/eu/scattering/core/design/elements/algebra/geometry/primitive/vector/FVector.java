@@ -89,7 +89,6 @@ public interface FVector extends Primitive<FVector> {
     FVector setLength(double length);
 
     double getAngle(FVector ref);
-    FVector setAngle(FVector ref, double angle);
 
     boolean isOrthogonal(FVector ref);
     FVector setOrthogonal(FVector ref);
@@ -105,9 +104,6 @@ public interface FVector extends Primitive<FVector> {
     double getDotProduct(FVector ref);
 
     FVector setCrossProduct(FVector ref);
-
-    FVector rotate(FPoint ref, double angle);
-    FVector rotate(FVector ref, double angle);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 

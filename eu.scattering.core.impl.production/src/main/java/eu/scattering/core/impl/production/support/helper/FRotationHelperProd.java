@@ -2,6 +2,7 @@ package eu.scattering.core.impl.production.support.helper;
 
 import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.engine.FRotationHelper;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
@@ -55,6 +56,53 @@ public class FRotationHelperProd implements FRotationHelper {
     @Override
     public FPoint rotate(FPoint origin, FPoint ref, double angle) {
         rotate(origin, rotor.getRotation(ref.toFPos3D(), angle));
+
+        return origin;
+    }
+
+    @Override
+    public FVector setAngle(FVector origin, FVector ref, double angle) {
+
+        if (ref.isNonDirectional()) {
+            throw new IllegalArgumentException("The direction of the provided vector is not defined");
+        }
+
+        if (origin.isSimilar(ref)) {
+            throw new IllegalStateException("The two vectors are similar");
+        }
+
+        FVector fCopyLocal = origin.copy().moveBaseToCenter();
+        FVector fCopyExternal = ref.copy().moveBaseToCenter();
+
+        setAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
+
+        fCopyLocal.moveBase(origin.getRefBase());
+
+        return origin.applyStateFrom(fCopyLocal);
+    }
+
+    @Override
+    public FVector rotate(FVector origin, FPoint ref, double angle) {
+
+        if (origin.getRefBase().isSimilar(ref)) {
+            throw new IllegalStateException("The provided point is at the same position as the base point");
+        }
+
+        FVector fCopyLocal = origin.copy().set(origin.getRefBase(), ref);
+
+        rotate(origin, rotor.getRotation(fCopyLocal.toTuplePos3D(), angle));
+
+        return origin;
+    }
+
+    @Override
+    public FVector rotate(FVector origin, FVector ref, double angle) {
+
+        if (ref.isNonDirectional()) {
+            throw new IllegalArgumentException("The direction of the provided FVector is not defined");
+        }
+
+        rotate(origin, rotor.getRotation(ref.toTuplePos3D(), angle));
 
         return origin;
     }

@@ -1852,7 +1852,7 @@ public class FVectorTest {
             FVector fVectorB = TestHelper.getRandomFVector();
             double angle = Math.abs(random.nextDouble() % Math.PI);
 
-            fVectorA.setAngle(fVectorB, angle);
+            rotation.setAngle(fVectorA, fVectorB, angle);
 
             assertEquals(angle, fVectorA.getAngle(fVectorB),
                     jitter, "The angle is incorrect");
@@ -1865,7 +1865,7 @@ public class FVectorTest {
             FVector fVectorB = TestHelper.getRandomFVector();
             double angle = -Math.abs(random.nextDouble() % Math.PI);
 
-            fVectorA.setAngle(fVectorB, angle);
+            rotation.setAngle(fVectorA, fVectorB, angle);
 
             assertEquals(angle, -fVectorA.getAngle(fVectorB),
                     jitter, "The angle is incorrect");
@@ -1878,7 +1878,7 @@ public class FVectorTest {
             FVector fVectorB = fVectorA.copy();
             double angle = Math.abs(random.nextDouble() % Math.PI);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setAngle(fVectorB, angle),
+            Assertions.assertThrows(IllegalStateException.class, () -> rotation.setAngle(fVectorA, fVectorB, angle),
                     "Both FVectors are at the same position");
         }
 
@@ -1889,7 +1889,7 @@ public class FVectorTest {
             FVector fVectorB = factory.getFVector();
             double angle = Math.abs(random.nextDouble() % Math.PI);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.setAngle(fVectorB, angle),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.setAngle(fVectorA, fVectorB, angle),
                     "The direction of the provided FVector is not defined");
         }
 
@@ -1899,7 +1899,7 @@ public class FVectorTest {
             FVector fVectorA = TestHelper.getRandomFVector();
             FVector fVectorB = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fVectorA, fVectorB);
+            FVectorTestHelper.testReference((a, b) -> rotation.setAngle(a, b, Math.PI), fVectorA, fVectorB);
         }
 
         @Test
@@ -1908,7 +1908,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-            fVector.rotate(fPoint, Math.PI * 0.5);
+            rotation.rotate(fVector, fPoint, Math.PI * 0.5);
 
             assertTrue(fVector.isSimilar(-1, 1, 0, -1, 1, -Math.sqrt(2)),
                     "The position of the rotated FVector is erroneous");
@@ -1920,7 +1920,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-            fVector.rotate(fPoint, -(Math.PI * 0.5));
+            rotation.rotate(fVector, fPoint, -(Math.PI * 0.5));
 
             assertTrue(fVector.isSimilar(-1, 1, 0, -1, 1, Math.sqrt(2)),
                     "The position of the rotated FVector is erroneous");
@@ -1933,7 +1933,7 @@ public class FVectorTest {
             FPoint fPoint = fVector.getRefBase().copy();
             double angle = Math.abs(random.nextDouble() % Math.PI);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.rotate(fPoint, angle),
+            Assertions.assertThrows(IllegalStateException.class, () -> rotation.rotate(fVector, fPoint, angle),
                     "The argument FPoint is at the same position as the base FPoint");
         }
 
@@ -1943,7 +1943,7 @@ public class FVectorTest {
             FVector fVector = TestHelper.getRandomFVector();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            FVectorTestHelper.testReference((a, b) -> a.rotate(b, Math.PI), fVector, fPoint);
+            FVectorTestHelper.testReference((a, b) -> rotation.rotate(a, b, Math.PI), fVector, fPoint);
         }
 
         @Test
@@ -1952,7 +1952,7 @@ public class FVectorTest {
             FVector fVectorA = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FVector fVectorB = factory.getFVector(0, 1, 0);
 
-            fVectorA.rotate(fVectorB, Math.PI * 0.5);
+            rotation.rotate(fVectorA, fVectorB, Math.PI * 0.5);
 
             assertTrue(fVectorA.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
@@ -1964,7 +1964,7 @@ public class FVectorTest {
             FVector fVectorA = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FVector fVectorB = factory.getFVector(0, 1, 0);
 
-            fVectorA.rotate(fVectorB, -(Math.PI * 0.5));
+            rotation.rotate(fVectorA, fVectorB, -(Math.PI * 0.5));
 
             assertTrue(fVectorA.isSimilar(0, 1, 1, 0, 2, 2),
                     "The position of the rotated FVector is erroneous");
@@ -1977,7 +1977,7 @@ public class FVectorTest {
             FVector fVectorB = factory.getFVector();
             double angle = Math.abs(random.nextDouble() % Math.PI);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.rotate(fVectorB, angle),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.rotate(fVectorA, fVectorB, angle),
                     "The direction of the provided FVector is not defined");
         }
 
@@ -1987,7 +1987,7 @@ public class FVectorTest {
             FVector fVectorA = TestHelper.getRandomFVector();
             FVector fVectorB = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testReference((a, b) -> a.rotate(b, Math.PI), fVectorA, fVectorB);
+            FVectorTestHelper.testReference((a, b) -> rotation.rotate(a, b, Math.PI), fVectorA, fVectorB);
         }
 
         @Test
