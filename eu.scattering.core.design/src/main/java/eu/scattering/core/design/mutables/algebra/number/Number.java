@@ -34,8 +34,8 @@ public interface Number<T> extends Algebra<T> {
     T applyStateTo(T ref);
     T applyStateFrom(T ref);
 
-    @IntermediateResults("Magnitude squared")
+    @IntermediateResults
     double getMagnitudeP2();
-    @IntermediateResults("Distance squared")
+    @IntermediateResults
     double getDistanceP2(T ref);
 }
