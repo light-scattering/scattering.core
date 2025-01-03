@@ -683,7 +683,6 @@ public class FComplexTest {
     @Tag("Core")
     @DisplayName("Core features")
     class CoreFeatures {
-
         private double refRe, refIm;
 
         @BeforeEach

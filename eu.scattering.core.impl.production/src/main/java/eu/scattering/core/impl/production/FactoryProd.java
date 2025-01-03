@@ -100,7 +100,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FComplex getFComplex() {
 
-        return FComplexProd.create(this, epsilon);
+        return FComplexProd.create(epsilon);
     }
 
     @Override

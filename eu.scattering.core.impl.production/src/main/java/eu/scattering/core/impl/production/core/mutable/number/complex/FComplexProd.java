@@ -1,31 +1,36 @@
 package eu.scattering.core.impl.production.core.mutable.number.complex;
 
-import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
-import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
+import static eu.scattering.core.impl.production.configurations.NameConfig.JSON_TYPE;
+
 public class FComplexProd implements FComplex {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final String JSON_MAIN = "cpx";
+    private static final String JSON_VAL = "val";
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0 };
-    private final FactoryDesignConcrete factory;
     private final double epsilon;
 
-    private FComplexProd(FactoryDesignConcrete factory, double epsilon) {
+    private FComplexProd(double epsilon) {
 
-        this.factory = factory;
         this.epsilon = epsilon;
     }
 
-    public static FComplex create(FactoryDesignConcrete factory, double epsilon) {
+    public static FComplex create(double epsilon) {
 
-        return new FComplexProd(factory, epsilon);
+        return new FComplexProd(epsilon);
     }
 
     @Override
@@ -67,11 +72,18 @@ public class FComplexProd implements FComplex {
         return setRe(re).setIm(im);
     }
 
-
     @Override
     public FComplex set(FPos2D position) {
 
         return set(position.getD0(), position.getD1());
+    }
+
+    @Override
+    public FComplex applyStateTo(FComplex ref) {
+
+        ref.applyStateFrom(this);
+
+        return this;
     }
 
     @Override
@@ -81,9 +93,17 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public FPos2D toFPos2D() {
+    public FComplex importFromJSON(JSONObject json) {
 
-        return factory.getFPos2D(getRe(), getIm());
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var re = structure.getDouble(0);
+        var im = structure.getDouble(1);
+
+        return set(re, im);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -120,21 +140,7 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public JSONObject exportToJSON() {
-        JSONObject json = new JSONObject();
-
-        json.append("complex", getRe());
-        json.append("complex", getIm());
-
-        return json;
-    }
-
-    @Override
-    public FComplex importFromJSON(JSONObject json) {
-        JSONArray structure = json.getJSONArray("complex");
-
-        setRe(structure.getDouble(0));
-        setIm(structure.getDouble(1));
+    public FComplex self() {
 
         return this;
     }
@@ -142,31 +148,56 @@ public class FComplexProd implements FComplex {
     @Override
     public FComplex copy() {
 
-        return FComplexProd.create(factory, epsilon).applyStateFrom(this);
+        return FComplexProd.create(epsilon).applyStateFrom(this);
     }
 
     @Override
     public FComplex copyZero() {
 
-        return FComplexProd.create(factory, epsilon);
+        return FComplexProd.create(epsilon);
     }
 
     @Override
-    public FComplex self() {
+    public JSONObject exportToJSON() {
+        JSONObject json = new JSONObject();
 
-        return this;
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.append(JSON_VAL, getRe());
+        json.append(JSON_VAL, getIm());
+
+        return json;
+    }
+
+    @Override
+    public FPos2D toFPos2D() {
+
+        return factory.getFPos2D(getRe(), getIm());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
-        int hashCode = 7;
 
-        hashCode = 31 * hashCode + (int) (getRe() * 100);
-        hashCode = 31 * hashCode + (int) (getIm() * 100);
+        return Objects.hash(getRe(), getIm());
+    }
 
-        return hashCode;
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FComplex) {
+            FComplex ref = (FComplex) object;
+
+            return getRe() == ref.getRe() && getIm() == ref.getIm();
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+
+        return exportToJSON().toString();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -310,8 +341,13 @@ public class FComplexProd implements FComplex {
         return setIm(getIm() / im);
     }
 
-
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isZero() {
+
+        return getRe() == 0 && getIm() == 0;
+    }
 
     @Override
     public boolean isExact(double re, double im) {
@@ -328,15 +364,15 @@ public class FComplexProd implements FComplex {
     }
 
     @Override
-    public double getMagnitude() {
-
-        return Math.sqrt((getRe() * getRe()) + (getIm() * getIm()));
-    }
-
-    @Override
     public double getMagnitudeP2() {
 
         return (getRe() * getRe()) + (getIm() * getIm());
+    }
+
+    @Override
+    public double getMagnitude() {
+
+        return Math.sqrt((getRe() * getRe()) + (getIm() * getIm()));
     }
 
     @Override
@@ -344,6 +380,14 @@ public class FComplexProd implements FComplex {
         double phase = getPhase();
 
         return setRe(magnitude * Math.cos(phase)).setIm(magnitude * Math.sin(phase));
+    }
+
+    @Override
+    public double getDistanceP2(FComplex ref) {
+        double distanceRe = Math.abs(getRe() - ref.getRe());
+        double distanceIm = Math.abs(getIm() - ref.getIm());
+
+        return (distanceRe * distanceRe) + (distanceIm * distanceIm);
     }
 
     @Override
@@ -359,14 +403,6 @@ public class FComplexProd implements FComplex {
     public FComplex setDistance(FComplex ref, double distance) {
 
         return null;
-    }
-
-    @Override
-    public double getDistanceP2(FComplex ref) {
-        double distanceRe = Math.abs(getRe() - ref.getRe());
-        double distanceIm = Math.abs(getIm() - ref.getIm());
-
-        return (distanceRe * distanceRe) + (distanceIm * distanceIm);
     }
 
     @Override
@@ -396,7 +432,6 @@ public class FComplexProd implements FComplex {
         return setRe(magnitude * Math.cos(phase)).setIm(magnitude * Math.sin(phase));
     }
 
-
     @Override
     public FComplex power(int n) {
         double power = Math.pow(getMagnitude(), n);
@@ -420,7 +455,7 @@ public class FComplexProd implements FComplex {
             double valueRe = tmp * Math.cos((phase + (2 * i * Math.PI)) / n);
             double valueIm = tmp * Math.sin((phase + (2 * i * Math.PI)) / n);
 
-            res[i] = factory.getFComplex(valueRe, valueIm);
+            res[i] = copyZero().set(valueRe, valueIm);
         }
 
         return res;
@@ -435,7 +470,7 @@ public class FComplexProd implements FComplex {
     @Override
     public FComplex inverse() {
 
-        factory.getFComplex(1, 0).div(this).applyStateTo(this);
+        copyZero().set(1, 0).div(this).applyStateTo(this);
 
         return this;
     }
@@ -450,19 +485,5 @@ public class FComplexProd implements FComplex {
     public FComplex normalize() {
 
         return setMagnitude(1);
-    }
-
-    @Override
-    public FComplex applyStateTo(FComplex ref) {
-
-        ref.applyStateFrom(this);
-
-        return this;
-    }
-
-    @Override
-    public boolean isZero() {
-
-        return getRe() == 0 && getIm() == 0;
     }
 }
