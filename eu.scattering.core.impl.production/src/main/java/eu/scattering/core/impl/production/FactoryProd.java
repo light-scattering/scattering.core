@@ -74,7 +74,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FVector getFVector() {
 
-        return FVectorProd.create(this, epsilon);
+        return FVectorProd.create(epsilon, this::getFPoint);
     }
 
     @Override

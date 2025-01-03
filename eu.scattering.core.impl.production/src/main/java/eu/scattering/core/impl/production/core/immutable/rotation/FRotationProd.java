@@ -1,6 +1,5 @@
 package eu.scattering.core.impl.production.core.immutable.rotation;
 
-import eu.scattering.core.design.elements.algebra.geometry.Geometry;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.elements.engine.rotation.FRotation;
 import eu.scattering.core.transfer.TransferFactory;
@@ -12,7 +11,6 @@ import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONObject;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class FRotationProd implements FRotation {

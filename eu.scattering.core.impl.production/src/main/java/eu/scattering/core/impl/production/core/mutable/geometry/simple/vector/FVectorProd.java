@@ -1,9 +1,10 @@
 package eu.scattering.core.impl.production.core.mutable.geometry.simple.vector;
 
-import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
 import eu.scattering.core.impl.production.core.mutable.geometry.simple.SimplePresetProd;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONArray;
@@ -11,35 +12,33 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
+
+    private Supplier<FPoint> fPointSupplier;
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final FPoint[] origin = new FPoint[2];
-    private final FactoryDesignConcrete factory;
     private final double epsilon;
 
-    private FVectorProd(FactoryDesignConcrete factory, double epsilon) {
+    private FVectorProd(double epsilon, Supplier<FPoint> fPointSupplier) {
 
-        this.factory = factory;
         this.epsilon = epsilon;
+        this.fPointSupplier = fPointSupplier;
     }
 
-    public static FVector create(FactoryDesignConcrete factory, double epsilon) {
-        FVectorProd fVector = new FVectorProd(factory, epsilon);
+    public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier) {
+        FVectorProd fVector = new FVectorProd(epsilon, fPointSupplier);
 
-        fVector.origin[0] = factory.getFPoint();
-        fVector.origin[1] = factory.getFPoint();
+        fVector.origin[0] = fPointSupplier.get();
+        fVector.origin[1] = fPointSupplier.get();
 
         return fVector;
-    }
-
-    public static FVector createRef(FactoryDesignConcrete factory, double epsilon) {
-
-        return new FVectorProd(factory, epsilon);
     }
 
     @Override
@@ -328,15 +327,15 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     public FVector importFromJSON(JSONObject json) {
         JSONArray structure = json.getJSONArray("vector");
 
-        setRefBase(factory.getFPoint().importFromJSON(structure.getJSONObject(0)));
-        setRefHead(factory.getFPoint().importFromJSON(structure.getJSONObject(1)));
+        setRefBase(fPointSupplier.get().importFromJSON(structure.getJSONObject(0)));
+        setRefHead(fPointSupplier.get().importFromJSON(structure.getJSONObject(1)));
 
         return this;
     }
 
     @Override
     public FVector copy() {
-        FVector fVector = FVectorProd.create(factory, epsilon);
+        FVector fVector = FVectorProd.create(epsilon, fPointSupplier);
 
         fVector.setRefBase(getRefBase().copy());
         fVector.setRefHead(getRefHead().copy());
@@ -348,8 +347,8 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     public FVector copyZero() {
         FVector fVector = copy();
 
-        fVector.setRefBase(fVector.getRefBase().copyZero());
-        fVector.setRefHead(fVector.getRefHead().copyZero());
+        fVector.setRefBase(fPointSupplier.get());
+        fVector.setRefHead(fPointSupplier.get());
 
         return fVector;
     }
@@ -397,31 +396,33 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
 
     @Override
     public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+        var copyZeroVector = copyZero();
 
-        return isExact(factory.getFVector(bX, bY, bZ, hX, hY, hZ));
+        return isExact(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
     }
 
     @Override
     public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+        var copyZeroVector = copyZero();
 
-        return isSimilar(factory.getFVector(bX, bY, bZ, hX, hY, hZ));
+        return isSimilar(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
     }
 
     @Override
     public FVector moveBaseToCenter() {
 
-        return moveBase(factory.getFPoint());
+        return moveBase(fPointSupplier.get());
     }
 
     @Override
     public FVector moveBase(double bX, double bY, double bZ) {
 
-        return moveBase(factory.getFPoint(bX, bY, bZ));
+        return moveBase(fPointSupplier.get().set(bX, bY, bZ));
     }
 
     @Override
     public FVector moveBase(FPoint base) {
-        FPoint translation = factory.getFPoint(base).sub(getRefBase());
+        FPoint translation = fPointSupplier.get().applyStateFrom(base).sub(getRefBase());
 
         getRefBase().applyStateFrom(base);
         getRefHead().add(translation);
@@ -432,18 +433,18 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
     @Override
     public FVector moveHeadToCenter() {
 
-        return moveHead(factory.getFPoint());
+        return moveHead(fPointSupplier.get());
     }
 
     @Override
     public FVector moveHead(double hX, double hY, double hZ) {
 
-        return moveHead(factory.getFPoint(hX, hY, hZ));
+        return moveHead(fPointSupplier.get().set(hX, hY, hZ));
     }
 
     @Override
     public FVector moveHead(FPoint head) {
-        FPoint translation = factory.getFPoint().applyStateFrom(head).sub(getRefHead());
+        FPoint translation = fPointSupplier.get().applyStateFrom(head).sub(getRefHead());
 
         getRefBase().add(translation);
         getRefHead().applyStateFrom(head);
@@ -778,7 +779,7 @@ public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
         }
 
         double magnitude = getLength();
-        FVector fVectorRef = factory.getFVector(ref.getRefBase().copy(), ref.getRefHead().copy());
+        FVector fVectorRef = copyZero().set(ref.getRefBase().copy(), ref.getRefHead().copy());
         FVector fVectorRot = copy().setCrossProduct(fVectorRef);
 
         fVectorRef.setCrossProduct(fVectorRot).setLength(magnitude);
