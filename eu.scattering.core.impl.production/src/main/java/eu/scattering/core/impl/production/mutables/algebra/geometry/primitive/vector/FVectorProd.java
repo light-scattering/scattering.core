@@ -1,8 +1,8 @@
-package eu.scattering.core.impl.production.mutables.algebra.geometry.simple.vector;
+package eu.scattering.core.impl.production.mutables.algebra.geometry.primitive.vector;
 
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.impl.production.mutables.algebra.geometry.simple.SimplePresetProd;
+import eu.scattering.core.impl.production.mutables.algebra.geometry.primitive.support.PrimitivePresetDef;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class FVectorProd extends SimplePresetProd<FVector> implements FVector {
+public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     private Supplier<FPoint> fPointSupplier;

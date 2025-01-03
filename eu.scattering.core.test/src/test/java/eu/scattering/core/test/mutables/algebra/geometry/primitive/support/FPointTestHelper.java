@@ -1,4 +1,4 @@
-package eu.scattering.core.test.mutables.algebra.geometry.simple.support;
+package eu.scattering.core.test.mutables.algebra.geometry.primitive.support;
 
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +27,6 @@ public class FPointTestHelper {
     }
 
     public static void testReference(Function<FPoint, FPoint> exe, FPoint ref) {
-
         FPoint result = exe.apply(ref);
 
         assertSame(result, ref, "The reference should not change");

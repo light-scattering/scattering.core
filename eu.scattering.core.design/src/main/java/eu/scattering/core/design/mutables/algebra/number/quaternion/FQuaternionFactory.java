@@ -1,5 +1,7 @@
 package eu.scattering.core.design.mutables.algebra.number.quaternion;
 
+import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
+
 public interface FQuaternionFactory {
 
     FQuaternion getFQuaternion();
@@ -12,5 +14,10 @@ public interface FQuaternionFactory {
     default FQuaternion getFQuaternion(double re) {
 
         return getFQuaternion().setRe(re);
+    }
+
+    default FQuaternion getFQuaternion(FPos4D origin) {
+
+        return getFQuaternion().set(origin);
     }
 }

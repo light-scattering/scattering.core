@@ -1,7 +1,7 @@
-package eu.scattering.core.impl.production.mutables.algebra.geometry.simple.point;
+package eu.scattering.core.impl.production.mutables.algebra.geometry.primitive;
 
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.impl.production.mutables.algebra.geometry.simple.SimplePresetProd;
+import eu.scattering.core.impl.production.mutables.algebra.geometry.primitive.support.PrimitivePresetDef;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
@@ -10,9 +10,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
+import static eu.scattering.core.impl.production.configurations.NameConfig.JSON_TYPE;
+
+public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final String JSON_MAIN = "point";
+    private static final String JSON_VAL = "val";
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -21,14 +26,14 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     private final double[] origin = { 0.0, 0.0, 0.0 };
     private final double epsilon;
 
-    private FPointProd(double epsilon) {
+    private FPointDef(double epsilon) {
 
         this.epsilon = epsilon;
     }
 
     public static FPoint create(double epsilon) {
 
-        return new FPointProd(epsilon);
+        return new FPointDef(epsilon);
     }
 
     @Override
@@ -97,9 +102,18 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public FPos3D toFPos3D() {
+    public FPoint applyStateFrom(JSONObject json) {
 
-        return factory.getFPos3D(getX(), getY(), getZ());
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var x = structure.getDouble(0);
+        var y = structure.getDouble(1);
+        var z = structure.getDouble(2);
+
+        return set(x, y, z);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -141,35 +155,7 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     @Override
-    public boolean isZero() {
-
-        return getX() == 0 && getY() == 0 && getZ() == 0;
-    }
-
-    @Override
-    public boolean isNonDirectional() {
-
-        return isSimilar(0, 0, 0);
-    }
-
-    @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-
-        json.append("point", getX());
-        json.append("point", getY());
-        json.append("point", getZ());
-
-        return json;
-    }
-
-    @Override
-    public FPoint applyStateFrom(JSONObject json) {
-        JSONArray structure = json.getJSONArray("point");
-
-        setX(structure.getDouble(0));
-        setY(structure.getDouble(1));
-        setZ(structure.getDouble(2));
+    public FPoint self() {
 
         return this;
     }
@@ -177,44 +163,60 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-        return FPointProd.create(epsilon).applyStateFrom(this);
+        return FPointDef.create(epsilon).applyStateFrom(this);
     }
 
     @Override
     public FPoint copyZero() {
 
-        return FPointProd.create(epsilon);
+        return FPointDef.create(epsilon);
     }
 
     @Override
-    public FPoint self() {
+    public FPos3D toFPos3D() {
 
-        return this;
+        return factory.getFPos3D(getX(), getY(), getZ());
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.append(JSON_VAL, getX());
+        json.append(JSON_VAL, getY());
+        json.append(JSON_VAL, getZ());
+
+        return json;
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
-        int hashCode = 7;
 
-        hashCode = 31 * hashCode + (int) (getX() * 1000);
-        hashCode = 31 * hashCode + (int) (getY() * 1000);
-        hashCode = 31 * hashCode + (int) (getZ() * 1000);
+        return Objects.hash(getX(), getY(), getZ());
+    }
 
-        return hashCode;
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FPoint) {
+            FPoint ref = (FPoint) object;
+
+            return getX() == ref.getX() && getY() == ref.getY() && getZ() == ref.getZ();
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public List<FPoint> disassemble() {
-        List<FPoint> fPointList = new ArrayList<>();
-
-        fPointList.add(this);
-
-        return fPointList;
-    }
 
     @Override
     public FPoint add(double x, double y, double z) {
@@ -372,6 +374,27 @@ public class FPointProd extends SimplePresetProd<FPoint> implements FPoint {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public List<FPoint> disassemble() {
+        List<FPoint> fPointList = new ArrayList<>();
+
+        fPointList.add(this);
+
+        return fPointList;
+    }
+
+    @Override
+    public boolean isZero() {
+
+        return getX() == 0 && getY() == 0 && getZ() == 0;
+    }
+
+    @Override
+    public boolean isNonDirectional() {
+
+        return isSimilar(0, 0, 0);
+    }
 
     @Override
     public double getDistanceP2(FPoint ref) {

@@ -3,6 +3,7 @@ package eu.scattering.core.test.mutables.algebra.number;
 import eu.scattering.core.design.mutables.algebra.number.complex.FComplex;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.algebra.number.support.FComplexTestHelper;
+import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -39,6 +40,19 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(1, 2);
 
             Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fComplex.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(2, fComplex.getIm(),
+                            "The imaginary part is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Set values with FPos2D")
+        void constructWithFPos2D() {
+            FComplex fComplex = factory.getFComplex(factory.getFPos2D(1, 2));
+
+            Assertions.assertAll("Updated values are incorrect",
                     () -> assertEquals(1, fComplex.getRe(),
                             "The real part is incorrect"),
                     () -> assertEquals(2, fComplex.getIm(),
@@ -118,6 +132,21 @@ public class FComplexTest {
                             "The real part is incorrect"),
                     () -> assertEquals(1, fComplex.getIm(),
                             "The imaginary part is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Export to FPos2D")
+        void toFPos2D() {
+            FComplex fComplex = factory.getFComplex();
+
+            fComplex.set(1, 2);
+
+            FPos2D fPos2D = fComplex.toFPos2D();
+
+            Assertions.assertAll("Updated values are incorrect",
+                    () -> assertEquals(1, fPos2D.getD0(), "The D0 value is incorrect"),
+                    () -> assertEquals(2, fPos2D.getD1(), "The D1 value is incorrect")
             );
         }
     }

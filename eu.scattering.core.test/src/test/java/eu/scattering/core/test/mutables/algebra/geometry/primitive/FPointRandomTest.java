@@ -1,9 +1,9 @@
-package eu.scattering.core.test.mutables.algebra.geometry.simple;
+package eu.scattering.core.test.mutables.algebra.geometry.primitive;
 
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.helpers.engine.FRandomHelper;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.test.mutables.algebra.geometry.simple.support.FPointTestHelper;
+import eu.scattering.core.test.mutables.algebra.geometry.primitive.support.FPointTestHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,5 +59,4 @@ public class FPointRandomTest {
 
         FPointTestHelper.testReference(random::rndAngle, fPoint);
     }
-
 }

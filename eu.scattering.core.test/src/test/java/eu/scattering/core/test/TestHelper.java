@@ -6,15 +6,16 @@ import eu.scattering.core.design.mutables.algebra.number.complex.FComplex;
 import eu.scattering.core.design.mutables.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
 
 import java.util.Arrays;
 
 import static eu.scattering.core.test.Configuration.factory;
-import static eu.scattering.core.test.Configuration.random;
 
 public class TestHelper {
 
     public static final double range = 10000;
+    public static final FPairPos4D range4D = factory.getFPositionHelper().getFPairPos4DWithRange(range);
     public static final FPairPos3D range3D = factory.getFPositionHelper().getFPairPos3DWithRange(range);
     public static final FPairPos2D range2D = factory.getFPositionHelper().getFPairPos2DWithRange(range);
 
@@ -40,11 +41,7 @@ public class TestHelper {
     }
 
     public static FQuaternion getRandomFQuaternion(FQuaternion... exc) {
-        double re = random.nextDouble(-range, range);
-        double i = random.nextDouble(-range, range);
-        double j = random.nextDouble(-range, range);
-        double k = random.nextDouble(-range, range);
 
-        return factory.getFQuaternion(re, i, j, k);
+        return factory.getFRandomHelper().rndPosition(factory.getFQuaternion(), range4D, exc);
     }
 }

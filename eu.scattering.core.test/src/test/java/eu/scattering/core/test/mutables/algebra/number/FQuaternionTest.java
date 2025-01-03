@@ -3,6 +3,7 @@ package eu.scattering.core.test.mutables.algebra.number;
 import eu.scattering.core.design.mutables.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.algebra.number.support.FQuaternionTestHelper;
+import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -33,6 +34,23 @@ public class FQuaternionTest {
                     () -> assertEquals(0, fQuaternion.getJ(),
                             "The imaginary part (J) is incorrect"),
                     () -> assertEquals(0, fQuaternion.getK(),
+                            "The imaginary part (K) is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Set values with FPos4D")
+        void constructWithFPos4D() {
+            FQuaternion fQuaternion = factory.getFQuaternion(factory.getFPos4D(1, 2, 3, 4));
+
+            Assertions.assertAll("Validate FQuaternion values",
+                    () -> assertEquals(1, fQuaternion.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(2, fQuaternion.getI(),
+                            "The imaginary part (I) is incorrect"),
+                    () -> assertEquals(3, fQuaternion.getJ(),
+                            "The imaginary part (J) is incorrect"),
+                    () -> assertEquals(4, fQuaternion.getK(),
                             "The imaginary part (K) is incorrect")
             );
         }
@@ -201,6 +219,23 @@ public class FQuaternionTest {
                             "The imaginary part (J) is incorrect"),
                     () -> assertEquals(1, fQuaternion.getK(),
                             "The imaginary part (K) is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Export to FPos4D")
+        void toFPos4D() {
+            FQuaternion fQuaternion = factory.getFQuaternion();
+
+            fQuaternion.set(1, 2, 3, 4);
+
+            FPos4D fPos4D = fQuaternion.toFPos4D();
+
+            Assertions.assertAll("Updated values are incorrect",
+                    () -> assertEquals(1, fPos4D.getD0(), "The D0 value is incorrect"),
+                    () -> assertEquals(2, fPos4D.getD1(), "The D1 value is incorrect"),
+                    () -> assertEquals(3, fPos4D.getD2(), "The D1 value is incorrect"),
+                    () -> assertEquals(4, fPos4D.getD3(), "The D1 value is incorrect")
             );
         }
     }

@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.production.mutables.algebra.geometry.simple;
+package eu.scattering.core.impl.production.mutables.algebra.geometry.primitive.support;
 
 import eu.scattering.core.design.mutables.algebra.geometry.Geometry;
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.Primitive;
@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class SimplePresetProd<T extends Primitive<T>> implements Primitive<T> {
+public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Primitive<T> {
 
+    // TODO - remove
     @Override
     public int hashCode() {
         int hashCode = 7;
@@ -21,6 +22,14 @@ public abstract class SimplePresetProd<T extends Primitive<T>> implements Primit
         }
 
         return hashCode;
+    }
+
+    @Override
+    public T applyStateTo(T ref) {
+
+        ref.applyStateFrom(self());
+
+        return self();
     }
 
     @Override
@@ -236,14 +245,7 @@ public abstract class SimplePresetProd<T extends Primitive<T>> implements Primit
         return self();
     }
 
-    @Override
-    public T applyStateTo(T ref) {
-
-        ref.applyStateFrom(self());
-
-        return self();
-    }
-
+    // TODO - remove
     @Override
     public T ext(Consumer<Geometry> exp) {
 
@@ -252,12 +254,14 @@ public abstract class SimplePresetProd<T extends Primitive<T>> implements Primit
         return self();
     }
 
+    // TODO - remove
     @Override
     public List<Double> extDouble(Function<Geometry, List<Double>> exp) {
 
         return exp.apply(self());
     }
 
+    // TODO - remove
     @Override
     public List<Boolean> extBoolean(Function<Geometry, List<Boolean>> exp) {
 

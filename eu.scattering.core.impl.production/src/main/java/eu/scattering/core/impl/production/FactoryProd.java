@@ -17,8 +17,8 @@ import eu.scattering.core.impl.production.mutables.engine.random.FRandomProd;
 import eu.scattering.core.impl.production.mutables.immutable.rotation.FRotationProd;
 import eu.scattering.core.impl.production.mutables.algebra.geometry.advanced.line.FLineProd;
 import eu.scattering.core.impl.production.mutables.algebra.geometry.advanced.plane.FPlaneProd;
-import eu.scattering.core.impl.production.mutables.algebra.geometry.simple.point.FPointProd;
-import eu.scattering.core.impl.production.mutables.algebra.geometry.simple.vector.FVectorProd;
+import eu.scattering.core.impl.production.mutables.algebra.geometry.primitive.FPointDef;
+import eu.scattering.core.impl.production.mutables.algebra.geometry.primitive.vector.FVectorProd;
 import eu.scattering.core.impl.production.mutables.algebra.number.FComplexDef;
 import eu.scattering.core.impl.production.mutables.algebra.number.FQuaternionDef;
 import eu.scattering.core.impl.production.support.helper.FAngleHelperProd;
@@ -68,7 +68,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FPoint getFPoint() {
 
-        return FPointProd.create(epsilon);
+        return FPointDef.create(epsilon);
     }
 
     @Override

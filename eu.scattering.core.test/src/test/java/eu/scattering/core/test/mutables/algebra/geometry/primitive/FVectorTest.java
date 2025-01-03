@@ -1,8 +1,8 @@
-package eu.scattering.core.test.mutables.algebra.geometry.simple;
+package eu.scattering.core.test.mutables.algebra.geometry.primitive;
 
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.test.mutables.algebra.geometry.simple.support.FVectorTestHelper;
+import eu.scattering.core.test.mutables.algebra.geometry.primitive.support.FVectorTestHelper;
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
 import org.junit.jupiter.api.*;
 

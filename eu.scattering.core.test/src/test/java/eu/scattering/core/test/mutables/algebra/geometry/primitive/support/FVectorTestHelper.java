@@ -1,4 +1,4 @@
-package eu.scattering.core.test.mutables.algebra.geometry.simple.support;
+package eu.scattering.core.test.mutables.algebra.geometry.primitive.support;
 
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
