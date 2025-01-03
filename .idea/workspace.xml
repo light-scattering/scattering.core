@@ -23,23 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/elements/Core.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/elements/Core.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/elements/algebra/Algebra.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/elements/algebra/Algebra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/engine/random/FRandomProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/engine/random/FRandomProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/immutable/rotation/FRotationProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/immutable/rotation/FRotationProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/advanced/line/FLineProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/advanced/line/FLineProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/advanced/plane/FPlaneProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/advanced/plane/FPlaneProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/simple/point/FPointProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/simple/point/FPointProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/simple/vector/FVectorProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/geometry/simple/vector/FVectorProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/number/complex/FComplexProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/number/complex/FComplexProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/number/quaternion/FQuaternionProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/core/mutable/number/quaternion/FQuaternionProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/advanced/FLineTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/advanced/FLineTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/advanced/FPlaneTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/advanced/FPlaneTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/simple/FPointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/simple/FPointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/simple/FVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/simple/FVectorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/number/FComplexTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/number/FComplexTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/number/FQuaternionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/number/FQuaternionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/FactoryProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/FactoryProd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/mutables/algebra/number/quaternion/FQuaternionProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/java/eu/scattering/core/impl/production/mutables/algebra/number/quaternion/FQuaternionDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/algebra/number/FQuaternionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/algebra/number/FQuaternionTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,53 +158,7 @@
       <recent name="eu.scattering.core.design.core.data.positionF3D" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FComplexTest">
-    <configuration name="CoreFeatures.copyZero" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.core.mutable.number.FComplexTest$CoreFeatures.copyZero&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="CoreFeatures.copyZeroValidate" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.core.mutable.number.FComplexTest$CoreFeatures.copyZeroValidate&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.CoreFeatures.parseJSON">
     <configuration name="CoreFeatures.parseJSON" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -232,7 +172,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.core.mutable.number.FComplexTest$CoreFeatures.parseJSON&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.algebra.number.FQuaternionTest$CoreFeatures.parseJSON&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -242,7 +182,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FComplexBase.setWithFPos2D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FQuaternionBase.setWithFPos4D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -255,7 +195,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.core.mutable.number.FComplexTest$FComplexBase.setWithFPos2D&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.algebra.number.FQuaternionTest$FQuaternionBase.setWithFPos4D&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -265,7 +205,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FComplexTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FQuaternionTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -278,7 +218,49 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.core.mutable.number.FComplexTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.algebra.number.FQuaternionTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.test:test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.transfer'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.transfer:test" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -290,11 +272,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FComplexTest" />
-        <item itemvalue="Gradle.CoreFeatures.copyZeroValidate" />
-        <item itemvalue="Gradle.CoreFeatures.copyZero" />
         <item itemvalue="Gradle.CoreFeatures.parseJSON" />
-        <item itemvalue="Gradle.FComplexBase.setWithFPos2D" />
+        <item itemvalue="Gradle.FQuaternionBase.setWithFPos4D" />
+        <item itemvalue="Gradle.FQuaternionTest" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.transfer'" />
       </list>
     </recent_temporary>
   </component>
@@ -519,7 +501,7 @@
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/core/mutable/geometry/advanced/FLineTest.java</url>
+          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/algebra/geometry/advanced/FLineTest.java</url>
           <line>715</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
@@ -532,6 +514,11 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/position/FPairPos2DITest.java</url>
           <line>44</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/algebra/number/FQuaternionTest.java</url>
+          <line>1240</line>
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

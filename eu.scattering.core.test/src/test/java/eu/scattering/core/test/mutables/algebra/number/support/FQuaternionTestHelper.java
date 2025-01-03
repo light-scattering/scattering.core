@@ -10,8 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FQuaternionTestHelper {
 
-    public static void restReference(BiFunction<FQuaternion, FQuaternion, FQuaternion> exe,
-                                     FQuaternion ref, FQuaternion arg) {
+    public static void restReference(BiFunction<FQuaternion, FQuaternion, FQuaternion> exe, FQuaternion ref, FQuaternion arg) {
 
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");
@@ -27,7 +26,6 @@ public class FQuaternionTestHelper {
     }
 
     public static void restReference(Function<FQuaternion, FQuaternion> exe, FQuaternion ref) {
-
         FQuaternion result = exe.apply(ref);
 
         assertSame(result, ref, "The reference should not change");

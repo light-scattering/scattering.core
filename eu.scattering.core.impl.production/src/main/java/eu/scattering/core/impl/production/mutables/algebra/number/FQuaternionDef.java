@@ -1,30 +1,36 @@
-package eu.scattering.core.impl.production.mutables.algebra.number.quaternion;
+package eu.scattering.core.impl.production.mutables.algebra.number;
 
-import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.mutables.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class FQuaternionProd implements FQuaternion {
+import java.util.Objects;
+
+import static eu.scattering.core.impl.production.configurations.NameConfig.JSON_TYPE;
+
+public class FQuaternionDef implements FQuaternion {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final String JSON_MAIN = "qt";
+    private static final String JSON_VAL = "val";
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private final double[] origin = { 0.0, 0.0, 0.0, 0.0 };
-    private final FactoryDesignConcrete factory;
     private final double epsilon;
 
-    private FQuaternionProd(FactoryDesignConcrete factory, double epsilon) {
+    private FQuaternionDef(double epsilon) {
 
-        this.factory = factory;
         this.epsilon = epsilon;
     }
 
-    public static FQuaternion create(FactoryDesignConcrete factory, double epsilon) {
+    public static FQuaternion create(double epsilon) {
 
-        return new FQuaternionProd(factory, epsilon);
+        return new FQuaternionDef(epsilon);
     }
 
     @Override
@@ -89,9 +95,9 @@ public class FQuaternionProd implements FQuaternion {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FQuaternion applyStateFrom(FQuaternion ref) {
+    public FQuaternion set(double re, double i, double j, double k) {
 
-        return set(ref.getRe(), ref.getI(), ref.getJ(), ref.getK());
+        return setRe(re).setI(i).setJ(j).setK(k);
     }
 
     @Override
@@ -101,15 +107,33 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public FQuaternion set(double re, double i, double j, double k) {
+    public FQuaternion applyStateTo(FQuaternion ref) {
 
-        return setRe(re).setI(i).setJ(j).setK(k);
+        ref.applyStateFrom(this);
+
+        return this;
     }
 
     @Override
-    public FPos4D toFPos4D() {
+    public FQuaternion applyStateFrom(FQuaternion ref) {
 
-        return factory.getFPos4D(getRe(), getI(), getJ(), getK());
+        return set(ref.getRe(), ref.getI(), ref.getJ(), ref.getK());
+    }
+
+    @Override
+    public FQuaternion applyStateFrom(JSONObject json) {
+
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var re = structure.getDouble(0);
+        var i = structure.getDouble(1);
+        var j = structure.getDouble(2);
+        var k = structure.getDouble(3);
+
+        return set(re, i, j, k);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -125,8 +149,7 @@ public class FQuaternionProd implements FQuaternion {
             return true;
         }
 
-        return getRe() == ref.getRe() && getI() == ref.getI() &&
-                getJ() == ref.getJ() && getK() == ref.getK();
+        return getRe() == ref.getRe() && getI() == ref.getI() && getJ() == ref.getJ() && getK() == ref.getK();
     }
 
     @Override
@@ -149,27 +172,7 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public JSONObject toJSON() {
-
-        JSONObject json = new JSONObject();
-
-        json.append("quaternion", getRe());
-        json.append("quaternion", getI());
-        json.append("quaternion", getJ());
-        json.append("quaternion", getK());
-
-        return json;
-    }
-
-    @Override
-    public FQuaternion applyStateFrom(JSONObject json) {
-
-        JSONArray structure = json.getJSONArray("quaternion");
-
-        setRe(structure.getDouble(0));
-        setI(structure.getDouble(1));
-        setJ(structure.getDouble(2));
-        setK(structure.getDouble(3));
+    public FQuaternion self() {
 
         return this;
     }
@@ -177,33 +180,58 @@ public class FQuaternionProd implements FQuaternion {
     @Override
     public FQuaternion copy() {
 
-        return FQuaternionProd.create(factory, epsilon).applyStateFrom(this);
+        return copyZero().applyStateFrom(this);
     }
 
     @Override
     public FQuaternion copyZero() {
 
-        return FQuaternionProd.create(factory, epsilon);
+        return FQuaternionDef.create(epsilon);
     }
 
     @Override
-    public FQuaternion self() {
+    public FPos4D toFPos4D() {
 
-        return this;
+        return factory.getFPos4D(getRe(), getI(), getJ(), getK());
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.append(JSON_VAL, getRe());
+        json.append(JSON_VAL, getI());
+        json.append(JSON_VAL, getJ());
+        json.append(JSON_VAL, getK());
+
+        return json;
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
-        int hashCode = 7;
 
-        hashCode = 31 * hashCode + (int) (getRe() * 100);
-        hashCode = 31 * hashCode + (int) (getI() * 100);
-        hashCode = 31 * hashCode + (int) (getJ() * 100);
-        hashCode = 31 * hashCode + (int) (getK() * 100);
+        return Objects.hash(getRe(), getI(), getJ(), getK());
+    }
 
-        return hashCode;
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FQuaternion) {
+            FQuaternion ref = (FQuaternion) object;
+
+            return getRe() == ref.getRe() && getI() == ref.getI() && getJ() == ref.getJ() && getK() == ref.getK();
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -432,6 +460,12 @@ public class FQuaternionProd implements FQuaternion {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public boolean isZero() {
+
+        return getRe() == 0 && getI() == 0 && getJ() == 0 && getK() == 0;
+    }
+
+    @Override
     public boolean isExact(double re, double i, double j, double k) {
 
         return getRe() == re && getI() == i && getJ() == j && getK() == k;
@@ -448,15 +482,15 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
-    public double getMagnitude() {
-
-        return Math.sqrt((getRe() * getRe()) + (getI() * getI()) + (getJ() * getJ())+ (getK() * getK()));
-    }
-
-    @Override
     public double getMagnitudeP2() {
 
         return (getRe() * getRe()) + (getI() * getI()) + (getJ() * getJ())+ (getK() * getK());
+    }
+
+    @Override
+    public double getMagnitude() {
+
+        return Math.sqrt((getRe() * getRe()) + (getI() * getI()) + (getJ() * getJ())+ (getK() * getK()));
     }
 
     @Override
@@ -472,6 +506,16 @@ public class FQuaternionProd implements FQuaternion {
     }
 
     @Override
+    public double getDistanceP2(FQuaternion ref) {
+        double distanceRe = Math.pow(Math.abs(getRe() - ref.getRe()), 2);
+        double distanceI = Math.pow(Math.abs(getI() - ref.getI()), 2);
+        double distanceJ = Math.pow(Math.abs(getJ() - ref.getI()), 2);
+        double distanceK = Math.pow(Math.abs(getK() - ref.getK()), 2);
+
+        return distanceRe + distanceI + distanceJ + distanceK;
+    }
+
+    @Override
     public double getDistance(FQuaternion ref) {
         double distanceRe = Math.pow(Math.abs(getRe() - ref.getRe()), 2);
         double distanceI = Math.pow(Math.abs(getI() - ref.getI()), 2);
@@ -484,17 +528,8 @@ public class FQuaternionProd implements FQuaternion {
     // TODO - Not implemented
     @Override
     public FQuaternion setDistance(FQuaternion ref, double distance) {
+
         return null;
-    }
-
-    @Override
-    public double getDistanceP2(FQuaternion ref) {
-        double distanceRe = Math.pow(Math.abs(getRe() - ref.getRe()), 2);
-        double distanceI = Math.pow(Math.abs(getI() - ref.getI()), 2);
-        double distanceJ = Math.pow(Math.abs(getJ() - ref.getI()), 2);
-        double distanceK = Math.pow(Math.abs(getK() - ref.getK()), 2);
-
-        return distanceRe + distanceI + distanceJ + distanceK;
     }
 
     @Override
@@ -516,6 +551,7 @@ public class FQuaternionProd implements FQuaternion {
     // TODO - Not implemented
     @Override
     public FQuaternion[] root(int n) {
+
         return new FQuaternion[0];
     }
 
@@ -548,20 +584,6 @@ public class FQuaternionProd implements FQuaternion {
     public FQuaternion normalize() {
 
         return setMagnitude(1);
-    }
-
-    @Override
-    public FQuaternion applyStateTo(FQuaternion ref) {
-
-        ref.applyStateFrom(this);
-
-        return this;
-    }
-
-    @Override
-    public boolean isZero() {
-
-        return getRe() == 0 && getI() == 0 && getJ() == 0 && getK() == 0;
     }
 }
 

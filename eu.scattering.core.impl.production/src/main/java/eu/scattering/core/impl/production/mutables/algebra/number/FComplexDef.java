@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.production.mutables.algebra.number.complex;
+package eu.scattering.core.impl.production.mutables.algebra.number;
 
 import eu.scattering.core.design.mutables.algebra.number.complex.FComplex;
 import eu.scattering.core.transfer.TransferFactory;

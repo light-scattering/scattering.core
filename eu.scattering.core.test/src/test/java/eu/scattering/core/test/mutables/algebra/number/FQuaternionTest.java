@@ -3,6 +3,7 @@ package eu.scattering.core.test.mutables.algebra.number;
 import eu.scattering.core.design.mutables.algebra.number.quaternion.FQuaternion;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.algebra.number.support.FQuaternionTestHelper;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Configuration.*;
@@ -95,6 +96,25 @@ public class FQuaternionTest {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
             fQuaternion.applyStateFrom(factory.getFQuaternion(1, 2, 3, 4));
+
+            Assertions.assertAll("Validate FQuaternion values",
+                    () -> assertEquals(1, fQuaternion.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(2, fQuaternion.getI(),
+                            "The imaginary part (I) is incorrect"),
+                    () -> assertEquals(3, fQuaternion.getJ(),
+                            "The imaginary part (J) is incorrect"),
+                    () -> assertEquals(4, fQuaternion.getK(),
+                            "The imaginary part (K) is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Set values with FPos4D")
+        void setWithFPos4D() {
+            FQuaternion fQuaternion = factory.getFQuaternion();
+
+            fQuaternion.set(factory.getFPos4D(1, 2, 3, 4));
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(1, fQuaternion.getRe(),
@@ -1024,7 +1044,7 @@ public class FQuaternionTest {
 
         @Test
         @DisplayName("Div Im (throw ArithmeticException)")
-        void divImsThrowArithmeticException() {
+        void divImThrowArithmeticException() {
 
             Assertions.assertAll("Division by zero",
                     () -> Assertions.assertThrows(ArithmeticException.class,
@@ -1215,7 +1235,10 @@ public class FQuaternionTest {
         @DisplayName("JSON parser")
         void parseJSON() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            FQuaternion fQuaternionOp = factory.getFQuaternion().applyStateFrom(fQuaternionRef.toJSON());
+
+            JSONObject json = fQuaternionRef.toJSON();
+
+            FQuaternion fQuaternionOp = factory.getFQuaternion().applyStateFrom(json);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe, fQuaternionOp.getRe(),
@@ -1429,6 +1452,34 @@ public class FQuaternionTest {
             FQuaternion fQuaternionRef = factory.getFQuaternion();
 
             FQuaternionTestHelper.testValue(FQuaternion::hashCode, fQuaternionRef);
+        }
+
+        @Test
+        @DisplayName("Copy zero")
+        void copyZero() {
+            FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
+            FQuaternion fQuaternion = fQuaternionRef.copyZero();
+
+            Assertions.assertAll("Validate copy",
+                    () -> assertNotSame(fQuaternionRef, fQuaternion,
+                            "FQuaternion objects contain different values"),
+                    () -> assertEquals(0, fQuaternion.getRe(),
+                            "FQuaternion Re values are incorrect"),
+                    () -> assertEquals(0, fQuaternion.getI(),
+                            "FQuaternion I values are incorrect"),
+                    () -> assertEquals(0, fQuaternion.getJ(),
+                            "FQuaternion J values are incorrect"),
+                    () -> assertEquals(0, fQuaternion.getK(),
+                            "FQuaternion K values are incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Copy (validate)")
+        void copyZeroValidate() {
+            FQuaternion fQuaternion = factory.getFQuaternion();
+
+            FQuaternionTestHelper.testValue(FQuaternion::copyZero, fQuaternion);
         }
 
         @Test
