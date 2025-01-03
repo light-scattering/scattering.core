@@ -1,9 +1,9 @@
 package eu.scattering.core.impl.production.support.helper;
 
-import eu.scattering.core.design.elements.algebra.geometry.Geometry;
-import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.elements.engine.rotation.FRotation;
+import eu.scattering.core.design.mutables.algebra.geometry.Geometry;
+import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutables.engine.rotation.FRotation;
 import eu.scattering.core.design.helpers.engine.FRotationHelper;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 

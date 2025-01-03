@@ -1,10 +1,10 @@
 package eu.scattering.core.impl.production.support.helper;
 
-import eu.scattering.core.design.elements.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.elements.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.elements.algebra.number.complex.FComplex;
-import eu.scattering.core.design.elements.algebra.number.quaternion.FQuaternion;
-import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutables.algebra.number.complex.FComplex;
+import eu.scattering.core.design.mutables.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.mutables.engine.random.FRandom;
 import eu.scattering.core.design.helpers.engine.FRandomHelper;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;

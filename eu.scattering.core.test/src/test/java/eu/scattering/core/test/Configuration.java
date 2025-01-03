@@ -1,7 +1,7 @@
 package eu.scattering.core.test;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
-import eu.scattering.core.design.elements.engine.random.FRandom;
+import eu.scattering.core.design.mutables.engine.random.FRandom;
 import eu.scattering.core.design.helpers.engine.FRotationHelper;
 import eu.scattering.core.impl.production.FactoryProd;
 

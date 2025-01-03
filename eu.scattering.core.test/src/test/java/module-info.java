@@ -5,10 +5,10 @@ module eu.scattering.core.test {
     requires eu.scattering.core.design;
     requires eu.scattering.core.impl.production;
     requires eu.scattering.core.transfer;
-    opens eu.scattering.core.test.core.mutable.geometry.simple;
-    opens eu.scattering.core.test.core.mutable.geometry.advanced;
-    opens eu.scattering.core.test.core.mutable.number;
-    opens eu.scattering.core.test.core.immutable;
-    opens eu.scattering.core.test.core.engine;
+    opens eu.scattering.core.test.mutables.algebra.geometry.simple;
+    opens eu.scattering.core.test.mutables.algebra.geometry.advanced;
+    opens eu.scattering.core.test.mutables.algebra.number;
+    opens eu.scattering.core.test.mutables.immutable;
+    opens eu.scattering.core.test.mutables.engine;
     opens eu.scattering.core.test;
 }

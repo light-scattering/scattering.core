@@ -1,0 +1,9 @@
+package eu.scattering.core.design.mutables.algebra.number.quaternion;
+
+import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
+
+public interface FQuaternionEngineRandom {
+
+    FQuaternion rndPosition(FQuaternion origin, FPairPos4D range, FQuaternion... exclusion);
+    FQuaternion rndPosition(FQuaternion origin, double radius, FQuaternion... exclusion);
+}
