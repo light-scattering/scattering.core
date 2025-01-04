@@ -12,10 +12,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
+
+import static eu.scattering.core.impl.production.configurations.NameConfig.JSON_TYPE;
 
 public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final String JSON_MAIN = "point";
+    private static final String JSON_VAL = "val";
 
     private final Supplier<FPoint> fPointSupplier;
 
@@ -117,14 +122,6 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector applyStateFrom(FVector ref) {
-        setBase(ref.getRefBase());
-        setHead(ref.getRefHead());
-
-        return this;
-    }
-
-    @Override
     public FVector set(FPoint base, FPoint head) {
         setBase(base);
         setHead(head);
@@ -156,6 +153,52 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public FVector setBase(FPos3D base) {
+        setBase(base.getD0(), base.getD1(), base.getD2());
+
+        return this;
+    }
+
+    @Override
+    public double getBaseX() {
+
+        return getRefBase().getX();
+    }
+
+    @Override
+    public double getBaseY() {
+
+        return getRefBase().getY();
+    }
+
+    @Override
+    public double getBaseZ() {
+
+        return getRefBase().getZ();
+    }
+
+    @Override
+    public FVector setBaseX(double bX) {
+        getRefBase().setX(bX);
+
+        return this;
+    }
+
+    @Override
+    public FVector setBaseY(double bY) {
+        getRefBase().setY(bY);
+
+        return this;
+    }
+
+    @Override
+    public FVector setBaseZ(double bZ) {
+        getRefBase().setZ(bZ);
+
+        return this;
+    }
+
+    @Override
     public FVector setHead(double hX, double hY, double hZ) {
         getRefHead().set(hX, hY, hZ);
 
@@ -170,40 +213,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getBaseX() {
-
-        return getRefBase().getX();
-    }
-
-    @Override
-    public FVector setBaseX(double bX) {
-        getRefBase().setX(bX);
-
-        return this;
-    }
-
-    @Override
-    public double getBaseY() {
-
-        return getRefBase().getY();
-    }
-
-    @Override
-    public FVector setBaseY(double bY) {
-        getRefBase().setY(bY);
-
-        return this;
-    }
-
-    @Override
-    public double getBaseZ() {
-
-        return getRefBase().getZ();
-    }
-
-    @Override
-    public FVector setBaseZ(double bZ) {
-        getRefBase().setZ(bZ);
+    public FVector setHead(FPos3D head) {
+        setHead(head.getD0(), head.getD1(), head.getD2());
 
         return this;
     }
@@ -215,16 +226,22 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public double getHeadY() {
+
+        return getRefHead().getY();
+    }
+
+    @Override
+    public double getHeadZ() {
+
+        return getRefHead().getZ();
+    }
+
+    @Override
     public FVector setHeadX(double hX) {
         getRefHead().setX(hX);
 
         return this;
-    }
-
-    @Override
-    public double getHeadY() {
-
-        return getRefHead().getY();
     }
 
     @Override
@@ -235,12 +252,6 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getHeadZ() {
-
-        return getRefHead().getZ();
-    }
-
-    @Override
     public FVector setHeadZ(double hZ) {
         getRefHead().setZ(hZ);
 
@@ -248,20 +259,35 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector setBase(FPos3D base) {
-        setBase(base.getD0(), base.getD1(), base.getD2());
+    public FVector applyStateFrom(FVector ref) {
+        setBase(ref.getRefBase());
+        setHead(ref.getRefHead());
 
         return this;
     }
 
     @Override
-    public FVector setHead(FPos3D head) {
-        setHead(head.getD0(), head.getD1(), head.getD2());
+    public FVector applyStateFrom(JSONObject json) {
 
-        return this;
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var base = fPointSupplier.get().applyStateFrom(structure.getJSONObject(0));
+        var head = fPointSupplier.get().applyStateFrom(structure.getJSONObject(1));
+
+        return set(base, head);
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+        var copyZeroVector = copyZero();
+
+        return isExact(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
+    }
 
     @Override
     public boolean isExact(FVector ref) {
@@ -271,6 +297,13 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         return getRefBase().isExact(ref.getRefBase()) && getRefHead().isExact(ref.getRefHead());
+    }
+
+    @Override
+    public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+        var copyZeroVector = copyZero();
+
+        return isSimilar(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
     }
 
     @Override
@@ -284,21 +317,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-
-        json.append("vector", getRefBase().toJSON());
-        json.append("vector", getRefHead().toJSON());
-
-        return json;
-    }
-
-    @Override
-    public FVector applyStateFrom(JSONObject json) {
-        JSONArray structure = json.getJSONArray("vector");
-
-        setRefBase(fPointSupplier.get().applyStateFrom(structure.getJSONObject(0)));
-        setRefHead(fPointSupplier.get().applyStateFrom(structure.getJSONObject(1)));
+    public FVector self() {
 
         return this;
     }
@@ -324,141 +343,52 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector self() {
+    public FPairPos3D toFPairPos3D() {
 
-        return this;
+        var posA = factory.getFPos3D(getBaseX(), getBaseY(), getBaseZ());
+        var posB = factory.getFPos3D(getHeadX(), getHeadY(), getHeadZ());
+
+        return factory.getFPairPos3D(posA, posB);
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.append(JSON_VAL, getRefBase().toJSON());
+        json.append(JSON_VAL, getRefHead().toJSON());
+
+        return json;
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
-        int hashCode = 7;
 
-        hashCode = 31 * hashCode + getRefBase().hashCode();
-        hashCode = 31 * hashCode + getRefHead().hashCode();
-
-        return hashCode;
-    }
-
-//--------------------------------------------------
-
-    @Override
-    public List<FPoint> disassemble() {
-        List<FPoint> fPointList = new ArrayList<>();
-        fPointList.add(getRefBase());
-        fPointList.add(getRefHead());
-
-        return fPointList;
-    }
-
-//--------------------------------------------------
-
-    @Override
-    public FVector setSphericalCoordinates(double inclination, double azimuth) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
-
-        fCopyLocal.getRefHead().setSphericalCoordinates(inclination, azimuth);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return Objects.hash(getBaseX(), getBaseY(), getBaseZ(), getHeadX(), getHeadY(), getHeadZ());
     }
 
     @Override
-    public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-        var copyZeroVector = copyZero();
+    public boolean equals(Object object) {
 
-        return isExact(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
-    }
+        if (object instanceof FVector) {
+            FVector ref = (FVector) object;
 
-    @Override
-    public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-        var copyZeroVector = copyZero();
-
-        return isSimilar(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
-    }
-
-    @Override
-    public FVector moveBaseToCenter() {
-
-        return moveBase(fPointSupplier.get());
-    }
-
-    @Override
-    public FVector moveBase(double bX, double bY, double bZ) {
-
-        return moveBase(fPointSupplier.get().set(bX, bY, bZ));
-    }
-
-    @Override
-    public FVector moveBase(FPoint base) {
-        FPoint translation = fPointSupplier.get().applyStateFrom(base).sub(getRefBase());
-
-        getRefBase().applyStateFrom(base);
-        getRefHead().add(translation);
-
-        return this;
-    }
-
-    @Override
-    public FVector moveHeadToCenter() {
-
-        return moveHead(fPointSupplier.get());
-    }
-
-    @Override
-    public FVector moveHead(double hX, double hY, double hZ) {
-
-        return moveHead(fPointSupplier.get().set(hX, hY, hZ));
-    }
-
-    @Override
-    public FVector moveHead(FPoint head) {
-        FPoint translation = fPointSupplier.get().applyStateFrom(head).sub(getRefHead());
-
-        getRefBase().add(translation);
-        getRefHead().applyStateFrom(head);
-
-        return this;
-    }
-
-    @Override
-    public FVector shiftForward(double distance) {
-
-        if (isNonDirectional()) {
-            throw new IllegalStateException("The direction of the IFVector is not defined");
+            return getRefBase().equals(ref.getRefBase()) && getRefHead().equals(ref.getRefHead());
         }
 
-        if (distance < 0) {
-            return shiftBackward(-distance);
-        }
-
-        FVector fCopyLocal = copy();
-        fCopyLocal.setLength(distance);
-
-        moveBase(fCopyLocal.getRefHead());
-
-        return this;
+        return false;
     }
 
     @Override
-    public FVector shiftBackward(double distance) {
+    public String toString() {
 
-        if (isNonDirectional()) {
-            throw new IllegalStateException("The direction of the IFVector is not defined");
-        }
-
-        if (distance < 0) {
-            return shiftForward(-distance);
-        }
-
-        FVector fCopyLocal = copy().reflectHead();
-        fCopyLocal.setLength(distance);
-
-        moveBase(fCopyLocal.getRefHead());
-
-        return this;
+        return toJSON().toString();
     }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FVector add(FVector vector) {
@@ -482,22 +412,70 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         return applyStateFrom(fCopyLocal);
     }
 
+    //--------------------------------------------------
+
     @Override
-    public double getLengthAxisX() {
+    public List<FPoint> disassemble() {
+        List<FPoint> fPointList = new ArrayList<>();
+        fPointList.add(getRefBase());
+        fPointList.add(getRefHead());
+
+        return fPointList;
+    }
+
+    @Override
+    public boolean isZero() {
+
+        return getRefBase().isZero() && getRefHead().isZero();
+    }
+
+    @Override
+    public boolean isNonDirectional() {
+
+        return getRefBase().isSimilar(getRefHead());
+    }
+
+    @Override
+    public double getLengthP2() {
+        double distanceX = getRefHead().getX() - getRefBase().getX();
+        double distanceY = getRefHead().getY() - getRefBase().getY();
+        double distanceZ = getRefHead().getZ() - getRefBase().getZ();
+
+        return (distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ);
+    }
+
+    @Override
+    public double getLengthX() {
 
         return Math.abs(getRefHead().getX() - getRefBase().getX());
     }
 
     @Override
-    public double getLengthAxisY() {
+    public double getLengthY() {
 
         return Math.abs(getRefHead().getY() - getRefBase().getY());
     }
 
     @Override
-    public double getLengthAxisZ() {
+    public double getLengthZ() {
 
         return Math.abs(getRefHead().getZ() - getRefBase().getZ());
+    }
+
+    @Override
+    public double getLength() {
+
+        return Math.sqrt(getLengthP2());
+    }
+
+    @Override
+    public FVector setLength(double length) {
+        FVector fCopyLocal = copy().moveBaseToCenter();
+
+        fCopyLocal.getRefHead().setLength(length);
+        fCopyLocal.moveBase(getRefBase());
+
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
@@ -550,84 +528,85 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getLength() {
+    public FVector moveBase(double bX, double bY, double bZ) {
 
-        return Math.sqrt(getLengthP2());
+        return moveBase(fPointSupplier.get().set(bX, bY, bZ));
     }
 
     @Override
-    public double getLengthP2() {
-        double distanceX = getRefHead().getX() - getRefBase().getX();
-        double distanceY = getRefHead().getY() - getRefBase().getY();
-        double distanceZ = getRefHead().getZ() - getRefBase().getZ();
+    public FVector moveBase(FPoint base) {
+        FPoint translation = fPointSupplier.get().applyStateFrom(base).sub(getRefBase());
 
-        return (distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ);
+        getRefBase().applyStateFrom(base);
+        getRefHead().add(translation);
+
+        return this;
     }
 
     @Override
-    public FVector setLength(double length) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
+    public FVector moveBaseToCenter() {
 
-        fCopyLocal.getRefHead().setLength(length);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return moveBase(fPointSupplier.get());
     }
 
     @Override
-    public double getInclination() {
-        FVector fCopyLocal = copy().moveBaseToCenter();
+    public FVector moveHead(double hX, double hY, double hZ) {
 
-        return fCopyLocal.getRefHead().getInclination();
+        return moveHead(fPointSupplier.get().set(hX, hY, hZ));
     }
 
     @Override
-    public FVector setInclination(double inclination) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
+    public FVector moveHead(FPoint head) {
+        FPoint translation = fPointSupplier.get().applyStateFrom(head).sub(getRefHead());
 
-        fCopyLocal.getRefHead().setInclination(inclination);
-        fCopyLocal.moveBase(getRefBase());
+        getRefBase().add(translation);
+        getRefHead().applyStateFrom(head);
 
-        return applyStateFrom(fCopyLocal);
+        return this;
     }
 
     @Override
-    public double getAzimuth() {
-        FVector fCopyLocal = copy().moveBaseToCenter();
+    public FVector moveHeadToCenter() {
 
-        return fCopyLocal.getRefHead().getAzimuth();
+        return moveHead(fPointSupplier.get());
     }
 
     @Override
-    public FVector setAzimuth(double azimuth) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
-
-        fCopyLocal.getRefHead().setAzimuth(azimuth);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
-    }
-
-    @Override
-    public double getAngle(FVector ref) {
+    public FVector shiftForward(double distance) {
 
         if (isNonDirectional()) {
-            throw new IllegalStateException("The direction of the input IFVector is not defined");
+            throw new IllegalStateException("The direction of the IFVector is not defined");
         }
 
-        if (ref.isNonDirectional()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+        if (distance < 0) {
+            return shiftBackward(-distance);
         }
 
-        double angle, dProd, magAB;
-        FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = ref.copy().moveBaseToCenter();
+        FVector fCopyLocal = copy();
+        fCopyLocal.setLength(distance);
 
-        dProd = fCopyLocal.getDotProduct(fCopyExternal);
-        magAB = fCopyLocal.getRefHead().getLength() * fCopyExternal.getRefHead().getLength();
-        angle = Math.acos(dProd / magAB);
+        moveBase(fCopyLocal.getRefHead());
 
-        return Double.isNaN(angle) ? 0 : angle;
+        return this;
+    }
+
+    @Override
+    public FVector shiftBackward(double distance) {
+
+        if (isNonDirectional()) {
+            throw new IllegalStateException("The direction of the IFVector is not defined");
+        }
+
+        if (distance < 0) {
+            return shiftForward(-distance);
+        }
+
+        FVector fCopyLocal = copy().reflectHead();
+        fCopyLocal.setLength(distance);
+
+        moveBase(fCopyLocal.getRefHead());
+
+        return this;
     }
 
     @Override
@@ -761,24 +740,68 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public boolean isZero() {
+    public FVector setSphericalCoordinates(double inclination, double azimuth) {
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        return getRefBase().isZero() && getRefHead().isZero();
+        fCopyLocal.getRefHead().setSphericalCoordinates(inclination, azimuth);
+        fCopyLocal.moveBase(getRefBase());
+
+        return applyStateFrom(fCopyLocal);
     }
 
     @Override
-    public boolean isNonDirectional() {
+    public double getInclination() {
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        return getRefBase().isSimilar(getRefHead());
+        return fCopyLocal.getRefHead().getInclination();
     }
 
     @Override
-    public FPairPos3D toFPairPos3D() {
+    public FVector setInclination(double inclination) {
+        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        var posA = factory.getFPos3D(getBaseX(), getBaseY(), getBaseZ());
-        var posB = factory.getFPos3D(getHeadX(), getHeadY(), getHeadZ());
+        fCopyLocal.getRefHead().setInclination(inclination);
+        fCopyLocal.moveBase(getRefBase());
 
-        return factory.getFPairPos3D(posA, posB);
+        return applyStateFrom(fCopyLocal);
     }
 
+    @Override
+    public double getAzimuth() {
+        FVector fCopyLocal = copy().moveBaseToCenter();
+
+        return fCopyLocal.getRefHead().getAzimuth();
+    }
+
+    @Override
+    public FVector setAzimuth(double azimuth) {
+        FVector fCopyLocal = copy().moveBaseToCenter();
+
+        fCopyLocal.getRefHead().setAzimuth(azimuth);
+        fCopyLocal.moveBase(getRefBase());
+
+        return applyStateFrom(fCopyLocal);
+    }
+
+    @Override
+    public double getAngle(FVector ref) {
+
+        if (isNonDirectional()) {
+            throw new IllegalStateException("The direction of the input IFVector is not defined");
+        }
+
+        if (ref.isNonDirectional()) {
+            throw new IllegalStateException("The direction of the provided FVector is not defined");
+        }
+
+        double angle, dProd, magAB;
+        FVector fCopyLocal = copy().moveBaseToCenter();
+        FVector fCopyExternal = ref.copy().moveBaseToCenter();
+
+        dProd = fCopyLocal.getDotProduct(fCopyExternal);
+        magAB = fCopyLocal.getRefHead().getLength() * fCopyExternal.getRefHead().getLength();
+        angle = Math.acos(dProd / magAB);
+
+        return Double.isNaN(angle) ? 0 : angle;
+    }
 }

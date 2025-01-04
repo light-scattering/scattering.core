@@ -75,9 +75,9 @@ public interface FVector extends Primitive<FVector> {
     FVector reflectHead();
     FVector invertDirection();
 
-    double getLengthAxisX();
-    double getLengthAxisY();
-    double getLengthAxisZ();
+    double getLengthX();
+    double getLengthY();
+    double getLengthZ();
 
     double getLength();
     FVector setLength(double length);

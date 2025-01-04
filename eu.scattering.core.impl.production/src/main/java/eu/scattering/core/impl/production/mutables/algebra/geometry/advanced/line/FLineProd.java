@@ -328,20 +328,20 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
 
     private String getProjectionType(FVector ref) {
 
-        if ((getOrigin().getLengthAxisX() > 0 || getOrigin().getLengthAxisY() > 0) &&
-                (ref.getLengthAxisX() > 0 || ref.getLengthAxisY() > 0)) {
+        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthY() > 0) &&
+                (ref.getLengthX() > 0 || ref.getLengthY() > 0)) {
 
             return "XY";
         }
 
-        if ((getOrigin().getLengthAxisY() > 0 || getOrigin().getLengthAxisZ() > 0) &&
-                (ref.getLengthAxisY() > 0 || ref.getLengthAxisZ() > 0)) {
+        if ((getOrigin().getLengthY() > 0 || getOrigin().getLengthZ() > 0) &&
+                (ref.getLengthY() > 0 || ref.getLengthZ() > 0)) {
 
             return "YZ";
         }
 
-        if ((getOrigin().getLengthAxisX() > 0 || getOrigin().getLengthAxisZ() > 0) &&
-                (ref.getLengthAxisX() > 0 || ref.getLengthAxisZ() > 0)) {
+        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthZ() > 0) &&
+                (ref.getLengthX() > 0 || ref.getLengthZ() > 0)) {
 
             return "XZ";
         }

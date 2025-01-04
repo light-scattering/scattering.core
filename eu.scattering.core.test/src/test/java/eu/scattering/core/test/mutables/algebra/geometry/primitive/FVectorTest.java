@@ -1389,9 +1389,9 @@ public class FVectorTest {
         void getLengthX() {
             FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
 
-            assertEquals(Math.abs(fVector.getRefHead().getX() - fVector.getRefBase().getX()), fVector.getLengthAxisX(),
+            assertEquals(Math.abs(fVector.getRefHead().getX() - fVector.getRefBase().getX()), fVector.getLengthX(),
                     "The X length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getX() - fVector.getRefHead().getX()), fVector.getLengthAxisX(),
+            assertEquals(Math.abs(fVector.getRefBase().getX() - fVector.getRefHead().getX()), fVector.getLengthX(),
                     "The X length is incorrect");
         }
 
@@ -1400,7 +1400,7 @@ public class FVectorTest {
         void getLengthXValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testValue(FVector::getLengthAxisX, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthX, fVector);
         }
 
         @Test
@@ -1408,9 +1408,9 @@ public class FVectorTest {
         void getLengthY() {
             FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
 
-            assertEquals(Math.abs(fVector.getRefHead().getY() - fVector.getRefBase().getY()), fVector.getLengthAxisY(),
+            assertEquals(Math.abs(fVector.getRefHead().getY() - fVector.getRefBase().getY()), fVector.getLengthY(),
                     "The Y length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getY() - fVector.getRefHead().getY()), fVector.getLengthAxisY(),
+            assertEquals(Math.abs(fVector.getRefBase().getY() - fVector.getRefHead().getY()), fVector.getLengthY(),
                     "The Y length is incorrect");
         }
 
@@ -1419,7 +1419,7 @@ public class FVectorTest {
         void getLengthYValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testValue(FVector::getLengthAxisY, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthY, fVector);
         }
 
         @Test
@@ -1427,9 +1427,9 @@ public class FVectorTest {
         void getLengthZ() {
             FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
 
-            assertEquals(Math.abs(fVector.getRefHead().getZ() - fVector.getRefBase().getZ()), fVector.getLengthAxisZ(),
+            assertEquals(Math.abs(fVector.getRefHead().getZ() - fVector.getRefBase().getZ()), fVector.getLengthZ(),
                     "The Z length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getZ() - fVector.getRefHead().getZ()), fVector.getLengthAxisZ(),
+            assertEquals(Math.abs(fVector.getRefBase().getZ() - fVector.getRefHead().getZ()), fVector.getLengthZ(),
                     "The Z length is incorrect");
         }
 
@@ -1438,7 +1438,7 @@ public class FVectorTest {
         void getLengthZValidate() {
             FVector fVector = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testValue(FVector::getLengthAxisZ, fVector);
+            FVectorTestHelper.testValue(FVector::getLengthZ, fVector);
         }
 
         @Test
@@ -1468,9 +1468,9 @@ public class FVectorTest {
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            double dimX = fVector.getLengthAxisX() * fVector.getLengthAxisX();
-            double dimY = fVector.getLengthAxisY() * fVector.getLengthAxisY();
-            double dimZ = fVector.getLengthAxisZ() * fVector.getLengthAxisZ();
+            double dimX = fVector.getLengthX() * fVector.getLengthX();
+            double dimY = fVector.getLengthY() * fVector.getLengthY();
+            double dimZ = fVector.getLengthZ() * fVector.getLengthZ();
             double radius = Math.sqrt(dimX + dimY + dimZ);
 
             assertEquals(radius, fVector.getLength(),

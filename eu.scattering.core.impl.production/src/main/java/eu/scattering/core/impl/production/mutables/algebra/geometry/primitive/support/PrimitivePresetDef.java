@@ -10,20 +10,6 @@ import java.util.function.Function;
 
 public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Primitive<T> {
 
-    // TODO - remove
-    @Override
-    public int hashCode() {
-        int hashCode = 7;
-
-        for (FPoint fPoint : disassemble()) {
-            hashCode = 31 * hashCode + (int) (fPoint.getX() * 100);
-            hashCode = 31 * hashCode + (int) (fPoint.getY() * 100);
-            hashCode = 31 * hashCode + (int) (fPoint.getZ() * 100);
-        }
-
-        return hashCode;
-    }
-
     @Override
     public T applyStateTo(T ref) {
 
