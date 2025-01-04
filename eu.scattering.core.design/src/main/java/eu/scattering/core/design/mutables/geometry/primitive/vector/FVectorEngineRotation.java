@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.geometry.primitive.vector;
+package eu.scattering.core.design.mutables.geometry.primitive.vector;
 
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 
 public interface FVectorEngineRotation {
 

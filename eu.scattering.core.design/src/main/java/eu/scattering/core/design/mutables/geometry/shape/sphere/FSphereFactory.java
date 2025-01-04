@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.geometry.shape.sphere;
+package eu.scattering.core.design.mutables.geometry.shape.sphere;
 
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 
 public interface FSphereFactory {
 

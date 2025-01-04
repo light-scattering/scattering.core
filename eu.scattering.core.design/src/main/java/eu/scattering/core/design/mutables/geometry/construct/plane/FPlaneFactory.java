@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.geometry.construct.plane;
+package eu.scattering.core.design.mutables.geometry.construct.plane;
 
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 
 public interface FPlaneFactory {
 

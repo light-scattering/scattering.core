@@ -1,4 +1,4 @@
-package eu.scattering.core.design.mutables.algebra.number;
+package eu.scattering.core.design.mutables.number;
 
 import eu.scattering.core.design.annotations.IntermediateResults;
 import eu.scattering.core.design.mutables.Mutable;

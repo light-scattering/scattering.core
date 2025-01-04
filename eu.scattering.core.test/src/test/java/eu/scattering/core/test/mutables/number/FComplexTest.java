@@ -1,8 +1,8 @@
-package eu.scattering.core.test.mutables.algebra.number;
+package eu.scattering.core.test.mutables.number;
 
 import eu.scattering.core.design.mutables.number.complex.FComplex;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.test.mutables.algebra.number.support.FComplexTestHelper;
+import eu.scattering.core.test.mutables.number.support.FComplexTestHelper;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;

@@ -1,7 +1,7 @@
-package eu.scattering.core.design.mutables.algebra.geometry.shape;
+package eu.scattering.core.design.mutables.geometry.shape;
 
-import eu.scattering.core.design.mutables.algebra.geometry.Geometry;
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.geometry.Geometry;
+import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPos3DI.FPos3DI;
 
 public interface Shape<T> extends Geometry {

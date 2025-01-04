@@ -1,7 +1,7 @@
-package eu.scattering.core.design.engines.random;
+package eu.scattering.core.design.engines.random.processor;
 
 import eu.scattering.core.design.annotations.IntermediateResults;
-import eu.scattering.core.design.engines.Engine;
+import eu.scattering.core.design.engines.random.processor.core.FRandomProcessorCore;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
@@ -11,7 +11,7 @@ import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 
 import java.util.Optional;
 
-public interface FRandom extends FRandomCore, Engine<FRandom> {
+public interface FRandomProcessor extends FRandomProcessorCore {
 
     Optional<Long> getSeed();
 

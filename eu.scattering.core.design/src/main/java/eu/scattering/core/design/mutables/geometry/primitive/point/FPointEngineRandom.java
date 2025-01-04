@@ -1,4 +1,4 @@
-package eu.scattering.core.design.mutables.algebra.geometry.primitive.point;
+package eu.scattering.core.design.mutables.geometry.primitive.point;
 
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 

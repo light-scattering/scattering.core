@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.number.complex;
+package eu.scattering.core.design.mutables.number.complex;
 
-import eu.scattering.core.design.mutables.algebra.number.Number;
+import eu.scattering.core.design.mutables.number.Number;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 
 public interface FComplex extends Number<FComplex> {

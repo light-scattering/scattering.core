@@ -1,4 +1,4 @@
-package eu.scattering.core.design.mutables.algebra.number.quaternion;
+package eu.scattering.core.design.mutables.number.quaternion;
 
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 

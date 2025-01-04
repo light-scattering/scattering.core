@@ -1,4 +1,4 @@
-package eu.scattering.core.design.mutables.algebra.number.complex;
+package eu.scattering.core.design.mutables.number.complex;
 
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 

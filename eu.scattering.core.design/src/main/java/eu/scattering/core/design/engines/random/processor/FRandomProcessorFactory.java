@@ -1,7 +1,7 @@
-package eu.scattering.core.design.engines.random;
+package eu.scattering.core.design.engines.random.processor;
 
-public interface FRandomFactory {
+public interface FRandomProcessorFactory {
 
-    FRandom getFRandom();
-    FRandom getFRandom(long seed);
+    FRandomProcessor getFRandomProcessor();
+    FRandomProcessor getFRandomProcessor(long seed);
 }

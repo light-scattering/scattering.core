@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.geometry;
+package eu.scattering.core.design.mutables.geometry;
 
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 
 import java.util.List;
 

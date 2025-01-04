@@ -1,4 +1,4 @@
-package eu.scattering.core.test.mutables.algebra.number.support;
+package eu.scattering.core.test.mutables.number.support;
 
 import eu.scattering.core.design.mutables.number.complex.FComplex;
 import org.junit.jupiter.api.Assertions;

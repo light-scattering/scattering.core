@@ -1,6 +1,6 @@
-package eu.scattering.core.design.helpers.engine;
+package eu.scattering.core.design.engines.random;
 
-public interface FRandomHelperFactory {
+public interface FRandomEngineFactory {
 
-    FRandomHelper getFRandomHelper();
+    FRandomEngine getFRandomEngine();
 }

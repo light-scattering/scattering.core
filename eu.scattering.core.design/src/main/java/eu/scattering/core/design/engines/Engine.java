@@ -1,4 +1,4 @@
-package eu.scattering.core.design.engine;
+package eu.scattering.core.design.engines;
 
 public interface Engine<T> {
 }

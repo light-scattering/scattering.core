@@ -1,8 +1,8 @@
-package eu.scattering.core.design.mutables.algebra.geometry;
+package eu.scattering.core.design.mutables.geometry;
 
-import eu.scattering.core.design.mutables.algebra.geometry.construct.ConstructEngineRotation;
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.PrimitiveEngineRotation;
-import eu.scattering.core.design.mutables.algebra.geometry.shape.ShapeEngineRotation;
+import eu.scattering.core.design.mutables.geometry.construct.ConstructEngineRotation;
+import eu.scattering.core.design.mutables.geometry.primitive.PrimitiveEngineRotation;
+import eu.scattering.core.design.mutables.geometry.shape.ShapeEngineRotation;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 
 public interface GeometryEngineRotation extends ConstructEngineRotation, PrimitiveEngineRotation, ShapeEngineRotation {

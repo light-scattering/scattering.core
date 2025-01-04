@@ -1,6 +1,6 @@
-package eu.scattering.core.design.helpers.engine;
+package eu.scattering.core.design.engines.rotation;
 
-public interface FRotationHelperFactory {
+public interface FRotationEngineFactory {
 
-    FRotationHelper getFRotationHelper();
+    FRotationEngine getFRotationEngine();
 }

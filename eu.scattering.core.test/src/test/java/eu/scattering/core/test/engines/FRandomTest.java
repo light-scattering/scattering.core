@@ -1,4 +1,4 @@
-package eu.scattering.core.test.mutables.engine;
+package eu.scattering.core.test.engines;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.engines.random.processor.FRandomProcessor;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FEngine")
-public class FEngineTest {
+public class FRandomTest {
 
     @Nested
     @Tag("Basic")

@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.geometry.shape;
+package eu.scattering.core.design.mutables.geometry.shape;
 
-import eu.scattering.core.design.mutables.algebra.geometry.shape.sphere.FSphereEngineRotation;
+import eu.scattering.core.design.mutables.geometry.shape.sphere.FSphereEngineRotation;
 
 public interface ShapeEngineRotation extends FSphereEngineRotation {
 }

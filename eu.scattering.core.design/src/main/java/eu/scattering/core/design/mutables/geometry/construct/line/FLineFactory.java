@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.geometry.construct.line;
+package eu.scattering.core.design.mutables.geometry.construct.line;
 
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 
 public interface FLineFactory {
 

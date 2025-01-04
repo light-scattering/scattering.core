@@ -1,4 +1,4 @@
-package eu.scattering.core.design.engines.random.processor;
+package eu.scattering.core.design.engines.random.processor.core;
 
 import java.util.Optional;
 

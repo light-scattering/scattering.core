@@ -1,9 +1,9 @@
-package eu.scattering.core.design.mutables.algebra.geometry.construct;
+package eu.scattering.core.design.mutables.geometry.construct;
 
 import eu.scattering.core.design.mutables.Mutable;
-import eu.scattering.core.design.mutables.algebra.geometry.Geometry;
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutables.geometry.Geometry;
+import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 
 import java.util.List;
 import java.util.function.Consumer;

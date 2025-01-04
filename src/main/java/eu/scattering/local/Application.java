@@ -1,7 +1,7 @@
 package eu.scattering.local;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
-import eu.scattering.core.impl.production.SpringProd;
+import eu.scattering.core.impl.SpringProd;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Application {

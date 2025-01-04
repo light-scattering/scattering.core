@@ -1,6 +1,6 @@
-package eu.scattering.core.design.engines.rotation;
+package eu.scattering.core.design.engines.rotation.processor;
 
-public interface FRotationFactory {
+public interface FRotationProcessorFactory {
 
-    FRotation getFRotation();
+    FRotationProcessor getFRotationProcessor();
 }

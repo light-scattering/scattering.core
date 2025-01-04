@@ -1,7 +1,7 @@
-package eu.scattering.core.design.mutables.algebra.geometry.primitive.point;
+package eu.scattering.core.design.mutables.geometry.primitive.point;
 
 import eu.scattering.core.design.annotations.IntermediateResults;
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.Primitive;
+import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 public interface FPoint extends Primitive<FPoint> {

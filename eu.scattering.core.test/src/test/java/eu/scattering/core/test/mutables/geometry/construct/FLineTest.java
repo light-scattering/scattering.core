@@ -1,10 +1,10 @@
-package eu.scattering.core.test.mutables.algebra.geometry.advanced;
+package eu.scattering.core.test.mutables.geometry.construct;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.test.mutables.algebra.geometry.advanced.support.FLineTestHelper;
+import eu.scattering.core.test.mutables.geometry.construct.support.FLineTestHelper;
 import org.junit.jupiter.api.*;
 
 import java.util.List;

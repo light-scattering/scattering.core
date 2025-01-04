@@ -3,12 +3,11 @@ module eu.scattering.core.test {
     requires org.assertj.core;
     requires org.json;
     requires eu.scattering.core.design;
-    requires eu.scattering.core.impl.production;
     requires eu.scattering.core.transfer;
-    opens eu.scattering.core.test.mutables.algebra.geometry.primitive;
-    opens eu.scattering.core.test.mutables.algebra.geometry.advanced;
-    opens eu.scattering.core.test.mutables.algebra.number;
-    opens eu.scattering.core.test.mutables.immutable;
-    opens eu.scattering.core.test.mutables.engine;
+    requires eu.scattering.core.impl.def;
+    opens eu.scattering.core.test.mutables.geometry.primitive;
+    opens eu.scattering.core.test.mutables.geometry.construct;
+    opens eu.scattering.core.test.mutables.number;
+    opens eu.scattering.core.test.engines;
     opens eu.scattering.core.test;
 }

@@ -1,9 +1,9 @@
 package eu.scattering.core.test;
 
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.mutables.algebra.number.complex.FComplex;
-import eu.scattering.core.design.mutables.algebra.number.quaternion.FQuaternion;
+import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutables.number.complex.FComplex;
+import eu.scattering.core.design.mutables.number.quaternion.FQuaternion;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
@@ -21,7 +21,7 @@ public class TestHelper {
 
     public static FPoint getRandomFPoint(FPoint... exc) {
 
-        return factory.getFRandomHelper().rndPosition(factory.getFPoint(), range3D, exc);
+        return factory.getFRandomEngine().rndPosition(factory.getFPoint(), range3D, exc);
     }
 
     public static FVector getRandomFVector(FVector... exc) {
@@ -37,11 +37,11 @@ public class TestHelper {
 
     public static FComplex getRandomFComplex(FComplex... exc) {
 
-        return factory.getFRandomHelper().rndPosition(factory.getFComplex(), range2D, exc);
+        return factory.getFRandomEngine().rndPosition(factory.getFComplex(), range2D, exc);
     }
 
     public static FQuaternion getRandomFQuaternion(FQuaternion... exc) {
 
-        return factory.getFRandomHelper().rndPosition(factory.getFQuaternion(), range4D, exc);
+        return factory.getFRandomEngine().rndPosition(factory.getFQuaternion(), range4D, exc);
     }
 }

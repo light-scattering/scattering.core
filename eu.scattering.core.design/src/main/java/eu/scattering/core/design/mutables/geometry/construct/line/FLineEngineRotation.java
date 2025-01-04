@@ -1,4 +1,4 @@
-package eu.scattering.core.design.mutables.algebra.geometry.construct.line;
+package eu.scattering.core.design.mutables.geometry.construct.line;
 
 public interface FLineEngineRotation {
 }

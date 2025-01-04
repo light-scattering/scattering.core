@@ -1,6 +1,6 @@
-package eu.scattering.core.design.mutables.algebra.geometry.shape.sphere;
+package eu.scattering.core.design.mutables.geometry.shape.sphere;
 
-import eu.scattering.core.design.mutables.algebra.geometry.shape.Shape;
+import eu.scattering.core.design.mutables.geometry.shape.Shape;
 
 public interface FSphere extends Shape<FSphere> {
 }
