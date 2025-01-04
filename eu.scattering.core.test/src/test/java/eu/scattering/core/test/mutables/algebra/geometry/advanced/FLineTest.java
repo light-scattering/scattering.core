@@ -1240,10 +1240,10 @@ public class FLineTest {
         void getCommonFPointFail() {
             FLine fLineA = factory.getFLine(TestHelper.getRandomFVector());
 
-            FPoint fLineBOriginHead = factory.getFPoint(TestHelper.getRandomFPoint());
+            FPoint fLineBOriginHead = TestHelper.getRandomFPoint();
 
             while (fLineBOriginHead.extBoolean(fLineA.isPartOf()).get(0)) {
-                fLineBOriginHead = factory.getFPoint(TestHelper.getRandomFPoint());
+                fLineBOriginHead = TestHelper.getRandomFPoint();
             }
 
             FPoint fLineBOriginBase = fLineBOriginHead.copy().ext(fLineA.project());

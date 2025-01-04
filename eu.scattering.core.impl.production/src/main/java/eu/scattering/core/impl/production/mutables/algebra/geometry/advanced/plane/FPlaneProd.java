@@ -247,11 +247,11 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectOnPlane(FPoint fPoint) {
-        FPoint opA = factory.getFPoint(getOrigin().getRefHead())
+        FPoint opA = getOrigin().getRefHead().copy()
                 .sub(getOrigin().getRefBase())
                 .div(getOrigin().getLength());
 
-        FPoint opB = factory.getFPoint(fPoint)
+        FPoint opB = fPoint.copy()
                 .sub(getOrigin().getRefBase());
 
         FPoint opC = factory.getFPoint()
@@ -264,11 +264,11 @@ public class FPlaneProd extends AdvancedPresetProd<FPlane> implements FPlane {
     }
 
     private FPoint projectOnLine(FPoint fPoint) {
-        FPoint opA = factory.getFPoint(getOrigin().getRefHead())
+        FPoint opA = getOrigin().getRefHead().copy()
                 .sub(getOrigin().getRefBase())
                 .div(getOrigin().getLength());
 
-        FPoint opB = factory.getFPoint(fPoint)
+        FPoint opB = fPoint.copy()
                 .sub(getOrigin().getRefBase());
 
         return fPoint.applyStateFrom(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));

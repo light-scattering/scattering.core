@@ -23,7 +23,7 @@ public class FVectorRandomTest {
     void setRandomAngle() {
         FPoint fPointBase = factory.getFPoint(1, 1, 0);
         FPoint fPointHead = factory.getFPoint(2, 1, 0);
-        FVector fVector = factory.getFVector(fPointBase, fPointHead);
+        FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
         factory.getFRandomHelper().rndAngle(fPointHead);
 

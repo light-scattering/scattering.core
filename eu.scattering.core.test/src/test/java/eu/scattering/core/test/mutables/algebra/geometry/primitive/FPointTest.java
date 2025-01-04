@@ -84,7 +84,7 @@ public class FPointTest {
         @DisplayName("Construct with FPoint")
         void constructWithFPoint() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
-            FPoint fPoint = factory.getFPoint(fPointRef);
+            FPoint fPoint = fPointRef.copy();
 
             assertNotSame(fPointRef, fPoint, "References to the two created FPoints should be different");
             assertNotNull(fPoint, "The instance is null");

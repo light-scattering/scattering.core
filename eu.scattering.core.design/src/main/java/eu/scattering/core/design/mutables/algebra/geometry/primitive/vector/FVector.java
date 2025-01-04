@@ -10,8 +10,6 @@ import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 public interface FVector extends Primitive<FVector> {
 
     FVector set(double bX, double bY, double bZ, double hX, double hY, double hZ);
-    FVector set(FPoint base, double hX, double hY, double hZ);
-    FVector set(double bX, double bY, double bZ, FPoint head);
     FVector set(FPoint base, FPoint head);
 
     FVector setBase(double bX, double bY, double bZ);
@@ -42,14 +40,10 @@ public interface FVector extends Primitive<FVector> {
 
     FVector set(FPairPos3D position);
 
-    FVector set(FPos3D base, double hX, double hY, double hZ);
-    FVector set(double bX, double bY, double bZ, FPos3D head);
-    FVector set(FPos3D base, FPos3D head);
-
     FVector setBase(FPos3D base);
     FVector setHead(FPos3D head);
 
-    FPairPos3D toTuplePos3D();
+    FPairPos3D toFPairPos3D();
 
     //--------------------------------------------------
 

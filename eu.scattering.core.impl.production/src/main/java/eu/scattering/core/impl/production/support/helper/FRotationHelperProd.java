@@ -90,7 +90,7 @@ public class FRotationHelperProd implements FRotationHelper {
 
         FVector fCopyLocal = origin.copy().set(origin.getRefBase(), ref);
 
-        rotate(origin, rotor.getRotation(fCopyLocal.toTuplePos3D(), angle));
+        rotate(origin, rotor.getRotation(fCopyLocal.toFPairPos3D(), angle));
 
         return origin;
     }
@@ -102,7 +102,7 @@ public class FRotationHelperProd implements FRotationHelper {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
         }
 
-        rotate(origin, rotor.getRotation(ref.toTuplePos3D(), angle));
+        rotate(origin, rotor.getRotation(ref.toFPairPos3D(), angle));
 
         return origin;
     }

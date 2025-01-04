@@ -93,7 +93,6 @@ public final class FVectorTestHelper {
 
     public static void testValue(BiFunction<FVector, FVector, Object> exe, FVector ref, FVector arg) {
 
-
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");
 

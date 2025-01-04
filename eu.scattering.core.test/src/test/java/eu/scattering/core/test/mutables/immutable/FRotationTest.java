@@ -58,7 +58,7 @@ public class FRotationTest {
         FVector axis = TestHelper.getRandomFVector();
         double angle = Math.abs(random.nextDouble() % (2 * Math.PI));
 
-        FRot rotor = fRot.getRotation(axis.toTuplePos3D(), angle);
+        FRot rotor = fRot.getRotation(axis.toFPairPos3D(), angle);
 
         Assertions.assertAll("Validate FPoint",
                 () -> assertEquals(angle, rotor.getAngle(),
@@ -74,7 +74,7 @@ public class FRotationTest {
         FVector axis = TestHelper.getRandomFVector();
         double angle = -Math.abs(random.nextDouble() % (2 * Math.PI));
 
-        FRot rotor = fRot.getRotation(axis.toTuplePos3D(), angle);
+        FRot rotor = fRot.getRotation(axis.toFPairPos3D(), angle);
 
         Assertions.assertAll("Validate FPoint",
                 () -> assertEquals(-angle, rotor.getAngle(),
@@ -90,8 +90,8 @@ public class FRotationTest {
         FVector fVectorRefA = TestHelper.getRandomFVector();
         FVector fVectorRefB = fVectorRefA.copy();
 
-        FRot rotorA = fRot.getRotation(fVectorRefA.toTuplePos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVectorRefB.toTuplePos3D(), 1);
+        FRot rotorA = fRot.getRotation(fVectorRefA.toFPairPos3D(), 1);
+        FRot rotorB = fRot.getRotation(fVectorRefB.toFPairPos3D(), 1);
 
         assertEquals(rotorA.hashCode(), rotorB.hashCode(),
                 jitter, "The hash code is erroneous");
@@ -103,8 +103,8 @@ public class FRotationTest {
         FVector fVectorRefA = TestHelper.getRandomFVector();
         FVector fVectorRefB = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVectorRefA.toTuplePos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVectorRefB.toTuplePos3D(), 1);
+        FRot rotorA = fRot.getRotation(fVectorRefA.toFPairPos3D(), 1);
+        FRot rotorB = fRot.getRotation(fVectorRefB.toFPairPos3D(), 1);
 
         assertNotEquals(rotorA.hashCode(), rotorB.hashCode(),
                 jitter, "The hash code is erroneous");
@@ -115,8 +115,8 @@ public class FRotationTest {
     public void equals() {
         FVector fVector = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVector.toTuplePos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVector.toTuplePos3D(), 1);
+        FRot rotorA = fRot.getRotation(fVector.toFPairPos3D(), 1);
+        FRot rotorB = fRot.getRotation(fVector.toFPairPos3D(), 1);
 
         assertEquals(rotorA, rotorB, "FRot instances have the same core");
     }
@@ -127,8 +127,8 @@ public class FRotationTest {
         FVector fVectorRefA = TestHelper.getRandomFVector();
         FVector fVectorRefB = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVectorRefA.toTuplePos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVectorRefB.toTuplePos3D(), 1);
+        FRot rotorA = fRot.getRotation(fVectorRefA.toFPairPos3D(), 1);
+        FRot rotorB = fRot.getRotation(fVectorRefB.toFPairPos3D(), 1);
 
         assertNotEquals(rotorA, rotorB, "FRot instances have different core (axis)");
     }
@@ -138,8 +138,8 @@ public class FRotationTest {
     public void equalsFalseAngle() {
         FVector fVector = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVector.toTuplePos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVector.toTuplePos3D(), 2);
+        FRot rotorA = fRot.getRotation(fVector.toFPairPos3D(), 1);
+        FRot rotorB = fRot.getRotation(fVector.toFPairPos3D(), 2);
 
         assertNotEquals(rotorA, rotorB, "FRot instances have different core (angle)");
     }

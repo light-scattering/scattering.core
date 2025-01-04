@@ -127,7 +127,7 @@ public class FRotationProd implements FRotation {
                 .setY(axis.getPosA().getD1())
                 .setZ(axis.getPosA().getD2());
 
-        return rotAxis.toTuplePos3D();
+        return rotAxis.toFPairPos3D();
     }
 
     //--------------------------------------------------

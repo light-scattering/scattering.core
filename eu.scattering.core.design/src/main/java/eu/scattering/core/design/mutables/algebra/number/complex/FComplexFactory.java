@@ -6,10 +6,14 @@ public interface FComplexFactory {
 
     FComplex getFComplex();
 
+    //--------------------------------------------------
+
     default FComplex getFComplex(double re, double im) {
 
         return getFComplex().set(re, im);
     }
+
+    //--------------------------------------------------
 
     default FComplex getFComplex(FPos2D origin) {
 

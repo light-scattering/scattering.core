@@ -218,7 +218,7 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
         var fRot = factory.getFRotation();
         var fRotHelper = factory.getFRotationHelper();
 
-        FRot rotor = fRot.getRotation(getOrigin().toTuplePos3D(), angle);
+        FRot rotor = fRot.getRotation(getOrigin().toFPairPos3D(), angle);
 
         return (e) -> e.disassemble()
                 .forEach(p -> fRotHelper.rotate(p, rotor));
@@ -459,11 +459,11 @@ public class FLineProd extends AdvancedPresetProd<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectFPoint(FPoint fPoint) {
-        FPoint opA = factory.getFPoint(getOrigin().getRefHead())
+        FPoint opA = getOrigin().getRefHead().copy()
                 .sub(getOrigin().getRefBase())
                 .div(getOrigin().getLength());
 
-        FPoint opB = factory.getFPoint(fPoint)
+        FPoint opB = fPoint.copy()
                 .sub(getOrigin().getRefBase());
 
         fPoint.applyStateFrom(origin.getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));

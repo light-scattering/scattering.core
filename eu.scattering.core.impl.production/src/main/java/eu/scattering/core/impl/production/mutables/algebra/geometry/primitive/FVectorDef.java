@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.production.mutables.algebra.geometry.primitive.vector;
+package eu.scattering.core.impl.production.mutables.algebra.geometry.primitive;
 
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector {
+public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
 
-    private Supplier<FPoint> fPointSupplier;
+    private final Supplier<FPoint> fPointSupplier;
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -26,14 +26,32 @@ public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector 
     private final FPoint[] origin = new FPoint[2];
     private final double epsilon;
 
-    private FVectorProd(double epsilon, Supplier<FPoint> fPointSupplier) {
+    private FVectorDef(double epsilon, Supplier<FPoint> fPointSupplier) {
 
         this.epsilon = epsilon;
         this.fPointSupplier = fPointSupplier;
     }
 
+    public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier, FPoint refBase, FPoint refHead) {
+        FVectorDef fVector = new FVectorDef(epsilon, fPointSupplier);
+
+        fVector.origin[0] = refBase;
+        fVector.origin[1] = refHead;
+
+        return fVector;
+    }
+
+    public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier, FPoint refHead) {
+        FVectorDef fVector = new FVectorDef(epsilon, fPointSupplier);
+
+        fVector.origin[0] = fPointSupplier.get();
+        fVector.origin[1] = refHead;
+
+        return fVector;
+    }
+
     public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier) {
-        FVectorProd fVector = new FVectorProd(epsilon, fPointSupplier);
+        FVectorDef fVector = new FVectorDef(epsilon, fPointSupplier);
 
         fVector.origin[0] = fPointSupplier.get();
         fVector.origin[1] = fPointSupplier.get();
@@ -54,10 +72,6 @@ public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector 
             throw new NullPointerException("The base FPoint cannot be null");
         }
 
-        if (refBase == getRefHead()) {
-            throw new IllegalArgumentException("The base/head FPoints cannot be the same");
-        }
-
         origin[0] = refBase;
 
         return this;
@@ -74,10 +88,6 @@ public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector 
 
         if (refHead == null) {
             throw new NullPointerException(" The head FPoint cannot be null");
-        }
-
-        if (refHead == getRefBase()) {
-            throw new IllegalArgumentException("The base/head FPoints cannot be the same");
         }
 
         origin[1] = refHead;
@@ -102,22 +112,6 @@ public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector 
     public FVector set(double bX, double bY, double bZ, double hX, double hY, double hZ) {
         setBase(bX, bY, bZ);
         setHead(hX, hY, hZ);
-
-        return this;
-    }
-
-    @Override
-    public FVector set(FPoint base, double hX, double hY, double hZ) {
-        setBase(base);
-        setHead(hX, hY, hZ);
-
-        return this;
-    }
-
-    @Override
-    public FVector set(double bX, double bY, double bZ, FPoint head) {
-        setBase(bX, bY, bZ);
-        setHead(head);
 
         return this;
     }
@@ -254,30 +248,6 @@ public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector 
     }
 
     @Override
-    public FVector set(FPos3D base, double hX, double hY, double hZ) {
-        setBase(base);
-        setHead(hX, hY, hZ);
-
-        return this;
-    }
-
-    @Override
-    public FVector set(double bX, double bY, double bZ, FPos3D head) {
-        setBase(bX, bY, bZ);
-        setHead(head);
-
-        return this;
-    }
-
-    @Override
-    public FVector set(FPos3D base, FPos3D head) {
-        setBase(base);
-        setHead(head);
-
-        return this;
-    }
-
-    @Override
     public FVector setBase(FPos3D base) {
         setBase(base.getD0(), base.getD1(), base.getD2());
 
@@ -335,7 +305,7 @@ public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector 
 
     @Override
     public FVector copy() {
-        FVector fVector = FVectorProd.create(epsilon, fPointSupplier);
+        FVector fVector = FVectorDef.create(epsilon, fPointSupplier);
 
         fVector.setRefBase(getRefBase().copy());
         fVector.setRefHead(getRefHead().copy());
@@ -803,7 +773,7 @@ public class FVectorProd extends PrimitivePresetDef<FVector> implements FVector 
     }
 
     @Override
-    public FPairPos3D toTuplePos3D() {
+    public FPairPos3D toFPairPos3D() {
 
         var posA = factory.getFPos3D(getBaseX(), getBaseY(), getBaseZ());
         var posB = factory.getFPos3D(getHeadX(), getHeadY(), getHeadZ());

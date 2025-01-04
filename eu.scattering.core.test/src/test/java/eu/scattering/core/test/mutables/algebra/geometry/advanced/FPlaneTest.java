@@ -638,7 +638,7 @@ public class FPlaneTest {
 
             FPoint fPoint = fPointOpt.get();
 
-            assertTrue(fPoint.isSimilar(factory.getFPoint(fPointRel)),
+            assertTrue(fPoint.isSimilar(fPointRel.copy()),
                     "The intersecting FPoint is erroneous");
         }
 

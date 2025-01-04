@@ -4,6 +4,7 @@ import eu.scattering.core.design.mutables.algebra.geometry.primitive.point.FPoin
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.algebra.geometry.primitive.support.FVectorTestHelper;
 import eu.scattering.core.design.mutables.algebra.geometry.primitive.vector.FVector;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -106,210 +107,6 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Construct with FPoint head")
-        void constructWithHead() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointHead);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getRefBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointHead.getX(), fVector.getRefHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointHead.getY(), fVector.getRefHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointHead.getZ(), fVector.getRefHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint head (validate reference)")
-        void constructWithHeadValidateReference() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointHead);
-
-            Assertions.assertAll("Validate FPoint references",
-                    () -> assertNotNull(fVector,
-                            "The generated FVector instance is null"),
-                    () -> assertSame(fPointHead, fVector.getRefHead(),
-                            "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
-                            "FPoints should have different references")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint head (validate reference change)")
-        void constructWithHeadValidateReferenceChange() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointHead);
-
-            fPointHead.set(0, 0, 0);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getRefBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint head and parameters")
-        void constructWithHeadAndParameters() {
-            double valX = random.nextDouble();
-            double valY = random.nextDouble();
-            double valZ = random.nextDouble();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(valX, valY, valZ, fPointHead);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(valX, fVector.getRefBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getRefBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getRefBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointHead.getX(), fVector.getRefHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointHead.getY(), fVector.getRefHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointHead.getZ(), fVector.getRefHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint head and parameters (validate reference)")
-        void constructWithHeadAndParametersValidateReference() {
-            double valX = random.nextDouble();
-            double valY = random.nextDouble();
-            double valZ = random.nextDouble();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(valX, valY, valZ, fPointHead);
-
-            Assertions.assertAll("Validate FPoint references",
-                    () -> assertNotNull(fVector,
-                            "The generated FVector instance is null"),
-                    () -> assertSame(fPointHead, fVector.getRefHead(),
-                            "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
-                            "FPoints should have different references")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint head and parameters (validate reference change)")
-        void constructWithHeadAndParametersValidateReferenceChange() {
-            double valX = random.nextDouble();
-            double valY = random.nextDouble();
-            double valZ = random.nextDouble();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(valX, valY, valZ, fPointHead);
-
-            fPointHead.set(0, 0, 0);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(valX, fVector.getRefBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getRefBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getRefBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint base and parameters")
-        void constructWithBaseAndParameters() {
-            double valX = random.nextDouble();
-            double valY = random.nextDouble();
-            double valZ = random.nextDouble();
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, valX, valY, valZ);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointBase.getX(), fVector.getRefBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointBase.getY(), fVector.getRefBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointBase.getZ(), fVector.getRefBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(valX, fVector.getRefHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getRefHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getRefHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint base and parameters (validate reference)")
-        void constructWithBaseAndParametersValidateReference() {
-            double valX = random.nextDouble();
-            double valY = random.nextDouble();
-            double valZ = random.nextDouble();
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, valX, valY, valZ);
-
-            Assertions.assertAll("Validate FPoint references",
-                    () -> assertNotNull(fVector,
-                            "The generated FVector instance is null"),
-                    () -> assertSame(fPointBase, fVector.getRefBase(),
-                            "The head FPoint reference is erroneous"),
-                    () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
-                            "FPoints should have different references")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with FPoint base and parameters (validate reference change)")
-        void constructWithBaseAndParametersValidateReferenceChange() {
-            double valX = random.nextDouble();
-            double valY = random.nextDouble();
-            double valZ = random.nextDouble();
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, valX, valY, valZ);
-
-            fPointBase.set(0, 0, 0);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fVector.getRefBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(0, fVector.getRefBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(valX, fVector.getRefHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(valY, fVector.getRefHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(valZ, fVector.getRefHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
-        }
-
-        @Test
         @DisplayName("Construct with FPoint base/head")
         void constructWithBaseHead() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
@@ -342,9 +139,9 @@ public class FVectorTest {
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertSame(fPointBase, fVector.getRefBase(),
+                    () -> assertNotSame(fPointBase, fVector.getRefBase(),
                             "The base FPoint reference is erroneous"),
-                    () -> assertSame(fPointHead, fVector.getRefHead(),
+                    () -> assertNotSame(fPointHead, fVector.getRefHead(),
                             "The head FPoint reference is erroneous"),
                     () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
                             "FPoints should have different references")
@@ -357,6 +154,74 @@ public class FVectorTest {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
+
+            fPointBase.set(0, 0, 0);
+            fPointHead.set(0, 0, 0);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertNotEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference FPoint base/head")
+        void constructWithRefBaseHead() {
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(fPointBase.getX(), fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(fPointBase.getY(), fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(fPointBase.getZ(), fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(fPointHead.getX(), fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(fPointHead.getY(), fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getRefHead().getZ(),
+                            "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference FPoint base/head (validate reference)")
+        void constructWithRefBaseHeadValidateReference() {
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+
+            Assertions.assertAll("Validate FPoint references",
+                    () -> assertNotNull(fVector,
+                            "The generated FVector instance is null"),
+                    () -> assertSame(fPointBase, fVector.getRefBase(),
+                            "The base FPoint reference is erroneous"),
+                    () -> assertSame(fPointHead, fVector.getRefHead(),
+                            "The head FPoint reference is erroneous"),
+                    () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
+                            "FPoints should have different references")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference FPoint base/head (validate reference change)")
+        void constructWithRefBaseHeadValidateReferenceChange() {
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fPointBase.set(0, 0, 0);
             fPointHead.set(0, 0, 0);
@@ -378,51 +243,126 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Construct with FPoint base/head (throw IllegalArgumentException)")
-        void constructWithBaseHeadThrowIllegalArgumentException() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> factory.getFVector(fPoint, fPoint),
-                    "FPoints must not be the same object" );
-        }
-
-        @Test
-        @DisplayName("Construct with FVector")
-        void constructWithFVector() {
-            FVector fVectorRef = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
-            FVector fVector = factory.getFVector(fVectorRef);
+        @DisplayName("Construct with FPoint head")
+        void constructWithHead() {
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getFVector(fPointHead);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVectorRef.getRefBase().getX(), fVector.getRefBase().getX(),
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fVectorRef.getRefBase().getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fVectorRef.getRefBase().getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fVectorRef.getRefHead().getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(fPointHead.getX(), fVector.getRefHead().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fVectorRef.getRefHead().getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(fPointHead.getY(), fVector.getRefHead().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fVectorRef.getRefHead().getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getRefHead().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
 
         @Test
-        @DisplayName("Construct with FVector (validate reference)")
-        void constructWithFVectorValidateReference() {
-            FVector fVectorRef = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
-            FVector fVector = factory.getFVector(fVectorRef);
+        @DisplayName("Construct with FPoint head (validate reference)")
+        void constructWithHeadValidateReference() {
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getFVector(fPointHead);
 
             Assertions.assertAll("Validate FPoint references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
-                    () -> assertNotSame(fVectorRef.getRefBase(), fVector.getRefBase(),
-                            "The base FPoint reference is erroneous"),
-                    () -> assertNotSame(fVectorRef.getRefHead(), fVector.getRefHead(),
+                    () -> assertNotSame(fPointHead, fVector.getRefHead(),
                             "The head FPoint reference is erroneous"),
                     () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
                             "FPoints should have different references")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with FPoint head (validate reference change)")
+        void constructWithHeadValidateReferenceChange() {
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getFVector(fPointHead);
+
+            fPointHead.set(0, 0, 0);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertNotEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference FPoint head")
+        void constructWithRefHead() {
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointHead);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(fPointHead.getX(), fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(fPointHead.getY(), fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(fPointHead.getZ(), fVector.getRefHead().getZ(),
+                            "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference FPoint head (validate reference)")
+        void constructWithRefHeadValidateReference() {
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointHead);
+
+            Assertions.assertAll("Validate FPoint references",
+                    () -> assertNotNull(fVector,
+                            "The generated FVector instance is null"),
+                    () -> assertSame(fPointHead, fVector.getRefHead(),
+                            "The head FPoint reference is erroneous"),
+                    () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
+                            "FPoints should have different references")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference FPoint head (validate reference change)")
+        void constructWithRefHeadValidateReferenceChange() {
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointHead);
+
+            fPointHead.set(0, 0, 0);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Z value is incorrect")
             );
         }
 
@@ -433,7 +373,7 @@ public class FVectorTest {
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
+            assertNotSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -470,7 +410,7 @@ public class FVectorTest {
 
             fVector.setBase(factory.getFPoint());
 
-            assertSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
+            assertNotSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -485,11 +425,21 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set base ref")
-        void setBaseRef() {
+        @DisplayName("Get reference base")
+        void getRefBase() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+
+            assertSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
+        }
+
+        @Test
+        @DisplayName("Set reference base")
+        void setRefBase() {
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setRefBase(factory.getFPoint());
 
@@ -510,11 +460,11 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set base ref (validate reference)")
-        void setBaseRefValidateReference() {
+        @DisplayName("Set reference base (validate reference)")
+        void setRefBaseValidateReference() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setRefBase(factory.getFPoint());
 
@@ -522,25 +472,14 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set base ref (throw NullPointerException)")
-        void setBaseRefThrowNullPointerException() {
+        @DisplayName("Set reference base (throw NullPointerException)")
+        void setRefBaseThrowNullPointerException() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             Assertions.assertThrows(NullPointerException.class, () -> fVector.setRefBase(null),
                     "The reference must not be null");
-        }
-
-        @Test
-        @DisplayName("Set base ref (throw IllegalArgumentException)")
-        void setBaseRefThrowIllegalArgumentException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVector.setRefBase(fPointHead),
-                    "FPoints must not be the same object");
         }
 
         @Test
@@ -550,7 +489,7 @@ public class FVectorTest {
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
+            assertNotSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -587,7 +526,7 @@ public class FVectorTest {
 
             fVector.setHead(factory.getFPoint());
 
-            assertSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
+            assertNotSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
         }
 
         @Test
@@ -602,11 +541,21 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set head ref")
-        void setHeadRef() {
+        @DisplayName("Get reference head")
+        void getRefHead() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+
+            assertSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
+        }
+
+        @Test
+        @DisplayName("Set reference head")
+        void setRefHead() {
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setRefHead(factory.getFPoint());
 
@@ -627,11 +576,11 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set head ref (validate reference)")
-        void setHeadRefValidateReference() {
+        @DisplayName("Set reference head (validate reference)")
+        void setRefHeadValidateReference() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setRefHead(factory.getFPoint());
 
@@ -639,25 +588,14 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set head ref (throw NullPointerException)")
-        void setHeadRefThrowNullPointerException() {
+        @DisplayName("Set reference head (throw NullPointerException)")
+        void setRefHeadThrowNullPointerException() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             Assertions.assertThrows(NullPointerException.class, () -> fVector.setRefHead(null),
                     "The reference must not be null");
-        }
-
-        @Test
-        @DisplayName("Set head ref (throw IllegalArgumentException)")
-        void setHeadRefThrowIllegalArgumentException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVector.setRefHead(fPointBase),
-                    "FPoints must not be an instance of the same object");
         }
 
         @Test
@@ -695,8 +633,8 @@ public class FVectorTest {
             fVector.set(factory.getFPoint(), factory.getFPoint());
 
             Assertions.assertAll("Validate FPoint references",
-                    () -> assertSame(fPointBase, fVector.getRefBase(), "The base FPoint is incorrect"),
-                    () -> assertSame(fPointHead, fVector.getRefHead(), "The head FPoint is incorrect")
+                    () -> assertNotSame(fPointBase, fVector.getRefBase(), "The base FPoint is incorrect"),
+                    () -> assertNotSame(fPointHead, fVector.getRefHead(), "The head FPoint is incorrect")
             );
         }
 
@@ -718,8 +656,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set FPoints ref")
-        void setBaseHeadRef() {
+        @DisplayName("Set reference FPoints")
+        void setRefBaseHead() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
@@ -743,8 +681,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set FPoints ref (validate references)")
-        void setBaseHeadRefValidateReferences() {
+        @DisplayName("Set reference FPoints (validate references)")
+        void setRefBaseHeadValidateReferences() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
@@ -758,8 +696,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set FPoints ref (throw NullPointerException)")
-        void setBaseHeadRefThrowNullPointerException() {
+        @DisplayName("Set reference FPoints (throw NullPointerException)")
+        void setRefBaseHeadThrowNullPointerException() {
             FPoint fPointBase = TestHelper.getRandomFPoint();
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
@@ -772,17 +710,6 @@ public class FVectorTest {
                     () -> Assertions.assertThrows(NullPointerException.class, () -> fVector.setRef(null, null),
                             "The reference FPoints must not be null")
             );
-        }
-
-        @Test
-        @DisplayName("Set FPoints ref (throw IllegalArgumentException)")
-        void setBaseHeadRefThrowIllegalArgumentException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVector.setRefHead(fPointBase),
-                    "FPoints must not be an instance of the same object");
         }
 
         @Test
@@ -825,6 +752,189 @@ public class FVectorTest {
             );
         }
 
+        @Test
+        @DisplayName("Access base X")
+        void accessBaseX() {
+            FVector fVector = factory.getFVector();
+
+            fVector.setBaseX(1);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Access base Y")
+        void accessBaseY() {
+            FVector fVector = factory.getFVector();
+
+            fVector.setBaseY(1);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Access base Z")
+        void accessBaseZ() {
+            FVector fVector = factory.getFVector();
+
+            fVector.setBaseZ(1);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Access head X")
+        void accessHeadX() {
+            FVector fVector = factory.getFVector();
+
+            fVector.setHeadX(1);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Access head Y")
+        void accessHeadY() {
+            FVector fVector = factory.getFVector();
+
+            fVector.setHeadY(1);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            "Head - The Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Access head Z")
+        void accessHeadZ() {
+            FVector fVector = factory.getFVector();
+
+            fVector.setHeadZ(1);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefHead().getZ(),
+                            "Head - The Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with FPairPos3D")
+        void constructWithFPairPos3D() {
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
+            FVector fVector = factory.getFVector(fPairPos3D);
+
+            assertNotNull(fVector, "The instance is null");
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(2, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(3, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(4, fVector.getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(5, fVector.getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(6, fVector.getRefHead().getZ(),
+                            "Head - The Y value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Export to FPairPos3D")
+        void toPairPos3D() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+            FPairPos3D fPairPos3D = fVector.toFPairPos3D();
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fPairPos3D.getPosA().getD0(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(2, fPairPos3D.getPosA().getD1(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(3, fPairPos3D.getPosA().getD2(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(4, fPairPos3D.getPosB().getD0(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(5, fPairPos3D.getPosB().getD1(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(6, fPairPos3D.getPosB().getD2(),
+                            "Head - The Y value is incorrect")
+            );
+        }
     }
 
     @Nested
@@ -1354,8 +1464,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Get length (random)")
         void getLengthRandom() {
-            FPoint fPointBase = factory.getFPoint(TestHelper.getRandomFPoint());
-            FPoint fPointHead = factory.getFPoint(TestHelper.getRandomFPoint());
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
             double dimX = fVector.getLengthAxisX() * fVector.getLengthAxisX();
@@ -1433,8 +1543,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set length (random)")
         void setLengthRandom() {
-            FPoint fPointBase = factory.getFPoint(TestHelper.getRandomFPoint());
-            FPoint fPointHead = factory.getFPoint(TestHelper.getRandomFPoint());
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
             fVector.setLength(1);
@@ -1843,151 +1953,6 @@ public class FVectorTest {
             FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
 
             FVectorTestHelper.testValue(FVector::getAngle, fVectorA, fVectorB);
-        }
-
-        @Test
-        @DisplayName("Set angle with FVector")
-        void setAngleWithFVector() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            rotation.setAngle(fVectorA, fVectorB, angle);
-
-            assertEquals(angle, fVectorA.getAngle(fVectorB),
-                    jitter, "The angle is incorrect");
-        }
-
-        @Test
-        @DisplayName("Set angle with FVector (negative)")
-        void setAngleWithFVectorNegative() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
-            double angle = -Math.abs(random.nextDouble() % Math.PI);
-
-            rotation.setAngle(fVectorA, fVectorB, angle);
-
-            assertEquals(angle, -fVectorA.getAngle(fVectorB),
-                    jitter, "The angle is incorrect");
-        }
-
-        @Test
-        @DisplayName("Set angle with FVector (throw IllegalStateException, position)")
-        void setAngleWithFVectorThrowIllegalStateExceptionPosition() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = fVectorA.copy();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> rotation.setAngle(fVectorA, fVectorB, angle),
-                    "Both FVectors are at the same position");
-        }
-
-        @Test
-        @DisplayName("Set angle with FVector (throw IllegalArgumentException, direction)")
-        void setAngleWithFVectorThrowIllegalArgumentExceptionDirection() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.setAngle(fVectorA, fVectorB, angle),
-                    "The direction of the provided FVector is not defined");
-        }
-
-        @Test
-        @DisplayName("Set angle with FVector (validate)")
-        void setAngleWithFVectorValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
-
-            FVectorTestHelper.testReference((a, b) -> rotation.setAngle(a, b, Math.PI), fVectorA, fVectorB);
-        }
-
-        @Test
-        @DisplayName("Rotate with FPoint (simple)")
-        void rotateWithFPointSimple() {
-            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
-            FPoint fPoint = factory.getFPoint(0, 2, 0);
-
-            rotation.rotate(fVector, fPoint, Math.PI * 0.5);
-
-            assertTrue(fVector.isSimilar(-1, 1, 0, -1, 1, -Math.sqrt(2)),
-                    "The position of the rotated FVector is erroneous");
-        }
-
-        @Test
-        @DisplayName("Rotate with FPoint (simple, negative)")
-        void rotateWithFPointSimpleNegative() {
-            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
-            FPoint fPoint = factory.getFPoint(0, 2, 0);
-
-            rotation.rotate(fVector, fPoint, -(Math.PI * 0.5));
-
-            assertTrue(fVector.isSimilar(-1, 1, 0, -1, 1, Math.sqrt(2)),
-                    "The position of the rotated FVector is erroneous");
-        }
-
-        @Test
-        @DisplayName("Rotate with FPoint (throw IllegalStateException)")
-        void rotateWithFPointThrowIllegalStateException() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = fVector.getRefBase().copy();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> rotation.rotate(fVector, fPoint, angle),
-                    "The argument FPoint is at the same position as the base FPoint");
-        }
-
-        @Test
-        @DisplayName("Rotate with FPoint (validate)")
-        void rotateWithFPointValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FVectorTestHelper.testReference((a, b) -> rotation.rotate(a, b, Math.PI), fVector, fPoint);
-        }
-
-        @Test
-        @DisplayName("Rotate with FVector (simple)")
-        void rotateWithFVectorSimple() {
-            FVector fVectorA = factory.getFVector(-1, 1, 0, -2, 2, 0);
-            FVector fVectorB = factory.getFVector(0, 1, 0);
-
-            rotation.rotate(fVectorA, fVectorB, Math.PI * 0.5);
-
-            assertTrue(fVectorA.isSimilar(0, 1, -1, 0, 2, -2),
-                    "The position of the rotated FVector is erroneous");
-        }
-
-        @Test
-        @DisplayName("Rotate with FVector (simple, negative)")
-        void rotateWithFVectorSimpleNegative() {
-            FVector fVectorA = factory.getFVector(-1, 1, 0, -2, 2, 0);
-            FVector fVectorB = factory.getFVector(0, 1, 0);
-
-            rotation.rotate(fVectorA, fVectorB, -(Math.PI * 0.5));
-
-            assertTrue(fVectorA.isSimilar(0, 1, 1, 0, 2, 2),
-                    "The position of the rotated FVector is erroneous");
-        }
-
-        @Test
-        @DisplayName("Rotate with FVector (throw IllegalArgumentException)")
-        void rotateWithFVectorThrowIllegalArgumentException() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.rotate(fVectorA, fVectorB, angle),
-                    "The direction of the provided FVector is not defined");
-        }
-
-        @Test
-        @DisplayName("Rotate with FVector (validate)")
-        void rotateWithFVectorValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
-
-            FVectorTestHelper.testReference((a, b) -> rotation.rotate(a, b, Math.PI), fVectorA, fVectorB);
         }
 
         @Test
@@ -2834,6 +2799,31 @@ public class FVectorTest {
             FVectorTestHelper.testValue(FVector::copy, fVector);
         }
 
+        @Test
+        @DisplayName("Copy zero")
+        void copyZero() {
+            FVector fVectorA = TestHelper.getRandomFVector();
+            FVector fVectorB = fVectorA.copyZero();
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertNotSame(fVectorA, fVectorB,
+                            "FVectors represent different objects"),
+                    () -> assertFalse(fVectorA.isExact(fVectorB),
+                            "FVectors should have the same values"),
+                    () -> assertNotSame(fVectorA.getRefBase(), fVectorB.getRefBase(),
+                            "The base FPoints should be different"),
+                    () -> assertNotSame(fVectorA.getRefHead(), fVectorB.getRefHead(),
+                            "The head FPoints should be different")
+            );
+        }
+
+        @Test
+        @DisplayName("Copy zero (validate)")
+        void copyZeroValidate() {
+            FVector fVector = TestHelper.getRandomFVector();
+
+            FVectorTestHelper.testValue(FVector::copyZero, fVector);
+        }
     }
 
     @Nested
@@ -3564,6 +3554,5 @@ public class FVectorTest {
                             "The head FPoint reference is incorrect")
             );
         }
-
     }
 }
