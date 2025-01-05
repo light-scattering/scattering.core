@@ -172,18 +172,18 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
         geometry.disassemble().forEach(p -> p.setDistance(projectOnPlane(p.copy()), distance));
     }
 
-
     @Override
-    public Function<Geometry, List<Boolean>> isInHalfSpace() {
+    public List<Boolean> isInHalfSpace(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble().stream()
+        return geometry.disassemble().stream()
                 .map(p -> isInHalfSpace(projectOnLine(p.copy())))
                 .collect(Collectors.toList());
     }
+
 
     // -------------------------------------------------------------------------------------------------
 
@@ -243,6 +243,8 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
 
         return Optional.of(factory.getFLine(factory.getFVector(vPlanePar).moveBase(pos)));
     }
+
+
 
     // -------------------------------------------------------------------------------------------------
 

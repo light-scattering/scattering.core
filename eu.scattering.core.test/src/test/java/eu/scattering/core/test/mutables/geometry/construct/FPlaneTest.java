@@ -480,7 +480,7 @@ public class FPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertTrue(fPoint.extBoolean(fPlane.isInHalfSpace()).get(0),"The half-space is erroneous");
+            assertTrue(fPlane.isInHalfSpace(fPoint).get(0),"The half-space is erroneous");
         }
 
         @Test
@@ -498,7 +498,7 @@ public class FPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertFalse(fPoint.extBoolean(fPlane.isInHalfSpace()).get(0),"The half-space is erroneous");
+            assertFalse(fPlane.isInHalfSpace(fPoint).get(0),"The half-space is erroneous");
         }
 
         @Test
@@ -507,16 +507,8 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.extBoolean(fPlane.isInHalfSpace()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isInHalfSpace(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Determine half-space (validate)")
-        void isInHalfSpaceValidate() {
-            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(FPlane::isInHalfSpace, fPlane);
         }
 
         @Test

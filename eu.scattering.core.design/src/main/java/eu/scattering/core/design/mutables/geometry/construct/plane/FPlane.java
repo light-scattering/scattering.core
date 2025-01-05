@@ -20,6 +20,6 @@ public interface FPlane extends Construct<FPlane> {
     // Extensions
     //--------------------------------------------------
 
-    Function<Geometry, List<Boolean>> isInHalfSpace();
+    List<Boolean> isInHalfSpace(Geometry geometry);
 }
 
