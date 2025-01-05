@@ -6,8 +6,6 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface Construct<T> extends Geometry, Mutable<T> {
 
@@ -18,12 +16,13 @@ public interface Construct<T> extends Geometry, Mutable<T> {
     FPoint getBase();
     FPoint getHead();
 
-    Consumer<Geometry> project();
-    Consumer<Geometry> reflect();
+    void project(Geometry geometry);
+    void reflect(Geometry geometry);
 
-    Function<Geometry, List<Double>> getDistance();
-    Function<Geometry, List<Double>> getDistanceP2();
-    Consumer<Geometry> setDistance(double distance);
+    List<Double> getDistance(Geometry geometry);
+    List<Double> getDistanceP2(Geometry geometry);
 
-    Function<Geometry, List<Boolean>> isPartOf();
+    void setDistance(Geometry geometry, double distance);
+
+    List<Boolean> isPartOf(Geometry geometry);
 }

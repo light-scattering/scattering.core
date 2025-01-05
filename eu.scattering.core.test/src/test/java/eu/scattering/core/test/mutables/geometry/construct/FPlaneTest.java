@@ -222,7 +222,11 @@ public class FPlaneTest {
             FPlane fPlaneB = fPlaneA.copy();
 
             fPlaneB.getOrigin().reflectHead().moveBase(TestHelper.getRandomFPoint());
-            fPlaneB.getOrigin().moveBase(fPlaneB.copy().getBase().ext(fPlaneA.project()));
+
+            var fPointA = fPlaneB.copy().getBase();
+            fPlaneA.project(fPointA);
+
+            fPlaneB.getOrigin().moveBase(fPointA);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fPlaneA.isSimilar(fPlaneB), "FPlanes should be similar"),
@@ -322,7 +326,7 @@ public class FPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            fPoint.ext(fPlane.project());
+            fPlane.project(fPoint);
 
             assertTrue(factory.getFPoint(-1, 2, -1).add(relocation).isSimilar(fPoint),
                     "The projection is erroneous");
@@ -334,16 +338,8 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.ext(fPlane.project()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.project(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Project (validate)")
-        void projectValidate() {
-            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(FPlane::project, fPlane);
         }
 
         @Test
@@ -352,7 +348,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fPoint.ext(fPlane.reflect());
+            fPlane.reflect(fPoint);
 
             assertTrue(factory.getFPoint(-2, 1, -2).isSimilar(fPoint),
                     "The reflection is erroneous");
@@ -364,16 +360,8 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.ext(fPlane.reflect()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.reflect(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Reflect (validate)")
-        void reflectValidate() {
-            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(FPlane::reflect, fPlane);
         }
 
         @Test
@@ -382,7 +370,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(-1, 2, -1).add(0.5 * jitter);
 
-            assertTrue(fPoint.extBoolean(fPlane.isPartOf()).get(0),
+            assertTrue(fPlane.isPartOf(fPoint).get(0),
                     "The distance should be negligible");
         }
 
@@ -392,7 +380,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(-1, 2, -1).add(1.5 * jitter);
 
-            assertFalse(fPoint.extBoolean(fPlane.isPartOf()).get(0),
+            assertFalse(fPlane.isPartOf(fPoint).get(0),
                     "The distance should not be negligible");
         }
 
@@ -402,16 +390,8 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.extBoolean(fPlane.isPartOf()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isPartOf(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Location (validate)")
-        void locationValidate() {
-            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(FPlane::isPartOf, fPlane);
         }
 
         @Test
@@ -425,7 +405,7 @@ public class FPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertEquals(Math.sqrt(3), fPoint.extDouble(fPlane.getDistance()).get(0),
+            assertEquals(Math.sqrt(3), fPlane.getDistance(fPoint).get(0),
                     "The distance is erroneous");
         }
 
@@ -435,16 +415,8 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.extDouble(fPlane.getDistance()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.getDistance(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Get distance (validate)")
-        void getDistanceValidate() {
-            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(FPlane::getDistance, fPlane);
         }
 
         @Test
@@ -458,7 +430,7 @@ public class FPlaneTest {
             fPlane.getOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertEquals(3, fPoint.extDouble(fPlane.getDistanceP2()).get(0),
+            assertEquals(3, fPlane.getDistanceP2(fPoint).get(0),
                     jitter, "The distance is erroneous");
         }
 
@@ -468,16 +440,8 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.extDouble(fPlane.getDistanceP2()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.getDistanceP2(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Get distance P2 (validate)")
-        void getDistanceP2Validate() {
-            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(FPlane::getDistanceP2, fPlane);
         }
 
         @Test
@@ -486,9 +450,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fPoint.ext(fPlane.setDistance(1));
+            fPlane.setDistance(fPoint, 1);
 
-            assertEquals(1, fPoint.extDouble(fPlane.getDistance()).get(0),
+            assertEquals(1, fPlane.getDistance(fPoint).get(0),
                     jitter, "The distance is erroneous");
         }
 
@@ -498,16 +462,8 @@ public class FPlaneTest {
             FPlane fPlane = factory.getFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.ext(fPlane.setDistance(1)),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.setDistance(fPoint, 1),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Set distance (validate)")
-        void setDistanceValidate() {
-            FPlane fPlane = factory.getFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(e -> e.setDistance(1), fPlane);
         }
 
         @Test
@@ -716,13 +672,13 @@ public class FPlaneTest {
             FLine fLine = fLineOpt.get();
 
             Assertions.assertAll("Validate FLine",
-                    () -> assertTrue(fLine.getBase().extBoolean(fPlane1.isPartOf()).get(0),
+                    () -> assertTrue(fPlane1.isPartOf(fLine.getBase()).get(0),
                             "The FLine base does not belong to FPlane 1"),
-                    () -> assertTrue(fLine.getHead().extBoolean(fPlane1.isPartOf()).get(0),
+                    () -> assertTrue(fPlane1.isPartOf(fLine.getHead()).get(0),
                             "The FLine head does not belong to FPlane 1"),
-                    () -> assertTrue(fLine.getBase().extBoolean(fPlane2.isPartOf()).get(0),
+                    () -> assertTrue(fPlane2.isPartOf(fLine.getBase()).get(0),
                             "The FLine base does not belong to FPlane 2"),
-                    () -> assertTrue(fLine.getHead().extBoolean(fPlane2.isPartOf()).get(0),
+                    () -> assertTrue(fPlane2.isPartOf(fLine.getHead()).get(0),
                             "The FLine head does not belong to FPlane 2")
             );
         }

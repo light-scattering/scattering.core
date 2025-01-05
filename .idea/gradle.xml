@@ -10,7 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/eu.scattering.core.design" />
-            <option value="$PROJECT_DIR$/eu.scattering.core.impl.production" />
+            <option value="$PROJECT_DIR$/eu.scattering.core.impl" />
             <option value="$PROJECT_DIR$/eu.scattering.core.test" />
             <option value="$PROJECT_DIR$/eu.scattering.core.transfer" />
           </set>

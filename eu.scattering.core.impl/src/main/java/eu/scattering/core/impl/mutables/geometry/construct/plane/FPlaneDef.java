@@ -55,6 +55,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
         return this;
     }
 
+
     // -------------------------------------------------------------------------------------------------
     // The following fields do not have to modified while extending the class.
     // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
@@ -99,79 +100,78 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     public boolean isSimilar(FPlane ref) {
 
         return (getOrigin().isParallel(ref.getOrigin()) || getOrigin().isAntiParallel(ref.getOrigin()))
-                && ref.getOrigin().extBoolean(isPartOf()).get(0);
+                && isPartOf(ref.getOrigin()).get(0);
     }
 
     // -------------------------------------------------------------------------------------------------
 
+
     @Override
-    public Consumer<Geometry> project() {
+    public void project(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble()
-                .forEach(this::projectOnPlane);
+        geometry.disassemble().forEach(this::projectOnPlane);
     }
 
     @Override
-    public Consumer<Geometry> reflect() {
+    public void reflect(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble()
-                .forEach(p -> p.reflect(projectOnPlane(p.copy())));
+        geometry.disassemble().forEach(p -> p.reflect(projectOnPlane(p.copy())));
     }
 
     @Override
-    public Function<Geometry, List<Boolean>> isPartOf() {
+    public List<Boolean> isPartOf(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble().stream()
+        return geometry.disassemble().stream()
                 .map(p -> p.getDistance(projectOnPlane(p.copy())) < epsilon)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Function<Geometry, List<Double>> getDistance() {
+    public List<Double> getDistance(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble().stream()
+        return geometry.disassemble().stream()
                 .map(p -> p.getDistance(projectOnPlane(p.copy())))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Function<Geometry, List<Double>> getDistanceP2() {
+    public List<Double> getDistanceP2(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble().stream()
+        return geometry.disassemble().stream()
                 .map(p -> p.getDistanceP2(projectOnPlane(p.copy())))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Consumer<Geometry> setDistance(double distance) {
+    public void setDistance(Geometry geometry, double distance) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble()
-                .forEach(p -> p.setDistance(projectOnPlane(p.copy()), distance));
+        geometry.disassemble().forEach(p -> p.setDistance(projectOnPlane(p.copy()), distance));
     }
+
 
     @Override
     public Function<Geometry, List<Boolean>> isInHalfSpace() {
