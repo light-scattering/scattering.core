@@ -171,44 +171,45 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
         geometry.disassemble().forEach(p -> p.setDistance(projectFPoint(p.copy()), distance));
     }
 
-    @Override
-    public Consumer<Geometry> moveForward(double distance) {
 
-        return (e) -> e.disassemble().forEach(p -> moveForward(p, distance));
+    @Override
+    public void moveForward(Geometry geometry, double distance) {
+
+        geometry.disassemble().forEach(p -> moveForward(p, distance));
     }
 
     @Override
-    public Consumer<Geometry> moveBackward(double distance) {
+    public void moveBackward(Geometry geometry, double distance) {
 
-        return (e) -> e.disassemble().forEach(p -> moveBackward(p, distance));
+        geometry.disassemble().forEach(p -> moveBackward(p, distance));
     }
 
     @Override
-    public Function<Geometry, List<Boolean>> isPartOfRay() {
+    public List<Boolean> isPartOfRay(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble().stream()
+        return geometry.disassemble().stream()
                 .map(this::isPartOfRay)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Function<Geometry, List<Boolean>> isPartOfSegment() {
+    public List<Boolean> isPartOfSegment(Geometry geometry) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return (e) -> e.disassemble().stream()
+        return geometry.disassemble().stream()
                 .map(this::isPartOfSegment)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Consumer<Geometry> rotate(double angle) {
+    public void rotate(Geometry geometry, double angle) {
 
         if (getOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -219,9 +220,9 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
 
         FRot rotor = fRot.getRotation(getOrigin().toFPairPos3D(), angle);
 
-        return (e) -> e.disassemble()
-                .forEach(p -> fRotHelper.rotate(p, rotor));
+        geometry.disassemble().forEach(p -> fRotHelper.rotate(p, rotor));
     }
+
 
     @Override
     public FPoint getFPoint(double length) {

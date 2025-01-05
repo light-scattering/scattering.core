@@ -620,7 +620,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint();
 
-            assertTrue(fPoint.extBoolean(fLine.isPartOfRay()).get(0),
+            assertTrue(fLine.isPartOfRay(fPoint).get(0),
                     "The FPoint is a part of the ray");
         }
 
@@ -631,7 +631,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            assertFalse(fPoint.extBoolean(fLine.isPartOfRay()).get(0),
+            assertFalse(fLine.isPartOfRay(fPoint).get(0),
                     "The FPoint is not a part of the ray");
         }
 
@@ -642,7 +642,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            assertTrue(fPoint.extBoolean(fLine.isPartOfRay()).get(0),
+            assertTrue(fLine.isPartOfRay(fPoint).get(0),
                     "The FPoint is a part of the ray");
         }
 
@@ -652,16 +652,8 @@ public class FLineTest {
             FLine fLine = factory.getFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.extBoolean(fLine.isPartOfRay()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOfRay(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Project on ray (validate)")
-        void projectOnRayValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector(1, 1, 1));
-
-            FLineTestHelper.testValue(FLine::isPartOfRay, fLine);
         }
 
         @Test
@@ -671,7 +663,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint();
 
-            assertTrue(fPoint.extBoolean(fLine.isPartOfSegment()).get(0),
+            assertTrue(fLine.isPartOfSegment(fPoint).get(0),
                     "The FPoint is a part of the segment");
         }
 
@@ -682,7 +674,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            assertFalse(fPoint.extBoolean(fLine.isPartOfSegment()).get(0),
+            assertFalse(fLine.isPartOfSegment(fPoint).get(0),
                     "The FPoint is not a of the segment");
         }
 
@@ -693,26 +685,18 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            assertFalse(fPoint.extBoolean(fLine.isPartOfSegment()).get(0),
+            assertFalse(fLine.isPartOfSegment(fPoint).get(0),
                     "The FPoint is not a part of the segment");
         }
 
         @Test
         @DisplayName("Project on segment (throw IllegalStateException)")
-        void isProjectableOnSegmantThrowIllegalStateException() {
+        void isProjectableOnSegmentThrowIllegalStateException() {
             FLine fLine = factory.getFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.extBoolean(fLine.isPartOfSegment()),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOfSegment(fPoint),
                     "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Project on segment (validate)")
-        void projectOnSegmentValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector(1, 1, 1));
-
-            FLineTestHelper.testValue(FLine::isPartOfSegment, fLine);
         }
 
         @Test
@@ -722,7 +706,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fPoint.ext(fLine.moveForward(Math.sqrt(3)));
+            fLine.moveForward(fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
                     "The translation is erroneous");
@@ -735,7 +719,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fPoint.ext(fLine.moveForward(-Math.sqrt(3)));
+            fLine.moveForward(fPoint, -Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
                     "The translation is erroneous");
@@ -747,16 +731,8 @@ public class FLineTest {
             FLine fLine = factory.getFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.ext(fLine.moveForward(Math.sqrt(3))),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.moveForward(fPoint, Math.sqrt(3)),
                     "The direction of the FLine is not defined");
-        }
-
-        @Test
-        @DisplayName("Move forward (validate)")
-        void moveForwardValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector());
-
-            FLineTestHelper.testValue(e -> e.moveForward(1), fLine);
         }
 
         @Test
@@ -766,7 +742,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fPoint.ext(fLine.moveBackward(Math.sqrt(3)));
+            fLine.moveBackward(fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
                     "The translation is erroneous");
@@ -779,7 +755,7 @@ public class FLineTest {
             FLine fLine = factory.getFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fPoint.ext(fLine.moveBackward(-Math.sqrt(3)));
+            fLine.moveBackward(fPoint, -Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
                     "The translation is erroneous");
@@ -791,16 +767,8 @@ public class FLineTest {
             FLine fLine = factory.getFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPoint.ext(fLine.moveBackward(Math.sqrt(3))),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.moveBackward(fPoint, Math.sqrt(3)),
                     "The direction of the FLine is not defined");
-        }
-
-        @Test
-        @DisplayName("Move backward (validate)")
-        void moveBackwardValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector());
-
-            FLineTestHelper.testValue(e -> e.moveBackward(1), fLine);
         }
 
         @Test
@@ -809,7 +777,7 @@ public class FLineTest {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FLine fLine = factory.getFLine(factory.getFVector(0, 1, 0));
 
-            fVector.ext(fLine.rotate(Math.PI * 0.5));
+            fLine.rotate(fVector, Math.PI * 0.5);
 
             assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
@@ -821,7 +789,7 @@ public class FLineTest {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FLine fLine = factory.getFLine(factory.getFVector(0, 1, 0));
 
-            fVector.ext(fLine.rotate(-(Math.PI * 0.5)));
+            fLine.rotate(fVector, -(Math.PI * 0.5));
 
             assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
                     "The position of the rotated FVector is erroneous");
@@ -833,16 +801,8 @@ public class FLineTest {
             FVector fVector = TestHelper.getRandomFVector();
             FLine fLine = factory.getFLine(factory.getFVector());
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.ext(fLine.rotate(Math.PI * 0.5)),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.rotate(fVector, Math.PI * 0.5),
                     "The direction of the FLine is not defined");
-        }
-
-        @Test
-        @DisplayName("Rotate (validate)")
-        void rotateValidate() {
-            FLine fLine = factory.getFLine(TestHelper.getRandomFVector());
-
-            FLineTestHelper.testValue(e -> e.rotate(Math.PI * 0.5), fLine);
         }
 
         @Test

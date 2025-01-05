@@ -23,11 +23,11 @@ public interface FLine extends Construct<FLine> {
     // Extensions
     //--------------------------------------------------
 
-    Consumer<Geometry> rotate(double angle);
+    void rotate(Geometry geometry, double angle);
 
-    Consumer<Geometry> moveForward(double distance);
-    Consumer<Geometry> moveBackward(double distance);
+    void moveForward(Geometry geometry, double distance);
+    void moveBackward(Geometry geometry, double distance);
 
-    Function<Geometry, List<Boolean>> isPartOfRay();
-    Function<Geometry, List<Boolean>> isPartOfSegment();
+    List<Boolean> isPartOfRay(Geometry geometry);
+    List<Boolean> isPartOfSegment(Geometry geometry);
 }
