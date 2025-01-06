@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.engines.rotation;
 
 import eu.scattering.core.design.mutables.geometry.Geometry;
+import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
@@ -8,16 +9,16 @@ import eu.scattering.core.design.engines.rotation.FRotationEngine;
 import eu.scattering.core.transfer.containers.engine.FRot.FRot;
 
 public class FRotationEngineDef implements FRotationEngine {
-    private final FRotationProcessor rotor;
+    private final FRotationProcessor core;
 
-    private FRotationEngineDef(FRotationProcessor rotor) {
+    private FRotationEngineDef(FRotationProcessor core) {
 
-        this.rotor = rotor;
+        this.core = core;
     }
 
-    public static FRotationEngine create(FRotationProcessor rotor) {
+    public static FRotationEngine create(FRotationProcessor core) {
 
-        return new FRotationEngineDef(rotor);
+        return new FRotationEngineDef(core);
     }
 
     @Override
@@ -48,14 +49,14 @@ public class FRotationEngineDef implements FRotationEngine {
         var axis = origin.copy().setCrossProduct(ref);
         var fPointCopy = ref.copy();
 
-        rotate(fPointCopy, rotor.getRotation(axis.toFPos3D(), angle));
+        rotate(fPointCopy, core.getRotation(axis.toFPos3D(), angle));
 
         return origin.applyStateFrom(fPointCopy);
     }
 
     @Override
     public FPoint rotate(FPoint origin, FPoint ref, double angle) {
-        rotate(origin, rotor.getRotation(ref.toFPos3D(), angle));
+        rotate(origin, core.getRotation(ref.toFPos3D(), angle));
 
         return origin;
     }
@@ -90,7 +91,7 @@ public class FRotationEngineDef implements FRotationEngine {
 
         FVector fCopyLocal = origin.copy().set(origin.getRefBase(), ref);
 
-        rotate(origin, rotor.getRotation(fCopyLocal.toFPairPos3D(), angle));
+        rotate(origin, core.getRotation(fCopyLocal.toFPairPos3D(), angle));
 
         return origin;
     }
@@ -102,8 +103,20 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
         }
 
-        rotate(origin, rotor.getRotation(ref.toFPairPos3D(), angle));
+        rotate(origin, core.getRotation(ref.toFPairPos3D(), angle));
 
         return origin;
+    }
+
+    @Override
+    public void rotate(FLine origin, Geometry geometry, double angle) {
+
+        if (origin.getRefOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        FRot rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
+
+        geometry.disassemble().forEach(p -> rotate(p, rotor));
     }
 }

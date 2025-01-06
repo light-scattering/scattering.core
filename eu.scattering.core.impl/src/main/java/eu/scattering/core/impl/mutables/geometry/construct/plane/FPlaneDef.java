@@ -12,8 +12,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
@@ -34,23 +32,23 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
 
     public static FPlane create(FactoryDesignConcrete factory, double epsilon) {
 
-        return new FPlaneDef(factory, epsilon).setOriginRef(factory.getFVector());
+        return new FPlaneDef(factory, epsilon).setRefOrigin(factory.getFVector());
     }
 
     @Override
-    public FVector getOrigin() {
+    public FVector getRefOrigin() {
 
         return origin;
     }
 
     @Override
-    public FPlane setOriginRef(FVector fVector) {
+    public FPlane setRefOrigin(FVector refOrigin) {
 
-        if (fVector == null) {
+        if (refOrigin == null) {
             throw new NullPointerException("The reference FVector cannot be null");
         }
 
-        origin = fVector;
+        origin = refOrigin;
 
         return this;
     }
@@ -64,7 +62,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
-        json.append("plane", getOrigin().toJSON());
+        json.append("plane", getRefOrigin().toJSON());
 
         return json;
     }
@@ -73,7 +71,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     public FPlane applyStateFrom(JSONObject json) {
         JSONArray structure = json.getJSONArray("plane");
 
-        getOrigin().applyStateFrom(factory.getFVector().applyStateFrom(structure.getJSONObject(0)));
+        getRefOrigin().applyStateFrom(factory.getFVector().applyStateFrom(structure.getJSONObject(0)));
 
         return this;
     }
@@ -81,7 +79,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane copy() {
 
-        return factory.getFPlane(getOrigin().copy());
+        return factory.getFPlane(getRefOrigin().copy());
     }
 
     @Override
@@ -99,8 +97,8 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public boolean isSimilar(FPlane ref) {
 
-        return (getOrigin().isParallel(ref.getOrigin()) || getOrigin().isAntiParallel(ref.getOrigin()))
-                && isPartOf(ref.getOrigin()).get(0);
+        return (getRefOrigin().isParallel(ref.getRefOrigin()) || getRefOrigin().isAntiParallel(ref.getRefOrigin()))
+                && isPartOf(ref.getRefOrigin()).get(0);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -109,7 +107,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public void project(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -119,7 +117,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public void reflect(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -129,7 +127,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public List<Boolean> isPartOf(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -141,7 +139,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public List<Double> getDistance(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -153,7 +151,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public List<Double> getDistanceP2(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -165,7 +163,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public void setDistance(Geometry geometry, double distance) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -175,7 +173,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public List<Boolean> isInHalfSpace(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -190,7 +188,7 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public boolean isCut(Geometry assembly) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -207,18 +205,18 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public Optional<FPoint> getCommonFPoint(FLine ref) {
 
-        if (getOrigin().isOrthogonal(ref.getOrigin())) {
+        if (getRefOrigin().isOrthogonal(ref.getRefOrigin())) {
             return Optional.empty();
         }
 
-        FPoint vPlane = getOrigin().copy().moveBaseToCenter().normalize().getRefHead();
-        FPoint vLine = ref.getOrigin().copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint vPlane = getRefOrigin().copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint vLine = ref.getRefOrigin().copy().moveBaseToCenter().normalize().getRefHead();
 
-        double dividend = vPlane.getDotProduct(getOrigin().getRefBase().copy().sub(ref.getOrigin().getRefBase()));
+        double dividend = vPlane.getDotProduct(getRefOrigin().getRefBase().copy().sub(ref.getRefOrigin().getRefBase()));
         double divisor = vPlane.getDotProduct(vLine);
         double distance = dividend / divisor;
 
-        FVector extension = ref.getOrigin().copy().setLength(distance);
+        FVector extension = ref.getRefOrigin().copy().setLength(distance);
 
         return Optional.of(extension.getRefHead());
     }
@@ -226,22 +224,22 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     @Override
     public Optional<FLine> getCommonFLine(FPlane ref) {
 
-        if (getOrigin().isParallel(ref.getOrigin()) || getOrigin().isAntiParallel(ref.getOrigin())) {
+        if (getRefOrigin().isParallel(ref.getRefOrigin()) || getRefOrigin().isAntiParallel(ref.getRefOrigin())) {
             return Optional.empty();
         }
 
-        FPoint vPlane1 = getOrigin().copy().moveBaseToCenter().getRefHead();
-        double d1 = -vPlane1.getDotProduct(getBase());
+        FPoint vPlane1 = getRefOrigin().copy().moveBaseToCenter().getRefHead();
+        double d1 = -vPlane1.getDotProduct(getRefOrigin().getRefBase());
 
-        FPoint vPlane2 = ref.getOrigin().copy().moveBaseToCenter().getRefHead();
-        double d2 = -vPlane2.getDotProduct(ref.getBase());
+        FPoint vPlane2 = ref.getRefOrigin().copy().moveBaseToCenter().getRefHead();
+        double d2 = -vPlane2.getDotProduct(ref.getRefOrigin().getRefBase());
 
         FPoint vPlanePar = vPlane1.copy().setCrossProduct(vPlane2);
         double vPlaneParDot = vPlanePar.getDotProduct(vPlanePar);
 
         FPoint pos = vPlane1.mul(d2).sub(vPlane2.mul(d1)).setCrossProduct(vPlanePar).div(vPlaneParDot);
 
-        return Optional.of(factory.getFLine(factory.getFVector(vPlanePar).moveBase(pos)));
+        return Optional.of(factory.getRefFLine(factory.getFVector(vPlanePar).moveBase(pos)));
     }
 
 
@@ -249,38 +247,38 @@ public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectOnPlane(FPoint fPoint) {
-        FPoint opA = getOrigin().getRefHead().copy()
-                .sub(getOrigin().getRefBase())
-                .div(getOrigin().getLength());
+        FPoint opA = getRefOrigin().getRefHead().copy()
+                .sub(getRefOrigin().getRefBase())
+                .div(getRefOrigin().getLength());
 
         FPoint opB = fPoint.copy()
-                .sub(getOrigin().getRefBase());
+                .sub(getRefOrigin().getRefBase());
 
         FPoint opC = factory.getFPoint()
-                .applyStateFrom(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+                .applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         FVector translation = factory.getFVector(opC, fPoint.copy())
-                .moveBase(getOrigin().getRefBase());
+                .moveBase(getRefOrigin().getRefBase());
 
         return fPoint.applyStateFrom(translation.getRefHead());
     }
 
     private FPoint projectOnLine(FPoint fPoint) {
-        FPoint opA = getOrigin().getRefHead().copy()
-                .sub(getOrigin().getRefBase())
-                .div(getOrigin().getLength());
+        FPoint opA = getRefOrigin().getRefHead().copy()
+                .sub(getRefOrigin().getRefBase())
+                .div(getRefOrigin().getLength());
 
         FPoint opB = fPoint.copy()
-                .sub(getOrigin().getRefBase());
+                .sub(getRefOrigin().getRefBase());
 
-        return fPoint.applyStateFrom(getOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+        return fPoint.applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
     }
 
     private boolean isInHalfSpace(FPoint projection) {
-        double magnitude = getOrigin().getLength();
+        double magnitude = getRefOrigin().getLength();
 
-        double distanceBase = getOrigin().getRefBase().getDistance(projection);
-        double distanceHead = getOrigin().getRefHead().getDistance(projection);
+        double distanceBase = getRefOrigin().getRefBase().getDistance(projection);
+        double distanceHead = getRefOrigin().getRefHead().getDistance(projection);
 
         if ((distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon)) {
             return true;

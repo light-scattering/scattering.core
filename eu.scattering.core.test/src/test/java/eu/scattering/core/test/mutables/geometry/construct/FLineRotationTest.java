@@ -1,0 +1,52 @@
+package eu.scattering.core.test.mutables.geometry.construct;
+
+import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
+import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
+import eu.scattering.core.test.TestHelper;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+
+import static eu.scattering.core.test.Configuration.factory;
+import static eu.scattering.core.test.Configuration.rotation;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@Timeout(5)
+@DisplayName("FLineRotation")
+public class FLineRotationTest {
+
+    @Test
+    @DisplayName("Rotate (simple)")
+    void rotateSimple() {
+        FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+        FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
+
+        rotation.rotate(fLine, fVector, Math.PI * 0.5);
+
+        assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                "The position of the rotated FVector is erroneous");
+    }
+
+    @Test
+    @DisplayName("Rotate (simple, negative)")
+    void rotateSimpleNegative() {
+        FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+        FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
+
+        rotation.rotate(fLine, fVector, -(Math.PI * 0.5));
+
+        assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
+                "The position of the rotated FVector is erroneous");
+    }
+
+    @Test
+    @DisplayName("Rotate  (throw IllegalStateException)")
+    void rotateThrowIllegalStateException() {
+        FVector fVector = TestHelper.getRandomFVector();
+        FLine fLine = factory.getRefFLine(factory.getFVector());
+
+        Assertions.assertThrows(IllegalStateException.class, () -> rotation.rotate(fLine, fVector, Math.PI * 0.5),
+                "The direction of the FLine is not defined");
+    }
+}

@@ -14,6 +14,4 @@ public final class Configuration {
     public static final double jitter = 1E-8;
     public static final FRandomProcessor random = factory.getFRandomProcessor();
     public static final FRotationEngine rotation = factory.getFRotationEngine();
-
-
 }

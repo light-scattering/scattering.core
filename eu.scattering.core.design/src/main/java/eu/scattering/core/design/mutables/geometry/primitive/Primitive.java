@@ -4,10 +4,6 @@ import eu.scattering.core.design.mutables.Mutable;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 public interface Primitive<T> extends Geometry, Mutable<T> {
 
     T add(FPoint fPoint);
@@ -40,8 +36,4 @@ public interface Primitive<T> extends Geometry, Mutable<T> {
 
     T applyStateTo(T ref);
     T applyStateFrom(T ref);
-
-    T ext(Consumer<Geometry> exp);
-    List<Double> extDouble(Function<Geometry, List<Double>> exp);
-    List<Boolean> extBoolean(Function<Geometry, List<Boolean>> exp);
 }

@@ -1,10 +1,12 @@
 package eu.scattering.core.test.mutables.geometry.construct;
 
+import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.geometry.construct.support.FLineTestHelper;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class FLineTest {
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    class FLineBase {
+    class FLineBasicTest {
 
         @Test
         @DisplayName("Construct")
@@ -36,7 +38,7 @@ public class FLineTest {
         void constructValidatePositions() {
             FLine fLine = factory.getFLine();
 
-            assertTrue(factory.getFVector().isExact(fLine.getOrigin()),
+            assertTrue(factory.getFVector().isExact(fLine.getRefOrigin()),
                     "The initial FVector values are erroneous");
         }
 
@@ -44,7 +46,7 @@ public class FLineTest {
         @DisplayName("Construct with FVector")
         void constructWithFVector() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLine = factory.getFLine(fVector);
+            FLine fLine = factory.getRefFLine(fVector);
 
             assertNotNull(fLine, "The instance is null");
         }
@@ -53,9 +55,9 @@ public class FLineTest {
         @DisplayName("Construct with FVector (validate references)")
         void constructWithFVectorValidateReferences() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLine = factory.getFLine(fVector);
+            FLine fLine = factory.getRefFLine(fVector);
 
-            assertSame(fVector, fLine.getOrigin(), "The FVector reference is erroneous");
+            assertSame(fVector, fLine.getRefOrigin(), "The FVector reference is erroneous");
         }
 
         @Test
@@ -70,93 +72,102 @@ public class FLineTest {
             FPoint fPointBase = factory.getFPoint(refAX, refAY, refAZ);
             FPoint fPointHead = factory.getFPoint(refBX, refBY, refBZ);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
-            FLine fLine = factory.getFLine(fVector);
+            FLine fLine = factory.getRefFLine(fVector);
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(refAX, fLine.getBase().getX(),
+                    () -> assertEquals(refAX, fLine.getRefOrigin().getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(refAY, fLine.getBase().getY(),
+                    () -> assertEquals(refAY, fLine.getRefOrigin().getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(refAZ, fLine.getBase().getZ(),
+                    () -> assertEquals(refAZ, fLine.getRefOrigin().getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(refBX, fLine.getHead().getX(),
+                    () -> assertEquals(refBX, fLine.getRefOrigin().getRefHead().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(refBY, fLine.getHead().getY(),
+                    () -> assertEquals(refBY, fLine.getRefOrigin().getRefHead().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(refBZ, fLine.getHead().getZ(),
+                    () -> assertEquals(refBZ, fLine.getRefOrigin().getRefHead().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
 
         @Test
-        @DisplayName("Set origin ref")
-        void setOriginRef() {
+        @DisplayName("Construct with FPairPos3D")
+        void constructWithFPairPos3D() {
+            var fVector = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
+            FLine fLine = factory.getFLine(fVector);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fLine.getRefOrigin().getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(2, fLine.getRefOrigin().getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(3, fLine.getRefOrigin().getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(4, fLine.getRefOrigin().getRefHead().getX(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(5, fLine.getRefOrigin().getRefHead().getY(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(6, fLine.getRefOrigin().getRefHead().getZ(),
+                            "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Set reference core")
+        void setRefCore() {
             FVector fVectorA = TestHelper.getRandomFVector();
             FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
-            FLine fLine = factory.getFLine(fVectorA);
 
-            FLine fLineRef = fLine.setOriginRef(fVectorB);
+            FLine fLine = factory.getRefFLine(fVectorA);
+            FLine fLineRef = fLine.setRefOrigin(fVectorB);
 
             Assertions.assertAll("Validate FLine references",
                     () -> assertNotSame(fVectorA, fVectorB, "FVectors should point at different objects"),
-                    () -> assertSame(fVectorB, fLine.getOrigin(), "The FVector reference is erroneous"),
+                    () -> assertSame(fVectorB, fLine.getRefOrigin(), "The FVector reference is erroneous"),
                     () -> assertSame(fLineRef, fLine, "The FLine reference should not change")
             );
         }
 
         @Test
-        @DisplayName("Get origin")
-        void getOrigin() {
+        @DisplayName("Get core")
+        void getCore() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLine = factory.getFLine(fVector);
+            FLine fLine = factory.getRefFLine(fVector);
 
-            assertSame(fVector, fLine.getOrigin(), "The FVector reference is erroneous");
+            assertSame(fVector, fLine.getRefOrigin(), "The FVector reference is erroneous");
         }
-
-        @Test
-        @DisplayName("Get origin (validate positions)")
-        void getOriginValidatePositions() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FLine fLine = factory.getFLine(fVector.copy());
-
-            assertTrue(fVector.isExact(fLine.getOrigin()), "The FVector positions are erroneous");
-        }
-
     }
 
     @Nested
     @DisplayName("Core features")
-    class ICoreFeatures {
+    class FLineCoreTest {
 
         @Test
         @DisplayName("JSON parser")
         void parseJSON() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fVector);
-            FLine fLineB = factory.getFLine().applyStateFrom(fLineA.toJSON());
+            FLine fLineA = factory.getRefFLine(fVector);
+
+            JSONObject json = fLineA.toJSON();
+
+            FLine fLineB = factory.getFLine().applyStateFrom(json);
 
             Assertions.assertAll("Validate JSON parser",
                     () -> assertNotSame(fLineA, fLineB,
                             "FLine references should point at different objects"),
-                    () -> assertTrue(fLineA.getOrigin().isExact(fLineB.getOrigin()),
+                    () -> assertNotSame(fLineA.getRefOrigin(), fLineB.getRefOrigin(),
+                            "FLine core references should point at different objects"),
+                    () -> assertTrue(fLineA.getRefOrigin().isExact(fLineB.getRefOrigin()),
                             "The origin of FLines should be exact")
             );
-        }
-
-        @Test
-        @DisplayName("Parse JSON export (validate)")
-        void parseJSONExportValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector());
-
-            FLineTestHelper.testValue(FLine::toJSON, fLine);
         }
 
         @Test
         @DisplayName("Exactness")
         void isExact() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy());
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy());
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isExact(fLineB), "FLines should be equal"),
@@ -168,8 +179,8 @@ public class FLineTest {
         @DisplayName("Exactness (fail)")
         void isExactFail() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy().add(0.5 * jitter));
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy().add(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fLineA.isExact(fLineB), "FLines should not be equal"),
@@ -180,8 +191,8 @@ public class FLineTest {
         @Test
         @DisplayName("Exactness (validate)")
         void isExactValidate() {
-            FLine fLineA = factory.getFLine(factory.getFVector());
-            FLine fLineB = factory.getFLine(factory.getFVector());
+            FLine fLineA = factory.getRefFLine(factory.getFVector());
+            FLine fLineB = factory.getRefFLine(factory.getFVector());
 
             FLineTestHelper.testValue(FLine::isExact, fLineA, fLineB);
         }
@@ -190,8 +201,8 @@ public class FLineTest {
         @DisplayName("Similarity")
         void isSimilar() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy().add(0.5 * jitter));
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy().add(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
@@ -202,8 +213,8 @@ public class FLineTest {
         @Test
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
-            FLine fLineA = factory.getFLine(TestHelper.getRandomFVector());
-            FLine fLineB = factory.getFLine(TestHelper.getRandomFVector(fLineA.getOrigin()));
+            FLine fLineA = factory.getRefFLine(TestHelper.getRandomFVector());
+            FLine fLineB = factory.getRefFLine(TestHelper.getRandomFVector(fLineA.getRefOrigin()));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fLineA.isSimilar(fLineB), "FLines should not be similar"),
@@ -213,79 +224,79 @@ public class FLineTest {
 
         @Test
         @DisplayName("Similarity (above head)")
-        void isSimilarAboveHead() {
+        void isSimilarLineAboveHead() {
             FVector fVector = TestHelper.getRandomFVector().normalize();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy());
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy());
 
-            fLineB.getOrigin().shiftForward(10);
+            fLineB.getRefOrigin().shiftForward(10);
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isSimilar(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
         @Test
         @DisplayName("Similarity (above head, inverted)")
-        void isSimilarAboveHeadInverted() {
+        void isSimilarLineAboveHeadInverted() {
             FVector fVector = TestHelper.getRandomFVector().normalize();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy());
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy());
 
-            fLineB.getOrigin().shiftForward(10).reflectHead();
+            fLineB.getRefOrigin().shiftForward(10).reflectHead();
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isSimilar(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
         @Test
         @DisplayName("Similarity (below base)")
-        void isSimilarBelowBase() {
+        void isSimilarLineBelowBase() {
             FVector fVector = TestHelper.getRandomFVector().normalize();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy());
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy());
 
-            fLineB.getOrigin().shiftBackward(10);
+            fLineB.getRefOrigin().shiftBackward(10);
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isSimilar(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
         @Test
         @DisplayName("Similarity (below base, inverted)")
-        void isSimilarBelowBaseInverted() {
+        void isSimilarLineBelowBaseInverted() {
             FVector fVector = TestHelper.getRandomFVector().normalize();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy());
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy());
 
-            fLineB.getOrigin().shiftBackward(10).reflectHead();
+            fLineB.getRefOrigin().shiftBackward(10).reflectHead();
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isSimilar(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
         @Test
         @DisplayName("Similarity (validate)")
-        void isSimilarValidate() {
-            FLine fLineA = factory.getFLine(TestHelper.getRandomFVector());
-            FLine fLineB = factory.getFLine(TestHelper.getRandomFVector());
+        void isSimilarLineValidate() {
+            FLine fLineA = factory.getRefFLine(TestHelper.getRandomFVector());
+            FLine fLineB = factory.getRefFLine(TestHelper.getRandomFVector());
 
-            FLineTestHelper.testValue(FLine::isSimilar, fLineA, fLineB);
+            FLineTestHelper.testValue(FLine::isSameLine, fLineA, fLineB);
         }
 
         @Test
         @DisplayName("Get hash code")
         void getHashCode() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fVector.copy());
-            FLine fLineB = factory.getFLine(fVector.copy());
+            FLine fLineA = factory.getRefFLine(fVector.copy());
+            FLine fLineB = factory.getRefFLine(fVector.copy());
 
             assertEquals(fLineA.hashCode(), fLineB.hashCode(),
                     "Two identical FLines should have the same hash code");
@@ -295,8 +306,8 @@ public class FLineTest {
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fVector);
-            FLine fLineB = factory.getFLine(TestHelper.getRandomFVector(fVector));
+            FLine fLineA = factory.getRefFLine(fVector);
+            FLine fLineB = factory.getRefFLine(TestHelper.getRandomFVector(fVector));
 
             assertNotEquals(fLineA.hashCode(), fLineB.hashCode(),
                     "Two different FLines should not have the same hash code");
@@ -305,7 +316,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get hash code (validate)")
         void getHashCodeValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
 
             FLineTestHelper.testValue(FLine::hashCode, fLine);
         }
@@ -314,7 +325,7 @@ public class FLineTest {
         @DisplayName("Copy")
         void copy() {
             FVector fVector = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fVector);
+            FLine fLineA = factory.getRefFLine(fVector);
             FLine fLineB = fLineA.copy();
 
             Assertions.assertAll("Validate copy",
@@ -328,58 +339,155 @@ public class FLineTest {
         @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
 
             FLineTestHelper.testValue(FLine::copy, fLine);
         }
 
+        @Test
+        @DisplayName("Copy zero")
+        void copyZero() {
+            FVector fVector = TestHelper.getRandomFVector();
+            FLine fLineA = factory.getRefFLine(fVector);
+            FLine fLineB = fLineA.copyZero();
+
+            Assertions.assertAll("Validate copy",
+                    () -> assertNotSame(fLineA, fLineB,
+                            "FLines represent different objects"),
+                    () -> assertTrue(fLineB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                            "FLines should have the same values")
+            );
+        }
+
+        @Test
+        @DisplayName("Copy zero (validate)")
+        void copyZeroValidate() {
+            FLine fLine = factory.getRefFLine(factory.getFVector());
+
+            FLineTestHelper.testValue(FLine::copyZero, fLine);
+        }
+
+        @Test
+        @DisplayName("Export to FPairPos3D")
+        void toPairPos3D() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+            FLine fLine = factory.getRefFLine(fVector);
+            FPairPos3D fPairPos3D = fLine.toFPairPos3D();
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fPairPos3D.getPosA().getD0(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(2, fPairPos3D.getPosA().getD1(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(3, fPairPos3D.getPosA().getD2(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(4, fPairPos3D.getPosB().getD0(),
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(5, fPairPos3D.getPosB().getD1(),
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(6, fPairPos3D.getPosB().getD2(),
+                            "Head - The Y value is incorrect")
+            );
+        }
     }
 
     @Nested
     @DisplayName("Functionality - Advanced")
-    class FLineAdvanced {
+    class FLineAdvancedTest {
 
         @Test
-        @DisplayName("Project")
-        void project() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            FPoint relocation = TestHelper.getRandomFPoint();
-
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
+        @DisplayName("Project simple - X")
+        void projectX() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(-1, 5, 5, 1, 5, 5));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
 
             fLine.project(fPoint);
 
-            assertTrue(factory.getFPoint(1, 1, 1).add(relocation).isSimilar(fPoint),
-                    "The projection is erroneous");
+            assertTrue(factory.getFPoint(1, 5, 5).isSimilar(fPoint));
         }
 
         @Test
-        @DisplayName("Project (position base)")
-        void projectPositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+        @DisplayName("Project simple - Y")
+        void projectY() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(5, -1, 5, 5, 1, 5));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fLine.project(fPoint);
+
+            assertTrue(factory.getFPoint(5, 2, 5).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project simple - Z")
+        void projectZ() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(5, 5, -1, 5, 5, 1));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fLine.project(fPoint);
+
+            assertTrue(factory.getFPoint(5, 5, 3).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project with offset")
+        void projectWithOffset() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandomFPoint();
+
+            fLine.getRefOrigin().add(offset);
+            fPoint.add(offset);
+
+            fLine.project(fPoint);
+
+            assertTrue(factory.getFPoint(1, 1, 1).add(offset).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project advanced - A")
+        void projectAdvancedA() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
+            FLine fLine = factory.getRefFLine(fVector);
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
             fLine.project(fPoint);
+
+            assertTrue(factory.getFPoint(-3, -3, -3).isSimilar(fPoint));
+
+            var angle = factory.getFTrigHelper().getAngleBetweenVectors(
+                    factory.getFPos3D(-3, -3, -3),
+                    factory.getFPos3D(0, 0, 0),
+                    factory.getFPos3D(0, -9, 0)
+            );
+
+            assertTrue(Math.abs(angle - Math.PI / 2) < jitter);
         }
 
         @Test
-        @DisplayName("Project (position head)")
-        void projectPositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+        @DisplayName("Project advanced - B")
+        void projectAdvancedB() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
             fLine.project(fPoint);
+
+            assertTrue(factory.getFPoint(3, 3, 3).isSimilar(fPoint));
+
+            var angle = factory.getFTrigHelper().getAngleBetweenVectors(
+                    factory.getFPos3D(3, 3, 3),
+                    factory.getFPos3D(0, 0, 0),
+                    factory.getFPos3D(0, 9, 0)
+            );
+
+            assertTrue(Math.abs(angle - Math.PI / 2) < jitter);
         }
 
         @Test
         @DisplayName("Project (throw IllegalStateException)")
         void projectThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.project(fPoint),
@@ -387,41 +495,77 @@ public class FLineTest {
         }
 
         @Test
+        @DisplayName("Reflect simple - X")
+        void reflectX() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(-1, 5, 5, 1, 5, 5));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fLine.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(1, 8, 7).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Reflect simple - Y")
+        void reflectY() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(5, -1, 5, 5, 1, 5));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fLine.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(9, 2, 7).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Reflect simple - Z")
+        void reflectZ() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(5, 5, -1, 5, 5, 1));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fLine.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(9, 8, 3).isSimilar(fPoint));
+        }
+
+        @Test
         @DisplayName("Reflect")
         void reflect() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             fLine.reflect(fPoint);
 
-            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint),
-                    "The reflection is erroneous");
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
         @Test
-        @DisplayName("Reflect (position base)")
-        void reflectPositionBase() {
+        @DisplayName("Reflect advanced - A")
+        void reflectAdvancedA() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
             fLine.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(-6, 3, -6).isSimilar(fPoint));
         }
 
         @Test
-        @DisplayName("Reflect (position head)")
-        void reflectPositionHead() {
+        @DisplayName("Reflect advanced - B")
+        void reflectAdvancedB() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
             fLine.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(6, -3, 6).isSimilar(fPoint));
         }
 
         @Test
         @DisplayName("Reflect (throw IllegalStateException)")
         void reflectThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.reflect(fPoint),
@@ -431,47 +575,45 @@ public class FLineTest {
         @Test
         @DisplayName("Location")
         void isPartOf() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * jitter);
 
-            assertTrue(fLine.isPartOf(fPoint).get(0),
-                    "The distance should be negligible");
+            assertTrue(fLine.isPartOf(fPoint).get(0), "The distance should be negligible");
         }
 
         @Test
         @DisplayName("Location (fail)")
         void isPartOfFail() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * jitter);
 
-            assertFalse(fLine.isPartOf(fPoint).get(0),
-                    "The distance should not be negligible");
+            assertFalse(fLine.isPartOf(fPoint).get(0), "The distance should not be negligible");
         }
 
         @Test
         @DisplayName("Location (position base)")
         void isPartOfPositionBase() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4).addY(0.5 * jitter);
 
-            fLine.isPartOf(fPoint);
+            assertTrue(fLine.isPartOf(fPoint).get(0));
         }
 
         @Test
         @DisplayName("Location (position head)")
         void isPartOfPositionHead() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
-            fLine.isPartOf(fPoint);
+            assertTrue(fLine.isPartOf(fPoint).get(0));
         }
 
         @Test
         @DisplayName("Location (throw IllegalStateException)")
         void isPartOfThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOf(fPoint),
@@ -481,22 +623,21 @@ public class FLineTest {
         @Test
         @DisplayName("Get distance")
         void getDistance() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = TestHelper.getRandomFPoint();
+            FPoint offset = TestHelper.getRandomFPoint();
 
-            fLine.getOrigin().add(relocation);
-            fPoint.add(relocation);
+            fLine.getRefOrigin().add(offset);
+            fPoint.add(offset);
 
-            assertEquals(Math.sqrt(6), fLine.getDistance(fPoint).get(0),
-                    jitter, "The distance is erroneous");
+            assertEquals(Math.sqrt(6), fLine.getDistance(fPoint).get(0));
         }
 
         @Test
         @DisplayName("Get distance (throw IllegalStateException)")
         void getDistanceThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.getDistance(fPoint),
@@ -506,22 +647,21 @@ public class FLineTest {
         @Test
         @DisplayName("Get distance P2")
         void getDistanceP2() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fLine.getOrigin().add(relocation);
+            fLine.getRefOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertEquals(6, fLine.getDistanceP2(fPoint).get(0),
-                    "The distance is erroneous");
+            assertEquals(6, fLine.getDistanceP2(fPoint).get(0));
         }
 
         @Test
         @DisplayName("Get distance P2 (throw IllegalStateException)")
         void getDistanceP2ThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.getDistanceP2(fPoint),
@@ -531,12 +671,12 @@ public class FLineTest {
         @Test
         @DisplayName("Set distance")
         void setDistance() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fLine.getOrigin().add(relocation);
+            fLine.getRefOrigin().add(relocation);
             fPoint.add(relocation);
 
             fLine.setDistance(fPoint, 1);
@@ -549,7 +689,7 @@ public class FLineTest {
         @DisplayName("Set distance (position base)")
         void setDistancePositionBase() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
             fLine.setDistance(fPoint, 1);
@@ -559,7 +699,7 @@ public class FLineTest {
         @DisplayName("Set distance (position head)")
         void setDistancePositionHead() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
             fLine.setDistance(fPoint, 1);
@@ -568,12 +708,12 @@ public class FLineTest {
         @Test
         @DisplayName("Set distance A (negative)")
         void setDistanceNegativeA() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fLine.getOrigin().add(relocation);
+            fLine.getRefOrigin().add(relocation);
             fPoint.add(relocation);
 
             fLine.setDistance(fPoint, -1);
@@ -585,12 +725,12 @@ public class FLineTest {
         @Test
         @DisplayName("Set distance B (negative)")
         void setDistanceNegativeB() {
-            FLine fLine = factory.getFLine(factory.getFVector(2, 2, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fLine.getOrigin().add(relocation);
+            fLine.getRefOrigin().add(relocation);
             fPoint.add(relocation);
 
             FPoint fPointA = fPoint.copy();
@@ -606,7 +746,7 @@ public class FLineTest {
         @Test
         @DisplayName("Set distance (throw IllegalStateException)")
         void setDistanceThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.setDistance(fPoint, 1),
@@ -617,7 +757,7 @@ public class FLineTest {
         @DisplayName("Project on ray")
         void isProjectableOnRay() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint();
 
             assertTrue(fLine.isPartOfRay(fPoint).get(0),
@@ -628,7 +768,7 @@ public class FLineTest {
         @DisplayName("Project on ray (below base)")
         void isProjectableOnRayBelowBase() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
             assertFalse(fLine.isPartOfRay(fPoint).get(0),
@@ -639,7 +779,7 @@ public class FLineTest {
         @DisplayName("Project on ray (over head)")
         void isProjectableOnRayOverHead() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
             assertTrue(fLine.isPartOfRay(fPoint).get(0),
@@ -649,7 +789,7 @@ public class FLineTest {
         @Test
         @DisplayName("Project on ray (throw IllegalStateException)")
         void isProjectableOnRayThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOfRay(fPoint),
@@ -660,7 +800,7 @@ public class FLineTest {
         @DisplayName("Project on segment")
         void isProjectableOnSegment() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint();
 
             assertTrue(fLine.isPartOfSegment(fPoint).get(0),
@@ -671,7 +811,7 @@ public class FLineTest {
         @DisplayName("Project on segment (below base)")
         void isProjectableOnSegmentBelowBase() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
             assertFalse(fLine.isPartOfSegment(fPoint).get(0),
@@ -682,7 +822,7 @@ public class FLineTest {
         @DisplayName("Project on segment (over head)")
         void isProjectableOnSegmentOverHead() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
             assertFalse(fLine.isPartOfSegment(fPoint).get(0),
@@ -692,7 +832,7 @@ public class FLineTest {
         @Test
         @DisplayName("Project on segment (throw IllegalStateException)")
         void isProjectableOnSegmentThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOfSegment(fPoint),
@@ -703,10 +843,10 @@ public class FLineTest {
         @DisplayName("Move forward")
         void moveForward() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fLine.moveForward(fPoint, Math.sqrt(3));
+            fLine.shiftForward(fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
                     "The translation is erroneous");
@@ -716,10 +856,10 @@ public class FLineTest {
         @DisplayName("Move forward (negative)")
         void moveForwardNegative() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fLine.moveForward(fPoint, -Math.sqrt(3));
+            fLine.shiftForward(fPoint, -Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
                     "The translation is erroneous");
@@ -728,10 +868,10 @@ public class FLineTest {
         @Test
         @DisplayName("Move forward (throw IllegalStateException)")
         void moveForwardThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.moveForward(fPoint, Math.sqrt(3)),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.shiftForward(fPoint, Math.sqrt(3)),
                     "The direction of the FLine is not defined");
         }
 
@@ -739,10 +879,10 @@ public class FLineTest {
         @DisplayName("Move backward")
         void moveBackward() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fLine.moveBackward(fPoint, Math.sqrt(3));
+            fLine.shiftBackward(fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
                     "The translation is erroneous");
@@ -752,10 +892,10 @@ public class FLineTest {
         @DisplayName("Move backward (negative)")
         void moveBackwardNegative() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
-            FLine fLine = factory.getFLine(fVector.copy());
+            FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fLine.moveBackward(fPoint, -Math.sqrt(3));
+            fLine.shiftBackward(fPoint, -Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
                     "The translation is erroneous");
@@ -764,59 +904,25 @@ public class FLineTest {
         @Test
         @DisplayName("Move backward (throw IllegalStateException)")
         void moveBackwardThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.moveBackward(fPoint, Math.sqrt(3)),
-                    "The direction of the FLine is not defined");
-        }
-
-        @Test
-        @DisplayName("Rotate (simple)")
-        void rotateSimple() {
-            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
-            FLine fLine = factory.getFLine(factory.getFVector(0, 1, 0));
-
-            fLine.rotate(fVector, Math.PI * 0.5);
-
-            assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
-                    "The position of the rotated FVector is erroneous");
-        }
-
-        @Test
-        @DisplayName("Rotate (simple, negative)")
-        void rotateSimpleNegative() {
-            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
-            FLine fLine = factory.getFLine(factory.getFVector(0, 1, 0));
-
-            fLine.rotate(fVector, -(Math.PI * 0.5));
-
-            assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
-                    "The position of the rotated FVector is erroneous");
-        }
-
-        @Test
-        @DisplayName("Rotate  (throw IllegalStateException)")
-        void rotateThrowIllegalStateException() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FLine fLine = factory.getFLine(factory.getFVector());
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.rotate(fVector, Math.PI * 0.5),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.shiftBackward(fPoint, Math.sqrt(3)),
                     "The direction of the FLine is not defined");
         }
 
         @Test
         @DisplayName("Get FPoint")
         void getFPoint() {
-            FLine fLine = factory.getFLine(TestHelper.getRandomFVector());
-            double length = fLine.getOrigin().getLength();
+            FLine fLine = factory.getRefFLine(TestHelper.getRandomFVector());
+            double length = fLine.getRefOrigin().getLength();
 
             Assertions.assertAll("Validate FPoint",
-                    () -> assertTrue(fLine.getFPoint(0).isSimilar(fLine.getBase()),
+                    () -> assertTrue(fLine.getFPointAtDistance(0).isSimilar(fLine.getRefOrigin().getRefBase()),
                             "The FPoint base is incorrect"),
-                    () -> assertTrue(fLine.getFPoint(length).isSimilar(fLine.getHead()),
+                    () -> assertTrue(fLine.getFPointAtDistance(length).isSimilar(fLine.getRefOrigin().getRefHead()),
                             "The FPoint head is incorrect"),
-                    () -> assertTrue(fLine.getFPoint(-length).isSimilar(fLine.getOrigin().reflectHead().getRefHead()),
+                    () -> assertTrue(fLine.getFPointAtDistance(-length).isSimilar(fLine.getRefOrigin().reflectHead().getRefHead()),
                             "The FPoint inverse head is incorrect")
             );
         }
@@ -824,9 +930,9 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint (throw IllegalStateException)")
         void getFPointThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.getFPoint(1),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.getFPointAtDistance(1),
                     "The origin is a non-directional FVector");
         }
 
@@ -834,11 +940,11 @@ public class FLineTest {
         @DisplayName("Get FPoint (validate)")
         void getFPointValidatePositions() {
             FVector fVectorOrigin = TestHelper.getRandomFVector();
-            FLine fLine = factory.getFLine(fVectorOrigin.copy());
+            FLine fLine = factory.getRefFLine(fVectorOrigin.copy());
 
-            fLine.getFPoint(0);
+            fLine.getFPointAtDistance(0);
 
-            assertTrue(fVectorOrigin.isExact(fLine.getOrigin()),
+            assertTrue(fVectorOrigin.isExact(fLine.getRefOrigin()),
                     "The position should remain unchanged");
         }
 
@@ -847,16 +953,16 @@ public class FLineTest {
         void getFPointAtX() {
             FPoint base = TestHelper.getRandomFPoint();
             FPoint head = TestHelper.getRandomFPoint(base);
-            FLine fLine = factory.getFLine(factory.getFVector(base.copy(), head.copy()));
+            FLine fLine = factory.getRefFLine(factory.getFVector(base.copy(), head.copy()));
 
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fLine.getFPointAtX(0).isPresent(),
                             "The FPoint should be available"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getFPointAtX(base.getX()).orElse(null))
-                                    .isSimilar(fLine.getBase()),
+                                    .isSimilar(fLine.getRefOrigin().getRefBase()),
                             "The FPoint base is incorrect"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getFPointAtX(head.getX()).orElse(null))
-                                    .isSimilar(fLine.getHead()),
+                                    .isSimilar(fLine.getRefOrigin().getRefHead()),
                             "The FPoint head is incorrect")
             );
         }
@@ -864,7 +970,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at X (empty)")
         void getFPointAtXEmpty() {
-            FLine fLine = factory.getFLine(factory.getFVector(0, 1, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 2));
 
             assertTrue(fLine.getFPointAtX(0).isEmpty(),
                     "The FPoint should not be available");
@@ -873,7 +979,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at X (throw IllegalStateException)")
         void getFPointAtXThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.getFPointAtX(1),
                     "The origin is a non-directional FVector");
@@ -882,7 +988,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at X (validate)")
         void getFPointAtXValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector(1, 1, 1));
+            FLine fLine = factory.getRefFLine(factory.getFVector(1, 1, 1));
 
             FLineTestHelper.testValue(e -> e.getFPointAtX(0), fLine);
         }
@@ -892,16 +998,16 @@ public class FLineTest {
         void getFPointAtY() {
             FPoint base = TestHelper.getRandomFPoint();
             FPoint head = TestHelper.getRandomFPoint(base);
-            FLine fLine = factory.getFLine(factory.getFVector(base.copy(), head.copy()));
+            FLine fLine = factory.getRefFLine(factory.getFVector(base.copy(), head.copy()));
 
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fLine.getFPointAtY(0).isPresent(),
                             "The FPoint should be available"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getFPointAtY(base.getY()).orElse(null))
-                                    .isSimilar(fLine.getBase()),
+                                    .isSimilar(fLine.getRefOrigin().getRefBase()),
                             "The FPoint base is incorrect"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getFPointAtY(head.getY()).orElse(null))
-                                    .isSimilar(fLine.getHead()),
+                                    .isSimilar(fLine.getRefOrigin().getRefHead()),
                             "The FPoint head is incorrect")
             );
         }
@@ -909,7 +1015,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at Y (empty)")
         void getFPointAtYEmpty() {
-            FLine fLine = factory.getFLine(factory.getFVector(1, 0, 2));
+            FLine fLine = factory.getRefFLine(factory.getFVector(1, 0, 2));
 
             assertTrue(fLine.getFPointAtY(0).isEmpty(),
                     "The FPoint should not be available");
@@ -918,7 +1024,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at Y (throw IllegalStateException)")
         void getFPointAtYThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.getFPointAtY(1),
                     "The origin is a non-directional FVector");
@@ -927,7 +1033,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at Y (validate)")
         void getFPointAtYValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector(1, 1, 1));
+            FLine fLine = factory.getRefFLine(factory.getFVector(1, 1, 1));
 
             FLineTestHelper.testValue(e -> e.getFPointAtY(0), fLine);
         }
@@ -937,16 +1043,16 @@ public class FLineTest {
         void getFPointAtZ() {
             FPoint base = TestHelper.getRandomFPoint();
             FPoint head = TestHelper.getRandomFPoint(base);
-            FLine fLine = factory.getFLine(factory.getFVector(base.copy(), head.copy()));
+            FLine fLine = factory.getRefFLine(factory.getFVector(base.copy(), head.copy()));
 
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fLine.getFPointAtZ(0).isPresent(),
                             "The FPoint should be available"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getFPointAtZ(base.getZ()).orElse(null))
-                                    .isSimilar(fLine.getBase()),
+                                    .isSimilar(fLine.getRefOrigin().getRefBase()),
                             "The FPoint base is incorrect"),
                     () -> assertTrue(Objects.requireNonNull(fLine.getFPointAtZ(head.getZ()).orElse(null))
-                                    .isSimilar(fLine.getHead()),
+                                    .isSimilar(fLine.getRefOrigin().getRefHead()),
                             "The FPoint head is incorrect")
             );
         }
@@ -954,7 +1060,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at Z (empty)")
         void getFPointAtZEmpty() {
-            FLine fLine = factory.getFLine(factory.getFVector(1, 2, 0));
+            FLine fLine = factory.getRefFLine(factory.getFVector(1, 2, 0));
 
             assertTrue(fLine.getFPointAtZ(0).isEmpty(),
                     "The FPoint should not be available");
@@ -963,7 +1069,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at Z (throw IllegalStateException)")
         void getFPointAtZThrowIllegalStateException() {
-            FLine fLine = factory.getFLine(factory.getFVector());
+            FLine fLine = factory.getRefFLine(factory.getFVector());
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.getFPointAtZ(1),
                     "The origin is a non-directional FVector");
@@ -972,7 +1078,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get FPoint at Z (validate)")
         void getFPointAtZValidate() {
-            FLine fLine = factory.getFLine(factory.getFVector(1, 1, 1));
+            FLine fLine = factory.getRefFLine(factory.getFVector(1, 1, 1));
 
             FLineTestHelper.testValue(e -> e.getFPointAtZ(0), fLine);
         }
@@ -981,7 +1087,7 @@ public class FLineTest {
         @DisplayName("Get common FPoint 2D XY")
         void getCommonFPoint2DXY() {
             FVector fLineAOrigin = TestHelper.getRandomFVector();
-            FLine fLineA = factory.getFLine(fLineAOrigin);
+            FLine fLineA = factory.getRefFLine(fLineAOrigin);
 
             fLineAOrigin.getRefBase().setZ(0);
             fLineAOrigin.getRefHead().setZ(0);
@@ -994,9 +1100,9 @@ public class FLineTest {
             }
 
             FPoint fLineBOriginBase = TestHelper.getRandomFPoint();
-            FPoint fLineBOriginHead = fLineA.getFPoint(random.nextDouble());
+            FPoint fLineBOriginHead = fLineA.getFPointAtDistance(random.nextDouble());
             FVector fLineBOrigin = factory.getFVector(fLineBOriginBase, fLineBOriginHead);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
             fLineBOriginBase.setZ(0);
             fLineBOriginBase.setZ(0);
@@ -1024,14 +1130,14 @@ public class FLineTest {
         @DisplayName("Get common FPoint 2D XY (simple)")
         void getCommonFPoint2DXYSimple() {
             FVector fLineAOrigin = factory.getFVector(0, 0, 0, 1, 0, 0);
-            FLine fLineA = factory.getFLine(fLineAOrigin);
+            FLine fLineA = factory.getRefFLine(fLineAOrigin);
             FVector fLineBOrigin = factory.getFVector(1, -1, 0, 3, 1, 0);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
             FPoint fPointRel = TestHelper.getRandomFPoint().setZ(0);
 
-            fLineA.getOrigin().add(fPointRel);
-            fLineB.getOrigin().add(fPointRel);
+            fLineA.getRefOrigin().add(fPointRel);
+            fLineB.getRefOrigin().add(fPointRel);
 
             Optional<FPoint> fPointRes = fLineA.getCommonFPoint(fLineB);
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
@@ -1048,9 +1154,9 @@ public class FLineTest {
         @DisplayName("Get common FPoint 2D XY (fail)")
         void getCommonFPoint2DXYFail() {
             FVector fLineAOrigin = factory.getFVector(1, 0, 0);
-            FLine fLineA = factory.getFLine(fLineAOrigin);
+            FLine fLineA = factory.getRefFLine(fLineAOrigin);
             FVector fLineBOrigin = factory.getFVector(-1, 1, 0, 1, 1, 0);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
             assertTrue(fLineA.getCommonFPoint(fLineB).isEmpty(),
                     "The intersecting point is non-existent");
@@ -1059,11 +1165,11 @@ public class FLineTest {
         @Test
         @DisplayName("Get common FPoint")
         void getCommonFPoint() {
-            FLine fLineA = factory.getFLine(TestHelper.getRandomFVector());
+            FLine fLineA = factory.getRefFLine(TestHelper.getRandomFVector());
 
             FPoint fLineBOriginBase = TestHelper.getRandomFPoint();
-            FPoint fLineBOriginHead = fLineA.getFPoint(random.nextDouble());
-            FLine fLineB = factory.getFLine(factory.getFVector(fLineBOriginBase, fLineBOriginHead));
+            FPoint fLineBOriginHead = fLineA.getFPointAtDistance(random.nextDouble());
+            FLine fLineB = factory.getRefFLine(factory.getFVector(fLineBOriginBase, fLineBOriginHead));
 
             while (fLineA.isPartOf(fLineBOriginBase).get(0)) {
                 fLineBOriginBase.applyStateFrom(TestHelper.getRandomFPoint());
@@ -1086,9 +1192,9 @@ public class FLineTest {
         @DisplayName("Get common FPoint (static X)")
         void getCommonFPointStaticX() {
             FVector fLineAOrigin = factory.getFVector(1, 1, 0, 1, 1, 1);
-            FLine fLineA = factory.getFLine(fLineAOrigin);
+            FLine fLineA = factory.getRefFLine(fLineAOrigin);
             FVector fLineBOrigin = factory.getFVector(1, 0, 0, 1, 3, 0);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
             Optional<FPoint> fPointRes = fLineA.getCommonFPoint(fLineB);
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
@@ -1108,9 +1214,9 @@ public class FLineTest {
         @DisplayName("Get common FPoint (static Y)")
         void getCommonFPointStaticY() {
             FVector fLineAOrigin = factory.getFVector(1, 1, 0, 1, 1, 1);
-            FLine fLineA = factory.getFLine(fLineAOrigin);
+            FLine fLineA = factory.getRefFLine(fLineAOrigin);
             FVector fLineBOrigin = factory.getFVector(0, 1, 0, 3, 1, 0);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
             Optional<FPoint> fPointRes = fLineA.getCommonFPoint(fLineB);
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
@@ -1131,9 +1237,9 @@ public class FLineTest {
         @DisplayName("Get common FPoint (static Z)")
         void getCommonFPointStaticZ() {
             FVector fLineAOrigin = factory.getFVector(0, 1, 1, 2, 1, 1);
-            FLine fLineA = factory.getFLine(fLineAOrigin);
+            FLine fLineA = factory.getRefFLine(fLineAOrigin);
             FVector fLineBOrigin = factory.getFVector(1, 0, 1, 1, 2, 1);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
             Optional<FPoint> fPointRes = fLineA.getCommonFPoint(fLineB);
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
@@ -1153,7 +1259,7 @@ public class FLineTest {
         @Test
         @DisplayName("Get common FPoint (fail)")
         void getCommonFPointFail() {
-            FLine fLineA = factory.getFLine(TestHelper.getRandomFVector());
+            FLine fLineA = factory.getRefFLine(TestHelper.getRandomFVector());
 
             FPoint fLineBOriginHead = TestHelper.getRandomFPoint();
 
@@ -1165,11 +1271,11 @@ public class FLineTest {
             fLineA.project(fLineBOriginBase);
 
             FVector fLineBOrigin = factory.getFVector(fLineBOriginBase, fLineBOriginHead);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
-            fLineBOrigin.moveBase(fLineA.getBase());
+            fLineBOrigin.moveBase(fLineA.getRefOrigin().getRefBase());
 
-            FVector fVectorDrift = fLineA.getOrigin().copy()
+            FVector fVectorDrift = fLineA.getRefOrigin().copy()
                     .setCrossProduct(fLineBOrigin)
                     .setLength(1.5 * jitter);
 
@@ -1183,19 +1289,18 @@ public class FLineTest {
         @DisplayName("Get common FPoint (fail, simple)")
         void getCommonFPointFailSimple() {
             FVector fLineAOrigin = factory.getFVector(1, 0, 0);
-            FLine fLineA = factory.getFLine(fLineAOrigin);
+            FLine fLineA = factory.getRefFLine(fLineAOrigin);
             FVector fLineBOrigin = factory.getFVector(0, 1, 0, 0, 0, 1);
-            FLine fLineB = factory.getFLine(fLineBOrigin);
+            FLine fLineB = factory.getRefFLine(fLineBOrigin);
 
-            assertTrue(fLineA.getCommonFPoint(fLineB).isEmpty(),
-                    "The intersecting point should be non-existent");
+            assertTrue(fLineA.getCommonFPoint(fLineB).isEmpty(), "The intersecting point should be non-existent");
         }
 
         @Test
         @DisplayName("Get common FPoint (fail, same line)")
         void getCommonFPointFailSameLine() {
-            FLine fLineA = factory.getFLine(factory.getFVector(1, 1, 1));
-            FLine fLineB = factory.getFLine(factory.getFVector(-1, -1, -1));
+            FLine fLineA = factory.getRefFLine(factory.getFVector(1, 1, 1));
+            FLine fLineB = factory.getRefFLine(factory.getFVector(-1, -1, -1));
 
             assertTrue(fLineA.getCommonFPoint(fLineB).isEmpty(),
                     "Origins form the same FLine, the intersecting point should be non-existent");
@@ -1204,8 +1309,8 @@ public class FLineTest {
         @Test
         @DisplayName("Get common FPoint (throw IllegalStateException, origin)")
         void getCommonFPointThrowIllegalStateExceptionOrigin() {
-            FLine fLineA = factory.getFLine(factory.getFVector());
-            FLine fLineB = factory.getFLine(factory.getFVector(-1, -1, -1));
+            FLine fLineA = factory.getRefFLine(factory.getFVector());
+            FLine fLineB = factory.getRefFLine(factory.getFVector(-1, -1, -1));
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLineA.getCommonFPoint(fLineB),
                     "The origin is a non-directional FVector");
@@ -1214,8 +1319,8 @@ public class FLineTest {
         @Test
         @DisplayName("Get common FPoint (throw IllegalStateException, argument)")
         void getCommonFPointThrowIllegalStateExceptionArgument() {
-            FLine fLineA = factory.getFLine(factory.getFVector(-1, -1, -1));
-            FLine fLineB = factory.getFLine(factory.getFVector());
+            FLine fLineA = factory.getRefFLine(factory.getFVector(-1, -1, -1));
+            FLine fLineB = factory.getRefFLine(factory.getFVector());
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLineA.getCommonFPoint(fLineB),
                     "The origin is a non-directional FVector");
@@ -1224,8 +1329,8 @@ public class FLineTest {
         @Test
         @DisplayName("Get common FPoint (validate)")
         void getCommonFPointValidate() {
-            FLine fLineA = factory.getFLine(TestHelper.getRandomFVector());
-            FLine fLineB = factory.getFLine(TestHelper.getRandomFVector());
+            FLine fLineA = factory.getRefFLine(TestHelper.getRandomFVector());
+            FLine fLineB = factory.getRefFLine(TestHelper.getRandomFVector());
 
             FLineTestHelper.testValue(FLine::getCommonFPoint, fLineA, fLineB);
         }
@@ -1240,13 +1345,11 @@ public class FLineTest {
             disassembly.get(1).set(4, 5, 6);
 
             Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(factory.getFPoint(1, 2, 3).isExact(fLine.getBase()),
+                    () -> assertTrue(factory.getFPoint(1, 2, 3).isExact(fLine.getRefOrigin().getRefBase()),
                             "The FPoint base value is erroneous"),
-                    () -> assertTrue(factory.getFPoint(4, 5, 6).isExact(fLine.getHead()),
+                    () -> assertTrue(factory.getFPoint(4, 5, 6).isExact(fLine.getRefOrigin().getRefHead()),
                             "The FPoint head value is erroneous")
             );
         }
-
     }
-
 }

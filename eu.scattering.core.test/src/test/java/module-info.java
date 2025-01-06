@@ -9,5 +9,6 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.mutables.geometry.construct;
     opens eu.scattering.core.test.mutables.number;
     opens eu.scattering.core.test.engines;
+    opens eu.scattering.core.test.helpers;
     opens eu.scattering.core.test;
 }

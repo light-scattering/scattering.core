@@ -10,14 +10,14 @@ import eu.scattering.core.design.mutables.number.complex.FComplex;
 import eu.scattering.core.design.mutables.number.quaternion.FQuaternion;
 import eu.scattering.core.design.engines.random.processor.FRandomProcessor;
 import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
-import eu.scattering.core.design.helpers.auxiliary.FAngleHelper;
+import eu.scattering.core.design.helpers.auxiliary.FTrigHelper;
 import eu.scattering.core.design.engines.random.FRandomEngine;
 import eu.scattering.core.design.engines.rotation.FRotationEngine;
 import eu.scattering.core.impl.engines.random.FRandomEngineDef;
 import eu.scattering.core.impl.engines.random.FRandomProcessorDef;
 import eu.scattering.core.impl.engines.rotation.FRotationEngineDef;
 import eu.scattering.core.impl.engines.rotation.FRotationProcessorDef;
-import eu.scattering.core.impl.helpers.FAngleHelperDef;
+import eu.scattering.core.impl.helpers.FTrigHelperDef;
 import eu.scattering.core.impl.mutables.geometry.construct.line.FLineDef;
 import eu.scattering.core.impl.mutables.geometry.construct.plane.FPlaneDef;
 import eu.scattering.core.impl.mutables.geometry.primitive.FPointDef;
@@ -29,7 +29,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
     private final double epsilon = 1E-8;
     private final double proximityLimit = 1E-6;
 
-    private final FAngleHelper fAngleHelper;
+    private final FTrigHelper fAngleHelper;
     private final FRandomEngine fRandomHelper;
     private final FRotationEngine fRotationHelper;
 
@@ -40,7 +40,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
         this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
         this.fRotationHelper = FRotationEngineDef.create(getFRotationProcessor());
-        this.fAngleHelper = FAngleHelperDef.create();
+        this.fAngleHelper = FTrigHelperDef.create();
     }
 
     private FactoryProd(long seed) {
@@ -50,7 +50,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
         this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
         this.fRotationHelper = FRotationEngineDef.create(getFRotationProcessor());
-        this.fAngleHelper = FAngleHelperDef.create();
+        this.fAngleHelper = FTrigHelperDef.create();
     }
 
     public static FactoryDesignConcrete create() {
@@ -89,10 +89,15 @@ public final class FactoryProd extends FactoryDesignConcrete {
         return FVectorDef.create(epsilon, this::getFPoint, refBase, refHead);
     }
 
-    @Override
     public FLine getFLine() {
 
-        return FLineDef.create(this, epsilon);
+        return FLineDef.create(this, epsilon, this::getFVector);
+    }
+
+    @Override
+    public FLine getRefFLine(FVector refCore) {
+
+        return FLineDef.create(this, epsilon, this::getFVector, refCore);
     }
 
     @Override
@@ -124,7 +129,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
 //--------------------------------------------------
 
     @Override
-    public FAngleHelper getFAngleHelper() {
+    public FTrigHelper getFTrigHelper() {
 
         return fAngleHelper;
     }

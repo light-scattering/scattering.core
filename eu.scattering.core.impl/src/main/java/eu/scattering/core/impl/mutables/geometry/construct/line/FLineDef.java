@@ -1,60 +1,80 @@
 package eu.scattering.core.impl.mutables.geometry.construct.line;
 
-import eu.scattering.core.design.FactoryDesignConcrete;
+import eu.scattering.core.design.FactoryDesign;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.impl.mutables.geometry.construct.AdvancedPresetDef;
-import eu.scattering.core.transfer.containers.engine.FRot.FRot;
+import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
+
 public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
+//    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final String JSON_MAIN = "line";
+    private static final String JSON_VAL = "val";
+
+    private final Supplier<FVector> fOriginSupplier;
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private FVector origin;
-    private final FactoryDesignConcrete factory;
+    private final FactoryDesign factory;
     private final double epsilon;
 
-    private FLineDef(FactoryDesignConcrete factory, double epsilon) {
+    private FLineDef(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier) {
 
         this.factory = factory;
         this.epsilon = epsilon;
+        this.fOriginSupplier = fOriginSupplier;
+        this.origin = fOriginSupplier.get();
     }
 
-    public static FLine create(FactoryDesignConcrete factory, double epsilon) {
+    private FLineDef(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier, FVector origin) {
 
-        return new FLineDef(factory, epsilon).setOriginRef(factory.getFVector());
+        this.factory = factory;
+        this.epsilon = epsilon;
+        this.fOriginSupplier = fOriginSupplier;
+        this.origin = origin;
+    }
+
+    public static FLine create(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier) {
+
+        return new FLineDef(factory, epsilon, fOriginSupplier);
+    }
+
+    public static FLine create(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier, FVector origin) {
+
+        return new FLineDef(factory, epsilon, fOriginSupplier, origin);
     }
 
     @Override
-    public FVector getOrigin() {
+    public FVector getRefOrigin() {
 
         return origin;
     }
 
     @Override
-    public FLine setOriginRef(FVector fVector) {
+    public FLine setRefOrigin(FVector refOrigin) {
 
-        if (fVector == null) {
+        if (refOrigin == null) {
             throw new NullPointerException("The reference FVector cannot be null");
         }
 
-        origin = fVector;
+        origin = refOrigin;
 
         return this;
     }
-
 
     // -------------------------------------------------------------------------------------------------
     // The following fields do not have to modified while extending the class.
@@ -62,33 +82,27 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.append("line", getOrigin().toJSON());
+    public FLine set(FPairPos3D position) {
 
-        return json;
-    }
-
-    @Override
-    public FLine applyStateFrom(JSONObject json) {
-        JSONArray structure = json.getJSONArray("line");
-
-        getOrigin().applyStateFrom(factory.getFVector().applyStateFrom(structure.getJSONObject(0)));
+        getRefOrigin().set(position);
 
         return this;
     }
 
     @Override
-    public FLine copy() {
+    public FLine applyStateFrom(JSONObject json) {
 
-        return factory.getFLine(getOrigin().copy());
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var origin = fOriginSupplier.get().applyStateFrom(structure.getJSONObject(0));
+
+        return setRefOrigin(origin);
     }
 
-    @Override
-    public FLine copyZero() {
-
-        return factory.getFLine();
-    }
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public FLine self() {
@@ -97,146 +111,182 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public boolean isSimilar(FLine ref) {
+    public FLine copy() {
 
-        return ref.isPartOf(origin).stream().allMatch(e -> e);
+        return factory.getRefFLine(getRefOrigin().copy());
+    }
+
+    @Override
+    public FLine copyZero() {
+
+        return factory.getRefFLine(fOriginSupplier.get());
+    }
+
+    @Override
+    public FPairPos3D toFPairPos3D() {
+
+        return getRefOrigin().toFPairPos3D();
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.append(JSON_VAL, getRefOrigin().toJSON());
+
+        return json;
     }
 
     // -------------------------------------------------------------------------------------------------
 
+    @Override
+    public int hashCode() {
+
+        return getRefOrigin().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FLine) {
+            FLine ref = (FLine) object;
+
+            return getRefOrigin().equals(ref.getRefOrigin());
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isSameLine(FLine ref) {
+
+        return ref.isPartOf(origin).stream().allMatch(e -> e);
+    }
 
     @Override
     public void project(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(this::projectFPoint);
+        geometry.disassemble().forEach(this::projectUnit);
     }
 
     @Override
     public void reflect(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> p.reflect(projectFPoint(p.copy())));
+        geometry.disassemble().forEach(p -> p.reflect(projectUnit(p.copy())));
     }
 
     @Override
     public List<Boolean> isPartOf(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistance(projectFPoint(p.copy())) < epsilon)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Double> getDistance(Geometry geometry) {
-
-        if (getOrigin().isNonDirectional()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return geometry.disassemble().stream()
-                .map(p -> p.getDistance(projectFPoint(p.copy())))
+                .map(p -> p.getDistance(projectUnit(p.copy())) < epsilon)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Double> getDistanceP2(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistanceP2(projectFPoint(p.copy())))
+                .map(p -> p.getDistanceP2(projectUnit(p.copy())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Double> getDistance(Geometry geometry) {
+
+        if (getRefOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return geometry.disassemble().stream()
+                .map(p -> p.getDistance(projectUnit(p.copy())))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void setDistance(Geometry geometry, double distance) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> p.setDistance(projectFPoint(p.copy()), distance));
-    }
-
-
-    @Override
-    public void moveForward(Geometry geometry, double distance) {
-
-        geometry.disassemble().forEach(p -> moveForward(p, distance));
+        geometry.disassemble().forEach(p -> p.setDistance(projectUnit(p.copy()), distance));
     }
 
     @Override
-    public void moveBackward(Geometry geometry, double distance) {
+    public void shiftForward(Geometry geometry, double distance) {
 
-        geometry.disassemble().forEach(p -> moveBackward(p, distance));
+        geometry.disassemble().forEach(p -> shiftForwardUnit(p, distance));
+    }
+
+    @Override
+    public void shiftBackward(Geometry geometry, double distance) {
+
+        geometry.disassemble().forEach(p -> shiftBackwardUnit(p, distance));
     }
 
     @Override
     public List<Boolean> isPartOfRay(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(this::isPartOfRay)
+                .map(this::isPartOfRayUnit)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Boolean> isPartOfSegment(Geometry geometry) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(this::isPartOfSegment)
+                .map(this::isPartOfSegmentUnit)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void rotate(Geometry geometry, double angle) {
+    public FPoint getFPointAtDistance(double length) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var fRot = factory.getFRotationProcessor();
-        var fRotHelper = factory.getFRotationEngine();
+        FPoint fPoint = getRefOrigin().getRefHead().copy().sub(getRefOrigin().getRefBase());
+        double tmp = length / getRefOrigin().getLength();
 
-        FRot rotor = fRot.getRotation(getOrigin().toFPairPos3D(), angle);
-
-        geometry.disassemble().forEach(p -> fRotHelper.rotate(p, rotor));
-    }
-
-
-    @Override
-    public FPoint getFPoint(double length) {
-
-        if (getOrigin().isNonDirectional()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        FPoint fPoint = getOrigin().getRefHead().copy().sub(getOrigin().getRefBase());
-        double tmp = length / getOrigin().getLength();
-
-        fPoint.setX(getOrigin().getRefBase().getX() + (fPoint.getX() * tmp));
-        fPoint.setY(getOrigin().getRefBase().getY() + (fPoint.getY() * tmp));
-        fPoint.setZ(getOrigin().getRefBase().getZ() + (fPoint.getZ() * tmp));
+        fPoint.setX(getRefOrigin().getRefBase().getX() + (fPoint.getX() * tmp));
+        fPoint.setY(getRefOrigin().getRefBase().getY() + (fPoint.getY() * tmp));
+        fPoint.setZ(getRefOrigin().getRefBase().getZ() + (fPoint.getZ() * tmp));
 
         return fPoint;
     }
@@ -244,20 +294,20 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getFPointAtX(double x) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        if (getOrigin().getRefBase().getX() == getOrigin().getRefHead().getX()) {
+        if (getRefOrigin().getRefBase().getX() == getRefOrigin().getRefHead().getX()) {
             return Optional.empty();
         }
 
-        double l = getOrigin().getRefHead().getX() - getOrigin().getRefBase().getX();
-        double m = getOrigin().getRefHead().getY() - getOrigin().getRefBase().getY();
-        double n = getOrigin().getRefHead().getZ() - getOrigin().getRefBase().getZ();
+        double l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
+        double m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
+        double n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
 
-        double y = getOrigin().getRefBase().getY() + (m / l * (x - getOrigin().getRefBase().getX()));
-        double z = getOrigin().getRefBase().getZ() + (n / l * (x - getOrigin().getRefBase().getX()));
+        double y = getRefOrigin().getRefBase().getY() + (m / l * (x - getRefOrigin().getRefBase().getX()));
+        double z = getRefOrigin().getRefBase().getZ() + (n / l * (x - getRefOrigin().getRefBase().getX()));
 
         return Optional.of(factory.getFPoint(x, y, z));
     }
@@ -265,20 +315,20 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getFPointAtY(double y) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        if (getOrigin().getRefBase().getY() == getOrigin().getRefHead().getY()) {
+        if (getRefOrigin().getRefBase().getY() == getRefOrigin().getRefHead().getY()) {
             return Optional.empty();
         }
 
-        double l = getOrigin().getRefHead().getX() - getOrigin().getRefBase().getX();
-        double m = getOrigin().getRefHead().getY() - getOrigin().getRefBase().getY();
-        double n = getOrigin().getRefHead().getZ() - getOrigin().getRefBase().getZ();
+        double l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
+        double m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
+        double n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
 
-        double x = getOrigin().getRefBase().getX() + (l / m * (y - getOrigin().getRefBase().getY()));
-        double z = getOrigin().getRefBase().getZ() + (n / m * (y - getOrigin().getRefBase().getY()));
+        double x = getRefOrigin().getRefBase().getX() + (l / m * (y - getRefOrigin().getRefBase().getY()));
+        double z = getRefOrigin().getRefBase().getZ() + (n / m * (y - getRefOrigin().getRefBase().getY()));
 
         return Optional.of(factory.getFPoint(x, y, z));
     }
@@ -286,20 +336,20 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getFPointAtZ(double z) {
 
-        if (getOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        if (getOrigin().getRefBase().getZ() == getOrigin().getRefHead().getZ()) {
+        if (getRefOrigin().getRefBase().getZ() == getRefOrigin().getRefHead().getZ()) {
             return Optional.empty();
         }
 
-        double l = getOrigin().getRefHead().getX() - getOrigin().getRefBase().getX();
-        double m = getOrigin().getRefHead().getY() - getOrigin().getRefBase().getY();
-        double n = getOrigin().getRefHead().getZ() - getOrigin().getRefBase().getZ();
+        double l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
+        double m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
+        double n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
 
-        double x = getOrigin().getRefBase().getX() + (l / n * (z - getOrigin().getRefBase().getZ()));
-        double y = getOrigin().getRefBase().getY() + (m / n * (z - getOrigin().getRefBase().getZ()));
+        double x = getRefOrigin().getRefBase().getX() + (l / n * (z - getRefOrigin().getRefBase().getZ()));
+        double y = getRefOrigin().getRefBase().getY() + (m / n * (z - getRefOrigin().getRefBase().getZ()));
 
         return Optional.of(factory.getFPoint(x, y, z));
     }
@@ -307,14 +357,14 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getCommonFPoint(FLine ref) {
 
-        if (getOrigin().isParallel(ref.getOrigin())) {
+        if (getRefOrigin().isParallel(ref.getRefOrigin())) {
             return Optional.empty();
         }
 
-        String dir = getProjectionType(ref.getOrigin());
+        String dir = getProjectionType(ref.getRefOrigin());
 
-        FVector u = projectOnPlane(dir, getOrigin().copy());
-        FVector v = projectOnPlane(dir, ref.getOrigin().copy());
+        FVector u = projectOnPlane(dir, getRefOrigin().copy());
+        FVector v = projectOnPlane(dir, ref.getRefOrigin().copy());
         FVector w = factory.getFVector(v.getRefBase(), u.getRefBase());
 
         v = getCrossProduct(dir, v);
@@ -328,19 +378,19 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
 
     private String getProjectionType(FVector ref) {
 
-        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthY() > 0) &&
+        if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthY() > 0) &&
                 (ref.getLengthX() > 0 || ref.getLengthY() > 0)) {
 
             return "XY";
         }
 
-        if ((getOrigin().getLengthY() > 0 || getOrigin().getLengthZ() > 0) &&
+        if ((getRefOrigin().getLengthY() > 0 || getRefOrigin().getLengthZ() > 0) &&
                 (ref.getLengthY() > 0 || ref.getLengthZ() > 0)) {
 
             return "YZ";
         }
 
-        if ((getOrigin().getLengthX() > 0 || getOrigin().getLengthZ() > 0) &&
+        if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthZ() > 0) &&
                 (ref.getLengthX() > 0 || ref.getLengthZ() > 0)) {
 
             return "XZ";
@@ -458,24 +508,24 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
 
     // -------------------------------------------------------------------------------------------------
 
-    private FPoint projectFPoint(FPoint fPoint) {
-        FPoint opA = getOrigin().getRefHead().copy()
-                .sub(getOrigin().getRefBase())
-                .div(getOrigin().getLength());
+    private FPoint projectUnit(FPoint fPoint) {
+        FPoint opA = getRefOrigin().getRefHead().copy()
+                .sub(getRefOrigin().getRefBase())
+                .div(getRefOrigin().getLength());
 
         FPoint opB = fPoint.copy()
-                .sub(getOrigin().getRefBase());
+                .sub(getRefOrigin().getRefBase());
 
         fPoint.applyStateFrom(origin.getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         return fPoint;
     }
 
-    private boolean isPartOfRay(FPoint projection) {
-        double magnitude = getOrigin().getLength();
+    private boolean isPartOfRayUnit(FPoint projection) {
+        double magnitude = getRefOrigin().getLength();
 
-        double distanceBase = getOrigin().getRefBase().getDistance(projection);
-        double distanceHead = getOrigin().getRefHead().getDistance(projection);
+        double distanceBase = getRefOrigin().getRefBase().getDistance(projection);
+        double distanceHead = getRefOrigin().getRefHead().getDistance(projection);
 
         if ((distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon)) {
             return true;
@@ -484,25 +534,24 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
         return distanceHead < distanceBase + epsilon;
     }
 
-    private boolean isPartOfSegment(FPoint projection) {
-        double magnitude = getOrigin().getLength();
+    private boolean isPartOfSegmentUnit(FPoint projection) {
+        double magnitude = getRefOrigin().getLength();
 
-        double distanceBase = getOrigin().getRefBase().getDistance(projection);
-        double distanceHead = getOrigin().getRefHead().getDistance(projection);
+        double distanceBase = getRefOrigin().getRefBase().getDistance(projection);
+        double distanceHead = getRefOrigin().getRefHead().getDistance(projection);
 
         return (distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon);
     }
 
-    private FPoint moveForward(FPoint ref, double distance) {
+    private FPoint shiftForwardUnit(FPoint ref, double distance) {
 
-        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).shiftForward(distance).getRefBase());
+        return ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftForward(distance).getRefBase());
     }
 
-    private FPoint moveBackward(FPoint ref, double distance) {
+    private FPoint shiftBackwardUnit(FPoint ref, double distance) {
 
-        return ref.applyStateFrom(getOrigin().copy().moveBase(ref).shiftBackward(distance).getRefBase());
+        return ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftBackward(distance).getRefBase());
     }
-
 }
 
 // https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.

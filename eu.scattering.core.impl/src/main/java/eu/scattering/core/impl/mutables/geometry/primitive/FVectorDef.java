@@ -19,7 +19,7 @@ import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
-    private static final String JSON_MAIN = "point";
+    private static final String JSON_MAIN = "vector";
     private static final String JSON_VAL = "val";
 
     private final Supplier<FPoint> fPointSupplier;

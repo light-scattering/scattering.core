@@ -11,7 +11,7 @@ public abstract class AdvancedPresetDef<T extends Construct<T>> implements Const
     public int hashCode() {
         int hashCode = 7;
 
-        for (FPoint fPoint : getOrigin().disassemble()) {
+        for (FPoint fPoint : getRefOrigin().disassemble()) {
             hashCode = 31 * hashCode + (int) (fPoint.getX() * 100);
             hashCode = 31 * hashCode + (int) (fPoint.getY() * 100);
             hashCode = 31 * hashCode + (int) (fPoint.getZ() * 100);
@@ -23,31 +23,19 @@ public abstract class AdvancedPresetDef<T extends Construct<T>> implements Const
     @Override
     public boolean isExact(T ref) {
 
-        return getOrigin().isExact(ref.getOrigin());
+        return getRefOrigin().isExact(ref.getRefOrigin());
     }
 
     @Override
     public boolean isSimilar(T ref) {
 
-        return getOrigin().isSimilar(ref.getOrigin());
-    }
-
-    @Override
-    public FPoint getBase() {
-
-        return getOrigin().getRefBase();
-    }
-
-    @Override
-    public FPoint getHead() {
-
-        return getOrigin().getRefHead();
+        return getRefOrigin().isSimilar(ref.getRefOrigin());
     }
 
     @Override
     public List<FPoint> disassemble() {
 
-        return getOrigin().disassemble();
+        return getRefOrigin().disassemble();
     }
 
 }

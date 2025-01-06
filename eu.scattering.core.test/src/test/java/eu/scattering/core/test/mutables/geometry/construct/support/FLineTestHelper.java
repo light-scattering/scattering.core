@@ -13,65 +13,66 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class FLineTestHelper {
 
+    // TODO - adapt
     public static void testValue(BiFunction<FLine, FLine, Object> exe,
                                  FLine ref, FLine arg) {
 
         Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
                 "The reference cannot be null");
         
-        FVector refOriginSnapshot = ref.getOrigin();
-        FVector refOriginPositionSnapshot = ref.getOrigin().copy();
-        FPoint refBaseSnapshot = ref.getBase();
-        FPoint refHeadSnapshot = ref.getHead();
-        FVector argOriginSnapshot = arg.getOrigin();
-        FVector argOriginPositionSnapshot = arg.getOrigin().copy();
-        FPoint argBaseSnapshot = arg.getBase();
-        FPoint argHeadSnapshot = arg.getHead();
+        FVector refOriginSnapshot = ref.getRefOrigin();
+        FVector refOriginPositionSnapshot = ref.getRefOrigin().copy();
+        FPoint refBaseSnapshot = ref.getRefOrigin().getRefBase();
+        FPoint refHeadSnapshot = ref.getRefOrigin().getRefHead();
+        FVector argOriginSnapshot = arg.getRefOrigin();
+        FVector argOriginPositionSnapshot = arg.getRefOrigin().copy();
+        FPoint argBaseSnapshot = arg.getRefOrigin().getRefBase();
+        FPoint argHeadSnapshot = arg.getRefOrigin().getRefHead();
 
         exe.apply(ref, arg);
 
         Assertions.assertAll("Validate positions",
-                () -> assertTrue(refOriginPositionSnapshot.isExact(ref.getOrigin()),
+                () -> assertTrue(refOriginPositionSnapshot.isExact(ref.getRefOrigin()),
                         "The input origin position should not change"),
-                () -> assertTrue(argOriginPositionSnapshot.isExact(arg.getOrigin()),
+                () -> assertTrue(argOriginPositionSnapshot.isExact(arg.getRefOrigin()),
                         "The argument origin position should not change")
         );
 
         Assertions.assertAll("Validate references",
                 () -> assertSame(refOriginSnapshot, refOriginSnapshot,
                         "The input origin reference should not change"),
-                () -> assertSame(refBaseSnapshot, ref.getBase(),
+                () -> assertSame(refBaseSnapshot, ref.getRefOrigin().getRefBase(),
                         "The input origin head reference should not change"),
-                () -> assertSame(refHeadSnapshot, ref.getHead(),
+                () -> assertSame(refHeadSnapshot, ref.getRefOrigin().getRefHead(),
                         "The input origin base reference should not change"),
-                () -> assertSame(argOriginSnapshot, arg.getOrigin(),
+                () -> assertSame(argOriginSnapshot, arg.getRefOrigin(),
                         "The argument origin reference should not change"),
-                () -> assertSame(argBaseSnapshot, arg.getBase(),
+                () -> assertSame(argBaseSnapshot, arg.getRefOrigin().getRefBase(),
                         "The argument origin base reference should not change"),
-                () -> assertSame(argHeadSnapshot, arg.getHead(),
+                () -> assertSame(argHeadSnapshot, arg.getRefOrigin().getRefHead(),
                         "The argument origin head reference should not change")
         );
     }
 
     public static void testValue(Function<FLine, Object> exe, FLine ref) {
-        FVector refOriginSnapshot = ref.getOrigin();
-        FVector refOriginPositionSnapshot = ref.getOrigin().copy();
-        FPoint refBaseSnapshot = ref.getBase();
-        FPoint refHeadSnapshot = ref.getHead();
+        FVector refOriginSnapshot = ref.getRefOrigin();
+        FVector refOriginPositionSnapshot = ref.getRefOrigin().copy();
+        FPoint refBaseSnapshot = ref.getRefOrigin().getRefBase();
+        FPoint refHeadSnapshot = ref.getRefOrigin().getRefHead();
 
         exe.apply(ref);
 
         Assertions.assertAll("Validate positions",
-                () -> assertTrue(refOriginPositionSnapshot.isExact(ref.getOrigin()),
+                () -> assertTrue(refOriginPositionSnapshot.isExact(ref.getRefOrigin()),
                         "The input origin position should not change")
         );
 
         Assertions.assertAll("Validate references",
                 () -> assertSame(refOriginSnapshot, refOriginSnapshot,
                         "The input origin reference should not change"),
-                () -> assertSame(refBaseSnapshot, ref.getBase(),
+                () -> assertSame(refBaseSnapshot, ref.getRefOrigin().getRefBase(),
                         "The input origin head reference should not change"),
-                () -> assertSame(refHeadSnapshot, ref.getHead(),
+                () -> assertSame(refHeadSnapshot, ref.getRefOrigin().getRefHead(),
                         "The input origin base reference should not change")
         );
     }

@@ -8,6 +8,6 @@ public interface FPlaneFactory {
 
     default FPlane getFPlane(FVector fVector) {
 
-        return getFPlane().setOriginRef(fVector);
+        return getFPlane().setRefOrigin(fVector);
     }
 }

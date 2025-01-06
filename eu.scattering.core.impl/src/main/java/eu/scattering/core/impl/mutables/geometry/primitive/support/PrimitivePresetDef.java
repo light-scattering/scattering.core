@@ -1,12 +1,7 @@
 package eu.scattering.core.impl.mutables.geometry.primitive.support;
 
-import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
-
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Primitive<T> {
 
@@ -230,28 +225,4 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
 
         return self();
     }
-
-    // TODO - remove
-    @Override
-    public T ext(Consumer<Geometry> exp) {
-
-        exp.accept(self());
-
-        return self();
-    }
-
-    // TODO - remove
-    @Override
-    public List<Double> extDouble(Function<Geometry, List<Double>> exp) {
-
-        return exp.apply(self());
-    }
-
-    // TODO - remove
-    @Override
-    public List<Boolean> extBoolean(Function<Geometry, List<Boolean>> exp) {
-
-        return exp.apply(self());
-    }
-
 }

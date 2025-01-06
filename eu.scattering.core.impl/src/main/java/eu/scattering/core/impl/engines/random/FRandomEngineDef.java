@@ -16,16 +16,16 @@ import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import java.util.Arrays;
 
 public class FRandomEngineDef implements FRandomEngine {
-    private final FRandomProcessor fRandom;
+    private final FRandomProcessor core;
 
-    private FRandomEngineDef(FRandomProcessor random) {
+    private FRandomEngineDef(FRandomProcessor core) {
 
-        this.fRandom = random;
+        this.core = core;
     }
 
-    public static FRandomEngine create(FRandomProcessor random) {
+    public static FRandomEngine create(FRandomProcessor core) {
 
-        return new FRandomEngineDef(random);
+        return new FRandomEngineDef(core);
     }
 
     //--------------------------------------------------
@@ -34,7 +34,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FComplex rndPosition(FComplex origin, FPairPos2D range, FComplex... exclusion) {
         FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
 
-        origin.set(fRandom.nextDouble2D(range, exc));
+        origin.set(core.nextDouble2D(range, exc));
 
         return origin;
     }
@@ -43,7 +43,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FComplex rndPosition(FComplex origin, double radius, FComplex... exclusion) {
         FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
 
-        origin.set(fRandom.nextDoubleOnCircle(radius, exc));
+        origin.set(core.nextDoubleOnCircle(radius, exc));
 
         return origin;
     }
@@ -52,7 +52,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FQuaternion rndPosition(FQuaternion origin, FPairPos4D range, FQuaternion... exclusion) {
         FPos4D[] exc = Arrays.stream(exclusion).map(FQuaternion::toFPos4D).toArray(FPos4D[]::new);
 
-        origin.set(fRandom.nextDouble4D(range, exc));
+        origin.set(core.nextDouble4D(range, exc));
 
         return origin;
     }
@@ -69,7 +69,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FPoint rndAngle(FPoint origin, FPoint... exclusion) {
         double radius = origin.getLength();
 
-        origin.set(fRandom.nextDoubleOnSphere(radius));
+        origin.set(core.nextDoubleOnSphere(radius));
 
         return origin;
     }
@@ -78,7 +78,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FPoint rndPosition(FPoint origin, FPairPos3D range, FPoint... exclusion) {
         FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
 
-        origin.set(fRandom.nextDouble3D(range, exc));
+        origin.set(core.nextDouble3D(range, exc));
 
         return origin;
     }
@@ -87,7 +87,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FPoint rndPosition(FPoint origin, double radius, FPoint... exclusion) {
         FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
 
-        origin.set(fRandom.nextDoubleInSphere(radius, exc));
+        origin.set(core.nextDoubleInSphere(radius, exc));
 
         return origin;
     }
