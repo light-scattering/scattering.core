@@ -1,11 +1,12 @@
 package eu.scattering.core.impl.mutables.geometry.construct.line;
 
-import eu.scattering.core.design.FactoryDesign;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.impl.mutables.geometry.construct.AdvancedPresetDef;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,44 +19,46 @@ import java.util.stream.Collectors;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
-//    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "line";
     private static final String JSON_VAL = "val";
 
-    private final Supplier<FVector> fOriginSupplier;
+    private final Supplier<FVector> fVectorSupplier;
+    private final Supplier<FPoint> fPointSupplier;
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
     private FVector origin;
-    private final FactoryDesign factory;
     private final double epsilon;
 
-    private FLineDef(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier) {
+    private FLineDef(double epsilon, Supplier<FVector> fOriginSupplier) {
 
-        this.factory = factory;
+        this.fVectorSupplier = fOriginSupplier;
+        this.fPointSupplier = () -> getRefOrigin().getRefBase().copyZero();
+
         this.epsilon = epsilon;
-        this.fOriginSupplier = fOriginSupplier;
         this.origin = fOriginSupplier.get();
     }
 
-    private FLineDef(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier, FVector origin) {
+    private FLineDef(double epsilon, Supplier<FVector> fOriginSupplier, FVector origin) {
 
-        this.factory = factory;
+        this.fVectorSupplier = fOriginSupplier;
+        this.fPointSupplier = () -> getRefOrigin().getRefBase().copyZero();
+
         this.epsilon = epsilon;
-        this.fOriginSupplier = fOriginSupplier;
         this.origin = origin;
     }
 
-    public static FLine create(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier) {
+    public static FLine create(double epsilon, Supplier<FVector> fOriginSupplier) {
 
-        return new FLineDef(factory, epsilon, fOriginSupplier);
+        return new FLineDef(epsilon, fOriginSupplier);
     }
 
-    public static FLine create(FactoryDesign factory, double epsilon, Supplier<FVector> fOriginSupplier, FVector origin) {
+    public static FLine create(double epsilon, Supplier<FVector> fOriginSupplier, FVector origin) {
 
-        return new FLineDef(factory, epsilon, fOriginSupplier, origin);
+        return new FLineDef(epsilon, fOriginSupplier, origin);
     }
 
     @Override
@@ -97,7 +100,7 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
         }
 
         JSONArray structure = json.getJSONArray(JSON_VAL);
-        var origin = fOriginSupplier.get().applyStateFrom(structure.getJSONObject(0));
+        var origin = fVectorSupplier.get().applyStateFrom(structure.getJSONObject(0));
 
         return setRefOrigin(origin);
     }
@@ -113,13 +116,13 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
     @Override
     public FLine copy() {
 
-        return factory.getRefFLine(getRefOrigin().copy());
+        return copyZero().setRefOrigin(getRefOrigin().copy());
     }
 
     @Override
     public FLine copyZero() {
 
-        return factory.getRefFLine(fOriginSupplier.get());
+        return create(epsilon, fVectorSupplier);
     }
 
     @Override
@@ -309,7 +312,7 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
         double y = getRefOrigin().getRefBase().getY() + (m / l * (x - getRefOrigin().getRefBase().getX()));
         double z = getRefOrigin().getRefBase().getZ() + (n / l * (x - getRefOrigin().getRefBase().getX()));
 
-        return Optional.of(factory.getFPoint(x, y, z));
+        return Optional.of(fPointSupplier.get().set(x, y, z));
     }
 
     @Override
@@ -330,7 +333,7 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
         double x = getRefOrigin().getRefBase().getX() + (l / m * (y - getRefOrigin().getRefBase().getY()));
         double z = getRefOrigin().getRefBase().getZ() + (n / m * (y - getRefOrigin().getRefBase().getY()));
 
-        return Optional.of(factory.getFPoint(x, y, z));
+        return Optional.of(fPointSupplier.get().set(x, y, z));
     }
 
     @Override
@@ -351,7 +354,7 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
         double x = getRefOrigin().getRefBase().getX() + (l / n * (z - getRefOrigin().getRefBase().getZ()));
         double y = getRefOrigin().getRefBase().getY() + (m / n * (z - getRefOrigin().getRefBase().getZ()));
 
-        return Optional.of(factory.getFPoint(x, y, z));
+        return Optional.of(fPointSupplier.get().set(x, y, z));
     }
 
     @Override
@@ -365,7 +368,7 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
 
         FVector u = projectOnPlane(dir, getRefOrigin().copy());
         FVector v = projectOnPlane(dir, ref.getRefOrigin().copy());
-        FVector w = factory.getFVector(v.getRefBase(), u.getRefBase());
+        FVector w = fVectorSupplier.get().set(v.getRefBase(), u.getRefBase());
 
         v = getCrossProduct(dir, v);
 
@@ -426,11 +429,11 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
 
         switch (dir) {
             case "XY":
-                return ref.setCrossProduct(factory.getFVector(ref.getRefBase().copy().setZ(1)));
+                return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setZ(1)));
             case "YZ":
-                return ref.setCrossProduct(factory.getFVector(ref.getRefBase().copy().setX(1)));
+                return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setX(1)));
             case "XZ":
-                return ref.setCrossProduct(factory.getFVector(ref.getRefBase().copy().setY(1)));
+                return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setY(1)));
         }
 
         throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);

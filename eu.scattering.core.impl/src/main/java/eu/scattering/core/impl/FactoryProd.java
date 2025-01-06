@@ -91,13 +91,13 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
     public FLine getFLine() {
 
-        return FLineDef.create(this, epsilon, this::getFVector);
+        return FLineDef.create(epsilon, this::getFVector);
     }
 
     @Override
-    public FLine getRefFLine(FVector refCore) {
+    public FLine getRefFLine(FVector refOrigin) {
 
-        return FLineDef.create(this, epsilon, this::getFVector, refCore);
+        return FLineDef.create(epsilon, this::getFVector, refOrigin);
     }
 
     @Override
