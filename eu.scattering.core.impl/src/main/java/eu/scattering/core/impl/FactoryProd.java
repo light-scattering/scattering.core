@@ -4,6 +4,7 @@ import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
+import eu.scattering.core.design.mutables.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.mutables.geometry.shape.sphere.FSphere;
@@ -22,6 +23,7 @@ import eu.scattering.core.impl.helpers.FTrigHelperDef;
 import eu.scattering.core.impl.mutables.geometry.construct.line.FLineDef;
 import eu.scattering.core.impl.mutables.geometry.construct.plane.FPlaneDef;
 import eu.scattering.core.impl.mutables.geometry.construct.ray.FRayDef;
+import eu.scattering.core.impl.mutables.geometry.construct.segment.FSegmentDef;
 import eu.scattering.core.impl.mutables.geometry.primitive.FPointDef;
 import eu.scattering.core.impl.mutables.geometry.primitive.FVectorDef;
 import eu.scattering.core.impl.mutables.number.FComplexDef;
@@ -112,6 +114,18 @@ public final class FactoryProd extends FactoryDesignConcrete {
     public FRay getRefFRay(FVector refOrigin) {
 
         return FRayDef.create(epsilon, this::getFVector, refOrigin);
+    }
+
+    @Override
+    public FSegment getFSegment() {
+
+        return FSegmentDef.create(epsilon, this::getFVector);
+    }
+
+    @Override
+    public FSegment getRefFSegment(FVector refOrigin) {
+
+        return FSegmentDef.create(epsilon, this::getFVector, refOrigin);
     }
 
     @Override

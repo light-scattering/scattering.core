@@ -3,6 +3,7 @@ package eu.scattering.core.impl.engines.rotation;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
+import eu.scattering.core.design.mutables.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
@@ -123,6 +124,26 @@ public class FRotationEngineDef implements FRotationEngine {
 
     @Override
     public void rotate(FRay origin, Geometry geometry, double angle) {
+
+        if (origin.getRefOrigin().isNonDirectional()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        FRot rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
+
+        geometry.disassemble().forEach(p -> {
+            var projection = p.copy();
+
+            origin.project(projection);
+
+            if (origin.isPartOf(projection).get(0)) {
+                rotate(p, rotor);
+            }
+        });
+    }
+
+    @Override
+    public void rotate(FSegment origin, Geometry geometry, double angle) {
 
         if (origin.getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");

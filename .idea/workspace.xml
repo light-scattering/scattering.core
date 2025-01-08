@@ -24,20 +24,16 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/Construct.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/Construct.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/ConstructEngineRandom.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/ConstructEngineRandom.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/ConstructEngineRotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/ConstructEngineRotation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/ConstructFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/ConstructFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/line/FLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/line/FLine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/line/FLineFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/line/FLineFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/plane/FPlane.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/plane/FPlane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPoint.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryProd.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engines/rotation/FRotationEngineDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engines/rotation/FRotationEngineDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/AdvancedPresetDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/ConstructPresetDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/line/FLineDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/line/FLineDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/plane/FPlaneDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/plane/FPlaneDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/construct/FLineTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/construct/FLineTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/ray/FRayDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/construct/ray/FRayDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/construct/FSegmentTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/construct/FSegmentTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/construct/support/FSegmentTestHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/construct/support/FSegmentTestHelper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +138,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="add_unversioned_files" value="true&#10;/home/krzysztof/Desktop/git/scattering.core/build/reports/tests/test/index.html" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/ray" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/segment" />
     <property name="memory.settings.postsync.last.time.stamp" value="1592602420832" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -153,11 +149,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\mutables\geometry\construct\segment" />
       <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\mutables\geometry\construct\ray" />
       <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\mutables\geometry\construct" />
       <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.transfer\src\main\java" />
       <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\transfers" />
-      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\elements\data" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/resources" />
@@ -170,8 +166,8 @@
       <recent name="eu.scattering.core.transfer.elements" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FRayRotationTest.rotateBelowBase">
-    <configuration name="FRayAdvancedTest.disassemble" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
+    <configuration name="FRayAdvancedTest.getFPointThrowIllegalStateExceptionNegative" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -184,7 +180,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayTest$FRayAdvancedTest.disassemble&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayTest$FRayAdvancedTest.getFPointThrowIllegalStateExceptionNegative&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -194,7 +190,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FRayRotationTest.rotateBelowBase" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FRayAdvancedTest.getFPointValidatePositions" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -207,7 +203,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayRotationTest.rotateBelowBase&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayTest$FRayAdvancedTest.getFPointValidatePositions&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -217,7 +213,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FRayRotationTest.rotateSimple" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FRayTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -230,7 +226,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayRotationTest.rotateSimple&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -240,7 +236,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FRayRotationTest.rotateSimpleNegative" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.design.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -251,9 +247,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayRotationTest.rotateSimpleNegative&quot;" />
+            <option value=":eu.scattering.core.design:test" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -263,7 +257,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FRayRotationTest.rotateThrowIllegalStateException" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -275,8 +269,6 @@
         <option name="taskNames">
           <list>
             <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayRotationTest.rotateThrowIllegalStateException&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -288,11 +280,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FRayRotationTest.rotateBelowBase" />
-        <item itemvalue="Gradle.FRayRotationTest.rotateThrowIllegalStateException" />
-        <item itemvalue="Gradle.FRayRotationTest.rotateSimpleNegative" />
-        <item itemvalue="Gradle.FRayRotationTest.rotateSimple" />
-        <item itemvalue="Gradle.FRayAdvancedTest.disassemble" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.design.test'" />
+        <item itemvalue="Gradle.FRayTest" />
+        <item itemvalue="Gradle.FRayAdvancedTest.getFPointThrowIllegalStateExceptionNegative" />
+        <item itemvalue="Gradle.FRayAdvancedTest.getFPointValidatePositions" />
       </list>
     </recent_temporary>
   </component>
@@ -525,11 +517,6 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/position/FPairPos2DITest.java</url>
           <line>44</line>
           <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/construct/FRayRotationTest.java</url>
-          <line>46</line>
-          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

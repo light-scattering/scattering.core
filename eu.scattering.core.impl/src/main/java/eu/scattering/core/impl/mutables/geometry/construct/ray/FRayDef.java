@@ -1,7 +1,6 @@
 package eu.scattering.core.impl.mutables.geometry.construct.ray;
 
 import eu.scattering.core.design.mutables.geometry.Geometry;
-import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
@@ -23,7 +22,6 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     private static final String JSON_VAL = "val";
 
     private final Supplier<FVector> fVectorSupplier;
-    private final Supplier<FPoint> fPointSupplier;
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -35,7 +33,6 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     private FRayDef(double epsilon, Supplier<FVector> fOriginSupplier) {
 
         this.fVectorSupplier = fOriginSupplier;
-        this.fPointSupplier = () -> getRefOrigin().getRefBase().copyZero();
 
         this.epsilon = epsilon;
         this.origin = fOriginSupplier.get();
@@ -44,7 +41,6 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     private FRayDef(double epsilon, Supplier<FVector> fOriginSupplier, FVector origin) {
 
         this.fVectorSupplier = fOriginSupplier;
-        this.fPointSupplier = () -> getRefOrigin().getRefBase().copyZero();
 
         this.epsilon = epsilon;
         this.origin = origin;
@@ -151,8 +147,8 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FLine) {
-            FLine ref = (FLine) object;
+        if (object instanceof FRay) {
+            FRay ref = (FRay) object;
 
             return getRefOrigin().equals(ref.getRefOrigin());
         }
@@ -295,12 +291,12 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         FPoint projection = ref.copy()
                 .applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
-        boolean isValid = projectUnitValidate(ref, projection);
+        boolean isValid = projectUnitValidate(projection);
 
         return isValid ? Optional.of(ref.applyStateFrom(projection)) : Optional.empty();
     }
 
-    private boolean projectUnitValidate(FPoint ref, FPoint projection) {
+    private boolean projectUnitValidate(FPoint projection) {
 
         var distBase = getRefOrigin().getRefBase().getDistance(projection);
         var distHead = getRefOrigin().getRefHead().getDistance(projection);
@@ -312,14 +308,14 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         return distBase > distHead;
     }
 
-    private FPoint shiftForwardUnit(FPoint ref, double distance) {
+    private void shiftForwardUnit(FPoint ref, double distance) {
 
-        return ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftForward(distance).getRefBase());
+        ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftForward(distance).getRefBase());
     }
 
-    private FPoint shiftBackwardUnit(FPoint ref, double distance) {
+    private void shiftBackwardUnit(FPoint ref, double distance) {
 
-        return ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftBackward(distance).getRefBase());
+        ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftBackward(distance).getRefBase());
     }
 }
 
