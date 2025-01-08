@@ -4,9 +4,7 @@ import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.impl.mutables.geometry.construct.AdvancedPresetDef;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.impl.mutables.geometry.construct.ConstructPresetDef;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,8 +16,7 @@ import java.util.stream.Collectors;
 
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
-public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private static final String JSON_MAIN = "line";
     private static final String JSON_VAL = "val";
 
@@ -519,7 +516,7 @@ public class FLineDef extends AdvancedPresetDef<FLine> implements FLine {
         FPoint opB = fPoint.copy()
                 .sub(getRefOrigin().getRefBase());
 
-        fPoint.applyStateFrom(origin.getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+        fPoint.applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         return fPoint;
     }

@@ -6,7 +6,7 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.plane.FPlane;
-import eu.scattering.core.impl.mutables.geometry.construct.AdvancedPresetDef;
+import eu.scattering.core.impl.mutables.geometry.construct.ConstructPresetDef;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FPlaneDef extends AdvancedPresetDef<FPlane> implements FPlane {
+public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.

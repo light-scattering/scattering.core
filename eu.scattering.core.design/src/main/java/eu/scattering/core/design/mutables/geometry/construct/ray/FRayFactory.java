@@ -1,20 +1,20 @@
-package eu.scattering.core.design.mutables.geometry.construct.line;
+package eu.scattering.core.design.mutables.geometry.construct.ray;
 
 import eu.scattering.core.design.annotations.MutableState;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 
-public interface FLineFactory {
+public interface FRayFactory {
 
-    FLine getFLine();
+    FRay getFRay();
 
     @MutableState
-    FLine getRefFLine(FVector refOrigin);
+    FRay getRefFRay(FVector refOrigin);
 
     //--------------------------------------------------
 
-    default FLine getFLine(FPairPos3D position) {
+    default FRay getFRay(FPairPos3D position) {
 
-        return getFLine().set(position);
+        return getFRay().set(position);
     }
 }

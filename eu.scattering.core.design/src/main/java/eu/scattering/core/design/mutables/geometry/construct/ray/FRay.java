@@ -1,4 +1,4 @@
-package eu.scattering.core.design.mutables.geometry.construct.line;
+package eu.scattering.core.design.mutables.geometry.construct.ray;
 
 import eu.scattering.core.design.annotations.IntermediateResults;
 import eu.scattering.core.design.mutables.geometry.Geometry;
@@ -7,11 +7,11 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.OptionalDouble;
 
-public interface FLine extends Construct<FLine> {
+public interface FRay extends Construct<FRay> {
 
-    FLine set(FPairPos3D position);
+    FRay set(FPairPos3D position);
 
     FPairPos3D toFPairPos3D();
 
@@ -19,25 +19,14 @@ public interface FLine extends Construct<FLine> {
 
     FPoint getFPointAtDistance(double length);
 
-    Optional<FPoint> getFPointAtX(double x);
-    Optional<FPoint> getFPointAtY(double y);
-    Optional<FPoint> getFPointAtZ(double z);
-
-    Optional<FPoint> getCommonFPoint(FLine ref);
-
-    boolean isSameLine(FLine ref);
-
     void shiftForward(Geometry geometry, double distance);
     void shiftBackward(Geometry geometry, double distance);
 
-    List<Boolean> isPartOfRay(Geometry geometry);
-    List<Boolean> isPartOfSegment(Geometry geometry);
-
-    List<Double> getDistance(Geometry geometry);
+    List<OptionalDouble> getDistance(Geometry geometry);
     void setDistance(Geometry geometry, double distance);
 
     //--------------------------------------------------
 
     @IntermediateResults
-    List<Double> getDistanceP2(Geometry geometry);
+    List<OptionalDouble> getDistanceP2(Geometry geometry);
 }

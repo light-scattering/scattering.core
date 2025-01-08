@@ -5,7 +5,7 @@ import eu.scattering.core.design.mutables.geometry.construct.Construct;
 
 import java.util.List;
 
-public abstract class AdvancedPresetDef<T extends Construct<T>> implements Construct<T> {
+public abstract class ConstructPresetDef<T extends Construct<T>> implements Construct<T> {
 
     @Override
     public int hashCode() {

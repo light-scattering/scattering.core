@@ -445,8 +445,8 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Project advanced - A")
-        void projectAdvancedA() {
+        @DisplayName("Project (below base)")
+        void projectBelowBase() {
             FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
             FLine fLine = factory.getRefFLine(fVector);
             FPoint fPoint = factory.getFPoint(0, -9, 0);
@@ -465,8 +465,8 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Project advanced - B")
-        void projectAdvancedB() {
+        @DisplayName("Project (above head)")
+        void projectAboveHead() {
             FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
@@ -539,9 +539,9 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Reflect advanced - A")
-        void reflectAdvancedA() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+        @DisplayName("Reflect (below base)")
+        void reflectBelowBase() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
@@ -551,9 +551,9 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Reflect advanced - B")
-        void reflectAdvancedB() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+        @DisplayName("Reflect (above head")
+        void reflectAboveHead() {
+            FVector fVector = factory.getFVector(-1, -1, -1, 1, 1, 1);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
@@ -591,7 +591,7 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Location (position base)")
+        @DisplayName("Location (below base)")
         void isPartOfPositionBase() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
@@ -601,7 +601,7 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Location (position head)")
+        @DisplayName("Location (above head)")
         void isPartOfPositionHead() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
@@ -686,23 +686,27 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Set distance (position base)")
+        @DisplayName("Set distance (below base)")
         void setDistancePositionBase() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
             fLine.setDistance(fPoint, 1);
+
+            assertEquals(1, fLine.getDistance(fPoint).get(0), jitter);
         }
 
         @Test
-        @DisplayName("Set distance (position head)")
+        @DisplayName("Set distance (above head)")
         void setDistancePositionHead() {
             FVector fVector = factory.getFVector(4, 4, 4).sub(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
             fLine.setDistance(fPoint, 1);
+
+            assertEquals(1, fLine.getDistance(fPoint).get(0), jitter);
         }
 
         @Test

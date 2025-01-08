@@ -19,4 +19,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.engines.random.processor;
     exports eu.scattering.core.design.engines.rotation.processor;
     exports eu.scattering.core.design.engines.random.processor.core;
+    exports eu.scattering.core.design.mutables.geometry.construct.ray;
 }

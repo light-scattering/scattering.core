@@ -1,5 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.construct.plane;
 
+import eu.scattering.core.design.annotations.IntermediateResults;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
@@ -16,5 +17,13 @@ public interface FPlane extends Construct<FPlane> {
     Optional<FLine> getCommonFLine(FPlane ref);
 
     List<Boolean> isInHalfSpace(Geometry geometry);
+
+    List<Double> getDistance(Geometry geometry);
+    void setDistance(Geometry geometry, double distance);
+
+    //--------------------------------------------------
+
+    @IntermediateResults
+    List<Double> getDistanceP2(Geometry geometry);
 }
 

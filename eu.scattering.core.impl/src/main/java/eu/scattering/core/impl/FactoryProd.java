@@ -3,6 +3,7 @@ package eu.scattering.core.impl;
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.mutables.geometry.shape.sphere.FSphere;
@@ -20,6 +21,7 @@ import eu.scattering.core.impl.engines.rotation.FRotationProcessorDef;
 import eu.scattering.core.impl.helpers.FTrigHelperDef;
 import eu.scattering.core.impl.mutables.geometry.construct.line.FLineDef;
 import eu.scattering.core.impl.mutables.geometry.construct.plane.FPlaneDef;
+import eu.scattering.core.impl.mutables.geometry.construct.ray.FRayDef;
 import eu.scattering.core.impl.mutables.geometry.primitive.FPointDef;
 import eu.scattering.core.impl.mutables.geometry.primitive.FVectorDef;
 import eu.scattering.core.impl.mutables.number.FComplexDef;
@@ -98,6 +100,18 @@ public final class FactoryProd extends FactoryDesignConcrete {
     public FLine getRefFLine(FVector refOrigin) {
 
         return FLineDef.create(epsilon, this::getFVector, refOrigin);
+    }
+
+    @Override
+    public FRay getFRay() {
+
+        return FRayDef.create(epsilon, this::getFVector);
+    }
+
+    @Override
+    public FRay getRefFRay(FVector refOrigin) {
+
+        return FRayDef.create(epsilon, this::getFVector, refOrigin);
     }
 
     @Override
