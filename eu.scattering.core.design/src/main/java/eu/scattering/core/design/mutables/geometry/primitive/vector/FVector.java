@@ -107,6 +107,9 @@ public interface FVector extends Primitive<FVector> {
     double getAzimuth();
     FVector setAzimuth(double azimuth);
 
+    // FVector mutateAtBaseZero(Consumer<FVector op);
+    // FVector mutateHeadAtBaseZero(Consumer<FPoint> op);
+
     //--------------------------------------------------
 
     @MutableState

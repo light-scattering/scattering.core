@@ -17,21 +17,13 @@ public interface FLine extends Construct<FLine> {
 
     //--------------------------------------------------
 
-    FPoint getFPointAtDistance(double length);
+    boolean isCollinear(FLine ref);
 
     Optional<FPoint> getFPointAtX(double x);
     Optional<FPoint> getFPointAtY(double y);
     Optional<FPoint> getFPointAtZ(double z);
 
-    Optional<FPoint> getCommonFPoint(FLine ref);
-
-    boolean isSameLine(FLine ref);
-
-    void shiftForward(Geometry geometry, double distance);
-    void shiftBackward(Geometry geometry, double distance);
-
-    List<Boolean> isPartOfRay(Geometry geometry);
-    List<Boolean> isPartOfSegment(Geometry geometry);
+    Optional<FPoint> getFPointAtIntersection(FLine ref);
 
     List<Double> getDistance(Geometry geometry);
     void setDistance(Geometry geometry, double distance);

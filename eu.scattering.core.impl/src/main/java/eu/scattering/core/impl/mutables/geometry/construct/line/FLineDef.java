@@ -167,7 +167,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isSameLine(FLine ref) {
+    public boolean isCollinear(FLine ref) {
 
         return ref.isPartOf(origin).stream().allMatch(e -> e);
     }
@@ -239,59 +239,6 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public void shiftForward(Geometry geometry, double distance) {
-
-        geometry.disassemble().forEach(p -> shiftForwardUnit(p, distance));
-    }
-
-    @Override
-    public void shiftBackward(Geometry geometry, double distance) {
-
-        geometry.disassemble().forEach(p -> shiftBackwardUnit(p, distance));
-    }
-
-    @Override
-    public List<Boolean> isPartOfRay(Geometry geometry) {
-
-        if (getRefOrigin().isNonDirectional()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return geometry.disassemble().stream()
-                .map(this::isPartOfRayUnit)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Boolean> isPartOfSegment(Geometry geometry) {
-
-        if (getRefOrigin().isNonDirectional()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return geometry.disassemble().stream()
-                .map(this::isPartOfSegmentUnit)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public FPoint getFPointAtDistance(double length) {
-
-        if (getRefOrigin().isNonDirectional()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        FPoint fPoint = getRefOrigin().getRefHead().copy().sub(getRefOrigin().getRefBase());
-        double tmp = length / getRefOrigin().getLength();
-
-        fPoint.setX(getRefOrigin().getRefBase().getX() + (fPoint.getX() * tmp));
-        fPoint.setY(getRefOrigin().getRefBase().getY() + (fPoint.getY() * tmp));
-        fPoint.setZ(getRefOrigin().getRefBase().getZ() + (fPoint.getZ() * tmp));
-
-        return fPoint;
-    }
-
-    @Override
     public Optional<FPoint> getFPointAtX(double x) {
 
         if (getRefOrigin().isNonDirectional()) {
@@ -355,7 +302,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public Optional<FPoint> getCommonFPoint(FLine ref) {
+    public Optional<FPoint> getFPointAtIntersection(FLine ref) {
 
         if (getRefOrigin().isParallel(ref.getRefOrigin())) {
             return Optional.empty();
@@ -371,7 +318,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         double scaleFactor = v.copy().reflectHead().getDotProduct(w) / v.getDotProduct(u);
 
-        return validateCandidate(ref, getCandidate3D(dir, getCandidate2D(u, scaleFactor)));
+        return validateCandidate(ref, getCandidate3D(dir, getCandidate2D(u, scaleFactor)).orElse(null));
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -493,14 +440,14 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         throw new IllegalStateException("The FPoint candidate cannot be calculated. Value " + dir);
     }
 
-    private Optional<FPoint> validateCandidate(FLine ref, Optional<FPoint> candidate) {
+    private Optional<FPoint> validateCandidate(FLine ref, FPoint candidate) {
 
-        if (candidate.isEmpty()) {
+        if (candidate == null) {
             return Optional.empty();
         }
 
-        if (isPartOf(candidate.get()).get(0) && ref.isPartOf(candidate.get()).get(0)) {
-            return candidate;
+        if (isPartOf(candidate).get(0) && ref.isPartOf(candidate).get(0)) {
+            return Optional.of(candidate);
         }
 
         return Optional.empty();
@@ -519,38 +466,6 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         fPoint.applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
         return fPoint;
-    }
-
-    private boolean isPartOfRayUnit(FPoint projection) {
-        double magnitude = getRefOrigin().getLength();
-
-        double distanceBase = getRefOrigin().getRefBase().getDistance(projection);
-        double distanceHead = getRefOrigin().getRefHead().getDistance(projection);
-
-        if ((distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon)) {
-            return true;
-        }
-
-        return distanceHead < distanceBase + epsilon;
-    }
-
-    private boolean isPartOfSegmentUnit(FPoint projection) {
-        double magnitude = getRefOrigin().getLength();
-
-        double distanceBase = getRefOrigin().getRefBase().getDistance(projection);
-        double distanceHead = getRefOrigin().getRefHead().getDistance(projection);
-
-        return (distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon);
-    }
-
-    private FPoint shiftForwardUnit(FPoint ref, double distance) {
-
-        return ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftForward(distance).getRefBase());
-    }
-
-    private FPoint shiftBackwardUnit(FPoint ref, double distance) {
-
-        return ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftBackward(distance).getRefBase());
     }
 }
 
