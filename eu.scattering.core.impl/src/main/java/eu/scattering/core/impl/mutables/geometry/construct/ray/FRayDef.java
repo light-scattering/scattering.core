@@ -184,15 +184,14 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public List<Boolean> isAtomicPartOf(Geometry geometry) {
+    public boolean isPartOf(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(this::isPartOfUnit)
-                .collect(Collectors.toList());
+                .allMatch(this::isPartOfUnit);
     }
 
     @Override

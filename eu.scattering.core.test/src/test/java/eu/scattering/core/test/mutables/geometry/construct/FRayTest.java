@@ -491,7 +491,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * jitter);
 
-            assertTrue(fRay.isAtomicPartOf(fPoint).get(0), "The distance should be negligible");
+            assertTrue(fRay.isPartOf(fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -500,7 +500,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * jitter);
 
-            assertFalse(fRay.isAtomicPartOf(fPoint).get(0), "The distance should not be negligible");
+            assertFalse(fRay.isPartOf(fPoint), "The distance should not be negligible");
         }
 
         @Test
@@ -510,7 +510,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4);
 
-            assertFalse(fRay.isAtomicPartOf(fPoint).get(0));
+            assertFalse(fRay.isPartOf(fPoint));
         }
 
         @Test
@@ -520,7 +520,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
-            assertTrue(fRay.isAtomicPartOf(fPoint).get(0));
+            assertTrue(fRay.isPartOf(fPoint));
         }
 
         @Test
@@ -529,7 +529,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.isAtomicPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fRay.isPartOf(fPoint),
                     "The origin is a non-directional FVector");
         }
 

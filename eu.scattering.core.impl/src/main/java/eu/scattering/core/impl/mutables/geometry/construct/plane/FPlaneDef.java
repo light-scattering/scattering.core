@@ -170,7 +170,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     public boolean isCoplanar(FPlane ref) {
 
         return (getRefOrigin().isParallel(ref.getRefOrigin()) || getRefOrigin().isAntiParallel(ref.getRefOrigin()))
-                && isAtomicPartOf(ref.getRefOrigin()).get(0);
+                && isPartOf(ref.getRefOrigin().getRefBase());
     }
 
     @Override
@@ -194,15 +194,14 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public List<Boolean> isAtomicPartOf(Geometry geometry) {
+    public boolean isPartOf(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistance(projectOnPlane(p.copy())) < epsilon)
-                .collect(Collectors.toList());
+                .allMatch(p -> p.getDistance(projectOnPlane(p.copy())) < epsilon);
     }
 
     @Override

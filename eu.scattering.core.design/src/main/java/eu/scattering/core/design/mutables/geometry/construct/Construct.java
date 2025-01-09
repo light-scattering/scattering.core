@@ -4,8 +4,6 @@ import eu.scattering.core.design.annotations.Mutable;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 
-import java.util.List;
-
 public interface Construct<T> extends Geometry, eu.scattering.core.design.mutables.Mutable<T> {
 
     @Mutable
@@ -18,7 +16,5 @@ public interface Construct<T> extends Geometry, eu.scattering.core.design.mutabl
     void project(Geometry geometry);
     void reflect(Geometry geometry);
 
-//    boolean isPartOf(Geometry geometry);
-    // TODO - Do we really need this?
-    List<Boolean> isAtomicPartOf(Geometry geometry);
+    boolean isPartOf(Geometry geometry);
 }

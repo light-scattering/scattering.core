@@ -491,7 +491,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * jitter);
 
-            assertTrue(fSegment.isAtomicPartOf(fPoint).get(0), "The distance should be negligible");
+            assertTrue(fSegment.isPartOf(fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -500,7 +500,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * jitter);
 
-            assertFalse(fSegment.isAtomicPartOf(fPoint).get(0), "The distance should not be negligible");
+            assertFalse(fSegment.isPartOf(fPoint), "The distance should not be negligible");
         }
 
         @Test
@@ -510,7 +510,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4);
 
-            assertFalse(fSegment.isAtomicPartOf(fPoint).get(0));
+            assertFalse(fSegment.isPartOf(fPoint));
         }
 
         @Test
@@ -520,7 +520,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
-            assertFalse(fSegment.isAtomicPartOf(fPoint).get(0));
+            assertFalse(fSegment.isPartOf(fPoint));
         }
 
         @Test
@@ -529,7 +529,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.isAtomicPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.isPartOf(fPoint),
                     "The origin is a non-directional FVector");
         }
 

@@ -567,14 +567,14 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public double terminatorDouble(Function<FPoint, List<Double>> action) {
+    public double terminatorDouble(Function<FPoint, Double> action) {
 
-        return action.apply(this).get(0);
+        return action.apply(this);
     }
 
     @Override
-    public boolean terminatorBoolean(Function<FPoint, List<Boolean>> action) {
+    public boolean terminatorBoolean(Function<FPoint, Boolean> action) {
 
-        return action.apply(this).get(0);
+        return action.apply(this);
     }
 }

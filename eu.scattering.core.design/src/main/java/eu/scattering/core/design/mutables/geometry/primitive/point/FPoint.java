@@ -6,7 +6,6 @@ import eu.scattering.core.design.annotations.Intermediate;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -68,9 +67,9 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint apply(Consumer<FPoint> action);
 
     @Facade
-    double terminatorDouble(Function<FPoint, List<Double>> action);
+    double terminatorDouble(Function<FPoint, Double> action);
     @Facade
-    boolean terminatorBoolean(Function<FPoint, List<Boolean>> action);
+    boolean terminatorBoolean(Function<FPoint, Boolean> action);
 
     //--------------------------------------------------
 

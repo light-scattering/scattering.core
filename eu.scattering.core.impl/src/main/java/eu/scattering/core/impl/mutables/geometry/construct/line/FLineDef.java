@@ -168,7 +168,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public boolean isCollinear(FLine ref) {
 
-        return ref.isAtomicPartOf(origin).stream().allMatch(e -> e);
+        return ref.isPartOf(origin);
     }
 
     @Override
@@ -192,15 +192,14 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public List<Boolean> isAtomicPartOf(Geometry geometry) {
+    public boolean isPartOf(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistance(projectUnit(p.copy())) < epsilon)
-                .collect(Collectors.toList());
+                .allMatch(p -> p.getDistance(projectUnit(p.copy())) < epsilon);
     }
 
     @Override
@@ -445,7 +444,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             return Optional.empty();
         }
 
-        if (isAtomicPartOf(candidate).get(0) && ref.isAtomicPartOf(candidate).get(0)) {
+        if (isPartOf(candidate) && ref.isPartOf(candidate)) {
             return Optional.of(candidate);
         }
 

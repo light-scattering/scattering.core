@@ -131,7 +131,7 @@ public class FRotationEngineDef implements FRotationEngine {
         var rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
 
         geometry.disassemble().forEach(p -> {
-            if (p.copy().apply(origin::project).terminatorBoolean(origin::isAtomicPartOf)) {
+            if (p.copy().apply(origin::project).terminatorBoolean(origin::isPartOf)) {
                 rotate(p, rotor);
             }
         });
@@ -147,7 +147,7 @@ public class FRotationEngineDef implements FRotationEngine {
         var rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
 
         geometry.disassemble().forEach(p -> {
-            if (p.copy().apply(origin::project).terminatorBoolean(origin::isAtomicPartOf)) {
+            if (p.copy().apply(origin::project).terminatorBoolean(origin::isPartOf)) {
                 rotate(p, rotor);
             }
         });

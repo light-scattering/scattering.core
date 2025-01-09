@@ -527,7 +527,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(-1, 2, -1).add(0.5 * jitter);
 
-            assertTrue(fPlane.isAtomicPartOf(fPoint).get(0),
+            assertTrue(fPlane.isPartOf(fPoint),
                     "The distance should be negligible");
         }
 
@@ -537,7 +537,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(-1, 2, -1).add(1.5 * jitter);
 
-            assertFalse(fPlane.isAtomicPartOf(fPoint).get(0),
+            assertFalse(fPlane.isPartOf(fPoint),
                     "The distance should not be negligible");
         }
 
@@ -547,7 +547,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isAtomicPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isPartOf(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -821,13 +821,13 @@ public class FPlaneTest {
             FLine fLine = fLineOpt.get();
 
             Assertions.assertAll("Validate FLine",
-                    () -> assertTrue(fPlane1.isAtomicPartOf(fLine.getRefOrigin().getRefBase()).get(0),
+                    () -> assertTrue(fPlane1.isPartOf(fLine.getRefOrigin().getRefBase()),
                             "The FLine base does not belong to FPlane 1"),
-                    () -> assertTrue(fPlane1.isAtomicPartOf(fLine.getRefOrigin().getRefHead()).get(0),
+                    () -> assertTrue(fPlane1.isPartOf(fLine.getRefOrigin().getRefHead()),
                             "The FLine head does not belong to FPlane 1"),
-                    () -> assertTrue(fPlane2.isAtomicPartOf(fLine.getRefOrigin().getRefBase()).get(0),
+                    () -> assertTrue(fPlane2.isPartOf(fLine.getRefOrigin().getRefBase()),
                             "The FLine base does not belong to FPlane 2"),
-                    () -> assertTrue(fPlane2.isAtomicPartOf(fLine.getRefOrigin().getRefHead()).get(0),
+                    () -> assertTrue(fPlane2.isPartOf(fLine.getRefOrigin().getRefHead()),
                             "The FLine head does not belong to FPlane 2")
             );
         }
