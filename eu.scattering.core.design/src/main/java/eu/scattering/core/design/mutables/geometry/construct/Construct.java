@@ -13,8 +13,8 @@ public interface Construct<T> extends Geometry, eu.scattering.core.design.mutabl
 
     //--------------------------------------------------
 
+    boolean isPartOf(Geometry geometry);
+
     void project(Geometry geometry);
     void reflect(Geometry geometry);
-
-    boolean isPartOf(Geometry geometry);
 }

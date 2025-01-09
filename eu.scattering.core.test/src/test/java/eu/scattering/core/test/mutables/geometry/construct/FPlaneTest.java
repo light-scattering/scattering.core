@@ -637,7 +637,7 @@ public class FPlaneTest {
             fPlane.getRefOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertTrue(fPlane.isAtomicOnSide(fPoint).get(0),"The half-space is erroneous");
+            assertTrue(fPlane.isOnSide(fPoint),"The half-space is erroneous");
         }
 
         @Test
@@ -655,7 +655,7 @@ public class FPlaneTest {
             fPlane.getRefOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertFalse(fPlane.isAtomicOnSide(fPoint).get(0),"The half-space is erroneous");
+            assertFalse(fPlane.isOnSide(fPoint),"The half-space is erroneous");
         }
 
         @Test
@@ -664,7 +664,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isAtomicOnSide(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isOnSide(fPoint),
                     "The origin is a non-directional FVector");
         }
 

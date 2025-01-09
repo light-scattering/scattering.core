@@ -26,7 +26,6 @@ public interface FRay extends Construct<FRay> {
 
     //--------------------------------------------------
 
-    // TODO - Some fields should be empty
     List<OptionalDouble> getAtomicDistance(Geometry geometry);
 
     @Intermediate

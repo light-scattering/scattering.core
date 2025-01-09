@@ -20,14 +20,11 @@ public interface FPlane extends Construct<FPlane> {
 
     boolean isCoplanar(FPlane ref);
 
+    boolean isCut(Geometry geometry);
+    boolean isOnSide(Geometry geometry);
+
     Optional<FPoint> getFPointAtIntersection(FLine ref);
     Optional<FLine> getFLineAtIntersection(FPlane ref);
-
-    boolean isCut(Geometry geometry);
-
-//    boolean isOnSide(Geometry geometry);
-    // TODO - Do we really need this?
-    List<Boolean> isAtomicOnSide(Geometry geometry);
 
     void setDistance(Geometry geometry, double distance);
 

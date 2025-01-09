@@ -256,15 +256,14 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public List<Boolean> isAtomicOnSide(Geometry geometry) {
+    public boolean isOnSide(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(p -> isInHalfSpace(projectOnLine(p.copy())))
-                .collect(Collectors.toList());
+                .allMatch(p -> isInHalfSpace(projectOnLine(p.copy())));
     }
 
     @Override
