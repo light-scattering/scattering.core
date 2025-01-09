@@ -131,7 +131,13 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FPlane getFPlane() {
 
-        return FPlaneDef.create(this, epsilon);
+        return FPlaneDef.create(epsilon, this::getFLine, this::getFVector);
+    }
+
+    @Override
+    public FPlane getFPlane(FVector refOrigin) {
+
+        return FPlaneDef.create(epsilon, this::getFLine, this::getFVector, refOrigin);
     }
 
     @Override

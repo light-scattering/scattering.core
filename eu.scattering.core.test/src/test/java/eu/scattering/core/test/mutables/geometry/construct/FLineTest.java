@@ -578,7 +578,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * jitter);
 
-            assertTrue(fLine.isPartOf(fPoint).get(0), "The distance should be negligible");
+            assertTrue(fLine.isAtomicPartOf(fPoint).get(0), "The distance should be negligible");
         }
 
         @Test
@@ -587,7 +587,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * jitter);
 
-            assertFalse(fLine.isPartOf(fPoint).get(0), "The distance should not be negligible");
+            assertFalse(fLine.isAtomicPartOf(fPoint).get(0), "The distance should not be negligible");
         }
 
         @Test
@@ -597,7 +597,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4).addY(0.5 * jitter);
 
-            assertTrue(fLine.isPartOf(fPoint).get(0));
+            assertTrue(fLine.isAtomicPartOf(fPoint).get(0));
         }
 
         @Test
@@ -607,7 +607,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
-            assertTrue(fLine.isPartOf(fPoint).get(0));
+            assertTrue(fLine.isAtomicPartOf(fPoint).get(0));
         }
 
         @Test
@@ -616,7 +616,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.isAtomicPartOf(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -631,7 +631,7 @@ public class FLineTest {
             fLine.getRefOrigin().add(offset);
             fPoint.add(offset);
 
-            assertEquals(Math.sqrt(6), fLine.getDistance(fPoint).get(0));
+            assertEquals(Math.sqrt(6), fLine.getAtomicDistance(fPoint).get(0));
         }
 
         @Test
@@ -640,7 +640,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.getDistance(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.getAtomicDistance(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -655,7 +655,7 @@ public class FLineTest {
             fLine.getRefOrigin().add(relocation);
             fPoint.add(relocation);
 
-            assertEquals(6, fLine.getDistanceP2(fPoint).get(0));
+            assertEquals(6, fLine.getAtomicDistanceP2(fPoint).get(0));
         }
 
         @Test
@@ -664,7 +664,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.getDistanceP2(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.getAtomicDistanceP2(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -681,7 +681,7 @@ public class FLineTest {
 
             fLine.setDistance(fPoint, 1);
 
-            Assertions.assertTrue(Math.abs(fLine.getDistance(fPoint).get(0) - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fLine.getAtomicDistance(fPoint).get(0) - 1) < jitter,
                     "The distance is erroneous");
         }
 
@@ -694,7 +694,7 @@ public class FLineTest {
 
             fLine.setDistance(fPoint, 1);
 
-            assertEquals(1, fLine.getDistance(fPoint).get(0), jitter);
+            assertEquals(1, fLine.getAtomicDistance(fPoint).get(0), jitter);
         }
 
         @Test
@@ -706,7 +706,7 @@ public class FLineTest {
 
             fLine.setDistance(fPoint, 1);
 
-            assertEquals(1, fLine.getDistance(fPoint).get(0), jitter);
+            assertEquals(1, fLine.getAtomicDistance(fPoint).get(0), jitter);
         }
 
         @Test
@@ -722,7 +722,7 @@ public class FLineTest {
 
             fLine.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fLine.getDistance(fPoint).get(0) - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fLine.getAtomicDistance(fPoint).get(0) - 1) < jitter,
                     "The distance between FPoints is erroneous");
         }
 
@@ -917,7 +917,7 @@ public class FLineTest {
             fLineBOriginBase.setZ(0);
             fLineBOriginBase.setZ(0);
 
-            while (fLineA.isPartOf(fLineBOriginBase).get(0)) {
+            while (fLineA.isAtomicPartOf(fLineBOriginBase).get(0)) {
                 fLineBOriginBase.applyStateFrom(TestHelper.getRandomFPoint());
 
                 fLineBOriginBase.setZ(0);
@@ -927,12 +927,12 @@ public class FLineTest {
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
 
             Assertions.assertAll("Validate FPoint",
-                    () -> assertTrue(fLineA.isPartOf(fPointRes.get()).get(0),
+                    () -> assertTrue(fLineA.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance(fPointRes.get()).get(0)+ ")"),
-                    () -> assertTrue(fLineB.isPartOf(fPointRes.get()).get(0),
+                                    "(distance: " + fLineA.getAtomicDistance(fPointRes.get()).get(0)+ ")"),
+                    () -> assertTrue(fLineB.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance(fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getAtomicDistance(fPointRes.get()).get(0)+ ")")
             );
         }
 
@@ -953,9 +953,9 @@ public class FLineTest {
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
 
             Assertions.assertAll("Validate FPoint",
-                    () -> assertTrue(fLineA.isPartOf(fPointRes.get()).get(0),
+                    () -> assertTrue(fLineA.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 1"),
-                    () -> assertTrue(fLineB.isPartOf(fPointRes.get()).get(0),
+                    () -> assertTrue(fLineB.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 2")
             );
         }
@@ -982,7 +982,7 @@ public class FLineTest {
             FPoint fLineBOriginHead = fLineA.getRefOrigin().getRefHead();
             FLine fLineB = factory.getRefFLine(factory.getFVector(fLineBOriginBase, fLineBOriginHead));
 
-            while (fLineA.isPartOf(fLineBOriginBase).get(0)) {
+            while (fLineA.isAtomicPartOf(fLineBOriginBase).get(0)) {
                 fLineBOriginBase.applyStateFrom(TestHelper.getRandomFPoint());
             }
 
@@ -990,12 +990,12 @@ public class FLineTest {
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");
 
             Assertions.assertAll("Validate FPoint",
-                    () -> assertTrue(fLineA.isPartOf(fPointRes.get()).get(0),
+                    () -> assertTrue(fLineA.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance(fPointRes.get()).get(0)+ ")"),
-                    () -> assertTrue(fLineB.isPartOf(fPointRes.get()).get(0),
+                                    "(distance: " + fLineA.getAtomicDistance(fPointRes.get()).get(0)+ ")"),
+                    () -> assertTrue(fLineB.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance(fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getAtomicDistance(fPointRes.get()).get(0)+ ")")
             );
         }
 
@@ -1013,12 +1013,12 @@ public class FLineTest {
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fPointRes.get().isExact(factory.getFPoint(1, 1, 0)),
                             "The FPoint is erroneous"),
-                    () -> assertTrue(fLineA.isPartOf(fPointRes.get()).get(0),
+                    () -> assertTrue(fLineA.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance(fPointRes.get()).get(0)+ ")"),
-                    () -> assertTrue(fLineB.isPartOf(fPointRes.get()).get(0),
+                                    "(distance: " + fLineA.getAtomicDistance(fPointRes.get()).get(0)+ ")"),
+                    () -> assertTrue(fLineB.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance(fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getAtomicDistance(fPointRes.get()).get(0)+ ")")
             );
         }
         @Test
@@ -1035,12 +1035,12 @@ public class FLineTest {
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fPointRes.get().isExact(factory.getFPoint(1, 1, 0)),
                             "The FPoint is erroneous"),
-                    () -> assertTrue(fLineA.isPartOf(fPointRes.get()).get(0),
+                    () -> assertTrue(fLineA.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance(fPointRes.get()).get(0)+ ")"),
-                    () -> assertTrue(fLineB.isPartOf(fPointRes.get()).get(0),
+                                    "(distance: " + fLineA.getAtomicDistance(fPointRes.get()).get(0)+ ")"),
+                    () -> assertTrue(fLineB.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance(fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getAtomicDistance(fPointRes.get()).get(0)+ ")")
             );
         }
 
@@ -1058,12 +1058,12 @@ public class FLineTest {
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fPointRes.get().isExact(factory.getFPoint(1, 1, 1)),
                             "The FPoint is erroneous"),
-                    () -> assertTrue(fLineA.isPartOf(fPointRes.get()).get(0),
+                    () -> assertTrue(fLineA.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance(fPointRes.get()).get(0)+ ")"),
-                    () -> assertTrue(fLineB.isPartOf(fPointRes.get()).get(0),
+                                    "(distance: " + fLineA.getAtomicDistance(fPointRes.get()).get(0)+ ")"),
+                    () -> assertTrue(fLineB.isAtomicPartOf(fPointRes.get()).get(0),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance(fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getAtomicDistance(fPointRes.get()).get(0)+ ")")
             );
         }
 
@@ -1074,7 +1074,7 @@ public class FLineTest {
 
             FPoint fLineBOriginHead = TestHelper.getRandomFPoint();
 
-            while (fLineA.isPartOf(fLineBOriginHead).get(0)) {
+            while (fLineA.isAtomicPartOf(fLineBOriginHead).get(0)) {
                 fLineBOriginHead = TestHelper.getRandomFPoint();
             }
 

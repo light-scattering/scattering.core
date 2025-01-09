@@ -22,11 +22,13 @@ public interface FRay extends Construct<FRay> {
     void shiftForward(Geometry geometry, double distance);
     void shiftBackward(Geometry geometry, double distance);
 
-    List<OptionalDouble> getDistance(Geometry geometry);
     void setDistance(Geometry geometry, double distance);
 
     //--------------------------------------------------
 
+    // TODO - Some fields should be empty
+    List<Double> getAtomicDistance(Geometry geometry);
+
     @Intermediate
-    List<OptionalDouble> getDistanceP2(Geometry geometry);
+    List<Double> getAtomicDistanceP2(Geometry geometry);
 }

@@ -184,7 +184,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public List<Boolean> isPartOf(Geometry geometry) {
+    public List<Boolean> isAtomicPartOf(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -196,7 +196,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public List<OptionalDouble> getDistanceP2(Geometry geometry) {
+    public List<OptionalDouble> getAtomicDistanceP2(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -210,7 +210,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public List<OptionalDouble> getDistance(Geometry geometry) {
+    public List<OptionalDouble> getAtomicDistance(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");

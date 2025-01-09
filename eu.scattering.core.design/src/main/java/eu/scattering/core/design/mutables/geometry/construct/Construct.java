@@ -18,5 +18,7 @@ public interface Construct<T> extends Geometry, eu.scattering.core.design.mutabl
     void project(Geometry geometry);
     void reflect(Geometry geometry);
 
-    List<Boolean> isPartOf(Geometry geometry);
+//    boolean isPartOf(Geometry geometry);
+    // TODO - Do we really need this?
+    List<Boolean> isAtomicPartOf(Geometry geometry);
 }

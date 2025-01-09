@@ -25,11 +25,12 @@ public interface FLine extends Construct<FLine> {
 
     Optional<FPoint> getFPointAtIntersection(FLine ref);
 
-    List<Double> getDistance(Geometry geometry);
     void setDistance(Geometry geometry, double distance);
 
     //--------------------------------------------------
 
+    List<Double> getAtomicDistance(Geometry geometry);
+
     @Intermediate
-    List<Double> getDistanceP2(Geometry geometry);
+    List<Double> getAtomicDistanceP2(Geometry geometry);
 }

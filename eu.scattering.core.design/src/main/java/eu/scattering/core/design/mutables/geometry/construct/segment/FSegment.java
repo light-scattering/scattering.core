@@ -16,11 +16,12 @@ public interface FSegment extends Construct<FSegment> {
 
     //--------------------------------------------------
 
-    List<OptionalDouble> getDistance(Geometry geometry);
     void setDistance(Geometry geometry, double distance);
 
     //--------------------------------------------------
 
+    List<Double> getAtomicDistance(Geometry geometry);
+
     @Intermediate
-    List<OptionalDouble> getDistanceP2(Geometry geometry);
+    List<Double> getAtomicDistanceP2(Geometry geometry);
 }

@@ -168,7 +168,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public boolean isCollinear(FLine ref) {
 
-        return ref.isPartOf(origin).stream().allMatch(e -> e);
+        return ref.isAtomicPartOf(origin).stream().allMatch(e -> e);
     }
 
     @Override
@@ -192,7 +192,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public List<Boolean> isPartOf(Geometry geometry) {
+    public List<Boolean> isAtomicPartOf(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -204,7 +204,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public List<Double> getDistanceP2(Geometry geometry) {
+    public List<Double> getAtomicDistanceP2(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -216,7 +216,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public List<Double> getDistance(Geometry geometry) {
+    public List<Double> getAtomicDistance(Geometry geometry) {
 
         if (getRefOrigin().isNonDirectional()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -445,7 +445,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             return Optional.empty();
         }
 
-        if (isPartOf(candidate).get(0) && ref.isPartOf(candidate).get(0)) {
+        if (isAtomicPartOf(candidate).get(0) && ref.isAtomicPartOf(candidate).get(0)) {
             return Optional.of(candidate);
         }
 
