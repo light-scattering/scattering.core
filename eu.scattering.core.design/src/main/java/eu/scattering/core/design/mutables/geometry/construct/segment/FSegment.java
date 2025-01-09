@@ -1,6 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.construct.segment;
 
-import eu.scattering.core.design.annotations.IntermediateResults;
+import eu.scattering.core.design.annotations.Intermediate;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -21,6 +21,6 @@ public interface FSegment extends Construct<FSegment> {
 
     //--------------------------------------------------
 
-    @IntermediateResults
+    @Intermediate
     List<OptionalDouble> getDistanceP2(Geometry geometry);
 }

@@ -1,11 +1,15 @@
 package eu.scattering.core.design.mutables.geometry.primitive.vector;
 
-import eu.scattering.core.design.annotations.IntermediateResults;
-import eu.scattering.core.design.annotations.MutableState;
+import eu.scattering.core.design.annotations.Extension;
+import eu.scattering.core.design.annotations.Facade;
+import eu.scattering.core.design.annotations.Intermediate;
+import eu.scattering.core.design.annotations.Mutable;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+
+import java.util.function.Consumer;
 
 public interface FVector extends Primitive<FVector> {
 
@@ -107,26 +111,32 @@ public interface FVector extends Primitive<FVector> {
     double getAzimuth();
     FVector setAzimuth(double azimuth);
 
-    // FVector mutateAtBaseZero(Consumer<FVector op);
-    // FVector mutateHeadAtBaseZero(Consumer<FPoint> op);
-
     //--------------------------------------------------
 
-    @MutableState
+    @Mutable
     FVector setRef(FPoint refBase, FPoint refHead);
 
-    @MutableState
+    @Mutable
     FPoint getRefBase();
-    @MutableState
+    @Mutable
     FVector setRefBase(FPoint refBase);
 
-    @MutableState
+    @Mutable
     FPoint getRefHead();
-    @MutableState
+    @Mutable
     FVector setRefHead(FPoint refHead);
 
     //--------------------------------------------------
 
-    @IntermediateResults
+//    @Extension
+//    FVector apply(Consumer<FVector> action);
+
+    @Facade
+    FVector mutateAtCenter(Consumer<FVector> action);
+//    FVector mutateHeadAtCenter(Consumer<FPoint> action);
+
+    //--------------------------------------------------
+
+    @Intermediate
     double getLengthP2();
 }

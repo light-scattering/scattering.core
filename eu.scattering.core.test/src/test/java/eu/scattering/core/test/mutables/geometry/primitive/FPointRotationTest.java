@@ -22,7 +22,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 1, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        rotation.rotate(fPointA, fPointB, Math.PI);
+        fPointA.apply(p -> rotation.rotate(p, fPointB, Math.PI));
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
                 "The position is incorrect");
@@ -34,7 +34,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 1, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        rotation.rotate(fPointA, fPointB, -Math.PI);
+        fPointA.apply(p -> rotation.rotate(p, fPointB, -Math.PI));
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
                 "The position is incorrect");
@@ -65,7 +65,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 0, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        rotation.setAngle(fPointA, fPointB, Math.PI * 0.25);
+        fPointA.apply(p ->  rotation.setAngle(p, fPointB, Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -83,7 +83,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(-1, 0, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        rotation.setAngle(fPointA, fPointB, Math.PI * 0.25);
+        fPointA.apply(p -> rotation.setAngle(p, fPointB, Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -101,7 +101,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 0, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        rotation.setAngle(fPointA, fPointB, -Math.PI * 0.25);
+        fPointA.apply(p -> rotation.setAngle(p, fPointB, -Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -121,7 +121,8 @@ public class FPointRotationTest {
 
         double magnitude = fPointA.getLength();
         double angle = random.nextDouble() % (Math.PI);
-        rotation.setAngle(fPointA, fPointB, angle);
+
+        fPointA.apply(p -> rotation.setAngle(p, fPointB, angle));
 
         Assertions.assertAll("Validate rotation",
                 () -> assertEquals(magnitude, fPointA.getLength(),

@@ -1,5 +1,5 @@
 package eu.scattering.core.design.annotations;
 
-public @interface IntermediateResults {
+public @interface Mutable {
     String value() default "";
 }

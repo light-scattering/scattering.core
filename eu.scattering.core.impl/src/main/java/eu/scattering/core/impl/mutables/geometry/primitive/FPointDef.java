@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
@@ -552,5 +554,27 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         double radius = getLength();
 
         return setSphericalCoordinates(getInclination(), azimuthal).setLength(radius);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FPoint apply(Consumer<FPoint> action) {
+
+        action.accept(this);
+
+        return this;
+    }
+
+    @Override
+    public double terminatorDouble(Function<FPoint, List<Double>> action) {
+
+        return action.apply(this).get(0);
+    }
+
+    @Override
+    public boolean terminatorBoolean(Function<FPoint, List<Boolean>> action) {
+
+        return action.apply(this).get(0);
     }
 }

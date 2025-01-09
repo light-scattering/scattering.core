@@ -56,9 +56,9 @@ public class FLineRotationTest {
     @DisplayName("Rotate (above head)")
     void rotateAboveHead() {
         FVector fVector = factory.getFVector(0, 2, 0, 2, 2, 0);
-        FLine fLIne = factory.getRefFLine(factory.getFVector(-1, 0, 0, 1, 0, 0));
+        FLine fLine = factory.getRefFLine(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rotation.rotate(fLIne, fVector, Math.PI);
+        rotation.rotate(fLine, fVector, Math.PI);
 
         assertTrue(fVector.isSimilar(0, -2, 0, 2, -2, 0),
                 "The position of the rotated FVector is erroneous");

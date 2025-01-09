@@ -6,7 +6,6 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.impl.mutables.geometry.construct.ConstructPresetDef;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -94,7 +93,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var structure = json.getJSONArray(JSON_VAL);
         var origin = fVectorSupplier.get().applyStateFrom(structure.getJSONObject(0));
 
         return setRefOrigin(origin);
@@ -128,7 +127,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
     @Override
     public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
+        var json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getRefOrigin().toJSON());
@@ -148,7 +147,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     public boolean equals(Object object) {
 
         if (object instanceof FSegment) {
-            FSegment ref = (FSegment) object;
+            var ref = (FSegment) object;
 
             return getRefOrigin().equals(ref.getRefOrigin());
         }
@@ -232,7 +231,8 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         }
 
         geometry.disassemble()
-                .forEach(p -> projectUnit(p.copy()).ifPresent(fPoint -> p.setDistance(fPoint, distance)));
+                .forEach(p -> projectUnit(p.copy())
+                        .ifPresent(fPoint -> p.setDistance(fPoint, distance)));
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -248,33 +248,25 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     private Optional<FPoint> projectUnit(FPoint ref) {
-        FPoint opA = getRefOrigin().getRefHead().copy()
+        var opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
                 .div(getRefOrigin().getLength());
 
-        FPoint opB = ref.copy()
+        var opB = ref.copy()
                 .sub(getRefOrigin().getRefBase());
 
-        FPoint projection = ref.copy()
+        var projection = ref.copy()
                 .applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
-        boolean isValid = projectUnitValidate(projection);
+        var isValid = projectUnitValidate(projection);
 
         return isValid ? Optional.of(ref.applyStateFrom(projection)) : Optional.empty();
     }
 
     private boolean projectUnitValidate(FPoint projection) {
-
         var distBase = getRefOrigin().getRefBase().getDistance(projection);
         var distHead = getRefOrigin().getRefHead().getDistance(projection);
 
-        if (Math.abs(distBase + distHead - getRefOrigin().getLength()) < epsilon) {
-            return true;
-        }
-
-        return false;
+        return Math.abs(distBase + distHead - getRefOrigin().getLength()) < epsilon;
     }
 }
-
-// https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.
-// http://sites.science.oregonstate.edu/math/home/programs/undergrad/CalculusQuestStudyGuides/vcalc/lineplane/lineplane.html

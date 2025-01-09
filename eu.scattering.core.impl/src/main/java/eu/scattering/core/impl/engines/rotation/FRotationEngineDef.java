@@ -51,16 +51,15 @@ public class FRotationEngineDef implements FRotationEngine {
         var axis = origin.copy().setCrossProduct(ref);
         var fPointCopy = ref.copy();
 
-        rotate(fPointCopy, core.getRotation(axis.toFPos3D(), angle));
+        fPointCopy.apply(p -> rotate(p, core.getRotation(axis.toFPos3D(), angle)));
 
         return origin.applyStateFrom(fPointCopy);
     }
 
     @Override
     public FPoint rotate(FPoint origin, FPoint ref, double angle) {
-        rotate(origin, core.getRotation(ref.toFPos3D(), angle));
 
-        return origin;
+        return origin.apply(p -> rotate(p, core.getRotation(ref.toFPos3D(), angle)));
     }
 
     @Override
@@ -74,8 +73,8 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The two vectors are similar");
         }
 
-        FVector fCopyLocal = origin.copy().moveBaseToCenter();
-        FVector fCopyExternal = ref.copy().moveBaseToCenter();
+        var fCopyLocal = origin.copy().moveBaseToCenter();
+        var fCopyExternal = ref.copy().moveBaseToCenter();
 
         setAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
 
@@ -117,7 +116,7 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRot rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
+        var rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
 
         geometry.disassemble().forEach(p -> rotate(p, rotor));
     }
@@ -129,14 +128,10 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRot rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
+        var rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
 
         geometry.disassemble().forEach(p -> {
-            var projection = p.copy();
-
-            origin.project(projection);
-
-            if (origin.isPartOf(projection).get(0)) {
+            if (p.copy().apply(origin::project).terminatorBoolean(origin::isPartOf)) {
                 rotate(p, rotor);
             }
         });
@@ -149,14 +144,10 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FRot rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
+        var rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
 
         geometry.disassemble().forEach(p -> {
-            var projection = p.copy();
-
-            origin.project(projection);
-
-            if (origin.isPartOf(projection).get(0)) {
+            if (p.copy().apply(origin::project).terminatorBoolean(origin::isPartOf)) {
                 rotate(p, rotor);
             }
         });

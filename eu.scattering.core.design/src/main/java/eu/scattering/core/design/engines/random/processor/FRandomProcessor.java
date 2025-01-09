@@ -1,6 +1,6 @@
 package eu.scattering.core.design.engines.random.processor;
 
-import eu.scattering.core.design.annotations.IntermediateResults;
+import eu.scattering.core.design.annotations.Intermediate;
 import eu.scattering.core.design.engines.random.processor.core.FRandomProcessorCore;
 import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -42,12 +42,12 @@ public interface FRandomProcessor extends FRandomProcessorCore {
     FPos4D nextDoubleOnHyperSphere(double radius, FPos4D... exclude);
     FPos4D nextDoubleInHyperSphere(double radius, FPos4D... exclude);
 
-    @IntermediateResults
+    @Intermediate
     boolean valExc1D(double value, double... exclude);
-    @IntermediateResults
+    @Intermediate
     boolean valExc2D(FPos2D value, FPos2D... exclude);
-    @IntermediateResults
+    @Intermediate
     boolean valExc3D(FPos3D value, FPos3D... exclude);
-    @IntermediateResults
+    @Intermediate
     boolean valExc4D(FPos4D value, FPos4D... exclude);
 }

@@ -1,17 +1,16 @@
 package eu.scattering.core.design.mutables.geometry.construct;
 
-import eu.scattering.core.design.annotations.MutableState;
-import eu.scattering.core.design.mutables.Mutable;
+import eu.scattering.core.design.annotations.Mutable;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 
 import java.util.List;
 
-public interface Construct<T> extends Geometry, Mutable<T> {
+public interface Construct<T> extends Geometry, eu.scattering.core.design.mutables.Mutable<T> {
 
-    @MutableState
+    @Mutable
     FVector getRefOrigin();
-    @MutableState
+    @Mutable
     T setRefOrigin(FVector refOrigin);
 
     //--------------------------------------------------

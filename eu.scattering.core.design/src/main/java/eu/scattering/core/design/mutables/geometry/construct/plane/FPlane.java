@@ -1,6 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.construct.plane;
 
-import eu.scattering.core.design.annotations.IntermediateResults;
+import eu.scattering.core.design.annotations.Intermediate;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
@@ -23,7 +23,7 @@ public interface FPlane extends Construct<FPlane> {
 
     //--------------------------------------------------
 
-    @IntermediateResults
+    @Intermediate
     List<Double> getDistanceP2(Geometry geometry);
 }
 

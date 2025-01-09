@@ -6,7 +6,6 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.impl.mutables.geometry.construct.ConstructPresetDef;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -94,7 +93,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var structure = json.getJSONArray(JSON_VAL);
         var origin = fVectorSupplier.get().applyStateFrom(structure.getJSONObject(0));
 
         return setRefOrigin(origin);
@@ -128,7 +127,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
+        var json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getRefOrigin().toJSON());
@@ -148,7 +147,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     public boolean equals(Object object) {
 
         if (object instanceof FRay) {
-            FRay ref = (FRay) object;
+            var ref = (FRay) object;
 
             return getRefOrigin().equals(ref.getRefOrigin());
         }
@@ -232,7 +231,8 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         }
 
         geometry.disassemble()
-                .forEach(p -> projectUnit(p.copy()).ifPresent(fPoint -> p.setDistance(fPoint, distance)));
+                .forEach(p -> projectUnit(p.copy())
+                        .ifPresent(fPoint -> p.setDistance(fPoint, distance)));
     }
 
     @Override
@@ -258,8 +258,8 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        FPoint fPoint = getRefOrigin().getRefHead().copy().sub(getRefOrigin().getRefBase());
-        double tmp = length / getRefOrigin().getLength();
+        var fPoint = getRefOrigin().getRefHead().copy().sub(getRefOrigin().getRefBase());
+        var tmp = length / getRefOrigin().getLength();
 
         fPoint.setX(getRefOrigin().getRefBase().getX() + (fPoint.getX() * tmp));
         fPoint.setY(getRefOrigin().getRefBase().getY() + (fPoint.getY() * tmp));
@@ -281,23 +281,22 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     private Optional<FPoint> projectUnit(FPoint ref) {
-        FPoint opA = getRefOrigin().getRefHead().copy()
+        var opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
                 .div(getRefOrigin().getLength());
 
-        FPoint opB = ref.copy()
+        var opB = ref.copy()
                 .sub(getRefOrigin().getRefBase());
 
-        FPoint projection = ref.copy()
+        var projection = ref.copy()
                 .applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
 
-        boolean isValid = projectUnitValidate(projection);
+        var isValid = projectUnitValidate(projection);
 
         return isValid ? Optional.of(ref.applyStateFrom(projection)) : Optional.empty();
     }
 
     private boolean projectUnitValidate(FPoint projection) {
-
         var distBase = getRefOrigin().getRefBase().getDistance(projection);
         var distHead = getRefOrigin().getRefHead().getDistance(projection);
 
@@ -318,6 +317,3 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         ref.applyStateFrom(getRefOrigin().copy().moveBase(ref).shiftBackward(distance).getRefBase());
     }
 }
-
-// https://math.stackexchange.com/questions/1905533/find-perpendicular-distance-from-point-to-line-in-3d.
-// http://sites.science.oregonstate.edu/math/home/programs/undergrad/CalculusQuestStudyGuides/vcalc/lineplane/lineplane.html

@@ -19,9 +19,9 @@ public class FTrigHelperTest {
         var helper = factory.getFTrigHelper();
 
         assertAll("Values",
-                () -> assertEquals(360, helper.parseRadToDeg(2 * Math.PI)),
-                () -> assertEquals(180, helper.parseRadToDeg(Math.PI)),
-                () -> assertEquals(90, helper.parseRadToDeg(Math.PI / 2))
+                () -> assertEquals(360, helper.convertRadToDeg(2 * Math.PI)),
+                () -> assertEquals(180, helper.convertRadToDeg(Math.PI)),
+                () -> assertEquals(90, helper.convertRadToDeg(Math.PI / 2))
         );
     }
 
@@ -31,9 +31,9 @@ public class FTrigHelperTest {
         var helper = factory.getFTrigHelper();
 
         assertAll("Values",
-                () -> assertEquals(2 * Math.PI, helper.parseDegToRad(360)),
-                () -> assertEquals(Math.PI, helper.parseDegToRad(180)),
-                () -> assertEquals(Math.PI / 2, helper.parseDegToRad(90))
+                () -> assertEquals(2 * Math.PI, helper.convertDegToRad(360)),
+                () -> assertEquals(Math.PI, helper.convertDegToRad(180)),
+                () -> assertEquals(Math.PI / 2, helper.convertDegToRad(90))
         );
     }
 

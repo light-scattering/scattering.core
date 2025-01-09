@@ -6,7 +6,6 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.impl.mutables.geometry.construct.ConstructPresetDef;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -96,7 +95,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var structure = json.getJSONArray(JSON_VAL);
         var origin = fVectorSupplier.get().applyStateFrom(structure.getJSONObject(0));
 
         return setRefOrigin(origin);
@@ -130,7 +129,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
+        var json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getRefOrigin().toJSON());
@@ -150,7 +149,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     public boolean equals(Object object) {
 
         if (object instanceof FLine) {
-            FLine ref = (FLine) object;
+            var ref = (FLine) object;
 
             return getRefOrigin().equals(ref.getRefOrigin());
         }
@@ -249,12 +248,12 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             return Optional.empty();
         }
 
-        double l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
-        double m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
-        double n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
+        var l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
+        var m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
+        var n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
 
-        double y = getRefOrigin().getRefBase().getY() + (m / l * (x - getRefOrigin().getRefBase().getX()));
-        double z = getRefOrigin().getRefBase().getZ() + (n / l * (x - getRefOrigin().getRefBase().getX()));
+        var y = getRefOrigin().getRefBase().getY() + (m / l * (x - getRefOrigin().getRefBase().getX()));
+        var z = getRefOrigin().getRefBase().getZ() + (n / l * (x - getRefOrigin().getRefBase().getX()));
 
         return Optional.of(fPointSupplier.get().set(x, y, z));
     }
@@ -310,9 +309,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         String dir = getProjectionType(ref.getRefOrigin());
 
-        FVector u = projectOnPlane(dir, getRefOrigin().copy());
-        FVector v = projectOnPlane(dir, ref.getRefOrigin().copy());
-        FVector w = fVectorSupplier.get().set(v.getRefBase(), u.getRefBase());
+        var u = projectOnPlane(dir, getRefOrigin().copy());
+        var v = projectOnPlane(dir, ref.getRefOrigin().copy());
+        var w = fVectorSupplier.get().set(v.getRefBase(), u.getRefBase());
 
         v = getCrossProduct(dir, v);
 
@@ -456,11 +455,11 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectUnit(FPoint fPoint) {
-        FPoint opA = getRefOrigin().getRefHead().copy()
+        var opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
                 .div(getRefOrigin().getLength());
 
-        FPoint opB = fPoint.copy()
+        var opB = fPoint.copy()
                 .sub(getRefOrigin().getRefBase());
 
         fPoint.applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));

@@ -16,13 +16,13 @@ public class FTrigHelperDef implements FTrigHelper {
     }
 
     @Override
-    public double parseRadToDeg(double radian) {
+    public double convertRadToDeg(double radian) {
 
         return radian * 180 / Math.PI;
     }
 
     @Override
-    public double parseDegToRad(double degree) {
+    public double convertDegToRad(double degree) {
 
         return degree * Math.PI / 180;
     }

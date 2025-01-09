@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
@@ -803,5 +804,18 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
+    }
+
+    @Override
+    public FVector mutateAtCenter(Consumer<FVector> action) {
+        var base = getRefBase().toFPos3D();
+
+        moveBaseToCenter();
+
+        action.accept(this);
+
+        moveBase(base.getD0(), base.getD1(), base.getD2());
+
+        return null;
     }
 }

@@ -18,7 +18,7 @@ public class FPointTest {
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    class FPointBase {
+    class FPointBasicTest {
 
         private double refX = random.nextDouble();
         private double refY = random.nextDouble();
@@ -219,7 +219,7 @@ public class FPointTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    class FPointAdvanced {
+    class FPointAdvancedTest {
 
         @Test
         @DisplayName("Normalize")
@@ -1018,7 +1018,7 @@ public class FPointTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    class CoreFeatures {
+    class FPointCoreTest {
 
         private double refX = random.nextDouble();
         private double refY = random.nextDouble();
@@ -1241,7 +1241,7 @@ public class FPointTest {
     @Nested
     @Tag("Mutable")
     @DisplayName("Base mutable")
-    class BaseMutable {
+    class FPointMutableTest {
 
         private double refX = random.nextDouble();
         private double refY = random.nextDouble();

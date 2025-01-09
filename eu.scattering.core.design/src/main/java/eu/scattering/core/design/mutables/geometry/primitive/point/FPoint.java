@@ -1,9 +1,14 @@
 package eu.scattering.core.design.mutables.geometry.primitive.point;
 
-import eu.scattering.core.design.annotations.IntermediateResults;
-import eu.scattering.core.design.mutables.geometry.Geometry;
+import eu.scattering.core.design.annotations.Extension;
+import eu.scattering.core.design.annotations.Facade;
+import eu.scattering.core.design.annotations.Intermediate;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface FPoint extends Primitive<FPoint> {
 
@@ -57,14 +62,20 @@ public interface FPoint extends Primitive<FPoint> {
     double getAzimuth();
     FPoint setAzimuth(double azimuth);
 
-//    FPoint ext(Consumer<Geometry> consumer);
-//    double extVal(Function<Geometry, List<Boolean>> function);
-//    boolean extBool(Function<Geometry, List<Boolean>> function);
+    //--------------------------------------------------
+
+    @Extension
+    FPoint apply(Consumer<FPoint> action);
+
+    @Facade
+    double terminatorDouble(Function<FPoint, List<Double>> action);
+    @Facade
+    boolean terminatorBoolean(Function<FPoint, List<Boolean>> action);
 
     //--------------------------------------------------
 
-    @IntermediateResults
+    @Intermediate
     double getLengthP2();
-    @IntermediateResults
+    @Intermediate
     double getDistanceP2(FPoint ref);
 }

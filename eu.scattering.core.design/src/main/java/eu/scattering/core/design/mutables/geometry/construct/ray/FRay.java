@@ -1,6 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.construct.ray;
 
-import eu.scattering.core.design.annotations.IntermediateResults;
+import eu.scattering.core.design.annotations.Intermediate;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
@@ -27,6 +27,6 @@ public interface FRay extends Construct<FRay> {
 
     //--------------------------------------------------
 
-    @IntermediateResults
+    @Intermediate
     List<OptionalDouble> getDistanceP2(Geometry geometry);
 }
