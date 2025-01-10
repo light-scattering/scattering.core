@@ -1,4 +1,4 @@
 package eu.scattering.core.design.annotations;
 
-public @interface Mutable {
+public @interface Termination {
 }

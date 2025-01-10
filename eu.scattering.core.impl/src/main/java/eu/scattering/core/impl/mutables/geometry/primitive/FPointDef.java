@@ -5,7 +5,6 @@ import eu.scattering.core.impl.mutables.geometry.primitive.support.PrimitivePres
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -98,9 +97,9 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint applyStateFrom(FPoint ref) {
+    public FPoint applyStateFrom(FPoint op) {
 
-        return set(ref.getX(), ref.getY(), ref.getZ());
+        return set(op.getX(), op.getY(), op.getZ());
     }
 
     @Override
@@ -110,7 +109,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        JSONArray structure = json.getJSONArray(JSON_VAL);
+        var structure = json.getJSONArray(JSON_VAL);
         var x = structure.getDouble(0);
         var y = structure.getDouble(1);
         var z = structure.getDouble(2);
@@ -127,13 +126,9 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public boolean isExact(FPoint ref) {
+    public boolean isExact(FPoint op) {
 
-        if (ref == null) {
-            throw new NullPointerException("The reference FPoint is null");
-        }
-
-        return isExact(ref.getX(), ref.getY(), ref.getZ());
+        return isExact(op.getX(), op.getY(), op.getZ());
     }
 
     @Override
@@ -147,13 +142,9 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public boolean isSimilar(FPoint ref) {
+    public boolean isSimilar(FPoint op) {
 
-        if (ref == null) {
-            throw new NullPointerException("The reference FPoint is null");
-        }
-
-        return isSimilar(ref.getX(), ref.getY(), ref.getZ());
+        return isSimilar(op.getX(), op.getY(), op.getZ());
     }
 
     @Override
@@ -165,7 +156,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint copy() {
 
-        return FPointDef.create(epsilon).applyStateFrom(this);
+        return copyZero().applyStateFrom(this);
     }
 
     @Override
@@ -182,7 +173,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
+        var json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getX());
@@ -204,7 +195,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public boolean equals(Object object) {
 
         if (object instanceof FPoint) {
-            FPoint ref = (FPoint) object;
+            var ref = (FPoint) object;
 
             return getX() == ref.getX() && getY() == ref.getY() && getZ() == ref.getZ();
         }
@@ -227,9 +218,9 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint add(FPoint fPoint) {
+    public FPoint add(FPoint op) {
 
-        return add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        return add(op.getX(), op.getY(), op.getZ());
     }
 
     @Override
@@ -263,9 +254,9 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint sub(FPoint fPoint) {
+    public FPoint sub(FPoint op) {
 
-        return sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        return sub(op.getX(), op.getY(), op.getZ());
     }
 
     @Override
@@ -299,9 +290,9 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint mul(FPoint fPoint) {
+    public FPoint mul(FPoint op) {
 
-        return mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        return mul(op.getX(), op.getY(), op.getZ());
     }
 
     @Override
@@ -335,9 +326,9 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint div(FPoint fPoint) {
+    public FPoint div(FPoint op) {
 
-        return div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        return div(op.getX(), op.getY(), op.getZ());
     }
 
     @Override
@@ -393,34 +384,34 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public boolean isNonDirectional() {
+    public boolean isNearZero() {
 
         return isSimilar(0, 0, 0);
     }
 
     @Override
-    public double getDistanceP2(FPoint ref) {
-        double dimX = ref.getX() - getX();
-        double dimY = ref.getY() - getY();
-        double dimZ = ref.getZ() - getZ();
+    public double getDistanceP2(FPoint op) {
+        double dimX = op.getX() - getX();
+        double dimY = op.getY() - getY();
+        double dimZ = op.getZ() - getZ();
 
         return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
     }
 
     @Override
-    public double getDistance(FPoint ref) {
+    public double getDistance(FPoint op) {
 
-        return Math.sqrt(getDistanceP2(ref));
+        return Math.sqrt(getDistanceP2(op));
     }
 
     @Override
-    public FPoint setDistance(FPoint ref, double distance) throws IllegalStateException {
+    public FPoint setDistance(FPoint op, double distance) {
 
-        if (equals(ref)) {
+        if (equals(op)) {
             throw new IllegalStateException("FPoints must not be on the same position");
         }
 
-        return sub(ref).setLength(distance).add(ref);
+        return sub(op).setLength(distance).add(op);
     }
 
     @Override
@@ -438,7 +429,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint setLength(double length) {
 
-        if (isNonDirectional()) {
+        if (isNearZero()) {
             throw new IllegalStateException("The vector is non-directional (the position is too close to zero)");
         }
 
@@ -458,99 +449,96 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint reflect(FPoint ref) {
+    public FPoint reflect(FPoint op) {
 
-        return sub(ref).reflect().add(ref);
+        return sub(op).reflect().add(op);
     }
 
     @Override
-    public double getAngle(FPoint ref) {
+    public double getAngle(FPoint op) {
 
-        if (isNonDirectional()) {
+        if (isNearZero()) {
             throw new IllegalStateException("The input vector is non-directional");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZero()) {
             throw new IllegalStateException("The reference vector is non-directional");
         }
 
-        double dProd = getDotProduct(ref);
-        double magAB = getLength() * ref.getLength();
+        double dProd = getDotProduct(op);
+        double magAB = getLength() * op.getLength();
         double angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
     }
 
     @Override
-    public FPoint setAngle(FPoint ref, double angle) {
+    public FPoint setAngle(FPoint op, double angle) {
 
-        if (isNonDirectional()) {
+        if (isNearZero()) {
             throw new IllegalArgumentException("The input vector is non-directional");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZero()) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
-        double lenOpA = getLength();
-        normalize();
+        applyWithFixedLength(p -> {
+            p.normalize();
 
-        FPoint rotAxis = ref.copy().setCrossProduct(this).normalize();
+            op.applyWithFixedState(rotAxis -> {
+                rotAxis.setCrossProduct(p).normalize();
 
-        if (rotAxis.isNonDirectional()) {
-            throw new IllegalStateException("The rotation axis is non-directional");
-        }
+                if (rotAxis.isNearZero()) {
+                    throw new IllegalStateException("The rotation vector is non-directional");
+                }
 
-        double aCurrent = Math.acos(getDotProduct(ref));
-        double aDelta = angle - aCurrent;
+                var aDelta = angle - Math.acos(getDotProduct(op));
 
-        double aDeltaCos = Math.cos(aDelta);
-        double aDeltaSin = Math.sin(aDelta);
+                var aCos = Math.cos(aDelta);
+                var aSin = Math.sin(aDelta);
 
-        double tmpX = rotAxis.getX() * getX();
-        double tmpY = rotAxis.getY() * getY();
-        double tmpZ = rotAxis.getZ() * getZ();
+                var tmpSuffix = (1 - aCos) * (rotAxis.getX() * p.getX() + rotAxis.getY() * p.getY() + rotAxis.getZ() * p.getZ());
 
-        double tmpSuffix = (1 - aDeltaCos) * (tmpX + tmpY + tmpZ);
+                var opX = aCos * p.getX() + aSin * (rotAxis.getY() * p.getZ() - rotAxis.getZ() * p.getY()) + rotAxis.getX() * tmpSuffix;
+                var opY = aCos * p.getY() + aSin * (rotAxis.getZ() * p.getX() - rotAxis.getX() * p.getZ()) + rotAxis.getY() * tmpSuffix;
+                var opZ = aCos * p.getZ() + aSin * (rotAxis.getX() * p.getY() - rotAxis.getY() * p.getX()) + rotAxis.getZ() * tmpSuffix;
 
-        double opX = aDeltaCos * getX() + aDeltaSin * (rotAxis.getY() * getZ() - rotAxis.getZ() * getY()) + rotAxis.getX() * tmpSuffix;
-        double opY = aDeltaCos * getY() + aDeltaSin * (rotAxis.getZ() * getX() - rotAxis.getX() * getZ()) + rotAxis.getY() * tmpSuffix;
-        double opZ = aDeltaCos * getZ() + aDeltaSin * (rotAxis.getX() * getY() - rotAxis.getY() * getX()) + rotAxis.getZ() * tmpSuffix;
-
-        set(opX, opY, opZ).setLength(lenOpA);
+                p.set(opX, opY, opZ);
+            });
+        });
 
         return this;
     }
 
     @Override
-    public double getDotProduct(FPoint ref) {
-        double dimX = getX() * ref.getX();
-        double dimY = getY() * ref.getY();
-        double dimZ = getZ() * ref.getZ();
+    public double getDotProduct(FPoint op) {
+        double dimX = getX() * op.getX();
+        double dimY = getY() * op.getY();
+        double dimZ = getZ() * op.getZ();
 
         return dimX + dimY + dimZ;
     }
 
     @Override
-    public FPoint setCrossProduct(FPoint ref) {
-        double dimX = (getY() * ref.getZ()) - (getZ() * ref.getY());
-        double dimY = (getZ() * ref.getX()) - (getX() * ref.getZ());
-        double dimZ = (getX() * ref.getY()) - (getY() * ref.getX());
+    public FPoint setCrossProduct(FPoint op) {
+        double dimX = (getY() * op.getZ()) - (getZ() * op.getY());
+        double dimY = (getZ() * op.getX()) - (getX() * op.getZ());
+        double dimZ = (getX() * op.getY()) - (getY() * op.getX());
 
-        set(dimX, dimY, dimZ);
-
-        return this;
+        return set(dimX, dimY, dimZ);
     }
 
     @Override
     public FPoint setSphericalCoordinates(double inclination, double azimuth) {
-        double radius = getLength();
 
-        setX(Math.cos(azimuth) * Math.sin(inclination));
-        setY(Math.cos(inclination));
-        setZ(Math.sin(azimuth) * Math.sin(inclination));
+        applyWithFixedLength(p -> {
+            p.setX(Math.cos(azimuth) * Math.sin(inclination));
+            p.setY(Math.cos(inclination));
+            p.setZ(Math.sin(azimuth) * Math.sin(inclination));
+        });
 
-        return setLength(radius);
+        return this;
     }
 
     @Override
@@ -561,9 +549,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
 
     @Override
     public FPoint setInclination(double polar) {
-        double radius = getLength();
 
-        return setSphericalCoordinates(polar, getAzimuth()).setLength(radius);
+        applyWithFixedLength(p -> {
+            p.setSphericalCoordinates(polar, p.getAzimuth());
+        });
+
+        return this;
     }
 
     @Override
@@ -586,9 +577,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
 
     @Override
     public FPoint setAzimuth(double azimuthal) {
-        double radius = getLength();
 
-        return setSphericalCoordinates(getInclination(), azimuthal).setLength(radius);
+        applyWithFixedLength(p -> {
+            p.setSphericalCoordinates(p.getInclination(), azimuthal);
+        });
+
+        return this;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -602,13 +596,37 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public double terminatorDouble(Function<FPoint, Double> action) {
+    public FPoint applyWithFixedState(Consumer<FPoint> action) {
+        double memoX = this.getX();
+        double memoY = this.getY();
+        double memoZ = this.getZ();
+
+        action.accept(this);
+
+        set(memoX, memoY, memoZ);
+
+        return this;
+    }
+
+    @Override
+    public FPoint applyWithFixedLength(Consumer<FPoint> action) {
+        double length = getLength();
+
+        action.accept(this);
+
+        setLength(length);
+
+        return this;
+    }
+
+    @Override
+    public double toDouble(Function<FPoint, Double> action) {
 
         return action.apply(this);
     }
 
     @Override
-    public boolean terminatorBoolean(Function<FPoint, Boolean> action) {
+    public boolean toBoolean(Function<FPoint, Boolean> action) {
 
         return action.apply(this);
     }

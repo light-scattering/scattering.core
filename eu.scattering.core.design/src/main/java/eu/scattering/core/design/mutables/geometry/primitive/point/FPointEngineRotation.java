@@ -2,7 +2,7 @@ package eu.scattering.core.design.mutables.geometry.primitive.point;
 
 public interface FPointEngineRotation {
 
-    FPoint setAngle(FPoint origin, FPoint ref, double angle);
+    FPoint setAngle(FPoint origin, FPoint op, double angle);
 
-    FPoint rotate(FPoint origin, FPoint ref, double angle);
+    FPoint rotate(FPoint origin, FPoint op, double angle);
 }

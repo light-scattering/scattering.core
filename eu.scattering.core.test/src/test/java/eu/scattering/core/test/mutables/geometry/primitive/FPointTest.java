@@ -6,6 +6,7 @@ import eu.scattering.core.test.mutables.geometry.primitive.support.FPointTestHel
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static eu.scattering.core.test.Configuration.*;
@@ -752,7 +753,7 @@ public class FPointTest {
         @DisplayName("Is non-directional")
         void isNonDirectional() {
 
-            assertTrue(factory.getFPoint().isNonDirectional(),
+            assertTrue(factory.getFPoint().isNearZero(),
                     "The reference point should be non-directional");
         }
 
@@ -765,7 +766,7 @@ public class FPointTest {
 
             FPoint fPointRef = factory.getFPoint().set(refX, refY, refZ);
 
-            assertFalse(fPointRef.isNonDirectional(),
+            assertFalse(fPointRef.isNearZero(),
                     "The reference point should be directional");
         }
 
@@ -774,7 +775,7 @@ public class FPointTest {
         void isNonDirectionalValidate() {
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            FPointTestHelper.testValue(FPoint::isNonDirectional, fPoint);
+            FPointTestHelper.testValue(FPoint::isNearZero, fPoint);
         }
 
         @Test
@@ -2006,6 +2007,88 @@ public class FPointTest {
             Assertions.assertAll("Validate references",
                     () -> assertNotSame(fPoint, fPointOp, "FPoint references should be different"),
                     () -> assertSame(fPointOp, fPointRef, "The FPoint reference should not change")
+            );
+        }
+    }
+
+    @Nested
+    @Tag("Extension")
+    @DisplayName("Extension")
+    class FPointExtensionTest {
+
+        @Test
+        @DisplayName("Apply")
+        void apply() {
+            FPoint fPoint = factory.getFPoint(0, 0, 0);
+
+            var fPointRes = fPoint.apply(p -> p.setX(1).setY(2).setZ(3));
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(2, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(3, fPoint.getZ(), "The Z value is incorrect"),
+                    () -> assertSame(fPoint, fPointRes, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply with fixed state")
+        void applyWithFixedState() {
+            FPoint fPoint = factory.getFPoint(0, 0, 0);
+
+            List<Double> intermediate = new ArrayList<>();
+
+            var fPointRes = fPoint.applyWithFixedState(p -> {
+                intermediate.add(p.setX(3).setY(4).getLength());
+            });
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(0, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(0, fPoint.getZ(), "The Z value is incorrect"),
+                    () -> assertEquals(1, intermediate.size(), "The size of the array list is incorrect"),
+                    () -> assertEquals(5, intermediate.get(0), jitter, "The value is incorrect"),
+                    () -> assertSame(fPoint, fPointRes, "The reference is incorrect")
+            );
+        }
+        @Test
+        @DisplayName("Apply with fixed length")
+        void applyWithFixedLength() {
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            var fPointRes = fPoint.applyWithFixedLength(p -> {
+                p.set(-10, 0, 0);
+            });
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(-1, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(0, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(0, fPoint.getZ(), "The Z value is incorrect"),
+                    () -> assertSame(fPoint, fPointRes, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with double")
+        void terminateWithDouble() {
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            var res = fPoint.toDouble(FPoint::getLength);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with boolean")
+        void terminateWithBoolean() {
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            var res = fPoint.toBoolean(FPoint::isZero);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertFalse(res, "The value is incorrect")
             );
         }
     }

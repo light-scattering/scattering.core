@@ -1,8 +1,8 @@
 package eu.scattering.core.design.mutables.geometry.primitive.vector;
 
 import eu.scattering.core.design.annotations.Facade;
-import eu.scattering.core.design.annotations.Intermediate;
-import eu.scattering.core.design.annotations.Mutable;
+import eu.scattering.core.design.annotations.Fragment;
+import eu.scattering.core.design.annotations.Mutation;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -113,17 +113,17 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
-    @Mutable
+    @Mutation
     FVector setRef(FPoint refBase, FPoint refHead);
 
-    @Mutable
+    @Mutation
     FPoint getRefBase();
-    @Mutable
+    @Mutation
     FVector setRefBase(FPoint refBase);
 
-    @Mutable
+    @Mutation
     FPoint getRefHead();
-    @Mutable
+    @Mutation
     FVector setRefHead(FPoint refHead);
 
     //--------------------------------------------------
@@ -137,6 +137,6 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
-    @Intermediate
+    @Fragment
     double getLengthP2();
 }

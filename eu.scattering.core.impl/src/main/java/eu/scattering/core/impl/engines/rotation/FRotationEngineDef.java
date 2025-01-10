@@ -47,9 +47,9 @@ public class FRotationEngineDef implements FRotationEngine {
     }
 
     @Override
-    public FPoint setAngle(FPoint origin, FPoint ref, double angle) {
-        var axis = origin.copy().setCrossProduct(ref);
-        var fPointCopy = ref.copy();
+    public FPoint setAngle(FPoint origin, FPoint op, double angle) {
+        var axis = origin.copy().setCrossProduct(op);
+        var fPointCopy = op.copy();
 
         fPointCopy.apply(p -> rotate(p, core.getRotation(axis.toFPos3D(), angle)));
 
@@ -57,9 +57,9 @@ public class FRotationEngineDef implements FRotationEngine {
     }
 
     @Override
-    public FPoint rotate(FPoint origin, FPoint ref, double angle) {
+    public FPoint rotate(FPoint origin, FPoint op, double angle) {
 
-        return origin.apply(p -> rotate(p, core.getRotation(ref.toFPos3D(), angle)));
+        return origin.apply(p -> rotate(p, core.getRotation(op.toFPos3D(), angle)));
     }
 
     @Override
@@ -131,7 +131,7 @@ public class FRotationEngineDef implements FRotationEngine {
         var rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
 
         geometry.disassemble().forEach(p -> {
-            if (p.copy().apply(origin::project).terminatorBoolean(origin::isPartOf)) {
+            if (p.copy().apply(origin::project).toBoolean(origin::isPartOf)) {
                 rotate(p, rotor);
             }
         });
@@ -147,7 +147,7 @@ public class FRotationEngineDef implements FRotationEngine {
         var rotor = core.getRotation(origin.getRefOrigin().toFPairPos3D(), angle);
 
         geometry.disassemble().forEach(p -> {
-            if (p.copy().apply(origin::project).terminatorBoolean(origin::isPartOf)) {
+            if (p.copy().apply(origin::project).toBoolean(origin::isPartOf)) {
                 rotate(p, rotor);
             }
         });

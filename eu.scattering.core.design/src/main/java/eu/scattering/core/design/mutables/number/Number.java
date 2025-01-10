@@ -1,6 +1,6 @@
 package eu.scattering.core.design.mutables.number;
 
-import eu.scattering.core.design.annotations.Intermediate;
+import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.mutables.Mutable;
 
 public interface Number<T> extends Mutable<T> {
@@ -34,8 +34,8 @@ public interface Number<T> extends Mutable<T> {
     T applyStateTo(T ref);
     T applyStateFrom(T ref);
 
-    @Intermediate
+    @Fragment
     double getMagnitudeP2();
-    @Intermediate
+    @Fragment
     double getDistanceP2(T ref);
 }

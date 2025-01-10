@@ -2,7 +2,8 @@ package eu.scattering.core.design.mutables.geometry.primitive.point;
 
 import eu.scattering.core.design.annotations.Extension;
 import eu.scattering.core.design.annotations.Facade;
-import eu.scattering.core.design.annotations.Intermediate;
+import eu.scattering.core.design.annotations.Fragment;
+import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
@@ -31,7 +32,7 @@ public interface FPoint extends Primitive<FPoint> {
     //--------------------------------------------------
 
     boolean isZero();
-    boolean isNonDirectional();
+    boolean isNearZero();
 
     boolean isExact(double x, double y, double z);
     boolean isSimilar(double x, double y, double z);
@@ -39,20 +40,19 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint normalize();
 
     FPoint reflect();
-    FPoint reflect(FPoint ref);
+    FPoint reflect(FPoint op);
 
     double getLength();
     FPoint setLength(double length);
 
-    double getDistance(FPoint ref);
-    FPoint setDistance(FPoint ref, double distance);
+    double getDistance(FPoint op);
+    FPoint setDistance(FPoint op, double distance);
 
-    double getAngle(FPoint ref);
-    FPoint setAngle(FPoint ref, double angle);
+    double getAngle(FPoint op);
+    FPoint setAngle(FPoint op, double angle);
 
-    double getDotProduct(FPoint ref);
-
-    FPoint setCrossProduct(FPoint ref);
+    double getDotProduct(FPoint op);
+    FPoint setCrossProduct(FPoint op);
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
@@ -64,16 +64,21 @@ public interface FPoint extends Primitive<FPoint> {
 
     //--------------------------------------------------
 
-    @Intermediate
+    @Fragment
     double getLengthP2();
-    @Intermediate
-    double getDistanceP2(FPoint ref);
+    @Fragment
+    double getDistanceP2(FPoint op);
 
     @Extension
     FPoint apply(Consumer<FPoint> action);
 
     @Facade
-    double terminatorDouble(Function<FPoint, Double> action);
+    FPoint applyWithFixedState(Consumer<FPoint> action);
     @Facade
-    boolean terminatorBoolean(Function<FPoint, Boolean> action);
+    FPoint applyWithFixedLength(Consumer<FPoint> action);
+
+    @Termination
+    double toDouble(Function<FPoint, Double> action);
+    @Termination
+    boolean toBoolean(Function<FPoint, Boolean> action);
 }

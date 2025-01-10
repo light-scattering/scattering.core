@@ -1,14 +1,14 @@
 package eu.scattering.core.design.mutables.geometry.construct;
 
-import eu.scattering.core.design.annotations.Mutable;
+import eu.scattering.core.design.annotations.Mutation;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 
 public interface Construct<T> extends Geometry, eu.scattering.core.design.mutables.Mutable<T> {
 
-    @Mutable
+    @Mutation
     FVector getRefOrigin();
-    @Mutable
+    @Mutation
     T setRefOrigin(FVector refOrigin);
 
     //--------------------------------------------------

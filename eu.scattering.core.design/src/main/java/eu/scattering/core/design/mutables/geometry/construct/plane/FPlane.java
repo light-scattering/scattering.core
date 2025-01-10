@@ -1,6 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.construct.plane;
 
-import eu.scattering.core.design.annotations.Intermediate;
+import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
@@ -32,7 +32,7 @@ public interface FPlane extends Construct<FPlane> {
 
     List<Double> getAtomicDistance(Geometry geometry);
 
-    @Intermediate
+    @Fragment
     List<Double> getAtomicDistanceP2(Geometry geometry);
 }
 

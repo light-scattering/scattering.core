@@ -1,6 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.construct.ray;
 
-import eu.scattering.core.design.annotations.Mutable;
+import eu.scattering.core.design.annotations.Mutation;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 
@@ -8,7 +8,7 @@ public interface FRayFactory {
 
     FRay getFRay();
 
-    @Mutable
+    @Mutation
     FRay getRefFRay(FVector refOrigin);
 
     //--------------------------------------------------
