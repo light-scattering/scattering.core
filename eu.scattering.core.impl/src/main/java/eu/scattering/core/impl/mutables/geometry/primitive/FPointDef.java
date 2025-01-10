@@ -474,34 +474,69 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("The reference vector is non-directional");
         }
 
-        double angle, dProd, magAB;
-
-        dProd = getDotProduct(ref);
-        magAB = getLength() * ref.getLength();
-        angle = Math.acos(dProd / magAB);
+        double dProd = getDotProduct(ref);
+        double magAB = getLength() * ref.getLength();
+        double angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
     }
 
     @Override
+    public FPoint setAngle(FPoint ref, double angle) {
+
+        if (isNonDirectional()) {
+            throw new IllegalArgumentException("The input vector is non-directional");
+        }
+
+        if (ref.isNonDirectional()) {
+            throw new IllegalArgumentException("The reference vector is non-directional");
+        }
+
+        double lenOpA = getLength();
+        normalize();
+
+        FPoint rotAxis = ref.copy().setCrossProduct(this).normalize();
+
+        if (rotAxis.isNonDirectional()) {
+            throw new IllegalStateException("The rotation axis is non-directional");
+        }
+
+        double aCurrent = Math.acos(getDotProduct(ref));
+        double aDelta = angle - aCurrent;
+
+        double aDeltaCos = Math.cos(aDelta);
+        double aDeltaSin = Math.sin(aDelta);
+
+        double tmpX = rotAxis.getX() * getX();
+        double tmpY = rotAxis.getY() * getY();
+        double tmpZ = rotAxis.getZ() * getZ();
+
+        double tmpSuffix = (1 - aDeltaCos) * (tmpX + tmpY + tmpZ);
+
+        double opX = aDeltaCos * getX() + aDeltaSin * (rotAxis.getY() * getZ() - rotAxis.getZ() * getY()) + rotAxis.getX() * tmpSuffix;
+        double opY = aDeltaCos * getY() + aDeltaSin * (rotAxis.getZ() * getX() - rotAxis.getX() * getZ()) + rotAxis.getY() * tmpSuffix;
+        double opZ = aDeltaCos * getZ() + aDeltaSin * (rotAxis.getX() * getY() - rotAxis.getY() * getX()) + rotAxis.getZ() * tmpSuffix;
+
+        set(opX, opY, opZ).setLength(lenOpA);
+
+        return this;
+    }
+
+    @Override
     public double getDotProduct(FPoint ref) {
-        double dProd, dimX, dimY, dimZ;
+        double dimX = getX() * ref.getX();
+        double dimY = getY() * ref.getY();
+        double dimZ = getZ() * ref.getZ();
 
-        dimX = getX() * ref.getX();
-        dimY = getY() * ref.getY();
-        dimZ = getZ() * ref.getZ();
-        dProd = dimX + dimY + dimZ;
-
-        return dProd;
+        return dimX + dimY + dimZ;
     }
 
     @Override
     public FPoint setCrossProduct(FPoint ref) {
-        double dimX, dimY, dimZ;
+        double dimX = (getY() * ref.getZ()) - (getZ() * ref.getY());
+        double dimY = (getZ() * ref.getX()) - (getX() * ref.getZ());
+        double dimZ = (getX() * ref.getY()) - (getY() * ref.getX());
 
-        dimX = (getY() * ref.getZ()) - (getZ() * ref.getY());
-        dimY = (getZ() * ref.getX()) - (getX() * ref.getZ());
-        dimZ = (getX() * ref.getY()) - (getY() * ref.getX());
         set(dimX, dimY, dimZ);
 
         return this;

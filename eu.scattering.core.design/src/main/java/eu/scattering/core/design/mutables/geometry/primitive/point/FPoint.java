@@ -48,6 +48,7 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setDistance(FPoint ref, double distance);
 
     double getAngle(FPoint ref);
+    FPoint setAngle(FPoint ref, double angle);
 
     double getDotProduct(FPoint ref);
 
@@ -63,6 +64,11 @@ public interface FPoint extends Primitive<FPoint> {
 
     //--------------------------------------------------
 
+    @Intermediate
+    double getLengthP2();
+    @Intermediate
+    double getDistanceP2(FPoint ref);
+
     @Extension
     FPoint apply(Consumer<FPoint> action);
 
@@ -70,11 +76,4 @@ public interface FPoint extends Primitive<FPoint> {
     double terminatorDouble(Function<FPoint, Double> action);
     @Facade
     boolean terminatorBoolean(Function<FPoint, Boolean> action);
-
-    //--------------------------------------------------
-
-    @Intermediate
-    double getLengthP2();
-    @Intermediate
-    double getDistanceP2(FPoint ref);
 }

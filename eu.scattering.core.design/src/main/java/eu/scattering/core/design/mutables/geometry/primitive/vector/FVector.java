@@ -1,6 +1,5 @@
 package eu.scattering.core.design.mutables.geometry.primitive.vector;
 
-import eu.scattering.core.design.annotations.Extension;
 import eu.scattering.core.design.annotations.Facade;
 import eu.scattering.core.design.annotations.Intermediate;
 import eu.scattering.core.design.annotations.Mutable;
@@ -60,11 +59,10 @@ public interface FVector extends Primitive<FVector> {
     FVector normalize();
 
     FVector moveBaseToCenter();
-    FVector moveHeadToCenter();
-
     FVector moveBase(double bX, double bY, double bZ);
     FVector moveBase(FPoint base);
 
+    FVector moveHeadToCenter();
     FVector moveHead(double hX, double hY, double hZ);
     FVector moveHead(FPoint head);
 
@@ -87,9 +85,10 @@ public interface FVector extends Primitive<FVector> {
     FVector setLength(double length);
 
     double getAngle(FVector ref);
+//    double setAngle(FVector ref, double angle); // The Rodrigues rotation formula.
 
-    boolean isOrthogonal(FVector ref);
-    FVector setOrthogonal(FVector ref);
+    boolean isCollinear(FVector ref);
+//    FVector setCollinear(FVector ref); // To the lowest angle.
 
     boolean isParallel(FVector ref);
     FVector setParallel(FVector ref);
@@ -97,7 +96,8 @@ public interface FVector extends Primitive<FVector> {
     boolean isAntiParallel(FVector ref);
     FVector setAntiParallel(FVector ref);
 
-    boolean isCollinear(FVector ref);
+    boolean isOrthogonal(FVector ref);
+    FVector setOrthogonal(FVector ref);
 
     double getDotProduct(FVector ref);
 

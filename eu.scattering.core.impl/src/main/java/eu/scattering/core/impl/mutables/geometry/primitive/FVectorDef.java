@@ -132,7 +132,6 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     @Override
     public FVector set(FPairPos3D position) {
-
         setBase(position.getPosA());
         setHead(position.getPosB());
 
