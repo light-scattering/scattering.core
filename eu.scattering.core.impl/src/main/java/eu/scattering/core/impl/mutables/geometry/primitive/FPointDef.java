@@ -24,8 +24,8 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double[] origin = { 0.0, 0.0, 0.0 };
     private final double epsilon;
+    private double oX, oY, oZ;
 
     private FPointDef(double epsilon) {
 
@@ -40,13 +40,13 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public double getX() {
 
-        return origin[0];
+        return this.oX;
     }
 
     @Override
     public FPoint setX(double x) {
 
-        origin[0] = x;
+        this.oX = x;
 
         return this;
     }
@@ -54,13 +54,13 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public double getY() {
 
-        return origin[1];
+        return this.oY;
     }
 
     @Override
     public FPoint setY(double y) {
 
-        origin[1] = y;
+        this.oY = y;
 
         return this;
     }
@@ -68,13 +68,13 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public double getZ() {
 
-        return origin[2];
+        return this.oZ;
     }
 
     @Override
     public FPoint setZ(double z) {
 
-        origin[2] = z;
+        this.oZ = z;
 
         return this;
     }
@@ -483,7 +483,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
-        applyWithFixedLength(p -> {
+        return applyWithFixedLength(p -> {
             p.normalize();
 
             op.applyWithFixedState(rotAxis -> {
@@ -507,8 +507,6 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
                 p.set(opX, opY, opZ);
             });
         });
-
-        return this;
     }
 
     @Override
@@ -532,13 +530,11 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint setSphericalCoordinates(double inclination, double azimuth) {
 
-        applyWithFixedLength(p -> {
+        return applyWithFixedLength(p -> {
             p.setX(Math.cos(azimuth) * Math.sin(inclination));
             p.setY(Math.cos(inclination));
             p.setZ(Math.sin(azimuth) * Math.sin(inclination));
         });
-
-        return this;
     }
 
     @Override
@@ -550,11 +546,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint setInclination(double polar) {
 
-        applyWithFixedLength(p -> {
-            p.setSphericalCoordinates(polar, p.getAzimuth());
-        });
-
-        return this;
+        return applyWithFixedLength(p -> p.setSphericalCoordinates(polar, p.getAzimuth()));
     }
 
     @Override
@@ -578,11 +570,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint setAzimuth(double azimuthal) {
 
-        applyWithFixedLength(p -> {
-            p.setSphericalCoordinates(p.getInclination(), azimuthal);
-        });
-
-        return this;
+        return applyWithFixedLength(p -> p.setSphericalCoordinates(p.getInclination(), azimuthal));
     }
 
     // -------------------------------------------------------------------------------------------------
