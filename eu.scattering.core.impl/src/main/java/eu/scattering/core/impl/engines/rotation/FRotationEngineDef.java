@@ -65,7 +65,7 @@ public class FRotationEngineDef implements FRotationEngine {
     @Override
     public FVector setAngle(FVector origin, FVector ref, double angle) {
 
-        if (ref.isNonDirectional()) {
+        if (ref.isNearZeroLength()) {
             throw new IllegalArgumentException("The direction of the provided vector is not defined");
         }
 
@@ -100,7 +100,7 @@ public class FRotationEngineDef implements FRotationEngine {
     @Override
     public FVector rotate(FVector origin, FVector ref, double angle) {
 
-        if (ref.isNonDirectional()) {
+        if (ref.isNearZeroLength()) {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
         }
 
@@ -112,7 +112,7 @@ public class FRotationEngineDef implements FRotationEngine {
     @Override
     public void rotate(FLine origin, Geometry geometry, double angle) {
 
-        if (origin.getRefOrigin().isNonDirectional()) {
+        if (origin.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -124,7 +124,7 @@ public class FRotationEngineDef implements FRotationEngine {
     @Override
     public void rotate(FRay origin, Geometry geometry, double angle) {
 
-        if (origin.getRefOrigin().isNonDirectional()) {
+        if (origin.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -140,7 +140,7 @@ public class FRotationEngineDef implements FRotationEngine {
     @Override
     public void rotate(FSegment origin, Geometry geometry, double angle) {
 
-        if (origin.getRefOrigin().isNonDirectional()) {
+        if (origin.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 

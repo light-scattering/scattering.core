@@ -1,10 +1,12 @@
 package eu.scattering.core.test.mutables.geometry.primitive;
 
+import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.geometry.primitive.support.FVectorTestHelper;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -19,14 +21,14 @@ public class FVectorTest {
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    class FVectorBase {
+    class FVectorBasicTest {
 
         @Test
         @DisplayName("Constructor")
         void construct() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -45,9 +47,9 @@ public class FVectorTest {
         @Test
         @DisplayName("Constructor (validate reference)")
         void constructValidateReference() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            Assertions.assertAll("Validate FPoint references",
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
                     () -> assertNotSame(fVector.getRefBase(), fVector.getRefHead(),
@@ -64,9 +66,10 @@ public class FVectorTest {
             double valBX = random.nextDouble();
             double valBY = random.nextDouble();
             double valBZ = random.nextDouble();
-            FVector fVector = factory.getFVector(valAX, valAY, valAZ, valBX, valBY, valBZ);
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVector = factory.getFVector(valAX, valAY, valAZ, valBX, valBY, valBZ);
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(valAX, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(valAY, fVector.getRefBase().getY(),
@@ -88,9 +91,10 @@ public class FVectorTest {
             double valX = random.nextDouble();
             double valY = random.nextDouble();
             double valZ = random.nextDouble();
-            FVector fVector = factory.getFVector(valX, valY, valZ);
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVector = factory.getFVector(valX, valY, valZ);
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -109,11 +113,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with FPoint base/head")
         void constructWithBaseHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVector = factory.getFVector(fPointBase, fPointHead);
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(fPointBase.getX(), fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(fPointBase.getY(), fVector.getRefBase().getY(),
@@ -132,11 +137,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with FPoint base/head (validate reference)")
         void constructWithBaseHeadValidateReference() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint references",
+            var fVector = factory.getFVector(fPointBase, fPointHead);
+
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
                     () -> assertNotSame(fPointBase, fVector.getRefBase(),
@@ -151,14 +157,15 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with FPoint base/head (validate reference change)")
         void constructWithBaseHeadValidateReferenceChange() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             fPointBase.set(0, 0, 0);
             fPointHead.set(0, 0, 0);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertNotEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertNotEquals(0, fVector.getRefBase().getY(),
@@ -177,11 +184,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with reference FPoint base/head")
         void constructWithRefBaseHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(fPointBase.getX(), fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(fPointBase.getY(), fVector.getRefBase().getY(),
@@ -200,11 +208,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with reference FPoint base/head (validate reference)")
         void constructWithRefBaseHeadValidateReference() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint references",
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
+
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
                     () -> assertSame(fPointBase, fVector.getRefBase(),
@@ -219,14 +228,15 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with reference FPoint base/head (validate reference change)")
         void constructWithRefBaseHeadValidateReferenceChange() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fPointBase.set(0, 0, 0);
             fPointHead.set(0, 0, 0);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -245,10 +255,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with FPoint head")
         void constructWithHead() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointHead);
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVector = factory.getFVector(fPointHead);
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -267,10 +278,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with FPoint head (validate reference)")
         void constructWithHeadValidateReference() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointHead);
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint references",
+            var fVector = factory.getFVector(fPointHead);
+
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
                     () -> assertNotSame(fPointHead, fVector.getRefHead(),
@@ -283,12 +295,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with FPoint head (validate reference change)")
         void constructWithHeadValidateReferenceChange() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointHead);
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointHead);
 
             fPointHead.set(0, 0, 0);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -307,10 +320,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with reference FPoint head")
         void constructWithRefHead() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointHead);
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVector = factory.getRefFVector(fPointHead);
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -329,10 +343,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with reference FPoint head (validate reference)")
         void constructWithRefHeadValidateReference() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointHead);
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            Assertions.assertAll("Validate FPoint references",
+            var fVector = factory.getRefFVector(fPointHead);
+
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotNull(fVector,
                             "The generated FVector instance is null"),
                     () -> assertSame(fPointHead, fVector.getRefHead(),
@@ -345,12 +360,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with reference FPoint head (validate reference change)")
         void constructWithRefHeadValidateReferenceChange() {
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointHead);
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointHead);
 
             fPointHead.set(0, 0, 0);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -369,8 +385,9 @@ public class FVectorTest {
         @Test
         @DisplayName("Get base")
         void getBase() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
             assertNotSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
@@ -379,13 +396,16 @@ public class FVectorTest {
         @Test
         @DisplayName("Set base")
         void setBase() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            fVector.setBase(factory.getFPoint());
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVectorRef = fVector.setBase(0, 0, 0);
+
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -404,11 +424,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Set base (validate reference)")
         void setBaseValidateReference() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            fVector.setBase(factory.getFPoint());
+            var fVector = factory.getFVector(fPointBase, fPointHead);
+
+            fVector.setBase(0, 0, 0);
 
             assertNotSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
         }
@@ -416,9 +437,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set base (throw NullPointerException)")
         void setBaseThrowNullPointerException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             Assertions.assertThrows(NullPointerException.class, () -> fVector.setBase((FPoint) null),
                     "The reference must not be null");
@@ -427,9 +449,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Get reference base")
         void getRefBase() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             assertSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
         }
@@ -437,13 +460,16 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference base")
         void setRefBase() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            fVector.setRefBase(factory.getFPoint());
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVectorRef = fVector.setRefBase(factory.getFPoint());
+
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -462,9 +488,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference base (validate reference)")
         void setRefBaseValidateReference() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setRefBase(factory.getFPoint());
 
@@ -474,9 +501,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference base (throw NullPointerException)")
         void setRefBaseThrowNullPointerException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             Assertions.assertThrows(NullPointerException.class, () -> fVector.setRefBase(null),
                     "The reference must not be null");
@@ -485,9 +513,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Get head")
         void getHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             assertNotSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
         }
@@ -495,13 +524,16 @@ public class FVectorTest {
         @Test
         @DisplayName("Set head")
         void setHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            fVector.setHead(factory.getFPoint());
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
-            Assertions.assertAll("Validate FPoint values",
+            var fVectorRef = fVector.setHead(factory.getFPoint());
+
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(fPointBase.getX(), fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(fPointBase.getY(), fVector.getRefBase().getY(),
@@ -520,11 +552,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Set head (validate reference)")
         void setHeadValidateReference() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            fVector.setHead(factory.getFPoint());
+            var fVector = factory.getFVector(fPointBase, fPointHead);
+
+            fVector.setHead(0, 0, 0);
 
             assertNotSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
         }
@@ -532,9 +565,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set head (throw NullPointerException)")
         void setHeadThrowNullPointerException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             Assertions.assertThrows(NullPointerException.class, () -> fVector.setHead((FPoint) null),
                     "The reference must not be null");
@@ -543,9 +577,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Get reference head")
         void getRefHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             assertSame(fVector.getRefHead(), fPointHead, "The FPoint reference is erroneous");
         }
@@ -553,13 +588,14 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference head")
         void setRefHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setRefHead(factory.getFPoint());
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(fPointBase.getX(), fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(fPointBase.getY(), fVector.getRefBase().getY(),
@@ -578,9 +614,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference head (validate reference)")
         void setRefHeadValidateReference() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setRefHead(factory.getFPoint());
 
@@ -590,9 +627,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference head (throw NullPointerException)")
         void setRefHeadThrowNullPointerException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             Assertions.assertThrows(NullPointerException.class, () -> fVector.setRefHead(null),
                     "The reference must not be null");
@@ -601,13 +639,14 @@ public class FVectorTest {
         @Test
         @DisplayName("Set FPoints")
         void setBaseHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             fVector.set(factory.getFPoint(), factory.getFPoint());
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -626,13 +665,14 @@ public class FVectorTest {
         @Test
         @DisplayName("Set FPoints (validate reference)")
         void setBaseHeadValidateReference() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             fVector.set(factory.getFPoint(), factory.getFPoint());
 
-            Assertions.assertAll("Validate FPoint references",
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotSame(fPointBase, fVector.getRefBase(), "The base FPoint is incorrect"),
                     () -> assertNotSame(fPointHead, fVector.getRefHead(), "The head FPoint is incorrect")
             );
@@ -641,9 +681,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set FPoints (throw NullPointerException)")
         void setBaseHeadThrowNullPointerException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             Assertions.assertAll("Validate NullPointerExceptions",
                     () -> Assertions.assertThrows(NullPointerException.class, () -> fVector.set(null, fPointHead),
@@ -658,13 +699,14 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference FPoints")
         void setRefBaseHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             fVector.setRef(factory.getFPoint(), factory.getFPoint());
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -683,13 +725,14 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference FPoints (validate references)")
         void setRefBaseHeadValidateReferences() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             fVector.setRef(factory.getFPoint(), factory.getFPoint());
 
-            Assertions.assertAll("Validate FPoint references",
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotSame(fVector.getRefBase(), fPointBase, "The base FPoint is incorrect"),
                     () -> assertNotSame(fVector.getRefHead(), fPointHead, "The head FPoint is incorrect")
             );
@@ -698,9 +741,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set reference FPoints (throw NullPointerException)")
         void setRefBaseHeadThrowNullPointerException() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             Assertions.assertAll("Validate NullPointerExceptions",
                     () -> Assertions.assertThrows(NullPointerException.class, () -> fVector.setRef(null, fPointHead),
@@ -715,12 +759,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Set FVector")
         void setFVector() {
-            FVector fVectorRef = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
-            FVector fVector = factory.getFVector();
+            var fVectorRef = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
+            var fVector = factory.getFVector();
 
             fVector.applyStateFrom(fVectorRef);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(fVectorRef.getRefBase().getX(), fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(fVectorRef.getRefBase().getY(), fVector.getRefBase().getY(),
@@ -739,12 +783,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Set FVector (validate references)")
         void setFVectorValidateReferences() {
-            FVector fVectorRef = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
-            FVector fVector = factory.getFVector();
+            var fVectorRef = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
+            var fVector = factory.getFVector();
 
             fVector.applyStateFrom(fVectorRef);
 
-            Assertions.assertAll("Validate FPoint references",
+            Assertions.assertAll("Validate FVector references",
                     () -> assertNotSame(fVectorRef.getRefBase(), fVector.getRefBase(),
                             "The base FPoint is incorrect"),
                     () -> assertNotSame(fVectorRef.getRefHead(), fVector.getRefHead(),
@@ -755,11 +799,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Access base X")
         void accessBaseX() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            fVector.setBaseX(1);
+            var fVectorRef = fVector.setBaseX(1);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(1, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -778,11 +824,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Access base Y")
         void accessBaseY() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            fVector.setBaseY(1);
+            var fVectorRef = fVector.setBaseY(1);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(1, fVector.getRefBase().getY(),
@@ -801,11 +849,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Access base Z")
         void accessBaseZ() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            fVector.setBaseZ(1);
+            var fVectorRef = fVector.setBaseZ(1);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -824,11 +874,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Access head X")
         void accessHeadX() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            fVector.setHeadX(1);
+            var fVectorRef = fVector.setHeadX(1);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -847,11 +899,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Access head Y")
         void accessHeadY() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            fVector.setHeadY(1);
+            var fVectorRef = fVector.setHeadY(1);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -870,11 +924,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Access head Z")
         void accessHeadZ() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
-            fVector.setHeadZ(1);
+            var fVectorRef = fVector.setHeadZ(1);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertSame(fVector, fVectorRef, "The FVector reference should not change");
+
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
@@ -893,12 +949,12 @@ public class FVectorTest {
         @Test
         @DisplayName("Construct with FPairPos3D")
         void constructWithFPairPos3D() {
-            FPairPos3D fPairPos3D = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
-            FVector fVector = factory.getFVector(fPairPos3D);
+            var fPairPos3D = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
+            var fVector = factory.getFVector(fPairPos3D);
 
             assertNotNull(fVector, "The instance is null");
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(1, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(2, fVector.getRefBase().getY(),
@@ -917,10 +973,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Export to FPairPos3D")
         void toPairPos3D() {
-            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
-            FPairPos3D fPairPos3D = fVector.toFPairPos3D();
+            var fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+            var fPairPos3D = fVector.toFPairPos3D();
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(1, fPairPos3D.getPosA().getD0(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(2, fPairPos3D.getPosA().getD1(),
@@ -940,18 +996,18 @@ public class FVectorTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    class FVectorAdvanced {
+    class FVectorAdvancedTest {
 
         @Test
         @DisplayName("Set spherical coordinates")
         void setSphericalCoordinates() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 0);
-            FPoint fPointHead = factory.getFPoint(2, 1, 0);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 1, 0);
+            var fPointHead = factory.getFPoint(2, 1, 0);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setSphericalCoordinates(Math.PI * 0.5, Math.PI * 0.5);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(1, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(1, fVector.getRefBase().getY(),
@@ -970,7 +1026,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Set spherical coordinates (validate)")
         void setSphericalCoordinatesValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
             FVectorTestHelper.testReference(e -> e.setSphericalCoordinates(0, 0), fVector);
         }
@@ -978,66 +1034,62 @@ public class FVectorTest {
         @Test
         @DisplayName("Move base")
         void moveBase() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            var fPointBase = factory.getFPoint(0, 0, 0);
+            var fPointHead = factory.getFPoint(1, 2, 3);
 
-            FPoint fPointRel = TestHelper.getRandomFPoint(fPointBase,fPointHead);
-            FPoint fPointRef = fPointHead.copy().add(fPointRel.copy().sub(fPointBase));
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointOffset = factory.getFPoint(4, 5, 6);
 
-            fVector.moveBase(fPointRel);
+            fVector.moveBase(fPointOffset);
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRel.getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(4, fVector.getRefBase().getX(), jitter,
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(5, fVector.getRefBase().getY(), jitter,
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(6, fVector.getRefBase().getZ(), jitter,
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefHead().getX(),
-                            jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefHead().getY(),
-                            jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefHead().getZ(),
-                            jitter, "Head - The Z value is incorrect")
+                    () -> assertEquals(5, fVector.getRefHead().getX(), jitter,
+                            "Head - The X value is incorrect"),
+                    () -> assertEquals(7, fVector.getRefHead().getY(), jitter,
+                            "Head - The Y value is incorrect"),
+                    () -> assertEquals(9, fVector.getRefHead().getZ(), jitter,
+                            "Head - The Z value is incorrect")
             );
         }
 
         @Test
         @DisplayName("Move base (validate)")
         void moveBaseValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
+            var fVector = factory.getFVector(0, 0, 0, 1, 2, 3);
+            var fPointOffset = factory.getFPoint(4, 5, 6);
 
-            FVectorTestHelper.testReference(FVector::moveBase, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::moveBase, fVector, fPointOffset);
         }
 
         @Test
         @DisplayName("Move base with parameters")
         void moveBaseWithParameters() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            var fPointBase = factory.getFPoint(3, -2, -3);
+            var fPointHead = factory.getFPoint(2, 4, 6);
 
-            FPoint fPointRel = TestHelper.getRandomFPoint(fPointBase,fPointHead);
-            FPoint fPointRef = fPointHead.copy().add(fPointRel.copy().sub(fPointBase));
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            fVector.moveBase(-1, 3, -2);
 
-            fVector.moveBase(fPointRel.getX(), fPointRel.getY(), fPointRel.getZ());
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRel.getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-1, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(3, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(-2, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(-2, fVector.getRefHead().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(9, fVector.getRefHead().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(7, fVector.getRefHead().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1045,35 +1097,33 @@ public class FVectorTest {
         @Test
         @DisplayName("Move base with parameters (validate)")
         void moveBaseWithParametersValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(0, 0, 0, 1, 2, 3);
 
-            FVectorTestHelper.testReference(a -> a.moveBase(0, 0, 0), fVector);
+            FVectorTestHelper.testReference(a -> a.moveBase(4, 5, 6), fVector);
         }
 
         @Test
         @DisplayName("Move base to OX")
         void moveBaseToOX() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            var fPointBase = factory.getFPoint(1, 2, 3);
+            var fPointHead = factory.getFPoint(4, 5, 6);
 
-            FPoint fPointRef = fPointHead.copy().sub(fPointBase);
-
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.moveBaseToCenter();
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
                     () -> assertEquals(0, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(3, fVector.getRefHead().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(3, fVector.getRefHead().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(3, fVector.getRefHead().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1081,7 +1131,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Move base to OX (validate)")
         void moveBaseToOXValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::moveBaseToCenter, fVector);
         }
@@ -1089,28 +1139,27 @@ public class FVectorTest {
         @Test
         @DisplayName("Move head")
         void moveHead() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            var fPointBase = factory.getFPoint(0, 0, 0);
+            var fPointHead = factory.getFPoint(1, 2, 3);
 
-            FPoint fPointRel = TestHelper.getRandomFPoint(fPointBase, fPointHead);
-            FPoint fPointRef = fPointBase.copy().add(fPointRel.copy().sub(fPointHead));
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointOffset = factory.getFPoint(4, 5, 6);
 
-            fVector.moveHead(fPointRel);
+            fVector.moveHead(fPointOffset);
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(3, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(3, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(3, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRel.getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(4, fVector.getRefHead().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(5, fVector.getRefHead().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(6, fVector.getRefHead().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1118,37 +1167,34 @@ public class FVectorTest {
         @Test
         @DisplayName("Move head (validate)")
         void moveHeadValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
+            var fVector = factory.getFVector(0, 0, 0, 1, 2, 3);
+            var fPointOffset = factory.getFPoint(4, 5, 6);
 
-            FVectorTestHelper.testReference(FVector::moveHead, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::moveHead, fVector, fPointOffset);
         }
 
         @Test
         @DisplayName("Move head with parameters")
         void moveHeadWithParameters() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            var fPointBase = factory.getFPoint(3, -2, -3);
+            var fPointHead = factory.getFPoint(2, 4, 6);
 
-            FPoint fPointRel = TestHelper.getRandomFPoint(fPointBase, fPointHead);
-            FPoint fPointRef = fPointBase.copy().add(fPointRel.copy().sub(fPointHead));
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            fVector.moveHead(-1, 3, -2);
 
-            fVector.moveHead(fPointRel.getX(), fPointRel.getY(), fPointRel.getZ());
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(-3, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(-11, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRel.getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(-1, fVector.getRefHead().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRel.getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(3, fVector.getRefHead().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRel.getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(-2, fVector.getRefHead().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1156,7 +1202,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Move head with parameters (validate)")
         void moveHeadWithParametersValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(0, 0, 0, 1, 2, 3);
 
             FVectorTestHelper.testReference(a -> a.moveHead(0, 0, 0), fVector);
         }
@@ -1164,21 +1210,19 @@ public class FVectorTest {
         @Test
         @DisplayName("Move head to OX")
         void moveHeadToOX() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            var fPointBase = factory.getFPoint(1, 2, 3);
+            var fPointHead = factory.getFPoint(4, 5, 6);
 
-            FPoint fPointRef = fPointBase.copy().sub(fPointHead);
-
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.moveHeadToCenter();
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-3, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(-3, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(-3, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
                     () -> assertEquals(0, fVector.getRefHead().getX(),
                             jitter, "Head - The X value is incorrect"),
@@ -1192,124 +1236,227 @@ public class FVectorTest {
         @Test
         @DisplayName("Move head to OX (validate)")
         void moveHeadToOXValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::moveHeadToCenter, fVector);
         }
 
         @Test
-        @DisplayName("Move forward")
-        void moveForward() {
-            double distance = Math.abs(random.nextDouble());
-            FVector fVector = TestHelper.getRandomFVector();
+        @DisplayName("Move forward - X")
+        void moveForwardX() {
+            var fVector = factory.getFVector(3, 0, 0);
 
-            FVector fVectorRef = fVector.copy()
-                    .moveBase(fVector.copy()
-                            .setLength(distance)
-                            .getRefHead());
+            fVector.shiftForward(5);
 
-            fVector.shiftForward(distance);
-
-            assertTrue(fVector.isSimilar(fVectorRef),
-                    "The FVector is erroneous");
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(5, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(8, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
         }
 
         @Test
-        @DisplayName("Move forward (simple)")
-        void moveForwardSimple() {
-            FVector fVector = factory.getFVector(1, 1, 1, 2, 2, 2);
+        @DisplayName("Move forward - Y")
+        void moveForwardY() {
+            var fVector = factory.getFVector(0, 3, 0);
+
+            fVector.shiftForward(5);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(5, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(8, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Move forward - Z")
+        void moveForwardZ() {
+            var fVector = factory.getFVector(0, 0, 3);
+
+            fVector.shiftForward(5);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(5, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(8, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Move forward")
+        void moveForward() {
+            var fVector = factory.getFVector(1, 1, 1, 2, 2, 2);
 
             fVector.shiftForward(Math.sqrt(3));
 
             assertTrue(fVector.isSimilar(factory.getFVector(2, 2, 2, 3, 3, 3)),
-                    "The FVector is erroneous");
+                    "The FVector values are erroneous");
         }
 
         @Test
         @DisplayName("Move forward (opposite direction)")
         void moveForwardOppositeDirection() {
-            double distance = Math.abs(random.nextDouble());
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = fVectorA.copy();
+            var fVectorA = factory.getFVector(1, 2, 3, 4, 5, 6);
+            var fVectorB = fVectorA.copy();
 
-            fVectorA.shiftForward(-distance);
-            fVectorB.shiftBackward(distance);
+            fVectorA.shiftForward(-5);
+            fVectorB.shiftBackward(5);
 
-            assertTrue(fVectorA.isSimilar(fVectorB), "The two operations should have the same effect");
+            assertTrue(fVectorA.isSimilar(fVectorB),
+                    "The two vector operations should have the same effect");
         }
 
         @Test
         @DisplayName("Move forward (throw IllegalStateException)")
         void moveForwardThrowIllegalStateException() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector(0, 0, 0, 0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVector.shiftForward(1),
-                    "The direction of the FVector is unknown");
+                    "The direction of the FVector cannot be determined");
         }
 
         @Test
         @DisplayName("Move forward (validate)")
         void moveForwardValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
             FVectorTestHelper.testReference(a -> a.shiftForward(1), fVector);
         }
 
         @Test
-        @DisplayName("Move backward")
-        void moveBackward() {
-            double distance = Math.abs(random.nextDouble());
-            FVector fVector = TestHelper.getRandomFVector();
+        @DisplayName("Move backward - X")
+        void moveBackwardX() {
+            var fVector = factory.getFVector(3, 0, 0);
 
-            FVector fVectorRef = fVector.copy()
-                    .moveBase(fVector.copy()
-                            .setLength(distance)
-                            .reflectHead()
-                            .getRefHead());
+            fVector.shiftBackward(5);
 
-            fVector.shiftBackward(distance);
-
-            assertTrue(fVector.isSimilar(fVectorRef),
-                    "The FVector is erroneous");
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-5, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(-2, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
         }
 
         @Test
-        @DisplayName("Move backward (simple)")
-        void moveBackwardSimple() {
-            FVector fVector = factory.getFVector(1, 1, 1, 2, 2, 2);
+        @DisplayName("Move backward - Y")
+        void moveBackwardY() {
+            var fVector = factory.getFVector(0, 3, 0);
+
+            fVector.shiftBackward(5);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-2, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Move backward - Z")
+        void moveBackwardZ() {
+            var fVector = factory.getFVector(0, 0, 3);
+
+            fVector.shiftBackward(5);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(0, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(0, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(-2, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Move backward")
+        void moveBackward() {
+            var fVector = factory.getFVector(1, 1, 1, 2, 2, 2);
 
             fVector.shiftBackward(Math.sqrt(3));
 
             assertTrue(fVector.isSimilar(factory.getFVector(0, 0, 0, 1, 1, 1)),
-                    "The FVector is erroneous");
+                    "The FVector values are erroneous");
         }
 
         @Test
         @DisplayName("Move backward (opposite direction)")
         void moveBackwardOppositeDirection() {
-            double distance = Math.abs(random.nextDouble());
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = fVectorA.copy();
+            var fVectorA = factory.getFVector(1, 2, 3, 4, 5, 6);
+            var fVectorB = fVectorA.copy();
 
-            fVectorA.shiftBackward(-distance);
-            fVectorB.shiftForward(distance);
+            fVectorA.shiftBackward(-5);
+            fVectorB.shiftForward(5);
 
-            assertTrue(fVectorA.isSimilar(fVectorB), "The two operations should have the same effect");
+            assertTrue(fVectorA.isSimilar(fVectorB),
+                    "The two vector operations should have the same effect");
         }
 
         @Test
         @DisplayName("Move backward (throw IllegalStateException)")
         void moveBackwardThrowIllegalStateException() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector(0, 0, 0, 0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVector.shiftBackward(1),
-                    "The direction of the FVector is unknown");
+                    "The direction of the FVector cannot be determined");
         }
 
         @Test
         @DisplayName("Move backward (validate)")
         void moveBackwardValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
             FVectorTestHelper.testReference(a -> a.shiftBackward(1), fVector);
         }
@@ -1317,25 +1464,23 @@ public class FVectorTest {
         @Test
         @DisplayName("Add FVector")
         void addFVector() {
-            FVector fVectorSum = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
-            FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
+            var fVectorA = factory.getFVector(-1, 1, -2, 2, -5, 1);
+            var fVectorB = factory.getFVector(6, -2, 4, -3, -2, 7);
 
-            FPoint fPointRef = fVector.getRefHead().copy().add(fVectorSum.getRefHead().copy().sub(fVectorSum.getRefBase()));
+            fVectorA.add(fVectorB);
 
-            fVector.add(fVectorSum);
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVector.getRefBase().getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-1, fVectorA.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fVector.getRefBase().getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(1, fVectorA.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fVector.getRefBase().getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(-2, fVectorA.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(-7, fVectorA.getRefHead().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(-5, fVectorA.getRefHead().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(4, fVectorA.getRefHead().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1343,8 +1488,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Add FVector (validate)")
         void addFVectorValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::add, fVectorA, fVectorB);
         }
@@ -1352,25 +1497,25 @@ public class FVectorTest {
         @Test
         @DisplayName("Sub FVector")
         void subFVector() {
-            FVector fVectorSub = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
-            FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
+            var fVectorA = factory.getFVector(1, 5, -4, 2, -5, 1);
+            var fVectorB = factory.getFVector(-6, 2, 1, -3, 2, 6);
 
-            FPoint fPointRef = fVector.getRefHead().copy().sub(fVectorSub.getRefHead().copy().sub(fVectorSub.getRefBase()));
+            FPoint fPointRef = fVectorA.getRefHead().copy().sub(fVectorB.getRefHead().copy().sub(fVectorB.getRefBase()));
 
-            fVector.sub(fVectorSub);
+            fVectorA.sub(fVectorB);
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fVector.getRefBase().getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(1, fVectorA.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fVector.getRefBase().getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(fVectorA.getRefBase().getY(), fVectorA.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fVector.getRefBase().getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(fVectorA.getRefBase().getZ(), fVectorA.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(fPointRef.getX(), fVectorA.getRefHead().getX(),
                             jitter, "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(fPointRef.getY(), fVectorA.getRefHead().getY(),
                             jitter, "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(fPointRef.getZ(), fVectorA.getRefHead().getZ(),
                             jitter, "Head - The Z value is incorrect")
             );
         }
@@ -1378,8 +1523,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Sub FVector (validate)")
         void subFVectorValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::sub, fVectorA, fVectorB);
         }
@@ -1387,18 +1532,15 @@ public class FVectorTest {
         @Test
         @DisplayName("Get length X")
         void getLengthX() {
-            FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
+            var fVector = factory.getFVector(1, -2, 3, -4, 5, 6);
 
-            assertEquals(Math.abs(fVector.getRefHead().getX() - fVector.getRefBase().getX()), fVector.getLengthX(),
-                    "The X length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getX() - fVector.getRefHead().getX()), fVector.getLengthX(),
-                    "The X length is incorrect");
+            assertEquals(5, fVector.getLengthX()," The X length is incorrect");
         }
 
         @Test
         @DisplayName("Get length X (validate)")
         void getLengthXValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::getLengthX, fVector);
         }
@@ -1406,18 +1548,15 @@ public class FVectorTest {
         @Test
         @DisplayName("Get length Y")
         void getLengthY() {
-            FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
+            var fVector = factory.getFVector(1, -2, 3, -4, 5, 6);
 
-            assertEquals(Math.abs(fVector.getRefHead().getY() - fVector.getRefBase().getY()), fVector.getLengthY(),
-                    "The Y length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getY() - fVector.getRefHead().getY()), fVector.getLengthY(),
-                    "The Y length is incorrect");
+            assertEquals(7, fVector.getLengthY()," The Y length is incorrect");
         }
 
         @Test
         @DisplayName("Get length Y (validate)")
         void getLengthYValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::getLengthY, fVector);
         }
@@ -1425,18 +1564,15 @@ public class FVectorTest {
         @Test
         @DisplayName("Get length Z")
         void getLengthZ() {
-            FVector fVector = factory.getFVector(TestHelper.getRandomFPoint(), TestHelper.getRandomFPoint());
+            var fVector = factory.getFVector(1, -2, 3, -4, 5, 6);
 
-            assertEquals(Math.abs(fVector.getRefHead().getZ() - fVector.getRefBase().getZ()), fVector.getLengthZ(),
-                    "The Z length is incorrect");
-            assertEquals(Math.abs(fVector.getRefBase().getZ() - fVector.getRefHead().getZ()), fVector.getLengthZ(),
-                    "The Z length is incorrect");
+            assertEquals(3, fVector.getLengthZ()," The Z length is incorrect");
         }
 
         @Test
         @DisplayName("Get length Z (validate)")
         void getLengthZValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::getLengthZ, fVector);
         }
@@ -1444,43 +1580,42 @@ public class FVectorTest {
         @Test
         @DisplayName("Get length")
         void getLength() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 1);
-            FPoint fPointHead = factory.getFPoint(2, 2, 2);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 1, 1);
+            var fPointHead = factory.getFPoint(2, 2, 2);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            assertEquals(Math.sqrt(3), fVector.getLength(), jitter, "The length is erroneous");
+            assertEquals(Math.sqrt(3), fVector.getLength(), jitter, "The FVector length is erroneous");
         }
 
         @Test
         @DisplayName("Get length (zero)")
         void getLengthZero() {
-            FPoint fPointBase = factory.getFPoint();
-            FPoint fPointHead = factory.getFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint();
+            var fPointHead = factory.getFPoint();
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            assertEquals(0, fVector.getLength(), jitter, "The length should be zero");
+            assertEquals(0, fVector.getLength(), jitter, "The FVector length should be zero");
         }
 
         @Test
         @DisplayName("Get length (random)")
         void getLengthRandom() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             double dimX = fVector.getLengthX() * fVector.getLengthX();
             double dimY = fVector.getLengthY() * fVector.getLengthY();
             double dimZ = fVector.getLengthZ() * fVector.getLengthZ();
             double radius = Math.sqrt(dimX + dimY + dimZ);
 
-            assertEquals(radius, fVector.getLength(),
-                    jitter, "The radius is erroneous");
+            assertEquals(radius, fVector.getLength(), jitter, "The FVector length is erroneous");
         }
 
         @Test
         @DisplayName("Get length (validate)")
         void getLengthValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::getLength, fVector);
         }
@@ -1488,18 +1623,17 @@ public class FVectorTest {
         @Test
         @DisplayName("Get length P2")
         void getLengthP2() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 1);
-            FPoint fPointHead = factory.getFPoint(2, 2, 2);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 1, 1);
+            var fPointHead = factory.getFPoint(2, 2, 2);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            assertEquals(3, fVector.getLengthP2(),
-                    jitter, "The P2 length is erroneous");
+            assertEquals(3, fVector.getLengthP2(), jitter, "The FVector P2 length is erroneous");
         }
 
         @Test
         @DisplayName("Get length P2 (validate)")
         void getLengthP2Validate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::getLengthP2, fVector);
         }
@@ -1507,24 +1641,24 @@ public class FVectorTest {
         @Test
         @DisplayName("Set length")
         void setLength() {
-            FPoint fPointBase = factory.getFPoint(3, 3, 3);
-            FPoint fPointHead = factory.getFPoint(5, 5, 5);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(3, 3, 3);
+            var fPointHead = factory.getFPoint(5, 5, 5);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setLength(Math.sqrt(3));
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(3, fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(3, fVector.getRefBase().getX(), jitter,
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(3, fVector.getRefBase().getY(),
+                    () -> assertEquals(3, fVector.getRefBase().getY(), jitter,
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getRefBase().getZ(),
+                    () -> assertEquals(3, fVector.getRefBase().getZ(), jitter,
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(4, fVector.getRefHead().getX(),
+                    () -> assertEquals(4, fVector.getRefHead().getX(), jitter,
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(4, fVector.getRefHead().getY(),
+                    () -> assertEquals(4, fVector.getRefHead().getY(), jitter,
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(4, fVector.getRefHead().getZ(),
+                    () -> assertEquals(4, fVector.getRefHead().getZ(), jitter,
                             "Head - The Z value is incorrect")
             );
         }
@@ -1532,30 +1666,30 @@ public class FVectorTest {
         @Test
         @DisplayName("Set length (opposite direction)")
         void setLengthOppositeDirection() {
-            FVector fVector = factory.getFVector(1, 1, 1);
+            var fVector = factory.getFVector(1, 1, 1);
 
             fVector.setLength(-2 * Math.sqrt(3));
 
-            assertTrue(factory.getFVector(-2, -2, -2).isSimilar(fVector), "" +
+            assertTrue(fVector.isSimilar(0, 0, 0, -2, -2, -2),
                     "The resulting FVector position is incorrect");
         }
 
         @Test
         @DisplayName("Set length (random)")
         void setLengthRandom() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            fVector.setLength(1);
+            fVector.setLength(5);
 
-            assertEquals(1, fVector.getLength(), jitter, "The length is erroneous");
+            assertEquals(5, fVector.getLength(), jitter, "The FVector length is erroneous");
         }
 
         @Test
         @DisplayName("Set length (throw IllegalStateException)")
         void setLengthThrowIllegalStateException() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVector.setLength(1),
                     "The direction of the FVector is not defined");
@@ -1564,7 +1698,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Set length (validate)")
         void setLengthValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testReference(a -> a.setLength(1), fVector);
         }
@@ -1572,19 +1706,19 @@ public class FVectorTest {
         @Test
         @DisplayName("Normalize")
         void normalize() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.normalize();
 
-            assertEquals(1, fVector.getLength(), jitter, "The length is incorrect");
+            assertEquals(1, fVector.getLength(), jitter, "The FVector length is incorrect");
         }
 
         @Test
         @DisplayName("Normalize (throw IllegalStateException)")
         void normalizeThrowIllegalStateException() {
-            FVector fVector = factory.getFVector();
+            var fVector = factory.getFVector();
 
             assertThrows(IllegalStateException.class, fVector::normalize,
                     "The direction of the FVector is not defined");
@@ -1593,7 +1727,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Normalize (validate)")
         void normalizeValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testReference(FVector::normalize, fVector);
         }
@@ -1601,26 +1735,24 @@ public class FVectorTest {
         @Test
         @DisplayName("Reflect head")
         void reflectHead() {
-            FPoint fPointBase = factory.getFPoint(1, 2, 3);
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
-
-            FPoint fPointRef = fPointHead.copy().sub(fPointBase).reflect().add(fPointBase);
+            var fPointBase = factory.getFPoint(-1, 6, 3);
+            var fPointHead = factory.getFPoint(6, 3, -2);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.reflectHead();
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(1, fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-1, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getRefBase().getY(),
+                    () -> assertEquals(6, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
                     () -> assertEquals(3, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefHead().getX(),
+                    () -> assertEquals(-8, fVector.getRefHead().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefHead().getY(),
+                    () -> assertEquals(9, fVector.getRefHead().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefHead().getZ(),
+                    () -> assertEquals(8, fVector.getRefHead().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1628,7 +1760,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Reflect head (validate)")
         void reflectHeadValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testReference(FVector::reflectHead, fVector);
         }
@@ -1636,49 +1768,24 @@ public class FVectorTest {
         @Test
         @DisplayName("Reflect base")
         void reflectBase() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = factory.getFPoint(1, 2, 3);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
-
-            FPoint fPointRef = fPointBase.copy().sub(fPointHead).reflect().add(fPointHead);
+            var fPointBase = factory.getFPoint(-1, 6, 3);
+            var fPointHead = factory.getFPoint(6, 3, -2);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.reflectBase();
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(fPointRef.getX(), fVector.getRefBase().getX(),
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(13, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
-                    () -> assertEquals(fPointRef.getY(), fVector.getRefBase().getY(),
+                    () -> assertEquals(0, fVector.getRefBase().getY(),
                             "Base - The Y value is incorrect"),
-                    () -> assertEquals(fPointRef.getZ(), fVector.getRefBase().getZ(),
+                    () -> assertEquals(-7, fVector.getRefBase().getZ(),
                             "Base - The Z value is incorrect"),
-                    () -> assertEquals(1, fVector.getRefHead().getX(),
+                    () -> assertEquals(6, fVector.getRefHead().getX(),
                             "Head - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getRefHead().getY(),
+                    () -> assertEquals(3, fVector.getRefHead().getY(),
                             "Head - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getRefHead().getZ(),
-                            "Head - The Z value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Reflect base (simple)")
-        void reflectBaseSimple() {
-            FVector fVector = factory.getFVector(1, 1, 1, 2, 2, 2);
-
-            fVector.reflectBase();
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(3, fVector.getRefBase().getX(),
-                            "Base - The X value is incorrect"),
-                    () -> assertEquals(3, fVector.getRefBase().getY(),
-                            "Base - The Y value is incorrect"),
-                    () -> assertEquals(3, fVector.getRefBase().getZ(),
-                            "Base - The Z value is incorrect"),
-                    () -> assertEquals(2, fVector.getRefHead().getX(),
-                            "Head - The X value is incorrect"),
-                    () -> assertEquals(2, fVector.getRefHead().getY(),
-                            "Head - The Y value is incorrect"),
-                    () -> assertEquals(2, fVector.getRefHead().getZ(),
+                    () -> assertEquals(-2, fVector.getRefHead().getZ(),
                             "Head - The Z value is incorrect")
             );
         }
@@ -1686,7 +1793,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Reflect base (validate)")
         void reflectBaseValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testReference(FVector::reflectBase, fVector);
         }
@@ -1694,36 +1801,20 @@ public class FVectorTest {
         @Test
         @DisplayName("Reflect")
         void reflect() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
-            FPoint fPoint = TestHelper.getRandomFPoint();
-
-            FVector fVectorRef = factory.getFVector(fVector.getRefBase().copy().reflect(fPoint),
-                    fVector.getRefHead().copy().reflect(fPoint));
-
-            fVector.reflect(fPoint);
-
-            assertTrue(fVector.isSimilar(fVectorRef),"The reflection is erroneous");
-        }
-
-        @Test
-        @DisplayName("Reflect (simple)")
-        void reflectSimple() {
-            FVector fVector = factory.getFVector(1, 1, 0, 1, 3, 0);
-            FPoint fPoint = factory.getFPoint(2, 2, 0);
+            var fVector = factory.getFVector(1, 1, 0, 1, 3, 0);
+            var fPoint = factory.getFPoint(2, 2, 0);
 
             fVector.reflect(fPoint);
 
             assertTrue(fVector.isSimilar(3, 3, 0, 3, 1, 0),
-                    "The reflection is erroneous");
+                    "The FVector reflection is erroneous");
         }
 
         @Test
         @DisplayName("Reflect (validate)")
         void reflectValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPoint fPoint = TestHelper.getRandomFPoint();
+            var fVector = factory.getFVector(1, 2, 3);
+            var fPoint = factory.getFPoint(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::reflect, fVector, fPoint);
         }
@@ -1731,13 +1822,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Invert direction")
         void invertDirection() {
-            FPoint fPointBase = factory.getFPoint(1, 2, 3);
-            FPoint fPointHead = factory.getFPoint(4, 5, 6);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 2, 3);
+            var fPointHead = factory.getFPoint(4, 5, 6);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.invertDirection();
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(4, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(5, fVector.getRefBase().getY(),
@@ -1756,7 +1847,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Invert direction (validate)")
         void invertDirectionValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testReference(FVector::reflectHead, fVector);
         }
@@ -1764,9 +1855,9 @@ public class FVectorTest {
         @Test
         @DisplayName("Get inclination")
         void getInclination() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 0);
-            FPoint fPointHead = factory.getFPoint(2, 2, 0);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 1, 0);
+            var fPointHead = factory.getFPoint(2, 2, 0);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             assertEquals(Math.PI * 0.25, fVector.getInclination(), jitter,
                     "The FVector inclination is incorrect");
@@ -1775,7 +1866,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Get inclination (validate)")
         void getInclinationValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::getInclination, fVector);
         }
@@ -1783,13 +1874,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Set inclination")
         void setInclination() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 0);
-            FPoint fPointHead = factory.getFPoint(1, 2, 0);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 1, 0);
+            var fPointHead = factory.getFPoint(1, 2, 0);
+            var fVector = factory.getRefFVector(fPointBase, fPointHead);
 
             fVector.setInclination(Math.PI * 0.5);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(1, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(1, fVector.getRefBase().getY(),
@@ -1808,7 +1899,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Set inclination (validate)")
         void setInclinationValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testReference(a -> a.setInclination(Math.PI * 0.5), fVector);
         }
@@ -1816,18 +1907,18 @@ public class FVectorTest {
         @Test
         @DisplayName("Get azimuth")
         void getAzimuth() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 0);
-            FPoint fPointHead = factory.getFPoint(2, 1, 1);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 1, 0);
+            var fPointHead = factory.getFPoint(2, 1, 1);
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             assertEquals(Math.PI * 0.25, fVector.getAzimuth(), jitter,
-                    "The FVector inclination is incorrect");
+                    "The FVector azimuth is incorrect");
         }
 
         @Test
         @DisplayName("Get azimuth (validate)")
         void getAzimuthValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::getAzimuth, fVector);
         }
@@ -1835,13 +1926,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Set azimuth")
         void setAzimuth() {
-            FPoint fPointBase = factory.getFPoint(1, 1, 0);
-            FPoint fPointHead = factory.getFPoint(2, 1, 0);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = factory.getFPoint(1, 1, 0);
+            var fPointHead = factory.getFPoint(2, 1, 0);
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
             fVector.setAzimuth(Math.PI * 0.5);
 
-            Assertions.assertAll("Validate FPoint values",
+            Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(1, fVector.getRefBase().getX(),
                             "Base - The X value is incorrect"),
                     () -> assertEquals(1, fVector.getRefBase().getY(),
@@ -1860,7 +1951,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Set azimuth (validate)")
         void setAzimuthValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testReference(a -> a.setAzimuth(Math.PI * 0.5), fVector);
         }
@@ -1868,13 +1959,13 @@ public class FVectorTest {
         @Test
         @DisplayName("Get angle")
         void getAngle() {
-            FPoint fPointBaseA = factory.getFPoint();
-            FPoint fPointHeadA = factory.getFPoint(2, 2, 0);
-            FVector fVectorA = factory.getFVector(fPointBaseA, fPointHeadA);
+            var fPointBaseA = factory.getFPoint();
+            var fPointHeadA = factory.getFPoint(2, 2, 0);
+            var fVectorA = factory.getFVector(fPointBaseA, fPointHeadA);
 
-            FPoint fPointBaseB = factory.getFPoint();
-            FPoint fPointHeadB = factory.getFPoint(4, -4, 0);
-            FVector fVectorB = factory.getFVector(fPointBaseB, fPointHeadB);
+            var fPointBaseB = factory.getFPoint();
+            var fPointHeadB = factory.getFPoint(4, -4, 0);
+            var fVectorB = factory.getFVector(fPointBaseB, fPointHeadB);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -1890,47 +1981,44 @@ public class FVectorTest {
         @Test
         @DisplayName("Get angle (parallel)")
         void getAngleParallel() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(4, 4, 4));
+            var fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
+            var fVectorB = factory.getFVector(factory.getFPoint(4, 4, 4));
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
 
-            assertEquals(0, fVectorA.getAngle(fVectorB),
-                    jitter, "The angle is incorrect");
+            assertEquals(0, fVectorA.getAngle(fVectorB), jitter, "The angle is incorrect");
         }
 
         @Test
         @DisplayName("Get angle (antiparallel)")
         void getAngleAntiparallel() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(-4, -4, -4));
+            var fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
+            var fVectorB = factory.getFVector(factory.getFPoint(-4, -4, -4));
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
 
-            assertEquals(0, fVectorA.getAngle(fVectorB),
-                    jitter, "The angle is incorrect");
+            assertEquals(0, fVectorA.getAngle(fVectorB), jitter, "The angle is incorrect");
         }
 
         @Test
         @DisplayName("Get angle (orthogonal)")
         void getAngleOrthogonal() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(0, 1, 0));
-            FVector fVectorB = factory.getFVector(TestHelper.getRandomFPoint().setY(0));
+            var fVectorA = factory.getFVector(factory.getFPoint(0, 1, 0));
+            var fVectorB = factory.getFVector(TestHelper.getRandomFPoint().setY(0));
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
 
-            assertEquals(Math.PI * 0.5, fVectorA.getAngle(fVectorB),
-                    jitter, "The angle is incorrect");
+            assertEquals(Math.PI * 0.5, fVectorA.getAngle(fVectorB), jitter, "The angle is incorrect");
         }
 
         @Test
         @DisplayName("Get angle (throw IllegalStateException, input)")
         void getAngleThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector();
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.getAngle(fVectorB),
                     "The direction of the input FVector is not defined");
@@ -1939,18 +2027,18 @@ public class FVectorTest {
         @Test
         @DisplayName("Get angle (throw IllegalStateException, argument)")
         void getAngleThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector();
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector();
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.getAngle(fVectorB),
-                    "The direction of the argument FVector is not defined");
+                    "The direction of the FVector is not defined");
         }
 
         @Test
         @DisplayName("Get angle (validate)")
         void getAngleValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::getAngle, fVectorA, fVectorB);
         }
@@ -1958,21 +2046,21 @@ public class FVectorTest {
         @Test
         @DisplayName("Get dot product")
         void getDotProduct() {
-            FPoint fPointBaseA = TestHelper.getRandomFPoint();
-            FPoint fPointHeadA = TestHelper.getRandomFPoint();
-            FVector fVectorA = factory.getFVector(fPointBaseA, fPointHeadA);
+            var fPointBaseA = TestHelper.getRandomFPoint();
+            var fPointHeadA = TestHelper.getRandomFPoint();
+            var fVectorA = factory.getRefFVector(fPointBaseA, fPointHeadA);
 
-            FPoint fPointBaseB = TestHelper.getRandomFPoint();
-            FPoint fPointHeadB = TestHelper.getRandomFPoint();
-            FVector fVectorB = factory.getFVector(fPointBaseB, fPointHeadB);
+            var fPointBaseB = TestHelper.getRandomFPoint();
+            var fPointHeadB = TestHelper.getRandomFPoint();
+            var fVectorB = factory.getRefFVector(fPointBaseB, fPointHeadB);
 
             double result = fVectorA.getDotProduct(fVectorB);
 
             fVectorA.moveBase(factory.getFPoint());
             fVectorB.moveBase(factory.getFPoint());
 
-            FPoint fPointA = fVectorA.getRefHead();
-            FPoint fPointB = fVectorB.getRefHead();
+            var fPointA = fVectorA.getRefHead();
+            var fPointB = fVectorB.getRefHead();
 
             double dimX = fPointA.getX() * fPointB.getX();
             double dimY = fPointA.getY() * fPointB.getY();
@@ -1984,8 +2072,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Get dot product (simple)")
         void getDotProductSimple() {
-            FVector fVectorA = factory.getFVector(0, 0, 0, 1, 2, 3);
-            FVector fVectorB = factory.getFVector(0, 0, 0, 4, 5, 6);
+            var fVectorA = factory.getFVector(0, 0, 0, 1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0, 4, 5, 6);
 
             assertEquals(32, fVectorA.getDotProduct(fVectorB),
                     "The resulting FVector is erroneous");
@@ -1994,8 +2082,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Get dot product (validate)")
         void getDotProductValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::getDotProduct, fVectorA, fVectorB);
         }
@@ -2003,24 +2091,25 @@ public class FVectorTest {
         @Test
         @DisplayName("Set cross product")
         void setCrossProduct() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = TestHelper.getRandomFVector();
+            var fVectorB = TestHelper.getRandomFVector();
 
-            FVector fVectorRes = fVectorA.copy().setCrossProduct(fVectorB);
+            var fVectorRes = fVectorA.copy().setCrossProduct(fVectorB);
 
-            FPoint fPointRel = fVectorA.getRefBase().copy();
+            var fPointRel = fVectorA.getRefBase().copy();
 
-            fVectorA.moveBase(factory.getFPoint());
-            fVectorB.moveBase(factory.getFPoint());
+            fVectorA.moveBaseToCenter();
+            fVectorB.moveBaseToCenter();
 
-            FPoint fPointA = fVectorA.getRefHead();
-            FPoint fPointB = fVectorB.getRefHead();
+            var fPointA = fVectorA.getRefHead();
+            var fPointB = fVectorB.getRefHead();
 
             double dimX = (fPointA.getY() * fPointB.getZ()) - (fPointA.getZ() * fPointB.getY());
             double dimY = (fPointA.getZ() * fPointB.getX()) - (fPointA.getX() * fPointB.getZ());
             double dimZ = (fPointA.getX() * fPointB.getY()) - (fPointA.getY() * fPointB.getX());
 
-            FVector fVectorRef = factory.getFVector(factory.getFPoint(dimX, dimY, dimZ));
+            var fVectorRef = factory.getFVector(dimX, dimY, dimZ);
+
             fVectorRef.moveBase(fPointRel);
 
             assertTrue(fVectorRes.isSimilar(fVectorRef),"The resulting FVector is erroneous");
@@ -2029,11 +2118,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set cross product (simple)")
         void setCrossProductSimple() {
-            FVector fVectorA = factory.getFVector(0, 0, 0, 0, 0, 1);
-            FVector fVectorB = factory.getFVector(0, 0, 0, 1, 0, 0);
-
-            fVectorA.moveBase(1, 1, 1);
-            fVectorB.moveBase(-1, -1, -1);
+            var fVectorA = factory.getFVector(1, 1, 1, 1, 1, 2);
+            var fVectorB = factory.getFVector(-1, -1, -1, 0, -1, -1);
 
             fVectorA.setCrossProduct(fVectorB);
 
@@ -2044,8 +2130,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set cross product (validate)")
         void setCrossProductValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::setCrossProduct, fVectorA, fVectorB);
         }
@@ -2053,62 +2139,67 @@ public class FVectorTest {
         @Test
         @DisplayName("Is collinear A")
         void isCollinearA() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(4, 4, 4));
+            var fVectorA = factory.getFVector(2, 2, 2);
+            var fVectorB = factory.getFVector(4, 4, 4);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVectorA.isCollinear(fVectorB), "The two FVectors should be collinear");
+            assertTrue(fVectorA.isCollinear(fVectorB),
+                    "The two FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear B")
         void isCollinearB() {
-            FVector fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FVector fVectorB = factory.getFVector(-1, 1, 0, 1, 1, 0);
+            var fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
+            var fVectorB = factory.getFVector(-1, 1, 0, 1, 1, 0);
 
-            assertTrue(fVectorA.isCollinear(fVectorB), "The two FVectors should be collinear");
+            assertTrue(fVectorA.isCollinear(fVectorB),
+                    "The two FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear A (opposite direction")
-        void isCollinearAOppositeDirection() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(-4, -4, -4));
+        void isCollinearOppositeDirectionA() {
+            var fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
+            var fVectorB = factory.getFVector(factory.getFPoint(-4, -4, -4));
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVectorA.isCollinear(fVectorB), "The FVectors should be collinear");
+            assertTrue(fVectorA.isCollinear(fVectorB),
+                    "The FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear B (opposite direction")
-        void isCollinearBOppositeDirection() {
-            FVector fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FVector fVectorB = factory.getFVector(1, 1, 0, -1, 1, 0);
+        void isCollinearOppositeDirectionB() {
+            var fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
+            var fVectorB = factory.getFVector(1, 1, 0, -1, 1, 0);
 
-            assertTrue(fVectorA.isCollinear(fVectorB), "The two FVectors should be collinear");
+            assertTrue(fVectorA.isCollinear(fVectorB),
+                    "The two FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear (fail)")
         void isCollinearFail() {
-            FVector fVectorA = factory.getFVector(TestHelper.getRandomFPoint());
-            FVector fVectorB = factory.getFVector(TestHelper.getRandomFPoint(fVectorA.getRefHead()));
+            var fVectorA = factory.getFVector(1, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 0);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
 
-            assertFalse(fVectorA.isCollinear(fVectorB), "The FVectors should not be collinear");
+            assertFalse(fVectorA.isCollinear(fVectorB),
+                    "The FVectors should not be collinear");
         }
 
         @Test
         @DisplayName("Is collinear (throw IllegalStateException, input)")
         void isCollinearThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(0, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isCollinear(fVectorB),
                     "The input FVector direction is not defined");
@@ -2117,8 +2208,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is collinear (throw IllegalStateException, argument)")
         void isCollinearThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isCollinear(fVectorB),
                     "The argument FVector direction is not defined");
@@ -2127,8 +2218,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is collinear (validate)")
         void isCollinearValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::isCollinear, fVectorA, fVectorB);
         }
@@ -2136,8 +2227,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is parallel A")
         void isParallelA() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(4, 4, 4));
+            var fVectorA = factory.getFVector(2, 2, 2);
+            var fVectorB = factory.getFVector(4, 4, 4);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -2148,8 +2239,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is parallel B")
         void isParallelB() {
-            FVector fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FVector fVectorB = factory.getFVector(-1, 1, 0, 1, 1, 0);
+            var fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
+            var fVectorB = factory.getFVector(-1, 1, 0, 1, 1, 0);
 
             assertTrue(fVectorA.isParallel(fVectorB), "The two FVectors should be parallel");
         }
@@ -2157,8 +2248,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is parallel (fail)")
         void isParallelFail() {
-            FVector fVectorA = factory.getFVector(TestHelper.getRandomFPoint());
-            FVector fVectorB = factory.getFVector(TestHelper.getRandomFPoint(fVectorA.getRefHead()));
+            var fVectorA = factory.getFVector(1, 0, 0);
+            var fVectorB = factory.getFVector(1, 1, 0);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -2169,8 +2260,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is parallel (fail, opposite direction")
         void isParallelOppositeDirection() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(-4, -4, -4));
+            var fVectorA = factory.getFVector(2, 2, 2);
+            var fVectorB = factory.getFVector(-4, -4, -4);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -2181,8 +2272,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is parallel (throw IllegalStateException, input)")
         void isParallelThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(0, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isParallel(fVectorB),
                     "The input FVector direction is not defined");
@@ -2191,8 +2282,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is parallel (throw IllegalStateException, argument)")
         void isParallelThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isParallel(fVectorB),
                     "The argument FVector direction is not defined");
@@ -2201,8 +2292,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is parallel (validate)")
         void isParallelValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::isParallel, fVectorA, fVectorB);
         }
@@ -2210,8 +2301,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set parallel")
         void setParallel() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             fVectorA.setParallel(fVectorB);
 
@@ -2221,8 +2312,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set parallel (throw IllegalStateException, input)")
         void setParallelThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(0, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setParallel(fVectorB),
                     "The input FVector direction is not defined");
@@ -2231,8 +2322,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set parallel (throw IllegalStateException, argument)")
         void setParallelThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setParallel(fVectorB),
                     "The argument FVector direction is not defined");
@@ -2241,8 +2332,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set parallel (validate)")
         void setParallelValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::setParallel, fVectorA, fVectorB);
         }
@@ -2250,8 +2341,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is anti-parallel A")
         void isAntiParallelA() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(-4, -4, -4));
+            var fVectorA = factory.getFVector(2, 2, 2);
+            var fVectorB = factory.getFVector(-4, -4, -4);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -2262,8 +2353,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is anti-parallel B")
         void isAntiParallelB() {
-            FVector fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FVector fVectorB = factory.getFVector(1, 1, 0, -1, 1, 0);
+            var fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
+            var fVectorB = factory.getFVector(1, 1, 0, -1, 1, 0);
 
             assertTrue(fVectorA.isAntiParallel(fVectorB), "The two FVectors should be anti-parallel");
         }
@@ -2271,8 +2362,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is anti-parallel (fail)")
         void isAntiParallelFail() {
-            FVector fVectorA = factory.getFVector(TestHelper.getRandomFPoint());
-            FVector fVectorB = factory.getFVector(TestHelper.getRandomFPoint(fVectorA.getRefHead()));
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -2283,8 +2374,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is anti-parallel (fail, opposite direction")
         void isAntiParallelOppositeDirection() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(4, 4, 4));
+            var fVectorA = factory.getFVector(2, 2, 2);
+            var fVectorB = factory.getFVector(4, 4, 4);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -2295,8 +2386,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is anti-parallel (throw IllegalStateException, input)")
         void isAntiParallelThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(0, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isAntiParallel(fVectorB),
                     "The input FVector direction is not defined");
@@ -2305,8 +2396,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is anti-parallel (throw IllegalStateException, argument)")
         void isAntiParallelThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isAntiParallel(fVectorB),
                     "The argument FVector direction is not defined");
@@ -2315,8 +2406,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is anti-parallel (validate)")
         void isAntiParallelValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::isAntiParallel, fVectorA, fVectorB);
         }
@@ -2324,8 +2415,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set anti-parallel")
         void setAntiParallel() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(4, 5, -3, -3, 6, 1);
+            var fVectorB = factory.getFVector(7, 3, -4, 6, 2, -3);
 
             fVectorA.setAntiParallel(fVectorB);
 
@@ -2335,8 +2426,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set anti-parallel (throw IllegalStateException, input)")
         void setAntiParallelThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(0, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setAntiParallel(fVectorB),
                     "The input FVector direction is not defined");
@@ -2345,8 +2436,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set anti-parallel (throw DirectionException, argument)")
         void setAntiParallelThrowDirectionExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setAntiParallel(fVectorB),
                     "The argument FVector direction is not defined");
@@ -2355,17 +2446,41 @@ public class FVectorTest {
         @Test
         @DisplayName("Set anti-parallel (validate)")
         void setAntiParallelValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::setAntiParallel, fVectorA, fVectorB);
         }
 
         @Test
-        @DisplayName("Is orthogonal")
-        void isOrthogonal() {
-            FVector fVectorA = factory.getFVector(0, 1, 0);
-            FVector fVectorB = factory.getFVector(TestHelper.getRandomFPoint().setY(0));
+        @DisplayName("Is orthogonal - X")
+        void isOrthogonalX() {
+            var fVectorA = factory.getFVector(1, 0, 0);
+            var fVectorB = factory.getFVector(0, 5, 5);
+
+            fVectorA.moveBase(TestHelper.getRandomFPoint());
+            fVectorB.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two FVectors should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal - Y")
+        void isOrthogonalY() {
+            var fVectorA = factory.getFVector(0, 1, 0);
+            var fVectorB = factory.getFVector(5, 0, 5);
+
+            fVectorA.moveBase(TestHelper.getRandomFPoint());
+            fVectorB.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two FVectors should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal - Z")
+        void isOrthogonalZ() {
+            var fVectorA = factory.getFVector(0, 0, 1);
+            var fVectorB = factory.getFVector(5, 5, 0);
 
             fVectorA.moveBase(TestHelper.getRandomFPoint());
             fVectorB.moveBase(TestHelper.getRandomFPoint());
@@ -2375,22 +2490,18 @@ public class FVectorTest {
 
         @Test
         @DisplayName("Is orthogonal A (fail)")
-        void isOrthogonalAFail() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
-
-            while (fVectorA.getDotProduct(fVectorB) < jitter) {
-                fVectorB = TestHelper.getRandomFVector();
-            }
+        void isOrthogonalAFailA() {
+            var fVectorA = factory.getFVector(1, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             assertFalse(fVectorA.isOrthogonal(fVectorB), "FVectors should not be orthogonal");
         }
 
         @Test
         @DisplayName("Is orthogonal B (fail)")
-        void isOrthogonalBFail() {
-            FVector fVectorA = factory.getFVector(0, 1, 0);
-            FVector fVectorB = factory.getFVector(-1, 1, 0, 1, -1, 0);
+        void isOrthogonalFailB() {
+            var fVectorA = factory.getFVector(0, 1, 0);
+            var fVectorB = factory.getFVector(-1, 1, 0, 1, -1, 0);
 
             assertFalse(fVectorA.isOrthogonal(fVectorB), "FVectors should not be orthogonal");
         }
@@ -2398,8 +2509,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is orthogonal (throw IllegalStateException, input)")
         void isOrthogonalThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(0, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isOrthogonal(fVectorB),
                     "The input FVector direction is not defined");
@@ -2408,8 +2519,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is orthogonal (throw IllegalStateException, argument)")
         void isOrthogonalThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isOrthogonal(fVectorB),
                     "The argument FVector direction is not defined");
@@ -2418,8 +2529,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is orthogonal (validate)")
         void isOrthogonalValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::isOrthogonal, fVectorA, fVectorB);
         }
@@ -2427,16 +2538,6 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal")
         void setOrthogonal() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
-            fVectorA.setOrthogonal(fVectorB);
-
-            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two FVectors should be orthogonal");
-        }
-
-        @Test
-        @DisplayName("Set orthogonal (simple)")
-        void setOrthogonalSimple() {
             FVector fVectorA = factory.getFVector(-1, 0, 0);
             FVector fVectorB = factory.getFVector(0, 0, 1, 1, 0, 0);
 
@@ -2448,10 +2549,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal (same base)")
         void setOrthogonalSameBase() {
-            FVector fVectorA = TestHelper.getRandomFVector();
+            var fVectorA = TestHelper.getRandomFVector();
 
-            FPoint fVectorBHead = TestHelper.getRandomFPoint(fVectorA.getRefHead());
-            FVector fVectorB = factory.getFVector(fVectorA.getRefBase().copy(), fVectorBHead);
+            var fVectorBHead = TestHelper.getRandomFPoint(fVectorA.getRefHead());
+            var fVectorB = factory.getFVector(fVectorA.getRefBase().copy(), fVectorBHead);
 
             fVectorA.setOrthogonal(fVectorB);
 
@@ -2461,8 +2562,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal (throw IllegalStateException, parallel)")
         void setOrthogonalThrowIllegalStateExceptionParallel() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(1, 2, 3, 4, 5, 6);
+            var fVectorB = factory.getFVector(6, 5, 4, 3, 2, 1);
 
             fVectorA.setParallel(fVectorB);
 
@@ -2473,8 +2574,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal (throw IllegalStateException, anti-parallel)")
         void setOrthogonalThrowIllegalStateExceptionAntiParallel() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(1, 2, 3, 4, 5, 6);
+            var fVectorB = factory.getFVector(6, 5, 4, 3, 2, 1);
 
             fVectorA.setAntiParallel(fVectorB);
 
@@ -2485,10 +2586,10 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal (same head)")
         void setOrthogonalSameHead() {
-            FVector fVectorA = TestHelper.getRandomFVector();
+            var fVectorA = TestHelper.getRandomFVector();
 
-            FPoint fVectorBBase = TestHelper.getRandomFPoint(fVectorA.getRefBase());
-            FVector fVectorB = factory.getFVector(fVectorBBase, fVectorA.getRefHead().copy());
+            var fVectorBBase = TestHelper.getRandomFPoint(fVectorA.getRefBase());
+            var fVectorB = factory.getFVector(fVectorBBase, fVectorA.getRefHead().copy());
 
             fVectorA.setOrthogonal(fVectorB);
 
@@ -2498,8 +2599,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal (throw IllegalStateException, input)")
         void setOrthogonalThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = TestHelper.getRandomFVector();
+            var fVectorA = factory.getFVector(0, 0, 0);
+            var fVectorB = factory.getFVector(1, 2, 3);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setOrthogonal(fVectorB),
                     "The input FVector direction is not defined");
@@ -2508,8 +2609,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal (throw IllegalStateException, argument)")
         void setOrthogonalThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(0, 0, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setOrthogonal(fVectorB),
                     "The argument FVector direction is not defined");
@@ -2518,8 +2619,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Set orthogonal (validate)")
         void setOrthogonalValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::setOrthogonal, fVectorA, fVectorB);
         }
@@ -2527,55 +2628,58 @@ public class FVectorTest {
         @Test
         @DisplayName("Is non-directional")
         void isNonDirectional() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = fPointBase.copy();
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = fPointBase.copy();
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertTrue(fVector.isNonDirectional(), "The two FPoints should be at the same position");
+            assertTrue(fVector.isNearZeroLength(), "The two FPoints should be at the same position");
         }
 
         @Test
         @DisplayName("Is non-directional (fail)")
         void isNonDirectionalFail() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
-            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            var fVector = factory.getFVector(fPointBase, fPointHead);
 
-            assertFalse(fVector.isNonDirectional(), "The two FPoints should not be at the same position");
+            assertFalse(fVector.isNearZeroLength(), "The two FPoints should not be at the same position");
         }
 
         @Test
         @DisplayName("Is non-directional (validate)")
         void isNonDirectionalValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
-            FVectorTestHelper.testValue(FVector::isNonDirectional, fVector);
+            FVectorTestHelper.testValue(FVector::isNearZeroLength, fVector);
         }
     }
 
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    class IFCoreFeatures {
+    class FVectorCoreTest {
 
         @Test
         @DisplayName("JSON parser")
         void parseJSON() {
-            FVector fVectorRef = TestHelper.getRandomFVector();
-            FVector fVector = factory.getFVector().applyStateFrom(fVectorRef.toJSON());
+            var fVector = TestHelper.getRandomFVector();
 
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertTrue(fVectorRef.getRefBase().isExact(fVector.getRefBase()),
-                            "The base FPoint is incorrect"),
-                    () -> assertTrue(fVectorRef.getRefHead().isExact(fVector.getRefHead()),
-                            "The head FPoint is incorrect")
+            var json = fVector.toJSON();
+
+            var fVectorRef = factory.getFVector().applyStateFrom(json);
+
+            Assertions.assertAll("Validate JSON parser",
+                    () -> assertNotSame(fVector, fVectorRef,
+                            "FVector references should point at different objects"),
+                    () -> assertTrue(fVector.isExact(fVectorRef),
+                            "The FVectors should be exact")
             );
         }
 
         @Test
         @DisplayName("Parse JSON export (validate)")
         void parseJSONExportValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::toJSON, fVector);
         }
@@ -2583,11 +2687,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Is exact")
         void isExact() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            FVector fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FVector fVectorB = factory.getFVector(fPointBase, fPointHead);
+            var fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            var fVectorB = factory.getFVector(fPointBase, fPointHead);
 
             assertTrue(fVectorA.isExact(fVectorB), "FVectors should be equal");
         }
@@ -2595,11 +2699,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Is exact (fail)")
         void isExactFail() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            FVector fVectorA = factory.getFVector(factory.getFPoint(), fPointHead);
-            FVector fVectorB = factory.getFVector(fPointBase, factory.getFPoint());
+            var fVectorA = factory.getFVector(factory.getFPoint(), fPointHead);
+            var fVectorB = factory.getFVector(fPointBase, factory.getFPoint());
 
             assertFalse(fVectorA.isExact(fVectorB), "FVectors should not be equal");
         }
@@ -2607,8 +2711,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is exact (validate)")
         void isExactValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = factory.getFVector(1, 2, 3);
+            var fVectorB = factory.getFVector(4,5, 6);
 
             FVectorTestHelper.testValue(FVector::isExact, fVectorA, fVectorB);
         }
@@ -2623,7 +2727,7 @@ public class FVectorTest {
             double hY = random.nextDouble();
             double hZ = random.nextDouble();
 
-            FVector fVector = factory.getFVector(bX, bY, bZ, hX, hY, hZ);
+            var fVector = factory.getFVector(bX, bY, bZ, hX, hY, hZ);
 
             assertTrue(fVector.isExact(bX, bY, bZ, hX, hY, hZ),
                     "FVector values should be equal");
@@ -2639,7 +2743,7 @@ public class FVectorTest {
             double hY = random.nextDouble();
             double hZ = random.nextDouble();
 
-            FVector fVector = factory.getFVector(bX, bY, bZ, hX, hY, hZ);
+            var fVector = factory.getFVector(bX, bY, bZ, hX, hY, hZ);
 
             assertFalse(fVector.isExact(0, 0, 0, 0, 0, 0),
                     "FVector values should not be equal");
@@ -2648,7 +2752,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Is exact with parameters (validate)")
         void isExactWithParametersValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(e -> e.isExact(0, 0, 0, 0, 0, 0), fVector);
         }
@@ -2656,11 +2760,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Is similar")
         void isSimilar() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            FVector fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FVector fVectorB = factory.getFVector(fPointBase.addX(jitter * 0.5), fPointHead);
+            var fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            var fVectorB = factory.getFVector(fPointBase.addX(jitter * 0.5), fPointHead);
 
             assertTrue(fVectorA.isSimilar(fVectorB), "FVectors should be similar");
         }
@@ -2668,8 +2772,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is similar (zero)")
         void isSimilarZero() {
-            FVector fVectorA = factory.getFVector();
-            FVector fVectorB = factory.getFVector();
+            var fVectorA = factory.getFVector();
+            var fVectorB = factory.getFVector();
 
             assertTrue(fVectorA.isSimilar(fVectorB), "FVectors should be similar");
         }
@@ -2677,11 +2781,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Is similar (fail)")
         void isSimilarFail() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            FVector fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FVector fVectorB = factory.getFVector(fPointBase.addX(jitter * 1.5), fPointHead);
+            var fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            var fVectorB = factory.getFVector(fPointBase.addX(jitter * 1.5), fPointHead);
 
             assertFalse(fVectorA.isSimilar(fVectorB), "FVectors should not be similar");
         }
@@ -2689,8 +2793,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is similar (validate)")
         void isSimilarValidate() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            var fVectorA = TestHelper.getRandomFVector();
+            var fVectorB = TestHelper.getRandomFVector(fVectorA);
 
             FVectorTestHelper.testValue(FVector::isSimilar, fVectorA, fVectorB);
         }
@@ -2705,7 +2809,7 @@ public class FVectorTest {
             double hY = random.nextDouble();
             double hZ = random.nextDouble();
 
-            FVector fVector = factory.getFVector(
+            var fVector = factory.getFVector(
                     bX + (0.5 * jitter), bY + (0.5 * jitter), bZ + (0.5 * jitter),
                     hX + (0.5 * jitter), hY + (0.5 * jitter), hZ + (0.5 * jitter));
 
@@ -2723,7 +2827,7 @@ public class FVectorTest {
             double hY = random.nextDouble();
             double hZ = random.nextDouble();
 
-            FVector fVector = factory.getFVector(
+            var fVector = factory.getFVector(
                     bX + (1.5 * jitter), bY + (1.5 * jitter), bZ + (1.5 * jitter),
                     hX + (1.5 * jitter), hY + (1.5 * jitter), hZ + (1.5 * jitter));
 
@@ -2734,7 +2838,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Is similar with parameters (validate)")
         void isSimilarWithParametersValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(e -> e.isSimilar(0, 0, 0, 0, 0, 0), fVector);
         }
@@ -2742,11 +2846,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Get hash code")
         void getHashCode() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            FVector fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FVector fVectorB = factory.getFVector(fPointBase, fPointHead);
+            var fVectorA = factory.getFVector(fPointBase, fPointHead);
+            var fVectorB = factory.getFVector(fPointBase, fPointHead);
 
             assertEquals(fVectorA.hashCode(), fVectorB.hashCode(),
                     "Two identical FVectors should have the same hash code");
@@ -2755,11 +2859,11 @@ public class FVectorTest {
         @Test
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
+            var fPointBase = TestHelper.getRandomFPoint();
+            var fPointHead = TestHelper.getRandomFPoint();
 
-            FVector fVectorA = factory.getFVector(factory.getFPoint(), fPointHead);
-            FVector fVectorB = factory.getFVector(fPointBase, factory.getFPoint());
+            var fVectorA = factory.getFVector(factory.getFPoint(), fPointHead);
+            var fVectorB = factory.getFVector(fPointBase, factory.getFPoint());
 
             assertNotEquals(fVectorA.hashCode(), fVectorB.hashCode(),
                     "Two different FVectors should not have the same hash code");
@@ -2768,7 +2872,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Get hash code (validate)")
         void getHashCodeValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::hashCode, fVector);
         }
@@ -2776,8 +2880,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Copy")
         void copy() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = fVectorA.copy();
+            var fVectorA = TestHelper.getRandomFVector();
+            var fVectorB = fVectorA.copy();
 
             Assertions.assertAll("Validate similarity",
                     () -> assertNotSame(fVectorA, fVectorB,
@@ -2794,7 +2898,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::copy, fVector);
         }
@@ -2802,8 +2906,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Copy zero")
         void copyZero() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = fVectorA.copyZero();
+            var fVectorA = TestHelper.getRandomFVector();
+            var fVectorB = fVectorA.copyZero();
 
             Assertions.assertAll("Validate similarity",
                     () -> assertNotSame(fVectorA, fVectorB,
@@ -2820,7 +2924,7 @@ public class FVectorTest {
         @Test
         @DisplayName("Copy zero (validate)")
         void copyZeroValidate() {
-            FVector fVector = TestHelper.getRandomFVector();
+            var fVector = factory.getFVector(1, 2, 3);
 
             FVectorTestHelper.testValue(FVector::copyZero, fVector);
         }

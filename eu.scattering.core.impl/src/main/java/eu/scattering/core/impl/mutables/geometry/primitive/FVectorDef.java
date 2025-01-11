@@ -7,7 +7,6 @@ import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -39,7 +38,16 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier, FPoint refBase, FPoint refHead) {
-        FVectorDef fVector = new FVectorDef(epsilon, fPointSupplier);
+
+        if (refBase == null) {
+            throw new NullPointerException("The base FPoint cannot be null");
+        }
+
+        if (refHead == null) {
+            throw new NullPointerException("The head FPoint cannot be null");
+        }
+
+        var fVector = new FVectorDef(epsilon, fPointSupplier);
 
         fVector.origin[0] = refBase;
         fVector.origin[1] = refHead;
@@ -48,7 +56,12 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier, FPoint refHead) {
-        FVectorDef fVector = new FVectorDef(epsilon, fPointSupplier);
+
+        if (refHead == null) {
+            throw new NullPointerException("The head FPoint cannot be null");
+        }
+
+        var fVector = new FVectorDef(epsilon, fPointSupplier);
 
         fVector.origin[0] = fPointSupplier.get();
         fVector.origin[1] = refHead;
@@ -57,7 +70,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier) {
-        FVectorDef fVector = new FVectorDef(epsilon, fPointSupplier);
+        var fVector = new FVectorDef(epsilon, fPointSupplier);
 
         fVector.origin[0] = fPointSupplier.get();
         fVector.origin[1] = fPointSupplier.get();
@@ -93,7 +106,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     public FVector setRefHead(FPoint refHead) {
 
         if (refHead == null) {
-            throw new NullPointerException(" The head FPoint cannot be null");
+            throw new NullPointerException("The head FPoint cannot be null");
         }
 
         origin[1] = refHead;
@@ -259,9 +272,9 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector applyStateFrom(FVector ref) {
-        setBase(ref.getRefBase());
-        setHead(ref.getRefHead());
+    public FVector applyStateFrom(FVector op) {
+        setBase(op.getRefBase());
+        setHead(op.getRefHead());
 
         return this;
     }
@@ -273,9 +286,9 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        JSONArray structure = json.getJSONArray(JSON_VAL);
-        var base = fPointSupplier.get().applyStateFrom(structure.getJSONObject(0));
-        var head = fPointSupplier.get().applyStateFrom(structure.getJSONObject(1));
+        var structure = json.getJSONArray(JSON_VAL);
+        var base = getRefBase().applyStateFrom(structure.getJSONObject(0));
+        var head = getRefHead().applyStateFrom(structure.getJSONObject(1));
 
         return set(base, head);
     }
@@ -284,36 +297,34 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     @Override
     public boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-        var copyZeroVector = copyZero();
 
-        return isExact(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
+        return getRefBase().isExact(bX, bY, bZ) && getRefHead().isExact(hX, hY, hZ);
     }
 
     @Override
-    public boolean isExact(FVector ref) {
+    public boolean isExact(FVector op) {
 
-        if (this == ref) {
+        if (this == op) {
             return true;
         }
 
-        return getRefBase().isExact(ref.getRefBase()) && getRefHead().isExact(ref.getRefHead());
+        return getRefBase().isExact(op.getRefBase()) && getRefHead().isExact(op.getRefHead());
     }
 
     @Override
     public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-        var copyZeroVector = copyZero();
 
-        return isSimilar(copyZeroVector.set(bX, bY, bZ, hX, hY, hZ));
+        return getRefBase().isSimilar(bX, bY, bZ) && getRefHead().isSimilar(hX, hY, hZ);
     }
 
     @Override
-    public boolean isSimilar(FVector ref) {
+    public boolean isSimilar(FVector op) {
 
-        if (this == ref) {
+        if (this == op) {
             return true;
         }
 
-        return getRefBase().isSimilar(ref.getRefBase()) && getRefHead().isSimilar(ref.getRefHead());
+        return getRefBase().isSimilar(op.getRefBase()) && getRefHead().isSimilar(op.getRefHead());
     }
 
     @Override
@@ -324,22 +335,14 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     @Override
     public FVector copy() {
-        FVector fVector = FVectorDef.create(epsilon, fPointSupplier);
 
-        fVector.setRefBase(getRefBase().copy());
-        fVector.setRefHead(getRefHead().copy());
-
-        return fVector;
+        return create(epsilon, fPointSupplier, getRefBase().copy(), getRefHead().copy());
     }
 
     @Override
     public FVector copyZero() {
-        FVector fVector = copy();
 
-        fVector.setRefBase(fPointSupplier.get());
-        fVector.setRefHead(fPointSupplier.get());
-
-        return fVector;
+        return create(epsilon, fPointSupplier);
     }
 
     @Override
@@ -353,7 +356,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     @Override
     public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
+        var json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getRefBase().toJSON());
@@ -374,7 +377,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     public boolean equals(Object object) {
 
         if (object instanceof FVector) {
-            FVector ref = (FVector) object;
+            var ref = (FVector) object;
 
             return getRefBase().equals(ref.getRefBase()) && getRefHead().equals(ref.getRefHead());
         }
@@ -391,25 +394,22 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FVector add(FVector vector) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = vector.copy().moveBaseToCenter();
+    public FVector add(FVector op) {
 
-        fCopyLocal.getRefHead().add(fCopyExternal.getRefHead());
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return applyWithPositionZero(vZero ->
+                op.applyWithFixedState(opFix -> {
+                    opFix.moveBaseToCenter();
+                    vZero.getRefHead().add(opFix.getRefHead());
+                }));
     }
 
     @Override
-    public FVector sub(FVector vector) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = vector.copy().moveBaseToCenter();
-
-        fCopyLocal.getRefHead().sub(fCopyExternal.getRefHead());
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+    public FVector sub(FVector op) {
+        return applyWithPositionZero(vZero ->
+                op.applyWithFixedState(opFix -> {
+                    opFix.moveBaseToCenter();
+                    vZero.getRefHead().sub(opFix.getRefHead());
+                }));
     }
 
     //--------------------------------------------------
@@ -417,6 +417,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public List<FPoint> disassemble() {
         List<FPoint> fPointList = new ArrayList<>();
+
         fPointList.add(getRefBase());
         fPointList.add(getRefHead());
 
@@ -424,24 +425,24 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public boolean isZero() {
+    public boolean isZeroLength() {
 
-        return getRefBase().isZero() && getRefHead().isZero();
+        return getRefBase().equals(getRefHead());
     }
 
     @Override
-    public boolean isNonDirectional() {
+    public boolean isNearZeroLength() {
 
         return getRefBase().isSimilar(getRefHead());
     }
 
     @Override
     public double getLengthP2() {
-        double distanceX = getRefHead().getX() - getRefBase().getX();
-        double distanceY = getRefHead().getY() - getRefBase().getY();
-        double distanceZ = getRefHead().getZ() - getRefBase().getZ();
+        double distX = getRefHead().getX() - getRefBase().getX();
+        double distY = getRefHead().getY() - getRefBase().getY();
+        double distZ = getRefHead().getZ() - getRefBase().getZ();
 
-        return (distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ);
+        return (distX * distX) + (distY * distY) + (distZ * distZ);
     }
 
     @Override
@@ -470,75 +471,72 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     @Override
     public FVector setLength(double length) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        fCopyLocal.getRefHead().setLength(length);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return applyWithPositionZero(vZero -> getRefHead().setLength(length));
     }
 
     @Override
     public FVector normalize() {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        fCopyLocal.getRefHead().normalize();
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return applyWithPositionZero(vZero -> getRefHead().normalize());
     }
 
     @Override
     public FVector reflectBase() {
-        FVector fCopyLocal = copy().moveHeadToCenter();
 
-        fCopyLocal.getRefBase().reflect();
-        fCopyLocal.moveHead(getRefHead());
+        getRefBase().reflect(getRefHead());
 
-        return applyStateFrom(fCopyLocal);
+        return this;
     }
 
     @Override
     public FVector reflectHead() {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        fCopyLocal.getRefHead().reflect();
-        fCopyLocal.moveBase(getRefBase());
+        getRefHead().reflect(getRefBase());
 
-        return applyStateFrom(fCopyLocal);
+        return this;
     }
 
     @Override
-    public FVector reflect(FPoint center) {
+    public FVector reflect(FPoint op) {
 
-        getRefBase().reflect(center);
-        getRefHead().reflect(center);
+        getRefBase().reflect(op);
+        getRefHead().reflect(op);
 
         return this;
     }
 
     @Override
     public FVector invertDirection() {
-        FPoint container = getRefHead().copy();
+        double memoX = getRefHead().getX();
+        double memoY = getRefHead().getY();
+        double memoZ = getRefHead().getZ();
 
-        getRefHead().applyStateFrom(getRefBase());
-        getRefBase().applyStateFrom(container);
+        getRefHead().reflect(getRefBase());
+
+        return moveBase(memoX, memoY, memoZ);
+    }
+
+    @Override
+    public FVector moveBase(double bX, double bY, double bZ) {
+        double distX = getRefBase().getX() - bX;
+        double distY = getRefBase().getY() - bY;
+        double distZ = getRefBase().getZ() - bZ;
+
+        getRefBase().sub(distX, distY, distZ);
+        getRefHead().sub(distX, distY, distZ);
 
         return this;
     }
 
     @Override
-    public FVector moveBase(double bX, double bY, double bZ) {
-
-        return moveBase(fPointSupplier.get().set(bX, bY, bZ));
-    }
-
-    @Override
     public FVector moveBase(FPoint base) {
-        FPoint translation = fPointSupplier.get().applyStateFrom(base).sub(getRefBase());
+        double distX = getRefBase().getX() - base.getX();
+        double distY = getRefBase().getY() - base.getY();
+        double distZ = getRefBase().getZ() - base.getZ();
 
-        getRefBase().applyStateFrom(base);
-        getRefHead().add(translation);
+        getRefBase().sub(distX, distY, distZ);
+        getRefHead().sub(distX, distY, distZ);
 
         return this;
     }
@@ -546,21 +544,29 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FVector moveBaseToCenter() {
 
-        return moveBase(fPointSupplier.get());
+        return moveBase(0, 0, 0);
     }
 
     @Override
     public FVector moveHead(double hX, double hY, double hZ) {
+        double distX = getRefHead().getX() - hX;
+        double distY = getRefHead().getY() - hY;
+        double distZ = getRefHead().getZ() - hZ;
 
-        return moveHead(fPointSupplier.get().set(hX, hY, hZ));
+        getRefBase().sub(distX, distY, distZ);
+        getRefHead().sub(distX, distY, distZ);
+
+        return this;
     }
 
     @Override
     public FVector moveHead(FPoint head) {
-        FPoint translation = fPointSupplier.get().applyStateFrom(head).sub(getRefHead());
+        double distX = getRefHead().getX() - head.getX();
+        double distY = getRefHead().getY() - head.getY();
+        double distZ = getRefHead().getZ() - head.getZ();
 
-        getRefBase().add(translation);
-        getRefHead().applyStateFrom(head);
+        getRefBase().sub(distX, distY, distZ);
+        getRefHead().sub(distX, distY, distZ);
 
         return this;
     }
@@ -568,59 +574,60 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FVector moveHeadToCenter() {
 
-        return moveHead(fPointSupplier.get());
+        return moveHead(0, 0, 0);
     }
 
     @Override
     public FVector shiftForward(double distance) {
 
-        if (isNonDirectional()) {
-            throw new IllegalStateException("The direction of the IFVector is not defined");
-        }
-
         if (distance < 0) {
             return shiftBackward(-distance);
         }
 
-        FVector fCopyLocal = copy();
-        fCopyLocal.setLength(distance);
+        if (isNearZeroLength()) {
+            throw new IllegalStateException("The direction of the FVector is not defined");
+        }
 
-        moveBase(fCopyLocal.getRefHead());
-
-        return this;
+        return applyWithFixedLength(v -> {
+            v.setLength(distance).moveBase(getRefHead());
+        });
     }
 
     @Override
     public FVector shiftBackward(double distance) {
 
-        if (isNonDirectional()) {
-            throw new IllegalStateException("The direction of the IFVector is not defined");
-        }
-
         if (distance < 0) {
             return shiftForward(-distance);
         }
 
-        FVector fCopyLocal = copy().reflectHead();
-        fCopyLocal.setLength(distance);
+        if (isNearZeroLength()) {
+            throw new IllegalStateException("The direction of the FVector is not defined");
+        }
 
-        moveBase(fCopyLocal.getRefHead());
-
-        return this;
+        return applyWithFixedLength(v -> {
+            v.setLength(distance).reflectHead().moveBase(getRefHead()).reflectHead();
+        });
+//
+//        FVector fCopyLocal = copy().reflectHead();
+//        fCopyLocal.setLength(distance);
+//
+//        moveBase(fCopyLocal.getRefHead());
+//
+//        return this;
     }
 
     @Override
-    public double getDotProduct(FVector ref) {
+    public double getDotProduct(FVector op) {
         FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = ref.copy().moveBaseToCenter();
+        FVector fCopyExternal = op.copy().moveBaseToCenter();
 
         return fCopyLocal.getRefHead().getDotProduct(fCopyExternal.getRefHead());
     }
 
     @Override
-    public FVector setCrossProduct(FVector ref) {
+    public FVector setCrossProduct(FVector op) {
         FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = ref.copy().moveBaseToCenter();
+        FVector fCopyExternal = op.copy().moveBaseToCenter();
 
         fCopyLocal.getRefHead().setCrossProduct(fCopyExternal.getRefHead());
         fCopyLocal.moveBase(getRefBase());
@@ -629,106 +636,106 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public boolean isCollinear(FVector ref) {
+    public boolean isCollinear(FVector op) {
 
-        return isParallel(ref) || isAntiParallel(ref);
+        return isParallel(op) || isAntiParallel(op);
     }
 
     @Override
-    public boolean isParallel(FVector ref) {
+    public boolean isParallel(FVector op) {
 
-        if (isNonDirectional()) {
+        if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZeroLength()) {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
         FPoint fCopyLocal = copy().moveBaseToCenter().normalize().getRefHead();
-        FPoint fCopyExternal = ref.copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint fCopyExternal = op.copy().moveBaseToCenter().normalize().getRefHead();
 
         return fCopyLocal.isSimilar(fCopyExternal);
     }
 
     @Override
-    public FVector setParallel(FVector ref) {
+    public FVector setParallel(FVector op) {
 
-        if (isNonDirectional()) {
+        if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZeroLength()) {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
         double magnitude = getLength();
         FPoint baseCopy = getRefBase().copy();
 
-        return applyStateFrom(ref).setLength(magnitude).moveBase(baseCopy);
+        return applyStateFrom(op).setLength(magnitude).moveBase(baseCopy);
     }
 
     @Override
-    public boolean isAntiParallel(FVector ref) {
+    public boolean isAntiParallel(FVector op) {
 
-        if (isNonDirectional()) {
+        if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZeroLength()) {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
         FPoint fCopyLocal = copy().moveBaseToCenter().normalize().getRefHead();
-        FPoint fCopyExternal = ref.copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint fCopyExternal = op.copy().moveBaseToCenter().normalize().getRefHead();
 
         return fCopyLocal.isSimilar(fCopyExternal.reflect());
     }
 
     @Override
-    public FVector setAntiParallel(FVector ref) {
+    public FVector setAntiParallel(FVector op) {
 
-        if (isNonDirectional()) {
+        if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZeroLength()) {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
         double magnitude = getLength();
         FPoint baseCopy = getRefBase().copy();
 
-        return applyStateFrom(ref).setLength(magnitude).moveBase(baseCopy).reflectHead();
+        return applyStateFrom(op).setLength(magnitude).moveBase(baseCopy).reflectHead();
     }
 
     @Override
-    public boolean isOrthogonal(FVector ref) {
+    public boolean isOrthogonal(FVector op) {
 
-        if (isNonDirectional()) {
+        if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the input FVector is not defined");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZeroLength()) {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
-        return (Math.abs(getDotProduct(ref)) < epsilon) || (Math.abs((Math.PI * 0.5) - getAngle(ref)) < epsilon);
+        return (Math.abs(getDotProduct(op)) < epsilon) || (Math.abs((Math.PI * 0.5) - getAngle(op)) < epsilon);
     }
 
     @Override
-    public FVector setOrthogonal(FVector ref) {
+    public FVector setOrthogonal(FVector op) {
 
-        if (isParallel(ref)) {
+        if (isParallel(op)) {
             throw new IllegalStateException("FVectors are parallel");
         }
 
-        if (isAntiParallel(ref)) {
+        if (isAntiParallel(op)) {
             throw new IllegalStateException("FVectors are anti-parallel");
         }
 
         double magnitude = getLength();
-        FVector fVectorRef = copyZero().set(ref.getRefBase().copy(), ref.getRefHead().copy());
+        FVector fVectorRef = copyZero().set(op.getRefBase().copy(), op.getRefHead().copy());
         FVector fVectorRot = copy().setCrossProduct(fVectorRef);
 
         fVectorRef.setCrossProduct(fVectorRot).setLength(magnitude);
@@ -784,19 +791,19 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getAngle(FVector ref) {
+    public double getAngle(FVector op) {
 
-        if (isNonDirectional()) {
+        if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the input IFVector is not defined");
         }
 
-        if (ref.isNonDirectional()) {
+        if (op.isNearZeroLength()) {
             throw new IllegalStateException("The direction of the provided FVector is not defined");
         }
 
         double angle, dProd, magAB;
         FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = ref.copy().moveBaseToCenter();
+        FVector fCopyExternal = op.copy().moveBaseToCenter();
 
         dProd = fCopyLocal.getDotProduct(fCopyExternal);
         magAB = fCopyLocal.getRefHead().getLength() * fCopyExternal.getRefHead().getLength();
@@ -806,15 +813,40 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector mutateAtCenter(Consumer<FVector> action) {
-        var base = getRefBase().toFPos3D();
+    public FVector applyWithPositionZero(Consumer<FVector> action) {
+        double memoX = this.getBaseX();
+        double memoY = this.getBaseY();
+        double memoZ = this.getBaseZ();
 
         moveBaseToCenter();
 
         action.accept(this);
 
-        moveBase(base.getD0(), base.getD1(), base.getD2());
+        return moveBase(memoX, memoY, memoZ);
+    }
 
-        return null;
+    @Override
+    public FVector applyWithFixedState(Consumer<FVector> action) {
+        double memoBX = this.getBaseX();
+        double memoBY = this.getBaseY();
+        double memoBZ = this.getBaseZ();
+        double memoHX = this.getHeadX();
+        double memoHY = this.getHeadY();
+        double memoHZ = this.getHeadZ();
+
+        action.accept(this);
+
+        return set(memoBX, memoBY, memoBZ, memoHX, memoHY, memoHZ);
+    }
+
+    @Override
+    public FVector applyWithFixedLength(Consumer<FVector> action) {
+        double length = getLength();
+
+        action.accept(this);
+
+        setLength(length);
+
+        return this;
     }
 }

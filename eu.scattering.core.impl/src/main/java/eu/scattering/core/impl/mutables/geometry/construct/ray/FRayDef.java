@@ -166,7 +166,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public void project(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -176,7 +176,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public void reflect(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -186,7 +186,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public boolean isPartOf(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -197,7 +197,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public List<OptionalDouble> getAtomicDistanceP2(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -211,7 +211,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public List<OptionalDouble> getAtomicDistance(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -225,7 +225,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public void setDistance(Geometry geometry, double distance) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -253,7 +253,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalArgumentException("The distance must be a positive value");
         }
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 

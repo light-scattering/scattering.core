@@ -6,17 +6,17 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Primitive<T> {
 
     @Override
-    public T applyStateTo(T ref) {
+    public T applyStateTo(T op) {
 
-        ref.applyStateFrom(self());
+        op.applyStateFrom(self());
 
         return self();
     }
 
     @Override
-    public T add(FPoint fPoint) {
+    public T add(FPoint op) {
 
-        disassemble().forEach(e -> e.add(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+        disassemble().forEach(e -> e.add(op.getX(), op.getY(), op.getZ()));
 
         return self();
     }
@@ -62,9 +62,9 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T sub(FPoint fPoint) {
+    public T sub(FPoint op) {
 
-        disassemble().forEach(e -> e.sub(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+        disassemble().forEach(e -> e.sub(op.getX(), op.getY(), op.getZ()));
 
         return self();
     }
@@ -110,9 +110,9 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T mul(FPoint fPoint) {
+    public T mul(FPoint op) {
 
-        disassemble().forEach(e -> e.mul(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+        disassemble().forEach(e -> e.mul(op.getX(), op.getY(), op.getZ()));
 
         return self();
     }
@@ -158,9 +158,9 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T div(FPoint fPoint) {
+    public T div(FPoint op) {
 
-        disassemble().forEach(e -> e.div(fPoint.getX(), fPoint.getY(), fPoint.getZ()));
+        disassemble().forEach(e -> e.div(op.getX(), op.getY(), op.getZ()));
 
         return self();
     }

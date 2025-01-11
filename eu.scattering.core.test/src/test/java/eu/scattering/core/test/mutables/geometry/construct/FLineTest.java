@@ -901,7 +901,7 @@ public class FLineTest {
             fLineAOrigin.getRefBase().setZ(0);
             fLineAOrigin.getRefHead().setZ(0);
 
-            while (fLineAOrigin.isNonDirectional()) {
+            while (fLineAOrigin.isNearZeroLength()) {
                 fLineAOrigin.applyStateFrom(TestHelper.getRandomFVector());
 
                 fLineAOrigin.getRefBase().setZ(0);

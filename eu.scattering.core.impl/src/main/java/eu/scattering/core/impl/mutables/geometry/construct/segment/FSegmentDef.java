@@ -166,7 +166,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public void project(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -176,7 +176,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public void reflect(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -186,7 +186,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public boolean isPartOf(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -197,7 +197,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public List<OptionalDouble> getAtomicDistanceP2(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -211,7 +211,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public List<OptionalDouble> getAtomicDistance(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -225,7 +225,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public void setDistance(Geometry geometry, double distance) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 

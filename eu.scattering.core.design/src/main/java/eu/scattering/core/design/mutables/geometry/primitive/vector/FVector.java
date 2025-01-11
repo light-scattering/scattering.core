@@ -3,12 +3,14 @@ package eu.scattering.core.design.mutables.geometry.primitive.vector;
 import eu.scattering.core.design.annotations.Facade;
 import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Mutation;
+import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface FVector extends Primitive<FVector> {
 
@@ -50,8 +52,8 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
-    boolean isZero();
-    boolean isNonDirectional();
+    boolean isZeroLength();
+    boolean isNearZeroLength();
 
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
@@ -69,10 +71,10 @@ public interface FVector extends Primitive<FVector> {
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
 
-    FVector add(FVector vector);
-    FVector sub(FVector vector);
+    FVector add(FVector op);
+    FVector sub(FVector op);
 
-    FVector reflect(FPoint center);
+    FVector reflect(FPoint op);
     FVector reflectBase();
     FVector reflectHead();
     FVector invertDirection();
@@ -84,24 +86,23 @@ public interface FVector extends Primitive<FVector> {
     double getLength();
     FVector setLength(double length);
 
-    double getAngle(FVector ref);
+    double getAngle(FVector op);
 //    double setAngle(FVector ref, double angle); // The Rodrigues rotation formula.
 
-    boolean isCollinear(FVector ref);
+    boolean isCollinear(FVector op);
 //    FVector setCollinear(FVector ref); // To the lowest angle.
 
-    boolean isParallel(FVector ref);
-    FVector setParallel(FVector ref);
+    boolean isParallel(FVector op);
+    FVector setParallel(FVector op);
 
-    boolean isAntiParallel(FVector ref);
-    FVector setAntiParallel(FVector ref);
+    boolean isAntiParallel(FVector op);
+    FVector setAntiParallel(FVector op);
 
-    boolean isOrthogonal(FVector ref);
-    FVector setOrthogonal(FVector ref);
+    boolean isOrthogonal(FVector op);
+    FVector setOrthogonal(FVector op);
 
-    double getDotProduct(FVector ref);
-
-    FVector setCrossProduct(FVector ref);
+    double getDotProduct(FVector op);
+    FVector setCrossProduct(FVector op);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
@@ -128,15 +129,21 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
+    @Fragment
+    double getLengthP2();
+
 //    @Extension
 //    FVector apply(Consumer<FVector> action);
 
     @Facade
-    FVector mutateAtCenter(Consumer<FVector> action);
-//    FVector mutateHeadAtCenter(Consumer<FPoint> action);
+    FVector applyWithFixedState(Consumer<FVector> action);
+    @Facade
+    FVector applyWithFixedLength(Consumer<FVector> action);
+    @Facade
+    FVector applyWithPositionZero(Consumer<FVector> action);
 
-    //--------------------------------------------------
-
-    @Fragment
-    double getLengthP2();
+//    @Termination
+//    double toDouble(Function<FVector, Double> action);
+//    @Termination
+//    boolean toBoolean(Function<FVector, Boolean> action);
 }

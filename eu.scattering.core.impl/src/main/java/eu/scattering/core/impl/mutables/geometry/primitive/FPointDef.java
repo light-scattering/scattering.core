@@ -128,6 +128,10 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public boolean isExact(FPoint op) {
 
+        if (this == op) {
+            return true;
+        }
+
         return isExact(op.getX(), op.getY(), op.getZ());
     }
 
@@ -143,6 +147,10 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
 
     @Override
     public boolean isSimilar(FPoint op) {
+
+        if (this == op) {
+            return true;
+        }
 
         return isSimilar(op.getX(), op.getY(), op.getZ());
     }

@@ -48,7 +48,7 @@ public class FRotationProcessorDef implements FRotationProcessor {
     private FVector getRotVector(FPairPos3D axis, double angle) {
         var rotVector = fVectorSupplier.get().set(axis);
 
-        if (rotVector.isNonDirectional()) {
+        if (rotVector.isNearZeroLength()) {
             throw new IllegalArgumentException("The rotation axis is non-directional");
         }
 

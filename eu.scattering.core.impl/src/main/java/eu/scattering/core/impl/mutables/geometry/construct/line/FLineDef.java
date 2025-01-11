@@ -174,7 +174,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public void project(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -184,7 +184,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public void reflect(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -194,7 +194,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public boolean isPartOf(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -205,7 +205,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public List<Double> getAtomicDistanceP2(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -217,7 +217,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public List<Double> getAtomicDistance(Geometry geometry) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -229,7 +229,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public void setDistance(Geometry geometry, double distance) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -239,7 +239,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getFPointAtX(double x) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -260,7 +260,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getFPointAtY(double y) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
@@ -281,7 +281,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getFPointAtZ(double z) {
 
-        if (getRefOrigin().isNonDirectional()) {
+        if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
