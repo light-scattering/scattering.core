@@ -3,7 +3,6 @@ package eu.scattering.core.design.mutables.geometry.primitive.vector;
 import eu.scattering.core.design.annotations.Facade;
 import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Mutation;
-import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -140,10 +139,18 @@ public interface FVector extends Primitive<FVector> {
     @Facade
     FVector applyWithFixedLength(Consumer<FVector> action);
     @Facade
-    FVector applyWithPositionZero(Consumer<FVector> action);
+    FVector applyWithZeroPosition(Consumer<FVector> action);
+
 
 //    @Termination
 //    double toDouble(Function<FVector, Double> action);
 //    @Termination
 //    boolean toBoolean(Function<FVector, Boolean> action);
+
+    @Facade
+    double toDoubleWithFixedState(Function<FVector, Double> action);
+    @Facade
+    double toDoubleWithFixedLength(Function<FVector, Double> action);
+    @Facade
+    double toDoubleWithZeroPosition(Function<FVector, Double> action);
 }

@@ -93,7 +93,7 @@ public class FPlaneTest {
         @Test
         @DisplayName("Construct with FPairPos3D")
         void constructWithFPairPos3D() {
-            var fVector = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
+            FPairPos3D fVector = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
             FPlane fPlane = factory.getFPlane(fVector);
 
             Assertions.assertAll("Validate FPoint values",
@@ -783,13 +783,14 @@ public class FPlaneTest {
                     "The argument is a non-directional FVector");
         }
 
+        // TODO - reference error
         @Test
         @DisplayName("Get common FPoint (validate)")
         void getCommonFPointValidate() {
             FPlane fPlane = factory.getRefFPlane(TestHelper.getRandomFVector());
             FLine fLine = factory.getRefFLine(TestHelper.getRandomFVector());
 
-            FPlaneTestHelper.testValue(e -> fPlane.getFPointAtIntersection(fLine), fPlane);
+            FPlaneTestHelper.testValue(e -> e.getFPointAtIntersection(fLine), fPlane);
         }
 
         @Test

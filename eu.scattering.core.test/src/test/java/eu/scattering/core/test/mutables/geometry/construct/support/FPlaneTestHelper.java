@@ -55,24 +55,22 @@ public class FPlaneTestHelper {
     }
 
     public static void testValue(Function<FPlane, Object> exe, FPlane ref) {
-        FVector refOriginSnapshot = ref.getRefOrigin();
-        FVector refOriginPositionSnapshot = ref.getRefOrigin().copy();
+        FVector refOrigin = ref.getRefOrigin();
+        FVector refOriginSnapshot = ref.getRefOrigin().copy();
         FPoint refBaseSnapshot = ref.getRefOrigin().getRefBase();
         FPoint refHeadSnapshot = ref.getRefOrigin().getRefHead();
 
         exe.apply(ref);
 
         Assertions.assertAll("Validate positions",
-                () -> assertTrue(refOriginPositionSnapshot.isExact(ref.getRefOrigin()),
+                () -> assertTrue(refOrigin.isExact(refOriginSnapshot),
                         "The input origin position should not change")
         );
 
         Assertions.assertAll("Validate references",
-                () -> assertSame(refOriginSnapshot, refOriginSnapshot,
-                        "The input origin reference should not change"),
-                () -> assertSame(refBaseSnapshot, ref.getRefOrigin().getRefBase(),
+                () -> assertSame(refBaseSnapshot, refOrigin.getRefBase(),
                         "The input origin head reference should not change"),
-                () -> assertSame(refHeadSnapshot, ref.getRefOrigin().getRefHead(),
+                () -> assertSame(refHeadSnapshot, refOrigin.getRefBase(),
                         "The input origin base reference should not change")
         );
     }

@@ -11,41 +11,20 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class FPointTestHelper {
 
+    public static void testReference(Function<FPoint, FPoint> exe, FPoint ref) {
+        FPoint refResult = exe.apply(ref);
+
+        assertSame(ref, refResult, "The reference should not change");
+    }
+
     public static void testReference(BiFunction<FPoint, FPoint, FPoint> exe, FPoint ref, FPoint arg) {
 
-        Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
-                "The reference cannot be null");
+        Assertions.assertThrows(NullPointerException.class, () ->
+                exe.apply(ref, null),"The argument cannot be null");
 
-        FPoint argSnapshot = arg.copy();
+        FPoint refResult = exe.apply(ref, arg);
 
-        FPoint result = exe.apply(ref, arg);
-
-        Assertions.assertAll("Validate method",
-                () -> assertSame(result, ref, "The reference should not change"),
-                () -> assertTrue(argSnapshot.isExact(arg), "The argument should not be modified")
-        );
-    }
-
-    public static void testReference(Function<FPoint, FPoint> exe, FPoint ref) {
-        FPoint result = exe.apply(ref);
-
-        assertSame(result, ref, "The reference should not change");
-    }
-
-    public static void testValue(BiFunction<FPoint, FPoint, Object> exe, FPoint ref, FPoint arg) {
-
-        Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
-                "The reference cannot be null");
-
-        FPoint refSnapshot = ref.copy();
-        FPoint argSnapshot = arg.copy();
-
-        exe.apply(ref, arg);
-
-        Assertions.assertAll("Validate method",
-                () -> assertTrue(ref.isExact(refSnapshot), "The input should not be modified"),
-                () -> assertTrue(arg.isExact(argSnapshot), "The argument should not be modified")
-        );
+        Assertions.assertSame(ref, refResult, "The reference should not change");
     }
 
     public static void testValue(Function<FPoint, Object> exe, FPoint ref) {
@@ -56,4 +35,19 @@ public class FPointTestHelper {
         assertTrue(ref.isExact(refSnapshot), "The input should not be modified");
     }
 
+    public static void testValue(BiFunction<FPoint, FPoint, Object> exe, FPoint ref, FPoint arg) {
+
+        Assertions.assertThrows(NullPointerException.class, () -> exe.apply(ref, null),
+                "The argument cannot be null");
+
+        FPoint refSnapshot = ref.copy();
+        FPoint argSnapshot = arg.copy();
+
+        exe.apply(ref, arg);
+
+        Assertions.assertAll("Validate method",
+                () -> assertTrue(ref.isExact(refSnapshot), "The reference should not be modified"),
+                () -> assertTrue(arg.isExact(argSnapshot), "The argument should not be modified")
+        );
+    }
 }

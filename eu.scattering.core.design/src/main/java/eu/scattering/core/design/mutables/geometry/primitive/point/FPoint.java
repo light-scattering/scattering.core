@@ -81,4 +81,9 @@ public interface FPoint extends Primitive<FPoint> {
     double toDouble(Function<FPoint, Double> action);
     @Termination
     boolean toBoolean(Function<FPoint, Boolean> action);
+
+    @Facade
+    double toDoubleWithFixedState(Function<FPoint, Double> action);
+    @Facade
+    boolean toBooleanWithFixedState(Function<FPoint, Boolean> action);
 }

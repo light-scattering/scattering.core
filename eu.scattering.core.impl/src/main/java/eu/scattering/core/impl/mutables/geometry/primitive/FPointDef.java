@@ -599,9 +599,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
 
         action.accept(this);
 
-        set(memoX, memoY, memoZ);
-
-        return this;
+        return set(memoX, memoY, memoZ);
     }
 
     @Override
@@ -610,9 +608,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
 
         action.accept(this);
 
-        setLength(length);
-
-        return this;
+        return setLength(length);
     }
 
     @Override
@@ -625,5 +621,31 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public boolean toBoolean(Function<FPoint, Boolean> action) {
 
         return action.apply(this);
+    }
+
+    @Override
+    public double toDoubleWithFixedState(Function<FPoint, Double> action) {
+        double memoX = this.getX();
+        double memoY = this.getY();
+        double memoZ = this.getZ();
+
+        double results = action.apply(this);
+
+        set(memoX, memoY, memoZ);
+
+        return results;
+    }
+
+    @Override
+    public boolean toBooleanWithFixedState(Function<FPoint, Boolean> action) {
+        double memoX = this.getX();
+        double memoY = this.getY();
+        double memoZ = this.getZ();
+
+        boolean results = action.apply(this);
+
+        set(memoX, memoY, memoZ);
+
+        return results;
     }
 }
