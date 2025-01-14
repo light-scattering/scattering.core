@@ -395,14 +395,14 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FVector add(FVector op) {
 
-        return applyWithPositionZeroAndFixedState((a, b) ->
+        return applyWithCenteredPositionAndFixedState((a, b) ->
                 a.getRefHead().add(b.moveBaseToCenter().getRefHead()), op);
     }
 
     @Override
     public FVector sub(FVector op) {
 
-        return applyWithPositionZeroAndFixedState((a, b) ->
+        return applyWithCenteredPositionAndFixedState((a, b) ->
                 a.getRefHead().sub(b.moveBaseToCenter().getRefHead()), op);
     }
 
@@ -466,13 +466,13 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FVector setLength(double length) {
 
-        return applyWithZeroPosition(vZero -> getRefHead().setLength(length));
+        return applyWithCenteredPosition(vZero -> getRefHead().setLength(length));
     }
 
     @Override
     public FVector normalize() {
 
-        return applyWithZeroPosition(vZero -> getRefHead().normalize());
+        return applyWithCenteredPosition(vZero -> getRefHead().normalize());
     }
 
     @Override
@@ -501,7 +501,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector invertDirection() {
+    public FVector swapBaseWithHead() {
         double memoX = getRefHead().getX();
         double memoY = getRefHead().getY();
         double memoZ = getRefHead().getZ();
@@ -602,14 +602,14 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public double getDotProduct(FVector op) {
 
-        return applyWithPositionZeroAndFixedStateToDouble((a, b) ->
-                a.getRefHead().getDotProduct(b.moveBaseToCenter().getRefHead()), op);
+        return toDoubleWithFixedState((a, b) ->
+                a.moveBaseToCenter().getRefHead().getDotProduct(b.moveBaseToCenter().getRefHead()), op);
     }
 
     @Override
     public FVector setCrossProduct(FVector op) {
 
-        return applyWithPositionZeroAndFixedState((a, b) ->
+        return applyWithCenteredPositionAndFixedState((a, b) ->
                 a.getRefHead().setCrossProduct(b.moveBaseToCenter().getRefHead()), op);
     }
 
@@ -623,36 +623,33 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     public boolean isParallel(FVector op) {
 
         if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the input FVector is not defined");
+            throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalStateException("The direction of the argument FVector is not defined");
         }
 
-        return toDoubleWithFixedState(a -> {
+        return toBooleanWithFixedState((a, b) -> {
             a.moveBaseToCenter().normalize();
+            b.moveBaseToCenter().normalize();
 
-            return op.toDoubleWithFixedState(b -> {
-                b.moveBaseToCenter().normalize();
-
-                return a.getRefHead().isSimilar(b.getRefHead()) ? 1.0 : 0.0;
-            });
-        }) == 1;
+            return a.isSimilar(b);
+        }, op);
     }
 
     @Override
     public FVector setParallel(FVector op) {
 
         if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the input FVector is not defined");
+            throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalStateException("The direction of the argument FVector is not defined");
         }
 
-        return applyWithPositionZeroAndFixedState((a, b) -> {
+        return applyWithCenteredPositionAndFixedState((a, b) -> {
             a.getRefHead().applyStateFrom(b.moveBaseToCenter().getRefHead());
         }, op);
     }
@@ -665,44 +662,41 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalStateException("The direction of the argument FVector is not defined");
         }
 
-        return toDoubleWithFixedState(a -> {
+        return toBooleanWithFixedState((a, b) -> {
             a.moveBaseToCenter().normalize();
+            b.moveBaseToCenter().normalize();
 
-            return op.toDoubleWithFixedState(b -> {
-                b.moveBaseToCenter().normalize();
-
-                return a.reflectHead().getRefHead().isSimilar(b.getRefHead()) ? 1.0 : 0.0;
-            });
-        }) == 1;
+            return a.reflectHead().isSimilar(b);
+        }, op);
     }
 
     @Override
     public FVector setAntiParallel(FVector op) {
 
         if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the input FVector is not defined");
+            throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalStateException("The direction of the argument FVector is not defined");
         }
 
-        return applyWithPositionZeroAndFixedState((a, b) ->
-                a.getRefHead().applyStateFrom(b.moveBaseToCenter().getRefHead()).reflect(), op);
+        return applyWithCenteredPositionAndFixedState((a, b) ->
+                a.getRefHead().applyStateFrom(b.moveBaseToCenter().getRefHead()).reflectThroughCenter(), op);
     }
 
     @Override
     public boolean isOrthogonal(FVector op) {
 
         if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the input FVector is not defined");
+            throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalStateException("The direction of the argument FVector is not defined");
         }
 
         return (Math.abs(getDotProduct(op)) < epsilon) || (Math.abs((Math.PI * 0.5) - getAngle(op)) < epsilon);
@@ -719,94 +713,66 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new IllegalStateException("FVectors are anti-parallel");
         }
 
-
-
-        return applyWithPositionZeroAndFixedState((a, b) -> {
-            double length = a.getLength();
-            a.getRefHead().setCrossProduct(b.moveBaseToCenter().getRefHead());
-            b.getRefHead().setCrossProduct(a.getRefHead());
-            a.applyStateFrom(b).setLength(length);
-        }, op);
-
-
-//        double magnitude = getLength();
-//        FVector fVectorRef = copyZero().set(op.getRefBase().copy(), op.getRefHead().copy());
-//        FVector fVectorRot = copy().setCrossProduct(fVectorRef);
-//
-//        fVectorRef.setCrossProduct(fVectorRot).setLength(magnitude);
-//        fVectorRef.moveBase(getRefBase());
-//
-//        applyStateFrom(fVectorRef);
-//
-//        return this;
-// (a) = a x b
-//  res = b x (a)
+        return applyWithFixedLengthAndFixedState((a, b) ->
+                a.applyStateFrom(b.setCrossProduct(a.setCrossProduct(b))), op);
     }
 
     @Override
     public FVector setSphericalCoordinates(double inclination, double azimuth) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        fCopyLocal.getRefHead().setSphericalCoordinates(inclination, azimuth);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return applyWithCenteredPosition(v -> v.getRefHead().setSphericalCoordinates(inclination, azimuth));
     }
 
     @Override
     public double getInclination() {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        return fCopyLocal.getRefHead().getInclination();
+        return toDoubleWithFixedState(v -> v.moveBaseToCenter().getRefHead().getInclination());
     }
 
     @Override
     public FVector setInclination(double inclination) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        fCopyLocal.getRefHead().setInclination(inclination);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return applyWithCenteredPosition(v -> v.getRefHead().setInclination(inclination));
     }
 
     @Override
     public double getAzimuth() {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        return fCopyLocal.getRefHead().getAzimuth();
+        return toDoubleWithFixedState(v -> v.moveBaseToCenter().getRefHead().getAzimuth());
     }
 
     @Override
     public FVector setAzimuth(double azimuth) {
-        FVector fCopyLocal = copy().moveBaseToCenter();
 
-        fCopyLocal.getRefHead().setAzimuth(azimuth);
-        fCopyLocal.moveBase(getRefBase());
-
-        return applyStateFrom(fCopyLocal);
+        return applyWithCenteredPosition(v -> v.getRefHead().setAzimuth(azimuth));
     }
 
     @Override
     public double getAngle(FVector op) {
 
         if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the input IFVector is not defined");
+            throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the provided FVector is not defined");
+            throw new IllegalStateException("The direction of the argument FVector is not defined");
         }
 
-        double angle, dProd, magAB;
-        FVector fCopyLocal = copy().moveBaseToCenter();
-        FVector fCopyExternal = op.copy().moveBaseToCenter();
+        return toDoubleWithFixedState((a, b) -> {
+            a.moveBaseToCenter();
+            b.moveBaseToCenter();
+            return a.getRefHead().getAngle(b.getRefHead());
+        }, op);
+    }
 
-        dProd = fCopyLocal.getDotProduct(fCopyExternal);
-        magAB = fCopyLocal.getRefHead().getLength() * fCopyExternal.getRefHead().getLength();
-        angle = Math.acos(dProd / magAB);
+    // -------------------------------------------------------------------------------------------------
 
-        return Double.isNaN(angle) ? 0 : angle;
+    @Override
+    public FVector apply(Consumer<FVector> action) {
+
+        action.accept(this);
+
+        return this;
     }
 
     @Override
@@ -833,7 +799,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector applyWithZeroPosition(Consumer<FVector> action) {
+    public FVector applyWithCenteredPosition(Consumer<FVector> action) {
         double memoX = this.getBaseX();
         double memoY = this.getBaseY();
         double memoZ = this.getBaseZ();
@@ -843,6 +809,18 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         action.accept(this);
 
         return moveBase(memoX, memoY, memoZ);
+    }
+
+    @Override
+    public double toDouble(Function<FVector, Double> action) {
+
+        return action.apply(this);
+    }
+
+    @Override
+    public boolean toBoolean(Function<FVector, Boolean> action) {
+
+        return action.apply(this);
     }
 
     @Override
@@ -862,40 +840,40 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double toDoubleWithFixedLength(Function<FVector, Double> action) {
-        double length = getLength();
+    public boolean toBooleanWithFixedState(Function<FVector, Boolean> action) {
+        double memoBX = this.getBaseX();
+        double memoBY = this.getBaseY();
+        double memoBZ = this.getBaseZ();
+        double memoHX = this.getHeadX();
+        double memoHY = this.getHeadY();
+        double memoHZ = this.getHeadZ();
 
-        double res = action.apply(this);
+        boolean res = action.apply(this);
 
-        setLength(length);
-
-        return res;
-    }
-
-    @Override
-    public double toDoubleWithZeroPosition(Function<FVector, Double> action) {
-        double memoX = this.getBaseX();
-        double memoY = this.getBaseY();
-        double memoZ = this.getBaseZ();
-
-        moveBaseToCenter();
-
-        double res = action.apply(this);
-
-        moveBase(memoX, memoY, memoZ);
+        set(memoBX, memoBY, memoBZ, memoHX, memoHY, memoHZ);
 
         return res;
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private FVector applyWithPositionZeroAndFixedState(BiConsumer<FVector, FVector> action, FVector op) {
+    private FVector applyWithFixedLengthAndFixedState(BiConsumer<FVector, FVector> action, FVector op) {
 
-        return applyWithZeroPosition(a -> op.applyWithFixedState(b -> action.accept(a, b)));
+        return applyWithFixedLength(a -> op.applyWithFixedState(b -> action.accept(a, b)));
     }
 
-    private double applyWithPositionZeroAndFixedStateToDouble(BiFunction<FVector, FVector, Double> action, FVector op) {
+    private FVector applyWithCenteredPositionAndFixedState(BiConsumer<FVector, FVector> action, FVector op) {
 
-        return toDoubleWithZeroPosition(a -> op.toDoubleWithFixedState(b -> action.apply(a, b)));
+        return applyWithCenteredPosition(a -> op.applyWithFixedState(b -> action.accept(a, b)));
+    }
+
+    private double toDoubleWithFixedState(BiFunction<FVector, FVector, Double> action, FVector op) {
+
+        return toDoubleWithFixedState(a -> op.toDoubleWithFixedState(b -> action.apply(a, b)));
+    }
+
+    private boolean toBooleanWithFixedState(BiFunction<FVector, FVector, Boolean> action, FVector op) {
+
+        return toBooleanWithFixedState(a -> op.toBooleanWithFixedState(b -> action.apply(a, b)));
     }
 }

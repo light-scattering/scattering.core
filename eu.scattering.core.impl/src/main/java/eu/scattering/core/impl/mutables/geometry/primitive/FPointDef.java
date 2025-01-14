@@ -398,6 +398,15 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public double getDistanceP2(double x, double y, double z) {
+        double dimX = x - getX();
+        double dimY = y - getY();
+        double dimZ = z - getZ();
+
+        return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
+    }
+
+    @Override
     public double getDistanceP2(FPoint op) {
         double dimX = op.getX() - getX();
         double dimY = op.getY() - getY();
@@ -407,9 +416,25 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public double getDistance(double x, double y, double z) {
+
+        return Math.sqrt(getDistanceP2(x, y, z));
+    }
+
+    @Override
     public double getDistance(FPoint op) {
 
         return Math.sqrt(getDistanceP2(op));
+    }
+
+    @Override
+    public FPoint setDistance(double x, double y, double z, double distance) {
+
+        if (isExact(x, y, z)) {
+            throw new IllegalStateException("FPoints must not be on the same position");
+        }
+
+        return sub(x, y, z).setLength(distance).add(x, y, z);
     }
 
     @Override
@@ -451,15 +476,43 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint reflect() {
+    public FPoint reflectThroughCenter() {
 
         return set(-getX(), -getY(), -getZ());
     }
 
     @Override
+    public FPoint reflect(double x, double y, double z) {
+
+        return sub(x, y, z).reflectThroughCenter().add(x, y, z);
+    }
+
+    @Override
     public FPoint reflect(FPoint op) {
 
-        return sub(op).reflect().add(op);
+        return sub(op).reflectThroughCenter().add(op);
+    }
+
+    @Override
+    public double getAngle(double x, double y, double z) {
+
+        if (isNearZero()) {
+            throw new IllegalStateException("The input vector is non-directional");
+        }
+
+        if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+            throw new IllegalStateException("The reference vector is non-directional");
+        }
+
+        if (isSimilar(x, y, z)) {
+            throw new IllegalStateException("The vectors are similar");
+        }
+
+        double dProd = getDotProduct(x, y, z);
+        double magAB = getLength() * Math.sqrt((x * x) + (y * y) + (z * z));
+        double angle = Math.acos(dProd / magAB);
+
+        return Double.isNaN(angle) ? 0 : angle;
     }
 
     @Override
@@ -473,11 +526,62 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("The reference vector is non-directional");
         }
 
+        if (isSimilar(op)) {
+            throw new IllegalStateException("The vectors are similar");
+        }
+
         double dProd = getDotProduct(op);
         double magAB = getLength() * op.getLength();
         double angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
+    }
+
+    @Override
+    public FPoint setAngle(double x, double y, double z, double angle) {
+
+        if (isNearZero()) {
+            throw new IllegalStateException("The input vector is non-directional");
+        }
+
+        if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+            throw new IllegalArgumentException("The reference vector is non-directional");
+        }
+
+        if (isSimilar(x, y, z)) {
+            throw new IllegalArgumentException("The vectors are similar");
+        }
+
+        return applyWithFixedLength(p -> {
+            p.normalize();
+
+            double opX = (y * getZ()) - (z * getY());
+            double opY = (z * getX()) - (x * getZ());
+            double opZ = (x * getY()) - (y * getX());
+
+            double factor = 1 / Math.sqrt((opX * opX) + (opY * opY) + (opZ * opZ));
+
+            opX *= factor;
+            opY *= factor;
+            opZ *= factor;
+
+            if (Math.abs(opX) < epsilon && Math.abs(opY) < epsilon && Math.abs(opZ) < epsilon) {
+                throw new IllegalStateException("The rotation vector is non-directional");
+            }
+
+            var aDelta = angle - Math.acos(getDotProduct(x, y, z));
+
+            var aCos = Math.cos(aDelta);
+            var aSin = Math.sin(aDelta);
+
+            var tmpSuffix = (1 - aCos) * (opX * p.getX() + opY * p.getY() + opZ * p.getZ());
+
+            var resX = aCos * p.getX() + aSin * (opY * p.getZ() - opZ * p.getY()) + opX * tmpSuffix;
+            var resY = aCos * p.getY() + aSin * (opZ * p.getX() - opX * p.getZ()) + opY * tmpSuffix;
+            var resZ = aCos * p.getZ() + aSin * (opX * p.getY() - opY * p.getX()) + opZ * tmpSuffix;
+
+            p.set(resX, resY, resZ);
+        });
     }
 
     @Override
@@ -490,7 +594,8 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         if (op.isNearZero()) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
-
+// TODO - test for similarity
+// TODO - check exception types
         return applyWithFixedLength(p -> {
             p.normalize();
 
@@ -518,12 +623,30 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public double getDotProduct(double x, double y, double z) {
+        double dimX = getX() * x;
+        double dimY = getY() * y;
+        double dimZ = getZ() * z;
+
+        return dimX + dimY + dimZ;
+    }
+
+    @Override
     public double getDotProduct(FPoint op) {
         double dimX = getX() * op.getX();
         double dimY = getY() * op.getY();
         double dimZ = getZ() * op.getZ();
 
         return dimX + dimY + dimZ;
+    }
+
+    @Override
+    public FPoint setCrossProduct(double x, double y, double z) {
+        double dimX = (getY() * z) - (getZ() * y);
+        double dimY = (getZ() * x) - (getX() * z);
+        double dimZ = (getX() * y) - (getY() * x);
+
+        return set(dimX, dimY, dimZ);
     }
 
     @Override

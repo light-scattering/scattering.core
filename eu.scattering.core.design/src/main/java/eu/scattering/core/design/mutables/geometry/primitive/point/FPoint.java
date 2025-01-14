@@ -39,20 +39,31 @@ public interface FPoint extends Primitive<FPoint> {
 
     FPoint normalize();
 
-    FPoint reflect();
+    FPoint reflectThroughCenter();
+    FPoint reflect(double x, double y, double z);
     FPoint reflect(FPoint op);
 
     double getLength();
     FPoint setLength(double length);
 
+    double getDistance(double x, double y, double z);
     double getDistance(FPoint op);
+    FPoint setDistance(double x, double y, double z, double distance);
     FPoint setDistance(FPoint op, double distance);
 
+    double getDotProduct(double x, double y, double z);
+    double getDotProduct(FPoint op);
+
+    FPoint setCrossProduct(double x, double y, double z);
+    FPoint setCrossProduct(FPoint op);
+
+    double getAngle(double x, double y, double z);
     double getAngle(FPoint op);
+    FPoint setAngle(double x, double y, double z, double angle);
     FPoint setAngle(FPoint op, double angle);
 
-    double getDotProduct(FPoint op);
-    FPoint setCrossProduct(FPoint op);
+//  FPoint rotate(double x, double y, double z);
+//  FPoint rotate(FPoint op, double angle);
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
@@ -66,6 +77,8 @@ public interface FPoint extends Primitive<FPoint> {
 
     @Fragment
     double getLengthP2();
+    @Fragment
+    double getDistanceP2(double x, double y, double z);
     @Fragment
     double getDistanceP2(FPoint op);
 

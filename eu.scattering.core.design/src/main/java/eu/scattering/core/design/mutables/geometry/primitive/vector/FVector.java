@@ -1,8 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.primitive.vector;
 
-import eu.scattering.core.design.annotations.Facade;
-import eu.scattering.core.design.annotations.Fragment;
-import eu.scattering.core.design.annotations.Mutation;
+import eu.scattering.core.design.annotations.*;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -67,16 +65,20 @@ public interface FVector extends Primitive<FVector> {
     FVector moveHead(double hX, double hY, double hZ);
     FVector moveHead(FPoint head);
 
+//  FVector reflectThroughCenter();
+//  FVector reflect(double x, double y, double z);
+    FVector reflect(FPoint op);
+
+    FVector reflectBase();
+    FVector reflectHead();
+
+    FVector swapBaseWithHead();
+
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
 
     FVector add(FVector op);
     FVector sub(FVector op);
-
-    FVector reflect(FPoint op);
-    FVector reflectBase();
-    FVector reflectHead();
-    FVector invertDirection();
 
     double getLengthX();
     double getLengthY();
@@ -86,10 +88,10 @@ public interface FVector extends Primitive<FVector> {
     FVector setLength(double length);
 
     double getAngle(FVector op);
-//    double setAngle(FVector ref, double angle); // The Rodrigues rotation formula.
+//  double setAngle(FVector op, double angle);
 
     boolean isCollinear(FVector op);
-//    FVector setCollinear(FVector ref); // To the lowest angle.
+//  FVector setCollinear(FVector op);
 
     boolean isParallel(FVector op);
     FVector setParallel(FVector op);
@@ -102,6 +104,9 @@ public interface FVector extends Primitive<FVector> {
 
     double getDotProduct(FVector op);
     FVector setCrossProduct(FVector op);
+
+//  FVector rotate(double x, double y, double z);
+//  FVector rotate(FVector op, double angle);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
@@ -131,26 +136,24 @@ public interface FVector extends Primitive<FVector> {
     @Fragment
     double getLengthP2();
 
-//    @Extension
-//    FVector apply(Consumer<FVector> action);
+    @Extension
+    FVector apply(Consumer<FVector> action);
 
     @Facade
     FVector applyWithFixedState(Consumer<FVector> action);
     @Facade
     FVector applyWithFixedLength(Consumer<FVector> action);
     @Facade
-    FVector applyWithZeroPosition(Consumer<FVector> action);
+    FVector applyWithCenteredPosition(Consumer<FVector> action);
 
 
-//    @Termination
-//    double toDouble(Function<FVector, Double> action);
-//    @Termination
-//    boolean toBoolean(Function<FVector, Boolean> action);
+    @Termination
+    double toDouble(Function<FVector, Double> action);
+    @Termination
+    boolean toBoolean(Function<FVector, Boolean> action);
 
     @Facade
     double toDoubleWithFixedState(Function<FVector, Double> action);
     @Facade
-    double toDoubleWithFixedLength(Function<FVector, Double> action);
-    @Facade
-    double toDoubleWithZeroPosition(Function<FVector, Double> action);
+    boolean toBooleanWithFixedState(Function<FVector, Boolean> action);
 }

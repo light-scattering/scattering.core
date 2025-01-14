@@ -20,11 +20,14 @@ public class FPointTestHelper {
     public static void testReference(BiFunction<FPoint, FPoint, FPoint> exe, FPoint ref, FPoint arg) {
 
         Assertions.assertThrows(NullPointerException.class, () ->
-                exe.apply(ref, null),"The argument cannot be null");
+                exe.apply(ref, null), "The argument cannot be null");
+
+        FPoint argSnapshot = arg.copy();
 
         FPoint refResult = exe.apply(ref, arg);
 
         Assertions.assertSame(ref, refResult, "The reference should not change");
+        Assertions.assertTrue(argSnapshot.isExact(arg), "The argument position should not change");
     }
 
     public static void testValue(Function<FPoint, Object> exe, FPoint ref) {

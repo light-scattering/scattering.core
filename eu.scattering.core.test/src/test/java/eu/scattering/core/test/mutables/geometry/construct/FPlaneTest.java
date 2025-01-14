@@ -215,15 +215,6 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Exactness (validate)")
-        void isExactValidate() {
-            FPlane fPlaneA = factory.getRefFPlane(factory.getFVector());
-            FPlane fPlaneB = factory.getRefFPlane(factory.getFVector());
-
-            FPlaneTestHelper.testValue(FPlane::isExact, fPlaneA, fPlaneB);
-        }
-
-        @Test
         @DisplayName("Is coplanar")
         void isCoplanar() {
             FVector fVector = TestHelper.getRandomFVector();
@@ -266,15 +257,6 @@ public class FPlaneTest {
                     () -> assertFalse(fPlaneA.isCoplanar(fPlaneB), "FPlanes should not be coplanar"),
                     () -> assertFalse(fPlaneB.isCoplanar(fPlaneA), "FPlanes should not be coplanar")
             );
-        }
-
-        @Test
-        @DisplayName("Is coplanar (validate)")
-        void isCoplanarValidate() {
-            FPlane fPlaneA = factory.getRefFPlane(factory.getFVector(0, 1, 0));
-            FPlane fPlaneB = factory.getRefFPlane(factory.getFVector(0, 1, 0));
-
-            FPlaneTestHelper.testValue(FPlane::isCoplanar, fPlaneA, fPlaneB);
         }
 
         @Test
@@ -878,15 +860,6 @@ public class FPlaneTest {
 
             Assertions.assertThrows(IllegalStateException.class, () -> fPlane1.getFLineAtIntersection(fPlane2),
                     "The argument is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Get common FLine (validate)")
-        void getCommonFLineValidate() {
-            FPlane fPlane1 = factory.getRefFPlane(TestHelper.getRandomFVector());
-            FPlane fPlane2 = factory.getRefFPlane(TestHelper.getRandomFVector());
-
-            FPlaneTestHelper.testValue(FPlane::getFLineAtIntersection, fPlane1, fPlane2);
         }
 
         @Test

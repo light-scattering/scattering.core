@@ -8,6 +8,7 @@ import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static eu.scattering.core.test.Configuration.*;
@@ -1825,7 +1826,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(4, 5, 6);
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            fVector.invertDirection();
+            fVector.swapBaseWithHead();
 
             Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(4, fVector.getRefBase().getX(),
@@ -1848,7 +1849,7 @@ public class FVectorTest {
         void invertDirectionValidate() {
             FVector fVector = factory.getFVector(1, 2, 3);
 
-            FVectorTestHelper.testReference(FVector::invertDirection, fVector);
+            FVectorTestHelper.testReference(FVector::swapBaseWithHead, fVector);
         }
 
         @Test
@@ -2546,6 +2547,20 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Set orthogonal (length)")
+        void setOrthogonalLength() {
+            double magnitude = random.nextDouble(1, 100);
+
+            FVector fVectorA = factory.getFVector(-magnitude, 0, 0);
+            FVector fVectorB = factory.getFVector(0, 0, 1, 1, 0, 0);
+
+            fVectorA.setOrthogonal(fVectorB);
+
+            assertTrue(fVectorA.isOrthogonal(fVectorB), "The two FVectors should be orthogonal");
+            assertEquals(magnitude, fVectorA.getLength(), jitter, "The two FVectors should be orthogonal");
+        }
+
+        @Test
         @DisplayName("Set orthogonal (same base)")
         void setOrthogonalSameBase() {
             FVector fVectorA = TestHelper.getRandomFVector();
@@ -2686,11 +2701,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is exact")
         void isExact() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-
-            FVector fVectorA = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FVector fVectorB = factory.getFVector(fPointBase, fPointHead);
+            FVector fVectorA = factory.getFVector(1, 2, 3, 4, 5, 6);
+            FVector fVectorB = factory.getFVector(1, 2, 3, 4, 5, 6);
 
             assertTrue(fVectorA.isExact(fVectorB), "FVectors should be equal");
         }
@@ -3654,6 +3666,174 @@ public class FVectorTest {
                             "The base FPoint reference is incorrect"),
                     () -> assertNotSame(fVectorRef.getRefHead(), fVector.getRefHead(),
                             "The head FPoint reference is incorrect")
+            );
+        }
+    }
+
+    @Nested
+    @Tag("Extension")
+    class FVectorExtensionTest {
+
+        @Test
+        @DisplayName("Apply")
+        void apply() {
+            FVector fVector = factory.getFVector();
+
+            var fVectorRes = fVector.apply(p -> p.set(1, 2, 3, 4, 5, 6));
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(2, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(3, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(4, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(5, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(6, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertSame(fVector, fVectorRes, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply with fixed state")
+        void applyWithFixedState() {
+            FVector fVector = factory.getFVector();
+
+            List<Double> intermediate = new ArrayList<>();
+
+            var fVectorRes = fVector.applyWithFixedState(p ->
+                    intermediate.add(p.set(1, 2, 3, 4, 5, 6).getLengthP2()));
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(0, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(0, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(0, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertEquals(1, intermediate.size(), "The size of the array list is incorrect"),
+                    () -> assertEquals(27, intermediate.get(0), jitter, "The value is incorrect"),
+                    () -> assertSame(fVector, fVectorRes, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply with fixed length")
+        void applyWithFixedLength() {
+            FVector fVector = factory.getFVector(1, 0, 0);
+
+            var fVectorRes = fVector.applyWithFixedLength(p ->
+                    p.setHead(-10, 0, 0));
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(0, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(0, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(-1, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(0, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertSame(fVector, fVectorRes, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply with centered position")
+        void applyWithCenteredPosition() {
+            FVector fVector = factory.getFVector(5, 0, 0, 9, 0, 0);
+
+            var fVectorRes = fVector.applyWithCenteredPosition(p ->
+                    p.getRefHead().reflect(factory.getFPoint(9, 0, 0)));
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(5, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(0, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(19, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(0, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(0, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertSame(fVector, fVectorRes, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with double")
+        void terminateWithDouble() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            var res = fVector.toDouble(p -> {
+                p.reflect(factory.getFPoint());
+                return p.getLengthP2();
+            });
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(-1, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(-2, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(-3, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(-4, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(-6, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertEquals(27, res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with boolean")
+        void terminateWithBoolean() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            var res = fVector.toBoolean(p -> {
+                p.reflect(factory.getFPoint());
+                return p.isNearZeroLength();
+            });
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(-1, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(-2, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(-3, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(-4, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(-6, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertFalse(res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with double (fixed state)")
+        void terminateWithDoubleFixedState() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            var res = fVector.toDoubleWithFixedState(p -> {
+                p.reflect(factory.getFPoint());
+                return p.getLengthP2();
+            });
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(2, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(3, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(4, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(5, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(6, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertEquals(27, res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with boolean (fixed state)")
+        void terminateWithBooleanFixedState() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            var res = fVector.toBooleanWithFixedState(p -> {
+                p.reflect(factory.getFPoint());
+                return p.isNearZeroLength();
+            });
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(1, fVector.getBaseX(), "The base X value is incorrect"),
+                    () -> assertEquals(2, fVector.getBaseY(), "The base Y value is incorrect"),
+                    () -> assertEquals(3, fVector.getBaseZ(), "The base Z value is incorrect"),
+                    () -> assertEquals(4, fVector.getHeadX(), "The head X value is incorrect"),
+                    () -> assertEquals(5, fVector.getHeadY(), "The head Y value is incorrect"),
+                    () -> assertEquals(6, fVector.getHeadZ(), "The head Z value is incorrect"),
+                    () -> assertFalse(res, "The value is incorrect")
             );
         }
     }
