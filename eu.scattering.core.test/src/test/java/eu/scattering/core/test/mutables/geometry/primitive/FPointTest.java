@@ -986,11 +986,11 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Get angle with primitives (throw IllegalStateException, argument)")
+        @DisplayName("Get angle with primitives (throw IllegalArgumentException, argument)")
         void getAngleWithPrimitivesThrowIllegalStateExceptionArgument() {
             FPoint fPointRef = TestHelper.getRandomFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPointRef.getAngle(0, 0, 0),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.getAngle(0, 0, 0),
                     "The direction of the argument vector is not defined");
         }
 
@@ -1066,12 +1066,12 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Get angle (throw IllegalStateException, argument)")
+        @DisplayName("Get angle (throw IllegalArgumentException, argument)")
         void getAngleThrowIllegalStateExceptionArgument() {
             FPoint fPointRef = TestHelper.getRandomFPoint();
             FPoint fPointArg = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPointRef.getAngle(fPointArg),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.getAngle(fPointArg),
                     "The direction of the argument vector is not defined");
         }
 
@@ -1212,7 +1212,16 @@ public class FPointTest {
             FPoint fPointRef = TestHelper.getRandomFPoint();
 
             Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.setAngle(0, 0, 0, Math.PI),
-                    "The rotation axis is not defined");
+                    "The axis is not defined");
+        }
+
+        @Test
+        @DisplayName("Set angle with primitives (throw IllegalStateException)")
+        void setAngleWithPrimitivesThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class, () -> fPointRef.setAngle(1, 2, 3, Math.PI),
+                    "The axes are similar");
         }
 
         @Test
@@ -1303,6 +1312,15 @@ public class FPointTest {
 
             Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.setAngle(factory.getFPoint(), Math.PI),
                     "The rotation axis is not defined");
+        }
+
+        @Test
+        @DisplayName("Set angle (throw IllegalStateException)")
+        void setAngleThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class, () -> fPointRef.setAngle(factory.getFPoint(1, 2, 3), Math.PI),
+                    "The axes are similar");
         }
 
         @Test

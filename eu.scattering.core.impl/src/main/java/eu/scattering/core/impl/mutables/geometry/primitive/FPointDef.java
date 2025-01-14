@@ -501,7 +501,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         }
 
         if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
-            throw new IllegalStateException("The reference vector is non-directional");
+            throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
         if (isSimilar(x, y, z)) {
@@ -523,7 +523,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         }
 
         if (op.isNearZero()) {
-            throw new IllegalStateException("The reference vector is non-directional");
+            throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
         if (isSimilar(op)) {
@@ -549,7 +549,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         }
 
         if (isSimilar(x, y, z)) {
-            throw new IllegalArgumentException("The vectors are similar");
+            throw new IllegalStateException("The vectors are similar");
         }
 
         return applyWithFixedLength(p -> {
@@ -588,14 +588,17 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public FPoint setAngle(FPoint op, double angle) {
 
         if (isNearZero()) {
-            throw new IllegalArgumentException("The input vector is non-directional");
+            throw new IllegalStateException("The input vector is non-directional");
         }
 
         if (op.isNearZero()) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
-// TODO - test for similarity
-// TODO - check exception types
+
+        if (isSimilar(op)) {
+            throw new IllegalStateException("The vectors are similar");
+        }
+
         return applyWithFixedLength(p -> {
             p.normalize();
 
