@@ -62,8 +62,8 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setAngle(double x, double y, double z, double angle);
     FPoint setAngle(FPoint op, double angle);
 
-//  FPoint rotate(double x, double y, double z);
-//  FPoint rotate(FPoint op, double angle);
+    FPoint rotate(double x, double y, double z, double angle);
+    FPoint rotate(FPoint op, double angle);
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 

@@ -1095,49 +1095,6 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Rotate (simple, positive)")
-        void rotateSimplePositive() {
-            FPoint fPointA = factory.getFPoint(1, 1, 0);
-            FPoint fPointB = factory.getFPoint(0, 1, 0);
-
-            fPointA.apply(p -> rotation.rotate(p, fPointB, Math.PI));
-
-            assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
-                    "The rotation position is incorrect");
-        }
-
-        @Test
-        @DisplayName("Rotate (simple, negative)")
-        void rotateSimpleNegative() {
-            FPoint fPointA = factory.getFPoint(1, 1, 0);
-            FPoint fPointB = factory.getFPoint(0, 1, 0);
-
-            fPointA.apply(p -> rotation.rotate(p, fPointB, -Math.PI));
-
-            assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
-                    "The rotation position is incorrect");
-        }
-
-        @Test
-        @DisplayName("Rotate (throw IllegalArgumentException)")
-        void rotateThrowIllegalArgumentException() {
-            FPoint fPointA = factory.getFPoint(1, 1, 0);
-            FPoint fPointB = factory.getFPoint();
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.rotate(fPointA, fPointB, Math.PI),
-                    "The rotation axis is not defined");
-        }
-
-        @Test
-        @DisplayName("Rotate (validate)")
-        void rotateValidate() {
-            FPoint fPointRef = factory.getFPoint(1, 2, 3);
-            FPoint fPointArg = factory.getFPoint(4, 5, 6);
-
-            FPointTestHelper.testReference((a, b) -> rotation.rotate(a, b, Math.PI), fPointRef, fPointArg);
-        }
-
-        @Test
         @DisplayName("Set angle with primitives (simple)")
         void setAngleWithPrimitivesSimple() {
             FPoint fPointRef = factory.getFPoint(1, 0, 0);
@@ -1330,6 +1287,135 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
             FPointTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fPointRef, fPointArg);
+        }
+
+
+        @Test
+        @DisplayName("Rotate with primitives A (simple, positive)")
+        void rotateWithPrimitivesSimplePositiveA() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+
+            fPointRef.rotate(0, 1, 0, Math.PI);
+
+            assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate with primitives B (simple, positive)")
+        void rotateWithPrimitivesSimplePositiveB() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+
+            fPointRef.rotate(0, 1, 0, Math.PI / 2);
+
+            assertTrue(factory.getFPoint(0, 1, -1).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate with primitives A (simple, negative)")
+        void rotateWithPrimitivesSimpleNegativeA() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+
+            fPointRef.rotate(0, 1, 0, -Math.PI);
+
+            assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate with primitives B (simple, negative)")
+        void rotateWithPrimitivesSimpleNegativeB() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+
+            fPointRef.rotate(0, 1, 0, -Math.PI / 2);
+
+            assertTrue(factory.getFPoint(0, 1, 1).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate with primitives (throw IllegalArgumentException)")
+        void rotateWithPrimitivesThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.rotate(0, 0, 0, Math.PI),
+                    "The rotation axis is not defined");
+        }
+
+        @Test
+        @DisplayName("Rotate with primitives (validate)")
+        void rotateWithPrimitivesValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+
+            FPointTestHelper.testReference(p -> p.rotate(4, 5, 6, Math.PI), fPointRef);
+        }
+
+        @Test
+        @DisplayName("Rotate A (simple, positive)")
+        void rotateSimplePositiveA() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+            FPoint fPointArg = factory.getFPoint(0, 1, 0);
+
+            fPointRef.rotate(fPointArg, Math.PI);
+
+            assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate B (simple, positive)")
+        void rotateSimplePositiveB() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+            FPoint fPointArg = factory.getFPoint(0, 1, 0);
+
+            fPointRef.rotate(fPointArg, Math.PI / 2);
+
+            assertTrue(factory.getFPoint(0, 1, -1).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate A (simple, negative)")
+        void rotateSimpleNegativeA() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+            FPoint fPointArg = factory.getFPoint(0, 1, 0);
+
+            fPointRef.rotate(fPointArg, -Math.PI);
+
+            assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate B (simple, negative)")
+        void rotateSimpleNegativeB() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+            FPoint fPointArg = factory.getFPoint(0, 1, 0);
+
+            fPointRef.rotate(fPointArg, -Math.PI / 2);
+
+            assertTrue(factory.getFPoint(0, 1, 1).isSimilar(fPointRef),
+                    "The FPoint position is incorrect");
+        }
+
+        @Test
+        @DisplayName("Rotate (throw IllegalArgumentException)")
+        void rotateThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+            FPoint fPointArg = factory.getFPoint();
+
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.rotate(fPointArg, Math.PI),
+                    "The rotation axis is not defined");
+        }
+
+        @Test
+        @DisplayName("Rotate (validate)")
+        void rotateValidate() {
+            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointArg = TestHelper.getRandomFPoint(fPointRef);
+
+            FPointTestHelper.testReference((a, b) -> a.rotate(b, Math.PI), fPointRef, fPointArg);
         }
 
         @Test

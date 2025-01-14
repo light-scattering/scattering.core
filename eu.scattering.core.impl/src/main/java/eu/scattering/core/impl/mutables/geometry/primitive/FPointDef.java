@@ -626,6 +626,56 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint rotate(double x, double y, double z, double angle) {
+
+        if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+            throw new IllegalArgumentException("The reference vector is non-directional");
+        }
+
+        return applyWithFixedLength(p -> {
+            if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+                throw new IllegalStateException("The rotation vector is non-directional");
+            }
+
+            var aDelta = angle - Math.acos(getDotProduct(x, y, z));
+
+            var aCos = Math.cos(aDelta);
+            var aSin = Math.sin(aDelta);
+
+            var tmpSuffix = (1 - aCos) * (x * p.getX() + y * p.getY() + z * p.getZ());
+
+            var resX = aCos * p.getX() + aSin * (y * p.getZ() - z * p.getY()) + x * tmpSuffix;
+            var resY = aCos * p.getY() + aSin * (z * p.getX() - x * p.getZ()) + y * tmpSuffix;
+            var resZ = aCos * p.getZ() + aSin * (x * p.getY() - y * p.getX()) + z * tmpSuffix;
+
+            p.set(resX, resY, resZ);
+        });
+    }
+
+    @Override
+    public FPoint rotate(FPoint op, double angle) {
+
+        if (op.isNearZero()) {
+            throw new IllegalArgumentException("The reference vector is non-directional");
+        }
+
+        return applyWithFixedLength(p -> {
+            var aDelta = angle - Math.acos(getDotProduct(op));
+
+            var aCos = Math.cos(aDelta);
+            var aSin = Math.sin(aDelta);
+
+            var tmpSuffix = (1 - aCos) * (op.getX() * p.getX() + op.getY() * p.getY() + op.getZ() * p.getZ());
+
+            var opX = aCos * p.getX() + aSin * (op.getY() * p.getZ() - op.getZ() * p.getY()) + op.getX() * tmpSuffix;
+            var opY = aCos * p.getY() + aSin * (op.getZ() * p.getX() - op.getX() * p.getZ()) + op.getY() * tmpSuffix;
+            var opZ = aCos * p.getZ() + aSin * (op.getX() * p.getY() - op.getY() * p.getX()) + op.getZ() * tmpSuffix;
+
+            p.set(opX, opY, opZ);
+        });
+    }
+
+    @Override
     public double getDotProduct(double x, double y, double z) {
         double dimX = getX() * x;
         double dimY = getY() * y;
