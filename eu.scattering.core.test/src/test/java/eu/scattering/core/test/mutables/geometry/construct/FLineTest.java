@@ -1128,12 +1128,12 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Get common FPoint (throw IllegalStateException, argument)")
-        void getCommonFPointThrowIllegalStateExceptionArgument() {
+        @DisplayName("Get common FPoint (throw IllegalArgumentException)")
+        void getCommonFPointThrowIllegalStateException() {
             FLine fLineA = factory.getRefFLine(factory.getFVector(-1, -1, -1));
             FLine fLineB = factory.getRefFLine(factory.getFVector());
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLineA.getFPointAtIntersection(fLineB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fLineA.getFPointAtIntersection(fLineB),
                     "The origin is a non-directional FVector");
         }
 

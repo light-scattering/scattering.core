@@ -492,6 +492,24 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public FVector reflectThroughCenter() {
+
+        getRefBase().reflect(0, 0, 0);
+        getRefHead().reflect(0, 0, 0);
+
+        return this;
+    }
+
+    @Override
+    public FVector reflect(double x, double y, double z) {
+
+        getRefBase().reflect(x, y, z);
+        getRefHead().reflect(x, y, z);
+
+        return this;
+    }
+
+    @Override
     public FVector reflect(FPoint op) {
 
         getRefBase().reflect(op);
@@ -620,6 +638,18 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public FVector setCollinear(FVector op) {
+        double lengthBase = getRefHead().getDistanceP2(op.getRefBase());
+        double lengthHead = getRefHead().getDistanceP2(op.getRefHead());
+
+        if (lengthHead < lengthBase) {
+            return setParallel(op);
+        }
+
+        return setAntiParallel(op);
+    }
+
+    @Override
     public boolean isParallel(FVector op) {
 
         if (isNearZeroLength()) {
@@ -627,7 +657,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the argument FVector is not defined");
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
         return toBooleanWithFixedState((a, b) -> {
@@ -646,12 +676,11 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the argument FVector is not defined");
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
-        return applyWithCenteredPositionAndFixedState((a, b) -> {
-            a.getRefHead().applyStateFrom(b.moveBaseToCenter().getRefHead());
-        }, op);
+        return applyWithCenteredPositionAndFixedState((a, b) ->
+                a.getRefHead().applyStateFrom(b.moveBaseToCenter().getRefHead()), op);
     }
 
     @Override
@@ -662,7 +691,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the argument FVector is not defined");
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
         return toBooleanWithFixedState((a, b) -> {
@@ -681,7 +710,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the argument FVector is not defined");
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
         return applyWithCenteredPositionAndFixedState((a, b) ->
@@ -696,7 +725,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the argument FVector is not defined");
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
         return (Math.abs(getDotProduct(op)) < epsilon) || (Math.abs((Math.PI * 0.5) - getAngle(op)) < epsilon);
@@ -715,6 +744,23 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
         return applyWithFixedLengthAndFixedState((a, b) ->
                 a.applyStateFrom(b.setCrossProduct(a.setCrossProduct(b))), op);
+    }
+
+    @Override
+    public FVector rotateAround(FVector op, double angle) {
+        double baseX = op.getRefBase().getX();
+        double baseY = op.getRefBase().getY();
+        double baseZ = op.getRefBase().getZ();
+
+        op.applyWithFixedState(v -> {
+           sub(baseX, baseY, baseZ);
+           op.getRefHead().sub(baseX, baseY, baseZ);
+           getRefHead().rotateAround(op.getRefHead(), angle);
+           getRefBase().rotateAround(op.getRefHead(), angle);
+           add(baseX, baseY, baseZ);
+        });
+
+        return this;
     }
 
     @Override
@@ -755,7 +801,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         }
 
         if (op.isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the argument FVector is not defined");
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
         return toDoubleWithFixedState((a, b) -> {
@@ -763,6 +809,21 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             b.moveBaseToCenter();
             return a.getRefHead().getAngle(b.getRefHead());
         }, op);
+    }
+
+    @Override
+    public FVector setAngle(FVector op, double angle) {
+
+        if (isNearZeroLength()) {
+            throw new IllegalStateException("The direction of the FVector is not defined");
+        }
+
+        if (op.isNearZeroLength()) {
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
+        }
+
+        return applyWithCenteredPositionAndFixedState((a, b) ->
+                a.getRefHead().setAngle(b.moveBaseToCenter().getRefHead(), angle), op);
     }
 
     // -------------------------------------------------------------------------------------------------

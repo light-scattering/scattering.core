@@ -493,9 +493,10 @@ public class FVectorTest {
 
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            fVector.setRefBase(factory.getFPoint());
+            FVector fVectorRef = fVector.setRefBase(factory.getFPoint());
 
             assertNotSame(fVector.getRefBase(), fPointBase, "The FPoint reference is erroneous");
+            assertSame(fVector, fVectorRef, "The FVector reference is erroneous");
         }
 
         @Test
@@ -619,9 +620,10 @@ public class FVectorTest {
 
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            fVector.setRefHead(factory.getFPoint());
+            FVector fVectorRef = fVector.setRefHead(factory.getFPoint());
 
             assertNotSame(fVector.getRefHead(), fPointHead, "The FPoint reference is incorrect");
+            assertSame(fVector, fVectorRef, "The FVector reference is erroneous");
         }
 
         @Test
@@ -730,11 +732,12 @@ public class FVectorTest {
 
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
-            fVector.setRef(factory.getFPoint(), factory.getFPoint());
+            FVector fVectorRef = fVector.setRef(factory.getFPoint(), factory.getFPoint());
 
             Assertions.assertAll("Validate FVector references",
                     () -> assertNotSame(fVector.getRefBase(), fPointBase, "The base FPoint is incorrect"),
-                    () -> assertNotSame(fVector.getRefHead(), fPointHead, "The head FPoint is incorrect")
+                    () -> assertNotSame(fVector.getRefHead(), fPointHead, "The head FPoint is incorrect"),
+                    () -> assertSame(fVector, fVectorRef, "The FVector reference is erroneous")
             );
         }
 
@@ -1799,6 +1802,44 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Reflect through center")
+        void reflectThroughCenter() {
+            FVector fVector = factory.getFVector(1, 1, 0, 1, 3, 0);
+
+            fVector.reflectThroughCenter();
+
+            assertTrue(fVector.isSimilar(-1, -1, 0, -1, -3, 0),
+                    "The FVector reflection is erroneous");
+        }
+
+        @Test
+        @DisplayName("Reflect through center (validate)")
+        void reflectThroughCenterValidate() {
+            FVector fVector = factory.getFVector(1, 2, 3);
+
+            FVectorTestHelper.testReference(FVector::reflectThroughCenter, fVector);
+        }
+
+        @Test
+        @DisplayName("Reflect with primitives")
+        void reflectWithPrimitives() {
+            FVector fVector = factory.getFVector(1, 1, 0, 1, 3, 0);
+
+            fVector.reflect(1, 2, 3);
+
+            assertTrue(fVector.isSimilar(1, 3, 6, 1, 1, 6),
+                    "The FVector reflection is erroneous");
+        }
+
+        @Test
+        @DisplayName("Reflect with primitives (validate)")
+        void reflectWithPrimitivesValidate() {
+            FVector fVector = factory.getFVector(1, 2, 3);
+
+            FVectorTestHelper.testReference(FVector::reflectThroughCenter, fVector);
+        }
+
+        @Test
         @DisplayName("Reflect")
         void reflect() {
             FVector fVector = factory.getFVector(1, 1, 0, 1, 3, 0);
@@ -1959,6 +2000,20 @@ public class FVectorTest {
         @Test
         @DisplayName("Get angle")
         void getAngle() {
+            FVector fVectorRef = factory.getFVector(2, 2, 0, 2, 3, 0);
+            FVector fVectorOp = factory.getFVector(-1, 0, 0, 1, 0, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(Math.PI * 0.5, fVectorRef.getAngle(fVectorOp),
+                            jitter, "The angle is incorrect"),
+                    () -> assertEquals(Math.PI * 0.5, fVectorOp.getAngle(fVectorRef),
+                            jitter, "The angle is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get angle (offset)")
+        void getAngleOffset() {
             FPoint fPointBaseA = factory.getFPoint();
             FPoint fPointHeadA = factory.getFPoint(2, 2, 0);
             FVector fVectorA = factory.getFVector(fPointBaseA, fPointHeadA);
@@ -2025,12 +2080,12 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Get angle (throw IllegalStateException, argument)")
-        void getAngleThrowIllegalStateExceptionArgument() {
+        @DisplayName("Get angle (throw IllegalArgumentException, argument)")
+        void getAngleThrowIllegalArgumentException() {
             FVector fVectorA = factory.getFVector(1, 2, 3);
             FVector fVectorB = factory.getFVector();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.getAngle(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.getAngle(fVectorB),
                     "The direction of the FVector is not defined");
         }
 
@@ -2041,6 +2096,120 @@ public class FVectorTest {
             FVector fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::getAngle, fVectorA, fVectorB);
+        }
+
+        @Test
+        @DisplayName("Set angle A")
+        void setAngleA() {
+            FVector fVectorRef = factory.getFVector(2, 2, 0, 3, 3, 0);
+            FVector fVectorOp = factory.getFVector(-1, 0, 0, 1, 0, 0);
+            double angle = Math.PI * 0.5;
+
+            fVectorRef.setAngle(fVectorOp, angle);
+
+            assertEquals(angle, fVectorRef.getAngle(fVectorOp),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Set angle (random)")
+        void setAngleRandom() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorOp = TestHelper.getRandomFVector(fVectorRef);
+            double angle = Math.abs(random.nextDouble() % Math.PI);
+
+            fVectorRef.setAngle(fVectorOp, angle);
+
+            assertEquals(angle, fVectorRef.getAngle(fVectorOp),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Set angle (random, negative)")
+        void setAngleRandomNegative() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorOp = TestHelper.getRandomFVector(fVectorRef);
+            double angle = -Math.abs(random.nextDouble() % Math.PI);
+
+            fVectorRef.setAngle(fVectorOp, angle);
+
+            assertEquals(angle, -fVectorRef.getAngle(fVectorOp),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Set angle (throw IllegalStateException)")
+        void setAngleThrowIllegalStateException() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorOp = fVectorRef.copy();
+            double angle = Math.abs(random.nextDouble() % Math.PI);
+
+            Assertions.assertThrows(IllegalStateException.class, () -> fVectorRef.setAngle(fVectorOp, angle),
+                    "Both FVectors are at the same position");
+        }
+
+        @Test
+        @DisplayName("Set angle (throw IllegalArgumentException)")
+        void setAngleThrowIllegalArgumentException() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorOp = factory.getFVector();
+            double angle = Math.abs(random.nextDouble() % Math.PI);
+
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorRef.setAngle(fVectorOp, angle),
+                    "The direction of the provided FVector is not defined");
+        }
+
+        @Test
+        @DisplayName("Set angle with FVector (validate)")
+        void setAngleValidate() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorOp = TestHelper.getRandomFVector(fVectorRef);
+
+            FVectorTestHelper.testReference((a, b) -> a.setAngle(b, Math.PI), fVectorRef, fVectorOp);
+        }
+
+        @Test
+        @DisplayName("Rotate (simple)")
+        void rotateWithFVectorSimple() {
+            FVector fVectorRef = factory.getFVector(-1, 1, 0, -2, 2, 0);
+            FVector fVectorArg = factory.getFVector(0, 1, 0);
+
+            fVectorRef.rotateAround(fVectorArg,Math.PI * 0.5);
+
+            assertTrue(fVectorRef.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate (simple, negative)")
+        void rotateWithFVectorSimpleNegative() {
+            FVector fVectorRef = factory.getFVector(-1, 1, 0, -2, 2, 0);
+            FVector fVectorArg = factory.getFVector(0, 1, 0);
+
+            fVectorRef.rotateAround(fVectorArg, -Math.PI * 0.5);
+
+            assertTrue(fVectorRef.isSimilar(0, 1, 1, 0, 2, 2),
+                    "The position of the rotated FVector is erroneous");
+        }
+
+        @Test
+        @DisplayName("Rotate (throw IllegalArgumentException)")
+        void rotateWithFVectorThrowIllegalArgumentException() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorArg = factory.getFVector();
+            double angle = Math.abs(random.nextDouble() % Math.PI);
+
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorRef.rotateAround(fVectorArg, angle),
+                    "The direction of the provided FVector is not defined");
+        }
+
+        @Test
+        @DisplayName("Rotate (validate)")
+        void rotateWithFVectorValidate() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorArg = TestHelper.getRandomFVector();
+
+            FVectorTestHelper.testReference((a, b) -> a.rotateAround(b, Math.PI), fVectorRef, fVectorArg);
         }
 
         @Test
@@ -2139,79 +2308,79 @@ public class FVectorTest {
         @Test
         @DisplayName("Is collinear A")
         void isCollinearA() {
-            FVector fVectorA = factory.getFVector(2, 2, 2);
-            FVector fVectorB = factory.getFVector(4, 4, 4);
+            FVector fVectorRef = factory.getFVector(2, 2, 2);
+            FVector fVectorArg = factory.getFVector(4, 4, 4);
 
-            fVectorA.moveBase(TestHelper.getRandomFPoint());
-            fVectorB.moveBase(TestHelper.getRandomFPoint());
+            fVectorRef.moveBase(TestHelper.getRandomFPoint());
+            fVectorArg.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVectorA.isCollinear(fVectorB),
+            assertTrue(fVectorRef.isCollinear(fVectorArg),
                     "The two FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear B")
         void isCollinearB() {
-            FVector fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FVector fVectorB = factory.getFVector(-1, 1, 0, 1, 1, 0);
+            FVector fVectorRef = factory.getFVector(-1, 0, 0, 1, 0, 0);
+            FVector fVectorArg = factory.getFVector(-1, 1, 0, 1, 1, 0);
 
-            assertTrue(fVectorA.isCollinear(fVectorB),
+            assertTrue(fVectorRef.isCollinear(fVectorArg),
                     "The two FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear A (opposite direction")
         void isCollinearOppositeDirectionA() {
-            FVector fVectorA = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FVector fVectorB = factory.getFVector(factory.getFPoint(-4, -4, -4));
+            FVector fVectorRef = factory.getFVector(factory.getFPoint(2, 2, 2));
+            FVector fVectorArg = factory.getFVector(factory.getFPoint(-4, -4, -4));
 
-            fVectorA.moveBase(TestHelper.getRandomFPoint());
-            fVectorB.moveBase(TestHelper.getRandomFPoint());
+            fVectorRef.moveBase(TestHelper.getRandomFPoint());
+            fVectorArg.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVectorA.isCollinear(fVectorB),
+            assertTrue(fVectorRef.isCollinear(fVectorArg),
                     "The FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear B (opposite direction")
         void isCollinearOppositeDirectionB() {
-            FVector fVectorA = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FVector fVectorB = factory.getFVector(1, 1, 0, -1, 1, 0);
+            FVector fVectorRef = factory.getFVector(-1, 0, 0, 1, 0, 0);
+            FVector fVectorArg = factory.getFVector(1, 1, 0, -1, 1, 0);
 
-            assertTrue(fVectorA.isCollinear(fVectorB),
+            assertTrue(fVectorRef.isCollinear(fVectorArg),
                     "The two FVectors should be collinear");
         }
 
         @Test
         @DisplayName("Is collinear (fail)")
         void isCollinearFail() {
-            FVector fVectorA = factory.getFVector(1, 0, 0);
-            FVector fVectorB = factory.getFVector(1, 2, 0);
+            FVector fVectorRef = factory.getFVector(1, 0, 0);
+            FVector fVectorArg = factory.getFVector(1, 2, 0);
 
-            fVectorA.moveBase(TestHelper.getRandomFPoint());
-            fVectorB.moveBase(TestHelper.getRandomFPoint());
+            fVectorRef.moveBase(TestHelper.getRandomFPoint());
+            fVectorArg.moveBase(TestHelper.getRandomFPoint());
 
-            assertFalse(fVectorA.isCollinear(fVectorB),
+            assertFalse(fVectorRef.isCollinear(fVectorArg),
                     "The FVectors should not be collinear");
         }
 
         @Test
-        @DisplayName("Is collinear (throw IllegalStateException, input)")
-        void isCollinearThrowIllegalStateExceptionInput() {
-            FVector fVectorA = factory.getFVector(0, 0, 0);
-            FVector fVectorB = factory.getFVector(1, 2, 3);
+        @DisplayName("Is collinear (throw IllegalStateException)")
+        void isCollinearThrowIllegalStateException() {
+            FVector fVectorRef = factory.getFVector(0, 0, 0);
+            FVector fVectorArg = factory.getFVector(1, 2, 3);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isCollinear(fVectorB),
+            Assertions.assertThrows(IllegalStateException.class, () -> fVectorRef.isCollinear(fVectorArg),
                     "The input FVector direction is not defined");
         }
 
         @Test
-        @DisplayName("Is collinear (throw IllegalStateException, argument)")
-        void isCollinearThrowIllegalStateExceptionArgument() {
-            FVector fVectorA = factory.getFVector(1, 2, 3);
-            FVector fVectorB = factory.getFVector(0, 0, 0);
+        @DisplayName("Is collinear (throw IllegalArgumentException)")
+        void isCollinearThrowIllegalArgumentException() {
+            FVector fVectorRef = factory.getFVector(1, 2, 3);
+            FVector fVectorArg = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isCollinear(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorRef.isCollinear(fVectorArg),
                     "The argument FVector direction is not defined");
         }
 
@@ -2222,6 +2391,71 @@ public class FVectorTest {
             FVector fVectorB = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::isCollinear, fVectorA, fVectorB);
+        }
+
+        @Test
+        @DisplayName("Set collinear (parallel)")
+        void setCollinearParallel() {
+            FVector fVectorRef = factory.getFVector(1, 1, 1);
+            FVector fVectorArg = factory.getFVector(-5, 0, 0, 5, 0, 0);
+
+            fVectorRef.setCollinear(fVectorArg);
+
+            assertTrue(fVectorRef.isParallel(fVectorArg),
+                    "The two FVectors should be parallel");
+        }
+
+        @Test
+        @DisplayName("Set collinear (antiparallel)")
+        void setCollinearAntiParallel() {
+            FVector fVectorRef = factory.getFVector(-1, -1, -1);
+            FVector fVectorArg = factory.getFVector(-5, 0, 0, 5, 0, 0);
+
+            fVectorRef.setCollinear(fVectorArg);
+
+            assertTrue(fVectorRef.isAntiParallel(fVectorArg),
+                    "The two FVectors should be antiparallel");
+        }
+
+        @Test
+        @DisplayName("Set collinear (random)")
+        void setCollinearRandom() {
+            FVector fVectorRef = TestHelper.getRandomFVector();
+            FVector fVectorArg = TestHelper.getRandomFVector(fVectorRef);
+
+            fVectorRef.setCollinear(fVectorArg);
+
+            assertTrue(fVectorRef.isCollinear(fVectorArg),
+                    "The two FVectors should be collinear");
+        }
+
+        @Test
+        @DisplayName("Set collinear (throw IllegalStateException)")
+        void setCollinearThrowIllegalStateException() {
+            FVector fVectorRef = factory.getFVector(0, 0, 0);
+            FVector fVectorArg = factory.getFVector(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class, () -> fVectorRef.setCollinear(fVectorArg),
+                    "The input FVector direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set collinear (throw IllegalArgumentException)")
+        void setCollinearIllegalArgumentException() {
+            FVector fVectorRef = factory.getFVector(1, 2, 3);
+            FVector fVectorArg = factory.getFVector(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorRef.setCollinear(fVectorArg),
+                    "The argument FVector direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set collinear (validate)")
+        void setCollinearValidate() {
+            FVector fVectorRef = factory.getFVector(1, 2, 3);
+            FVector fVectorArg = factory.getFVector(4, 5, 6);
+
+            FVectorTestHelper.testReference(FVector::setCollinear, fVectorRef, fVectorArg);
         }
 
         @Test
@@ -2270,8 +2504,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is parallel (throw IllegalStateException, input)")
-        void isParallelThrowIllegalStateExceptionInput() {
+        @DisplayName("Is parallel (throw IllegalStateException)")
+        void isParallelThrowIllegalStateException() {
             FVector fVectorA = factory.getFVector(0, 0, 0);
             FVector fVectorB = factory.getFVector(1, 2, 3);
 
@@ -2280,12 +2514,12 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is parallel (throw IllegalStateException, argument)")
-        void isParallelThrowIllegalStateExceptionArgument() {
+        @DisplayName("Is parallel (throw IllegalArgumentException)")
+        void isParallelThrowIllegalArgumentException() {
             FVector fVectorA = factory.getFVector(1, 2, 3);
             FVector fVectorB = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isParallel(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.isParallel(fVectorB),
                     "The argument FVector direction is not defined");
         }
 
@@ -2310,8 +2544,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set parallel (throw IllegalStateException, input)")
-        void setParallelThrowIllegalStateExceptionInput() {
+        @DisplayName("Set parallel (throw IllegalStateException)")
+        void setParallelThrowIllegalStateException() {
             FVector fVectorA = factory.getFVector(0, 0, 0);
             FVector fVectorB = factory.getFVector(1, 2, 3);
 
@@ -2320,12 +2554,12 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set parallel (throw IllegalStateException, argument)")
-        void setParallelThrowIllegalStateExceptionArgument() {
+        @DisplayName("Set parallel (throw IllegalArgumentException)")
+        void setParallelThrowIllegalArgumentException() {
             FVector fVectorA = factory.getFVector(1, 2, 3);
             FVector fVectorB = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setParallel(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.setParallel(fVectorB),
                     "The argument FVector direction is not defined");
         }
 
@@ -2384,8 +2618,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is anti-parallel (throw IllegalStateException, input)")
-        void isAntiParallelThrowIllegalStateExceptionInput() {
+        @DisplayName("Is anti-parallel (throw IllegalStateException)")
+        void isAntiParallelThrowIllegalStateException() {
             FVector fVectorA = factory.getFVector(0, 0, 0);
             FVector fVectorB = factory.getFVector(1, 2, 3);
 
@@ -2394,12 +2628,12 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is anti-parallel (throw IllegalStateException, argument)")
-        void isAntiParallelThrowIllegalStateExceptionArgument() {
+        @DisplayName("Is anti-parallel (throw IllegalArgumentException)")
+        void isAntiParallelThrowIllegalArgumentException() {
             FVector fVectorA = factory.getFVector(1, 2, 3);
             FVector fVectorB = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isAntiParallel(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.isAntiParallel(fVectorB),
                     "The argument FVector direction is not defined");
         }
 
@@ -2424,8 +2658,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set anti-parallel (throw IllegalStateException, input)")
-        void setAntiParallelThrowIllegalStateExceptionInput() {
+        @DisplayName("Set anti-parallel (throw IllegalStateException)")
+        void setAntiParallelThrowIllegalStateException() {
             FVector fVectorA = factory.getFVector(0, 0, 0);
             FVector fVectorB = factory.getFVector(1, 2, 3);
 
@@ -2434,12 +2668,12 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set anti-parallel (throw DirectionException, argument)")
-        void setAntiParallelThrowDirectionExceptionArgument() {
+        @DisplayName("Set anti-parallel (throw IllegalArgumentException)")
+        void setAntiParallelThrowIllegalArgumentException() {
             FVector fVectorA = factory.getFVector(1, 2, 3);
             FVector fVectorB = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setAntiParallel(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.setAntiParallel(fVectorB),
                     "The argument FVector direction is not defined");
         }
 
@@ -2507,8 +2741,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is orthogonal (throw IllegalStateException, input)")
-        void isOrthogonalThrowIllegalStateExceptionInput() {
+        @DisplayName("Is orthogonal (throw IllegalStateException)")
+        void isOrthogonalThrowIllegalStateException() {
             FVector fVectorA = factory.getFVector(0, 0, 0);
             FVector fVectorB = factory.getFVector(1, 2, 3);
 
@@ -2517,12 +2751,12 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is orthogonal (throw IllegalStateException, argument)")
-        void isOrthogonalThrowIllegalStateExceptionArgument() {
+        @DisplayName("Is orthogonal (throw IllegalArgumentException)")
+        void isOrthogonalThrowIllegalArgumentException() {
             FVector fVectorA = factory.getFVector(1, 2, 3);
             FVector fVectorB = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.isOrthogonal(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.isOrthogonal(fVectorB),
                     "The argument FVector direction is not defined");
         }
 
@@ -2611,8 +2845,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set orthogonal (throw IllegalStateException, input)")
-        void setOrthogonalThrowIllegalStateExceptionInput() {
+        @DisplayName("Set orthogonal (throw IllegalStateException)")
+        void setOrthogonalThrowIllegalStateException() {
             FVector fVectorA = factory.getFVector(0, 0, 0);
             FVector fVectorB = factory.getFVector(1, 2, 3);
 
@@ -2621,12 +2855,12 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set orthogonal (throw IllegalStateException, argument)")
-        void setOrthogonalThrowIllegalStateExceptionArgument() {
+        @DisplayName("Set orthogonal (throw IllegalArgumentException)")
+        void setOrthogonalThrowIllegalArgumentException() {
             FVector fVectorA = factory.getFVector(1, 2, 3);
             FVector fVectorB = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorA.setOrthogonal(fVectorB),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorA.setOrthogonal(fVectorB),
                     "The argument FVector direction is not defined");
         }
 
@@ -2640,10 +2874,38 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Is zero")
+        void isZero() {
+            FPoint fPointBase = factory.getFPoint();
+            FPoint fPointHead = factory.getFPoint();
+            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+
+            assertTrue(fVector.isZeroLength(), "The two FPoints should be at the same position");
+        }
+
+        @Test
+        @DisplayName("Is zero (fail)")
+        void isZeroFail() {
+            FPoint fPointBase = factory.getFPoint(1, 2, 3);
+            FPoint fPointHead = factory.getFPoint(1 + 2 * jitter, 2 + 2 * jitter, 3 + 1 * jitter);
+            FVector fVector = factory.getFVector(fPointBase, fPointHead);
+
+            assertFalse(fVector.isZeroLength(), "The two FPoints should not be at the same position");
+        }
+
+        @Test
+        @DisplayName("Is zero (validate)")
+        void isZeroValidate() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            FVectorTestHelper.testValue(FVector::isZeroLength, fVector);
+        }
+
+        @Test
         @DisplayName("Is non-directional")
         void isNonDirectional() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = fPointBase.copy();
+            FPoint fPointBase = factory.getFPoint(1, 2, 3);
+            FPoint fPointHead = factory.getFPoint(1 + 0.5 * jitter, 2 + 0.5 * jitter, 3 + 0.5 * jitter);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
             assertTrue(fVector.isNearZeroLength(), "The two FPoints should be at the same position");
@@ -2652,8 +2914,8 @@ public class FVectorTest {
         @Test
         @DisplayName("Is non-directional (fail)")
         void isNonDirectionalFail() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint(fPointBase);
+            FPoint fPointBase = factory.getFPoint(1, 2, 3);
+            FPoint fPointHead = factory.getFPoint(1 + 2 * jitter, 2 + 2 * jitter, 3 + 2 * jitter);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
 
             assertFalse(fVector.isNearZeroLength(), "The two FPoints should not be at the same position");

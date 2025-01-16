@@ -555,21 +555,31 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         return applyWithFixedLength(p -> {
             p.normalize();
 
-            double opX = (y * getZ()) - (z * getY());
-            double opY = (z * getX()) - (x * getZ());
-            double opZ = (x * getY()) - (y * getX());
+            double opRawX = x;
+            double opRawY = y;
+            double opRawZ = z;
 
-            double factor = 1 / Math.sqrt((opX * opX) + (opY * opY) + (opZ * opZ));
+            double opRawFactor = 1 / Math.sqrt((opRawX * opRawX) + (opRawY * opRawY) + (opRawZ * opRawZ));
 
-            opX *= factor;
-            opY *= factor;
-            opZ *= factor;
+            opRawX *= opRawFactor;
+            opRawY *= opRawFactor;
+            opRawZ *= opRawFactor;
+
+            double opX = (opRawY * getZ()) - (opRawZ * getY());
+            double opY = (opRawZ * getX()) - (opRawX * getZ());
+            double opZ = (opRawX * getY()) - (opRawY * getX());
+
+            double opFactor = 1 / Math.sqrt((opX * opX) + (opY * opY) + (opZ * opZ));
+
+            opX *= opFactor;
+            opY *= opFactor;
+            opZ *= opFactor;
 
             if (Math.abs(opX) < epsilon && Math.abs(opY) < epsilon && Math.abs(opZ) < epsilon) {
                 throw new IllegalStateException("The rotation vector is non-directional");
             }
 
-            var aDelta = angle - Math.acos(getDotProduct(x, y, z));
+            var aDelta = angle - Math.acos(getDotProduct(opRawX, opRawY, opRawZ));
 
             var aCos = Math.cos(aDelta);
             var aSin = Math.sin(aDelta);
@@ -603,13 +613,19 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             p.normalize();
 
             op.applyWithFixedState(rotAxis -> {
+                rotAxis.normalize();
+
+                var rotX = rotAxis.getX();
+                var rotY = rotAxis.getY();
+                var rotZ = rotAxis.getZ();
+
                 rotAxis.setCrossProduct(p).normalize();
 
                 if (rotAxis.isNearZero()) {
                     throw new IllegalStateException("The rotation vector is non-directional");
                 }
 
-                var aDelta = angle - Math.acos(getDotProduct(op));
+                var aDelta = angle - Math.acos(p.getDotProduct(rotX, rotY, rotZ));
 
                 var aCos = Math.cos(aDelta);
                 var aSin = Math.sin(aDelta);
@@ -626,52 +642,66 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint rotate(double x, double y, double z, double angle) {
+    public FPoint rotateAround(double x, double y, double z, double angle) {
 
         if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
         return applyWithFixedLength(p -> {
-            if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+            p.normalize();
+
+            double opRawX = x;
+            double opRawY = y;
+            double opRawZ = z;
+
+            double opRawFactor = 1 / Math.sqrt((opRawX * opRawX) + (opRawY * opRawY) + (opRawZ * opRawZ));
+
+            opRawX *= opRawFactor;
+            opRawY *= opRawFactor;
+            opRawZ *= opRawFactor;
+
+            if (Math.abs(opRawX) < epsilon && Math.abs(opRawY) < epsilon && Math.abs(opRawZ) < epsilon) {
                 throw new IllegalStateException("The rotation vector is non-directional");
             }
 
-            var aDelta = angle - Math.acos(getDotProduct(x, y, z));
+            var aCos = Math.cos(-angle);
+            var aSin = Math.sin(-angle);
 
-            var aCos = Math.cos(aDelta);
-            var aSin = Math.sin(aDelta);
+            var tmpSuffix = (1 - aCos) * (opRawX * p.getX() + opRawY * p.getY() + opRawZ * p.getZ());
 
-            var tmpSuffix = (1 - aCos) * (x * p.getX() + y * p.getY() + z * p.getZ());
-
-            var resX = aCos * p.getX() + aSin * (y * p.getZ() - z * p.getY()) + x * tmpSuffix;
-            var resY = aCos * p.getY() + aSin * (z * p.getX() - x * p.getZ()) + y * tmpSuffix;
-            var resZ = aCos * p.getZ() + aSin * (x * p.getY() - y * p.getX()) + z * tmpSuffix;
+            var resX = aCos * p.getX() + aSin * (opRawY * p.getZ() - opRawZ * p.getY()) + opRawX * tmpSuffix;
+            var resY = aCos * p.getY() + aSin * (opRawZ * p.getX() - opRawX * p.getZ()) + opRawY * tmpSuffix;
+            var resZ = aCos * p.getZ() + aSin * (opRawX * p.getY() - opRawY * p.getX()) + opRawZ * tmpSuffix;
 
             p.set(resX, resY, resZ);
         });
     }
 
     @Override
-    public FPoint rotate(FPoint op, double angle) {
+    public FPoint rotateAround(FPoint op, double angle) {
 
         if (op.isNearZero()) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
         return applyWithFixedLength(p -> {
-            var aDelta = angle - Math.acos(getDotProduct(op));
+            p.normalize();
 
-            var aCos = Math.cos(aDelta);
-            var aSin = Math.sin(aDelta);
+            op.applyWithFixedState(rotAxis -> {
+                rotAxis.normalize();
 
-            var tmpSuffix = (1 - aCos) * (op.getX() * p.getX() + op.getY() * p.getY() + op.getZ() * p.getZ());
+                var aCos = Math.cos(-angle);
+                var aSin = Math.sin(-angle);
 
-            var opX = aCos * p.getX() + aSin * (op.getY() * p.getZ() - op.getZ() * p.getY()) + op.getX() * tmpSuffix;
-            var opY = aCos * p.getY() + aSin * (op.getZ() * p.getX() - op.getX() * p.getZ()) + op.getY() * tmpSuffix;
-            var opZ = aCos * p.getZ() + aSin * (op.getX() * p.getY() - op.getY() * p.getX()) + op.getZ() * tmpSuffix;
+                var tmpSuffix = (1 - aCos) * (op.getX() * p.getX() + op.getY() * p.getY() + op.getZ() * p.getZ());
 
-            p.set(opX, opY, opZ);
+                var opX = aCos * p.getX() + aSin * (rotAxis.getY() * p.getZ() - rotAxis.getZ() * p.getY()) + rotAxis.getX() * tmpSuffix;
+                var opY = aCos * p.getY() + aSin * (rotAxis.getZ() * p.getX() - rotAxis.getX() * p.getZ()) + rotAxis.getY() * tmpSuffix;
+                var opZ = aCos * p.getZ() + aSin * (rotAxis.getX() * p.getY() - rotAxis.getY() * p.getX()) + rotAxis.getZ() * tmpSuffix;
+
+                p.set(opX, opY, opZ);
+            });
         });
     }
 

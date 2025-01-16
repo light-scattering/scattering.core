@@ -65,8 +65,8 @@ public interface FVector extends Primitive<FVector> {
     FVector moveHead(double hX, double hY, double hZ);
     FVector moveHead(FPoint head);
 
-//  FVector reflectThroughCenter();
-//  FVector reflect(double x, double y, double z);
+    FVector reflectThroughCenter();
+    FVector reflect(double x, double y, double z);
     FVector reflect(FPoint op);
 
     FVector reflectBase();
@@ -88,10 +88,10 @@ public interface FVector extends Primitive<FVector> {
     FVector setLength(double length);
 
     double getAngle(FVector op);
-//  double setAngle(FVector op, double angle);
+    FVector setAngle(FVector op, double angle);
 
     boolean isCollinear(FVector op);
-//  FVector setCollinear(FVector op);
+    FVector setCollinear(FVector op);
 
     boolean isParallel(FVector op);
     FVector setParallel(FVector op);
@@ -105,8 +105,7 @@ public interface FVector extends Primitive<FVector> {
     double getDotProduct(FVector op);
     FVector setCrossProduct(FVector op);
 
-//  FVector rotate(double x, double y, double z);
-//  FVector rotate(FVector op, double angle);
+    FVector rotateAround(FVector op, double angle);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
@@ -145,7 +144,6 @@ public interface FVector extends Primitive<FVector> {
     FVector applyWithFixedLength(Consumer<FVector> action);
     @Facade
     FVector applyWithCenteredPosition(Consumer<FVector> action);
-
 
     @Termination
     double toDouble(Function<FVector, Double> action);

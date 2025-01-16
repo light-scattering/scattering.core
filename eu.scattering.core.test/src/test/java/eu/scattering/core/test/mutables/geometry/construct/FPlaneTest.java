@@ -756,12 +756,12 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Get common FPoint (throw IllegalStateException, argument)")
-        void getCommonFPointThrowIllegalStateExceptionArgument() {
+        @DisplayName("Get common FPoint (throw IllegalArgumentException)")
+        void getCommonFPointThrowIllegalArgumentException() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 1, 0));
             FLine fLine = factory.getRefFLine(factory.getFVector());
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.getFPointAtIntersection(fLine),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPlane.getFPointAtIntersection(fLine),
                     "The argument is a non-directional FVector");
         }
 
@@ -850,15 +850,15 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Get common FLine (throw IllegalStateException, argument)")
-        void getCommonFLineThrowIllegalStateExceptionArgument() {
+        @DisplayName("Get common FLine (throw IllegalArgumentException)")
+        void getCommonFLineThrowIllegalArgumentException() {
             FVector fVector1 = factory.getFVector(1, 1, 1);
             FVector fVector2 = factory.getFVector();
 
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane1.getFLineAtIntersection(fPlane2),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPlane1.getFLineAtIntersection(fPlane2),
                     "The argument is a non-directional FVector");
         }
 

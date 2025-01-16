@@ -13,6 +13,7 @@ import java.util.Objects;
 import static eu.scattering.core.transfer.configurations.NameConfiguration.JSON_TYPE;
 
 public class FRot implements Engine<FRot> {
+    // TODO - We need just quaternion and the matrix
     private static ContainerFactory factory = ContainerFactoryConcrete.create();
     private static final String JSON_TAG = "engRot";
     private static final String JSON_AXIS = "axis";
@@ -54,18 +55,22 @@ public class FRot implements Engine<FRot> {
     }
 
     public double getAngle() {
+
         return rotAngle;
     }
 
     public FPairPos3D getAxis() {
+
         return rotAxis;
     }
 
     public FPos4D getCoreCode() {
+
         return rotCoreCode;
     }
 
     public FMatrix3x3D getCoreMatrix() {
+
         return rotCoreMatrix;
     }
 
