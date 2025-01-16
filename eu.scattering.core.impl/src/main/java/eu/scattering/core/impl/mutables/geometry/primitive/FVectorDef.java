@@ -27,7 +27,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final FPoint[] origin = new FPoint[2];
+    private FPoint oBase;
+    private FPoint oHead;
     private final double epsilon;
 
     private FVectorDef(double epsilon, Supplier<FPoint> fPointSupplier) {
@@ -48,8 +49,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
         var fVector = new FVectorDef(epsilon, fPointSupplier);
 
-        fVector.origin[0] = refBase;
-        fVector.origin[1] = refHead;
+        fVector.setRefBase(refBase);
+        fVector.setRefHead(refHead);
 
         return fVector;
     }
@@ -62,8 +63,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
         var fVector = new FVectorDef(epsilon, fPointSupplier);
 
-        fVector.origin[0] = fPointSupplier.get();
-        fVector.origin[1] = refHead;
+        fVector.setRefBase(fPointSupplier.get());
+        fVector.setRefHead(refHead);
 
         return fVector;
     }
@@ -71,8 +72,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier) {
         var fVector = new FVectorDef(epsilon, fPointSupplier);
 
-        fVector.origin[0] = fPointSupplier.get();
-        fVector.origin[1] = fPointSupplier.get();
+        fVector.setRefBase(fPointSupplier.get());
+        fVector.setRefHead(fPointSupplier.get());
 
         return fVector;
     }
@@ -80,7 +81,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FPoint getRefBase() {
 
-        return origin[0];
+        return oBase;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new NullPointerException("The base FPoint cannot be null");
         }
 
-        origin[0] = refBase;
+        oBase = refBase;
 
         return this;
     }
@@ -98,7 +99,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FPoint getRefHead() {
 
-        return origin[1];
+        return oHead;
     }
 
     @Override
@@ -108,7 +109,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new NullPointerException("The head FPoint cannot be null");
         }
 
-        origin[1] = refHead;
+        oHead = refHead;
 
         return this;
     }

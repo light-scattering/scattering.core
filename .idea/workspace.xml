@@ -22,17 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/engines/rotation/processor/FRotationProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/engines/rotation/processor/FRotationProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPointEngineRotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPointEngineRotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/vector/FVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/vector/FVector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FPointDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FPointDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FVectorDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FVectorDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRot.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/containers/engine/FRot/FRot.java" afterDir="false" />
-    </list>
+    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -164,7 +154,7 @@
       <recent name="eu.scattering.core.transfer.elements" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FPointTest">
+  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
     <configuration name="FPointAdvancedTest.rotateWithPrimitivesSimpleNegativeA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -211,52 +201,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FPointAdvancedTest.rotateWithPrimitivesSimplePositiveA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FPointTest$FPointAdvancedTest.rotateWithPrimitivesSimplePositiveA&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="FPointAdvancedTest.rotateWithPrimitivesSimplePositiveB" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FPointTest$FPointAdvancedTest.rotateWithPrimitivesSimplePositiveB&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="FPointTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -280,13 +224,57 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="FVectorTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.test:test" />
+            <option value="--tests" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.test:test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.FVectorTest" />
         <item itemvalue="Gradle.FPointTest" />
         <item itemvalue="Gradle.FPointAdvancedTest.rotateWithPrimitivesSimpleNegativeB" />
         <item itemvalue="Gradle.FPointAdvancedTest.rotateWithPrimitivesSimpleNegativeA" />
-        <item itemvalue="Gradle.FPointAdvancedTest.rotateWithPrimitivesSimplePositiveB" />
-        <item itemvalue="Gradle.FPointAdvancedTest.rotateWithPrimitivesSimplePositiveA" />
       </list>
     </recent_temporary>
   </component>
