@@ -21,8 +21,6 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     private static final String JSON_MAIN = "vector";
     private static final String JSON_VAL = "val";
 
-    private final Supplier<FPoint> fPointSupplier;
-
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
@@ -31,13 +29,12 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     private FPoint oHead;
     private final double epsilon;
 
-    private FVectorDef(double epsilon, Supplier<FPoint> fPointSupplier) {
+    private FVectorDef(double epsilon) {
 
         this.epsilon = epsilon;
-        this.fPointSupplier = fPointSupplier;
     }
 
-    public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier, FPoint refBase, FPoint refHead) {
+    public static FVector create(double epsilon, FPoint refBase, FPoint refHead) {
 
         if (refBase == null) {
             throw new NullPointerException("The base FPoint cannot be null");
@@ -47,33 +44,10 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new NullPointerException("The head FPoint cannot be null");
         }
 
-        var fVector = new FVectorDef(epsilon, fPointSupplier);
+        var fVector = new FVectorDef(epsilon);
 
         fVector.setRefBase(refBase);
         fVector.setRefHead(refHead);
-
-        return fVector;
-    }
-
-    public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier, FPoint refHead) {
-
-        if (refHead == null) {
-            throw new NullPointerException("The head FPoint cannot be null");
-        }
-
-        var fVector = new FVectorDef(epsilon, fPointSupplier);
-
-        fVector.setRefBase(fPointSupplier.get());
-        fVector.setRefHead(refHead);
-
-        return fVector;
-    }
-
-    public static FVector create(double epsilon, Supplier<FPoint> fPointSupplier) {
-        var fVector = new FVectorDef(epsilon, fPointSupplier);
-
-        fVector.setRefBase(fPointSupplier.get());
-        fVector.setRefHead(fPointSupplier.get());
 
         return fVector;
     }
@@ -336,13 +310,13 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FVector copy() {
 
-        return create(epsilon, fPointSupplier, getRefBase().copy(), getRefHead().copy());
+        return create(epsilon, getRefBase().copy(), getRefHead().copy());
     }
 
     @Override
     public FVector copyZero() {
 
-        return create(epsilon, fPointSupplier);
+        return create(epsilon, getRefBase().copyZero(), getRefHead().copyZero());
     }
 
     @Override

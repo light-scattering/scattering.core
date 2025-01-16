@@ -78,19 +78,19 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FVector getFVector() {
 
-        return FVectorDef.create(epsilon, this::getFPoint);
+        return FVectorDef.create(epsilon, getFPoint(), getFPoint());
     }
 
     @Override
     public FVector getRefFVector(FPoint refHead) {
 
-        return FVectorDef.create(epsilon, this::getFPoint, refHead);
+        return FVectorDef.create(epsilon, getFPoint(), refHead);
     }
 
     @Override
     public FVector getRefFVector(FPoint refBase, FPoint refHead) {
 
-        return FVectorDef.create(epsilon, this::getFPoint, refBase, refHead);
+        return FVectorDef.create(epsilon, refBase, refHead);
     }
 
     public FLine getFLine() {
