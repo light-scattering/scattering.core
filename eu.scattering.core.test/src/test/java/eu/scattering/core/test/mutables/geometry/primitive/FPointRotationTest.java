@@ -119,13 +119,13 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 0, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        double magnitude = fPointA.getLength();
+        double magnitude = fPointA.getMagnitude();
         double angle = random.nextDouble() % (Math.PI);
 
         fPointA.apply(p -> rotation.setAngle(p, fPointB, angle));
 
         Assertions.assertAll("Validate rotation",
-                () -> assertEquals(magnitude, fPointA.getLength(),
+                () -> assertEquals(magnitude, fPointA.getMagnitude(),
                         jitter, "The magnitude is erroneous"),
                 () -> assertEquals(Math.abs(angle), fPointA.getAngle(fPointB),
                         jitter, "The angle is erroneous")

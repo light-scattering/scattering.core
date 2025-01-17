@@ -746,7 +746,7 @@ public class FRayTest {
         @DisplayName("Get FPoint")
         void getFPoint() {
             FRay fRay = factory.getRefFRay(TestHelper.getRandomFVector());
-            double length = fRay.getRefOrigin().getLength();
+            double length = fRay.getRefOrigin().getMagnitude();
 
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fRay.getFPointAtDistance(0).isSimilar(fRay.getRefOrigin().getRefBase()),

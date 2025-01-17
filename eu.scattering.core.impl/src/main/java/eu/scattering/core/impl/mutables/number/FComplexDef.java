@@ -7,6 +7,8 @@ import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
@@ -263,7 +265,6 @@ public class FComplexDef implements FComplex {
 
     @Override
     public FComplex mul(FComplex ref) {
-
         double valueRe = getRe() * ref.getRe() - getIm() * ref.getIm();
         double valueIm = getRe() * ref.getIm() + getIm() * ref.getRe();
 
@@ -484,5 +485,61 @@ public class FComplexDef implements FComplex {
     public FComplex normalize() {
 
         return setMagnitude(1);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FComplex apply(Consumer<FComplex> action) {
+
+        action.accept(this);
+
+        return this;
+    }
+
+    @Override
+    public FComplex applyWithFixedState(Consumer<FComplex> action) {
+        double memoRe = this.getRe();
+        double memoIm = this.getIm();
+
+        action.accept(this);
+
+        return set(memoRe, memoIm);
+    }
+
+    @Override
+    public double toDouble(Function<FComplex, Double> action) {
+
+        return action.apply(this);
+    }
+
+    @Override
+    public boolean toBoolean(Function<FComplex, Boolean> action) {
+
+        return action.apply(this);
+    }
+
+    @Override
+    public double toDoubleWithFixedState(Function<FComplex, Double> action) {
+        double memoRe = this.getRe();
+        double memoIm = this.getIm();
+
+        double results = action.apply(this);
+
+        set(memoRe, memoIm);
+
+        return results;
+    }
+
+    @Override
+    public boolean toBooleanWithFixedState(Function<FComplex, Boolean> action) {
+        double memoRe = this.getRe();
+        double memoIm = this.getIm();
+
+        boolean results = action.apply(this);
+
+        set(memoRe, memoIm);
+
+        return results;
     }
 }

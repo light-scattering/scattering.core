@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
@@ -584,6 +586,68 @@ public class FQuaternionDef implements FQuaternion {
     public FQuaternion normalize() {
 
         return setMagnitude(1);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FQuaternion apply(Consumer<FQuaternion> action) {
+
+        action.accept(this);
+
+        return this;
+    }
+
+    @Override
+    public FQuaternion applyWithFixedState(Consumer<FQuaternion> action) {
+        double memoRe = this.getRe();
+        double memoI = this.getI();
+        double memoJ = this.getJ();
+        double memoK = this.getK();
+
+        action.accept(this);
+
+        return set(memoRe, memoI, memoJ, memoK);
+    }
+
+    @Override
+    public double toDouble(Function<FQuaternion, Double> action) {
+
+        return action.apply(this);
+    }
+
+    @Override
+    public boolean toBoolean(Function<FQuaternion, Boolean> action) {
+
+        return action.apply(this);
+    }
+
+    @Override
+    public double toDoubleWithFixedState(Function<FQuaternion, Double> action) {
+        double memoRe = this.getRe();
+        double memoI = this.getI();
+        double memoJ = this.getJ();
+        double memoK = this.getK();
+
+        double results = action.apply(this);
+
+        set(memoRe, memoI, memoJ, memoK);
+
+        return results;
+    }
+
+    @Override
+    public boolean toBooleanWithFixedState(Function<FQuaternion, Boolean> action) {
+        double memoRe = this.getRe();
+        double memoI = this.getI();
+        double memoJ = this.getJ();
+        double memoK = this.getK();
+
+        boolean results = action.apply(this);
+
+        set(memoRe, memoI, memoJ, memoK);
+
+        return results;
     }
 }
 

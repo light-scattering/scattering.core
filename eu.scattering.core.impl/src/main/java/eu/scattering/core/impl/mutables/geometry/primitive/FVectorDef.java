@@ -406,7 +406,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getLengthP2() {
+    public double getMagnitudeP2() {
         double distX = getRefHead().getX() - getRefBase().getX();
         double distY = getRefHead().getY() - getRefBase().getY();
         double distZ = getRefHead().getZ() - getRefBase().getZ();
@@ -433,15 +433,15 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getLength() {
+    public double getMagnitude() {
 
-        return Math.sqrt(getLengthP2());
+        return Math.sqrt(getMagnitudeP2());
     }
 
     @Override
-    public FVector setLength(double length) {
+    public FVector setMagnitude(double magnitude) {
 
-        return applyWithCenteredPosition(vZero -> getRefHead().setLength(length));
+        return applyWithCenteredPosition(vZero -> getRefHead().setMagnitude(magnitude));
     }
 
     @Override
@@ -575,7 +575,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
-        return applyWithFixedLength(v -> v.setLength(distance).moveBase(getRefHead()));
+        return applyWithFixedMagnitude(v -> v.setMagnitude(distance).moveBase(getRefHead()));
     }
 
     @Override
@@ -589,7 +589,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
-        return applyWithFixedLength(v -> v.setLength(distance).reflectHead().moveBase(getRefHead()).reflectHead());
+        return applyWithFixedMagnitude(v -> v.setMagnitude(distance).reflectHead().moveBase(getRefHead()).reflectHead());
     }
 
     @Override
@@ -717,7 +717,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new IllegalStateException("FVectors are anti-parallel");
         }
 
-        return applyWithFixedLengthAndFixedState((a, b) ->
+        return applyWithFixedMagnitudeAndFixedState((a, b) ->
                 a.applyStateFrom(b.setCrossProduct(a.setCrossProduct(b))), op);
     }
 
@@ -826,12 +826,12 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector applyWithFixedLength(Consumer<FVector> action) {
-        double length = getLength();
+    public FVector applyWithFixedMagnitude(Consumer<FVector> action) {
+        double length = getMagnitude();
 
         action.accept(this);
 
-        return setLength(length);
+        return setMagnitude(length);
     }
 
     @Override
@@ -893,9 +893,9 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     // -------------------------------------------------------------------------------------------------
 
-    private FVector applyWithFixedLengthAndFixedState(BiConsumer<FVector, FVector> action, FVector op) {
+    private FVector applyWithFixedMagnitudeAndFixedState(BiConsumer<FVector, FVector> action, FVector op) {
 
-        return applyWithFixedLength(a -> op.applyWithFixedState(b -> action.accept(a, b)));
+        return applyWithFixedMagnitude(a -> op.applyWithFixedState(b -> action.accept(a, b)));
     }
 
     private FVector applyWithCenteredPositionAndFixedState(BiConsumer<FVector, FVector> action, FVector op) {

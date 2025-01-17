@@ -1,7 +1,13 @@
 package eu.scattering.core.design.mutables.number.complex;
 
+import eu.scattering.core.design.annotations.Extension;
+import eu.scattering.core.design.annotations.Facade;
+import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.number.Number;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface FComplex extends Number<FComplex> {
 
@@ -42,4 +48,22 @@ public interface FComplex extends Number<FComplex> {
     FComplex div(double re, double im);
     FComplex divRe(double re);
     FComplex divIm(double im);
+
+    //--------------------------------------------------
+
+    @Extension
+    FComplex apply(Consumer<FComplex> action);
+
+    @Facade
+    FComplex applyWithFixedState(Consumer<FComplex> action);
+
+    @Termination
+    double toDouble(Function<FComplex, Double> action);
+    @Termination
+    boolean toBoolean(Function<FComplex, Boolean> action);
+
+    @Facade
+    double toDoubleWithFixedState(Function<FComplex, Double> action);
+    @Facade
+    boolean toBooleanWithFixedState(Function<FComplex, Boolean> action);
 }

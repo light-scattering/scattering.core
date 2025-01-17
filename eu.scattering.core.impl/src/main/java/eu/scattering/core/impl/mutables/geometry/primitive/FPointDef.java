@@ -434,7 +434,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("FPoints must not be on the same position");
         }
 
-        return sub(x, y, z).setLength(distance).add(x, y, z);
+        return sub(x, y, z).setMagnitude(distance).add(x, y, z);
     }
 
     @Override
@@ -444,35 +444,35 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("FPoints must not be on the same position");
         }
 
-        return sub(op).setLength(distance).add(op);
+        return sub(op).setMagnitude(distance).add(op);
     }
 
     @Override
-    public double getLengthP2() {
+    public double getMagnitudeP2() {
 
         return (getX() * getX()) + (getY() * getY()) + (getZ() * getZ());
     }
 
     @Override
-    public double getLength() {
+    public double getMagnitude() {
 
-        return Math.sqrt(getLengthP2());
+        return Math.sqrt(getMagnitudeP2());
     }
 
     @Override
-    public FPoint setLength(double length) {
+    public FPoint setMagnitude(double magnitude) {
 
         if (isNearZero()) {
             throw new IllegalStateException("The vector is non-directional (the position is too close to zero)");
         }
 
-        return mul(length / getLength());
+        return mul(magnitude / getMagnitude());
     }
 
     @Override
     public FPoint normalize() {
 
-        return setLength(1);
+        return setMagnitude(1);
     }
 
     @Override
@@ -509,7 +509,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         }
 
         double dProd = getDotProduct(x, y, z);
-        double magAB = getLength() * Math.sqrt((x * x) + (y * y) + (z * z));
+        double magAB = getMagnitude() * Math.sqrt((x * x) + (y * y) + (z * z));
         double angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
@@ -531,7 +531,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         }
 
         double dProd = getDotProduct(op);
-        double magAB = getLength() * op.getLength();
+        double magAB = getMagnitude() * op.getMagnitude();
         double angle = Math.acos(dProd / magAB);
 
         return Double.isNaN(angle) ? 0 : angle;
@@ -552,7 +552,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("The vectors are similar");
         }
 
-        return applyWithFixedLength(p -> {
+        return applyWithFixedMagnitude(p -> {
             p.normalize();
 
             double opRawX = x;
@@ -609,7 +609,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("The vectors are similar");
         }
 
-        return applyWithFixedLength(p -> {
+        return applyWithFixedMagnitude(p -> {
             p.normalize();
 
             op.applyWithFixedState(rotAxis -> {
@@ -648,7 +648,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
-        return applyWithFixedLength(p -> {
+        return applyWithFixedMagnitude(p -> {
             p.normalize();
 
             double opRawX = x;
@@ -685,7 +685,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
-        return applyWithFixedLength(p -> {
+        return applyWithFixedMagnitude(p -> {
             p.normalize();
 
             op.applyWithFixedState(rotAxis -> {
@@ -744,7 +744,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint setSphericalCoordinates(double inclination, double azimuth) {
 
-        return applyWithFixedLength(p -> {
+        return applyWithFixedMagnitude(p -> {
             p.setX(Math.cos(azimuth) * Math.sin(inclination));
             p.setY(Math.cos(inclination));
             p.setZ(Math.sin(azimuth) * Math.sin(inclination));
@@ -754,13 +754,13 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public double getInclination() {
 
-        return Math.acos(getY() / getLength());
+        return Math.acos(getY() / getMagnitude());
     }
 
     @Override
     public FPoint setInclination(double polar) {
 
-        return applyWithFixedLength(p -> p.setSphericalCoordinates(polar, p.getAzimuth()));
+        return applyWithFixedMagnitude(p -> p.setSphericalCoordinates(polar, p.getAzimuth()));
     }
 
     @Override
@@ -784,7 +784,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint setAzimuth(double azimuthal) {
 
-        return applyWithFixedLength(p -> p.setSphericalCoordinates(p.getInclination(), azimuthal));
+        return applyWithFixedMagnitude(p -> p.setSphericalCoordinates(p.getInclination(), azimuthal));
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -809,12 +809,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint applyWithFixedLength(Consumer<FPoint> action) {
-        double length = getLength();
+    public FPoint applyWithFixedMagnitude(Consumer<FPoint> action) {
+        double length = getMagnitude();
 
         action.accept(this);
 
-        return setLength(length);
+        return setMagnitude(length);
     }
 
     @Override

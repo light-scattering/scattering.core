@@ -1088,7 +1088,7 @@ public class FLineTest {
 
             FVector fVectorDrift = fLineA.getRefOrigin().copy()
                     .setCrossProduct(fLineBOrigin)
-                    .setLength(1.5 * jitter);
+                    .setMagnitude(1.5 * jitter);
 
             fLineBOrigin.getRefBase().applyStateFrom(fVectorDrift.getRefHead());
 

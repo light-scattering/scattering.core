@@ -7,6 +7,9 @@ import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static eu.scattering.core.test.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +20,7 @@ public class FComplexTest {
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    class FComplexBase {
+    class FComplexBasicTest {
 
         @Test
         @DisplayName("Construct")
@@ -154,7 +157,7 @@ public class FComplexTest {
     @Nested
     @Tag("Mutable")
     @DisplayName("Base mutable")
-    class BaseMutable {
+    class FComplexMutableTest {
 
         private double refRe, refIm;
         private double opRe, opIm;
@@ -727,7 +730,7 @@ public class FComplexTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    class CoreFeatures {
+    class FComplexCoreTest {
         private double refRe, refIm;
 
         @BeforeEach
@@ -983,7 +986,7 @@ public class FComplexTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    class FComplexAdvanced {
+    class FComplexAdvancedTest {
 
         @Test
         @DisplayName("Get magnitude")
@@ -1150,7 +1153,7 @@ public class FComplexTest {
 
             FComplex fComplex = factory.getFComplex(re, im);
 
-            assertEquals(Math.PI * +0.25, fComplex.getPhase(),
+            assertEquals(Math.PI * 0.25, fComplex.getPhase(),
                     jitter, "The phase is erroneous");
         }
 
@@ -1409,6 +1412,112 @@ public class FComplexTest {
             FComplex fComplex = TestHelper.getRandomFComplex();
 
             FComplexTestHelper.testValue(e -> e.root(3), fComplex);
+        }
+    }
+
+    @Nested
+    @Tag("Extension")
+    @DisplayName("Extension")
+    class FComplexExtensionTest {
+
+        @Test
+        @DisplayName("Apply")
+        void apply() {
+            FComplex fComplex = factory.getFComplex(0, 0);
+
+            var fComplexRes = fComplex.apply(p -> p.setRe(1).setIm(2));
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fComplex.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(2, fComplex.getIm(), "The 'im' value is incorrect"),
+                    () -> assertSame(fComplexRes, fComplex, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply with fixed state")
+        void applyWithFixedState() {
+            FComplex fComplex = factory.getFComplex(0, 0);
+
+            List<Double> intermediate = new ArrayList<>();
+
+            var fComplexRes = fComplex.applyWithFixedState(p -> intermediate.add(p.setRe(2).setIm(2).getMagnitude()));
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(0, fComplex.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(0, fComplex.getIm(), "The 'im' value is incorrect"),
+                    () -> assertEquals(1, intermediate.size(), "The size of the array list is incorrect"),
+                    () -> assertEquals(2 * Math.sqrt(2), intermediate.get(0), jitter, "The value is incorrect"),
+                    () -> assertSame(fComplexRes, fComplex, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with double")
+        void terminateWithDouble() {
+            FComplex fComplex = factory.getFComplex(1, 2);
+
+            var res = fComplex.toDouble(p -> {
+                p.add(3, 4);
+                return p.getRe() + p.getIm();
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(4, fComplex.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(6, fComplex.getIm(), "The 'im' value is incorrect"),
+                    () -> assertEquals(10, res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with boolean")
+        void terminateWithBoolean() {
+            FComplex fComplex = factory.getFComplex(1, 2);
+
+            var res = fComplex.toBoolean(p -> {
+                p.add(3, 4);
+                return p.getRe() + p.getIm() == 10;
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(4, fComplex.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(6, fComplex.getIm(), "The 'im' value is incorrect"),
+                    () -> assertTrue(res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with double (fixed state)")
+        void terminateWithDoubleFixedState() {
+            FComplex fComplex = factory.getFComplex(1, 2);
+
+            var res = fComplex.toDoubleWithFixedState(p -> {
+                p.add(3, 4);
+                return p.getRe() + p.getIm();
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fComplex.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(2, fComplex.getIm(), "The 'im' value is incorrect"),
+                    () -> assertEquals(10, res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with boolean (fixed state)")
+        void terminateWithBooleanFixedState() {
+            FComplex fComplex = factory.getFComplex(1, 2);
+
+            var res = fComplex.toBooleanWithFixedState(p -> {
+                p.add(3, 4);
+                return p.getRe() + p.getIm() == 10;
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fComplex.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(2, fComplex.getIm(), "The 'im' value is incorrect"),
+                    () -> assertTrue(res, "The value is incorrect")
+            );
         }
     }
 }

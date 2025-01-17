@@ -1587,7 +1587,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(2, 2, 2);
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            assertEquals(Math.sqrt(3), fVector.getLength(), jitter, "The FVector length is erroneous");
+            assertEquals(Math.sqrt(3), fVector.getMagnitude(), jitter, "The FVector length is erroneous");
         }
 
         @Test
@@ -1597,7 +1597,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint();
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            assertEquals(0, fVector.getLength(), jitter, "The FVector length should be zero");
+            assertEquals(0, fVector.getMagnitude(), jitter, "The FVector length should be zero");
         }
 
         @Test
@@ -1612,7 +1612,7 @@ public class FVectorTest {
             double dimZ = fVector.getLengthZ() * fVector.getLengthZ();
             double radius = Math.sqrt(dimX + dimY + dimZ);
 
-            assertEquals(radius, fVector.getLength(), jitter, "The FVector length is erroneous");
+            assertEquals(radius, fVector.getMagnitude(), jitter, "The FVector length is erroneous");
         }
 
         @Test
@@ -1620,7 +1620,7 @@ public class FVectorTest {
         void getLengthValidate() {
             FVector fVector = factory.getFVector(1, 2, 3);
 
-            FVectorTestHelper.testValue(FVector::getLength, fVector);
+            FVectorTestHelper.testValue(FVector::getMagnitude, fVector);
         }
 
         @Test
@@ -1630,7 +1630,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(2, 2, 2);
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            assertEquals(3, fVector.getLengthP2(), jitter, "The FVector P2 length is erroneous");
+            assertEquals(3, fVector.getMagnitudeP2(), jitter, "The FVector P2 length is erroneous");
         }
 
         @Test
@@ -1638,7 +1638,7 @@ public class FVectorTest {
         void getLengthP2Validate() {
             FVector fVector = factory.getFVector(1, 2, 3);
 
-            FVectorTestHelper.testValue(FVector::getLengthP2, fVector);
+            FVectorTestHelper.testValue(FVector::getMagnitudeP2, fVector);
         }
 
         @Test
@@ -1648,7 +1648,7 @@ public class FVectorTest {
             FPoint fPointHead = factory.getFPoint(5, 5, 5);
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            fVector.setLength(Math.sqrt(3));
+            fVector.setMagnitude(Math.sqrt(3));
 
             Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(3, fVector.getRefBase().getX(), jitter,
@@ -1671,7 +1671,7 @@ public class FVectorTest {
         void setLengthOppositeDirection() {
             FVector fVector = factory.getFVector(1, 1, 1);
 
-            fVector.setLength(-2 * Math.sqrt(3));
+            fVector.setMagnitude(-2 * Math.sqrt(3));
 
             assertTrue(fVector.isSimilar(0, 0, 0, -2, -2, -2),
                     "The resulting FVector position is incorrect");
@@ -1684,9 +1684,9 @@ public class FVectorTest {
             FPoint fPointHead = TestHelper.getRandomFPoint();
             FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-            fVector.setLength(5);
+            fVector.setMagnitude(5);
 
-            assertEquals(5, fVector.getLength(), jitter, "The FVector length is erroneous");
+            assertEquals(5, fVector.getMagnitude(), jitter, "The FVector length is erroneous");
         }
 
         @Test
@@ -1694,7 +1694,7 @@ public class FVectorTest {
         void setLengthThrowIllegalStateException() {
             FVector fVector = factory.getFVector();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.setLength(1),
+            Assertions.assertThrows(IllegalStateException.class, () -> fVector.setMagnitude(1),
                     "The direction of the FVector is not defined");
         }
 
@@ -1703,7 +1703,7 @@ public class FVectorTest {
         void setLengthValidate() {
             FVector fVector = factory.getFVector(1, 2, 3);
 
-            FVectorTestHelper.testReference(a -> a.setLength(1), fVector);
+            FVectorTestHelper.testReference(a -> a.setMagnitude(1), fVector);
         }
 
         @Test
@@ -1715,7 +1715,7 @@ public class FVectorTest {
 
             fVector.normalize();
 
-            assertEquals(1, fVector.getLength(), jitter, "The FVector length is incorrect");
+            assertEquals(1, fVector.getMagnitude(), jitter, "The FVector length is incorrect");
         }
 
         @Test
@@ -2791,7 +2791,7 @@ public class FVectorTest {
             fVectorA.setOrthogonal(fVectorB);
 
             assertTrue(fVectorA.isOrthogonal(fVectorB), "The two FVectors should be orthogonal");
-            assertEquals(magnitude, fVectorA.getLength(), jitter, "The two FVectors should be orthogonal");
+            assertEquals(magnitude, fVectorA.getMagnitude(), jitter, "The two FVectors should be orthogonal");
         }
 
         @Test
@@ -3962,7 +3962,7 @@ public class FVectorTest {
             List<Double> intermediate = new ArrayList<>();
 
             var fVectorRes = fVector.applyWithFixedState(p ->
-                    intermediate.add(p.set(1, 2, 3, 4, 5, 6).getLengthP2()));
+                    intermediate.add(p.set(1, 2, 3, 4, 5, 6).getMagnitudeP2()));
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(0, fVector.getBaseX(), "The base X value is incorrect"),
@@ -3982,7 +3982,7 @@ public class FVectorTest {
         void applyWithFixedLength() {
             FVector fVector = factory.getFVector(1, 0, 0);
 
-            var fVectorRes = fVector.applyWithFixedLength(p ->
+            var fVectorRes = fVector.applyWithFixedMagnitude(p ->
                     p.setHead(-10, 0, 0));
 
             Assertions.assertAll("Validate FPoint values",
@@ -4022,7 +4022,7 @@ public class FVectorTest {
 
             var res = fVector.toDouble(p -> {
                 p.reflect(factory.getFPoint());
-                return p.getLengthP2();
+                return p.getMagnitudeP2();
             });
 
             Assertions.assertAll("Validate FPoint values",
@@ -4064,7 +4064,7 @@ public class FVectorTest {
 
             var res = fVector.toDoubleWithFixedState(p -> {
                 p.reflect(factory.getFPoint());
-                return p.getLengthP2();
+                return p.getMagnitudeP2();
             });
 
             Assertions.assertAll("Validate FPoint values",

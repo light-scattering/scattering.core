@@ -27,7 +27,7 @@ public class FPointRandomTest {
 
         FPoint fPoint = factory.getFRandomEngine().rndAngle(factory.getFPoint(radius));
 
-        assertEquals(radius, fPoint.getLength(),
+        assertEquals(radius, fPoint.getMagnitude(),
                 jitter, "The radius is invalid");
     }
 

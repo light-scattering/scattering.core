@@ -301,7 +301,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         double divisor = vPlane.getDotProduct(vLine);
         double distance = dividend / divisor;
 
-        FVector extension = ref.getRefOrigin().copy().setLength(distance);
+        FVector extension = ref.getRefOrigin().copy().setMagnitude(distance);
 
         return Optional.of(extension.getRefHead());
     }
@@ -311,7 +311,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private FPoint projectOnPlane(FPoint fPoint) {
         FPoint opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getLength());
+                .div(getRefOrigin().getMagnitude());
 
         FPoint opB = fPoint.copy()
                 .sub(getRefOrigin().getRefBase());
@@ -328,7 +328,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private FPoint projectOnLine(FPoint fPoint) {
         FPoint opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getLength());
+                .div(getRefOrigin().getMagnitude());
 
         FPoint opB = fPoint.copy()
                 .sub(getRefOrigin().getRefBase());
@@ -337,7 +337,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     private boolean isInHalfSpace(FPoint projection) {
-        double magnitude = getRefOrigin().getLength();
+        double magnitude = getRefOrigin().getMagnitude();
 
         double distanceBase = getRefOrigin().getRefBase().getDistance(projection);
         double distanceHead = getRefOrigin().getRefHead().getDistance(projection);

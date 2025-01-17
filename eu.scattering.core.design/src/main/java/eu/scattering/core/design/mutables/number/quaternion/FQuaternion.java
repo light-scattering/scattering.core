@@ -1,7 +1,13 @@
 package eu.scattering.core.design.mutables.number.quaternion;
 
+import eu.scattering.core.design.annotations.Extension;
+import eu.scattering.core.design.annotations.Facade;
+import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.number.Number;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface FQuaternion extends Number<FQuaternion> {
 
@@ -55,4 +61,22 @@ public interface FQuaternion extends Number<FQuaternion> {
     FQuaternion divI(double i);
     FQuaternion divJ(double j);
     FQuaternion divK(double k);
+
+    //--------------------------------------------------
+
+    @Extension
+    FQuaternion apply(Consumer<FQuaternion> action);
+
+    @Facade
+    FQuaternion applyWithFixedState(Consumer<FQuaternion> action);
+
+    @Termination
+    double toDouble(Function<FQuaternion, Double> action);
+    @Termination
+    boolean toBoolean(Function<FQuaternion, Boolean> action);
+
+    @Facade
+    double toDoubleWithFixedState(Function<FQuaternion, Double> action);
+    @Facade
+    boolean toBooleanWithFixedState(Function<FQuaternion, Boolean> action);
 }

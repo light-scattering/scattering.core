@@ -84,8 +84,8 @@ public interface FVector extends Primitive<FVector> {
     double getLengthY();
     double getLengthZ();
 
-    double getLength();
-    FVector setLength(double length);
+    double getMagnitude();
+    FVector setMagnitude(double magnitude);
 
     double getAngle(FVector op);
     FVector setAngle(FVector op, double angle);
@@ -133,7 +133,7 @@ public interface FVector extends Primitive<FVector> {
     //--------------------------------------------------
 
     @Fragment
-    double getLengthP2();
+    double getMagnitudeP2();
 
     @Extension
     FVector apply(Consumer<FVector> action);
@@ -141,7 +141,7 @@ public interface FVector extends Primitive<FVector> {
     @Facade
     FVector applyWithFixedState(Consumer<FVector> action);
     @Facade
-    FVector applyWithFixedLength(Consumer<FVector> action);
+    FVector applyWithFixedMagnitude(Consumer<FVector> action);
     @Facade
     FVector applyWithCenteredPosition(Consumer<FVector> action);
 

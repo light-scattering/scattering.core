@@ -499,8 +499,8 @@ public class FRandomTest {
             FPos3D posB = randomB.nextDoubleOnSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on sphere",
                     () -> assertTrue(Math.abs(lengthA - radius) < jitter),
@@ -523,8 +523,8 @@ public class FRandomTest {
             FPos3D posB = randomB.nextDoubleOnSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on sphere",
                     () -> assertTrue(Math.abs(lengthA - radius) < jitter),
@@ -547,8 +547,8 @@ public class FRandomTest {
             FPos3D posB = randomB.nextDoubleInSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on sphere",
                     () -> assertTrue(lengthA < radius),
@@ -570,8 +570,8 @@ public class FRandomTest {
             FPos3D posB = randomB.nextDoubleInSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on sphere",
                     () -> assertTrue(lengthA < radius),
@@ -595,8 +595,8 @@ public class FRandomTest {
             FPos2D posB = randomB.nextDoubleOnCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on sphere",
                     () -> assertTrue(Math.abs(lengthA - radius) < jitter),
@@ -619,8 +619,8 @@ public class FRandomTest {
             FPos2D posB = randomB.nextDoubleOnCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on sphere",
                     () -> assertTrue(Math.abs(lengthA - radius) < jitter),
@@ -643,8 +643,8 @@ public class FRandomTest {
             FPos2D posB = randomB.nextDoubleInCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on circle",
                     () -> assertTrue(lengthA < radius),
@@ -666,8 +666,8 @@ public class FRandomTest {
             FPos2D posB = randomB.nextDoubleInCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
-            double lengthA = pointA.getLength();
-            double lengthB = pointB.getLength();
+            double lengthA = pointA.getMagnitude();
+            double lengthB = pointB.getMagnitude();
 
             assertAll("Validate point on circle",
                     () -> assertTrue(lengthA < radius),

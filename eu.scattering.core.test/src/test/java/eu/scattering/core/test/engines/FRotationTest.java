@@ -148,13 +148,13 @@ public class FRotationTest {
     @DisplayName("Rotate (validate magnitude)")
     public void rotateValidateLength() {
         FPoint fPoint = TestHelper.getRandomFPoint();
-        double length = fPoint.getLength();
+        double length = fPoint.getMagnitude();
         double angle = random.nextDouble() % (2 * Math.PI);
         FRot rotor = fRot.getRotation(TestHelper.getRandomFPoint().toFPos3D(), angle);
 
         fRotHelper.rotate(fPoint, rotor);
 
-        assertEquals(length, fPoint.getLength(), jitter, "The magnitude is invalid");
+        assertEquals(length, fPoint.getMagnitude(), jitter, "The magnitude is invalid");
     }
 
     @Test

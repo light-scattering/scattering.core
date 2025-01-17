@@ -456,7 +456,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private FPoint projectUnit(FPoint fPoint) {
         var opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getLength());
+                .div(getRefOrigin().getMagnitude());
 
         var opB = fPoint.copy()
                 .sub(getRefOrigin().getRefBase());

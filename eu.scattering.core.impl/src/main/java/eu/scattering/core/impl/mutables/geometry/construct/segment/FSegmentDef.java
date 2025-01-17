@@ -249,7 +249,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     private Optional<FPoint> projectUnit(FPoint ref) {
         var opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getLength());
+                .div(getRefOrigin().getMagnitude());
 
         var opB = ref.copy()
                 .sub(getRefOrigin().getRefBase());
@@ -266,6 +266,6 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         var distBase = getRefOrigin().getRefBase().getDistance(projection);
         var distHead = getRefOrigin().getRefHead().getDistance(projection);
 
-        return Math.abs(distBase + distHead - getRefOrigin().getLength()) < epsilon;
+        return Math.abs(distBase + distHead - getRefOrigin().getMagnitude()) < epsilon;
     }
 }

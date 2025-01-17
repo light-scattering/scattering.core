@@ -67,7 +67,7 @@ public class FRandomEngineDef implements FRandomEngine {
 
     @Override
     public FPoint rndAngle(FPoint origin, FPoint... exclusion) {
-        double radius = origin.getLength();
+        double radius = origin.getMagnitude();
 
         origin.set(core.nextDoubleOnSphere(radius));
 

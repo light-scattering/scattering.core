@@ -43,11 +43,12 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint reflect(double x, double y, double z);
     FPoint reflect(FPoint op);
 
-    double getLength();
-    FPoint setLength(double length);
+    double getMagnitude();
+    FPoint setMagnitude(double magnitude);
 
     double getDistance(double x, double y, double z);
     double getDistance(FPoint op);
+
     FPoint setDistance(double x, double y, double z, double distance);
     FPoint setDistance(FPoint op, double distance);
 
@@ -59,6 +60,7 @@ public interface FPoint extends Primitive<FPoint> {
 
     double getAngle(double x, double y, double z);
     double getAngle(FPoint op);
+
     FPoint setAngle(double x, double y, double z, double angle);
     FPoint setAngle(FPoint op, double angle);
 
@@ -76,7 +78,7 @@ public interface FPoint extends Primitive<FPoint> {
     //--------------------------------------------------
 
     @Fragment
-    double getLengthP2();
+    double getMagnitudeP2();
     @Fragment
     double getDistanceP2(double x, double y, double z);
     @Fragment
@@ -88,7 +90,7 @@ public interface FPoint extends Primitive<FPoint> {
     @Facade
     FPoint applyWithFixedState(Consumer<FPoint> action);
     @Facade
-    FPoint applyWithFixedLength(Consumer<FPoint> action);
+    FPoint applyWithFixedMagnitude(Consumer<FPoint> action);
 
     @Termination
     double toDouble(Function<FPoint, Double> action);

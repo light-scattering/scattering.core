@@ -7,6 +7,9 @@ import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static eu.scattering.core.test.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +20,7 @@ public class FQuaternionTest {
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality")
-    class FQuaternionBase {
+    class FQuaternionBasicTest {
 
         @Test
         @DisplayName("Construct")
@@ -243,7 +246,7 @@ public class FQuaternionTest {
     @Nested
     @Tag("Mutable")
     @DisplayName("Base mutable")
-    class BaseMutable {
+    class FQuaternionMutableTest {
 
         private double refRe, refI, refJ, refK;
         private double opRe, opI, opJ, opK;
@@ -1253,7 +1256,7 @@ public class FQuaternionTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core features")
-    class CoreFeatures {
+    class FQuaternionCoreTest {
 
         private double refRe, refI, refJ, refK;
 
@@ -1545,7 +1548,7 @@ public class FQuaternionTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    class FQuaternionAdvanced {
+    class FQuaternionAdvancedTest {
 
         @Test
         @DisplayName("Get magnitude")
@@ -1831,6 +1834,125 @@ public class FQuaternionTest {
             FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
 
             FQuaternionTestHelper.restReference(e -> e.power(3), fQuaternion);
+        }
+    }
+
+    @Nested
+    @Tag("Extension")
+    @DisplayName("Extension")
+    class FQuaternionExtensionTest {
+
+        @Test
+        @DisplayName("Apply")
+        void apply() {
+            FQuaternion fQuaternion = factory.getFQuaternion(0, 0, 0, 0);
+
+            var fQuaternionRes = fQuaternion.apply(p -> p.setRe(1).setI(2).setJ(3).setK(4));
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fQuaternion.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(2, fQuaternion.getI(), "The 'i' value is incorrect"),
+                    () -> assertEquals(3, fQuaternion.getJ(), "The 'j' value is incorrect"),
+                    () -> assertEquals(4, fQuaternion.getK(), "The 'k' value is incorrect"),
+                    () -> assertSame(fQuaternionRes, fQuaternion, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply with fixed state")
+        void applyWithFixedState() {
+            FQuaternion fQuaternion = factory.getFQuaternion(0, 0, 0, 0);
+
+            List<Double> intermediate = new ArrayList<>();
+
+            var fComplexRes = fQuaternion.applyWithFixedState(p ->
+                    intermediate.add(p.setRe(1).setI(2).setJ(3).setK(4).getMagnitude()));
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(0, fQuaternion.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(0, fQuaternion.getI(), "The 'i' value is incorrect"),
+                    () -> assertEquals(0, fQuaternion.getJ(), "The 'j' value is incorrect"),
+                    () -> assertEquals(0, fQuaternion.getK(), "The 'k' value is incorrect"),
+                    () -> assertEquals(1, intermediate.size(), "The size of the array list is incorrect"),
+                    () -> assertTrue(intermediate.get(0) > 0, "The value is incorrect"),
+                    () -> assertSame(fComplexRes, fQuaternion, "The reference is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with double")
+        void terminateWithDouble() {
+            FQuaternion fQuaternion = factory.getFQuaternion(1, 2, 3, 4);
+
+            var res = fQuaternion.toDouble(p -> {
+                p.add(3, 4, 5, 6);
+                return p.getRe() + p.getI() + p.getJ() + p.getK();
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(4, fQuaternion.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(6, fQuaternion.getI(), "The 'i' value is incorrect"),
+                    () -> assertEquals(8, fQuaternion.getJ(), "The 'j' value is incorrect"),
+                    () -> assertEquals(10, fQuaternion.getK(), "The 'k' value is incorrect"),
+                    () -> assertEquals(28, res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with boolean")
+        void terminateWithBoolean() {
+            FQuaternion fQuaternion = factory.getFQuaternion(1, 2, 3, 4);
+
+            var res = fQuaternion.toBoolean(p -> {
+                p.add(3, 4, 5, 6);
+                return p.getRe() + p.getI() + p.getJ() + p.getK() == 28;
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(4, fQuaternion.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(6, fQuaternion.getI(), "The 'i' value is incorrect"),
+                    () -> assertEquals(8, fQuaternion.getJ(), "The 'j' value is incorrect"),
+                    () -> assertEquals(10, fQuaternion.getK(), "The 'k' value is incorrect"),
+                    () -> assertTrue(res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with double (fixed state)")
+        void terminateWithDoubleFixedState() {
+            FQuaternion fQuaternion = factory.getFQuaternion(1, 2, 3, 4);
+
+            var res = fQuaternion.toDoubleWithFixedState(p -> {
+                p.add(3, 4, 5, 6);
+                return p.getRe() + p.getI() + p.getJ() + p.getK();
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fQuaternion.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(2, fQuaternion.getI(), "The 'i' value is incorrect"),
+                    () -> assertEquals(3, fQuaternion.getJ(), "The 'j' value is incorrect"),
+                    () -> assertEquals(4, fQuaternion.getK(), "The 'k' value is incorrect"),
+                    () -> assertEquals(28, res, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Terminate with boolean (fixed state)")
+        void terminateWithBooleanFixedState() {
+            FQuaternion fQuaternion = factory.getFQuaternion(1, 2, 3, 4);
+
+            var res = fQuaternion.toBooleanWithFixedState(p -> {
+                p.add(3, 4, 5, 6);
+                return p.getRe() + p.getI() + p.getJ() + p.getK() == 28;
+            });
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fQuaternion.getRe(), "The 're' value is incorrect"),
+                    () -> assertEquals(2, fQuaternion.getI(), "The 'i' value is incorrect"),
+                    () -> assertEquals(3, fQuaternion.getJ(), "The 'j' value is incorrect"),
+                    () -> assertEquals(4, fQuaternion.getK(), "The 'k' value is incorrect"),
+                    () -> assertTrue(res, "The value is incorrect")
+            );
         }
     }
 }

@@ -258,7 +258,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         }
 
         var fPoint = getRefOrigin().getRefHead().copy().sub(getRefOrigin().getRefBase());
-        var tmp = length / getRefOrigin().getLength();
+        var tmp = length / getRefOrigin().getMagnitude();
 
         fPoint.setX(getRefOrigin().getRefBase().getX() + (fPoint.getX() * tmp));
         fPoint.setY(getRefOrigin().getRefBase().getY() + (fPoint.getY() * tmp));
@@ -282,7 +282,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     private Optional<FPoint> projectUnit(FPoint ref) {
         var opA = getRefOrigin().getRefHead().copy()
                 .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getLength());
+                .div(getRefOrigin().getMagnitude());
 
         var opB = ref.copy()
                 .sub(getRefOrigin().getRefBase());
@@ -299,7 +299,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         var distBase = getRefOrigin().getRefBase().getDistance(projection);
         var distHead = getRefOrigin().getRefHead().getDistance(projection);
 
-        if (Math.abs(distBase + distHead - getRefOrigin().getLength()) < epsilon) {
+        if (Math.abs(distBase + distHead - getRefOrigin().getMagnitude()) < epsilon) {
             return true;
         }
 
