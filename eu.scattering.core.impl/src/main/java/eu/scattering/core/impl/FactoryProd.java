@@ -151,7 +151,12 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FComplex getFComplex() {
 
-        return FComplexDef.create(epsilon);
+        return FComplexDef.create(epsilon, 0, 0);
+    }
+
+    public FComplex getFComplex(double re, double im) {
+
+        return FComplexDef.create(epsilon, re, im);
     }
 
     @Override

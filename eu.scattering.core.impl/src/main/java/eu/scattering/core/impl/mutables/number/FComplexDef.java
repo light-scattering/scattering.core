@@ -21,29 +21,31 @@ public class FComplexDef implements FComplex {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double[] origin = { 0.0, 0.0 };
     private final double epsilon;
+    private double oRe, oIm;
 
-    private FComplexDef(double epsilon) {
+    private FComplexDef(double epsilon, double re, double im) {
 
         this.epsilon = epsilon;
+        this.oRe = re;
+        this.oIm = im;
     }
 
-    public static FComplex create(double epsilon) {
+    public static FComplex create(double epsilon, double re, double im) {
 
-        return new FComplexDef(epsilon);
+        return new FComplexDef(epsilon, re, im);
     }
 
     @Override
     public double getRe() {
 
-        return origin[0];
+        return this.oRe;
     }
 
     @Override
     public FComplex setRe(double re) {
 
-        origin[0] = re;
+        this.oRe = re;
 
         return this;
     }
@@ -51,13 +53,13 @@ public class FComplexDef implements FComplex {
     @Override
     public double getIm() {
 
-        return origin[1];
+        return this.oIm;
     }
 
     @Override
     public FComplex setIm(double im) {
 
-        origin[1] = im;
+        this.oIm = im;
 
         return this;
     }
@@ -155,7 +157,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FComplex copyZero() {
 
-        return FComplexDef.create(epsilon);
+        return FComplexDef.create(epsilon, 0, 0);
     }
 
     @Override
@@ -273,14 +275,16 @@ public class FComplexDef implements FComplex {
 
     @Override
     public FComplex mul(double re, double im) {
+        double valueRe = getRe() * re - getIm() * im;
+        double valueIm = getRe() * im + getIm() * re;
 
-        return mulRe(re).mulIm(im);
+        return set(valueRe, valueIm);
     }
 
     @Override
     public FComplex mul(double factor) {
 
-        return mul(factor, factor);
+        return mulRe(factor).mulIm(factor);
     }
 
     @Override
@@ -312,13 +316,21 @@ public class FComplexDef implements FComplex {
     @Override
     public FComplex div(double re, double im) {
 
-        return divRe(re).divIm(im);
+        if (re == 0 && im == 0) {
+            throw new ArithmeticException("The divisor cannot be zero");
+        }
+
+        double nominatorRe = (getRe() * re) + (getIm() * im);
+        double nominatorIm = (getIm() * re) - (getRe() * im);
+        double denominator = (re * re) + (im * im);
+
+        return set(nominatorRe / denominator, nominatorIm / denominator);
     }
 
     @Override
     public FComplex div(double factor) {
 
-        return div(factor, factor);
+        return divRe(factor).divIm(factor);
     }
 
     @Override
@@ -469,10 +481,9 @@ public class FComplexDef implements FComplex {
 
     @Override
     public FComplex inverse() {
+        double denominator = (getRe() * getRe()) + (getIm() * getIm());
 
-        copyZero().set(1, 0).div(this).applyStateTo(this);
-
-        return this;
+        return set(getRe() / denominator, -getIm() / denominator);
     }
 
     @Override
