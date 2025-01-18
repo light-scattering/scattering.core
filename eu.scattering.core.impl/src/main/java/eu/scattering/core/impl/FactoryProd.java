@@ -72,13 +72,25 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FPoint getFPoint() {
 
-        return FPointDef.create(epsilon);
+        return FPointDef.create(epsilon, 0, 0, 0);
+    }
+
+    @Override
+    public FPoint getFPoint(double x, double y, double z) {
+
+        return FPointDef.create(epsilon, x, y, z);
     }
 
     @Override
     public FVector getFVector() {
 
         return FVectorDef.create(epsilon, getFPoint(), getFPoint());
+    }
+
+    @Override
+    public FVector getFVector(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        return FVectorDef.create(epsilon, getFPoint(bX, bY, bZ), getFPoint(hX, hY, hZ));
     }
 
     @Override
@@ -93,6 +105,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
         return FVectorDef.create(epsilon, refBase, refHead);
     }
 
+    @Override
     public FLine getFLine() {
 
         return FLineDef.create(epsilon, this::getFVector);

@@ -22,14 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/number/quaternion/FQuaternion.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/number/quaternion/FQuaternion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/number/quaternion/FQuaternionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/number/quaternion/FQuaternionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryProd.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryProd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/number/FQuaternionDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/number/FQuaternionDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/number/FQuaternionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/number/FQuaternionTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -162,7 +155,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
-    <configuration name="FQuaternionMutableTest.divPrimitives" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FComplexTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -175,7 +168,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.number.FQuaternionTest$FQuaternionMutableTest.divPrimitives&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.number.FComplexTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -185,7 +178,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FQuaternionMutableTest.divPrimitivesValidate" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FQuaternionCoreTest.isSimilarValidate" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -198,7 +191,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.number.FQuaternionTest$FQuaternionMutableTest.divPrimitivesValidate&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.number.FQuaternionTest$FQuaternionCoreTest.isSimilarValidate&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -208,7 +201,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FQuaternionMutableTest.mulPrimitives" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FQuaternionMutableTest.addFQuaternion" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -221,7 +214,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.number.FQuaternionTest$FQuaternionMutableTest.mulPrimitives&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.number.FQuaternionTest$FQuaternionMutableTest.addFQuaternion&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -278,10 +271,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.FQuaternionCoreTest.isSimilarValidate" />
         <item itemvalue="Gradle.FQuaternionTest" />
-        <item itemvalue="Gradle.FQuaternionMutableTest.divPrimitivesValidate" />
-        <item itemvalue="Gradle.FQuaternionMutableTest.mulPrimitives" />
-        <item itemvalue="Gradle.FQuaternionMutableTest.divPrimitives" />
+        <item itemvalue="Gradle.FQuaternionMutableTest.addFQuaternion" />
+        <item itemvalue="Gradle.FComplexTest" />
       </list>
     </recent_temporary>
   </component>

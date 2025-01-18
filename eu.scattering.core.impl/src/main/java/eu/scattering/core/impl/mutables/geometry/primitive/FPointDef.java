@@ -27,14 +27,17 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     private final double epsilon;
     private double oX, oY, oZ;
 
-    private FPointDef(double epsilon) {
+    private FPointDef(double epsilon, double x, double y, double z) {
 
         this.epsilon = epsilon;
+        this.oX = x;
+        this.oY = y;
+        this.oZ = z;
     }
 
-    public static FPoint create(double epsilon) {
+    public static FPoint create(double epsilon, double x, double y, double z) {
 
-        return new FPointDef(epsilon);
+        return new FPointDef(epsilon, x, y, z);
     }
 
     @Override
@@ -170,7 +173,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint copyZero() {
 
-        return FPointDef.create(epsilon);
+        return FPointDef.create(epsilon, 0, 0, 0);
     }
 
     @Override
