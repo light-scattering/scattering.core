@@ -6,22 +6,19 @@ public interface FQuaternionFactory {
 
     FQuaternion getFQuaternion();
 
+    FQuaternion getFQuaternion(double re, double i, double j, double k);
+
     //--------------------------------------------------
-
-    default FQuaternion getFQuaternion(double re, double i, double j, double k) {
-
-        return getFQuaternion().set(re, i, j, k);
-    }
 
     default FQuaternion getFQuaternion(double re) {
 
-        return getFQuaternion().setRe(re);
+        return getFQuaternion(re, 0, 0, 0);
     }
 
     //--------------------------------------------------
 
     default FQuaternion getFQuaternion(FPos4D origin) {
 
-        return getFQuaternion().set(origin);
+        return getFQuaternion(origin.getD0(), origin.getD1(), origin.getD2(), origin.getD3());
     }
 }

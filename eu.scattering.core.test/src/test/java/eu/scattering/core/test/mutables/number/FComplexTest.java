@@ -51,6 +51,19 @@ public class FComplexTest {
         }
 
         @Test
+        @DisplayName("Construct with real part")
+        void constructWithRe() {
+            FComplex fComplex = factory.getFComplex(1);
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(1, fComplex.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(0, fComplex.getIm(),
+                            "The imaginary part is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Set values with FPos2D")
         void constructWithFPos2D() {
             FComplex fComplex = factory.getFComplex(factory.getFPos2D(1, 2));

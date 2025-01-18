@@ -82,17 +82,17 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex applyStateTo(FComplex ref) {
+    public FComplex applyStateTo(FComplex arg) {
 
-        ref.applyStateFrom(this);
+        arg.applyStateFrom(this);
 
         return this;
     }
 
     @Override
-    public FComplex applyStateFrom(FComplex ref) {
+    public FComplex applyStateFrom(FComplex arg) {
 
-        return set(ref.getRe(), ref.getIm());
+        return set(arg.getRe(), arg.getIm());
     }
 
     @Override
@@ -112,32 +112,32 @@ public class FComplexDef implements FComplex {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isExact(FComplex ref) {
+    public boolean isExact(FComplex arg) {
 
-        if (ref == null) {
+        if (arg == null) {
             throw new NullPointerException("The reference FComplex cannot be null");
         }
 
-        if (this == ref) {
+        if (this == arg) {
             return true;
         }
 
-        return getRe() == ref.getRe() && getIm() == ref.getIm();
+        return getRe() == arg.getRe() && getIm() == arg.getIm();
     }
 
     @Override
-    public boolean isSimilar(FComplex ref) {
+    public boolean isSimilar(FComplex arg) {
 
-        if (ref == null) {
+        if (arg == null) {
             throw new NullPointerException("The reference FComplex cannot be null");
         }
 
-        if (this == ref) {
+        if (this == arg) {
             return true;
         }
 
-        double distanceRe = Math.abs(getRe() - ref.getRe());
-        double distanceIm = Math.abs(getIm() - ref.getIm());
+        double distanceRe = Math.abs(getRe() - arg.getRe());
+        double distanceIm = Math.abs(getIm() - arg.getIm());
 
         return distanceRe < epsilon && distanceIm < epsilon;
     }
@@ -206,9 +206,9 @@ public class FComplexDef implements FComplex {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FComplex add(FComplex ref) {
+    public FComplex add(FComplex arg) {
 
-        return add(ref.getRe(), ref.getIm());
+        return add(arg.getRe(), arg.getIm());
     }
 
     @Override
@@ -236,9 +236,9 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex sub(FComplex ref) {
+    public FComplex sub(FComplex arg) {
 
-        return sub(ref.getRe(), ref.getIm());
+        return sub(arg.getRe(), arg.getIm());
     }
 
     @Override
@@ -266,9 +266,9 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex mul(FComplex ref) {
-        double valueRe = getRe() * ref.getRe() - getIm() * ref.getIm();
-        double valueIm = getRe() * ref.getIm() + getIm() * ref.getRe();
+    public FComplex mul(FComplex arg) {
+        double valueRe = getRe() * arg.getRe() - getIm() * arg.getIm();
+        double valueIm = getRe() * arg.getIm() + getIm() * arg.getRe();
 
         return set(valueRe, valueIm);
     }
@@ -300,15 +300,15 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex div(FComplex ref) {
+    public FComplex div(FComplex arg) {
 
-        if (ref.isZero()) {
+        if (arg.isZero()) {
             throw new ArithmeticException("The divisor cannot be zero");
         }
 
-        double nominatorRe = (getRe() * ref.getRe()) + (getIm() * ref.getIm());
-        double nominatorIm = (getIm() * ref.getRe()) - (getRe() * ref.getIm());
-        double denominator = (ref.getRe() * ref.getRe()) + (ref.getIm() * ref.getIm());
+        double nominatorRe = (getRe() * arg.getRe()) + (getIm() * arg.getIm());
+        double nominatorIm = (getIm() * arg.getRe()) - (getRe() * arg.getIm());
+        double denominator = (arg.getRe() * arg.getRe()) + (arg.getIm() * arg.getIm());
 
         return set(nominatorRe / denominator, nominatorIm / denominator);
     }
@@ -395,24 +395,24 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public double getDistanceP2(FComplex ref) {
-        double distanceRe = Math.abs(getRe() - ref.getRe());
-        double distanceIm = Math.abs(getIm() - ref.getIm());
+    public double getDistanceP2(FComplex arg) {
+        double distanceRe = Math.abs(getRe() - arg.getRe());
+        double distanceIm = Math.abs(getIm() - arg.getIm());
 
         return (distanceRe * distanceRe) + (distanceIm * distanceIm);
     }
 
     @Override
-    public double getDistance(FComplex ref) {
-        double distanceRe = Math.abs(getRe() - ref.getRe());
-        double distanceIm = Math.abs(getIm() - ref.getIm());
+    public double getDistance(FComplex arg) {
+        double distanceRe = Math.abs(getRe() - arg.getRe());
+        double distanceIm = Math.abs(getIm() - arg.getIm());
 
         return Math.sqrt((distanceRe * distanceRe) + (distanceIm * distanceIm));
     }
 
     // TODO - Not implemented
     @Override
-    public FComplex setDistance(FComplex ref, double distance) {
+    public FComplex setDistance(FComplex arg, double distance) {
 
         return null;
     }

@@ -5,10 +5,10 @@ import eu.scattering.core.design.mutables.Mutable;
 
 public interface Number<T> extends Mutable<T> {
 
-    T add(T ref);
-    T sub(T ref);
-    T mul(T ref);
-    T div(T ref);
+    T add(T arg);
+    T sub(T arg);
+    T mul(T arg);
+    T div(T arg);
 
     T add(double factor);
     T sub(double factor);
@@ -20,8 +20,8 @@ public interface Number<T> extends Mutable<T> {
     double getMagnitude();
     T setMagnitude(double magnitude);
 
-    double getDistance(T ref);
-    T setDistance(T ref, double distance);
+    double getDistance(T arg);
+    T setDistance(T arg, double distance);
 
     T power(int n);
     T [] root(int n);
@@ -31,11 +31,11 @@ public interface Number<T> extends Mutable<T> {
     T conjugate();
     T normalize();
 
-    T applyStateTo(T ref);
-    T applyStateFrom(T ref);
+    T applyStateTo(T arg);
+    T applyStateFrom(T arg);
 
     @Fragment
     double getMagnitudeP2();
     @Fragment
-    double getDistanceP2(T ref);
+    double getDistanceP2(T arg);
 }

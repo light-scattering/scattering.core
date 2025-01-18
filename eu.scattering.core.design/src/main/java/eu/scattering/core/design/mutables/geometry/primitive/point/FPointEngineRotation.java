@@ -2,6 +2,7 @@ package eu.scattering.core.design.mutables.geometry.primitive.point;
 
 public interface FPointEngineRotation {
 
+    // TODO - Rename to setAngleQt
     FPoint setAngle(FPoint origin, FPoint op, double angle);
 
     FPoint rotate(FPoint origin, FPoint op, double angle);

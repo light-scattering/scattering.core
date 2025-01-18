@@ -18,6 +18,7 @@ public interface FPointFactory {
         return getFPoint().setX(x).setY(y);
     }
 
+    // TODO move to default getter
     default FPoint getFPoint(double x, double y, double z) {
 
         return getFPoint().set(x, y, z);

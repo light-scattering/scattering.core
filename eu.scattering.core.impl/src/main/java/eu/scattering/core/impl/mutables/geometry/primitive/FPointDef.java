@@ -407,10 +407,10 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public double getDistanceP2(FPoint op) {
-        double dimX = op.getX() - getX();
-        double dimY = op.getY() - getY();
-        double dimZ = op.getZ() - getZ();
+    public double getDistanceP2(FPoint arg) {
+        double dimX = arg.getX() - getX();
+        double dimY = arg.getY() - getY();
+        double dimZ = arg.getZ() - getZ();
 
         return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
     }

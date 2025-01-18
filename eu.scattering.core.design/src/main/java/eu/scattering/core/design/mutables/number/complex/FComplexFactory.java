@@ -10,8 +10,15 @@ public interface FComplexFactory {
 
     //--------------------------------------------------
 
+    default FComplex getFComplex(double re) {
+
+        return getFComplex(re, 0);
+    }
+
+    //--------------------------------------------------
+
     default FComplex getFComplex(FPos2D origin) {
 
-        return getFComplex().set(origin);
+        return getFComplex(origin.getD0(), origin.getD1());
     }
 }

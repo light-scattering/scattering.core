@@ -82,7 +82,7 @@ public interface FPoint extends Primitive<FPoint> {
     @Fragment
     double getDistanceP2(double x, double y, double z);
     @Fragment
-    double getDistanceP2(FPoint op);
+    double getDistanceP2(FPoint arg);
 
     @Extension
     FPoint apply(Consumer<FPoint> action);

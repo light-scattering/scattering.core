@@ -162,7 +162,12 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FQuaternion getFQuaternion() {
 
-        return FQuaternionDef.create(epsilon);
+        return FQuaternionDef.create(epsilon, 0, 0, 0, 0);
+    }
+
+    public FQuaternion getFQuaternion(double re, double i, double j, double k) {
+
+        return FQuaternionDef.create(epsilon, re, i, j, k);
     }
 
 //--------------------------------------------------

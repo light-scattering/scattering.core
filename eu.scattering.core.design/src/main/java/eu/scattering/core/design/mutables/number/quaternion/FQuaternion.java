@@ -50,14 +50,12 @@ public interface FQuaternion extends Number<FQuaternion> {
 
     FQuaternion mul(double re, double i, double j, double k);
     FQuaternion mulRe(double re);
-    FQuaternion mulIm(double i, double j, double k);
     FQuaternion mulI(double i);
     FQuaternion mulJ(double j);
     FQuaternion mulK(double k);
 
     FQuaternion div(double re, double i, double j, double k);
     FQuaternion divRe(double re);
-    FQuaternion divIm(double i, double j, double k);
     FQuaternion divI(double i);
     FQuaternion divJ(double j);
     FQuaternion divK(double k);
