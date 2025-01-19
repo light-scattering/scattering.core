@@ -26,8 +26,8 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private FVector origin;
     private final double epsilon;
+    private FVector origin;
 
     private FLineDef(double epsilon, Supplier<FVector> fOriginSupplier) {
 
@@ -188,7 +188,13 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> p.reflect(projectUnit(p.copy())));
+        geometry.disassemble().forEach(p -> {
+            var x = p.getX();
+            var y = p.getY();
+            var z = p.getZ();
+
+            p.reflect(projectUnit(p.copy()));
+        });
     }
 
     @Override
@@ -239,64 +245,19 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public Optional<FPoint> getFPointAtX(double x) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        if (getRefOrigin().getRefBase().getX() == getRefOrigin().getRefHead().getX()) {
-            return Optional.empty();
-        }
-
-        var l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
-        var m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
-        var n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
-
-        var y = getRefOrigin().getRefBase().getY() + (m / l * (x - getRefOrigin().getRefBase().getX()));
-        var z = getRefOrigin().getRefBase().getZ() + (n / l * (x - getRefOrigin().getRefBase().getX()));
-
-        return Optional.of(fPointSupplier.get().set(x, y, z));
+        return setFPointAtX(fPointSupplier.get().setX(x));
     }
 
     @Override
     public Optional<FPoint> getFPointAtY(double y) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        if (getRefOrigin().getRefBase().getY() == getRefOrigin().getRefHead().getY()) {
-            return Optional.empty();
-        }
-
-        double l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
-        double m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
-        double n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
-
-        double x = getRefOrigin().getRefBase().getX() + (l / m * (y - getRefOrigin().getRefBase().getY()));
-        double z = getRefOrigin().getRefBase().getZ() + (n / m * (y - getRefOrigin().getRefBase().getY()));
-
-        return Optional.of(fPointSupplier.get().set(x, y, z));
+        return setFPointAtY(fPointSupplier.get().setY(y));
     }
 
     @Override
     public Optional<FPoint> getFPointAtZ(double z) {
 
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        if (getRefOrigin().getRefBase().getZ() == getRefOrigin().getRefHead().getZ()) {
-            return Optional.empty();
-        }
-
-        double l = getRefOrigin().getRefHead().getX() - getRefOrigin().getRefBase().getX();
-        double m = getRefOrigin().getRefHead().getY() - getRefOrigin().getRefBase().getY();
-        double n = getRefOrigin().getRefHead().getZ() - getRefOrigin().getRefBase().getZ();
-
-        double x = getRefOrigin().getRefBase().getX() + (l / n * (z - getRefOrigin().getRefBase().getZ()));
-        double y = getRefOrigin().getRefBase().getY() + (m / n * (z - getRefOrigin().getRefBase().getZ()));
-
-        return Optional.of(fPointSupplier.get().set(x, y, z));
+        return setFPointAtZ(fPointSupplier.get().setZ(z));
     }
 
     @Override
@@ -306,7 +267,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             return Optional.empty();
         }
 
-        String dir = getProjectionType(ref.getRefOrigin());
+        Direction dir = getProjectionType(ref.getRefOrigin());
 
         var u = projectOnPlane(dir, getRefOrigin().copy());
         var v = projectOnPlane(dir, ref.getRefOrigin().copy());
@@ -316,135 +277,228 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         double scaleFactor = v.copy().reflectHead().getDotProduct(w) / v.getDotProduct(u);
 
-        return validateCandidate(ref, getCandidate3D(dir, getCandidate2D(u, scaleFactor)).orElse(null));
+        return validateCandidate(ref, setCandidate3D(setCandidate2D(u, scaleFactor), dir).orElse(null));
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private String getProjectionType(FVector ref) {
+    private enum Direction { XY, YZ, XZ };
+
+    private Optional<FPoint> setFPointAtX(FPoint arg) {
+        var origin = getRefOrigin();
+
+        if (origin.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        var oBase = origin.getRefBase();
+        var oHead = origin.getRefHead();
+
+        if (oBase.getX() == oHead.getX()) {
+            return Optional.empty();
+        }
+
+        var l = oHead.getX() - oBase.getX();
+        var m = oHead.getY() - oBase.getY();
+        var n = oHead.getZ() - oBase.getZ();
+
+        var y = oBase.getY() + (m / l * (arg.getX() - oBase.getX()));
+        var z = oBase.getZ() + (n / l * (arg.getX() - oBase.getX()));
+
+        return Optional.of(arg.setY(y).setZ(z));
+    }
+
+    private Optional<FPoint> setFPointAtY(FPoint arg) {
+        var origin = getRefOrigin();
+
+        if (origin.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        var oBase = origin.getRefBase();
+        var oHead = origin.getRefHead();
+
+        if (oBase.getY() == oHead.getY()) {
+            return Optional.empty();
+        }
+
+        double l = oHead.getX() - oBase.getX();
+        double m = oHead.getY() - oBase.getY();
+        double n = oHead.getZ() - oBase.getZ();
+
+        double x = oBase.getX() + (l / m * (arg.getY() - oBase.getY()));
+        double z = oBase.getZ() + (n / m * (arg.getY() - oBase.getY()));
+
+        return Optional.of(arg.setX(x).setZ(z));
+    }
+
+    private Optional<FPoint> setFPointAtZ(FPoint arg) {
+        var origin = getRefOrigin();
+
+        if (origin.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        var oBase = origin.getRefBase();
+        var oHead = origin.getRefHead();
+
+        if (oBase.getZ() == oHead.getZ()) {
+            return Optional.empty();
+        }
+
+        double l = oHead.getX() - oBase.getX();
+        double m = oHead.getY() - oBase.getY();
+        double n = oHead.getZ() - oBase.getZ();
+
+        double x = oBase.getX() + (l / n * (arg.getZ() - oBase.getZ()));
+        double y = oBase.getY() + (m / n * (arg.getZ() - oBase.getZ()));
+
+        return Optional.of(arg.setX(x).setY(y));
+    }
+
+    private Direction getProjectionType(FVector ref) {
 
         if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthY() > 0) &&
                 (ref.getLengthX() > 0 || ref.getLengthY() > 0)) {
 
-            return "XY";
+            return Direction.XY;
         }
 
         if ((getRefOrigin().getLengthY() > 0 || getRefOrigin().getLengthZ() > 0) &&
                 (ref.getLengthY() > 0 || ref.getLengthZ() > 0)) {
 
-            return "YZ";
+            return Direction.YZ;
         }
 
         if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthZ() > 0) &&
                 (ref.getLengthX() > 0 || ref.getLengthZ() > 0)) {
 
-            return "XZ";
+            return Direction.XZ;
         }
 
         throw new IllegalStateException("The projection plane cannot be determined");
     }
 
-    private FVector projectOnPlane(String dir, FVector ref) {
+    private FVector projectOnPlane(Direction dir, FVector ref) {
 
         switch (dir) {
-            case "XY":
+            case XY:
                 ref.getRefBase().setZ(0);
                 ref.getRefHead().setZ(0);
 
                 return ref;
-            case "YZ":
+            case YZ:
                 ref.getRefBase().setX(0);
                 ref.getRefHead().setX(0);
 
                 return ref;
-            case "XZ":
+            case XZ:
                 ref.getRefBase().setY(0);
                 ref.getRefHead().setY(0);
 
                 return ref;
         }
 
-        throw new IllegalStateException("The FVector cannot be projected on any plane. Value " + dir);
+        throw new IllegalStateException("The FVector cannot be projected on any plane. Direction " + dir);
     }
 
-    private FVector getCrossProduct(String dir, FVector ref) {
+    private FVector getCrossProduct(Direction dir, FVector ref) {
 
         switch (dir) {
-            case "XY":
+            case XY:
                 return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setZ(1)));
-            case "YZ":
+            case YZ:
                 return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setX(1)));
-            case "XZ":
+            case XZ:
                 return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setY(1)));
         }
 
         throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);
     }
 
-    private FPoint getCandidate2D(FVector ref, double scaleFactor) {
+    private FPoint setCandidate2D(FVector ref, double scaleFactor) {
+        double baseX = ref.getRefBase().getX();
+        double baseY = ref.getRefBase().getY();
+        double baseZ = ref.getRefBase().getZ();
 
-        return ref.copy().mul(scaleFactor).moveBase(ref.getRefBase()).getRefHead();
+        return ref.mul(scaleFactor).moveBase(baseX, baseY, baseZ).getRefHead();
     }
 
-    private Optional<FPoint> getCandidate3D(String dir, FPoint ref) {
-
-        Optional<FPoint> candidate;
+    private Optional<FPoint> setCandidate3D(FPoint ref, Direction dir) {
 
         switch (dir) {
-            case "XY":
-                candidate = getFPointAtX(ref.getX());
-
-                if (candidate.isPresent()) {
-                    return candidate;
-                }
-
-                candidate = getFPointAtY(ref.getY());
-
-                if (candidate.isPresent()) {
-                    return candidate;
-                }
-
-                throw new IllegalStateException("The FPoint candidate cannot be calculated. Value " + dir);
-            case "YZ":
-                candidate = getFPointAtY(ref.getY());
-
-                if (candidate.isPresent()) {
-                    return candidate;
-                }
-
-                candidate = getFPointAtZ(ref.getZ());
-
-                if (candidate.isPresent()) {
-                    return candidate;
-                }
-
-                throw new IllegalStateException("The FPoint candidate cannot be calculated. Value " + dir);
-            case "XZ":
-                candidate = getFPointAtX(ref.getX());
-
-                if (candidate.isPresent()) {
-                    return candidate;
-                }
-
-                candidate = getFPointAtZ(ref.getZ());
-
-                if (candidate.isPresent()) {
-                    return candidate;
-                }
-
-                throw new IllegalStateException("The FPoint candidate cannot be calculated. Value " + dir);
+            case XY: return setCandidate3DXY(ref, dir);
+            case YZ: return setCandidate3DYZ(ref, dir);
+            case XZ: return setCandidate3DXZ(ref, dir);
         }
 
-        throw new IllegalStateException("The FPoint candidate cannot be calculated. Value " + dir);
+        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction " + dir);
     }
 
-    private Optional<FPoint> validateCandidate(FLine ref, FPoint candidate) {
+    private Optional<FPoint> setCandidate3DXY(FPoint ref, Direction dir) {
+        Optional<FPoint> candidate;
+        double memoY = ref.getY();
+
+        candidate = setFPointAtX(ref);
+
+        if (candidate.isPresent()) {
+            return candidate;
+        }
+
+        candidate = setFPointAtY(ref.setY(memoY));
+
+        if (candidate.isPresent()) {
+            return candidate;
+        }
+
+        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction - " + dir);
+    }
+
+    private Optional<FPoint> setCandidate3DYZ(FPoint ref, Direction dir) {
+        Optional<FPoint> candidate;
+        double memoZ = ref.getZ();
+
+        candidate = setFPointAtY(ref);
+
+        if (candidate.isPresent()) {
+            return candidate;
+        }
+
+        candidate = setFPointAtZ(ref.setZ(memoZ));
+
+        if (candidate.isPresent()) {
+            return candidate;
+        }
+
+        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction - " + dir);
+    }
+
+    private Optional<FPoint> setCandidate3DXZ(FPoint ref, Direction dir) {
+        Optional<FPoint> candidate;
+        double memoZ = ref.getZ();
+
+        candidate = setFPointAtX(ref);
+
+        if (candidate.isPresent()) {
+            return candidate;
+        }
+
+        candidate = setFPointAtZ(ref.setZ(memoZ));
+
+        if (candidate.isPresent()) {
+            return candidate;
+        }
+
+        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction - " + dir);
+    }
+
+    private Optional<FPoint> validateCandidate(FLine arg, FPoint candidate) {
 
         if (candidate == null) {
             return Optional.empty();
         }
 
-        if (isPartOf(candidate) && ref.isPartOf(candidate)) {
+        if (isPartOf(candidate) && arg.isPartOf(candidate)) {
             return Optional.of(candidate);
         }
 
@@ -454,14 +508,23 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     private FPoint projectUnit(FPoint fPoint) {
-        var opA = getRefOrigin().getRefHead().copy()
-                .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getMagnitude());
 
-        var opB = fPoint.copy()
-                .sub(getRefOrigin().getRefBase());
+        getRefOrigin().applyWithFixedState(o -> {
+            var oBase = o.getRefBase();
+            var oHead = o.getRefHead();
 
-        fPoint.applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+            var oMagnitude = o.getMagnitude();
+
+            fPoint.sub(oBase);
+
+            oHead.sub(oBase);
+            oHead.div(oMagnitude);
+
+            oHead.mul(fPoint.getDotProduct(oHead));
+            oBase.add(oHead);
+
+            fPoint.applyStateFrom(oBase);
+        });
 
         return fPoint;
     }
