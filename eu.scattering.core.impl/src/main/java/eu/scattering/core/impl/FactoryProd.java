@@ -120,25 +120,25 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FRay getFRay() {
 
-        return FRayDef.create(epsilon, this::getFVector);
+        return FRayDef.create(epsilon, getFVector());
     }
 
     @Override
     public FRay getRefFRay(FVector refOrigin) {
 
-        return FRayDef.create(epsilon, this::getFVector, refOrigin);
+        return FRayDef.create(epsilon, refOrigin);
     }
 
     @Override
     public FSegment getFSegment() {
 
-        return FSegmentDef.create(epsilon, this::getFVector);
+        return FSegmentDef.create(epsilon, getFVector());
     }
 
     @Override
     public FSegment getRefFSegment(FVector refOrigin) {
 
-        return FSegmentDef.create(epsilon, this::getFVector, refOrigin);
+        return FSegmentDef.create(epsilon, refOrigin);
     }
 
     @Override

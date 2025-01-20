@@ -343,22 +343,22 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     private enum Direction { XY, YZ, XZ }
 
-    private Direction getProjectionDirection(FVector ref) {
+    private Direction getProjectionDirection(FVector arg) {
 
         if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthY() > 0) &&
-                (ref.getLengthX() > 0 || ref.getLengthY() > 0)) {
+                (arg.getLengthX() > 0 || arg.getLengthY() > 0)) {
 
             return Direction.XY;
         }
 
         if ((getRefOrigin().getLengthY() > 0 || getRefOrigin().getLengthZ() > 0) &&
-                (ref.getLengthY() > 0 || ref.getLengthZ() > 0)) {
+                (arg.getLengthY() > 0 || arg.getLengthZ() > 0)) {
 
             return Direction.YZ;
         }
 
         if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthZ() > 0) &&
-                (ref.getLengthX() > 0 || ref.getLengthZ() > 0)) {
+                (arg.getLengthX() > 0 || arg.getLengthZ() > 0)) {
 
             return Direction.XZ;
         }
@@ -366,7 +366,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         throw new IllegalStateException("The projection plane cannot be determined");
     }
 
-    private void setFPointAtX(FPoint arg) {
+    private void setFPointAtX(FPoint in) {
         var origin = getRefOrigin();
 
         if (origin.isNearZeroLength()) {
@@ -377,7 +377,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var oHead = origin.getRefHead();
 
         if (oBase.getX() == oHead.getX()) {
-            invalidate(arg);
+            invalidate(in);
             return;
         }
 
@@ -385,13 +385,13 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var m = oHead.getY() - oBase.getY();
         var n = oHead.getZ() - oBase.getZ();
 
-        var y = oBase.getY() + (m / l * (arg.getX() - oBase.getX()));
-        var z = oBase.getZ() + (n / l * (arg.getX() - oBase.getX()));
+        var y = oBase.getY() + (m / l * (in.getX() - oBase.getX()));
+        var z = oBase.getZ() + (n / l * (in.getX() - oBase.getX()));
 
-        arg.setY(y).setZ(z);
+        in.setY(y).setZ(z);
     }
 
-    private void setFPointAtY(FPoint arg) {
+    private void setFPointAtY(FPoint in) {
         var origin = getRefOrigin();
 
         if (origin.isNearZeroLength()) {
@@ -402,7 +402,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var oHead = origin.getRefHead();
 
         if (oBase.getY() == oHead.getY()) {
-            invalidate(arg);
+            invalidate(in);
             return;
         }
 
@@ -410,13 +410,13 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double m = oHead.getY() - oBase.getY();
         double n = oHead.getZ() - oBase.getZ();
 
-        double x = oBase.getX() + (l / m * (arg.getY() - oBase.getY()));
-        double z = oBase.getZ() + (n / m * (arg.getY() - oBase.getY()));
+        double x = oBase.getX() + (l / m * (in.getY() - oBase.getY()));
+        double z = oBase.getZ() + (n / m * (in.getY() - oBase.getY()));
 
-        arg.setX(x).setZ(z);
+        in.setX(x).setZ(z);
     }
 
-    private void setFPointAtZ(FPoint arg) {
+    private void setFPointAtZ(FPoint in) {
         var origin = getRefOrigin();
 
         if (origin.isNearZeroLength()) {
@@ -427,7 +427,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var oHead = origin.getRefHead();
 
         if (oBase.getZ() == oHead.getZ()) {
-            invalidate(arg);
+            invalidate(in);
             return;
         }
 
@@ -435,135 +435,135 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double m = oHead.getY() - oBase.getY();
         double n = oHead.getZ() - oBase.getZ();
 
-        double x = oBase.getX() + (l / n * (arg.getZ() - oBase.getZ()));
-        double y = oBase.getY() + (m / n * (arg.getZ() - oBase.getZ()));
+        double x = oBase.getX() + (l / n * (in.getZ() - oBase.getZ()));
+        double y = oBase.getY() + (m / n * (in.getZ() - oBase.getZ()));
 
-        arg.setX(x).setY(y);
+        in.setX(x).setY(y);
     }
 
-    private void setCrossProduct(FVector arg, Direction dir) {
-        double memoX = arg.getRefBase().getX();
-        double memoY = arg.getRefBase().getY();
-        double memoZ = arg.getRefBase().getZ();
+    private void setCrossProduct(FVector in, Direction dir) {
+        double memoX = in.getRefBase().getX();
+        double memoY = in.getRefBase().getY();
+        double memoZ = in.getRefBase().getZ();
 
         switch (dir) {
             case XY:
-                arg.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(memoX, memoY, 1));
+                in.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(memoX, memoY, 1));
                 break;
             case YZ:
-                arg.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(1, memoY, memoZ));
+                in.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(1, memoY, memoZ));
                 break;
             case XZ:
-                arg.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(memoX, 1, memoZ));
+                in.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(memoX, 1, memoZ));
                 break;
         }
     }
 
-    private void projectOnPlane(FVector arg, Direction dir) {
+    private void projectOnPlane(FVector in, Direction dir) {
 
         switch (dir) {
             case XY:
-                arg.getRefBase().setZ(0);
-                arg.getRefHead().setZ(0);
+                in.getRefBase().setZ(0);
+                in.getRefHead().setZ(0);
                 break;
             case YZ:
-                arg.getRefBase().setX(0);
-                arg.getRefHead().setX(0);
+                in.getRefBase().setX(0);
+                in.getRefHead().setX(0);
                 break;
             case XZ:
-                arg.getRefBase().setY(0);
-                arg.getRefHead().setY(0);
+                in.getRefBase().setY(0);
+                in.getRefHead().setY(0);
                 break;
         }
     }
 
-    private FPoint setCandidate2D(FVector arg, double scaleFactor) {
-        double baseX = arg.getRefBase().getX();
-        double baseY = arg.getRefBase().getY();
-        double baseZ = arg.getRefBase().getZ();
+    private FPoint setCandidate2D(FVector in, double factor) {
+        double baseX = in.getRefBase().getX();
+        double baseY = in.getRefBase().getY();
+        double baseZ = in.getRefBase().getZ();
 
-        return arg.mul(scaleFactor).moveBase(baseX, baseY, baseZ).getRefHead();
+        return in.mul(factor).moveBase(baseX, baseY, baseZ).getRefHead();
     }
 
-    private FPoint setCandidate3D(FPoint arg, Direction dir) {
+    private FPoint setCandidate3D(FPoint in, Direction dir) {
 
         switch (dir) {
             case XY:
-                setCandidate3DXY(arg);
+                setCandidate3DXY(in);
                 break;
             case YZ:
-                setCandidate3DYZ(arg);
+                setCandidate3DYZ(in);
                 break;
             case XZ:
-                setCandidate3DXZ(arg);
+                setCandidate3DXZ(in);
                 break;
         }
 
-        return arg;
+        return in;
     }
 
-    private void setCandidate3DXY(FPoint arg) {
-        double memoY = arg.getY();
+    private void setCandidate3DXY(FPoint in) {
+        double memoY = in.getY();
 
-        setFPointAtX(arg);
+        setFPointAtX(in);
 
-        if (isValid(arg)) {
+        if (isValid(in)) {
             return;
         }
 
-        setFPointAtY(arg.setY(memoY));
+        setFPointAtY(in.setY(memoY));
 
-        if (isValid(arg)) {
+        if (isValid(in)) {
             return;
         }
 
-        invalidate(arg);
+        invalidate(in);
     }
 
-    private void setCandidate3DYZ(FPoint arg) {
-        double memoZ = arg.getZ();
+    private void setCandidate3DYZ(FPoint in) {
+        double memoZ = in.getZ();
 
-        setFPointAtY(arg);
+        setFPointAtY(in);
 
-        if (isValid(arg)) {
+        if (isValid(in)) {
             return;
         }
 
-        setFPointAtZ(arg.setZ(memoZ));
+        setFPointAtZ(in.setZ(memoZ));
 
-        if (isValid(arg)) {
+        if (isValid(in)) {
             return;
         }
 
-        invalidate(arg);
+        invalidate(in);
     }
 
-    private void setCandidate3DXZ(FPoint arg) {
-        double memoZ = arg.getZ();
+    private void setCandidate3DXZ(FPoint in) {
+        double memoZ = in.getZ();
 
-        setFPointAtX(arg);
+        setFPointAtX(in);
 
-        if (isValid(arg)) {
+        if (isValid(in)) {
             return;
         }
 
-        setFPointAtZ(arg.setZ(memoZ));
+        setFPointAtZ(in.setZ(memoZ));
 
-        if (isValid(arg)) {
+        if (isValid(in)) {
             return;
         }
 
-        invalidate(arg);
+        invalidate(in);
     }
 
-    private Optional<FPoint> parseCandidate(FLine ref, FPoint arg) {
+    private Optional<FPoint> parseCandidate(FLine arg, FPoint argCandidate) {
 
-        if (!isValid(arg)) {
+        if (!isValid(argCandidate)) {
             return Optional.empty();
         }
 
-        if (isPartOf(arg) && ref.isPartOf(arg)) {
-            return Optional.of(arg);
+        if (isPartOf(argCandidate) && arg.isPartOf(argCandidate)) {
+            return Optional.of(argCandidate);
         }
 
         return Optional.empty();
@@ -571,36 +571,36 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     // -------------------------------------------------------------------------------------------------
 
-    private void projectUnit(FPoint fPoint) {
+    private void projectUnit(FPoint in) {
 
         getRefOrigin().applyWithFixedState(o -> {
-            var oBase = o.getRefBase();
-            var oHead = o.getRefHead();
+            FPoint oBase = o.getRefBase();
+            FPoint oHead = o.getRefHead();
 
-            var oMagnitude = o.getMagnitude();
+            double oMagnitude = o.getMagnitude();
 
-            fPoint.sub(oBase);
+            in.sub(oBase);
 
             oHead.sub(oBase);
             oHead.div(oMagnitude);
 
-            oHead.mul(fPoint.getDotProduct(oHead));
+            oHead.mul(in.getDotProduct(oHead));
             oBase.add(oHead);
 
-            fPoint.applyStateFrom(oBase);
+            in.applyStateFrom(oBase);
         });
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private boolean isValid(FPoint ref) {
+    private boolean isValid(FPoint arg) {
 
-        return !Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ());
+        return !Double.isNaN(arg.getX()) && !Double.isNaN(arg.getY()) && !Double.isNaN(arg.getZ());
     }
 
-    private void invalidate(FPoint ref) {
+    private void invalidate(FPoint in) {
 
-        ref.set(Double.NaN, Double.NaN, Double.NaN);
+        in.set(Double.NaN, Double.NaN, Double.NaN);
     }
 }
 
