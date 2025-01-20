@@ -27,8 +27,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private FVector origin;
     private final double epsilon;
+    private FVector origin;
 
     private FPlaneDef(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fOriginSupplier) {
 
@@ -246,7 +246,10 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         List<Boolean> isInHalfSpace = geometry.disassemble().stream()
-                .map(p -> isInHalfSpace(projectOnLine(p.copy())))
+                .map(p -> p.toBooleanWithFixedState(e -> {
+                    projectOnLine(e);
+                    return isInHalfSpace(e);
+                }))
                 .collect(Collectors.toList());
 
         boolean conditionTrue = isInHalfSpace.stream().anyMatch(e -> e);
@@ -263,7 +266,10 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         return geometry.disassemble().stream()
-                .allMatch(p -> isInHalfSpace(projectOnLine(p.copy())));
+                .allMatch(p -> p.toBooleanWithFixedState(e -> {
+                    projectOnLine(e);
+                    return isInHalfSpace(e);
+                }));
     }
 
     @Override
@@ -325,22 +331,31 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         return fPoint.applyStateFrom(translation.getRefHead());
     }
 
-    private FPoint projectOnLine(FPoint fPoint) {
-        FPoint opA = getRefOrigin().getRefHead().copy()
-                .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getMagnitude());
+    private void projectOnLine(FPoint in) {
 
-        FPoint opB = fPoint.copy()
-                .sub(getRefOrigin().getRefBase());
+        getRefOrigin().applyWithFixedState(o -> {
+            FPoint oBase = o.getRefBase();
+            FPoint oHead = o.getRefHead();
 
-        return fPoint.applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+            double oMagnitude = o.getMagnitude();
+
+            in.sub(oBase);
+
+            oHead.sub(oBase);
+            oHead.div(oMagnitude);
+
+            oHead.mul(in.getDotProduct(oHead));
+            oBase.add(oHead);
+
+            in.applyStateFrom(oBase);
+        });
     }
 
-    private boolean isInHalfSpace(FPoint projection) {
+    private boolean isInHalfSpace(FPoint arg) {
         double magnitude = getRefOrigin().getMagnitude();
 
-        double distanceBase = getRefOrigin().getRefBase().getDistance(projection);
-        double distanceHead = getRefOrigin().getRefHead().getDistance(projection);
+        double distanceBase = getRefOrigin().getRefBase().getDistance(arg);
+        double distanceHead = getRefOrigin().getRefHead().getDistance(arg);
 
         if ((distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon)) {
             return true;

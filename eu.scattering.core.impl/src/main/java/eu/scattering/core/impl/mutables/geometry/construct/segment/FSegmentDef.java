@@ -26,8 +26,8 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private FVector origin;
     private final double epsilon;
+    private FVector origin;
 
     private FSegmentDef(double epsilon, FVector origin) {
 
