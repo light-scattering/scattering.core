@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -166,9 +168,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isCollinear(FLine ref) {
+    public boolean isCollinear(FLine arg) {
 
-        return ref.isPartOf(origin);
+        return arg.isPartOf(origin);
     }
 
     @Override
@@ -189,11 +191,17 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         geometry.disassemble().forEach(p -> {
-            var x = p.getX();
-            var y = p.getY();
-            var z = p.getZ();
+            var oX = p.getX();
+            var oY = p.getY();
+            var oZ = p.getZ();
 
-            p.reflect(projectUnit(p.copy()));
+            projectUnit(p);
+
+            var pX = p.getX();
+            var pY = p.getY();
+            var pZ = p.getZ();
+
+            p.set(oX, oY, oZ).reflect(pX, pY, pZ);
         });
     }
 
@@ -205,7 +213,19 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         return geometry.disassemble().stream()
-                .allMatch(p -> p.getDistance(projectUnit(p.copy())) < epsilon);
+                .allMatch(p -> {
+                    var oX = p.getX();
+                    var oY = p.getY();
+                    var oZ = p.getZ();
+
+                    projectUnit(p);
+
+                    var pX = p.getX();
+                    var pY = p.getY();
+                    var pZ = p.getZ();
+
+                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ) < epsilon;
+                });
     }
 
     @Override
@@ -216,7 +236,19 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistanceP2(projectUnit(p.copy())))
+                .map(p -> {
+                    var oX = p.getX();
+                    var oY = p.getY();
+                    var oZ = p.getZ();
+
+                    projectUnit(p);
+
+                    var pX = p.getX();
+                    var pY = p.getY();
+                    var pZ = p.getZ();
+
+                    return p.set(oX, oY, oZ).getDistanceP2(pX, pY, pZ);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -228,7 +260,19 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistance(projectUnit(p.copy())))
+                .map(p -> {
+                    var oX = p.getX();
+                    var oY = p.getY();
+                    var oZ = p.getZ();
+
+                    projectUnit(p);
+
+                    var pX = p.getX();
+                    var pY = p.getY();
+                    var pZ = p.getZ();
+
+                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -239,52 +283,84 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> p.setDistance(projectUnit(p.copy()), distance));
+        geometry.disassemble().forEach(p -> {
+            var oX = p.getX();
+            var oY = p.getY();
+            var oZ = p.getZ();
+
+            projectUnit(p);
+
+            var pX = p.getX();
+            var pY = p.getY();
+            var pZ = p.getZ();
+
+            p.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
+        });
     }
 
     @Override
     public Optional<FPoint> getFPointAtX(double x) {
+        var fPoint = fPointSupplier.get().setX(x);
 
-        return setFPointAtX(fPointSupplier.get().setX(x));
+        setFPointAtX(fPoint);
+
+        return isValid(fPoint) ? Optional.of(fPoint) : Optional.empty();
     }
 
     @Override
     public Optional<FPoint> getFPointAtY(double y) {
+        var fPoint = fPointSupplier.get().setY(y);
 
-        return setFPointAtY(fPointSupplier.get().setY(y));
+        setFPointAtY(fPoint);
+
+        return isValid(fPoint) ? Optional.of(fPoint) : Optional.empty();
     }
 
     @Override
     public Optional<FPoint> getFPointAtZ(double z) {
+        var fPoint = fPointSupplier.get().setZ(z);
 
-        return setFPointAtZ(fPointSupplier.get().setZ(z));
+        setFPointAtZ(fPoint);
+
+        return isValid(fPoint) ? Optional.of(fPoint) : Optional.empty();
     }
 
     @Override
-    public Optional<FPoint> getFPointAtIntersection(FLine ref) {
+    public Optional<FPoint> getFPointAtIntersection(FLine arg) {
+        var refOrigin = getRefOrigin();
+        var argOrigin = arg.getRefOrigin();
 
-        if (getRefOrigin().isParallel(ref.getRefOrigin())) {
+        if (refOrigin.isParallel(argOrigin)) {
             return Optional.empty();
         }
 
-        Direction dir = getProjectionType(ref.getRefOrigin());
+        Direction dir = getProjectionType(argOrigin);
 
-        var u = projectOnPlane(dir, getRefOrigin().copy());
-        var v = projectOnPlane(dir, ref.getRefOrigin().copy());
-        var w = fVectorSupplier.get().set(v.getRefBase(), u.getRefBase());
+        var u = projectOnPlane(refOrigin.copy(), dir);
+        var v = projectOnPlane(argOrigin.copy(), dir);
 
-        v = getCrossProduct(dir, v);
+        var wX = u.getRefBase().getX() - v.getRefBase().getX();
+        var wY = u.getRefBase().getY() - v.getRefBase().getY();
+        var wZ = u.getRefBase().getZ() - v.getRefBase().getZ();
 
-        double scaleFactor = v.copy().reflectHead().getDotProduct(w) / v.getDotProduct(u);
+        setCrossProduct(v, dir);
 
-        return validateCandidate(ref, setCandidate3D(setCandidate2D(u, scaleFactor), dir).orElse(null));
+        double vuDot = v.getDotProduct(u);
+        double vwDot = v.moveBaseToCenter().getRefHead().getDotProduct(wX, wY, wZ);
+
+        double scaleFactor = -vwDot / vuDot;
+
+        var res = setCandidate2D(u, scaleFactor);
+        setCandidate3D(res, dir);
+        return validateCandidate(arg, res);
+//        return validateCandidate(arg, setCandidate3D(setCandidate2D(u, scaleFactor), dir).orElse(null));
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private enum Direction { XY, YZ, XZ };
+    private enum Direction { XY, YZ, XZ }
 
-    private Optional<FPoint> setFPointAtX(FPoint arg) {
+    private void setFPointAtX(FPoint arg) {
         var origin = getRefOrigin();
 
         if (origin.isNearZeroLength()) {
@@ -295,7 +371,8 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var oHead = origin.getRefHead();
 
         if (oBase.getX() == oHead.getX()) {
-            return Optional.empty();
+            invalidate(arg);
+            return;
         }
 
         var l = oHead.getX() - oBase.getX();
@@ -305,10 +382,10 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var y = oBase.getY() + (m / l * (arg.getX() - oBase.getX()));
         var z = oBase.getZ() + (n / l * (arg.getX() - oBase.getX()));
 
-        return Optional.of(arg.setY(y).setZ(z));
+        arg.setY(y).setZ(z);
     }
 
-    private Optional<FPoint> setFPointAtY(FPoint arg) {
+    private void setFPointAtY(FPoint arg) {
         var origin = getRefOrigin();
 
         if (origin.isNearZeroLength()) {
@@ -319,7 +396,8 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var oHead = origin.getRefHead();
 
         if (oBase.getY() == oHead.getY()) {
-            return Optional.empty();
+            invalidate(arg);
+            return;
         }
 
         double l = oHead.getX() - oBase.getX();
@@ -329,10 +407,10 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double x = oBase.getX() + (l / m * (arg.getY() - oBase.getY()));
         double z = oBase.getZ() + (n / m * (arg.getY() - oBase.getY()));
 
-        return Optional.of(arg.setX(x).setZ(z));
+        arg.setX(x).setZ(z);
     }
 
-    private Optional<FPoint> setFPointAtZ(FPoint arg) {
+    private void setFPointAtZ(FPoint arg) {
         var origin = getRefOrigin();
 
         if (origin.isNearZeroLength()) {
@@ -343,7 +421,8 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         var oHead = origin.getRefHead();
 
         if (oBase.getZ() == oHead.getZ()) {
-            return Optional.empty();
+            invalidate(arg);
+            return;
         }
 
         double l = oHead.getX() - oBase.getX();
@@ -353,7 +432,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double x = oBase.getX() + (l / n * (arg.getZ() - oBase.getZ()));
         double y = oBase.getY() + (m / n * (arg.getZ() - oBase.getZ()));
 
-        return Optional.of(arg.setX(x).setY(y));
+        arg.setX(x).setY(y);
     }
 
     private Direction getProjectionType(FVector ref) {
@@ -379,7 +458,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         throw new IllegalStateException("The projection plane cannot be determined");
     }
 
-    private FVector projectOnPlane(Direction dir, FVector ref) {
+    private FVector projectOnPlane(FVector ref, Direction dir) {
 
         switch (dir) {
             case XY:
@@ -402,18 +481,22 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         throw new IllegalStateException("The FVector cannot be projected on any plane. Direction " + dir);
     }
 
-    private FVector getCrossProduct(Direction dir, FVector ref) {
+    private void setCrossProduct(FVector ref, Direction dir) {
+        double memoX = ref.getRefBase().getX();
+        double memoY = ref.getRefBase().getY();
+        double memoZ = ref.getRefBase().getZ();
 
         switch (dir) {
             case XY:
-                return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setZ(1)));
+                ref.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(memoX, memoY, 1));
+                break;
             case YZ:
-                return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setX(1)));
+                ref.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(1, memoY, memoZ));
+                break;
             case XZ:
-                return ref.setCrossProduct(fVectorSupplier.get().setRefHead(ref.getRefBase().copy().setY(1)));
+                ref.applyWithCenteredPosition(v -> v.getRefHead().setCrossProduct(memoX, 1, memoZ));
+                break;
         }
-
-        throw new IllegalStateException("The cross product cannot be calculated. Value " + dir);
     }
 
     private FPoint setCandidate2D(FVector ref, double scaleFactor) {
@@ -424,77 +507,78 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return ref.mul(scaleFactor).moveBase(baseX, baseY, baseZ).getRefHead();
     }
 
-    private Optional<FPoint> setCandidate3D(FPoint ref, Direction dir) {
+    private void setCandidate3D(FPoint ref, Direction dir) {
 
         switch (dir) {
-            case XY: return setCandidate3DXY(ref, dir);
-            case YZ: return setCandidate3DYZ(ref, dir);
-            case XZ: return setCandidate3DXZ(ref, dir);
+            case XY:
+                setCandidate3DXY(ref);
+                break;
+            case YZ:
+                setCandidate3DYZ(ref);
+                break;
+            case XZ:
+                setCandidate3DXZ(ref);
+                break;
         }
-
-        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction " + dir);
     }
 
-    private Optional<FPoint> setCandidate3DXY(FPoint ref, Direction dir) {
-        Optional<FPoint> candidate;
+    private void setCandidate3DXY(FPoint ref) {
         double memoY = ref.getY();
 
-        candidate = setFPointAtX(ref);
+        setFPointAtX(ref);
 
-        if (candidate.isPresent()) {
-            return candidate;
+        if (!Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ())) {
+            return;
         }
 
-        candidate = setFPointAtY(ref.setY(memoY));
+        setFPointAtY(ref.setY(memoY));
 
-        if (candidate.isPresent()) {
-            return candidate;
+        if (!Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ())) {
+            return;
         }
 
-        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction - " + dir);
+        ref.set(Double.NaN, Double.NaN, Double.NaN);
     }
 
-    private Optional<FPoint> setCandidate3DYZ(FPoint ref, Direction dir) {
-        Optional<FPoint> candidate;
+    private void setCandidate3DYZ(FPoint ref) {
         double memoZ = ref.getZ();
 
-        candidate = setFPointAtY(ref);
+        setFPointAtY(ref);
 
-        if (candidate.isPresent()) {
-            return candidate;
+        if (!Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ())) {
+            return;
         }
 
-        candidate = setFPointAtZ(ref.setZ(memoZ));
+        setFPointAtZ(ref.setZ(memoZ));
 
-        if (candidate.isPresent()) {
-            return candidate;
+        if (!Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ())) {
+            return;
         }
 
-        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction - " + dir);
+        ref.set(Double.NaN, Double.NaN, Double.NaN);
     }
 
-    private Optional<FPoint> setCandidate3DXZ(FPoint ref, Direction dir) {
-        Optional<FPoint> candidate;
+    private void setCandidate3DXZ(FPoint ref) {
         double memoZ = ref.getZ();
 
-        candidate = setFPointAtX(ref);
+        setFPointAtX(ref);
 
-        if (candidate.isPresent()) {
-            return candidate;
+        if (!Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ())) {
+            return;
         }
 
-        candidate = setFPointAtZ(ref.setZ(memoZ));
+        setFPointAtZ(ref.setZ(memoZ));
 
-        if (candidate.isPresent()) {
-            return candidate;
+        if (!Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ())) {
+            return;
         }
 
-        throw new IllegalStateException("The FPoint candidate cannot be calculated. Direction - " + dir);
+        ref.set(Double.NaN, Double.NaN, Double.NaN);
     }
 
     private Optional<FPoint> validateCandidate(FLine arg, FPoint candidate) {
 
-        if (candidate == null) {
+        if (Double.isNaN(candidate.getX()) || Double.isNaN(candidate.getY()) || Double.isNaN(candidate.getZ())) {
             return Optional.empty();
         }
 
@@ -507,7 +591,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     // -------------------------------------------------------------------------------------------------
 
-    private FPoint projectUnit(FPoint fPoint) {
+    private void projectUnit(FPoint fPoint) {
 
         getRefOrigin().applyWithFixedState(o -> {
             var oBase = o.getRefBase();
@@ -525,8 +609,18 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
             fPoint.applyStateFrom(oBase);
         });
+    }
 
-        return fPoint;
+    // -------------------------------------------------------------------------------------------------
+
+    private boolean isValid(FPoint ref) {
+
+        return !Double.isNaN(ref.getX()) && !Double.isNaN(ref.getY()) && !Double.isNaN(ref.getZ());
+    }
+
+    private void invalidate(FPoint ref) {
+
+        ref.set(Double.NaN, Double.NaN, Double.NaN);
     }
 }
 
