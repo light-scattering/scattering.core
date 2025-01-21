@@ -169,8 +169,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public boolean isCoplanar(FPlane ref) {
 
-        return (getRefOrigin().isParallel(ref.getRefOrigin()) || getRefOrigin().isAntiParallel(ref.getRefOrigin()))
-                && isPartOf(ref.getRefOrigin().getRefBase());
+        return getRefOrigin().isCollinear(ref.getRefOrigin()) && isPartOf(ref.getRefOrigin().getRefBase());
     }
 
     @Override
@@ -180,7 +179,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(this::projectOnPlane);
+        geometry.disassemble().forEach(this::projectUnit);
     }
 
     @Override
@@ -190,7 +189,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> p.reflect(projectOnPlane(p.copy())));
+        geometry.disassemble().forEach(p -> {
+            var oX = p.getX();
+            var oY = p.getY();
+            var oZ = p.getZ();
+
+            projectUnit(p);
+
+            var pX = p.getX();
+            var pY = p.getY();
+            var pZ = p.getZ();
+
+            p.set(oX, oY, oZ).reflect(pX, pY, pZ);
+        });
     }
 
     @Override
@@ -201,7 +212,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         return geometry.disassemble().stream()
-                .allMatch(p -> p.getDistance(projectOnPlane(p.copy())) < epsilon);
+                .allMatch(p -> {
+                    var oX = p.getX();
+                    var oY = p.getY();
+                    var oZ = p.getZ();
+
+                    projectUnit(p);
+
+                    var pX = p.getX();
+                    var pY = p.getY();
+                    var pZ = p.getZ();
+
+                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ) < epsilon;
+                });
     }
 
     @Override
@@ -212,7 +235,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistanceP2(projectOnPlane(p.copy())))
+                .map(p -> {
+                    var oX = p.getX();
+                    var oY = p.getY();
+                    var oZ = p.getZ();
+
+                    projectUnit(p);
+
+                    var pX = p.getX();
+                    var pY = p.getY();
+                    var pZ = p.getZ();
+
+                    return p.set(oX, oY, oZ).getDistanceP2(pX, pY, pZ);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -224,7 +259,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         return geometry.disassemble().stream()
-                .map(p -> p.getDistance(projectOnPlane(p.copy())))
+                .map(p -> {
+                    var oX = p.getX();
+                    var oY = p.getY();
+                    var oZ = p.getZ();
+
+                    projectUnit(p);
+
+                    var pX = p.getX();
+                    var pY = p.getY();
+                    var pZ = p.getZ();
+
+                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -235,7 +282,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> p.setDistance(projectOnPlane(p.copy()), distance));
+        geometry.disassemble().forEach(p -> {
+            var oX = p.getX();
+            var oY = p.getY();
+            var oZ = p.getZ();
+
+            projectUnit(p);
+
+            var pX = p.getX();
+            var pY = p.getY();
+            var pZ = p.getZ();
+
+            p.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
+        });
     }
 
     @Override
@@ -247,8 +306,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         List<Boolean> isInHalfSpace = geometry.disassemble().stream()
                 .map(p -> p.toBooleanWithFixedState(e -> {
-                    projectOnLine(e);
-                    return isInHalfSpace(e);
+                    projectUnitOnLine(e);
+                    return isUnitInHalfSpace(e);
                 }))
                 .collect(Collectors.toList());
 
@@ -267,8 +326,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         return geometry.disassemble().stream()
                 .allMatch(p -> p.toBooleanWithFixedState(e -> {
-                    projectOnLine(e);
-                    return isInHalfSpace(e);
+                    projectUnitOnLine(e);
+                    return isUnitInHalfSpace(e);
                 }));
     }
 
@@ -300,38 +359,60 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint vPlane = getRefOrigin().copy().moveBaseToCenter().normalize().getRefHead();
-        FPoint vLine = ref.getRefOrigin().copy().moveBaseToCenter().normalize().getRefHead();
+        FPoint results = fVectorSupplier.get().getRefBase().copyZero();
 
-        double dividend = vPlane.getDotProduct(getRefOrigin().getRefBase().copy().sub(ref.getRefOrigin().getRefBase()));
-        double divisor = vPlane.getDotProduct(vLine);
-        double distance = dividend / divisor;
+        getRefOrigin().applyWithFixedState(a -> {
+            ref.getRefOrigin().applyWithFixedState(b -> {
+                double aBX = a.getBaseX();
+                double aBY = a.getBaseY();
+                double aBZ = a.getBaseZ();
+                double bBX = b.getBaseX();
+                double bBY = b.getBaseY();
+                double bBZ = b.getBaseZ();
 
-        FVector extension = ref.getRefOrigin().copy().setMagnitude(distance);
+                a.moveBaseToCenter().normalize();
+                b.moveBaseToCenter().normalize();
 
-        return Optional.of(extension.getRefHead());
+                double dividend = a.getRefHead().getDotProduct(aBX - bBX, aBY - bBY, aBZ - bBZ);
+                double divisor = a.getRefHead().getDotProduct(b.getRefHead());
+                double distance = dividend / divisor;
+
+                b.moveBase(bBX, bBY, bBZ).setMagnitude(distance);
+
+                results.applyStateFrom(b.getRefHead());
+            });
+        });
+
+        return Optional.of(results);
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private FPoint projectOnPlane(FPoint fPoint) {
-        FPoint opA = getRefOrigin().getRefHead().copy()
-                .sub(getRefOrigin().getRefBase())
-                .div(getRefOrigin().getMagnitude());
+    private void projectUnit(FPoint in) {
 
-        FPoint opB = fPoint.copy()
-                .sub(getRefOrigin().getRefBase());
+        getRefOrigin().applyWithFixedState(o -> {
+            FPoint oBase = o.getRefBase();
+            FPoint oHead = o.getRefHead();
 
-        FPoint opC = fPoint.copyZero()
-                .applyStateFrom(getRefOrigin().getRefBase().copy().add(opA.mul(opB.getDotProduct(opA))));
+            double memoX = oBase.getX();
+            double memoY = oBase.getY();
+            double memoZ = oBase.getZ();
 
-        FVector translation = fVectorSupplier.get().set(opC, fPoint.copy())
-                .moveBase(getRefOrigin().getRefBase());
+            double oMagnitude = o.getMagnitude();
 
-        return fPoint.applyStateFrom(translation.getRefHead());
+            oHead.sub(oBase);
+            oHead.div(oMagnitude);
+            oHead.mul(oHead.getDotProduct(in.getX() - memoX, in.getY() - memoY, in.getZ() - memoZ));
+
+            oBase.add(oHead);
+
+            o.setHead(in).moveBase(memoX, memoY, memoZ);
+
+            in.applyStateFrom(o.getRefHead());
+        });
     }
 
-    private void projectOnLine(FPoint in) {
+    private void projectUnitOnLine(FPoint in) {
 
         getRefOrigin().applyWithFixedState(o -> {
             FPoint oBase = o.getRefBase();
@@ -343,25 +424,25 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
             oHead.sub(oBase);
             oHead.div(oMagnitude);
+            oHead.mul(oHead.getDotProduct(in));
 
-            oHead.mul(in.getDotProduct(oHead));
             oBase.add(oHead);
 
             in.applyStateFrom(oBase);
         });
     }
 
-    private boolean isInHalfSpace(FPoint arg) {
+    private boolean isUnitInHalfSpace(FPoint arg) {
         double magnitude = getRefOrigin().getMagnitude();
 
-        double distanceBase = getRefOrigin().getRefBase().getDistance(arg);
-        double distanceHead = getRefOrigin().getRefHead().getDistance(arg);
+        double distBase = getRefOrigin().getRefBase().getDistance(arg);
+        double distHead = getRefOrigin().getRefHead().getDistance(arg);
 
-        if ((distanceBase < magnitude + epsilon) && (distanceHead < magnitude + epsilon)) {
+        if ((distBase < magnitude + epsilon) && (distHead < magnitude + epsilon)) {
             return true;
         }
 
-        return distanceHead < distanceBase + epsilon;
+        return distHead < distBase + epsilon;
     }
 }
 
