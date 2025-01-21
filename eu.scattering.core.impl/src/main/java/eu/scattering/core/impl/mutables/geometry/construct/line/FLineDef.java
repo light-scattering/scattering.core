@@ -344,22 +344,22 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private enum Direction { XY, YZ, XZ }
 
     private Direction getProjectionDirection(FVector arg) {
+        double oX = getRefOrigin().getLengthX();
+        double oY = getRefOrigin().getLengthY();
+        double oZ = getRefOrigin().getLengthZ();
+        double aX = arg.getLengthX();
+        double aY = arg.getLengthY();
+        double aZ = arg.getLengthZ();
 
-        if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthY() > 0) &&
-                (arg.getLengthX() > 0 || arg.getLengthY() > 0)) {
-
+        if ((oX > 0 || oY > 0) && (aX > 0 || aY > 0)) {
             return Direction.XY;
         }
 
-        if ((getRefOrigin().getLengthY() > 0 || getRefOrigin().getLengthZ() > 0) &&
-                (arg.getLengthY() > 0 || arg.getLengthZ() > 0)) {
-
+        if ((oY > 0 || oZ > 0) && (aY > 0 || aZ > 0)) {
             return Direction.YZ;
         }
 
-        if ((getRefOrigin().getLengthX() > 0 || getRefOrigin().getLengthZ() > 0) &&
-                (arg.getLengthX() > 0 || arg.getLengthZ() > 0)) {
-
+        if ((oX > 0 || oZ > 0) && (aX > 0 || aZ > 0)) {
             return Direction.XZ;
         }
 

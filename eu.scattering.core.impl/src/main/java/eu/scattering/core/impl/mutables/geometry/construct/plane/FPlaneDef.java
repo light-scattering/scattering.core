@@ -331,35 +331,17 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
                 }));
     }
 
+    // TODO - It doesn't have to be optional
     @Override
     public Optional<FLine> getFLineAtIntersection(FPlane ref) {
 
-        if (getRefOrigin().isParallel(ref.getRefOrigin()) || getRefOrigin().isAntiParallel(ref.getRefOrigin())) {
+        if (getRefOrigin().isCollinear(ref.getRefOrigin())) {
             return Optional.empty();
         }
 
-        FPoint vPlane1 = getRefOrigin().copy().moveBaseToCenter().getRefHead();
-        double d1 = -vPlane1.getDotProduct(getRefOrigin().getRefBase());
-
-        FPoint vPlane2 = ref.getRefOrigin().copy().moveBaseToCenter().getRefHead();
-        double d2 = -vPlane2.getDotProduct(ref.getRefOrigin().getRefBase());
-
-        FPoint vPlanePar = vPlane1.copy().setCrossProduct(vPlane2);
-        double vPlaneParDot = vPlanePar.getDotProduct(vPlanePar);
-
-        FPoint pos = vPlane1.mul(d2).sub(vPlane2.mul(d1)).setCrossProduct(vPlanePar).div(vPlaneParDot);
-
-        return Optional.of(fLineSupplier.get().setRefOrigin(fVectorSupplier.get().setRefHead(vPlanePar).moveBase(pos)));
-    }
-
-    @Override
-    public Optional<FPoint> getFPointAtIntersection(FLine ref) {
-
-        if (getRefOrigin().isOrthogonal(ref.getRefOrigin())) {
-            return Optional.empty();
-        }
-
-        FPoint results = fVectorSupplier.get().getRefBase().copyZero();
+        FLine res = fLineSupplier.get();
+        FPoint resBase = res.getRefOrigin().getRefBase();
+        FPoint resHead = res.getRefOrigin().getRefHead();
 
         getRefOrigin().applyWithFixedState(a -> {
             ref.getRefOrigin().applyWithFixedState(b -> {
@@ -370,20 +352,67 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
                 double bBY = b.getBaseY();
                 double bBZ = b.getBaseZ();
 
-                a.moveBaseToCenter().normalize();
-                b.moveBaseToCenter().normalize();
+                FPoint aHead = a.moveBaseToCenter().getRefHead();
+                FPoint bHead = b.moveBaseToCenter().getRefHead() ;
 
-                double dividend = a.getRefHead().getDotProduct(aBX - bBX, aBY - bBY, aBZ - bBZ);
-                double divisor = a.getRefHead().getDotProduct(b.getRefHead());
+                resBase.applyStateFrom(aHead);
+                resHead.applyStateFrom(bHead);
+
+                double d1 = -aHead.getDotProduct(aBX, aBY, aBZ);
+                double d2 = -bHead.getDotProduct(bBX, bBY, bBZ);
+
+                aHead.setCrossProduct(bHead);
+
+                double d3 = aHead.getDotProduct(aHead);
+
+                resHead.mul(d1);
+
+                resBase.mul(d2);
+                resBase.sub(resHead);
+                resBase.setCrossProduct(aHead);
+                resBase.div(d3);
+
+                aHead.add(resBase);
+
+                resHead.applyStateFrom(aHead);
+            });
+        });
+
+        return Optional.of(res);
+    }
+
+    @Override
+    public Optional<FPoint> getFPointAtIntersection(FLine ref) {
+
+        if (getRefOrigin().isOrthogonal(ref.getRefOrigin())) {
+            return Optional.empty();
+        }
+
+        FPoint res = fVectorSupplier.get().getRefBase().copyZero();
+
+        getRefOrigin().applyWithFixedState(a -> {
+            ref.getRefOrigin().applyWithFixedState(b -> {
+                double aBX = a.getBaseX();
+                double aBY = a.getBaseY();
+                double aBZ = a.getBaseZ();
+                double bBX = b.getBaseX();
+                double bBY = b.getBaseY();
+                double bBZ = b.getBaseZ();
+
+                FPoint aHead = a.moveBaseToCenter().normalize().getRefHead();
+                FPoint bHead = b.moveBaseToCenter().normalize().getRefHead();
+
+                double dividend = aHead.getDotProduct(aBX - bBX, aBY - bBY, aBZ - bBZ);
+                double divisor = aHead.getDotProduct(bHead);
                 double distance = dividend / divisor;
 
                 b.moveBase(bBX, bBY, bBZ).setMagnitude(distance);
 
-                results.applyStateFrom(b.getRefHead());
+                res.applyStateFrom(b.getRefHead());
             });
         });
 
-        return Optional.of(results);
+        return Optional.of(res);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -406,7 +435,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
             oBase.add(oHead);
 
-            o.setHead(in).moveBase(memoX, memoY, memoZ);
+            o.setHead(in);
+            o.moveBase(memoX, memoY, memoZ);
 
             in.applyStateFrom(o.getRefHead());
         });
