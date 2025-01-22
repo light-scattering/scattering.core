@@ -20,8 +20,10 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private static final String JSON_MAIN = "plane";
     private static final String JSON_VAL = "val";
 
+    // TODO - Make static
     private final Supplier<FLine> fLineSupplier;
     private final Supplier<FVector> fVectorSupplier;
+    private final Supplier<FPoint> fPointSupplier;
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -30,32 +32,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private final double epsilon;
     private FVector origin;
 
-    private FPlaneDef(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fOriginSupplier) {
+    private FPlaneDef(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fVectorSupplier, Supplier<FPoint> fPointSupplier, FVector origin) {
 
         this.fLineSupplier = fLineSupplier;
-        this.fVectorSupplier = fOriginSupplier;
-
-        this.epsilon = epsilon;
-        this.origin = fOriginSupplier.get();
-    }
-
-    private FPlaneDef(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fOriginSupplier, FVector origin) {
-
-        this.fLineSupplier = fLineSupplier;
-        this.fVectorSupplier = fOriginSupplier;
+        this.fVectorSupplier = fVectorSupplier;
+        this.fPointSupplier = fPointSupplier;
 
         this.epsilon = epsilon;
         this.origin = origin;
     }
 
-    public static FPlane create(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fOriginSupplier) {
+    public static FPlane create(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fVectorSupplier, Supplier<FPoint> fPointSupplier, FVector origin) {
 
-        return new FPlaneDef(epsilon, fLineSupplier, fOriginSupplier);
-    }
-
-    public static FPlane create(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fOriginSupplier, FVector origin) {
-
-        return new FPlaneDef(epsilon, fLineSupplier, fOriginSupplier, origin);
+        return new FPlaneDef(epsilon, fLineSupplier, fVectorSupplier, fPointSupplier, origin);
     }
 
     @Override
@@ -119,7 +108,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane copyZero() {
 
-        return create(epsilon, fLineSupplier, fVectorSupplier);
+        return create(epsilon, fLineSupplier, fVectorSupplier, fPointSupplier, fVectorSupplier.get());
     }
 
     @Override
