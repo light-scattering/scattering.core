@@ -7,6 +7,7 @@ import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -260,9 +261,9 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        var structure = json.getJSONArray(JSON_VAL);
-        var base = getRefBase().applyStateFrom(structure.getJSONObject(0));
-        var head = getRefHead().applyStateFrom(structure.getJSONObject(1));
+        JSONArray structure = json.getJSONArray(JSON_VAL);
+        FPoint base = getRefBase().applyStateFrom(structure.getJSONObject(0));
+        FPoint head = getRefHead().applyStateFrom(structure.getJSONObject(1));
 
         return set(base, head);
     }
@@ -322,15 +323,15 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FPairPos3D toFPairPos3D() {
 
-        var posA = getRefBase().toFPos3D();
-        var posB = getRefHead().toFPos3D();
+        FPos3D posA = getRefBase().toFPos3D();
+        FPos3D posB = getRefHead().toFPos3D();
 
         return factory.getFPairPos3D(posA, posB);
     }
 
     @Override
     public JSONObject toJSON() {
-        var json = new JSONObject();
+        JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getRefBase().toJSON());
@@ -351,7 +352,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     public boolean equals(Object object) {
 
         if (object instanceof FVector) {
-            var ref = (FVector) object;
+            FVector ref = (FVector) object;
 
             return getRefBase().equals(ref.getRefBase()) && getRefHead().equals(ref.getRefHead());
         }
@@ -369,16 +370,34 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     @Override
     public FVector add(FVector op) {
+        double memoBX = getBaseX();
+        double memoBY = getBaseY();
+        double memoBZ = getBaseZ();
 
-        return applyWithCenteredPositionAndFixedState((a, b) ->
-                a.getRefHead().add(b.moveBaseToCenter().getRefHead()), op);
+        FPoint aBase = op.getRefBase();
+        FPoint aHead = op.getRefHead();
+
+        moveBaseToCenter();
+        getRefHead().add(aHead.getX() - aBase.getX(), aHead.getY() - aBase.getY(), aHead.getZ() - aBase.getZ());
+        moveBase(memoBX, memoBY, memoBZ);
+
+        return this;
     }
 
     @Override
     public FVector sub(FVector op) {
+        double memoBX = getBaseX();
+        double memoBY = getBaseY();
+        double memoBZ = getBaseZ();
 
-        return applyWithCenteredPositionAndFixedState((a, b) ->
-                a.getRefHead().sub(b.moveBaseToCenter().getRefHead()), op);
+        FPoint aBase = op.getRefBase();
+        FPoint aHead = op.getRefHead();
+
+        moveBaseToCenter();
+        getRefHead().sub(aHead.getX() - aBase.getX(), aHead.getY() - aBase.getY(), aHead.getZ() - aBase.getZ());
+        moveBase(memoBX, memoBY, memoBZ);
+
+        return this;
     }
 
     //--------------------------------------------------

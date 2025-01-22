@@ -41,31 +41,31 @@ public interface FPoint extends Primitive<FPoint> {
 
     FPoint reflectThroughCenter();
     FPoint reflect(double x, double y, double z);
-    FPoint reflect(FPoint op);
+    FPoint reflect(FPoint arg);
 
     double getMagnitude();
     FPoint setMagnitude(double magnitude);
 
     double getDistance(double x, double y, double z);
-    double getDistance(FPoint op);
+    double getDistance(FPoint arg);
 
     FPoint setDistance(double x, double y, double z, double distance);
-    FPoint setDistance(FPoint op, double distance);
+    FPoint setDistance(FPoint arg, double distance);
 
     double getDotProduct(double x, double y, double z);
-    double getDotProduct(FPoint op);
+    double getDotProduct(FPoint arg);
 
     FPoint setCrossProduct(double x, double y, double z);
-    FPoint setCrossProduct(FPoint op);
+    FPoint setCrossProduct(FPoint arg);
 
     double getAngle(double x, double y, double z);
-    double getAngle(FPoint op);
+    double getAngle(FPoint arg);
 
     FPoint setAngle(double x, double y, double z, double angle);
-    FPoint setAngle(FPoint op, double angle);
+    FPoint setAngle(FPoint arg, double angle);
 
     FPoint rotateAround(double x, double y, double z, double angle);
-    FPoint rotateAround(FPoint op, double angle);
+    FPoint rotateAround(FPoint arg, double angle);
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
