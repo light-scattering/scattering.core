@@ -17,13 +17,13 @@ public interface FLine extends Construct<FLine> {
 
     //--------------------------------------------------
 
-    boolean isCollinear(FLine ref);
+    boolean isCollinear(FLine arg);
 
     Optional<FPoint> getFPointAtX(double x);
     Optional<FPoint> getFPointAtY(double y);
     Optional<FPoint> getFPointAtZ(double z);
 
-    Optional<FPoint> getFPointAtIntersection(FLine ref);
+    Optional<FPoint> getFPointAtIntersection(FLine arg);
 
     void setDistance(Geometry geometry, double distance);
 

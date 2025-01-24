@@ -103,8 +103,8 @@ public class FComplexDef implements FComplex {
         }
 
         JSONArray structure = json.getJSONArray(JSON_VAL);
-        var re = structure.getDouble(0);
-        var im = structure.getDouble(1);
+        double re = structure.getDouble(0);
+        double im = structure.getDouble(1);
 
         return set(re, im);
     }

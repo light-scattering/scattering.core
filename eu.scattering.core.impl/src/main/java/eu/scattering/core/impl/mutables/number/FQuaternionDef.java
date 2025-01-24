@@ -134,10 +134,10 @@ public class FQuaternionDef implements FQuaternion {
         }
 
         JSONArray structure = json.getJSONArray(JSON_VAL);
-        var re = structure.getDouble(0);
-        var i = structure.getDouble(1);
-        var j = structure.getDouble(2);
-        var k = structure.getDouble(3);
+        double re = structure.getDouble(0);
+        double i = structure.getDouble(1);
+        double j = structure.getDouble(2);
+        double k = structure.getDouble(3);
 
         return set(re, i, j, k);
     }
