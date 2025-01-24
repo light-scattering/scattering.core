@@ -25,6 +25,7 @@
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FVectorDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FVectorDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +159,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test' (1)">
-    <configuration name="FLineTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FVectorAdvancedTest.setAntiParallel" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -171,7 +172,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FLineTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorTest$FVectorAdvancedTest.setAntiParallel&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -181,7 +182,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FPlaneAdvancedTest.setDistance" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FVectorAdvancedTest.setCrossProduct" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -194,7 +195,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FPlaneTest$FPlaneAdvancedTest.setDistance&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorTest$FVectorAdvancedTest.setCrossProduct&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -204,7 +205,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FRayTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FVectorAdvancedTest.setOrthogonalSimple" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -217,7 +218,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.construct.FRayTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorTest$FVectorAdvancedTest.setOrthogonalSimple&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -227,7 +228,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FVectorAdvancedTest.setCollinearRandom" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FVectorTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -240,7 +241,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorTest$FVectorAdvancedTest.setCollinearRandom&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -274,10 +275,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test' (1)" />
-        <item itemvalue="Gradle.FVectorAdvancedTest.setCollinearRandom" />
-        <item itemvalue="Gradle.FPlaneAdvancedTest.setDistance" />
-        <item itemvalue="Gradle.FRayTest" />
-        <item itemvalue="Gradle.FLineTest" />
+        <item itemvalue="Gradle.FVectorTest" />
+        <item itemvalue="Gradle.FVectorAdvancedTest.setOrthogonalSimple" />
+        <item itemvalue="Gradle.FVectorAdvancedTest.setCrossProduct" />
+        <item itemvalue="Gradle.FVectorAdvancedTest.setAntiParallel" />
       </list>
     </recent_temporary>
   </component>
@@ -510,6 +511,11 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/position/FPairPos2DITest.java</url>
           <line>44</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorTest.java</url>
+          <line>2808</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

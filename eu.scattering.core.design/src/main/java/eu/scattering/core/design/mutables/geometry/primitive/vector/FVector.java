@@ -67,7 +67,7 @@ public interface FVector extends Primitive<FVector> {
 
     FVector reflectThroughCenter();
     FVector reflect(double x, double y, double z);
-    FVector reflect(FPoint op);
+    FVector reflect(FPoint arg);
 
     FVector reflectBase();
     FVector reflectHead();
@@ -77,8 +77,8 @@ public interface FVector extends Primitive<FVector> {
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
 
-    FVector add(FVector op);
-    FVector sub(FVector op);
+    FVector add(FVector arg);
+    FVector sub(FVector arg);
 
     double getLengthX();
     double getLengthY();
@@ -87,25 +87,25 @@ public interface FVector extends Primitive<FVector> {
     double getMagnitude();
     FVector setMagnitude(double magnitude);
 
-    double getAngle(FVector op);
-    FVector setAngle(FVector op, double angle);
+    double getAngle(FVector arg);
+    FVector setAngle(FVector arg, double angle);
 
-    boolean isCollinear(FVector op);
-    FVector setCollinear(FVector op);
+    boolean isCollinear(FVector arg);
+    FVector setCollinear(FVector arg);
 
-    boolean isParallel(FVector op);
-    FVector setParallel(FVector op);
+    boolean isParallel(FVector arg);
+    FVector setParallel(FVector arg);
 
-    boolean isAntiParallel(FVector op);
-    FVector setAntiParallel(FVector op);
+    boolean isAntiParallel(FVector arg);
+    FVector setAntiParallel(FVector arg);
 
-    boolean isOrthogonal(FVector op);
-    FVector setOrthogonal(FVector op);
+    boolean isOrthogonal(FVector arg);
+    FVector setOrthogonal(FVector arg);
 
-    double getDotProduct(FVector op);
-    FVector setCrossProduct(FVector op);
+    double getDotProduct(FVector arg);
+    FVector setCrossProduct(FVector arg);
 
-    FVector rotateAround(FVector op, double angle);
+    FVector rotateAround(FVector arg, double angle);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
