@@ -9,7 +9,6 @@ import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.OptionalDouble;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -157,7 +156,8 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(this::projectUnit);
+        geometry.disassemble()
+                .forEach(this::projectUnit);
     }
 
     @Override
@@ -167,25 +167,8 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> {
-            var oX = p.getX();
-            var oY = p.getY();
-            var oZ = p.getZ();
-
-            var isValid = projectUnit(p);
-
-            var pX = p.getX();
-            var pY = p.getY();
-            var pZ = p.getZ();
-
-            p.set(oX, oY, oZ);
-
-            if (!isValid) {
-                return;
-            }
-
-            p.reflect(pX, pY, pZ);
-        });
+        geometry.disassemble()
+                .forEach(this::reflectUnit);
     }
 
     @Override
@@ -195,66 +178,19 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream().allMatch(this::isPartOfUnit);
+        return geometry.disassemble().stream()
+                .allMatch(this::isUnitPartOf);
     }
 
     @Override
-    public List<OptionalDouble> getAtomicDistanceP2(Geometry geometry) {
+    public List<Double> getAtomicDistance(Geometry geometry) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(p -> {
-                    var oX = p.getX();
-                    var oY = p.getY();
-                    var oZ = p.getZ();
-
-                    var isValid = projectUnit(p);
-
-                    var pX = p.getX();
-                    var pY = p.getY();
-                    var pZ = p.getZ();
-
-                    p.set(oX, oY, oZ);
-
-                    if (!isValid) {
-                        return OptionalDouble.empty();
-                    }
-
-                    return OptionalDouble.of(p.getDistanceP2(pX, pY, pZ));
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<OptionalDouble> getAtomicDistance(Geometry geometry) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return geometry.disassemble().stream()
-                .map(p -> {
-                    var oX = p.getX();
-                    var oY = p.getY();
-                    var oZ = p.getZ();
-
-                    var isValid = projectUnit(p);
-
-                    var pX = p.getX();
-                    var pY = p.getY();
-                    var pZ = p.getZ();
-
-                    p.set(oX, oY, oZ);
-
-                    if (!isValid) {
-                        return OptionalDouble.empty();
-                    }
-
-                    return OptionalDouble.of(p.getDistance(pX, pY, pZ));
-                })
+                .map(this::getUnitDistance)
                 .collect(Collectors.toList());
     }
 
@@ -265,70 +201,13 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> {
-            var oX = p.getX();
-            var oY = p.getY();
-            var oZ = p.getZ();
-
-            var isValid = projectUnit(p);
-
-            var pX = p.getX();
-            var pY = p.getY();
-            var pZ = p.getZ();
-
-            p.set(oX, oY, oZ);
-
-            if (!isValid) {
-                return;
-            }
-
-            p.setDistance(pX, pY, pZ, distance);
-        });
+        geometry.disassemble()
+                .forEach(p -> setUnitDistance(p, distance));
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private boolean projectUnit(FPoint in) {
-        double memoX = in.getX();
-        double memoY = in.getY();
-        double memoZ = in.getZ();
-
-        getRefOrigin().applyWithFixedState(o -> {
-            FPoint oBase = o.getRefBase();
-            FPoint oHead = o.getRefHead();
-
-            double oMagnitude = o.getMagnitude();
-
-            in.sub(oBase);
-
-            oHead.sub(oBase);
-            oHead.div(oMagnitude);
-
-            oHead.mul(in.getDotProduct(oHead));
-            oBase.add(oHead);
-
-            in.applyStateFrom(oBase);
-        });
-
-        boolean isValid = projectUnitValidate(in);
-
-        if (isValid) {
-            return true;
-        }
-
-        in.set(memoX, memoY, memoZ);
-
-        return false;
-    }
-
-    private boolean projectUnitValidate(FPoint arg) {
-        var distBase = getRefOrigin().getRefBase().getDistance(arg);
-        var distHead = getRefOrigin().getRefHead().getDistance(arg);
-
-        return Math.abs(distBase + distHead - getRefOrigin().getMagnitude()) < epsilon;
-    }
-
-    private boolean isPartOfUnit(FPoint arg) {
+    private boolean isUnitPartOf(FPoint arg) {
         double memoX = arg.getX();
         double memoY = arg.getY();
         double memoZ = arg.getZ();
@@ -342,5 +221,124 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
             return p.getDistance(memoX, memoY, memoZ) < epsilon;
         });
+    }
+
+    private boolean isUnitPartOfSegment(double x, double y, double z) {
+        FPoint oBase = getRefOrigin().getRefBase();
+        FPoint oHead = getRefOrigin().getRefHead();
+
+        double oMagnitude = getRefOrigin().getMagnitude();
+
+        double distBase = oBase.getDistance(x, y, z);
+        double distHead = oHead.getDistance(x, y, z);
+
+        return Math.abs(distBase + distHead - oMagnitude) < epsilon;
+    }
+
+    private double getUnitDistance(FPoint arg) {
+        FVector origin = getRefOrigin();
+        double originMag = origin.getMagnitude();
+
+        double headX = arg.getX() - origin.getBaseX();
+        double headY = arg.getY() - origin.getBaseY();
+        double headZ = arg.getZ() - origin.getBaseZ();
+
+        double opX = (origin.getHeadX() - origin.getBaseX()) / originMag;
+        double opY = (origin.getHeadY() - origin.getBaseY()) / originMag;
+        double opZ = (origin.getHeadZ() - origin.getBaseZ()) / originMag;
+
+        double dotProduct = (headX * opX) + (headY * opY) + (headZ * opZ);
+
+        opX *= dotProduct;
+        opY *= dotProduct;
+        opZ *= dotProduct;
+
+        opX += origin.getBaseX();
+        opY += origin.getBaseY();
+        opZ += origin.getBaseZ();
+
+        boolean isValid = isUnitPartOfSegment(opX, opY, opZ);
+
+        if (!isValid) {
+            return -1;
+        }
+
+        double distX = arg.getX() - opX;
+        double distY = arg.getY() - opY;
+        double distZ = arg.getZ() - opZ;
+
+        return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
+    }
+
+    private void setUnitDistance(FPoint in, double distance) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        boolean isValid = projectUnit(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ);
+
+        if (!isValid) {
+            return;
+        }
+
+        in.setDistance(pX, pY, pZ, distance);
+    }
+
+    private void reflectUnit(FPoint in) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        boolean isValid = projectUnit(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ);
+
+        if (!isValid) {
+            return;
+        }
+
+        in.reflect(pX, pY, pZ);
+    }
+
+    private boolean projectUnit(FPoint in) {
+        FVector origin = getRefOrigin();
+
+        double memoX = in.getX();
+        double memoY = in.getY();
+        double memoZ = in.getZ();
+
+        double headX = in.getX() - origin.getBaseX();
+        double headY = in.getY() - origin.getBaseY();
+        double headZ = in.getZ() - origin.getBaseZ();
+
+        in.applyStateFrom(origin.getRefHead());
+
+        in.sub(origin.getRefBase());
+        in.normalize();
+
+        double dotProduct = in.getDotProduct(headX, headY, headZ);
+
+        in.mul(dotProduct);
+        in.add(origin.getRefBase());
+
+        boolean isValid = isUnitPartOfSegment(in.getX(), in.getY(), in.getZ());
+
+        if (isValid) {
+            return true;
+        }
+
+        in.set(memoX, memoY, memoZ);
+
+        return false;
     }
 }

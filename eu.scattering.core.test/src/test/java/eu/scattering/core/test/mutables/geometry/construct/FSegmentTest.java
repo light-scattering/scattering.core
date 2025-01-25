@@ -544,7 +544,7 @@ public class FSegmentTest {
             fSegment.getRefOrigin().add(offset);
             fPoint.add(offset);
 
-            assertEquals(Math.sqrt(6), fSegment.getAtomicDistance(fPoint).get(0).orElseThrow());
+            assertEquals(Math.sqrt(6), fSegment.getAtomicDistance(fPoint).get(0));
         }
 
         @Test
@@ -554,30 +554,6 @@ public class FSegmentTest {
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fSegment.getAtomicDistance(fPoint),
-                    "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Get distance P2")
-        void getDistanceP2() {
-            FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            FPoint relocation = TestHelper.getRandomFPoint();
-
-            fSegment.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            assertEquals(6, fSegment.getAtomicDistanceP2(fPoint).get(0).orElseThrow());
-        }
-
-        @Test
-        @DisplayName("Get distance P2 (throw IllegalStateException)")
-        void getDistanceP2ThrowIllegalStateException() {
-            FSegment fSegment = factory.getRefFSegment(factory.getFVector());
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.getAtomicDistanceP2(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -594,7 +570,7 @@ public class FSegmentTest {
 
             fSegment.setDistance(fPoint, 1);
 
-            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0).orElseThrow() - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < jitter,
                     "The distance is erroneous");
         }
 
@@ -635,7 +611,7 @@ public class FSegmentTest {
 
             fSegment.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0).orElseThrow() - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < jitter,
                     "The distance between FPoints is erroneous");
         }
 
