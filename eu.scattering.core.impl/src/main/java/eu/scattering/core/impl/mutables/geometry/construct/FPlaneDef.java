@@ -20,7 +20,6 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private static final String JSON_MAIN = "plane";
     private static final String JSON_VAL = "val";
 
-    // TODO - Make static
     private final Supplier<FLine> fLineSupplier;
     private final Supplier<FVector> fVectorSupplier;
     private final Supplier<FPoint> fPointSupplier;
@@ -85,8 +84,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        var structure = json.getJSONArray(JSON_VAL);
-        var origin = fVectorSupplier.get().applyStateFrom(structure.getJSONObject(0));
+        FVector origin = fVectorSupplier.get().applyStateFrom(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -119,10 +117,10 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     @Override
     public JSONObject toJSON() {
-        var json = new JSONObject();
+        JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
-        json.append(JSON_VAL, getRefOrigin().toJSON());
+        json.put(JSON_VAL, getRefOrigin().toJSON());
 
         return json;
     }
@@ -138,8 +136,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FLine) {
-            var ref = (FLine) object;
+        if (object instanceof FPlane) {
+            FPlane ref = (FPlane) object;
 
             return getRefOrigin().equals(ref.getRefOrigin());
         }
@@ -156,9 +154,9 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isCoplanar(FPlane ref) {
+    public boolean isCoplanar(FPlane arg) {
 
-        return getRefOrigin().isCollinear(ref.getRefOrigin()) && isPartOf(ref.getRefOrigin().getRefBase());
+        return getRefOrigin().isCollinear(arg.getRefOrigin()) && isPartOf(arg.getRefOrigin().getRefBase());
     }
 
     @Override
@@ -168,7 +166,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(this::projectUnit);
+        geometry.disassemble()
+                .forEach(this::projectUnitOnPlane);
     }
 
     @Override
@@ -178,19 +177,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> {
-            var oX = p.getX();
-            var oY = p.getY();
-            var oZ = p.getZ();
-
-            projectUnit(p);
-
-            var pX = p.getX();
-            var pY = p.getY();
-            var pZ = p.getZ();
-
-            p.set(oX, oY, oZ).reflect(pX, pY, pZ);
-        });
+        geometry.disassemble()
+                .forEach(this::reflectUnit);
     }
 
     @Override
@@ -201,43 +189,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         return geometry.disassemble().stream()
-                .allMatch(p -> {
-                    var oX = p.getX();
-                    var oY = p.getY();
-                    var oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    var pX = p.getX();
-                    var pY = p.getY();
-                    var pZ = p.getZ();
-
-                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ) < epsilon;
-                });
-    }
-
-    @Override
-    public List<Double> getAtomicDistanceP2(Geometry geometry) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return geometry.disassemble().stream()
-                .map(p -> {
-                    var oX = p.getX();
-                    var oY = p.getY();
-                    var oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    var pX = p.getX();
-                    var pY = p.getY();
-                    var pZ = p.getZ();
-
-                    return p.set(oX, oY, oZ).getDistanceP2(pX, pY, pZ);
-                })
-                .collect(Collectors.toList());
+                .allMatch(this::isUnitPartOf);
     }
 
     @Override
@@ -248,19 +200,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         return geometry.disassemble().stream()
-                .map(p -> {
-                    var oX = p.getX();
-                    var oY = p.getY();
-                    var oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    var pX = p.getX();
-                    var pY = p.getY();
-                    var pZ = p.getZ();
-
-                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ);
-                })
+                .map(this::getUnitDistance)
                 .collect(Collectors.toList());
     }
 
@@ -271,19 +211,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> {
-            var oX = p.getX();
-            var oY = p.getY();
-            var oZ = p.getZ();
-
-            projectUnit(p);
-
-            var pX = p.getX();
-            var pY = p.getY();
-            var pZ = p.getZ();
-
-            p.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
-        });
+        geometry.disassemble()
+                .forEach(p -> setUnitDistance(p, distance));
     }
 
     @Override
@@ -294,10 +223,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         List<Boolean> isInHalfSpace = geometry.disassemble().stream()
-                .map(p -> p.toBooleanWithFixedState(e -> {
-                    projectUnitOnLine(e);
-                    return isUnitInHalfSpace(e);
-                }))
+                .map(this::isUnitInHalfSpace)
                 .collect(Collectors.toList());
 
         boolean conditionTrue = isInHalfSpace.stream().anyMatch(e -> e);
@@ -314,13 +240,10 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         }
 
         return geometry.disassemble().stream()
-                .allMatch(p -> p.toBooleanWithFixedState(e -> {
-                    projectUnitOnLine(e);
-                    return isUnitInHalfSpace(e);
-                }));
+                .allMatch(this::isUnitInHalfSpace);
     }
 
-    // TODO - It doesn't have to be optional
+    // TODO - Not optimized
     @Override
     public Optional<FLine> getFLineAtIntersection(FPlane ref) {
 
@@ -328,48 +251,49 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FLine res = fLineSupplier.get();
-        FPoint resBase = res.getRefOrigin().getRefBase();
-        FPoint resHead = res.getRefOrigin().getRefHead();
+        FLine result = fLineSupplier.get();
 
-        getRefOrigin().applyWithFixedState(a -> {
-            ref.getRefOrigin().applyWithFixedState(b -> {
-                double aBX = a.getBaseX();
-                double aBY = a.getBaseY();
-                double aBZ = a.getBaseZ();
-                double bBX = b.getBaseX();
-                double bBY = b.getBaseY();
-                double bBZ = b.getBaseZ();
+        FPoint resBase = result.getRefOrigin().getRefBase();
+        FPoint resHead = result.getRefOrigin().getRefHead();
 
-                FPoint aHead = a.moveBaseToCenter().getRefHead();
-                FPoint bHead = b.moveBaseToCenter().getRefHead() ;
+        FVector u = getRefOrigin().copy();
+        FVector v = ref.getRefOrigin().copy();
 
-                resBase.applyStateFrom(aHead);
-                resHead.applyStateFrom(bHead);
+        double aBX = u.getBaseX();
+        double aBY = u.getBaseY();
+        double aBZ = u.getBaseZ();
+        double bBX = v.getBaseX();
+        double bBY = v.getBaseY();
+        double bBZ = v.getBaseZ();
 
-                double d1 = -aHead.getDotProduct(aBX, aBY, aBZ);
-                double d2 = -bHead.getDotProduct(bBX, bBY, bBZ);
+        FPoint aHead = u.moveBaseToCenter().getRefHead();
+        FPoint bHead = v.moveBaseToCenter().getRefHead() ;
 
-                aHead.setCrossProduct(bHead);
+        resBase.applyStateFrom(aHead);
+        resHead.applyStateFrom(bHead);
 
-                double d3 = aHead.getDotProduct(aHead);
+        double d1 = -aHead.getDotProduct(aBX, aBY, aBZ);
+        double d2 = -bHead.getDotProduct(bBX, bBY, bBZ);
 
-                resHead.mul(d1);
+        aHead.setCrossProduct(bHead);
 
-                resBase.mul(d2);
-                resBase.sub(resHead);
-                resBase.setCrossProduct(aHead);
-                resBase.div(d3);
+        double d3 = aHead.getDotProduct(aHead);
 
-                aHead.add(resBase);
+        resHead.mul(d1);
 
-                resHead.applyStateFrom(aHead);
-            });
-        });
+        resBase.mul(d2);
+        resBase.sub(resHead);
+        resBase.setCrossProduct(aHead);
+        resBase.div(d3);
 
-        return Optional.of(res);
+        aHead.add(resBase);
+
+        resHead.applyStateFrom(aHead);
+
+        return Optional.of(result);
     }
 
+    // TODO - Not optimized
     @Override
     public Optional<FPoint> getFPointAtIntersection(FLine ref) {
 
@@ -377,87 +301,136 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint res = fVectorSupplier.get().getRefBase().copyZero();
+        FPoint result = fVectorSupplier.get().getRefBase().copyZero();
 
-        getRefOrigin().applyWithFixedState(a -> {
-            ref.getRefOrigin().applyWithFixedState(b -> {
-                double aBX = a.getBaseX();
-                double aBY = a.getBaseY();
-                double aBZ = a.getBaseZ();
-                double bBX = b.getBaseX();
-                double bBY = b.getBaseY();
-                double bBZ = b.getBaseZ();
+        FVector u = getRefOrigin().copy();
+        FVector v = ref.getRefOrigin().copy();
 
-                FPoint aHead = a.moveBaseToCenter().normalize().getRefHead();
-                FPoint bHead = b.moveBaseToCenter().normalize().getRefHead();
+        double aBX = u.getBaseX();
+        double aBY = u.getBaseY();
+        double aBZ = u.getBaseZ();
+        double bBX = v.getBaseX();
+        double bBY = v.getBaseY();
+        double bBZ = v.getBaseZ();
 
-                double dividend = aHead.getDotProduct(aBX - bBX, aBY - bBY, aBZ - bBZ);
-                double divisor = aHead.getDotProduct(bHead);
-                double distance = dividend / divisor;
+        FPoint aHead = u.moveBaseToCenter().normalize().getRefHead();
+        FPoint bHead = v.moveBaseToCenter().normalize().getRefHead();
 
-                b.moveBase(bBX, bBY, bBZ).setMagnitude(distance);
+        double dividend = aHead.getDotProduct(aBX - bBX, aBY - bBY, aBZ - bBZ);
+        double divisor = aHead.getDotProduct(bHead);
+        double distance = dividend / divisor;
 
-                res.applyStateFrom(b.getRefHead());
-            });
-        });
+        v.moveBase(bBX, bBY, bBZ).setMagnitude(distance);
 
-        return Optional.of(res);
+        result.applyStateFrom(v.getRefHead());
+
+        return Optional.of(result);
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private void projectUnit(FPoint in) {
+    private boolean isUnitPartOf(FPoint arg) {
 
-        getRefOrigin().applyWithFixedState(o -> {
-            FPoint oBase = o.getRefBase();
-            FPoint oHead = o.getRefHead();
-
-            double memoX = oBase.getX();
-            double memoY = oBase.getY();
-            double memoZ = oBase.getZ();
-
-            double oMagnitude = o.getMagnitude();
-
-            oHead.sub(oBase);
-            oHead.div(oMagnitude);
-            oHead.mul(oHead.getDotProduct(in.getX() - memoX, in.getY() - memoY, in.getZ() - memoZ));
-
-            oBase.add(oHead);
-
-            o.setHead(in);
-            o.moveBase(memoX, memoY, memoZ);
-
-            in.applyStateFrom(o.getRefHead());
-        });
+        return getUnitDistance(arg) < epsilon;
     }
 
-    private void projectUnitOnLine(FPoint in) {
+    private double getUnitDistance(FPoint arg) {
+        FVector origin = getRefOrigin();
+        double originMag = origin.getMagnitude();
 
-        getRefOrigin().applyWithFixedState(o -> {
-            FPoint oBase = o.getRefBase();
-            FPoint oHead = o.getRefHead();
+        double headX = origin.getBaseX() - arg.getX();
+        double headY = origin.getBaseY() - arg.getY();
+        double headZ = origin.getBaseZ() - arg.getZ();
 
-            double oMagnitude = o.getMagnitude();
+        double opX = (origin.getHeadX() - origin.getBaseX()) / originMag;
+        double opY = (origin.getHeadY() - origin.getBaseY()) / originMag;
+        double opZ = (origin.getHeadZ() - origin.getBaseZ()) / originMag;
 
-            in.sub(oBase);
+        double dotProduct = (headX * opX) + (headY * opY) + (headZ * opZ);
 
-            oHead.sub(oBase);
-            oHead.div(oMagnitude);
-            oHead.mul(oHead.getDotProduct(in));
+        opX *= dotProduct;
+        opY *= dotProduct;
+        opZ *= dotProduct;
 
-            oBase.add(oHead);
+        return Math.sqrt((opX * opX) + (opY * opY) + (opZ * opZ));
+    }
 
-            in.applyStateFrom(oBase);
-        });
+    private void setUnitDistance(FPoint in, double distance) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        projectUnitOnPlane(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
+    }
+
+    private void projectUnitOnPlane(FPoint in) {
+        FVector origin = getRefOrigin();
+
+        double memoAX = in.getX();
+        double memoAY = in.getY();
+        double memoAZ = in.getZ();
+
+        double headX = origin.getBaseX() - memoAX;
+        double headY = origin.getBaseY() - memoAY;
+        double headZ = origin.getBaseZ() - memoAZ;
+
+        in.applyStateFrom(origin.getRefHead());
+
+        in.sub(origin.getRefBase());
+        in.normalize();
+
+        double dotProduct = in.getDotProduct(headX, headY, headZ);
+
+        in.mul(dotProduct);
+        in.add(memoAX, memoAY, memoAZ);
+    }
+
+    private void reflectUnit(FPoint in) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        projectUnitOnPlane(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ).reflect(pX, pY, pZ);
     }
 
     private boolean isUnitInHalfSpace(FPoint arg) {
-        double magnitude = getRefOrigin().getMagnitude();
+        FVector origin = getRefOrigin();
+        double originMag = origin.getMagnitude();
 
-        double distBase = getRefOrigin().getRefBase().getDistance(arg);
-        double distHead = getRefOrigin().getRefHead().getDistance(arg);
+        double headX = arg.getX() - origin.getBaseX();
+        double headY = arg.getY() - origin.getBaseY();
+        double headZ = arg.getZ() - origin.getBaseZ();
 
-        if ((distBase < magnitude + epsilon) && (distHead < magnitude + epsilon)) {
+        double opX = (origin.getHeadX() - origin.getBaseX()) / originMag;
+        double opY = (origin.getHeadY() - origin.getBaseY()) / originMag;
+        double opZ = (origin.getHeadZ() - origin.getBaseZ()) / originMag;
+
+        double dotProduct = (headX * opX) + (headY * opY) + (headZ * opZ);
+
+        opX *= dotProduct;
+        opY *= dotProduct;
+        opZ *= dotProduct;
+
+        opX += origin.getBaseX();
+        opY += origin.getBaseY();
+        opZ += origin.getBaseZ();
+
+        double distBase = origin.getRefBase().getDistance(opX, opY, opZ);
+        double distHead = origin.getRefHead().getDistance(opX, opY, opZ);
+
+        if ((distBase < originMag + epsilon) && (distHead < originMag + epsilon)) {
             return true;
         }
 

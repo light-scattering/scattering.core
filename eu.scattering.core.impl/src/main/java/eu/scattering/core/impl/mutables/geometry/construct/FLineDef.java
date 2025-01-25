@@ -239,6 +239,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return isValid(fPoint) ? Optional.of(fPoint) : Optional.empty();
     }
 
+    // TODO - Not optimized
     @Override
     public Optional<FPoint> getFPointAtIntersection(FLine arg) {
         FVector refOrigin = getRefOrigin();

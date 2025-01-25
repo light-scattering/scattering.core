@@ -9,6 +9,8 @@ import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static eu.scattering.core.test.Configuration.factory;
 
@@ -25,12 +27,14 @@ public class TestHelper {
     }
 
     public static FVector getRandomFVector(FVector... exc) {
+        List<FPoint> parsedBaseList = Arrays.stream(exc).map(FVector::getRefBase).collect(Collectors.toList());
+        List<FPoint> parsedHeadList = Arrays.stream(exc).map(FVector::getRefHead).collect(Collectors.toList());
 
-        FPoint[] parsedBase = Arrays.stream(exc).map(FVector::getRefBase).toArray(FPoint[]::new);
-        FPoint[] parsedHead = Arrays.stream(exc).map(FVector::getRefHead).toArray(FPoint[]::new);
+        FPoint base = getRandomFPoint(parsedBaseList.toArray(FPoint[]::new));
 
-        FPoint base = getRandomFPoint(parsedBase);
-        FPoint head = getRandomFPoint(parsedHead);
+        parsedHeadList.add(base);
+
+        FPoint head = getRandomFPoint(parsedHeadList.toArray(FPoint[]::new));
 
         return factory.getFVector(base, head);
     }
