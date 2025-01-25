@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.mutables.geometry.construct;
+package eu.scattering.core.impl.mutables.geometry.construct.support;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;

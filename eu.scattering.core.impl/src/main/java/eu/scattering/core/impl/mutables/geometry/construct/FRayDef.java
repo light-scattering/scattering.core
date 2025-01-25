@@ -1,10 +1,10 @@
-package eu.scattering.core.impl.mutables.geometry.construct.ray;
+package eu.scattering.core.impl.mutables.geometry.construct;
 
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.impl.mutables.geometry.construct.ConstructPresetDef;
+import eu.scattering.core.impl.mutables.geometry.construct.support.ConstructPresetDef;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 
