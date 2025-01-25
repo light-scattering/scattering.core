@@ -1,13 +1,11 @@
 package eu.scattering.core.design.mutables.geometry.construct.ray;
 
-import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 
 import java.util.List;
-import java.util.OptionalDouble;
 
 public interface FRay extends Construct<FRay> {
 
@@ -26,8 +24,5 @@ public interface FRay extends Construct<FRay> {
 
     //--------------------------------------------------
 
-    List<OptionalDouble> getAtomicDistance(Geometry geometry);
-
-    @Fragment
-    List<OptionalDouble> getAtomicDistanceP2(Geometry geometry);
+    List<Double> getAtomicDistance(Geometry geometry);
 }

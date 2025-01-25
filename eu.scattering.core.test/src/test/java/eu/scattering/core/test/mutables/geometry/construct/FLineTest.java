@@ -645,30 +645,6 @@ public class FLineTest {
         }
 
         @Test
-        @DisplayName("Get distance P2")
-        void getDistanceP2() {
-            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            FPoint relocation = TestHelper.getRandomFPoint();
-
-            fLine.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            assertEquals(6, fLine.getAtomicDistanceP2(fPoint).get(0));
-        }
-
-        @Test
-        @DisplayName("Get distance P2 (throw IllegalStateException)")
-        void getDistanceP2ThrowIllegalStateException() {
-            FLine fLine = factory.getRefFLine(factory.getFVector());
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.getAtomicDistanceP2(fPoint),
-                    "The origin is a non-directional FVector");
-        }
-
-        @Test
         @DisplayName("Set distance")
         void setDistance() {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));

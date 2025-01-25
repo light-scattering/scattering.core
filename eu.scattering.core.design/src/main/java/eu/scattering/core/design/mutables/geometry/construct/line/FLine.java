@@ -1,6 +1,5 @@
 package eu.scattering.core.design.mutables.geometry.construct.line;
 
-import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
@@ -30,7 +29,4 @@ public interface FLine extends Construct<FLine> {
     //--------------------------------------------------
 
     List<Double> getAtomicDistance(Geometry geometry);
-
-    @Fragment
-    List<Double> getAtomicDistanceP2(Geometry geometry);
 }

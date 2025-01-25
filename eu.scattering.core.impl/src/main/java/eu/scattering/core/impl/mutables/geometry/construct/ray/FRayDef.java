@@ -9,7 +9,6 @@ import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.OptionalDouble;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -81,7 +80,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        var origin = fVectorSupplier.get().applyStateFrom(json.getJSONObject(JSON_VAL));
+        FVector origin = fVectorSupplier.get().applyStateFrom(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -114,7 +113,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
     @Override
     public JSONObject toJSON() {
-        var json = new JSONObject();
+        JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_VAL, getRefOrigin().toJSON());
@@ -134,7 +133,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     public boolean equals(Object object) {
 
         if (object instanceof FRay) {
-            var ref = (FRay) object;
+            FRay ref = (FRay) object;
 
             return getRefOrigin().equals(ref.getRefOrigin());
         }
@@ -157,7 +156,8 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(this::projectUnit);
+        geometry.disassemble()
+                .forEach(this::projectUnit);
     }
 
     @Override
@@ -167,25 +167,8 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> {
-            var oX = p.getX();
-            var oY = p.getY();
-            var oZ = p.getZ();
-
-            var isValid = projectUnit(p);
-
-            var pX = p.getX();
-            var pY = p.getY();
-            var pZ = p.getZ();
-
-            p.set(oX, oY, oZ);
-
-            if (!isValid) {
-                return;
-            }
-
-            p.reflect(pX, pY, pZ);
-        });
+        geometry.disassemble()
+                .forEach(this::reflectUnit);
     }
 
     @Override
@@ -195,66 +178,19 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream().allMatch(this::isPartOfUnit);
+        return geometry.disassemble().stream()
+                .allMatch(this::isUnitPartOf);
     }
 
     @Override
-    public List<OptionalDouble> getAtomicDistanceP2(Geometry geometry) {
+    public List<Double> getAtomicDistance(Geometry geometry) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         return geometry.disassemble().stream()
-                .map(p -> {
-                    var oX = p.getX();
-                    var oY = p.getY();
-                    var oZ = p.getZ();
-
-                    var isValid = projectUnit(p);
-
-                    var pX = p.getX();
-                    var pY = p.getY();
-                    var pZ = p.getZ();
-
-                    p.set(oX, oY, oZ);
-
-                    if (!isValid) {
-                        return OptionalDouble.empty();
-                    }
-
-                    return OptionalDouble.of(p.getDistanceP2(pX, pY, pZ));
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<OptionalDouble> getAtomicDistance(Geometry geometry) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return geometry.disassemble().stream()
-                .map(p -> {
-                    var oX = p.getX();
-                    var oY = p.getY();
-                    var oZ = p.getZ();
-
-                    var isValid = projectUnit(p);
-
-                    var pX = p.getX();
-                    var pY = p.getY();
-                    var pZ = p.getZ();
-
-                    p.set(oX, oY, oZ);
-
-                    if (!isValid) {
-                        return OptionalDouble.empty();
-                    }
-
-                    return OptionalDouble.of(p.getDistance(pX, pY, pZ));
-                })
+                .map(this::getUnitDistance)
                 .collect(Collectors.toList());
     }
 
@@ -265,37 +201,30 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(p -> {
-            var oX = p.getX();
-            var oY = p.getY();
-            var oZ = p.getZ();
-
-            var isValid = projectUnit(p);
-
-            var pX = p.getX();
-            var pY = p.getY();
-            var pZ = p.getZ();
-
-            p.set(oX, oY, oZ);
-
-            if (!isValid) {
-                return;
-            }
-
-            p.setDistance(pX, pY, pZ, distance);
-        });
+        geometry.disassemble()
+                .forEach(p -> setUnitDistance(p, distance));
     }
 
     @Override
     public void shiftForward(Geometry geometry, double distance) {
 
-        geometry.disassemble().forEach(p -> shiftUnitForward(p, distance));
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        geometry.disassemble()
+                .forEach(p -> shiftUnitForward(p, distance));
     }
 
     @Override
     public void shiftBackward(Geometry geometry, double distance) {
 
-        geometry.disassemble().forEach(p -> shiftUnitBackward(p, distance));
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        geometry.disassemble()
+                .forEach(p -> shiftUnitBackward(p, distance));
     }
 
     @Override
@@ -325,47 +254,20 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
     // -------------------------------------------------------------------------------------------------
 
-    private boolean projectUnit(FPoint in) {
-        double memoX = in.getX();
-        double memoY = in.getY();
-        double memoZ = in.getZ();
+    private boolean isUnitPartOf(FPoint arg) {
+        double dist = getUnitDistance(arg);
 
-        getRefOrigin().applyWithFixedState(o -> {
-            FPoint oBase = o.getRefBase();
-            FPoint oHead = o.getRefHead();
-
-            double oMagnitude = o.getMagnitude();
-
-            in.sub(oBase);
-
-            oHead.sub(oBase);
-            oHead.div(oMagnitude);
-
-            oHead.mul(in.getDotProduct(oHead));
-            oBase.add(oHead);
-
-            in.applyStateFrom(oBase);
-        });
-
-        boolean isValid = projectUnitValidate(in);
-
-        if (isValid) {
-            return true;
-        }
-
-        in.set(memoX, memoY, memoZ);
-
-        return false;
+        return dist != -1 && dist < epsilon;
     }
 
-    private boolean projectUnitValidate(FPoint arg) {
+    private boolean isUnitPartOfRay(double x, double y, double z) {
         FPoint oBase = getRefOrigin().getRefBase();
         FPoint oHead = getRefOrigin().getRefHead();
 
         double oMagnitude = getRefOrigin().getMagnitude();
 
-        double distBase = oBase.getDistance(arg);
-        double distHead = oHead.getDistance(arg);
+        double distBase = oBase.getDistance(x, y, z);
+        double distHead = oHead.getDistance(x, y, z);
 
         if (Math.abs(distBase + distHead - oMagnitude) < epsilon) {
             return true;
@@ -374,33 +276,155 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         return distBase > distHead;
     }
 
-    private boolean isPartOfUnit(FPoint arg) {
-        double memoX = arg.getX();
-        double memoY = arg.getY();
-        double memoZ = arg.getZ();
+    private double getUnitDistance(FPoint arg) {
+        FVector origin = getRefOrigin();
+        double originMag = origin.getMagnitude();
 
-        return arg.toBooleanWithFixedState(p -> {
-            boolean isValid = projectUnit(p);
+        double headX = arg.getX() - origin.getBaseX();
+        double headY = arg.getY() - origin.getBaseY();
+        double headZ = arg.getZ() - origin.getBaseZ();
 
-            if (!isValid) {
-                return false;
-            }
+        double opX = (origin.getHeadX() - origin.getBaseX()) / originMag;
+        double opY = (origin.getHeadY() - origin.getBaseY()) / originMag;
+        double opZ = (origin.getHeadZ() - origin.getBaseZ()) / originMag;
 
-            return p.getDistance(memoX, memoY, memoZ) < epsilon;
-        });
+        double dotProduct = (headX * opX) + (headY * opY) + (headZ * opZ);
+
+        opX *= dotProduct;
+        opY *= dotProduct;
+        opZ *= dotProduct;
+
+        opX += origin.getBaseX();
+        opY += origin.getBaseY();
+        opZ += origin.getBaseZ();
+
+        boolean isValid = isUnitPartOfRay(opX, opY, opZ);
+
+        if (!isValid) {
+            return -1;
+        }
+
+        double distX = arg.getX() - opX;
+        double distY = arg.getY() - opY;
+        double distZ = arg.getZ() - opZ;
+
+        return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
+    }
+
+    private void setUnitDistance(FPoint in, double distance) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        boolean isValid = projectUnit(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ);
+
+        if (!isValid) {
+            return;
+        }
+
+        in.setDistance(pX, pY, pZ, distance);
+    }
+
+    private void reflectUnit(FPoint in) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        boolean isValid = projectUnit(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ);
+
+        if (!isValid) {
+            return;
+        }
+
+        in.reflect(pX, pY, pZ);
     }
 
     private void shiftUnitForward(FPoint in, double dist) {
 
-        getRefOrigin().applyWithFixedState(o -> {
-            in.applyStateFrom(o.moveBase(in).shiftForward(dist).getRefBase());
-        });
+        if (dist < 0) {
+            shiftUnitBackward(in, -dist);
+
+            return;
+        }
+
+        FVector origin = getRefOrigin();
+
+        double memoX = in.getX();
+        double memoY = in.getY();
+        double memoZ = in.getZ();
+        double zeroOHX = origin.getHeadX() - origin.getBaseX();
+        double zeroOHY = origin.getHeadY() - origin.getBaseY();
+        double zeroOHZ = origin.getHeadZ() - origin.getBaseZ();
+
+        in.set(zeroOHX, zeroOHY, zeroOHZ);
+        in.setMagnitude(dist);
+        in.add(memoX, memoY, memoZ);
     }
 
     private void shiftUnitBackward(FPoint in, double dist) {
 
-        getRefOrigin().applyWithFixedState(o -> {
-            in.applyStateFrom(o.moveBase(in).shiftBackward(dist).getRefBase());
-        });
+        if (dist < 0) {
+            shiftUnitForward(in, -dist);
+
+            return;
+        }
+
+        FVector origin = getRefOrigin();
+
+        double memoX = in.getX();
+        double memoY = in.getY();
+        double memoZ = in.getZ();
+        double zeroOHX = origin.getHeadX() - origin.getBaseX();
+        double zeroOHY = origin.getHeadY() - origin.getBaseY();
+        double zeroOHZ = origin.getHeadZ() - origin.getBaseZ();
+
+        in.set(zeroOHX, zeroOHY, zeroOHZ);
+        in.setMagnitude(dist);
+        in.reflectThroughCenter();
+        in.add(memoX, memoY, memoZ);
+    }
+
+    private boolean projectUnit(FPoint in) {
+        FVector origin = getRefOrigin();
+
+        double memoX = in.getX();
+        double memoY = in.getY();
+        double memoZ = in.getZ();
+
+        double headX = in.getX() - origin.getBaseX();
+        double headY = in.getY() - origin.getBaseY();
+        double headZ = in.getZ() - origin.getBaseZ();
+
+        in.applyStateFrom(origin.getRefHead());
+
+        in.sub(origin.getRefBase());
+        in.normalize();
+
+        double dotProduct = in.getDotProduct(headX, headY, headZ);
+
+        in.mul(dotProduct);
+        in.add(origin.getRefBase());
+
+        boolean isValid = isUnitPartOfRay(in.getX(), in.getY(), in.getZ());
+
+        if (isValid) {
+            return true;
+        }
+
+        in.set(memoX, memoY, memoZ);
+
+        return false;
     }
 }

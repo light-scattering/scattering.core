@@ -544,7 +544,7 @@ public class FRayTest {
             fRay.getRefOrigin().add(offset);
             fPoint.add(offset);
 
-            assertEquals(Math.sqrt(6), fRay.getAtomicDistance(fPoint).get(0).orElseThrow());
+            assertEquals(Math.sqrt(6), fRay.getAtomicDistance(fPoint).get(0));
         }
 
         @Test
@@ -554,30 +554,6 @@ public class FRayTest {
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fRay.getAtomicDistance(fPoint),
-                    "The origin is a non-directional FVector");
-        }
-
-        @Test
-        @DisplayName("Get distance P2")
-        void getDistanceP2() {
-            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            FPoint relocation = TestHelper.getRandomFPoint();
-
-            fRay.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
-
-            assertEquals(6, fRay.getAtomicDistanceP2(fPoint).get(0).orElseThrow());
-        }
-
-        @Test
-        @DisplayName("Get distance P2 (throw IllegalStateException)")
-        void getDistanceP2ThrowIllegalStateException() {
-            FRay fRay = factory.getRefFRay(factory.getFVector());
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.getAtomicDistanceP2(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -594,7 +570,7 @@ public class FRayTest {
 
             fRay.setDistance(fPoint, 1);
 
-            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0).orElseThrow() - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0) - 1) < jitter,
                     "The distance is erroneous");
         }
 
@@ -619,7 +595,7 @@ public class FRayTest {
 
             fRay.setDistance(fPoint, 1);
 
-            assertEquals(1, fRay.getAtomicDistance(fPoint).get(0).orElseThrow(), jitter);
+            assertEquals(1, fRay.getAtomicDistance(fPoint).get(0), jitter);
         }
 
         @Test
@@ -635,7 +611,7 @@ public class FRayTest {
 
             fRay.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0).orElseThrow() - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0) - 1) < jitter,
                     "The distance between FPoints is erroneous");
         }
 

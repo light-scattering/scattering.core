@@ -134,7 +134,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     public boolean equals(Object object) {
 
         if (object instanceof FLine) {
-            var ref = (FLine) object;
+            FLine ref = (FLine) object;
 
             return getRefOrigin().equals(ref.getRefOrigin());
         }
@@ -163,7 +163,8 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble().forEach(this::projectUnit);
+        geometry.disassemble()
+                .forEach(this::projectUnit);
     }
 
     @Override
@@ -174,19 +175,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         geometry.disassemble()
-                .forEach(p -> {
-                    double oX = p.getX();
-                    double oY = p.getY();
-                    double oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    double pX = p.getX();
-                    double pY = p.getY();
-                    double pZ = p.getZ();
-
-                    p.set(oX, oY, oZ).reflect(pX, pY, pZ);
-                });
+                .forEach(this::reflectUnit);
     }
 
     @Override
@@ -197,43 +186,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         return geometry.disassemble().stream()
-                .allMatch(p -> {
-                    double oX = p.getX();
-                    double oY = p.getY();
-                    double oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    double pX = p.getX();
-                    double pY = p.getY();
-                    double pZ = p.getZ();
-
-                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ) < epsilon;
-                });
-    }
-
-    @Override
-    public List<Double> getAtomicDistanceP2(Geometry geometry) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return geometry.disassemble().stream()
-                .map(p -> {
-                    double oX = p.getX();
-                    double oY = p.getY();
-                    double oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    double pX = p.getX();
-                    double pY = p.getY();
-                    double pZ = p.getZ();
-
-                    return p.set(oX, oY, oZ).getDistanceP2(pX, pY, pZ);
-                })
-                .collect(Collectors.toList());
+                .allMatch(this::isUnitPartOf);
     }
 
     @Override
@@ -244,19 +197,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         return geometry.disassemble().stream()
-                .map(p -> {
-                    double oX = p.getX();
-                    double oY = p.getY();
-                    double oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    double pX = p.getX();
-                    double pY = p.getY();
-                    double pZ = p.getZ();
-
-                    return p.set(oX, oY, oZ).getDistance(pX, pY, pZ);
-                })
+                .map(this::getUnitDistance)
                 .collect(Collectors.toList());
     }
 
@@ -268,19 +209,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         }
 
         geometry.disassemble()
-                .forEach(p -> {
-                    double oX = p.getX();
-                    double oY = p.getY();
-                    double oZ = p.getZ();
-
-                    projectUnit(p);
-
-                    double pX = p.getX();
-                    double pY = p.getY();
-                    double pZ = p.getZ();
-
-                    p.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
-                });
+                .forEach(p -> setUnitDistance(p, distance));
     }
 
     @Override
@@ -576,6 +505,68 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    private boolean isUnitPartOf(FPoint arg) {
+
+        return getUnitDistance(arg) < epsilon;
+    }
+
+    private double getUnitDistance(FPoint arg) {
+        FVector origin = getRefOrigin();
+        double originMag = origin.getMagnitude();
+
+        double headX = arg.getX() - origin.getBaseX();
+        double headY = arg.getY() - origin.getBaseY();
+        double headZ = arg.getZ() - origin.getBaseZ();
+
+        double opX = (origin.getHeadX() - origin.getBaseX()) / originMag;
+        double opY = (origin.getHeadY() - origin.getBaseY()) / originMag;
+        double opZ = (origin.getHeadZ() - origin.getBaseZ()) / originMag;
+
+        double dotProduct = (headX * opX) + (headY * opY) + (headZ * opZ);
+
+        opX *= dotProduct;
+        opY *= dotProduct;
+        opZ *= dotProduct;
+
+        opX += origin.getBaseX();
+        opY += origin.getBaseY();
+        opZ += origin.getBaseZ();
+
+        double distX = arg.getX() - opX;
+        double distY = arg.getY() - opY;
+        double distZ = arg.getZ() - opZ;
+
+        return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
+    }
+
+    private void setUnitDistance(FPoint in, double distance) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        projectUnit(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
+    }
+
+    private void reflectUnit(FPoint in) {
+        double oX = in.getX();
+        double oY = in.getY();
+        double oZ = in.getZ();
+
+        projectUnit(in);
+
+        double pX = in.getX();
+        double pY = in.getY();
+        double pZ = in.getZ();
+
+        in.set(oX, oY, oZ).reflect(pX, pY, pZ);
+    }
 
     private void projectUnit(FPoint in) {
         FVector origin = getRefOrigin();
