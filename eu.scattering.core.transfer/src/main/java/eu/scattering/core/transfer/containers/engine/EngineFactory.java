@@ -1,6 +1,6 @@
 package eu.scattering.core.transfer.containers.engine;
 
-import eu.scattering.core.transfer.containers.engine.FRot.FRotFactory;
+import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQtFactory;
 
-public interface EngineFactory extends FRotFactory {
+public interface EngineFactory extends FRotQtFactory {
 }

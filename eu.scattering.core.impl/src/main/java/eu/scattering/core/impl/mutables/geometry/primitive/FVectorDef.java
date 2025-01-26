@@ -22,20 +22,23 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     private static final String JSON_MAIN = "vector";
     private static final String JSON_VAL = "val";
 
+    private static double epsilon = 0;
+
+    public static void initialize(double epsilon) {
+
+        FVectorDef.epsilon = epsilon;
+    }
+
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private FPoint oBase;
     private FPoint oHead;
 
-    private FVectorDef(double epsilon) {
+    private FVectorDef() {}
 
-        this.epsilon = epsilon;
-    }
-
-    public static FVector create(double epsilon, FPoint refBase, FPoint refHead) {
+    public static FVector create( FPoint refBase, FPoint refHead) {
 
         if (refBase == null) {
             throw new NullPointerException("The base FPoint cannot be null");
@@ -45,7 +48,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
             throw new NullPointerException("The head FPoint cannot be null");
         }
 
-        var fVector = new FVectorDef(epsilon);
+        var fVector = new FVectorDef();
 
         fVector.setRefBase(refBase);
         fVector.setRefHead(refHead);
@@ -311,13 +314,13 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FVector copy() {
 
-        return create(epsilon, getRefBase().copy(), getRefHead().copy());
+        return create(getRefBase().copy(), getRefHead().copy());
     }
 
     @Override
     public FVector copyZero() {
 
-        return create(epsilon, getRefBase().copyZero(), getRefHead().copyZero());
+        return create(getRefBase().copyZero(), getRefHead().copyZero());
     }
 
     @Override

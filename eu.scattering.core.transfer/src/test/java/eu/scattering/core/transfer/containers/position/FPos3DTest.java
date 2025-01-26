@@ -62,7 +62,7 @@ public class FPos3DTest {
         void parseJSONTest() {
             var dtoOrigin = factory.getFPos3D(1, 2, 3);
 
-            JSONObject jsonOrigin = dtoOrigin.exportToJSON();
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
 
             var dtoCopy = factory.getFPos3D(jsonOrigin);
 

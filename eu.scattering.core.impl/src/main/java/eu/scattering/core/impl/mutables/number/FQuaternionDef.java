@@ -18,25 +18,30 @@ public class FQuaternionDef implements FQuaternion {
     private static final String JSON_MAIN = "qt";
     private static final String JSON_VAL = "val";
 
+    private static double epsilon = 0;
+
+    public static void initialize(double epsilon) {
+
+        FQuaternionDef.epsilon = epsilon;
+    }
+
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private double oRe, oI, oJ, oK;
 
-    private FQuaternionDef(double epsilon, double re, double i, double j, double k) {
+    private FQuaternionDef(double re, double i, double j, double k) {
 
-        this.epsilon = epsilon;
         this.oRe = re;
         this.oI = i;
         this.oJ = j;
         this.oK = k;
     }
 
-    public static FQuaternion create(double epsilon, double re, double i, double j, double k) {
+    public static FQuaternion create(double re, double i, double j, double k) {
 
-        return new FQuaternionDef(epsilon, re, i, j, k);
+        return new FQuaternionDef(re, i, j, k);
     }
 
     @Override
@@ -192,7 +197,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FQuaternion copyZero() {
 
-        return FQuaternionDef.create(epsilon, 0, 0, 0, 0);
+        return FQuaternionDef.create(0, 0, 0, 0);
     }
 
     @Override

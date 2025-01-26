@@ -17,23 +17,28 @@ public class FComplexDef implements FComplex {
     private static final String JSON_MAIN = "cpx";
     private static final String JSON_VAL = "val";
 
+    private static double epsilon = 0;
+
+    public static void initialize(double epsilon) {
+
+        FComplexDef.epsilon = epsilon;
+    }
+
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private double oRe, oIm;
 
-    private FComplexDef(double epsilon, double re, double im) {
+    private FComplexDef(double re, double im) {
 
-        this.epsilon = epsilon;
         this.oRe = re;
         this.oIm = im;
     }
 
-    public static FComplex create(double epsilon, double re, double im) {
+    public static FComplex create(double re, double im) {
 
-        return new FComplexDef(epsilon, re, im);
+        return new FComplexDef(re, im);
     }
 
     @Override
@@ -157,7 +162,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FComplex copyZero() {
 
-        return FComplexDef.create(epsilon, 0, 0);
+        return FComplexDef.create(0, 0);
     }
 
     @Override

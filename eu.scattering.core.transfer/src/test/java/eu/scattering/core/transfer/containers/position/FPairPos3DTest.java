@@ -40,7 +40,7 @@ public class FPairPos3DTest {
         void parseJSONTest() {
             var dtoOrigin = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
 
-            JSONObject jsonOrigin = dtoOrigin.exportToJSON();
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
 
             var dtoCopy = factory.getFPairPos3D(jsonOrigin);
 

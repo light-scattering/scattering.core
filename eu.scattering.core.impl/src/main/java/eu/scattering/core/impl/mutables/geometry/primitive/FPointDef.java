@@ -20,24 +20,29 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     private static final String JSON_MAIN = "point";
     private static final String JSON_VAL = "val";
 
+    private static double epsilon = 0;
+
+    public static void initialize(double epsilon) {
+
+        FPointDef.epsilon = epsilon;
+    }
+
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private double oX, oY, oZ;
 
-    private FPointDef(double epsilon, double x, double y, double z) {
+    private FPointDef(double x, double y, double z) {
 
-        this.epsilon = epsilon;
         this.oX = x;
         this.oY = y;
         this.oZ = z;
     }
 
-    public static FPoint create(double epsilon, double x, double y, double z) {
+    public static FPoint create(double x, double y, double z) {
 
-        return new FPointDef(epsilon, x, y, z);
+        return new FPointDef(x, y, z);
     }
 
     @Override
@@ -172,7 +177,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint copyZero() {
 
-        return FPointDef.create(epsilon, 0, 0, 0);
+        return FPointDef.create(0, 0, 0);
     }
 
     @Override

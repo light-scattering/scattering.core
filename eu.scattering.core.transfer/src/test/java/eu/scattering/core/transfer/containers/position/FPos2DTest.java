@@ -37,7 +37,7 @@ public class FPos2DTest {
         void parseJSONTest() {
             var dtoOrigin = factory.getFPos2D(1, 2);
 
-            JSONObject jsonOrigin = dtoOrigin.exportToJSON();
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
 
             var dtoCopy = factory.getFPos2D(jsonOrigin);
 

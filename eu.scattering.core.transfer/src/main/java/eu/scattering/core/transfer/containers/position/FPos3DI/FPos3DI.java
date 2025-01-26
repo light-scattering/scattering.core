@@ -75,7 +75,7 @@ public class FPos3DI implements Position<FPos3DI> {
 //--------------------------------------------------
 
     @Override
-    public JSONObject exportToJSON() {
+    public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_TAG);
@@ -109,6 +109,6 @@ public class FPos3DI implements Position<FPos3DI> {
     @Override
     public String toString() {
 
-        return exportToJSON().toString();
+        return toJSON().toString();
     }
 }

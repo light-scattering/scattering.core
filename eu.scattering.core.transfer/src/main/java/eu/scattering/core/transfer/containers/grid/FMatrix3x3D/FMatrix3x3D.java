@@ -98,7 +98,7 @@ public class FMatrix3x3D implements Grid<FMatrix3x3D> {
     //--------------------------------------------------
 
     @Override
-    public JSONObject exportToJSON() {
+    public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_TAG);
@@ -142,7 +142,7 @@ public class FMatrix3x3D implements Grid<FMatrix3x3D> {
     @Override
     public String toString() {
 
-        return exportToJSON().toString();
+        return toJSON().toString();
     }
 
     //--------------------------------------------------

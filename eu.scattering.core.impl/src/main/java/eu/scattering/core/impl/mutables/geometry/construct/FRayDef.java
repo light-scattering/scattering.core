@@ -18,28 +18,34 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     private static final String JSON_MAIN = "ray";
     private static final String JSON_VAL = "val";
 
-    private final Supplier<FVector> fVectorSupplier;
-    private final Supplier<FPoint> fPointSupplier;
+    private static double epsilon = 0;
+
+    private static Supplier<FPoint> fPointSupplier;
+    private static Supplier<FVector> fVectorSupplier;
+
+    public static void initialize(double epsilon,
+                                  Supplier<FPoint> fPointSupplier,
+                                  Supplier<FVector> fVectorSupplier) {
+
+        FRayDef.epsilon = epsilon;
+        FRayDef.fPointSupplier = fPointSupplier;
+        FRayDef.fVectorSupplier = fVectorSupplier;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private FVector origin;
 
-    private FRayDef(double epsilon, FVector origin) {
+    private FRayDef(FVector origin) {
 
-        this.fVectorSupplier = origin::copyZero;
-        this.fPointSupplier = () -> getRefOrigin().getRefBase().copyZero();
-
-        this.epsilon = epsilon;
         this.origin = origin;
     }
 
-    public static FRay create(double epsilon, FVector origin) {
+    public static FRay create(FVector origin) {
 
-        return new FRayDef(epsilon, origin);
+        return new FRayDef(origin);
     }
 
     @Override
@@ -102,7 +108,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public FRay copyZero() {
 
-        return create(epsilon, fVectorSupplier.get());
+        return create(fVectorSupplier.get());
     }
 
     @Override

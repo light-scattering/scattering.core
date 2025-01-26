@@ -19,28 +19,34 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private static final String JSON_MAIN = "line";
     private static final String JSON_VAL = "val";
 
-    private final Supplier<FVector> fVectorSupplier;
-    private final Supplier<FPoint> fPointSupplier;
+    private static double epsilon = 0;
+
+    private static Supplier<FPoint> fPointSupplier;
+    private static Supplier<FVector> fVectorSupplier;
+
+    public static void initialize(double epsilon,
+                                  Supplier<FPoint> fPointSupplier,
+                                  Supplier<FVector> fVectorSupplier) {
+
+        FLineDef.epsilon = epsilon;
+        FLineDef.fPointSupplier = fPointSupplier;
+        FLineDef.fVectorSupplier = fVectorSupplier;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private FVector origin;
 
-    private FLineDef(double epsilon, FVector origin) {
+    private FLineDef(FVector origin) {
 
-        this.fVectorSupplier = origin::copyZero;
-        this.fPointSupplier = () -> getRefOrigin().getRefBase().copyZero();
-
-        this.epsilon = epsilon;
         this.origin = origin;
     }
 
-    public static FLine create(double epsilon, FVector origin) {
+    public static FLine create(FVector origin) {
 
-        return new FLineDef(epsilon, origin);
+        return new FLineDef(origin);
     }
 
     @Override
@@ -103,7 +109,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine copyZero() {
 
-        return create(epsilon, fVectorSupplier.get());
+        return create(fVectorSupplier.get());
     }
 
     @Override

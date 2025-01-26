@@ -118,7 +118,7 @@ public class FPos4DTest {
         void parseJSONTest() {
             var dtoOrigin = factory.getFPos4D(1, 2, 3, 4);
 
-            JSONObject jsonOrigin = dtoOrigin.exportToJSON();
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
 
             var dtoCopy = factory.getFPos4D(jsonOrigin);
 

@@ -1,6 +1,5 @@
 package eu.scattering.core.transfer.containers.position;
 
-import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -64,7 +63,7 @@ public class FPos3DITest {
         void parseJSONTest() {
             var dtoOrigin = factory.getFPos3DI(1, 2, 3);
 
-            JSONObject jsonOrigin = dtoOrigin.exportToJSON();
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
 
             var dtoCopy = factory.getFPos3DI(jsonOrigin);
 

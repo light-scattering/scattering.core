@@ -29,16 +29,18 @@ import eu.scattering.core.impl.mutables.geometry.primitive.FVectorDef;
 import eu.scattering.core.impl.mutables.number.FComplexDef;
 import eu.scattering.core.impl.mutables.number.FQuaternionDef;
 
+import java.util.function.Supplier;
+
 public final class FactoryProd extends FactoryDesignConcrete {
-    private final double epsilon = 1E-8;
-    private final double proximityLimit = 1E-6;
+    private final static double epsilon = 1E-8;
+    private final static double proximityLimit = 1E-6;
 
     private final FTrigHelper fAngleHelper;
     private final FRandomEngine fRandomHelper;
     private final FRotationEngine fRotationHelper;
 
     private FactoryProd() {
-        var fRandomInternal = FRandomProcessorDef.create();
+        FRandomProcessor fRandomInternal = FRandomProcessorDef.create();
 
         fRandomInternal.setProximityLimit(proximityLimit);
 
@@ -48,7 +50,7 @@ public final class FactoryProd extends FactoryDesignConcrete {
     }
 
     private FactoryProd(long seed) {
-        var fRandomInternal = FRandomProcessorDef.create(seed);
+        FRandomProcessor fRandomInternal = FRandomProcessorDef.create(seed);
 
         fRandomInternal.setProximityLimit(proximityLimit);
 
@@ -70,87 +72,107 @@ public final class FactoryProd extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
+    public void initialize() {
+        Supplier<FLine> fLineSupplier = this::getFLine;
+        Supplier<FPoint> fPointSupplier = this::getFPoint;
+        Supplier<FVector> fVectorSupplier = this::getFVector;
+
+        FComplexDef.initialize(epsilon);
+        FQuaternionDef.initialize(epsilon);
+
+        FPointDef.initialize(epsilon);
+        FVectorDef.initialize(epsilon);
+
+        FLineDef.initialize(epsilon, fPointSupplier, fVectorSupplier);
+        FRayDef.initialize(epsilon, fPointSupplier, fVectorSupplier);
+        FSegmentDef.initialize(epsilon, fVectorSupplier);
+        FPlaneDef.initialize(epsilon, fLineSupplier, fVectorSupplier);
+    }
+
+    //--------------------------------------------------
+
+    @Override
     public FPoint getFPoint() {
 
-        return FPointDef.create(epsilon, 0, 0, 0);
+        return FPointDef.create(0, 0, 0);
     }
 
     @Override
     public FPoint getFPoint(double x, double y, double z) {
 
-        return FPointDef.create(epsilon, x, y, z);
+        return FPointDef.create(x, y, z);
     }
 
     @Override
     public FVector getFVector() {
 
-        return FVectorDef.create(epsilon, getFPoint(), getFPoint());
+        return FVectorDef.create(getFPoint(), getFPoint());
     }
 
     @Override
     public FVector getFVector(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
-        return FVectorDef.create(epsilon, getFPoint(bX, bY, bZ), getFPoint(hX, hY, hZ));
+        return FVectorDef.create(getFPoint(bX, bY, bZ), getFPoint(hX, hY, hZ));
     }
 
     @Override
     public FVector getRefFVector(FPoint refHead) {
 
-        return FVectorDef.create(epsilon, getFPoint(), refHead);
+        return FVectorDef.create(getFPoint(), refHead);
     }
 
     @Override
     public FVector getRefFVector(FPoint refBase, FPoint refHead) {
 
-        return FVectorDef.create(epsilon, refBase, refHead);
+        return FVectorDef.create(refBase, refHead);
     }
 
     @Override
     public FLine getFLine() {
 
-        return FLineDef.create(epsilon, getFVector());
+        return FLineDef.create(getFVector());
     }
 
     @Override
     public FLine getRefFLine(FVector refOrigin) {
 
-        return FLineDef.create(epsilon, refOrigin);
+        return FLineDef.create(refOrigin);
     }
 
     @Override
     public FRay getFRay() {
 
-        return FRayDef.create(epsilon, getFVector());
+        return FRayDef.create(getFVector());
     }
 
     @Override
     public FRay getRefFRay(FVector refOrigin) {
 
-        return FRayDef.create(epsilon, refOrigin);
+        return FRayDef.create(refOrigin);
     }
 
     @Override
     public FSegment getFSegment() {
 
-        return FSegmentDef.create(epsilon, getFVector());
+        return FSegmentDef.create(getFVector());
     }
 
     @Override
     public FSegment getRefFSegment(FVector refOrigin) {
 
-        return FSegmentDef.create(epsilon, refOrigin);
+        return FSegmentDef.create(refOrigin);
     }
 
     @Override
     public FPlane getFPlane() {
 
-        return FPlaneDef.create(epsilon, this::getFLine, this::getFVector, this::getFPoint, getFVector());
+        return FPlaneDef.create(getFVector());
     }
 
     @Override
     public FPlane getRefFPlane(FVector refOrigin) {
 
-        return FPlaneDef.create(epsilon, this::getFLine, this::getFVector, this::getFPoint, refOrigin);
+        return FPlaneDef.create(refOrigin);
     }
 
     @Override
@@ -164,23 +186,23 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FComplex getFComplex() {
 
-        return FComplexDef.create(epsilon, 0, 0);
+        return FComplexDef.create(0, 0);
     }
 
     public FComplex getFComplex(double re, double im) {
 
-        return FComplexDef.create(epsilon, re, im);
+        return FComplexDef.create(re, im);
     }
 
     @Override
     public FQuaternion getFQuaternion() {
 
-        return FQuaternionDef.create(epsilon, 0, 0, 0, 0);
+        return FQuaternionDef.create(0, 0, 0, 0);
     }
 
     public FQuaternion getFQuaternion(double re, double i, double j, double k) {
 
-        return FQuaternionDef.create(epsilon, re, i, j, k);
+        return FQuaternionDef.create(re, i, j, k);
     }
 
 //--------------------------------------------------
@@ -220,6 +242,6 @@ public final class FactoryProd extends FactoryDesignConcrete {
     @Override
     public FRotationProcessor getFRotationProcessor() {
 
-        return FRotationProcessorDef.create(this::getFVector);
+        return FRotationProcessorDef.create();
     }
 }

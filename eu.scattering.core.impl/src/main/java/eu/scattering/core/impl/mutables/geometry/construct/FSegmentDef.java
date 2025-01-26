@@ -18,28 +18,31 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     private static final String JSON_MAIN = "segment";
     private static final String JSON_VAL = "val";
 
-    private final Supplier<FVector> fVectorSupplier;
-    private final Supplier<FPoint> fPointSupplier;
+    private static double epsilon = 0;
+
+    private static Supplier<FVector> fVectorSupplier;
+
+    public static void initialize(double epsilon,
+                                  Supplier<FVector> fVectorSupplier) {
+
+        FSegmentDef.epsilon = epsilon;
+        FSegmentDef.fVectorSupplier = fVectorSupplier;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private FVector origin;
 
-    private FSegmentDef(double epsilon, FVector origin) {
+    private FSegmentDef(FVector origin) {
 
-        this.fVectorSupplier = origin::copyZero;
-        this.fPointSupplier = () -> getRefOrigin().getRefBase().copyZero();
-
-        this.epsilon = epsilon;
         this.origin = origin;
     }
 
-    public static FSegment create(double epsilon, FVector origin) {
+    public static FSegment create(FVector origin) {
 
-        return new FSegmentDef(epsilon, origin);
+        return new FSegmentDef(origin);
     }
 
     @Override
@@ -102,7 +105,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public FSegment copyZero() {
 
-        return create(epsilon, fVectorSupplier.get());
+        return create(fVectorSupplier.get());
     }
 
     @Override

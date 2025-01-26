@@ -40,7 +40,7 @@ public class FPairPos4DTest {
         void parseJSONTest() {
             var dtoOrigin = factory.getFPairPos4D(factory.getFPos4D(1, 2, 3, 4), factory.getFPos4D(5, 6, 7, 8));
 
-            JSONObject jsonOrigin = dtoOrigin.exportToJSON();
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
 
             var dtoCopy = factory.getFPairPos4D(jsonOrigin);
 

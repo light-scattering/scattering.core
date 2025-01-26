@@ -20,30 +20,34 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private static final String JSON_MAIN = "plane";
     private static final String JSON_VAL = "val";
 
-    private final Supplier<FLine> fLineSupplier;
-    private final Supplier<FVector> fVectorSupplier;
-    private final Supplier<FPoint> fPointSupplier;
+    private static double epsilon = 0;
+
+    private static Supplier<FLine> fLineSupplier;
+    private static Supplier<FVector> fVectorSupplier;
+
+    public static void initialize(double epsilon,
+                                  Supplier<FLine> fLineSupplier,
+                                  Supplier<FVector> fVectorSupplier) {
+
+        FPlaneDef.epsilon = epsilon;
+        FPlaneDef.fLineSupplier = fLineSupplier;
+        FPlaneDef.fVectorSupplier = fVectorSupplier;
+    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final double epsilon;
     private FVector origin;
 
-    private FPlaneDef(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fVectorSupplier, Supplier<FPoint> fPointSupplier, FVector origin) {
+    private FPlaneDef(FVector origin) {
 
-        this.fLineSupplier = fLineSupplier;
-        this.fVectorSupplier = fVectorSupplier;
-        this.fPointSupplier = fPointSupplier;
-
-        this.epsilon = epsilon;
         this.origin = origin;
     }
 
-    public static FPlane create(double epsilon, Supplier<FLine> fLineSupplier, Supplier<FVector> fVectorSupplier, Supplier<FPoint> fPointSupplier, FVector origin) {
+    public static FPlane create(FVector origin) {
 
-        return new FPlaneDef(epsilon, fLineSupplier, fVectorSupplier, fPointSupplier, origin);
+        return new FPlaneDef(origin);
     }
 
     @Override
@@ -106,7 +110,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane copyZero() {
 
-        return create(epsilon, fLineSupplier, fVectorSupplier, fPointSupplier, fVectorSupplier.get());
+        return create(fVectorSupplier.get());
     }
 
     @Override

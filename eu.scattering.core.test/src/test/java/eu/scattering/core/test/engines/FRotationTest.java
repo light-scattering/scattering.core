@@ -5,7 +5,7 @@ import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
 import eu.scattering.core.design.engines.rotation.FRotationEngine;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.transfer.containers.engine.FRot.FRot;
+import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +26,12 @@ public class FRotationTest {
         FPoint axis = TestHelper.getRandomFPoint();
         double angle = Math.abs(random.nextDouble() % (2 * Math.PI));
 
-        FRot rotor = fRot.getRotation(axis.toFPos3D(), angle);
+        FRotQt rotor = fRot.getRotationQt(axis.toFPos3D(), angle);
 
-        Assertions.assertAll("Validate FPoint",
-                () -> assertEquals(angle, rotor.getAngle(),
+        Assertions.assertAll("Validate FRotQt",
+                () -> assertEquals(angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(rotor.getAxis()).isParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -42,12 +42,12 @@ public class FRotationTest {
         FPoint axis = TestHelper.getRandomFPoint();
         double angle = -Math.abs(random.nextDouble() % (2 * Math.PI));
 
-        FRot rotor = fRot.getRotation(axis.toFPos3D(), angle);
+        FRotQt rotor = fRot.getRotationQt(axis.toFPos3D(), angle);
 
-        Assertions.assertAll("Validate FPoint",
-                () -> assertEquals(-angle, rotor.getAngle(),
+        Assertions.assertAll("Validate FRotQt",
+                () -> assertEquals(-angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(rotor.getAxis()).isAntiParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isAntiParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -58,12 +58,12 @@ public class FRotationTest {
         FVector axis = TestHelper.getRandomFVector();
         double angle = Math.abs(random.nextDouble() % (2 * Math.PI));
 
-        FRot rotor = fRot.getRotation(axis.toFPairPos3D(), angle);
+        FRotQt rotor = fRot.getRotationQt(axis.toFPairPos3D(), angle);
 
-        Assertions.assertAll("Validate FPoint",
-                () -> assertEquals(angle, rotor.getAngle(),
+        Assertions.assertAll("Validate FRotQt",
+                () -> assertEquals(angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(rotor.getAxis()).isParallel(axis),
+                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -74,12 +74,12 @@ public class FRotationTest {
         FVector axis = TestHelper.getRandomFVector();
         double angle = -Math.abs(random.nextDouble() % (2 * Math.PI));
 
-        FRot rotor = fRot.getRotation(axis.toFPairPos3D(), angle);
+        FRotQt rotor = fRot.getRotationQt(axis.toFPairPos3D(), angle);
 
-        Assertions.assertAll("Validate FPoint",
-                () -> assertEquals(-angle, rotor.getAngle(),
+        Assertions.assertAll("Validate FRotQt",
+                () -> assertEquals(-angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(rotor.getAxis()).isAntiParallel(axis),
+                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isAntiParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -90,8 +90,8 @@ public class FRotationTest {
         FVector fVectorRefA = TestHelper.getRandomFVector();
         FVector fVectorRefB = fVectorRefA.copy();
 
-        FRot rotorA = fRot.getRotation(fVectorRefA.toFPairPos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVectorRefB.toFPairPos3D(), 1);
+        FRotQt rotorA = fRot.getRotationQt(fVectorRefA.toFPairPos3D(), 1);
+        FRotQt rotorB = fRot.getRotationQt(fVectorRefB.toFPairPos3D(), 1);
 
         assertEquals(rotorA.hashCode(), rotorB.hashCode(),
                 jitter, "The hash code is erroneous");
@@ -103,8 +103,8 @@ public class FRotationTest {
         FVector fVectorRefA = TestHelper.getRandomFVector();
         FVector fVectorRefB = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVectorRefA.toFPairPos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVectorRefB.toFPairPos3D(), 1);
+        FRotQt rotorA = fRot.getRotationQt(fVectorRefA.toFPairPos3D(), 1);
+        FRotQt rotorB = fRot.getRotationQt(fVectorRefB.toFPairPos3D(), 1);
 
         assertNotEquals(rotorA.hashCode(), rotorB.hashCode(),
                 jitter, "The hash code is erroneous");
@@ -115,8 +115,8 @@ public class FRotationTest {
     public void equals() {
         FVector fVector = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVector.toFPairPos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVector.toFPairPos3D(), 1);
+        FRotQt rotorA = fRot.getRotationQt(fVector.toFPairPos3D(), 1);
+        FRotQt rotorB = fRot.getRotationQt(fVector.toFPairPos3D(), 1);
 
         assertEquals(rotorA, rotorB, "FRot instances have the same core");
     }
@@ -127,8 +127,8 @@ public class FRotationTest {
         FVector fVectorRefA = TestHelper.getRandomFVector();
         FVector fVectorRefB = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVectorRefA.toFPairPos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVectorRefB.toFPairPos3D(), 1);
+        FRotQt rotorA = fRot.getRotationQt(fVectorRefA.toFPairPos3D(), 1);
+        FRotQt rotorB = fRot.getRotationQt(fVectorRefB.toFPairPos3D(), 1);
 
         assertNotEquals(rotorA, rotorB, "FRot instances have different core (axis)");
     }
@@ -138,8 +138,8 @@ public class FRotationTest {
     public void equalsFalseAngle() {
         FVector fVector = TestHelper.getRandomFVector();
 
-        FRot rotorA = fRot.getRotation(fVector.toFPairPos3D(), 1);
-        FRot rotorB = fRot.getRotation(fVector.toFPairPos3D(), 2);
+        FRotQt rotorA = fRot.getRotationQt(fVector.toFPairPos3D(), 1);
+        FRotQt rotorB = fRot.getRotationQt(fVector.toFPairPos3D(), 2);
 
         assertNotEquals(rotorA, rotorB, "FRot instances have different core (angle)");
     }
@@ -150,7 +150,7 @@ public class FRotationTest {
         FPoint fPoint = TestHelper.getRandomFPoint();
         double length = fPoint.getMagnitude();
         double angle = random.nextDouble() % (2 * Math.PI);
-        FRot rotor = fRot.getRotation(TestHelper.getRandomFPoint().toFPos3D(), angle);
+        FRotQt rotor = fRot.getRotationQt(TestHelper.getRandomFPoint().toFPos3D(), angle);
 
         fRotHelper.rotate(fPoint, rotor);
 
@@ -161,7 +161,7 @@ public class FRotationTest {
     @DisplayName("Rotate A (simple)")
     public void rotateSimpleA() {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
-        FRot rotor = fRot.getRotation(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 0.5);
+        FRotQt rotor = fRot.getRotationQt(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 0.5);
 
         fRotHelper.rotate(fPoint, rotor);
 
@@ -173,7 +173,7 @@ public class FRotationTest {
     @DisplayName("Rotate B (simple)")
     public void rotateSimpleB() {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
-        FRot rotor = fRot.getRotation(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 1.5);
+        FRotQt rotor = fRot.getRotationQt(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 1.5);
 
         fRotHelper.rotate(fPoint, rotor);
 
@@ -185,7 +185,7 @@ public class FRotationTest {
     @DisplayName("Rotate C (simple)")
     public void rotateSimpleC() {
         FPoint fPoint = factory.getFPoint(1, 1, 1);
-        FRot rotor = fRot.getRotation(factory.getFPoint(-1, 1, 0).toFPos3D(), Math.PI);
+        FRotQt rotor = fRot.getRotationQt(factory.getFPoint(-1, 1, 0).toFPos3D(), Math.PI);
 
         fRotHelper.rotate(fPoint, rotor);
 

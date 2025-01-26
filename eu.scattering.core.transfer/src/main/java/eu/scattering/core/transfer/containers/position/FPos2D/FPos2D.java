@@ -52,7 +52,7 @@ public class FPos2D implements Position<FPos2D> {
 //--------------------------------------------------
 
     @Override
-    public JSONObject exportToJSON() {
+    public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_TAG);
@@ -85,6 +85,6 @@ public class FPos2D implements Position<FPos2D> {
     @Override
     public String toString() {
 
-        return exportToJSON().toString();
+        return toJSON().toString();
     }
 }

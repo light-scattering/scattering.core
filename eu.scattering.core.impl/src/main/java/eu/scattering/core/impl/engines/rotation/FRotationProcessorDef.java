@@ -1,81 +1,76 @@
 package eu.scattering.core.impl.engines.rotation;
 
 import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
-import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.containers.engine.FRot.FRot;
+import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
 
-import java.util.function.Supplier;
-
 public class FRotationProcessorDef implements FRotationProcessor {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
 
-    private Supplier<FVector> fVectorSupplier;
+    public static FRotationProcessor create() {
 
-    private FRotationProcessorDef(Supplier<FVector> fVectorSupplier) {
-
-        this.fVectorSupplier = fVectorSupplier;
+        return new FRotationProcessorDef();
     }
 
-    public static FRotationProcessor create(Supplier<FVector> fVectorSupplier) {
+    // -------------------------------------------------------------------------------------------------
 
-        return new FRotationProcessorDef(fVectorSupplier);
+    @Override
+    public FRotQt getRotationQt(FPos3D axis, double angle) {
+
+        return getRotationQt(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
     }
 
     @Override
-    public FRot getRotation(FPairPos3D axis, double angle) {
-        var rotVector = getRotVector(axis, angle);
+    public FRotQt getRotationQt(FPairPos3D axis, double angle) {
+        FPos4D quaternion = getQuaternion(axis, angle);
+        FPos3D offset = getOffset(axis);
+        FMatrix3x3D matrix = getMatrix(quaternion);
 
-        var rotCoreCode = getRotCoreCode(rotVector, angle);
-        var rotCoreMatrix = getRotCoreMatrix(rotCoreCode);
-
-        var rotRevAxis = getRotRevAxis(axis, rotCoreCode);
-        var rotRevAngle = getRotRevAngle(rotCoreCode);
-
-        return factory.getFRot(rotRevAxis, rotRevAngle, rotCoreCode, rotCoreMatrix);
+        return factory.getFRotQt(quaternion, offset, matrix);
     }
 
-    public FRot getRotation(FPos3D axis, double angle) {
+    private FPos4D getQuaternion(FPairPos3D axis, double angle) {
 
-        return getRotation(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
-    }
-
-    private FVector getRotVector(FPairPos3D axis, double angle) {
-        var rotVector = fVectorSupplier.get().set(axis);
-
-        if (rotVector.isNearZeroLength()) {
+        if (axis.getPosA().equals(axis.getPosB())) {
             throw new IllegalArgumentException("The rotation axis is non-directional");
         }
 
-        rotVector.set(axis);
-        rotVector.moveBaseToCenter();
-        rotVector.normalize();
-        rotVector.getRefHead().mul(Math.sin(angle * 0.5));
+        double headX = axis.getPosB().getD0() - axis.getPosA().getD0();
+        double headY = axis.getPosB().getD1() - axis.getPosA().getD1();
+        double headZ = axis.getPosB().getD2() - axis.getPosA().getD2();
 
-        return rotVector;
+        double factor1 = Math.sqrt((headX * headX) + (headY * headY) + (headZ * headZ));
+
+        headX /= factor1;
+        headY /= factor1;
+        headZ /= factor1;
+
+        double factor2 = Math.sin(angle * 0.5);
+
+        headX *= factor2;
+        headY *= factor2;
+        headZ *= factor2;
+
+        return factory.getFPos4D(Math.cos(angle * 0.5), headX, headY, headZ);
     }
 
-    private FPos4D getRotCoreCode(FVector rotVector, double angle) {
-        var d0 = Math.cos(angle * 0.5);
-        var d1 = rotVector.getRefHead().getX();
-        var d2 = rotVector.getRefHead().getY();
-        var d3 = rotVector.getRefHead().getZ();
+    private FPos3D getOffset(FPairPos3D axis) {
 
-        return factory.getFPos4D(d0, d1, d2, d3);
+        return axis.getPosA();
     }
 
-    private FMatrix3x3D getRotCoreMatrix(FPos4D rotCoreCode) {
+    private FMatrix3x3D getMatrix(FPos4D quaternion) {
         var origin = new double[3][3];
 
-        var re = rotCoreCode.getD0();
-        var i = rotCoreCode.getD1();
-        var j = rotCoreCode.getD2();
-        var k = rotCoreCode.getD3();
+        double re = quaternion.getD0();
+        double i = quaternion.getD1();
+        double j = quaternion.getD2();
+        double k = quaternion.getD3();
 
         origin[0][0] = 1 - (2 * j * j) - (2 * k * k);
         origin[0][1] = 2 * ((i * j) + (re * k));
@@ -90,8 +85,14 @@ public class FRotationProcessorDef implements FRotationProcessor {
         return factory.getFMatrix3x3D(origin);
     }
 
-    private double getRotRevAngle(FPos4D rotCoreCode) {
-        var re = rotCoreCode.getD0();
+    // -------------------------------------------------------------------------------------------------
+
+    @Deprecated
+    @Override
+    public double getAngle(FRotQt core) {
+        FPos4D quaternion = core.getQuaternion();
+
+        double re = quaternion.getD0();
 
         if (re <= -1) {
             return Math.PI * 2;
@@ -104,28 +105,25 @@ public class FRotationProcessorDef implements FRotationProcessor {
         return Math.acos(re) * 2;
     }
 
-    private FPairPos3D getRotRevAxis(FPairPos3D axis, FPos4D rotCoreCode) {
-        var rotAxis = fVectorSupplier.get();
+    @Deprecated
+    @Override
+    public FPairPos3D getAxis(FRotQt core) {
+        FPos4D quaternion = core.getQuaternion();
+        FPos3D offset = core.getOffset();
 
-        var re = rotCoreCode.getD0();
-        var i = rotCoreCode.getD1();
-        var j = rotCoreCode.getD2();
-        var k = rotCoreCode.getD3();
+        double re = quaternion.getD0();
+        double i = quaternion.getD1();
+        double j = quaternion.getD2();
+        double k = quaternion.getD3();
 
         double factor = 1 / Math.sqrt(1 - (re * re));
 
-        rotAxis.getRefHead()
-                .set(i, j, k)
-                .mul(factor)
-                .addX(axis.getPosA().getD0())
-                .addY(axis.getPosA().getD1())
-                .addZ(axis.getPosA().getD2());
+        FPos3D head = factory.getFPos3D(
+                (i * factor) + offset.getD0(),
+                (j * factor) + offset.getD1(),
+                (k * factor) + offset.getD2()
+        );
 
-        rotAxis.getRefBase()
-                .setX(axis.getPosA().getD0())
-                .setY(axis.getPosA().getD1())
-                .setZ(axis.getPosA().getD2());
-
-        return rotAxis.toFPairPos3D();
+        return factory.getFPairPos3D(offset, head);
     }
 }

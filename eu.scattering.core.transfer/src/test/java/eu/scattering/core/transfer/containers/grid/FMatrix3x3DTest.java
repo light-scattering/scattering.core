@@ -190,7 +190,7 @@ public class FMatrix3x3DTest {
 
             var dtoOrigin = factory.getFMatrix3x3D(core);
 
-            JSONObject jsonOrigin = dtoOrigin.exportToJSON();
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
 
             var dtoCopy = factory.getFMatrix3x3D(jsonOrigin);
 

@@ -54,12 +54,12 @@ public class FPairPos3D implements Position<FPairPos3D> {
     //--------------------------------------------------
 
     @Override
-    public JSONObject exportToJSON() {
+    public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_TAG);
-        json.append(JSON_VAL, getPosA().exportToJSON());
-        json.append(JSON_VAL, getPosB().exportToJSON());
+        json.append(JSON_VAL, getPosA().toJSON());
+        json.append(JSON_VAL, getPosB().toJSON());
 
         return json;
     }
@@ -87,6 +87,6 @@ public class FPairPos3D implements Position<FPairPos3D> {
     @Override
     public String toString() {
 
-        return exportToJSON().toString();
+        return toJSON().toString();
     }
 }

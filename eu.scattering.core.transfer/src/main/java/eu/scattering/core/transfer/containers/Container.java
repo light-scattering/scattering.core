@@ -4,5 +4,5 @@ import org.json.JSONObject;
 
 public interface Container<T> {
 
-    JSONObject exportToJSON();
+    JSONObject toJSON();
 }
