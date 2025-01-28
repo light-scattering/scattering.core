@@ -74,7 +74,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public FRay set(FPairPos3D position) {
 
-        getRefOrigin().set(position);
+        getRefOrigin().applyStateFrom(position);
 
         return this;
     }

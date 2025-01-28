@@ -71,7 +71,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public FSegment set(FPairPos3D position) {
 
-        getRefOrigin().set(position);
+        getRefOrigin().applyStateFrom(position);
 
         return this;
     }

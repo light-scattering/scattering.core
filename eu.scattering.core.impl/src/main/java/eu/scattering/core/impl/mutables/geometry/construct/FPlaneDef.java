@@ -76,7 +76,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane set(FPairPos3D position) {
 
-        getRefOrigin().set(position);
+        getRefOrigin().applyStateFrom(position);
 
         return this;
     }

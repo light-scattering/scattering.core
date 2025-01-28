@@ -1,12 +1,11 @@
 package eu.scattering.core.design.mutables.geometry.primitive.point;
 
+import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
+
 public interface FPointEngineRotation {
 
-    // TODO - Rename to setAngleQt
-    FPoint setAngle(FPoint origin, FPoint op, double angle);
+    FPoint setFPointQtAngle(FPoint in, FPoint arg, double angle);
 
-    FPoint rotate(FPoint origin, FPoint op, double angle);
-
-    //  FPoint rotate(FPoint origin, FRotRg core);
-    //  FPoint rotate(FPoint origin, FRotQt core);
+    FPoint rotFPointQtAround(FPoint in, FPoint arg, double angle);
+    FPoint rotFPointQt(FPoint in, FRotQt core);
 }

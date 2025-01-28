@@ -4,6 +4,7 @@ import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.impl.mutables.geometry.primitive.support.PrimitivePresetDef;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.json.JSONObject;
 
@@ -99,7 +100,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint set(FPos3D position) {
+    public FPoint applyStateFrom(FPos3D position) {
 
         return set(position.getD0(), position.getD1(), position.getD2());
     }
@@ -144,6 +145,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public boolean isExact(FPos3D arg) {
+
+        return isExact(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public boolean isSimilar(double x, double y, double z) {
         double distanceX = Math.abs(getX() - x);
         double distanceY = Math.abs(getY() - y);
@@ -160,6 +167,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         }
 
         return isSimilar(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public boolean isSimilar(FPos3D arg) {
+
+        return isSimilar(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
@@ -239,6 +252,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint add(FPos3D arg) {
+
+        return add(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public FPoint add(double factor) {
 
         return add(factor, factor, factor);
@@ -272,6 +291,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public FPoint sub(FPoint arg) {
 
         return sub(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FPoint sub(FPos3D arg) {
+
+        return sub(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
@@ -311,6 +336,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint mul(FPos3D arg) {
+
+        return mul(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public FPoint mul(double factor) {
 
         return mul(factor, factor, factor);
@@ -347,6 +378,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint div(FPos3D arg) {
+
+        return div(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public FPoint div(double factor) {
 
         return div(factor, factor, factor);
@@ -379,6 +416,15 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         }
 
         return setZ(getZ() / z);
+    }
+
+    @Override
+    public FPoint mul(FMatrix3x3D arg) {
+        double opX = (arg.get0x0() * getX()) + (arg.get0x1() * getY()) + (arg.get0x2() * getZ());
+        double opY = (arg.get1x0() * getX()) + (arg.get1x1() * getY()) + (arg.get1x2() * getZ());
+        double opZ = (arg.get2x0() * getX()) + (arg.get2x1() * getY()) + (arg.get2x2() * getZ());
+
+        return set(opX, opY, opZ);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -420,6 +466,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public double getDistanceP2(FPos3D arg) {
+
+        return getDistanceP2(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public double getDistance(double x, double y, double z) {
 
         return Math.sqrt(getDistanceP2(x, y, z));
@@ -429,6 +481,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public double getDistance(FPoint arg) {
 
         return getDistance(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public double getDistance(FPos3D arg) {
+
+        return getDistance(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
@@ -445,6 +503,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public FPoint setDistance(FPoint arg, double distance) {
 
         return setDistance(arg.getX(), arg.getY(), arg.getZ(), distance);
+    }
+
+    @Override
+    public FPoint setDistance(FPos3D arg, double distance) {
+
+        return setDistance(arg.getD0(), arg.getD1(), arg.getD2(), distance);
     }
 
     @Override
@@ -494,6 +558,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint reflect(FPos3D arg) {
+
+        return reflect(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public double getAngle(double x, double y, double z) {
 
         if (isNearZero()) {
@@ -519,6 +589,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public double getAngle(FPoint arg) {
 
         return getAngle(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public double getAngle(FPos3D arg) {
+
+        return getAngle(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
@@ -589,6 +665,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint setAngle(FPos3D arg, double angle) {
+
+        return setAngle(arg.getD0(), arg.getD1(), arg.getD2(), angle);
+    }
+
+    @Override
     public FPoint rotateAround(double x, double y, double z, double angle) {
 
         if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
@@ -636,6 +718,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public FPoint rotateAround(FPos3D arg, double angle) {
+
+        return rotateAround(arg.getD0(), arg.getD1(), arg.getD2(), angle);
+    }
+
+    @Override
     public double getDotProduct(double x, double y, double z) {
         double dimX = getX() * x;
         double dimY = getY() * y;
@@ -651,6 +739,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
+    public double getDotProduct(FPos3D arg) {
+
+        return getDotProduct(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public FPoint setCrossProduct(double x, double y, double z) {
         double dimX = (getY() * z) - (getZ() * y);
         double dimY = (getZ() * x) - (getX() * z);
@@ -663,6 +757,12 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     public FPoint setCrossProduct(FPoint arg) {
 
         return setCrossProduct(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FPoint setCrossProduct(FPos3D arg) {
+
+        return setCrossProduct(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override

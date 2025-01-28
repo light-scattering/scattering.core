@@ -25,6 +25,14 @@ public class FPairPos3D implements Position<FPairPos3D> {
         this.posB = posB;
     }
 
+    protected static FPairPos3D create(double AD0, double AD1, double AD2, double BD0, double BD1, double BD2) {
+
+        return new FPairPos3D(
+                factory.getFPos3D(AD0, AD1, AD2),
+                factory.getFPos3D(BD0, BD1, BD2)
+        );
+    }
+
     protected static FPairPos3D create(FPos3D posA, FPos3D posB) {
 
         return new FPairPos3D(posA, posB);
@@ -44,10 +52,12 @@ public class FPairPos3D implements Position<FPairPos3D> {
     }
 
     public FPos3D getPosA() {
+
         return posA;
     }
 
     public FPos3D getPosB() {
+
         return posB;
     }
 

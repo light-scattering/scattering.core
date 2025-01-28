@@ -6,8 +6,8 @@ public interface Mutable<T> {
 
     T applyStateFrom(JSONObject json);
 
-    boolean isSimilar(T ref);
-    boolean isExact(T ref);
+    boolean isSimilar(T arg);
+    boolean isExact(T arg);
 
     T self();
 

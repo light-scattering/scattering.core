@@ -69,7 +69,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FPoint rndAngle(FPoint origin, FPoint... exclusion) {
         double radius = origin.getMagnitude();
 
-        origin.set(core.nextDoubleOnSphere(radius));
+        origin.applyStateFrom(core.nextDoubleOnSphere(radius));
 
         return origin;
     }
@@ -78,7 +78,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FPoint rndPosition(FPoint origin, FPairPos3D range, FPoint... exclusion) {
         FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
 
-        origin.set(core.nextDouble3D(range, exc));
+        origin.applyStateFrom(core.nextDouble3D(range, exc));
 
         return origin;
     }
@@ -87,7 +87,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FPoint rndPosition(FPoint origin, double radius, FPoint... exclusion) {
         FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
 
-        origin.set(core.nextDoubleInSphere(radius, exc));
+        origin.applyStateFrom(core.nextDoubleInSphere(radius, exc));
 
         return origin;
     }

@@ -22,7 +22,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 1, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        fPointA.apply(p -> rotation.rotate(p, fPointB, Math.PI));
+        fPointA.apply(p -> rotation.rotFPointQtAround(p, fPointB, Math.PI));
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
                 "The position is incorrect");
@@ -34,7 +34,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 1, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        fPointA.apply(p -> rotation.rotate(p, fPointB, -Math.PI));
+        fPointA.apply(p -> rotation.rotFPointQtAround(p, fPointB, -Math.PI));
 
         assertTrue(factory.getFPoint(-1, 1, 0).isSimilar(fPointA),
                 "The position is incorrect");
@@ -46,7 +46,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 1, 0);
         FPoint fPointB = factory.getFPoint();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.rotate(fPointA, fPointB, Math.PI),
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.rotFPointQtAround(fPointA, fPointB, Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -56,7 +56,7 @@ public class FPointRotationTest {
         FPoint fPointA = TestHelper.getRandomFPoint();
         FPoint fPointB = TestHelper.getRandomFPoint(fPointA);
 
-        FPointTestHelper.testReference((a, b) -> rotation.rotate(a, b, Math.PI), fPointA, fPointB);
+        FPointTestHelper.testReference((a, b) -> rotation.rotFPointQtAround(a, b, Math.PI), fPointA, fPointB);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 0, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        fPointA.apply(p ->  rotation.setAngle(p, fPointB, Math.PI * 0.25));
+        fPointA.apply(p ->  rotation.setFPointQtAngle(p, fPointB, Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -83,7 +83,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(-1, 0, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        fPointA.apply(p -> rotation.setAngle(p, fPointB, Math.PI * 0.25));
+        fPointA.apply(p -> rotation.setFPointQtAngle(p, fPointB, Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -101,7 +101,7 @@ public class FPointRotationTest {
         FPoint fPointA = factory.getFPoint(1, 0, 0);
         FPoint fPointB = factory.getFPoint(0, 1, 0);
 
-        fPointA.apply(p -> rotation.setAngle(p, fPointB, -Math.PI * 0.25));
+        fPointA.apply(p -> rotation.setFPointQtAngle(p, fPointB, -Math.PI * 0.25));
 
         double position = 1 / Math.sqrt(2);
 
@@ -122,7 +122,7 @@ public class FPointRotationTest {
         double magnitude = fPointA.getMagnitude();
         double angle = random.nextDouble() % (Math.PI);
 
-        fPointA.apply(p -> rotation.setAngle(p, fPointB, angle));
+        fPointA.apply(p -> rotation.setFPointQtAngle(p, fPointB, angle));
 
         Assertions.assertAll("Validate rotation",
                 () -> assertEquals(magnitude, fPointA.getMagnitude(),
@@ -137,7 +137,7 @@ public class FPointRotationTest {
     void setAngleThrowIllegalArgumentException() {
         FPoint fPoint = TestHelper.getRandomFPoint();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.setAngle(fPoint, factory.getFPoint(), Math.PI),
+        Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.setFPointQtAngle(fPoint, factory.getFPoint(), Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -147,6 +147,6 @@ public class FPointRotationTest {
         FPoint fPointA = TestHelper.getRandomFPoint();
         FPoint fPointB = TestHelper.getRandomFPoint(fPointA);
 
-        FPointTestHelper.testReference((a, b) -> rotation.setAngle(a, b, Math.PI), fPointA, fPointB);
+        FPointTestHelper.testReference((a, b) -> rotation.setFPointQtAngle(a, b, Math.PI), fPointA, fPointB);
     }
 }

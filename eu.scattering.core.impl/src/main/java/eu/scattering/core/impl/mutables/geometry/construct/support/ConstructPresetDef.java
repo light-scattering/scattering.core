@@ -21,15 +21,15 @@ public abstract class ConstructPresetDef<T extends Construct<T>> implements Cons
     }
 
     @Override
-    public boolean isExact(T ref) {
+    public boolean isExact(T arg) {
 
-        return getRefOrigin().isExact(ref.getRefOrigin());
+        return getRefOrigin().isExact(arg.getRefOrigin());
     }
 
     @Override
-    public boolean isSimilar(T ref) {
+    public boolean isSimilar(T arg) {
 
-        return getRefOrigin().isSimilar(ref.getRefOrigin());
+        return getRefOrigin().isSimilar(arg.getRefOrigin());
     }
 
     @Override

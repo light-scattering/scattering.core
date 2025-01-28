@@ -31,7 +31,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -47,7 +47,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(-angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isAntiParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isAntiParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -63,7 +63,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isParallel(axis),
+                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -79,7 +79,7 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(-angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().set(fRot.getAxis(rotor)).isAntiParallel(axis),
+                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isAntiParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -152,7 +152,7 @@ public class FRotationTest {
         double angle = random.nextDouble() % (2 * Math.PI);
         FRotQt rotor = fRot.getRotationQt(TestHelper.getRandomFPoint().toFPos3D(), angle);
 
-        fRotHelper.rotate(fPoint, rotor);
+        fRotHelper.rotFPointQt(fPoint, rotor);
 
         assertEquals(length, fPoint.getMagnitude(), jitter, "The magnitude is invalid");
     }
@@ -163,7 +163,7 @@ public class FRotationTest {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
         FRotQt rotor = fRot.getRotationQt(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 0.5);
 
-        fRotHelper.rotate(fPoint, rotor);
+        fRotHelper.rotFPointQt(fPoint, rotor);
 
         assertTrue(factory.getFPoint(0, -1, 0).isSimilar(fPoint), "The position is invalid");
 
@@ -175,7 +175,7 @@ public class FRotationTest {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
         FRotQt rotor = fRot.getRotationQt(factory.getFPoint(0, 0, 1).toFPos3D(), Math.PI * 1.5);
 
-        fRotHelper.rotate(fPoint, rotor);
+        fRotHelper.rotFPointQt(fPoint, rotor);
 
         assertTrue(factory.getFPoint(0, 1, 0).isSimilar(fPoint), "The position is invalid");
 
@@ -187,7 +187,7 @@ public class FRotationTest {
         FPoint fPoint = factory.getFPoint(1, 1, 1);
         FRotQt rotor = fRot.getRotationQt(factory.getFPoint(-1, 1, 0).toFPos3D(), Math.PI);
 
-        fRotHelper.rotate(fPoint, rotor);
+        fRotHelper.rotFPointQt(fPoint, rotor);
 
         assertTrue(factory.getFPoint(-1, -1, -1).isSimilar(fPoint), "The position is invalid");
     }

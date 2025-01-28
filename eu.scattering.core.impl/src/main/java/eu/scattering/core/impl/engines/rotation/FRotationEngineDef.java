@@ -48,21 +48,35 @@ public class FRotationEngineDef implements FRotationEngine {
         return geometry;
     }
 
+//    private void rotate(FPoint in, FRotQt qt) {
+//
+//    }
+
+    //--------------------------------------------------
+
     @Override
-    public FPoint setAngle(FPoint origin, FPoint op, double angle) {
-        var axis = origin.copy().setCrossProduct(op);
-        var fPointCopy = op.copy();
+    public FPoint setFPointQtAngle(FPoint in, FPoint arg, double angle) {
+        var axis = in.copy().setCrossProduct(arg);
+        var fPointCopy = arg.copy();
 
-        fPointCopy.apply(p -> rotate(p, core.getRotationQt(axis.toFPos3D(), angle)));
+        fPointCopy.apply(p -> rotFPointQt(p, core.getRotationQt(axis.toFPos3D(), angle)));
 
-        return origin.applyStateFrom(fPointCopy);
+        return in.applyStateFrom(fPointCopy);
     }
 
     @Override
-    public FPoint rotate(FPoint origin, FPoint op, double angle) {
+    public FPoint rotFPointQtAround(FPoint in, FPoint arg, double angle) {
 
-        return origin.apply(p -> rotate(p, core.getRotationQt(op.toFPos3D(), angle)));
+        return in.apply(p -> rotFPointQt(p, core.getRotationQt(arg.toFPos3D(), angle)));
     }
+
+    @Override
+    public FPoint rotFPointQt(FPoint in, FRotQt core) {
+
+        return in.apply(p -> rotate(p, core));
+    }
+
+    //--------------------------------------------------
 
     @Override
     public FVector setAngle(FVector origin, FVector ref, double angle) {
@@ -78,7 +92,7 @@ public class FRotationEngineDef implements FRotationEngine {
         var fCopyLocal = origin.copy().moveBaseToCenter();
         var fCopyExternal = ref.copy().moveBaseToCenter();
 
-        setAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
+        setFPointQtAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
 
         fCopyLocal.moveBase(origin.getRefBase());
 
@@ -120,7 +134,7 @@ public class FRotationEngineDef implements FRotationEngine {
 
         var rotor = core.getRotationQt(origin.getRefOrigin().toFPairPos3D(), angle);
 
-        geometry.disassemble().forEach(p -> rotate(p, rotor));
+        geometry.disassemble().forEach(p -> rotFPointQt(p, rotor));
     }
 
     @Override
@@ -134,7 +148,7 @@ public class FRotationEngineDef implements FRotationEngine {
 
         geometry.disassemble().forEach(p -> {
             if (p.copy().apply(origin::project).toBoolean(origin::isPartOf)) {
-                rotate(p, rotor);
+                rotFPointQt(p, rotor);
             }
         });
     }
@@ -150,7 +164,7 @@ public class FRotationEngineDef implements FRotationEngine {
 
         geometry.disassemble().forEach(p -> {
             if (p.copy().apply(origin::project).toBoolean(origin::isPartOf)) {
-                rotate(p, rotor);
+                rotFPointQt(p, rotor);
             }
         });
     }

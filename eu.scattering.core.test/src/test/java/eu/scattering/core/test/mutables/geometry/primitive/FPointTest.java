@@ -5,6 +5,7 @@ import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.geometry.primitive.support.FPointTestHelper;
+import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
@@ -150,7 +151,7 @@ public class FPointTest {
             FPos3D fPos3DRef = factory.getFPos3D(refX, refY, refZ);
             FPoint fPoint = factory.getFPoint();
 
-            fPoint.set(fPos3DRef);
+            fPoint.applyStateFrom(fPos3DRef);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
@@ -161,11 +162,11 @@ public class FPointTest {
 
         @Test
         @DisplayName("Set values with FPos3D (validate)")
-        void setWithFPosValidate() {
+        void setWithFPos3DValidate() {
             FPoint fPointRef = factory.getFPoint();
             FPos3D fPos3DArg = factory.getFPos3D(refX, refY, refZ);
 
-            FPointTestHelper.testReference(p -> p.set(fPos3DArg), fPointRef);
+            FPointTestHelper.testReference(p -> p.applyStateFrom(fPos3DArg), fPointRef);
         }
 
         @Test
@@ -364,6 +365,31 @@ public class FPointTest {
             FPoint fPointArg = TestHelper.getRandomFPoint(fPointRef);
 
             FPointTestHelper.testReference(FPoint::reflect, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Reflect through FPos3D")
+        void reflectThroughFPos3D() {
+            double refAX = random.nextDouble();
+            double refAY = random.nextDouble();
+            double refAZ = random.nextDouble();
+            FPoint fPoint = factory.getFPoint(refAX, refAY, refAZ);
+
+            double refBX = random.nextDouble();
+            double refBY = random.nextDouble();
+            double refBZ = random.nextDouble();
+            FPos3D fPos3D = factory.getFPos3D(refBX, refBY, refBZ);
+
+            fPoint.reflect(fPos3D);
+
+            Assertions.assertAll("Validate element values",
+                    () -> assertEquals(refBX - (refAX - refBX), fPoint.getX(),
+                            "The X value is incorrect"),
+                    () -> assertEquals(refBY - (refAY - refBY), fPoint.getY(),
+                            "The Y value is incorrect"),
+                    () -> assertEquals(refBZ - (refAZ - refBZ), fPoint.getZ(),
+                            "The Z value is incorrect")
+            );
         }
 
         @Test
@@ -883,6 +909,22 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Get dot product with FPos3D")
+        void getDotProductWithFPos3D() {
+            FPoint fPoint = TestHelper.getRandomFPoint();
+            FPos3D fPos3D = TestHelper.getRandomFPoint(fPoint).toFPos3D();
+
+            double result = fPoint.getDotProduct(fPos3D);
+
+            double dimX = fPoint.getX() * fPos3D.getD0();
+            double dimY = fPoint.getY() * fPos3D.getD1();
+            double dimZ = fPoint.getZ() * fPos3D.getD2();
+
+            Assertions.assertEquals(dimX + dimY + dimZ, result,
+                    jitter, "The dot product value is erroneous");
+        }
+
+        @Test
         @DisplayName("Set cross product with primitives")
         void setCrossProductWithPrimitives() {
             double refAX = random.nextDouble();
@@ -936,6 +978,28 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
             FPointTestHelper.testReference(FPoint::setCrossProduct, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Set cross product with FPos3D")
+        void setCrossProductWithFPos3D() {
+            double refAX = random.nextDouble();
+            double refAY = random.nextDouble();
+            double refAZ = random.nextDouble();
+            FPoint fPoint = factory.getFPoint(refAX, refAY, refAZ);
+
+            double refBX = random.nextDouble();
+            double refBY = random.nextDouble();
+            double refBZ = random.nextDouble();
+            FPos3D fPos3D = factory.getFPoint(refBX, refBY, refBZ).toFPos3D();
+
+            FPoint fPointRes = fPoint.copy().setCrossProduct(fPos3D);
+
+            double dimX = (fPoint.getY() * fPos3D.getD2()) - (fPoint.getZ() * fPos3D.getD1());
+            double dimY = (fPoint.getZ() * fPos3D.getD0()) - (fPoint.getX() * fPos3D.getD2());
+            double dimZ = (fPoint.getX() * fPos3D.getD1()) - (fPoint.getY() * fPos3D.getD0());
+
+            assertTrue(fPointRes.isSimilar(dimX, dimY, dimZ),"The value is not correct");
         }
 
         @Test
@@ -1092,6 +1156,15 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
             FPointTestHelper.testValue(FPoint::getAngle, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Get angle with FPos3D")
+        void getAngleWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(2, 2, 0);
+            FPos3D fPos3D = factory.getFPoint(4, -4, 0).toFPos3D();
+
+            assertEquals(Math.PI * 0.5, fPoint.getAngle(fPos3D), jitter, "The angle is incorrect");
         }
 
         @Test
@@ -1310,6 +1383,42 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Set angle with FPos3D A (simple)")
+        void setAngleWithFPos3DSimpleA() {
+            FPoint fPoint = factory.getFPoint(2, 0, 0);
+            FPos3D fPos3D = factory.getFPoint(0, 5, 0).toFPos3D();
+
+            fPoint.setAngle(fPos3D, Math.PI * 0.25);
+
+            double position = 2 / Math.sqrt(2);
+
+            Assertions.assertAll("Validate angle",
+                    () -> assertEquals(Math.PI * 0.25, fPoint.getAngle(fPos3D),
+                            jitter, "The angle is erroneous"),
+                    () -> assertTrue(factory.getFPoint(position, position, 0).isSimilar(fPoint),
+                            "The position is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set angle with FPos3D B (simple)")
+        void setAngleWithFPos3DSimpleB() {
+            FPoint fPoint = factory.getFPoint(2, 2, 0);
+            FPos3D fPos3D = factory.getFPoint(5, 0, 0).toFPos3D();
+
+            fPoint.setAngle(fPos3D, Math.PI * 0.5);
+
+            double position = 2 * Math.sqrt(2);
+
+            Assertions.assertAll("Validate angle",
+                    () -> assertEquals(Math.PI * 0.5, fPoint.getAngle(fPos3D),
+                            jitter, "The angle is erroneous"),
+                    () -> assertTrue(factory.getFPoint(0, position, 0).isSimilar(fPoint),
+                            "The position is erroneous")
+            );
+        }
+
+        @Test
         @DisplayName("Rotate with primitives A (simple, positive)")
         void rotateWithPrimitivesSimplePositiveA() {
             FPoint fPointRef = factory.getFPoint(0, 2, 0);
@@ -1438,6 +1547,60 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Rotate with FPos3D A (simple, positive)")
+        void rotateWithFPos3DSimplePositiveA() {
+            FPoint fPoint = factory.getFPoint(5, 1, 0);
+            FPos3D fPos3D = factory.getFPoint(0, 5, 0).toFPos3D();
+
+            FPoint result = fPoint.rotateAround(fPos3D, Math.PI / 2);
+
+            assertTrue(factory.getFPoint(0, 1, 5).isSimilar(fPoint), "The FPoint position is incorrect");
+            assertSame(result, fPoint, "The reference should be the same");
+        }
+
+        @Test
+        @DisplayName("Rotate with FPos3D B (simple, positive)")
+        void rotateWithFPos3DSimplePositiveB() {
+            FPoint fPoint = factory.getFPoint(2, 2, 0);
+            FPos3D fPos3D = factory.getFPoint(0, 0, 3).toFPos3D();
+
+            FPoint result = fPoint.rotateAround(fPos3D, Math.PI / 2);
+
+            assertTrue(factory.getFPoint(2, -2, 0).isSimilar(fPoint), "The FPoint position is incorrect");
+            assertSame(result, fPoint, "The reference should be the same");
+        }
+
+        @Test
+        @DisplayName("Get distance")
+        void getDistance() {
+            FPoint fPointA = TestHelper.getRandomFPoint();
+            FPoint fPointB = TestHelper.getRandomFPoint();
+
+            double dimX = fPointA.getX() - fPointB.getX();
+            double dimY = fPointA.getY() - fPointB.getY();
+            double dimZ = fPointA.getZ() - fPointB.getZ();
+            double reference = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
+
+            assertEquals(reference, fPointA.getDistance(fPointB),
+                    jitter, "The distance between FPoints is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get distance with FPos3D")
+        void getDistanceWithFPos3D() {
+            FPoint fPoint = TestHelper.getRandomFPoint();
+            FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
+
+            double dimX = fPoint.getX() - fPos3D.getD0();
+            double dimY = fPoint.getY() - fPos3D.getD1();
+            double dimZ = fPoint.getZ() - fPos3D.getD2();
+            double reference = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
+
+            assertEquals(reference, fPoint.getDistance(fPos3D),
+                    jitter, "The distance between elements is incorrect");
+        }
+
+        @Test
         @DisplayName("Get distance with primitives")
         void getDistanceWithPrimitives() {
             FPoint fPointRef = TestHelper.getRandomFPoint();
@@ -1457,21 +1620,6 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
             FPointTestHelper.testValue(p -> p.getDistance(4, 5, 6), fPointRef);
-        }
-
-        @Test
-        @DisplayName("Get distance")
-        void getDistance() {
-            FPoint fPointA = TestHelper.getRandomFPoint();
-            FPoint fPointB = TestHelper.getRandomFPoint();
-
-            double dimX = fPointA.getX() - fPointB.getX();
-            double dimY = fPointA.getY() - fPointB.getY();
-            double dimZ = fPointA.getZ() - fPointB.getZ();
-            double reference = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
-
-            assertEquals(reference, fPointA.getDistance(fPointB),
-                    jitter, "The distance between FPoints is incorrect");
         }
 
         @Test
@@ -1527,6 +1675,21 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
             FPointTestHelper.testValue(FPoint::getDistanceP2, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Get distance with FPos3D P2")
+        void getDistanceWithFPos3DP2() {
+            FPoint fPoint = TestHelper.getRandomFPoint();
+            FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
+
+            double dimX = fPoint.getX() - fPos3D.getD0();
+            double dimY = fPoint.getY() - fPos3D.getD1();
+            double dimZ = fPoint.getZ() - fPos3D.getD2();
+            double reference = (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
+
+            assertEquals(reference, fPoint.getDistanceP2(fPos3D),
+                    jitter, "The distance between elements is incorrect");
         }
 
         @Test
@@ -1672,6 +1835,19 @@ public class FPointTest {
 
             FPointTestHelper.testReference((a, b) -> a.setDistance(b, 1), fPointRef, fPointArg);
         }
+
+        @Test
+        @DisplayName("Set distance with FPos3D")
+        void setDistanceWithFPos3D() {
+            double distance = Math.abs(random.nextDouble());
+            FPoint fPoint = TestHelper.getRandomFPoint();
+            FPos3D fPos3D = TestHelper.getRandomFPoint(fPoint).toFPos3D();
+
+            fPoint.setDistance(fPos3D, distance);
+
+            assertEquals(distance, fPoint.getDistance(fPos3D),
+                    jitter, "The distance between elements is erroneous");
+        }
     }
 
     @Nested
@@ -1762,6 +1938,24 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Exactness with FPos3D")
+        void isExactWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(refX, refY, refZ);
+            FPos3D fPos3D = factory.getFPos3D(refX, refY, refZ);
+
+            assertTrue(fPoint.isExact(fPos3D), "Elements should be equal");
+        }
+
+        @Test
+        @DisplayName("Exactness with FPos3D (fail)")
+        void isExactWithFPos3DFail() {
+            FPoint fPoint = factory.getFPoint(refX, refY, refZ);
+            FPos3D fPos3D = factory.getFPos3D(refX + jitter, refY + jitter, refZ + jitter);
+
+            assertFalse(fPoint.isExact(fPos3D), "Elements should not be equal");
+        }
+
+        @Test
         @DisplayName("Similarity")
         void isSimilar() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
@@ -1843,6 +2037,24 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
             FPointTestHelper.testValue(e -> e.isSimilar(0, 0, 0), fPointRef);
+        }
+
+        @Test
+        @DisplayName("Similarity with FPos3D")
+        void isSimilarWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(refX, refY, refZ);
+            FPos3D fPos3D = factory.getFPos3D(refX + 0.5 * jitter, refY + 0.5 * jitter, refZ + 0.5 * jitter);
+
+            assertTrue(fPoint.isSimilar(fPos3D), "Elements should be similar");
+        }
+
+        @Test
+        @DisplayName("Similarity with FPos3D (fail)")
+        void isSimilarWithFPos3DFail() {
+            FPoint fPoint = factory.getFPoint(refX, refY, refZ);
+            FPos3D fPos3D = factory.getFPos3D(refX + 1.5 * jitter, refY + 1.5 * jitter, refZ + 1.5 * jitter);
+
+            assertFalse(fPoint.isSimilar(fPos3D), "Elements should not be similar");
         }
 
         @Test
@@ -1963,6 +2175,20 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
             FPointTestHelper.testReference(FPoint::add, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Add FPos3D")
+        void addFPos3D() {
+            FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
+
+            fPoint.add(fPos3D);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY + argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ + argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
         }
 
         @Test
@@ -2095,6 +2321,20 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Sub FPos3D")
+        void subFPos3D() {
+            FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
+
+            fPoint.sub(fPos3D);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY - argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ - argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Sub primitives")
         void subPrimitives() {
 
@@ -2221,6 +2461,20 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
             FPointTestHelper.testReference(FPoint::mul, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Mul FPos3D")
+        void mulFPos3D() {
+            FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
+
+            fPoint.mul(fPos3D);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX * argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY * argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ * argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
         }
 
         @Test
@@ -2370,6 +2624,20 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Div FPos3D")
+        void divFPos3D() {
+            FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
+
+            fPoint.div(fPos3D);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX / argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY / argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ / argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Div primitives")
         void divPrimitives() {
 
@@ -2515,6 +2783,36 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
             FPointTestHelper.testReference(e -> e.divZ(1), fPointRef);
+        }
+
+        @Test
+        @DisplayName("Mul FMatrix3x3D")
+        void mulFMatrix3x3D() {
+            var fMatrixOrigin = new double[3][3];
+
+            fMatrixOrigin[0][0] = 1.5;
+            fMatrixOrigin[0][1] = 2.5;
+            fMatrixOrigin[0][2] = 3.5;
+            fMatrixOrigin[1][0] = 4.5;
+            fMatrixOrigin[1][1] = 5.5;
+            fMatrixOrigin[1][2] = 6.5;
+            fMatrixOrigin[2][0] = 7.5;
+            fMatrixOrigin[2][1] = 8.5;
+            fMatrixOrigin[2][2] = 9.5;
+
+            FMatrix3x3D fMatrix = factory.getFMatrix3x3D(fMatrixOrigin);
+            FPoint fPoint = factory.getFPoint(4, 5, 6);
+
+            fPoint.mul(fMatrix);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals((1.5 * 4) + (2.5 * 5) + (3.5 * 6), fPoint.getX(),
+                            jitter, "The X value is incorrect"),
+                    () -> assertEquals((4.5 * 4) + (5.5 * 5) + (6.5 * 6), fPoint.getY(),
+                            jitter, "The Y value is incorrect"),
+                    () -> assertEquals((7.5 * 4) + (8.5 * 5) + (9.5 * 6), fPoint.getZ(),
+                            jitter, "The Z value is incorrect")
+            );
         }
 
         @Test

@@ -75,7 +75,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine set(FPairPos3D position) {
 
-        getRefOrigin().set(position);
+        getRefOrigin().applyStateFrom(position);
 
         return this;
     }

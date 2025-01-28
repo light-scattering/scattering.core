@@ -6,7 +6,6 @@ import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
-
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -25,7 +24,7 @@ public interface FPoint extends Primitive<FPoint> {
 
     //--------------------------------------------------
 
-    FPoint set(FPos3D position);
+    FPoint applyStateFrom(FPos3D position);
 
     FPos3D toFPos3D();
 
@@ -35,37 +34,48 @@ public interface FPoint extends Primitive<FPoint> {
     boolean isNearZero();
 
     boolean isExact(double x, double y, double z);
+    boolean isExact(FPos3D arg);
+
     boolean isSimilar(double x, double y, double z);
+    boolean isSimilar(FPos3D arg);
 
     FPoint normalize();
 
     FPoint reflectThroughCenter();
     FPoint reflect(double x, double y, double z);
     FPoint reflect(FPoint arg);
+    FPoint reflect(FPos3D arg);
 
     double getMagnitude();
     FPoint setMagnitude(double magnitude);
 
     double getDistance(double x, double y, double z);
     double getDistance(FPoint arg);
+    double getDistance(FPos3D arg);
 
     FPoint setDistance(double x, double y, double z, double distance);
     FPoint setDistance(FPoint arg, double distance);
+    FPoint setDistance(FPos3D arg, double distance);
 
     double getDotProduct(double x, double y, double z);
     double getDotProduct(FPoint arg);
+    double getDotProduct(FPos3D arg);
 
     FPoint setCrossProduct(double x, double y, double z);
     FPoint setCrossProduct(FPoint arg);
+    FPoint setCrossProduct(FPos3D arg);
 
     double getAngle(double x, double y, double z);
     double getAngle(FPoint arg);
+    double getAngle(FPos3D arg);
 
     FPoint setAngle(double x, double y, double z, double angle);
     FPoint setAngle(FPoint arg, double angle);
+    FPoint setAngle(FPos3D arg, double angle);
 
     FPoint rotateAround(double x, double y, double z, double angle);
     FPoint rotateAround(FPoint arg, double angle);
+    FPoint rotateAround(FPos3D arg, double angle);
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
@@ -83,6 +93,8 @@ public interface FPoint extends Primitive<FPoint> {
     double getDistanceP2(double x, double y, double z);
     @Fragment
     double getDistanceP2(FPoint arg);
+    @Fragment
+    double getDistanceP2(FPos3D arg);
 
     @Extension
     FPoint apply(Consumer<FPoint> action);
