@@ -180,7 +180,7 @@ public class FLineTest {
         void isExactFail() {
             FVector fVector = TestHelper.getRandomFVector();
             FLine fLineA = factory.getRefFLine(fVector.copy());
-            FLine fLineB = factory.getRefFLine(fVector.copy().add(0.5 * jitter));
+            FLine fLineB = factory.getRefFLine(fVector.copy().addFactor(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fLineA.isExact(fLineB), "FLines should not be equal"),
@@ -202,7 +202,7 @@ public class FLineTest {
         void isSimilar() {
             FVector fVector = TestHelper.getRandomFVector();
             FLine fLineA = factory.getRefFLine(fVector.copy());
-            FLine fLineB = factory.getRefFLine(fVector.copy().add(0.5 * jitter));
+            FLine fLineB = factory.getRefFLine(fVector.copy().addFactor(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
@@ -436,12 +436,12 @@ public class FLineTest {
 
             FPoint offset = TestHelper.getRandomFPoint();
 
-            fLine.getRefOrigin().add(offset);
-            fPoint.add(offset);
+            fLine.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
 
             fLine.project(fPoint);
 
-            assertTrue(factory.getFPoint(1, 1, 1).add(offset).isSimilar(fPoint));
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
 
         @Test
@@ -593,7 +593,7 @@ public class FLineTest {
         @Test
         @DisplayName("Location (below base)")
         void isPartOfPositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4).addY(0.5 * jitter);
 
@@ -603,7 +603,7 @@ public class FLineTest {
         @Test
         @DisplayName("Location (above head)")
         void isPartOfPositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
@@ -628,8 +628,8 @@ public class FLineTest {
 
             FPoint offset = TestHelper.getRandomFPoint();
 
-            fLine.getRefOrigin().add(offset);
-            fPoint.add(offset);
+            fLine.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
 
             assertEquals(Math.sqrt(6), fLine.getAtomicDistance(fPoint).get(0));
         }
@@ -652,8 +652,8 @@ public class FLineTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fLine.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fLine.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             fLine.setDistance(fPoint, 1);
 
@@ -664,7 +664,7 @@ public class FLineTest {
         @Test
         @DisplayName("Set distance (below base)")
         void setDistancePositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
@@ -676,7 +676,7 @@ public class FLineTest {
         @Test
         @DisplayName("Set distance (above head)")
         void setDistancePositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
@@ -693,8 +693,8 @@ public class FLineTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fLine.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fLine.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             fLine.setDistance(fPoint, -1);
 
@@ -710,8 +710,8 @@ public class FLineTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fLine.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fLine.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             FPoint fPointA = fPoint.copy();
             fLine.setDistance(fPointA,1);
@@ -922,8 +922,8 @@ public class FLineTest {
 
             FPoint fPointRel = TestHelper.getRandomFPoint().setZ(0);
 
-            fLineA.getRefOrigin().add(fPointRel);
-            fLineB.getRefOrigin().add(fPointRel);
+            fLineA.getRefOrigin().addXYZ(fPointRel);
+            fLineB.getRefOrigin().addXYZ(fPointRel);
 
             Optional<FPoint> fPointRes = fLineA.getFPointAtIntersection(fLineB);
             Assertions.assertTrue(fPointRes.isPresent(),"FLines should have one intersecting FPoint");

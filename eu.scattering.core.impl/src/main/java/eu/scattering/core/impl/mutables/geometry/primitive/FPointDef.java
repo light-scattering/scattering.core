@@ -239,28 +239,64 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
 
     // -------------------------------------------------------------------------------------------------
 
+
     @Override
     public FPoint add(double x, double y, double z) {
 
-        return addX(x).addY(y).addZ(z);
+        return addXYZ(x, y, z);
     }
 
     @Override
     public FPoint add(FPoint arg) {
 
-        return add(arg.getX(), arg.getY(), arg.getZ());
+        return addXYZ(arg);
     }
 
     @Override
     public FPoint add(FPos3D arg) {
 
-        return add(arg.getD0(), arg.getD1(), arg.getD2());
+        return addXYZ(arg);
     }
 
     @Override
-    public FPoint add(double factor) {
+    public FPoint sub(double x, double y, double z) {
+        return subXYZ(x, y, z);
+    }
 
-        return add(factor, factor, factor);
+    @Override
+    public FPoint sub(FPoint arg) {
+
+        return subXYZ(arg);
+    }
+
+    @Override
+    public FPoint sub(FPos3D arg) {
+
+        return subXYZ(arg);
+    }
+
+    @Override
+    public FPoint addXYZ(double x, double y, double z) {
+
+        return addX(x).addY(y).addZ(z);
+    }
+
+    @Override
+    public FPoint addXYZ(FPoint arg) {
+
+        return this.addXYZ(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FPoint addXYZ(FPos3D arg) {
+
+        return this.addXYZ(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public FPoint addFactor(double factor) {
+
+        return this.addXYZ(factor, factor, factor);
     }
 
     @Override
@@ -282,27 +318,27 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint sub(double x, double y, double z) {
+    public FPoint subXYZ(double x, double y, double z) {
 
         return subX(x).subY(y).subZ(z);
     }
 
     @Override
-    public FPoint sub(FPoint arg) {
+    public FPoint subXYZ(FPoint arg) {
 
-        return sub(arg.getX(), arg.getY(), arg.getZ());
+        return this.subXYZ(arg.getX(), arg.getY(), arg.getZ());
     }
 
     @Override
-    public FPoint sub(FPos3D arg) {
+    public FPoint subXYZ(FPos3D arg) {
 
-        return sub(arg.getD0(), arg.getD1(), arg.getD2());
+        return this.subXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
-    public FPoint sub(double factor) {
+    public FPoint subFactor(double factor) {
 
-        return sub(factor, factor, factor);
+        return this.subXYZ(factor, factor, factor);
     }
 
     @Override
@@ -324,27 +360,27 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint mul(double x, double y, double z) {
+    public FPoint mulXYZ(double x, double y, double z) {
 
         return mulX(x).mulY(y).mulZ(z);
     }
 
     @Override
-    public FPoint mul(FPoint arg) {
+    public FPoint mulXYZ(FPoint arg) {
 
-        return mul(arg.getX(), arg.getY(), arg.getZ());
+        return this.mulXYZ(arg.getX(), arg.getY(), arg.getZ());
     }
 
     @Override
-    public FPoint mul(FPos3D arg) {
+    public FPoint mulXYZ(FPos3D arg) {
 
-        return mul(arg.getD0(), arg.getD1(), arg.getD2());
+        return this.mulXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
-    public FPoint mul(double factor) {
+    public FPoint mulFactor(double factor) {
 
-        return mul(factor, factor, factor);
+        return this.mulXYZ(factor, factor, factor);
     }
 
     @Override
@@ -366,27 +402,27 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     }
 
     @Override
-    public FPoint div(double x, double y, double z) {
+    public FPoint divXYZ(double x, double y, double z) {
 
         return divX(x).divY(y).divZ(z);
     }
 
     @Override
-    public FPoint div(FPoint arg) {
+    public FPoint divXYZ(FPoint arg) {
 
-        return div(arg.getX(), arg.getY(), arg.getZ());
+        return this.divXYZ(arg.getX(), arg.getY(), arg.getZ());
     }
 
     @Override
-    public FPoint div(FPos3D arg) {
+    public FPoint divXYZ(FPos3D arg) {
 
-        return div(arg.getD0(), arg.getD1(), arg.getD2());
+        return this.divXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
-    public FPoint div(double factor) {
+    public FPoint divFactor(double factor) {
 
-        return div(factor, factor, factor);
+        return this.divXYZ(factor, factor, factor);
     }
 
     @Override
@@ -496,7 +532,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("FPoints must not be on the same position");
         }
 
-        return sub(x, y, z).setMagnitude(distance).add(x, y, z);
+        return this.subXYZ(x, y, z).setMagnitude(distance).addXYZ(x, y, z);
     }
 
     @Override
@@ -530,7 +566,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
             throw new IllegalStateException("The vector is non-directional (the position is too close to zero)");
         }
 
-        return mul(magnitude / getMagnitude());
+        return this.mulFactor(magnitude / getMagnitude());
     }
 
     @Override
@@ -548,7 +584,7 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
     @Override
     public FPoint reflect(double x, double y, double z) {
 
-        return sub(x, y, z).reflectThroughCenter().add(x, y, z);
+        return this.subXYZ(x, y, z).reflectThroughCenter().addXYZ(x, y, z);
     }
 
     @Override

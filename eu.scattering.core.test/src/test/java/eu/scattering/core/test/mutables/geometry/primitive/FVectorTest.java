@@ -4559,12 +4559,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.add(fPoint);
+            fVector.addXYZ(fPoint);
 
             Assertions.assertAll("Validate FVectors",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().addXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().addXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4575,7 +4575,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
             FPoint fPoint = factory.getFPoint(3, 2, 1);
 
-            FVectorTestHelper.testReference(FVector::add, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::addXYZ, fVector, fPoint);
         }
 
         @Test
@@ -4585,12 +4585,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
 
-            fVector.add(fPos3D);
+            fVector.addXYZ(fPos3D);
 
             Assertions.assertAll("Validate FVectors",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().add(fPos3D)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().addXYZ(fPos3D)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().add(fPos3D)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().addXYZ(fPos3D)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4602,12 +4602,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.add(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+            fVector.addXYZ(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().addXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().add(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().addXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4617,7 +4617,7 @@ public class FVectorTest {
         void addPrimitivesValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.add(0, 0, 0), fVector);
+            FVectorTestHelper.testValue(e -> e.addXYZ(0, 0, 0), fVector);
         }
 
         @Test
@@ -4627,12 +4627,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             double value = random.nextDouble();
 
-            fVector.add(value);
+            fVector.addFactor(value);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().add(value)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().addFactor(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().add(value)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().addFactor(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4642,7 +4642,7 @@ public class FVectorTest {
         void addFactorValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.add(0), fVector);
+            FVectorTestHelper.testValue(e -> e.addFactor(0), fVector);
         }
 
         @Test
@@ -4727,12 +4727,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.sub(fPoint);
+            fVector.subXYZ(fPoint);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().subXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().subXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4743,7 +4743,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
             FPoint fPoint = factory.getFPoint(3, 2, 1);
 
-            FVectorTestHelper.testReference(FVector::sub, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::subXYZ, fVector, fPoint);
         }
 
         @Test
@@ -4753,12 +4753,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
 
-            fVector.sub(fPos3D);
+            fVector.subXYZ(fPos3D);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().sub(fPos3D)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().subXYZ(fPos3D)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().sub(fPos3D)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().subXYZ(fPos3D)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4770,12 +4770,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.sub(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+            fVector.subXYZ(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().subXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().sub(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().subXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4785,7 +4785,7 @@ public class FVectorTest {
         void subPrimitivesValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.sub(0, 0, 0), fVector);
+            FVectorTestHelper.testValue(e -> e.subXYZ(0, 0, 0), fVector);
         }
 
         @Test
@@ -4795,12 +4795,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             double value = random.nextDouble();
 
-            fVector.sub(value);
+            fVector.subFactor(value);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().sub(value)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().subFactor(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().sub(value)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().subFactor(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4810,7 +4810,7 @@ public class FVectorTest {
         void subFactorValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.sub(0), fVector);
+            FVectorTestHelper.testValue(e -> e.subFactor(0), fVector);
         }
 
         @Test
@@ -4895,12 +4895,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.mul(fPoint);
+            fVector.mulXYZ(fPoint);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mulXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mulXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4911,7 +4911,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
             FPoint fPoint = factory.getFPoint(3, 2, 1);
 
-            FVectorTestHelper.testReference(FVector::mul, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::mulXYZ, fVector, fPoint);
         }
 
         @Test
@@ -4921,12 +4921,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
 
-            fVector.mul(fPos3D);
+            fVector.mulXYZ(fPos3D);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mul(fPos3D)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mulXYZ(fPos3D)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mul(fPos3D)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mulXYZ(fPos3D)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4938,12 +4938,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.mul(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+            fVector.mulXYZ(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mulXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mul(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mulXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4953,7 +4953,7 @@ public class FVectorTest {
         void mulPrimitivesValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.mul(1, 1, 1), fVector);
+            FVectorTestHelper.testValue(e -> e.mulXYZ(1, 1, 1), fVector);
         }
 
         @Test
@@ -4963,12 +4963,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             double value = random.nextDouble();
 
-            fVector.mul(value);
+            fVector.mulFactor(value);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mul(value)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().mulFactor(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mul(value)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().mulFactor(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -4978,7 +4978,7 @@ public class FVectorTest {
         void mulFactorValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.mul(1), fVector);
+            FVectorTestHelper.testValue(e -> e.mulFactor(1), fVector);
         }
 
         @Test
@@ -5063,12 +5063,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.div(fPoint);
+            fVector.divXYZ(fPoint);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().divXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().divXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -5080,13 +5080,13 @@ public class FVectorTest {
 
             Assertions.assertAll("Division by zero",
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fVector.div(factory.getFPoint(0, 1, 1)),
+                            () -> fVector.divXYZ(factory.getFPoint(0, 1, 1)),
                             "The X value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fVector.div(factory.getFPoint(1, 0, 1)),
+                            () -> fVector.divXYZ(factory.getFPoint(1, 0, 1)),
                             "The Y value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fVector.div(factory.getFPoint(0, 1, 1)),
+                            () -> fVector.divXYZ(factory.getFPoint(0, 1, 1)),
                             "The Z value is zero")
             );
         }
@@ -5097,7 +5097,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
             FPoint fPoint = factory.getFPoint(3, 2, 1);
 
-            FVectorTestHelper.testReference(FVector::div, fVector, fPoint);
+            FVectorTestHelper.testReference(FVector::divXYZ, fVector, fPoint);
         }
 
         @Test
@@ -5107,12 +5107,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
 
-            fVector.div(fPos3D);
+            fVector.divXYZ(fPos3D);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().div(fPos3D)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().divXYZ(fPos3D)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().div(fPos3D)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().divXYZ(fPos3D)),
                             "The head FPoint is erroneous")
             );
         }
@@ -5124,12 +5124,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             FPoint fPoint = TestHelper.getRandomFPoint();
 
-            fVector.div(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+            fVector.divXYZ(fPoint.getX(), fPoint.getY(), fPoint.getZ());
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().divXYZ(fPoint)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().div(fPoint)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().divXYZ(fPoint)),
                             "The head FPoint is erroneous")
             );
         }
@@ -5141,11 +5141,11 @@ public class FVectorTest {
 
             Assertions.assertAll("Division by zero",
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fVector.div(0, 1, 1), "The X value is zero"),
+                            () -> fVector.divXYZ(0, 1, 1), "The X value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fVector.div(1, 0, 1), "The Y value is zero"),
+                            () -> fVector.divXYZ(1, 0, 1), "The Y value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fVector.div(0, 1, 1), "The Z value is zero")
+                            () -> fVector.divXYZ(0, 1, 1), "The Z value is zero")
             );
         }
 
@@ -5154,7 +5154,7 @@ public class FVectorTest {
         void divPrimitivesValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.div(1, 1, 1), fVector);
+            FVectorTestHelper.testValue(e -> e.divXYZ(1, 1, 1), fVector);
         }
 
         @Test
@@ -5164,12 +5164,12 @@ public class FVectorTest {
             FVector fVectorRef = fVector.copy();
             double value = random.nextDouble();
 
-            fVector.div(value);
+            fVector.divFactor(value);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().div(value)),
+                    () -> assertTrue(fVector.getRefBase().isExact(fVectorRef.getRefBase().copy().divFactor(value)),
                             "The base FPoint is erroneous"),
-                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().div(value)),
+                    () -> assertTrue(fVector.getRefHead().isExact(fVectorRef.getRefHead().copy().divFactor(value)),
                             "The head FPoint is erroneous")
             );
         }
@@ -5179,7 +5179,7 @@ public class FVectorTest {
         void divFactorThrowArithmeticException() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            Assertions.assertThrows(ArithmeticException.class, () -> fVector.div(0), "The X value is zero");
+            Assertions.assertThrows(ArithmeticException.class, () -> fVector.divFactor(0), "The X value is zero");
         }
 
         @Test
@@ -5187,7 +5187,7 @@ public class FVectorTest {
         void divFactorValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(e -> e.div(1), fVector);
+            FVectorTestHelper.testValue(e -> e.divFactor(1), fVector);
         }
 
         @Test

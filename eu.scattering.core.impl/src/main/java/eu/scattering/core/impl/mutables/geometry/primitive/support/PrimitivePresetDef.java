@@ -14,15 +14,15 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T add(FPoint arg) {
+    public T addXYZ(FPoint arg) {
 
-        disassemble().forEach(e -> e.add(arg.getX(), arg.getY(), arg.getZ()));
+        disassemble().forEach(e -> e.addXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
 
     @Override
-    public T add(double x, double y, double z) {
+    public T addXYZ(double x, double y, double z) {
 
         disassemble().forEach(e -> e.addX(x).addY(y).addZ(z));
 
@@ -30,9 +30,9 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T add(double factor) {
+    public T addFactor(double factor) {
 
-        disassemble().forEach(e -> e.add(factor, factor, factor));
+        disassemble().forEach(e -> e.addXYZ(factor, factor, factor));
 
         return self();
     }
@@ -62,15 +62,15 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T sub(FPoint arg) {
+    public T subXYZ(FPoint arg) {
 
-        disassemble().forEach(e -> e.sub(arg.getX(), arg.getY(), arg.getZ()));
+        disassemble().forEach(e -> e.subXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
 
     @Override
-    public T sub(double x, double y, double z) {
+    public T subXYZ(double x, double y, double z) {
 
         disassemble().forEach(e -> e.subX(x).subY(y).subZ(z));
 
@@ -78,9 +78,9 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T sub(double factor) {
+    public T subFactor(double factor) {
 
-        disassemble().forEach(e -> e.sub(factor, factor, factor));
+        disassemble().forEach(e -> e.subXYZ(factor, factor, factor));
 
         return self();
     }
@@ -110,15 +110,15 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T mul(FPoint arg) {
+    public T mulXYZ(FPoint arg) {
 
-        disassemble().forEach(e -> e.mul(arg.getX(), arg.getY(), arg.getZ()));
+        disassemble().forEach(e -> e.mulXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
 
     @Override
-    public T mul(double x, double y, double z) {
+    public T mulXYZ(double x, double y, double z) {
 
         disassemble().forEach(e -> e.mulX(x).mulY(y).mulZ(z));
 
@@ -126,9 +126,9 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T mul(double factor) {
+    public T mulFactor(double factor) {
 
-        disassemble().forEach(e -> e.mul(factor, factor, factor));
+        disassemble().forEach(e -> e.mulXYZ(factor, factor, factor));
 
         return self();
     }
@@ -158,15 +158,15 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T div(FPoint arg) {
+    public T divXYZ(FPoint arg) {
 
-        disassemble().forEach(e -> e.div(arg.getX(), arg.getY(), arg.getZ()));
+        disassemble().forEach(e -> e.divXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
 
     @Override
-    public T div(double x, double y, double z) {
+    public T divXYZ(double x, double y, double z) {
 
         disassemble().forEach(e -> e.divX(x).divY(y).divZ(z));
 
@@ -174,9 +174,9 @@ public abstract class PrimitivePresetDef<T extends Primitive<T>> implements Prim
     }
 
     @Override
-    public T div(double factor) {
+    public T divFactor(double factor) {
 
-        disassemble().forEach(e -> e.div(factor, factor, factor));
+        disassemble().forEach(e -> e.divXYZ(factor, factor, factor));
 
         return self();
     }

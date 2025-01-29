@@ -99,7 +99,7 @@ public class FRandomEngineDef implements FRandomEngine {
         FPoint[] exc = new FPoint[exclusion.length];
 
         for (int i = 0; i < exclusion.length ; i++ ) {
-            exc[i] = exclusion[i].copy().sub(origin.getRefBase());
+            exc[i] = exclusion[i].copy().subXYZ(origin.getRefBase());
         }
 
         rndAngle(fCopyLocal.getRefHead(), exc);

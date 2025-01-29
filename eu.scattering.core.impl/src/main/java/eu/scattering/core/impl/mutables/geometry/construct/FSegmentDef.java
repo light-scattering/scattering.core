@@ -326,13 +326,13 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
         in.applyStateFrom(origin.getRefHead());
 
-        in.sub(origin.getRefBase());
+        in.subXYZ(origin.getRefBase());
         in.normalize();
 
         double dotProduct = in.getDotProduct(headX, headY, headZ);
 
-        in.mul(dotProduct);
-        in.add(origin.getRefBase());
+        in.mulFactor(dotProduct);
+        in.addXYZ(origin.getRefBase());
 
         boolean isValid = isUnitPartOfSegment(in.getX(), in.getY(), in.getZ());
 

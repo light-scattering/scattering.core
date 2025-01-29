@@ -439,7 +439,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double memoOBZ = getBaseZ();
 
         moveBaseToCenter();
-        getRefHead().add(hX - bX, hY - bY, hZ - bZ);
+        getRefHead().addXYZ(hX - bX, hY - bY, hZ - bZ);
         moveBase(memoOBX, memoOBY, memoOBZ);
 
         return this;
@@ -488,7 +488,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double memoOBZ = getBaseZ();
 
         moveBaseToCenter();
-        getRefHead().sub(hX - bX, hY - bY, hZ - bZ);
+        getRefHead().subXYZ(hX - bX, hY - bY, hZ - bZ);
         moveBase(memoOBX, memoOBY, memoOBZ);
 
         return this;
@@ -531,27 +531,27 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector add(FPos3D arg) {
+    public FVector addXYZ(FPos3D arg) {
 
-        return add(arg.getD0(), arg.getD1(), arg.getD2());
+        return addXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
-    public FVector sub(FPos3D arg) {
+    public FVector subXYZ(FPos3D arg) {
 
-        return sub(arg.getD0(), arg.getD1(), arg.getD2());
+        return subXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
-    public FVector mul(FPos3D arg) {
+    public FVector mulXYZ(FPos3D arg) {
 
-        return mul(arg.getD0(), arg.getD1(), arg.getD2());
+        return mulXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
-    public FVector div(FPos3D arg) {
+    public FVector divXYZ(FPos3D arg) {
 
-        return div(arg.getD0(), arg.getD1(), arg.getD2());
+        return divXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
@@ -713,8 +713,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double distY = getRefBase().getY() - bY;
         double distZ = getRefBase().getZ() - bZ;
 
-        getRefBase().sub(distX, distY, distZ);
-        getRefHead().sub(distX, distY, distZ);
+        getRefBase().subXYZ(distX, distY, distZ);
+        getRefHead().subXYZ(distX, distY, distZ);
 
         return this;
     }
@@ -725,8 +725,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double distY = getRefBase().getY() - base.getY();
         double distZ = getRefBase().getZ() - base.getZ();
 
-        getRefBase().sub(distX, distY, distZ);
-        getRefHead().sub(distX, distY, distZ);
+        getRefBase().subXYZ(distX, distY, distZ);
+        getRefHead().subXYZ(distX, distY, distZ);
 
         return this;
     }
@@ -749,8 +749,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double distY = getRefHead().getY() - hY;
         double distZ = getRefHead().getZ() - hZ;
 
-        getRefBase().sub(distX, distY, distZ);
-        getRefHead().sub(distX, distY, distZ);
+        getRefBase().subXYZ(distX, distY, distZ);
+        getRefHead().subXYZ(distX, distY, distZ);
 
         return this;
     }
@@ -761,8 +761,8 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double distY = getRefHead().getY() - head.getY();
         double distZ = getRefHead().getZ() - head.getZ();
 
-        getRefBase().sub(distX, distY, distZ);
-        getRefHead().sub(distX, distY, distZ);
+        getRefBase().subXYZ(distX, distY, distZ);
+        getRefHead().subXYZ(distX, distY, distZ);
 
         return this;
     }
@@ -1358,12 +1358,12 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     @Override
     public FVector rotateAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
-        sub(bX, bY, bZ);
+        subXYZ(bX, bY, bZ);
 
         getRefHead().rotateAround(hX - bX, hY - bY, hZ - bZ, angle);
         getRefBase().rotateAround(hX - bX, hY - bY, hZ - bZ, angle);
 
-        add(bX, bY, bZ);
+        addXYZ(bX, bY, bZ);
 
         return this;
     }
@@ -1425,7 +1425,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double memoOHY = getHeadY();
         double memoOHZ = getHeadZ();
 
-        double results = getRefHead().sub(getRefBase()).getInclination();
+        double results = getRefHead().subXYZ(getRefBase()).getInclination();
 
         getRefHead().set(memoOHX, memoOHY, memoOHZ);
 
@@ -1451,7 +1451,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double memoOHY = getHeadY();
         double memoOHZ = getHeadZ();
 
-        double results = getRefHead().sub(getRefBase()).getAzimuth();
+        double results = getRefHead().subXYZ(getRefBase()).getAzimuth();
 
         getRefHead().set(memoOHX, memoOHY, memoOHZ);
 
@@ -1489,7 +1489,7 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double zeroAY = hY - bY;
         double zeroAZ = hZ - bZ;
 
-        getRefHead().sub(getRefBase());
+        getRefHead().subXYZ(getRefBase());
 
         double results = getRefHead().getAngle(zeroAX, zeroAY, zeroAZ);
 

@@ -178,7 +178,7 @@ public class FRayTest {
         void isExactFail() {
             FVector fVector = TestHelper.getRandomFVector();
             FRay fRayA = factory.getRefFRay(fVector.copy());
-            FRay fRayB = factory.getRefFRay(fVector.copy().add(0.5 * jitter));
+            FRay fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fRayA.isExact(fRayB), "FRays should not be equal"),
@@ -200,7 +200,7 @@ public class FRayTest {
         void isSimilar() {
             FVector fVector = TestHelper.getRandomFVector();
             FRay fRayA = factory.getRefFRay(fVector.copy());
-            FRay fRayB = factory.getRefFRay(fVector.copy().add(0.5 * jitter));
+            FRay fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fRayA.isSimilar(fRayB), "FRays should be similar"),
@@ -365,12 +365,12 @@ public class FRayTest {
 
             FPoint offset = TestHelper.getRandomFPoint();
 
-            fRay.getRefOrigin().add(offset);
-            fPoint.add(offset);
+            fRay.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
 
             fRay.project(fPoint);
 
-            assertTrue(factory.getFPoint(1, 1, 1).add(offset).isSimilar(fPoint));
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
 
         @Test
@@ -506,7 +506,7 @@ public class FRayTest {
         @Test
         @DisplayName("Location (below base)")
         void isPartOfPositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4);
 
@@ -516,7 +516,7 @@ public class FRayTest {
         @Test
         @DisplayName("Location (above head)")
         void isPartOfPositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
@@ -541,8 +541,8 @@ public class FRayTest {
 
             FPoint offset = TestHelper.getRandomFPoint();
 
-            fRay.getRefOrigin().add(offset);
-            fPoint.add(offset);
+            fRay.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
 
             assertEquals(Math.sqrt(6), fRay.getAtomicDistance(fPoint).get(0));
         }
@@ -565,8 +565,8 @@ public class FRayTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fRay.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fRay.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             fRay.setDistance(fPoint, 1);
 
@@ -577,7 +577,7 @@ public class FRayTest {
         @Test
         @DisplayName("Set distance (below base)")
         void setDistancePositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
@@ -589,7 +589,7 @@ public class FRayTest {
         @Test
         @DisplayName("Set distance (above head)")
         void setDistancePositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
@@ -606,8 +606,8 @@ public class FRayTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fRay.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fRay.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             fRay.setDistance(fPoint, -1);
 
@@ -623,8 +623,8 @@ public class FRayTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fRay.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fRay.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             FPoint fPointA = fPoint.copy();
             fRay.setDistance(fPointA,1);
@@ -649,7 +649,7 @@ public class FRayTest {
         @Test
         @DisplayName("Move forward")
         void moveForward() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
@@ -662,7 +662,7 @@ public class FRayTest {
         @Test
         @DisplayName("Move forward (negative)")
         void moveForwardNegative() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
@@ -685,7 +685,7 @@ public class FRayTest {
         @Test
         @DisplayName("Move backward")
         void moveBackward() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
@@ -698,7 +698,7 @@ public class FRayTest {
         @Test
         @DisplayName("Move backward (negative)")
         void moveBackwardNegative() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 

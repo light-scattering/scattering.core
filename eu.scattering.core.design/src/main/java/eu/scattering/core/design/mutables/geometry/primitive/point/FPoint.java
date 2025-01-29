@@ -6,6 +6,7 @@ import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -29,6 +30,14 @@ public interface FPoint extends Primitive<FPoint> {
     FPos3D toFPos3D();
 
     //--------------------------------------------------
+
+    FPoint add(double x, double y, double z);
+    FPoint add(FPoint arg);
+    FPoint add(FPos3D arg);
+
+    FPoint sub(double x, double y, double z);
+    FPoint sub(FPoint arg);
+    FPoint sub(FPos3D arg);
 
     boolean isZero();
     boolean isNearZero();

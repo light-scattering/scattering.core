@@ -49,6 +49,20 @@ public interface FVector extends Primitive<FVector> {
 
     //--------------------------------------------------
 
+    FVector add(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    FVector add(FVector arg);
+    FVector add(FPairPos3D arg);
+    FVector addSimple(double hX, double hY, double hZ);
+    FVector addSimple(FPoint head);
+    FVector addSimple(FPos3D head);
+
+    FVector sub(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    FVector sub(FVector arg);
+    FVector sub(FPairPos3D arg);
+    FVector subSimple(double hX, double hY, double hZ);
+    FVector subSimple(FPoint head);
+    FVector subSimple(FPos3D head);
+
     boolean isZeroLength();
     boolean isNearZeroLength();
 
@@ -88,20 +102,6 @@ public interface FVector extends Primitive<FVector> {
 
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
-
-    FVector add(double bX, double bY, double bZ, double hX, double hY, double hZ);
-    FVector add(FVector arg);
-    FVector add(FPairPos3D arg);
-    FVector addSimple(double hX, double hY, double hZ);
-    FVector addSimple(FPoint head);
-    FVector addSimple(FPos3D head);
-
-    FVector sub(double bX, double bY, double bZ, double hX, double hY, double hZ);
-    FVector sub(FVector arg);
-    FVector sub(FPairPos3D arg);
-    FVector subSimple(double hX, double hY, double hZ);
-    FVector subSimple(FPoint head);
-    FVector subSimple(FPos3D head);
 
     double getLengthX();
     double getLengthY();

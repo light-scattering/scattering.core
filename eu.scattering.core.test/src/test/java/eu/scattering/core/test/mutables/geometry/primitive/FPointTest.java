@@ -1896,7 +1896,7 @@ public class FPointTest {
         @DisplayName("Exactness (fail)")
         void isExactFail() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
-            FPoint fPointArg = factory.getFPoint(refX, refY, refZ).add(0.5 * jitter);
+            FPoint fPointArg = factory.getFPoint(refX, refY, refZ).addFactor(0.5 * jitter);
 
             Assertions.assertAll("Check combinations",
                     () -> assertFalse(fPointRef.isExact(fPointArg), "FPoints should not be equal"),
@@ -2155,11 +2155,93 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Add FPoint (native)")
+        void addFPointNative() {
+            FPoint fPointArg = factory.getFPoint(argX, argY, argZ);
+
+            fPoint.add(fPointArg);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY + argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ + argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Add FPos3D (native)")
+        void addFPos3DNative() {
+            FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
+
+            fPoint.add(fPos3D);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY + argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ + argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Add primitives (native)")
+        void addPrimitivesNative() {
+
+            fPoint.add(argX, argY, argZ);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY + argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ + argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub FPoint (native)")
+        void subFPointNative() {
+            FPoint fPointOp = factory.getFPoint(argX, argY, argZ);
+
+            fPoint.sub(fPointOp);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY - argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ - argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub FPos3D (native)")
+        void subFPos3DNative() {
+            FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
+
+            fPoint.sub(fPos3D);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY - argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ - argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub primitives (native)")
+        void subPrimitivesNative() {
+
+            fPoint.sub(argX, argY, argZ);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY - argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ - argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Add FPoint")
         void addFPoint() {
             FPoint fPointArg = factory.getFPoint(argX, argY, argZ);
 
-            fPoint.add(fPointArg);
+            fPoint.addXYZ(fPointArg);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
@@ -2174,7 +2256,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
-            FPointTestHelper.testReference(FPoint::add, fPointRef, fPointArg);
+            FPointTestHelper.testReference(FPoint::addXYZ, fPointRef, fPointArg);
         }
 
         @Test
@@ -2182,7 +2264,7 @@ public class FPointTest {
         void addFPos3D() {
             FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
 
-            fPoint.add(fPos3D);
+            fPoint.addXYZ(fPos3D);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
@@ -2195,7 +2277,7 @@ public class FPointTest {
         @DisplayName("Add primitives")
         void addPrimitives() {
 
-            fPoint.add(argX, argY, argZ);
+            fPoint.addXYZ(argX, argY, argZ);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
@@ -2209,7 +2291,7 @@ public class FPointTest {
         void addPrimitivesValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.add(0, 0, 0), fPointRef);
+            FPointTestHelper.testReference(e -> e.addXYZ(0, 0, 0), fPointRef);
         }
 
         @Test
@@ -2217,7 +2299,7 @@ public class FPointTest {
         void addFactor() {
             double op = argX * argY * argZ;
 
-            fPoint.add(op);
+            fPoint.addFactor(op);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX + op, fPoint.getX(), "The X value is incorrect"),
@@ -2231,7 +2313,7 @@ public class FPointTest {
         void addFactorValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.add(1), fPointRef);
+            FPointTestHelper.testReference(e -> e.addFactor(1), fPointRef);
         }
 
         @Test
@@ -2302,7 +2384,7 @@ public class FPointTest {
         void subFPoint() {
             FPoint fPointOp = factory.getFPoint(argX, argY, argZ);
 
-            fPoint.sub(fPointOp);
+            fPoint.subXYZ(fPointOp);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
@@ -2317,7 +2399,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
-            FPointTestHelper.testReference(FPoint::sub, fPointRef, fPointArg);
+            FPointTestHelper.testReference(FPoint::subXYZ, fPointRef, fPointArg);
         }
 
         @Test
@@ -2325,7 +2407,7 @@ public class FPointTest {
         void subFPos3D() {
             FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
 
-            fPoint.sub(fPos3D);
+            fPoint.subXYZ(fPos3D);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
@@ -2338,7 +2420,7 @@ public class FPointTest {
         @DisplayName("Sub primitives")
         void subPrimitives() {
 
-            fPoint.sub(argX, argY, argZ);
+            fPoint.subXYZ(argX, argY, argZ);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
@@ -2352,7 +2434,7 @@ public class FPointTest {
         void subPrimitivesValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.sub(0, 0, 0), fPointRef);
+            FPointTestHelper.testReference(e -> e.subXYZ(0, 0, 0), fPointRef);
         }
 
         @Test
@@ -2360,7 +2442,7 @@ public class FPointTest {
         void subFactor() {
             double op = argX * argY * argZ;
 
-            fPoint.sub(op);
+            fPoint.subFactor(op);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX - op, fPoint.getX(), "The X value is incorrect"),
@@ -2374,7 +2456,7 @@ public class FPointTest {
         void subFactorValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.sub(1), fPointRef);
+            FPointTestHelper.testReference(e -> e.subFactor(1), fPointRef);
         }
 
         @Test
@@ -2445,7 +2527,7 @@ public class FPointTest {
         void mulFPoint() {
             FPoint fPointArg = factory.getFPoint(argX, argY, argZ);
 
-            fPoint.mul(fPointArg);
+            fPoint.mulXYZ(fPointArg);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX * argX, fPoint.getX(), "The X value is incorrect"),
@@ -2460,7 +2542,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
-            FPointTestHelper.testReference(FPoint::mul, fPointRef, fPointArg);
+            FPointTestHelper.testReference(FPoint::mulXYZ, fPointRef, fPointArg);
         }
 
         @Test
@@ -2468,7 +2550,7 @@ public class FPointTest {
         void mulFPos3D() {
             FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
 
-            fPoint.mul(fPos3D);
+            fPoint.mulXYZ(fPos3D);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX * argX, fPoint.getX(), "The X value is incorrect"),
@@ -2481,7 +2563,7 @@ public class FPointTest {
         @DisplayName("Mul primitives")
         void mulPrimitives() {
 
-            fPoint.mul(argX, argY, argZ);
+            fPoint.mulXYZ(argX, argY, argZ);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX * argX, fPoint.getX(), "The X value is incorrect"),
@@ -2495,7 +2577,7 @@ public class FPointTest {
         void mulPrimitivesValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.mul(0, 0, 0), fPointRef);
+            FPointTestHelper.testReference(e -> e.mulXYZ(0, 0, 0), fPointRef);
         }
 
         @Test
@@ -2503,7 +2585,7 @@ public class FPointTest {
         void mulFactor() {
             double op = argX * argY * argZ;
 
-            fPoint.mul(op);
+            fPoint.mulFactor(op);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX * op, fPoint.getX(), "The X value is incorrect"),
@@ -2517,7 +2599,7 @@ public class FPointTest {
         void mulFactorValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.mul(1), fPointRef);
+            FPointTestHelper.testReference(e -> e.mulFactor(1), fPointRef);
         }
 
         @Test
@@ -2588,7 +2670,7 @@ public class FPointTest {
         void divFPoint() {
             FPoint fPointArg = factory.getFPoint(argX, argY, argZ);
 
-            fPoint.div(fPointArg);
+            fPoint.divXYZ(fPointArg);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX / argX, fPoint.getX(), "The X value is incorrect"),
@@ -2603,13 +2685,13 @@ public class FPointTest {
 
             Assertions.assertAll("Division by zero",
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fPoint.div(factory.getFPoint(0, 1, 1)),
+                            () -> fPoint.divXYZ(factory.getFPoint(0, 1, 1)),
                             "The X value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fPoint.div(factory.getFPoint(1, 0, 1)),
+                            () -> fPoint.divXYZ(factory.getFPoint(1, 0, 1)),
                             "The Y value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fPoint.div(factory.getFPoint(0, 1, 1)),
+                            () -> fPoint.divXYZ(factory.getFPoint(0, 1, 1)),
                             "The Z value is zero")
             );
         }
@@ -2620,7 +2702,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
-            FPointTestHelper.testReference(FPoint::mul, fPointRef, fPointArg);
+            FPointTestHelper.testReference(FPoint::mulXYZ, fPointRef, fPointArg);
         }
 
         @Test
@@ -2628,7 +2710,7 @@ public class FPointTest {
         void divFPos3D() {
             FPos3D fPos3D = factory.getFPos3D(argX, argY, argZ);
 
-            fPoint.div(fPos3D);
+            fPoint.divXYZ(fPos3D);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX / argX, fPoint.getX(), "The X value is incorrect"),
@@ -2641,7 +2723,7 @@ public class FPointTest {
         @DisplayName("Div primitives")
         void divPrimitives() {
 
-            fPoint.div(argX, argY, argZ);
+            fPoint.divXYZ(argX, argY, argZ);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX / argX, fPoint.getX(), "The X value is incorrect"),
@@ -2656,11 +2738,11 @@ public class FPointTest {
 
             Assertions.assertAll("Division by zero",
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fPoint.div(0, 1, 1), "The X value is zero"),
+                            () -> fPoint.divXYZ(0, 1, 1), "The X value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fPoint.div(1, 0, 1), "The Y value is zero"),
+                            () -> fPoint.divXYZ(1, 0, 1), "The Y value is zero"),
                     () -> Assertions.assertThrows(ArithmeticException.class,
-                            () -> fPoint.div(0, 1, 1), "The Z value is zero")
+                            () -> fPoint.divXYZ(0, 1, 1), "The Z value is zero")
             );
         }
 
@@ -2669,7 +2751,7 @@ public class FPointTest {
         void divPrimitivesValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.div(1, 1, 1), fPointRef);
+            FPointTestHelper.testReference(e -> e.divXYZ(1, 1, 1), fPointRef);
         }
 
         @Test
@@ -2677,7 +2759,7 @@ public class FPointTest {
         void divFactor() {
             double arg = argX * argY * argZ;
 
-            fPoint.div(arg);
+            fPoint.divFactor(arg);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX / arg, fPoint.getX(), "The X value is incorrect"),
@@ -2690,7 +2772,7 @@ public class FPointTest {
         @DisplayName("Div factor (throw ArithmeticException)")
         void divFactorThrowArithmeticException() {
 
-            Assertions.assertThrows(ArithmeticException.class, () -> fPoint.div(0), "The factor is zero");
+            Assertions.assertThrows(ArithmeticException.class, () -> fPoint.divFactor(0), "The factor is zero");
         }
 
         @Test
@@ -2698,7 +2780,7 @@ public class FPointTest {
         void divFactorValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
-            FPointTestHelper.testReference(e -> e.div(1), fPointRef);
+            FPointTestHelper.testReference(e -> e.divFactor(1), fPointRef);
         }
 
         @Test

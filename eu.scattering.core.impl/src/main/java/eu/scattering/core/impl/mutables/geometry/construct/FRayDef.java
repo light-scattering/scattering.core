@@ -247,7 +247,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         var fPoint = fPointSupplier.get();
 
         fPoint.applyStateFrom(getRefOrigin().getRefHead());
-        fPoint.sub(getRefOrigin().getRefBase());
+        fPoint.subXYZ(getRefOrigin().getRefBase());
 
         var tmp = length / getRefOrigin().getMagnitude();
 
@@ -376,7 +376,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
         in.set(zeroOHX, zeroOHY, zeroOHZ);
         in.setMagnitude(dist);
-        in.add(memoX, memoY, memoZ);
+        in.addXYZ(memoX, memoY, memoZ);
     }
 
     private void shiftUnitBackward(FPoint in, double dist) {
@@ -399,7 +399,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         in.set(zeroOHX, zeroOHY, zeroOHZ);
         in.setMagnitude(dist);
         in.reflectThroughCenter();
-        in.add(memoX, memoY, memoZ);
+        in.addXYZ(memoX, memoY, memoZ);
     }
 
     private boolean projectUnit(FPoint in) {
@@ -415,13 +415,13 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
         in.applyStateFrom(origin.getRefHead());
 
-        in.sub(origin.getRefBase());
+        in.subXYZ(origin.getRefBase());
         in.normalize();
 
         double dotProduct = in.getDotProduct(headX, headY, headZ);
 
-        in.mul(dotProduct);
-        in.add(origin.getRefBase());
+        in.mulFactor(dotProduct);
+        in.addXYZ(origin.getRefBase());
 
         boolean isValid = isUnitPartOfRay(in.getX(), in.getY(), in.getZ());
 

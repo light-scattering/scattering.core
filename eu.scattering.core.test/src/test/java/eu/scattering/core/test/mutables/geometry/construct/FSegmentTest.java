@@ -178,7 +178,7 @@ public class FSegmentTest {
         void isExactFail() {
             FVector fVector = TestHelper.getRandomFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector.copy());
-            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().add(0.5 * jitter));
+            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fSegmentA.isExact(fSegmentB), "FSegments should not be equal"),
@@ -200,7 +200,7 @@ public class FSegmentTest {
         void isSimilar() {
             FVector fVector = TestHelper.getRandomFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector.copy());
-            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().add(0.5 * jitter));
+            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fSegmentA.isSimilar(fSegmentB), "FSegments should be similar"),
@@ -365,12 +365,12 @@ public class FSegmentTest {
 
             FPoint offset = TestHelper.getRandomFPoint();
 
-            fSegment.getRefOrigin().add(offset);
-            fPoint.add(offset);
+            fSegment.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
 
             fSegment.project(fPoint);
 
-            assertTrue(factory.getFPoint(1, 1, 1).add(offset).isSimilar(fPoint));
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
 
         @Test
@@ -506,7 +506,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Location (below base)")
         void isPartOfPositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4);
 
@@ -516,7 +516,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Location (above head)")
         void isPartOfPositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
 
@@ -541,8 +541,8 @@ public class FSegmentTest {
 
             FPoint offset = TestHelper.getRandomFPoint();
 
-            fSegment.getRefOrigin().add(offset);
-            fPoint.add(offset);
+            fSegment.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
 
             assertEquals(Math.sqrt(6), fSegment.getAtomicDistance(fPoint).get(0));
         }
@@ -565,8 +565,8 @@ public class FSegmentTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fSegment.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fSegment.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             fSegment.setDistance(fPoint, 1);
 
@@ -577,7 +577,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Set distance (below base)")
         void setDistancePositionBase() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
@@ -589,7 +589,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Set distance (above head)")
         void setDistancePositionHead() {
-            FVector fVector = factory.getFVector(4, 4, 4).sub(2);
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
@@ -606,8 +606,8 @@ public class FSegmentTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fSegment.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fSegment.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             fSegment.setDistance(fPoint, -1);
 
@@ -623,8 +623,8 @@ public class FSegmentTest {
 
             FPoint relocation = TestHelper.getRandomFPoint();
 
-            fSegment.getRefOrigin().add(relocation);
-            fPoint.add(relocation);
+            fSegment.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
 
             FPoint fPointA = fPoint.copy();
             fSegment.setDistance(fPointA,1);

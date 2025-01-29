@@ -8,34 +8,34 @@ import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 public interface Primitive<T> extends Geometry, Mutable<T> {
 
-    T add(FPoint arg);
-    T add(FPos3D arg);
-    T add(double x, double y, double z);
-    T add(double factor);
+    T addXYZ(FPoint arg);
+    T addXYZ(FPos3D arg);
+    T addXYZ(double x, double y, double z);
+    T addFactor(double factor);
     T addX(double x);
     T addY(double y);
     T addZ(double z);
 
-    T sub(FPoint arg);
-    T sub(FPos3D arg);
-    T sub(double x, double y, double z);
-    T sub(double factor);
+    T subXYZ(FPoint arg);
+    T subXYZ(FPos3D arg);
+    T subXYZ(double x, double y, double z);
+    T subFactor(double factor);
     T subX(double x);
     T subY(double y);
     T subZ(double z);
 
-    T mul(FPoint arg);
-    T mul(FPos3D arg);
-    T mul(double x, double y, double z);
-    T mul(double factor);
+    T mulXYZ(FPoint arg);
+    T mulXYZ(FPos3D arg);
+    T mulXYZ(double x, double y, double z);
+    T mulFactor(double factor);
     T mulX(double x);
     T mulY(double y);
     T mulZ(double z);
 
-    T div(FPoint arg);
-    T div(FPos3D arg);
-    T div(double x, double y, double z);
-    T div(double factor);
+    T divXYZ(FPoint arg);
+    T divXYZ(FPos3D arg);
+    T divXYZ(double x, double y, double z);
+    T divFactor(double factor);
     T divX(double x);
     T divY(double y);
     T divZ(double z);

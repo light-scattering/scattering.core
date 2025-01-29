@@ -283,14 +283,14 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         double d3 = aHead.getDotProduct(aHead);
 
-        resHead.mul(d1);
+        resHead.mulFactor(d1);
 
-        resBase.mul(d2);
-        resBase.sub(resHead);
+        resBase.mulFactor(d2);
+        resBase.subXYZ(resHead);
         resBase.setCrossProduct(aHead);
-        resBase.div(d3);
+        resBase.divFactor(d3);
 
-        aHead.add(resBase);
+        aHead.addXYZ(resBase);
 
         resHead.applyStateFrom(aHead);
 
@@ -386,13 +386,13 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         in.applyStateFrom(origin.getRefHead());
 
-        in.sub(origin.getRefBase());
+        in.subXYZ(origin.getRefBase());
         in.normalize();
 
         double dotProduct = in.getDotProduct(headX, headY, headZ);
 
-        in.mul(dotProduct);
-        in.add(memoAX, memoAY, memoAZ);
+        in.mulFactor(dotProduct);
+        in.addXYZ(memoAX, memoAY, memoAZ);
     }
 
     private void reflectUnit(FPoint in) {

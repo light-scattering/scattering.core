@@ -424,7 +424,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double baseY = in.getRefBase().getY();
         double baseZ = in.getRefBase().getZ();
 
-        return in.mul(factor).moveBase(baseX, baseY, baseZ).getRefHead();
+        return in.mulFactor(factor).moveBase(baseX, baseY, baseZ).getRefHead();
     }
 
     private FPoint setCandidate3D(FPoint in, Plane plane) {
@@ -584,13 +584,13 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         in.applyStateFrom(origin.getRefHead());
 
-        in.sub(origin.getRefBase());
+        in.subXYZ(origin.getRefBase());
         in.normalize();
 
         double dotProduct = in.getDotProduct(headX, headY, headZ);
 
-        in.mul(dotProduct);
-        in.add(origin.getRefBase());
+        in.mulFactor(dotProduct);
+        in.addXYZ(origin.getRefBase());
     }
 
     // -------------------------------------------------------------------------------------------------
