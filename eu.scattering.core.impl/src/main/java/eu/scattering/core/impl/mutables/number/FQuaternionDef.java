@@ -260,7 +260,7 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion add(double factor) {
+    public FQuaternion addFactor(double factor) {
 
         return add(factor, factor, factor, factor);
     }
@@ -308,7 +308,7 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion sub(double factor) {
+    public FQuaternion subFactor(double factor) {
 
         return sub(factor, factor, factor, factor);
     }
@@ -374,7 +374,7 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion mul(double factor) {
+    public FQuaternion mulFactor(double factor) {
 
         return mulRe(factor).mulI(factor).mulJ(factor).mulK(factor);
     }
@@ -443,7 +443,7 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion div(double factor) {
+    public FQuaternion divFactor(double factor) {
 
         return divRe(factor).divI(factor).divJ(factor).divK(factor);
     }
@@ -591,7 +591,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FQuaternion negate() {
 
-        return mul(-1);
+        return mulFactor(-1);
     }
 
     @Override

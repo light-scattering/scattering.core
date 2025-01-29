@@ -10,10 +10,10 @@ public interface Number<T> extends Mutable<T> {
     T mul(T arg);
     T div(T arg);
 
-    T add(double factor);
-    T sub(double factor);
-    T mul(double factor);
-    T div(double factor);
+    T addFactor(double factor);
+    T subFactor(double factor);
+    T mulFactor(double factor);
+    T divFactor(double factor);
 
     boolean isZero();
 
@@ -34,6 +34,7 @@ public interface Number<T> extends Mutable<T> {
     T applyStateTo(T arg);
     T applyStateFrom(T arg);
 
+    // TODO - Out
     @Fragment
     double getMagnitudeP2();
     @Fragment

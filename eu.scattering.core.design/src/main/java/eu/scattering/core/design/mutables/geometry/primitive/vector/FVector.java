@@ -78,8 +78,6 @@ public interface FVector extends Primitive<FVector> {
     boolean isSimilarSimple(FPoint head);
     boolean isSimilarSimple(FPos3D head);
 
-    FVector normalize();
-
     FVector moveBaseToCenter();
     FVector moveBase(double bX, double bY, double bZ);
     FVector moveBase(FPoint base);
@@ -102,6 +100,8 @@ public interface FVector extends Primitive<FVector> {
 
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
+
+    FVector normalize();
 
     double getLengthX();
     double getLengthY();

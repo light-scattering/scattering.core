@@ -2,6 +2,7 @@ package eu.scattering.core.design.mutables.number.complex;
 
 import eu.scattering.core.design.annotations.Extension;
 import eu.scattering.core.design.annotations.Facade;
+import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.number.Number;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
@@ -21,17 +22,23 @@ public interface FComplex extends Number<FComplex> {
 
     //--------------------------------------------------
 
-    FComplex set(FPos2D position);
+    FComplex applyStateFrom(FPos2D position);
 
     FPos2D toFPos2D();
 
     //--------------------------------------------------
 
     boolean isExact(double re, double im);
+    boolean isExact(FPos2D arg);
+
     boolean isSimilar(double re, double im);
+    boolean isSimilar(FPos2D arg);
 
     double getPhase();
     FComplex setPhase(double phase);
+
+    FComplex add(FPos2D arg);
+    FComplex sub(FPos2D arg);
 
     FComplex add(double re, double im);
     FComplex addRe(double re);
@@ -49,7 +56,20 @@ public interface FComplex extends Number<FComplex> {
     FComplex divRe(double re);
     FComplex divIm(double im);
 
+    double getDistance(double re, double im);
+    double getDistance(FPos2D arg);
+
+    FComplex setDistance(double re, double im, double distance);
+    FComplex setDistance(FPos2D arg, double distance);
+
     //--------------------------------------------------
+
+    @Fragment
+    double getMagnitudeP2();
+    @Fragment
+    double getDistanceP2(FComplex arg);
+    @Fragment
+    double getDistanceP2(FPos2D arg);
 
     @Extension
     FComplex apply(Consumer<FComplex> action);

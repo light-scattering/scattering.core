@@ -323,7 +323,7 @@ public class FQuaternionTest {
         void addFactor() {
             double op = argRe * argI * argJ * argK;
 
-            refFQuaternion.add(op);
+            refFQuaternion.addFactor(op);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe + op, refFQuaternion.getRe(),
@@ -341,7 +341,7 @@ public class FQuaternionTest {
         @DisplayName("Add factor (validate)")
         void addFactorValidate() {
 
-            FQuaternionTestHelper.restReference(e -> e.add(0), refFQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.addFactor(0), refFQuaternion);
         }
 
         @Test
@@ -524,7 +524,7 @@ public class FQuaternionTest {
         void subFactor() {
             double op = argRe * argI * argJ * argK;
 
-            refFQuaternion.sub(op);
+            refFQuaternion.subFactor(op);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe - op, refFQuaternion.getRe(),
@@ -542,7 +542,7 @@ public class FQuaternionTest {
         @DisplayName("Sub factor (validate)")
         void subFactorValidate() {
 
-            FQuaternionTestHelper.restReference(e -> e.sub(0), refFQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.subFactor(0), refFQuaternion);
         }
 
         @Test
@@ -733,7 +733,7 @@ public class FQuaternionTest {
         void mulFactor() {
             double op = argRe * argI * argJ * argK;
 
-            refFQuaternion.mul(op);
+            refFQuaternion.mulFactor(op);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe * op, refFQuaternion.getRe(),
@@ -751,7 +751,7 @@ public class FQuaternionTest {
         @DisplayName("Mul factor (validate)")
         void mulFactorValidate() {
 
-            FQuaternionTestHelper.restReference(e -> e.mul(0), refFQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.mulFactor(0), refFQuaternion);
         }
 
         @Test
@@ -926,7 +926,7 @@ public class FQuaternionTest {
         void divFactor() {
             double op = argRe * argI * argJ * argK;
 
-            refFQuaternion.div(op);
+            refFQuaternion.divFactor(op);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe / op, refFQuaternion.getRe(),
@@ -944,7 +944,7 @@ public class FQuaternionTest {
         @DisplayName("Div factor (validate)")
         void divFactorValidate() {
 
-            FQuaternionTestHelper.restReference(e -> e.div(1), refFQuaternion);
+            FQuaternionTestHelper.restReference(e -> e.divFactor(1), refFQuaternion);
         }
 
         @Test
@@ -1179,7 +1179,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Exactness (fail)")
         void isExactFail() {
-            FQuaternion fQuaternionArg = refFQuaternion.copy().add(0.5 * jitter);
+            FQuaternion fQuaternionArg = refFQuaternion.copy().addFactor(0.5 * jitter);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(refFQuaternion.isExact(fQuaternionArg),
@@ -1192,7 +1192,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Exactness (validate)")
         void isExactValidate() {
-            FQuaternion fQuaternionArg = refFQuaternion.copy().add(0.5 * jitter);
+            FQuaternion fQuaternionArg = refFQuaternion.copy().addFactor(0.5 * jitter);
 
             FQuaternionTestHelper.testValue(FQuaternion::isExact, refFQuaternion, fQuaternionArg);
         }
@@ -1293,7 +1293,7 @@ public class FQuaternionTest {
         @Test
         @DisplayName("Similarity (validate)")
         void isSimilarValidate() {
-            FQuaternion fQuaternionArg = refFQuaternion.copy().add(0.5 * jitter);
+            FQuaternion fQuaternionArg = refFQuaternion.copy().addFactor(0.5 * jitter);
 
             FQuaternionTestHelper.testValue(FQuaternion::isSimilar, refFQuaternion, fQuaternionArg);
         }

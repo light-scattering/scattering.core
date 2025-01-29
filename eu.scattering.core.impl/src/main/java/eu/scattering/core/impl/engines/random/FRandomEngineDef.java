@@ -34,7 +34,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FComplex rndPosition(FComplex origin, FPairPos2D range, FComplex... exclusion) {
         FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
 
-        origin.set(core.nextDouble2D(range, exc));
+        origin.applyStateFrom(core.nextDouble2D(range, exc));
 
         return origin;
     }
@@ -43,7 +43,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FComplex rndPosition(FComplex origin, double radius, FComplex... exclusion) {
         FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
 
-        origin.set(core.nextDoubleOnCircle(radius, exc));
+        origin.applyStateFrom(core.nextDoubleOnCircle(radius, exc));
 
         return origin;
     }

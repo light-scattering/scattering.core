@@ -81,17 +81,9 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex set(FPos2D position) {
+    public FComplex applyStateFrom(FPos2D position) {
 
         return set(position.getD0(), position.getD1());
-    }
-
-    @Override
-    public FComplex applyStateTo(FComplex arg) {
-
-        arg.applyStateFrom(this);
-
-        return this;
     }
 
     @Override
@@ -114,38 +106,15 @@ public class FComplexDef implements FComplex {
         return set(re, im);
     }
 
+    @Override
+    public FComplex applyStateTo(FComplex arg) {
+
+        arg.applyStateFrom(this);
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean isExact(FComplex arg) {
-
-        if (arg == null) {
-            throw new NullPointerException("The reference FComplex cannot be null");
-        }
-
-        if (this == arg) {
-            return true;
-        }
-
-        return getRe() == arg.getRe() && getIm() == arg.getIm();
-    }
-
-    @Override
-    public boolean isSimilar(FComplex arg) {
-
-        if (arg == null) {
-            throw new NullPointerException("The reference FComplex cannot be null");
-        }
-
-        if (this == arg) {
-            return true;
-        }
-
-        double distanceRe = Math.abs(getRe() - arg.getRe());
-        double distanceIm = Math.abs(getIm() - arg.getIm());
-
-        return distanceRe < epsilon && distanceIm < epsilon;
-    }
 
     @Override
     public FComplex self() {
@@ -211,6 +180,12 @@ public class FComplexDef implements FComplex {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public FComplex add(FPos2D arg) {
+
+        return add(arg.getD0(), arg.getD1());
+    }
+
+    @Override
     public FComplex add(FComplex arg) {
 
         return add(arg.getRe(), arg.getIm());
@@ -223,7 +198,7 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex add(double factor) {
+    public FComplex addFactor(double factor) {
 
         return add(factor, factor);
     }
@@ -241,6 +216,12 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
+    public FComplex sub(FPos2D arg) {
+
+        return sub(arg.getD0(), arg.getD1());
+    }
+
+    @Override
     public FComplex sub(FComplex arg) {
 
         return sub(arg.getRe(), arg.getIm());
@@ -253,7 +234,7 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex sub(double factor) {
+    public FComplex subFactor(double factor) {
 
         return sub(factor, factor);
     }
@@ -287,7 +268,7 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex mul(double factor) {
+    public FComplex mulFactor(double factor) {
 
         return mulRe(factor).mulIm(factor);
     }
@@ -333,7 +314,7 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex div(double factor) {
+    public FComplex divFactor(double factor) {
 
         return divRe(factor).divIm(factor);
     }
@@ -373,11 +354,54 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
+    public boolean isExact(FComplex arg) {
+
+        if (arg == null) {
+            throw new NullPointerException("The reference FComplex cannot be null");
+        }
+
+        if (this == arg) {
+            return true;
+        }
+
+        return getRe() == arg.getRe() && getIm() == arg.getIm();
+    }
+
+    @Override
+    public boolean isExact(FPos2D arg) {
+
+        return isExact(arg.getD0(), arg.getD1());
+    }
+
+    @Override
     public boolean isSimilar(double re, double im) {
-        double distanceRe = Math.abs(getRe() - re);
-        double distanceIm = Math.abs(getIm() - im);
+        double distRe = Math.abs(getRe() - re);
+        double distIm = Math.abs(getIm() - im);
+
+        return distRe < epsilon && distIm < epsilon;
+    }
+
+    @Override
+    public boolean isSimilar(FComplex arg) {
+
+        if (arg == null) {
+            throw new NullPointerException("The reference FComplex cannot be null");
+        }
+
+        if (this == arg) {
+            return true;
+        }
+
+        double distanceRe = Math.abs(getRe() - arg.getRe());
+        double distanceIm = Math.abs(getIm() - arg.getIm());
 
         return distanceRe < epsilon && distanceIm < epsilon;
+    }
+
+    @Override
+    public boolean isSimilar(FPos2D arg) {
+
+        return isSimilar(arg.getD0(), arg.getD1());
     }
 
     @Override
@@ -401,25 +425,59 @@ public class FComplexDef implements FComplex {
 
     @Override
     public double getDistanceP2(FComplex arg) {
-        double distanceRe = Math.abs(getRe() - arg.getRe());
-        double distanceIm = Math.abs(getIm() - arg.getIm());
+        double distRe = Math.abs(getRe() - arg.getRe());
+        double distIm = Math.abs(getIm() - arg.getIm());
 
-        return (distanceRe * distanceRe) + (distanceIm * distanceIm);
+        return (distRe * distRe) + (distIm * distIm);
+    }
+
+    @Override
+    public double getDistanceP2(FPos2D arg) {
+        double distRe = Math.abs(getRe() - arg.getD0());
+        double distIm = Math.abs(getIm() - arg.getD1());
+
+        return (distRe * distRe) + (distIm * distIm);
+    }
+
+    @Override
+    public double getDistance(double re, double im) {
+        double distRe = Math.abs(getRe() - re);
+        double distIm = Math.abs(getIm() - im);
+
+        return Math.sqrt((distRe * distRe) + (distIm * distIm));
     }
 
     @Override
     public double getDistance(FComplex arg) {
-        double distanceRe = Math.abs(getRe() - arg.getRe());
-        double distanceIm = Math.abs(getIm() - arg.getIm());
 
-        return Math.sqrt((distanceRe * distanceRe) + (distanceIm * distanceIm));
+        return getDistance(arg.getRe(), arg.getIm());
+    }
+
+    @Override
+    public double getDistance(FPos2D arg) {
+
+        return getDistance(arg.getD0(), arg.getD1());
+    }
+
+    // TODO - Not implemented
+    @Override
+    public FComplex setDistance(double re, double im, double distance) {
+
+        return null;
     }
 
     // TODO - Not implemented
     @Override
     public FComplex setDistance(FComplex arg, double distance) {
 
-        return null;
+        return setDistance(arg.getRe(), arg.getIm(), distance);
+    }
+
+    // TODO - Not implemented
+    @Override
+    public FComplex setDistance(FPos2D arg, double distance) {
+
+        return setDistance(arg.getD0(), arg.getD1(), distance);
     }
 
     @Override
@@ -481,7 +539,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FComplex negate() {
 
-        return mul(-1);
+        return mulFactor(-1);
     }
 
     @Override

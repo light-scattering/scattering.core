@@ -111,7 +111,7 @@ public class FComplexTest {
         void setWithFPos2D() {
             FComplex fComplex = factory.getFComplex();
 
-            fComplex.set(factory.getFPos2D(1, 2));
+            fComplex.applyStateFrom(factory.getFPos2D(1, 2));
 
             Assertions.assertAll("Updated values are incorrect",
                     () -> assertEquals(1, fComplex.getRe(),
@@ -231,11 +231,25 @@ public class FComplexTest {
         }
 
         @Test
+        @DisplayName("Add FPos2D")
+        void addFPos2D() {
+
+            refFComplex.add(factory.getFPos2D(argRe, argIm));
+
+            Assertions.assertAll("Validate values",
+                    () -> assertEquals(refRe + argRe, refFComplex.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(refIm + argIm, refFComplex.getIm(),
+                            "The imaginary part is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Add factor")
         void addFactor() {
             double op = argRe * argIm;
 
-            refFComplex.add(op);
+            refFComplex.addFactor(op);
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(refRe + op, refFComplex.getRe(),
@@ -249,7 +263,7 @@ public class FComplexTest {
         @DisplayName("Add factor (validate)")
         void addFactorValidate() {
 
-            FComplexTestHelper.testReference(e -> e.add(1), refFComplex);
+            FComplexTestHelper.testReference(e -> e.addFactor(1), refFComplex);
         }
 
         @Test
@@ -337,11 +351,25 @@ public class FComplexTest {
         }
 
         @Test
+        @DisplayName("Sub FPos2D")
+        void subFPos2D() {
+
+            refFComplex.sub(factory.getFPos2D(argRe, argIm));
+
+            Assertions.assertAll("Validate FComplex values",
+                    () -> assertEquals(refRe - argRe, refFComplex.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(refIm - argIm, refFComplex.getIm(),
+                            "The imaginary part is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Sub factor")
         void subFactor() {
             double op = argRe * argIm;
 
-            refFComplex.sub(op);
+            refFComplex.subFactor(op);
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(refRe - op, refFComplex.getRe(),
@@ -355,7 +383,7 @@ public class FComplexTest {
         @DisplayName("Sub factor (validate)")
         void subFactorValidate() {
 
-            FComplexTestHelper.testReference(e -> e.sub(1), refFComplex);
+            FComplexTestHelper.testReference(e -> e.subFactor(1), refFComplex);
         }
 
         @Test
@@ -461,7 +489,7 @@ public class FComplexTest {
         void mulFactor() {
             double op = argRe * argIm;
 
-            refFComplex.mul(op);
+            refFComplex.mulFactor(op);
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(refRe * op, refFComplex.getRe(),
@@ -475,7 +503,7 @@ public class FComplexTest {
         @DisplayName("Mul factor (validate)")
         void mulFactorValidate() {
 
-            FComplexTestHelper.testReference(e -> e.mul(1), refFComplex);
+            FComplexTestHelper.testReference(e -> e.mulFactor(1), refFComplex);
         }
 
         @Test
@@ -592,7 +620,7 @@ public class FComplexTest {
         void divFactor() {
             double op = argRe * argIm;
 
-            refFComplex.div(op);
+            refFComplex.divFactor(op);
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(refRe / op, refFComplex.getRe(),
@@ -607,7 +635,7 @@ public class FComplexTest {
         void divFactorThrowArithmeticException() {
 
             Assertions.assertThrows(ArithmeticException.class,
-                    () -> refFComplex.div(0),
+                    () -> refFComplex.divFactor(0),
                     "The divisor cannot be zero");
         }
 
@@ -615,7 +643,7 @@ public class FComplexTest {
         @DisplayName("Div factor (validate)")
         void divFactorValidate() {
 
-            FComplexTestHelper.testReference(e -> e.div(1), refFComplex);
+            FComplexTestHelper.testReference(e -> e.divFactor(1), refFComplex);
         }
 
         @Test
@@ -758,7 +786,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness (fail)")
         void isExactFail() {
-            FComplex fComplexOp = refFComplex.copy().add(0.5 * jitter);
+            FComplex fComplexOp = refFComplex.copy().addFactor(0.5 * jitter);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(refFComplex.isExact(fComplexOp),
@@ -797,6 +825,15 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex();
 
             FComplexTestHelper.testValue(e -> e.isExact(0, 0), fComplex);
+        }
+
+        @Test
+        @DisplayName("Exactness with Pos2D")
+        void isExactWithPos2D() {
+            FPos2D fPos2D = factory.getFPos2D(refRe, refIm);
+
+            assertTrue(refFComplex.isExact(fPos2D),
+                    "Values should be equal");
         }
 
         @Test
@@ -871,6 +908,16 @@ public class FComplexTest {
                     refRe + (1.5 * jitter),
                     refRe + (1.5 * jitter)),
                     "FComplex values should not be similar");
+        }
+
+        @Test
+        @DisplayName("Similarity with FPos2D")
+        void isSimilarWithFPos2D() {
+            double error = 0.5 * jitter;
+            FPos2D fPos2D = factory.getFPos2D(refRe + error, refIm + error);
+
+            assertTrue(refFComplex.isSimilar(fPos2D),
+                    "FComplex values should be similar");
         }
 
         @Test
@@ -1017,6 +1064,37 @@ public class FComplexTest {
         }
 
         @Test
+        @DisplayName("Get distance with primitives")
+        void getDistanceWithPrimitives() {
+            double argRe = random.nextDouble();
+            double argIm = random.nextDouble();
+
+            FComplex fComplexRef = TestHelper.getRandomFComplex();
+
+            double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - argRe), 2);
+            double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - argIm), 2);
+            double res = Math.sqrt(distanceRe + distanceIm);
+
+            assertEquals(res, fComplexRef.getDistance(argRe, argIm), jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance with FPos2D")
+        void getDistanceWithFPos2D() {
+            double argRe = random.nextDouble();
+            double argIm = random.nextDouble();
+
+            FComplex fComplex = TestHelper.getRandomFComplex();
+            FPos2D fPos2D = factory.getFPos2D(argRe, argIm);
+
+            double distanceRe = Math.pow(Math.abs(fComplex.getRe() - fPos2D.getD0()), 2);
+            double distanceIm = Math.pow(Math.abs(fComplex.getIm() - fPos2D.getD1()), 2);
+            double res = Math.sqrt(distanceRe + distanceIm);
+
+            assertEquals(res, fComplex.getDistance(fPos2D), jitter, "The distance is erroneous");
+        }
+
+        @Test
         @DisplayName("Get distance P2")
         void getDistanceP2() {
             FComplex fComplexRef = TestHelper.getRandomFComplex();
@@ -1036,6 +1114,19 @@ public class FComplexTest {
             FComplex fComplexArg = factory.getFComplex();
 
             FComplexTestHelper.testValue(FComplex::getDistanceP2, fComplexRef, fComplexArg);
+        }
+
+        @Test
+        @DisplayName("Get distance P2 with FPos2D")
+        void getDistanceP2WithFPos2D() {
+            FComplex fComplexRef = TestHelper.getRandomFComplex();
+            FPos2D fPos2D = TestHelper.getRandomFComplex(fComplexRef).toFPos2D();
+
+            double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - fPos2D.getD0()), 2);
+            double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - fPos2D.getD1()), 2);
+            double res = distanceRe + distanceIm;
+
+            assertEquals(res, fComplexRef.getDistanceP2(fPos2D), jitter, "The distance is erroneous");
         }
 
         @Test
