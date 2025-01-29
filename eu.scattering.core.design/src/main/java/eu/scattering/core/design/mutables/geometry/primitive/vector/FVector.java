@@ -54,9 +54,15 @@ public interface FVector extends Primitive<FVector> {
 
     boolean isExact(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isExact(FPairPos3D arg);
+    boolean isExactSimple(double hX, double hY, double hZ);
+    boolean isExactSimple(FPoint head);
+    boolean isExactSimple(FPos3D head);
 
     boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isSimilar(FPairPos3D arg);
+    boolean isSimilarSimple(double hX, double hY, double hZ);
+    boolean isSimilarSimple(FPoint head);
+    boolean isSimilarSimple(FPos3D head);
 
     FVector normalize();
 
@@ -83,12 +89,19 @@ public interface FVector extends Primitive<FVector> {
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
 
-    // TODO - Might be confusing
+    FVector add(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector add(FVector arg);
     FVector add(FPairPos3D arg);
+    FVector addSimple(double hX, double hY, double hZ);
+    FVector addSimple(FPoint head);
+    FVector addSimple(FPos3D head);
 
+    FVector sub(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector sub(FVector arg);
     FVector sub(FPairPos3D arg);
+    FVector subSimple(double hX, double hY, double hZ);
+    FVector subSimple(FPoint head);
+    FVector subSimple(FPos3D head);
 
     double getLengthX();
     double getLengthY();
@@ -97,52 +110,96 @@ public interface FVector extends Primitive<FVector> {
     double getMagnitude();
     FVector setMagnitude(double magnitude);
 
-    double getAngle(FVector arg);
-    double getAngle(FPairPos3D arg);
-
-    FVector setAngle(FVector arg, double angle);
-    FVector setAngle(FPairPos3D arg, double angle);
-
+    boolean isCollinear(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isCollinear(FVector arg);
     boolean isCollinear(FPairPos3D arg);
+    boolean isCollinearSimple(double hX, double hY, double hZ);
+    boolean isCollinearSimple(FPoint head);
+    boolean isCollinearSimple(FPos3D head);
 
+    FVector setCollinear(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector setCollinear(FVector arg);
     FVector setCollinear(FPairPos3D arg);
+    FVector setCollinearSimple(double hX, double hY, double hZ);
+    FVector setCollinearSimple(FPoint head);
+    FVector setCollinearSimple(FPos3D head);
 
     boolean isParallel(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isParallel(FVector arg);
     boolean isParallel(FPairPos3D arg);
-    boolean isParallel(double hX, double hY, double hZ);
-    boolean isParallel(FPoint arg);
-    boolean isParallel(FPos3D arg);
+    boolean isParallelSimple(double hX, double hY, double hZ);
+    boolean isParallelSimple(FPoint head);
+    boolean isParallelSimple(FPos3D head);
 
     FVector setParallel(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector setParallel(FVector arg);
     FVector setParallel(FPairPos3D arg);
-    FVector setParallel(double hX, double hY, double hZ);
-    FVector setParallel(FPoint head);
-    FVector setParallel(FPos3D head);
+    FVector setParallelSimple(double hX, double hY, double hZ);
+    FVector setParallelSimple(FPoint head);
+    FVector setParallelSimple(FPos3D head);
 
+    boolean isAntiParallel(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isAntiParallel(FVector arg);
     boolean isAntiParallel(FPairPos3D arg);
+    boolean isAntiParallelSimple(double hX, double hY, double hZ);
+    boolean isAntiParallelSimple(FPoint head);
+    boolean isAntiParallelSimple(FPos3D head);
 
+    FVector setAntiParallel(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector setAntiParallel(FVector arg);
     FVector setAntiParallel(FPairPos3D arg);
+    FVector setAntiParallelSimple(double hX, double hY, double hZ);
+    FVector setAntiParallelSimple(FPoint head);
+    FVector setAntiParallelSimple(FPos3D head);
 
+    boolean isOrthogonal(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isOrthogonal(FVector arg);
-//    boolean isOrthogonal(FPairPos3D arg);
+    boolean isOrthogonal(FPairPos3D arg);
+    boolean isOrthogonalSimple(double hX, double hY, double hZ);
+    boolean isOrthogonalSimple(FPoint head);
+    boolean isOrthogonalSimple(FPos3D head);
 
+    FVector setOrthogonal(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector setOrthogonal(FVector arg);
-//    FVector setOrthogonal(FPairPos3D arg);
+    FVector setOrthogonal(FPairPos3D arg);
+    FVector setOrthogonalSimple(double hX, double hY, double hZ);
+    FVector setOrthogonalSimple(FPoint head);
+    FVector setOrthogonalSimple(FPos3D head);
 
+    double getDotProduct(double bX, double bY, double bZ, double hX, double hY, double hZ);
     double getDotProduct(FVector arg);
-//    double getDotProduct(FPairPos3D arg);
+    double getDotProduct(FPairPos3D arg);
+    double getDotProductSimple(double hX, double hY, double hZ);
+    double getDotProductSimple(FPoint head);
+    double getDotProductSimple(FPos3D head);
 
+    FVector setCrossProduct(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector setCrossProduct(FVector arg);
-//    FVector setCrossProduct(FPairPos3D arg);
+    FVector setCrossProduct(FPairPos3D arg);
+    FVector setCrossProductSimple(double hX, double hY, double hZ);
+    FVector setCrossProductSimple(FPoint head);
+    FVector setCrossProductSimple(FPos3D head);
 
+    double getAngle(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    double getAngle(FVector arg);
+    double getAngle(FPairPos3D arg);
+    double getAngleSimple(double hX, double hY, double hZ);
+    double getAngleSimple(FPoint head);
+    double getAngleSimple(FPos3D head);
+
+    FVector setAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FVector setAngle(FVector arg, double angle);
+    FVector setAngle(FPairPos3D arg, double angle);
+    FVector setAngleSimple(double hX, double hY, double hZ, double angle);
+    FVector setAngleSimple(FPoint head, double angle);
+    FVector setAngleSimple(FPos3D head, double angle);
+
+    FVector rotateAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
     FVector rotateAround(FVector arg, double angle);
-//    FVector rotateAround(FPairPos3D arg, double angle);
+    FVector rotateAround(FPairPos3D arg, double angle);
+    FVector rotateAroundSimple(double hX, double hY, double hZ, double angle);
+    FVector rotateAroundSimple(FPoint head, double angle);
+    FVector rotateAroundSimple(FPos3D head, double angle);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 

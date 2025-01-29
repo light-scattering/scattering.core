@@ -1582,12 +1582,114 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Add primitives A")
+        void addPrimitivesA() {
+            FVector fVector = factory.getFVector(-1, 1, -2, 2, -5, 1);
+
+            FVector results = fVector.add(6, -2, 4, -3, -2, 7);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-1, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(-2, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(-7, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Add primitives B")
+        void addPrimitivesB() {
+            FVector fVector = factory.getFVector(-1, 1, -2, 2, -5, 1);
+
+            FVector results = fVector.addSimple(-9, 0, 3);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-1, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(-2, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(-7, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Add FPairPos3D")
         void addFPairPos3D() {
             FVector fVector = factory.getFVector(-1, 1, -2, 2, -5, 1);
             FPairPos3D fPairPos3D = factory.getFVector(6, -2, 4, -3, -2, 7).toFPairPos3D();
 
             FVector results = fVector.add(fPairPos3D);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-1, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(-2, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(-7, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Add FPoint")
+        void addFPoint() {
+            FVector fVector = factory.getFVector(-1, 1, -2, 2, -5, 1);
+            FPoint fPoint = factory.getFPoint(-9, 0, 3);
+
+            FVector results = fVector.addSimple(fPoint);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(-1, fVector.getRefBase().getX(),
+                            "Base - The X value is incorrect"),
+                    () -> assertEquals(1, fVector.getRefBase().getY(),
+                            "Base - The Y value is incorrect"),
+                    () -> assertEquals(-2, fVector.getRefBase().getZ(),
+                            "Base - The Z value is incorrect"),
+                    () -> assertEquals(-7, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Add FPos3D")
+        void addFPos3D() {
+            FVector fVector = factory.getFVector(-1, 1, -2, 2, -5, 1);
+            FPos3D fPos3D = factory.getFPos3D(-9, 0, 3);
+
+            FVector results = fVector.addSimple(fPos3D);
 
             Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(-1, fVector.getRefBase().getX(),
@@ -1641,12 +1743,114 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Sub primitives A")
+        void subPrimitivesA() {
+            FVector fVector = factory.getFVector(1, 5, -4, 2, -5, 1);
+
+            FVector results = fVector.sub(-6, 2, 1, -3, 2, 6);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(1, fVector.getRefBase().getX(),
+                            jitter, "Base - The X value is incorrect"),
+                    () -> assertEquals(5, fVector.getRefBase().getY(),
+                            jitter, "Base - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefBase().getZ(),
+                            jitter, "Base - The Z value is incorrect"),
+                    () -> assertEquals(-1, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub primitives B")
+        void subPrimitivesB() {
+            FVector fVector = factory.getFVector(1, 5, -4, 2, -5, 1);
+
+            FVector results = fVector.subSimple(3, 0, 5);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(1, fVector.getRefBase().getX(),
+                            jitter, "Base - The X value is incorrect"),
+                    () -> assertEquals(5, fVector.getRefBase().getY(),
+                            jitter, "Base - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefBase().getZ(),
+                            jitter, "Base - The Z value is incorrect"),
+                    () -> assertEquals(-1, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Sub FPairPos3D")
         void subFPairPos3D() {
             FVector fVector = factory.getFVector(1, 5, -4, 2, -5, 1);
             FPairPos3D fPairPos3D = factory.getFVector(-6, 2, 1, -3, 2, 6).toFPairPos3D();
 
             FVector results = fVector.sub(fPairPos3D);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(1, fVector.getRefBase().getX(),
+                            jitter, "Base - The X value is incorrect"),
+                    () -> assertEquals(5, fVector.getRefBase().getY(),
+                            jitter, "Base - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefBase().getZ(),
+                            jitter, "Base - The Z value is incorrect"),
+                    () -> assertEquals(-1, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub FPoint")
+        void subFPoint() {
+            FVector fVector = factory.getFVector(1, 5, -4, 2, -5, 1);
+            FPoint fPoint = factory.getFPoint(3, 0, 5);
+
+            FVector results = fVector.subSimple(fPoint);
+
+            Assertions.assertAll("Validate FVector values",
+                    () -> assertEquals(1, fVector.getRefBase().getX(),
+                            jitter, "Base - The X value is incorrect"),
+                    () -> assertEquals(5, fVector.getRefBase().getY(),
+                            jitter, "Base - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefBase().getZ(),
+                            jitter, "Base - The Z value is incorrect"),
+                    () -> assertEquals(-1, fVector.getRefHead().getX(),
+                            jitter, "Head - The X value is incorrect"),
+                    () -> assertEquals(-5, fVector.getRefHead().getY(),
+                            jitter, "Head - The Y value is incorrect"),
+                    () -> assertEquals(-4, fVector.getRefHead().getZ(),
+                            jitter, "Head - The Z value is incorrect"),
+                    () -> assertSame(results, fVector,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub FPos3D")
+        void subFPos3D() {
+            FVector fVector = factory.getFVector(1, 5, -4, 2, -5, 1);
+            FPos3D fPos3D = factory.getFPos3D(3, 0, 5);
+
+            FVector results = fVector.subSimple(fPos3D);
 
             Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(1, fVector.getRefBase().getX(),
@@ -2247,12 +2451,51 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Get angle with primitives A")
+        void getAngleWithPrimitivesA() {
+            FVector fVector = factory.getFVector(2, 2, 0, 2, 3, 0);
+
+            assertEquals(Math.PI * 0.5, fVector.getAngle(-1, 0, 0, 1, 0, 0),
+                            jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get angle with primitives B")
+        void getAngleWithPrimitivesB() {
+            FVector fVector = factory.getFVector(2, 2, 0, 2, 3, 0);
+
+            assertEquals(Math.PI * 0.5, fVector.getAngleSimple(1, 0, 0),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
         @DisplayName("Get angle with FPairPos3D")
         void getAngleWithFPairPos3D() {
             FVector fVector = factory.getFVector(2, 2, 0, 2, 3, 0);
             FPairPos3D fPairPos3D = factory.getFVector(-1, 0, 0, 1, 0, 0).toFPairPos3D();
 
-            assertEquals(Math.PI * 0.5, fVector.getAngle(fPairPos3D), jitter, "The angle is incorrect");
+            assertEquals(Math.PI * 0.5, fVector.getAngle(fPairPos3D),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get angle with FPoint")
+        void getAngleWithFPoint() {
+            FVector fVector = factory.getFVector(2, 2, 0, 2, 3, 0);
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            assertEquals(Math.PI * 0.5, fVector.getAngleSimple(fPoint),
+                    jitter, "The angle is incorrect");
+        }
+
+        @Test
+        @DisplayName("Get angle with FPos3D")
+        void getAngleWithFPos3D() {
+            FVector fVector = factory.getFVector(2, 2, 0, 2, 3, 0);
+            FPos3D fPos3D = factory.getFPos3D(1, 0, 0);
+
+            assertEquals(Math.PI * 0.5, fVector.getAngleSimple(fPos3D),
+                    jitter, "The angle is incorrect");
         }
 
         @Test
@@ -2326,6 +2569,34 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Set angle with primitives A")
+        void setAngleWithPrimitivesA() {
+            FVector fVector = factory.getFVector(2, 2, 0, 3, 3, 0);
+            double angle = Math.PI * 0.5;
+
+            FVector results = fVector.setAngle(-1, 0, 0, 1, 0, 0, angle);
+
+            assertEquals(angle, fVector.getAngle(-1, 0, 0, 1, 0, 0),
+                    jitter, "The angle is incorrect");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Set angle with primitives B")
+        void setAngleWithPrimitivesB() {
+            FVector fVector = factory.getFVector(2, 2, 0, 3, 3, 0);
+            double angle = Math.PI * 0.5;
+
+            FVector results = fVector.setAngleSimple(1, 0, 0, angle);
+
+            assertEquals(angle, fVector.getAngleSimple(1, 0, 0),
+                    jitter, "The angle is incorrect");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
         @DisplayName("Set angle with FPairPos3D")
         void setAngleWithFPairPos3D() {
             FVector fVector = factory.getFVector(2, 2, 0, 3, 3, 0);
@@ -2341,29 +2612,33 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set angle with FPairPos3D (random)")
-        void setAngleWithFPairPos3DRandom() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPairPos3D fPairPos3D = TestHelper.getRandomFVector(fVector).toFPairPos3D();
-            double angle = Math.abs(random.nextDouble() % Math.PI);
+        @DisplayName("Set angle with FPoint")
+        void setAngleWithFPoint() {
+            FVector fVector = factory.getFVector(2, 2, 0, 3, 3, 0);
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+            double angle = Math.PI * 0.5;
 
-            fVector.setAngle(fPairPos3D, angle);
+            FVector results = fVector.setAngleSimple(fPoint, angle);
 
-            assertEquals(angle, fVector.getAngle(fPairPos3D),
+            assertEquals(angle, fVector.getAngleSimple(fPoint),
                     jitter, "The angle is incorrect");
+            assertSame(results, fVector,
+                    "The reference should not change");
         }
 
         @Test
-        @DisplayName("Set angle with FPairPos3D (random, negative)")
-        void setAngleWithFPairPos3DRandomNegative() {
-            FVector fVector = TestHelper.getRandomFVector();
-            FPairPos3D fPairPos3D = TestHelper.getRandomFVector(fVector).toFPairPos3D();
-            double angle = -Math.abs(random.nextDouble() % Math.PI);
+        @DisplayName("Set angle with FPos3D")
+        void setAngleWithFPos3D() {
+            FVector fVector = factory.getFVector(2, 2, 0, 3, 3, 0);
+            FPos3D fPos3D = factory.getFPos3D(1, 0, 0);
+            double angle = Math.PI * 0.5;
 
-            fVector.setAngle(fPairPos3D, angle);
+            FVector results = fVector.setAngleSimple(fPos3D, angle);
 
-            assertEquals(angle, -fVector.getAngle(fPairPos3D),
+            assertEquals(angle, fVector.getAngleSimple(fPos3D),
                     jitter, "The angle is incorrect");
+            assertSame(results, fVector,
+                    "The reference should not change");
         }
 
         @Test
@@ -2408,6 +2683,74 @@ public class FVectorTest {
             FVector fVectorArg = TestHelper.getRandomFVector();
 
             FVectorTestHelper.testReference((a, b) -> a.rotateAround(b, Math.PI), fVectorRef, fVectorArg);
+        }
+
+        @Test
+        @DisplayName("Rotate with primitives A")
+        void rotateWithPrimitivesA() {
+            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+
+            FVector results = fVector.rotateAround(0, 0, 0, 0, 1, 0,Math.PI * 0.5);
+
+            assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Rotate with primitives B")
+        void rotateWithPrimitivesB() {
+            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+
+            FVector results = fVector.rotateAroundSimple( 0, 1, 0,Math.PI * 0.5);
+
+            assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Rotate with FPairPos3D")
+        void rotateWithFPairPos3D() {
+            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(0, 0, 0, 0, 1, 0);
+
+            FVector results = fVector.rotateAround(fPairPos3D,Math.PI * 0.5);
+
+            assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Rotate with FPoint")
+        void rotateWithFPoint() {
+            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+            FPoint fPoint = factory.getFPoint(0, 1, 0);
+
+            FVector results = fVector.rotateAroundSimple(fPoint,Math.PI * 0.5);
+
+            assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Rotate with FPos3D")
+        void rotateWithFPos3D() {
+            FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+            FPos3D fPos3D = factory.getFPos3D(0, 1, 0);
+
+            FVector results = fVector.rotateAroundSimple(fPos3D, Math.PI * 0.5);
+
+            assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                    "The position of the rotated FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
         }
 
         @Test
@@ -2456,6 +2799,54 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Get dot product with primitives A")
+        void getDotProductWithPrimitivesA() {
+            FVector fVectorRef = factory.getFVector(0, 0, 0, 1, 2, 3);
+
+            assertEquals(32, fVectorRef.getDotProduct(0, 0, 0, 4, 5, 6),
+                    "The resulting value is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get dot product with primitives B")
+        void getDotProductWithPrimitivesB() {
+            FVector fVectorRef = factory.getFVector(1, 2, 3);
+
+            assertEquals(32, fVectorRef.getDotProductSimple(4, 5, 6),
+                    "The resulting value is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get dot product with FPairPos3D")
+        void getDotProductWithFPairPos3D() {
+            FVector fVector = factory.getFVector(0, 0, 0, 1, 2, 3);
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(0, 0, 0, 4, 5, 6);
+
+            assertEquals(32, fVector.getDotProduct(fPairPos3D),
+                    "The resulting value is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get dot product with FPoint")
+        void getDotProductWithFPoint() {
+            FVector fVector = factory.getFVector(0, 0, 0, 1, 2, 3);
+            FPoint fPoint = factory.getFPoint(4, 5, 6);
+
+            assertEquals(32, fVector.getDotProductSimple(fPoint),
+                    "The resulting value is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get dot product with FPos3D")
+        void getDotProductWithFPos3D() {
+            FVector fVector = factory.getFVector(0, 0, 0, 1, 2, 3);
+            FPos3D fPos3D = factory.getFPos3D(4, 5, 6);
+
+            assertEquals(32, fVector.getDotProductSimple(fPos3D),
+                    "The resulting value is erroneous");
+        }
+
+        @Test
         @DisplayName("Set cross product")
         void setCrossProduct() {
             FVector fVectorRef = TestHelper.getRandomFVector();
@@ -2501,6 +2892,74 @@ public class FVectorTest {
             FVector fVectorArg = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testReference(FVector::setCrossProduct, fVectorRef, fVectorArg);
+        }
+
+        @Test
+        @DisplayName("Set cross product with primitives A")
+        void setCrossProductWithPrimitivesA() {
+            FVector fVector = factory.getFVector(1, 1, 1, 1, 1, 2);
+
+            FVector results = fVector.setCrossProduct(-1, -1, -1, 0, -1, -1);
+
+            assertTrue(fVector.isExact(factory.getFVector(1, 1, 1, 1, 2, 1)),
+                    "The resulting FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Set cross product with primitives B")
+        void setCrossProductWithPrimitivesB() {
+            FVector fVector = factory.getFVector(1, 1, 1, 1, 1, 2);
+
+            FVector results = fVector.setCrossProductSimple(1, 0, 0);
+
+            assertTrue(fVector.isExact(factory.getFVector(1, 1, 1, 1, 2, 1)),
+                    "The resulting FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Set cross product with FPairPos3D")
+        void setCrossProductWithFPairPos3D() {
+            FVector fVector = factory.getFVector(1, 1, 1, 1, 1, 2);
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(-1, -1, -1, 0, -1, -1);
+
+            FVector results = fVector.setCrossProduct(fPairPos3D);
+
+            assertTrue(fVector.isExact(factory.getFVector(1, 1, 1, 1, 2, 1)),
+                    "The resulting FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Set cross product with FPoint")
+        void setCrossProductWithFPoint() {
+            FVector fVector = factory.getFVector(1, 1, 1, 1, 1, 2);
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            FVector results = fVector.setCrossProductSimple(fPoint);
+
+            assertTrue(fVector.isExact(factory.getFVector(1, 1, 1, 1, 2, 1)),
+                    "The resulting FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Set cross product with FPos3D")
+        void setCrossProductWithFPos3D() {
+            FVector fVector = factory.getFVector(1, 1, 1, 1, 1, 2);
+            FPos3D fPos3D = factory.getFPos3D(1, 0, 0);
+
+            FVector results = fVector.setCrossProductSimple(fPos3D);
+
+            assertTrue(fVector.isExact(factory.getFVector(1, 1, 1, 1, 2, 1)),
+                    "The resulting FVector is erroneous");
+            assertSame(results, fVector,
+                    "The reference should not change");
         }
 
         @Test
@@ -2592,8 +3051,30 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is collinear with FPairPos3D A")
-        void isCollinearWithFPairPos3DA() {
+        @DisplayName("Is collinear with primitives A")
+        void isCollinearWithPrimitivesA() {
+            FVector fVector = factory.getFVector(2, 2, 2);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isCollinear(0, 0, 0, 4, 4, 4),
+                    "The elements should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear with primitives B")
+        void isCollinearWithPrimitivesB() {
+            FVector fVector = factory.getFVector(2, 2, 2);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isCollinearSimple(4, 4, 4),
+                    "The elements should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear with FPairPos3D")
+        void isCollinearWithFPairPos3D() {
             FVector fVector = factory.getFVector(2, 2, 2);
             FPairPos3D fPairPos3D = factory.getFVector(4, 4, 4).toFPairPos3D();
 
@@ -2604,67 +3085,27 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is collinear with FPairPos3D B")
-        void isCollinearWithFPairPos3DB() {
-            FVector fVector = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(-1, 1, 0, 1, 1, 0).toFPairPos3D();
-
-            assertTrue(fVector.isCollinear(fPairPos3D),
-                    "The elements should be collinear");
-        }
-
-        @Test
-        @DisplayName("Is collinear with FPairPosD A (opposite direction)")
-        void isCollinearWithFPairPos3DOppositeDirectionA() {
-            FVector fVector = factory.getFVector(factory.getFPoint(2, 2, 2));
-            FPairPos3D fPairPos3D = factory.getFVector(factory.getFPoint(-4, -4, -4)).toFPairPos3D();
+        @DisplayName("Is collinear with FPoint")
+        void isCollinearWithFPoint() {
+            FVector fVector = factory.getFVector(2, 2, 2);
+            FPoint fPoint = factory.getFPoint(4, 4, 4);
 
             fVector.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVector.isCollinear(fPairPos3D),
+            assertTrue(fVector.isCollinearSimple(fPoint),
                     "The elements should be collinear");
         }
 
         @Test
-        @DisplayName("Is collinear with FPairPos3D B (opposite direction)")
-        void isCollinearWithFPairPos3DOppositeDirectionB() {
-            FVector fVector = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 1, 0, -1, 1, 0).toFPairPos3D();
-
-            assertTrue(fVector.isCollinear(fPairPos3D),
-                    "The elements should be collinear");
-        }
-
-        @Test
-        @DisplayName("Is collinear with FPairPos3D (fail)")
-        void isCollinearWithPairPos3DFail() {
-            FVector fVector = factory.getFVector(1, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 2, 0).toFPairPos3D();
+        @DisplayName("Is collinear with FPos3D")
+        void isCollinearWithFPos3D() {
+            FVector fVector = factory.getFVector(2, 2, 2);
+            FPos3D fPos3D = factory.getFPos3D(4, 4, 4);
 
             fVector.moveBase(TestHelper.getRandomFPoint());
 
-            assertFalse(fVector.isCollinear(fPairPos3D),
-                    "The elements should not be collinear");
-        }
-
-        @Test
-        @DisplayName("Is collinear with PairPos3D (throw IllegalStateException)")
-        void isCollinearWithPairPos3DThrowIllegalStateException() {
-            FVector fVector = factory.getFVector(0, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 2, 3).toFPairPos3D();
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.isCollinear(fPairPos3D),
-                    "The input FVector direction is not defined");
-        }
-
-        @Test
-        @DisplayName("Is collinear with PairPos3D (throw IllegalArgumentException)")
-        void isCollinearWithPairPos3DThrowIllegalArgumentException() {
-            FVector fVector = factory.getFVector(1, 2, 3);
-            FPairPos3D fPairPos3D = factory.getFVector(0, 0, 0).toFPairPos3D();
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVector.isCollinear(fPairPos3D),
-                    "The argument FPairPos3D direction is not defined");
+            assertTrue(fVector.isCollinearSimple(fPos3D),
+                    "The elements should be collinear");
         }
 
         @Test
@@ -2733,59 +3174,71 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Set collinear with FPairPos3D (parallel)")
-        void setCollinearWithFPairPos3DParallel() {
-            FVector fVector = factory.getFVector(1, 1, 1);
-            FPairPos3D fPairPos3D = factory.getFVector(-5, 0, 0, 5, 0, 0).toFPairPos3D();
-
-            FVector results = fVector.setCollinear(fPairPos3D);
-
-            assertTrue(fVector.isParallel(fPairPos3D), "The elements should be parallel");
-            assertSame(results, fVector, "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Set collinear with FPairPos3D (antiparallel)")
-        void setCollinearWithFPairPos3DAntiParallel() {
-            FVector fVector = factory.getFVector(-1, -1, -1);
-            FPairPos3D fPairPos3D = factory.getFVector(-5, 0, 0, 5, 0, 0).toFPairPos3D();
-
-            FVector results = fVector.setCollinear(fPairPos3D);
-
-            assertTrue(fVector.isAntiParallel(fPairPos3D), "The elements should be antiparallel");
-            assertSame(results, fVector, "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Set collinear with FPairPos3D (random)")
-        void setCollinearWithFPairPos3DRandom() {
+        @DisplayName("Set collinear with primitives A")
+        void setCollinearWithPrimitivesA() {
             FVector fVector = TestHelper.getRandomFVector();
-            FPairPos3D fPairPos3D = TestHelper.getRandomFVector(fVector).toFPairPos3D();
 
-            fVector.setCollinear(fPairPos3D);
+            FVector results = fVector.setCollinear(1, 2, 3, 4, 5, 6);
+
+            assertTrue(fVector.isCollinear(1, 2, 3, 4, 5, 6),
+                    "The FVectors should be collinear");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Set collinear with primitives B")
+        void setCollinearWithPrimitivesB() {
+            FVector fVector = TestHelper.getRandomFVector();
+
+            FVector results = fVector.setCollinearSimple(4, 5, 6);
+
+            assertTrue(fVector.isCollinearSimple(4, 5, 6),
+                    "The FVectors should be collinear");
+            assertSame(results, fVector,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Set collinear with FPairPos3D")
+        void setCollinearWithFPairPos3D() {
+            FVector fVector = TestHelper.getRandomFVector();
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(1, 2, 3, 4, 5, 6);
+
+            FVector results = fVector.setCollinear(fPairPos3D);
 
             assertTrue(fVector.isCollinear(fPairPos3D),
-                    "The elements should be collinear");
+                    "The elements should be parallel");
+            assertSame(results, fVector,
+                    "The reference should not change");
         }
 
         @Test
-        @DisplayName("Set collinear with FPairPos3D (throw IllegalStateException)")
-        void setCollinearWithFPairPos3DThrowIllegalStateException() {
-            FVector fVector = factory.getFVector(0, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 2, 3).toFPairPos3D();
+        @DisplayName("Set collinear with FPoint")
+        void setCollinearWithFPoint() {
+            FVector fVector = TestHelper.getRandomFVector();
+            FPoint fPoint = factory.getFPoint(4, 5, 6);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.setCollinear(fPairPos3D),
-                    "The input FVector direction is not defined");
+            FVector results = fVector.setCollinearSimple(fPoint);
+
+            assertTrue(fVector.isCollinearSimple(fPoint),
+                    "The elements should be parallel");
+            assertSame(results, fVector,
+                    "The reference should not change");
         }
 
         @Test
-        @DisplayName("Set collinear with FPairPos3D (throw IllegalArgumentException)")
-        void setCollinearWithFPairPos3DIllegalArgumentException() {
-            FVector fVector = factory.getFVector(1, 2, 3);
-            FPairPos3D fPairPos3D = factory.getFVector(0, 0, 0).toFPairPos3D();
+        @DisplayName("Set collinear with FPos3D")
+        void setCollinearWithFPos3D() {
+            FVector fVector = TestHelper.getRandomFVector();
+            FPos3D fPos3D = factory.getFPos3D(4, 5, 6);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVector.setCollinear(fPairPos3D),
-                    "The argument FPairPos3D direction is not defined");
+            FVector results = fVector.setCollinearSimple(fPos3D);
+
+            assertTrue(fVector.isCollinearSimple(fPos3D),
+                    "The elements should be parallel");
+            assertSame(results, fVector,
+                    "The reference should not change");
         }
 
         @Test
@@ -2884,7 +3337,7 @@ public class FVectorTest {
 
             fVector.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVector.isParallel(4, 4, 4),
+            assertTrue(fVector.isParallelSimple(4, 4, 4),
                     "The elements should be parallel");
         }
 
@@ -2896,7 +3349,7 @@ public class FVectorTest {
 
             fVector.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVector.isParallel(fPoint),
+            assertTrue(fVector.isParallelSimple(fPoint),
                     "The elements should be parallel");
         }
 
@@ -2920,7 +3373,7 @@ public class FVectorTest {
 
             fVector.moveBase(TestHelper.getRandomFPoint());
 
-            assertTrue(fVector.isParallel(fPos3D),
+            assertTrue(fVector.isParallelSimple(fPos3D),
                     "The elements should be parallel");
         }
 
@@ -2997,12 +3450,12 @@ public class FVectorTest {
 
             double memoRefMag = fVector.getMagnitude();
 
-            FVector results = fVector.setParallel(4, 5, 6);
+            FVector results = fVector.setParallelSimple(4, 5, 6);
 
             Assertions.assertAll("Validate elements",
                     () -> assertEquals(memoRefMag, fVector.getMagnitude(),
                             jitter, "The FVector magnitude is erroneous"),
-                    () -> assertTrue(fVector.isParallel(4, 5, 6),
+                    () -> assertTrue(fVector.isParallelSimple(4, 5, 6),
                             "The elements should be parallel"),
                     () -> assertSame(results, fVector,
                             "The reference should stay the same")
@@ -3037,12 +3490,12 @@ public class FVectorTest {
 
             double memoRefMag = fVector.getMagnitude();
 
-            FVector results = fVector.setParallel(fPoint);
+            FVector results = fVector.setParallelSimple(fPoint);
 
             Assertions.assertAll("Validate elements",
                     () -> assertEquals(memoRefMag, fVector.getMagnitude(),
                             jitter, "The FVector magnitude is erroneous"),
-                    () -> assertTrue(fVector.isParallel(fPoint),
+                    () -> assertTrue(fVector.isParallelSimple(fPoint),
                             "The elements should be parallel"),
                     () -> assertSame(results, fVector,
                             "The reference should stay the same")
@@ -3057,12 +3510,12 @@ public class FVectorTest {
 
             double memoRefMag = fVector.getMagnitude();
 
-            FVector results = fVector.setParallel(fPos3D);
+            FVector results = fVector.setParallelSimple(fPos3D);
 
             Assertions.assertAll("Validate elements",
                     () -> assertEquals(memoRefMag, fVector.getMagnitude(),
                             jitter, "The FVector magnitude is erroneous"),
-                    () -> assertTrue(fVector.isParallel(fPos3D),
+                    () -> assertTrue(fVector.isParallelSimple(fPos3D),
                             "The elements should be parallel"),
                     () -> assertSame(results, fVector,
                             "The reference should stay the same")
@@ -3148,8 +3601,30 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is anti-parallel with FPairPos3D A")
-        void isAntiParallelWithFPairPos3DA() {
+        @DisplayName("Is anti-parallel with primitives A")
+        void isAntiParallelWithPrimitivesA() {
+            FVector fVector = factory.getFVector(2, 2, 2);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isAntiParallel(4, 4, 4, -4, -4, -4),
+                    "The elements should be anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel with primitives B")
+        void isAntiParallelWithPrimitivesB() {
+            FVector fVector = factory.getFVector(2, 2, 2);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isAntiParallelSimple(-4, -4, -4),
+                    "The elements should be anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel with FPairPos3D")
+        void isAntiParallelWithFPairPos3D() {
             FVector fVector = factory.getFVector(2, 2, 2);
             FPairPos3D fPairPos3D = factory.getFVector(-4, -4, -4).toFPairPos3D();
 
@@ -3160,57 +3635,27 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is anti-parallel with FPairPos3D B")
-        void isAntiParallelWithPairPos3DB() {
-            FVector fVector = factory.getFVector(-1, 0, 0, 1, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 1, 0, -1, 1, 0).toFPairPos3D();
+        @DisplayName("Is anti-parallel with FPoint")
+        void isAntiParallelWithFPoint() {
+            FVector fVector = factory.getFVector(2, 2, 2);
+            FPoint fPoint = factory.getFPoint(-4, -4, -4);
 
-            assertTrue(fVector.isAntiParallel(fPairPos3D),
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isAntiParallelSimple(fPoint),
                     "The elements should be anti-parallel");
         }
 
         @Test
-        @DisplayName("Is anti-parallel with FPairPos3D (fail)")
-        void isAntiParallelWithFPairPos3DFail() {
-            FVector fVector = factory.getFVector(1, 2, 3);
-            FPairPos3D fPairPos3D = factory.getFVector(4, 5, 6).toFPairPos3D();
-
-            fVector.moveBase(TestHelper.getRandomFPoint());
-
-            assertFalse(fVector.isParallel(fPairPos3D),
-                    "The elements should not be anti-parallel");
-        }
-
-        @Test
-        @DisplayName("Is anti-parallel with FPairPos3D (fail, opposite direction")
-        void isAntiParallelWithFPairPos3DOppositeDirection() {
+        @DisplayName("Is anti-parallel with FPos3D")
+        void isAntiParallelWithFPos3D() {
             FVector fVector = factory.getFVector(2, 2, 2);
-            FPairPos3D fPairPos3D = factory.getFVector(4, 4, 4).toFPairPos3D();
+            FPos3D fPos3D = factory.getFPos3D(-4, -4, -4);
 
             fVector.moveBase(TestHelper.getRandomFPoint());
 
-            assertFalse(fVector.isAntiParallel(fPairPos3D),
-                    "The elements should not be anti-parallel");
-        }
-
-        @Test
-        @DisplayName("Is anti-parallel with FPairPos3D (throw IllegalStateException)")
-        void isAntiParallelWithFPairPos3DThrowIllegalStateException() {
-            FVector fVector = factory.getFVector(0, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 2, 3).toFPairPos3D();
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.isAntiParallel(fPairPos3D),
-                    "The input FVector direction is not defined");
-        }
-
-        @Test
-        @DisplayName("Is anti-parallel with FPairPos3D (throw IllegalArgumentException)")
-        void isAntiParallelWithFPairPos3DThrowIllegalArgumentException() {
-            FVector fVector = factory.getFVector(1, 2, 3);
-            FPairPos3D fPairPos3D = factory.getFVector(0, 0, 0).toFPairPos3D();
-
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVector.isAntiParallel(fPairPos3D),
-                    "The argument FPairPos3D direction is not defined");
+            assertTrue(fVector.isAntiParallelSimple(fPos3D),
+                    "The elements should be anti-parallel");
         }
 
         @Test
@@ -3261,10 +3706,48 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Set anti-parallel with primitives A")
+        void setAntiParallelWithPrimitivesA() {
+            FVector fVector = factory.getFVector(4, 5, -3, -3, 6, 1);
+
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setAntiParallel(7, 3, -4, 6, 2, -3);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isAntiParallel(7, 3, -4, 6, 2, -3),
+                            "The elements should be parallel"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
+        }
+
+        @Test
+        @DisplayName("Set anti-parallel with primitives B")
+        void setAntiParallelWithPrimitivesB() {
+            FVector fVector = factory.getFVector(4, 5, -3, -3, 6, 1);
+
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setAntiParallelSimple(1, 2, 3);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isAntiParallelSimple(1, 2, 3),
+                            "The elements should be parallel"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
+        }
+
+        @Test
         @DisplayName("Set anti-parallel with FPairPos3D")
         void setAntiParallelWithFPairPos3D() {
             FVector fVector = factory.getFVector(4, 5, -3, -3, 6, 1);
-            FVector fPairPos3D = factory.getFVector(7, 3, -4, 6, 2, -3);
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(7, 3, -4, 6, 2, -3);
 
             double memoRefMag = fVector.getMagnitude();
 
@@ -3276,28 +3759,48 @@ public class FVectorTest {
                     () -> assertEquals(memoRefMag, fVector.getMagnitude(),
                             jitter, "The FVector magnitude is erroneous"),
                     () -> assertSame(results, fVector,
-                            "The reference should be the same")
+                            "The reference should stay the same")
             );
         }
 
         @Test
-        @DisplayName("Set anti-parallel with FPairPos3D (throw IllegalStateException)")
-        void setAntiParallelWithFPairPos3DThrowIllegalStateException() {
-            FVector fVector = factory.getFVector(0, 0, 0);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 2, 3).toFPairPos3D();
+        @DisplayName("Set anti-parallel with FPoint")
+        void setAntiParallelWithFPoint() {
+            FVector fVector = factory.getFVector(4, 5, -3, -3, 6, 1);
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVector.setAntiParallel(fPairPos3D),
-                    "The input FVector direction is not defined");
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setAntiParallelSimple(fPoint);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isAntiParallelSimple(fPoint),
+                            "The elements should be parallel"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
         }
 
         @Test
-        @DisplayName("Set anti-parallel with FPairPos3D (throw IllegalArgumentException)")
-        void setAntiParallelWithFPairPos3DThrowIllegalArgumentException() {
-            FVector fVector = factory.getFVector(1, 2, 3);
-            FPairPos3D fPairPos3D = factory.getFVector(0, 0, 0).toFPairPos3D();
+        @DisplayName("Set anti-parallel with FPos3D")
+        void setAntiParallelWithFPos3D() {
+            FVector fVector = factory.getFVector(4, 5, -3, -3, 6, 1);
+            FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVector.setAntiParallel(fPairPos3D),
-                    "The argument FPairPos3D direction is not defined");
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setAntiParallelSimple(fPos3D);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isAntiParallelSimple(fPos3D),
+                            "The elements should be parallel"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
         }
 
         @Test
@@ -3386,6 +3889,64 @@ public class FVectorTest {
             FVector fVectorArg = factory.getFVector(4, 5, 6);
 
             FVectorTestHelper.testValue(FVector::isOrthogonal, fVectorRef, fVectorArg);
+        }
+
+        @Test
+        @DisplayName("Is orthogonal with primitives A")
+        void isOrthogonalWithPrimitivesA() {
+            FVector fVector = factory.getFVector(1, 0, 0);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isOrthogonal(0, 0, 0, 0, 5, 5),
+                    "The two elements should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal with primitives B")
+        void isOrthogonalWithPrimitivesB() {
+            FVector fVector = factory.getFVector(1, 0, 0);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isOrthogonalSimple(0, 5, 5),
+                    "The two elements should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal with FPairPos3D")
+        void isOrthogonalWithFPairPos3D() {
+            FVector fVector = factory.getFVector(1, 0, 0);
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(0, 0, 0, 0, 5, 5);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isOrthogonal(fPairPos3D),
+                    "The two elements should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal with FPoint")
+        void isOrthogonalWithFPoint() {
+            FVector fVector = factory.getFVector(1, 0, 0);
+            FPoint fPoint = factory.getFPoint(0, 5, 5);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isOrthogonalSimple(fPoint),
+                    "The two elements should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal with FPos3D")
+        void isOrthogonalWithFPos3D() {
+            FVector fVector = factory.getFVector(1, 0, 0);
+            FPos3D fPos3D = factory.getFPos3D(0, 5, 5);
+
+            fVector.moveBase(TestHelper.getRandomFPoint());
+
+            assertTrue(fVector.isOrthogonalSimple(fPos3D),
+                    "The two elements should be orthogonal");
         }
 
         @Test
@@ -3518,6 +4079,104 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Set orthogonal with primitives A")
+        void setOrthogonalWithPrimitivesA() {
+            FVector fVector = factory.getFVector(-1, 0, 0);
+
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setOrthogonal(0, 0, 1, 1, 0, 0);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isOrthogonal(0, 0, 1, 1, 0, 0),
+                            "The elements should be orthogonal"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with primitives B")
+        void setOrthogonalWithPrimitivesB() {
+            FVector fVector = factory.getFVector(-1, 0, 0);
+
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setOrthogonalSimple(1, 2, 3);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isOrthogonalSimple(1, 2, 3),
+                            "The elements should be orthogonal"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with FPairPos3D")
+        void setOrthogonalWithFPairPos3D() {
+            FVector fVector = factory.getFVector(-1, 0, 0);
+            FPairPos3D fPairPos3D = factory.getFPairPos3D(0, 0, 1, 1, 0, 0);
+
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setOrthogonal(fPairPos3D);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isOrthogonal(fPairPos3D),
+                            "The elements should be orthogonal"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with FPoint")
+        void setOrthogonalWithFPoint() {
+            FVector fVector = factory.getFVector(-1, 0, 0);
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setOrthogonalSimple(fPoint);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isOrthogonalSimple(fPoint),
+                            "The elements should be orthogonal"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with FPos3D")
+        void setOrthogonalWithFPos3D() {
+            FVector fVector = factory.getFVector(-1, 0, 0);
+            FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
+
+            double memoRefMag = fVector.getMagnitude();
+
+            FVector results = fVector.setOrthogonalSimple(fPos3D);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertTrue(fVector.isOrthogonalSimple(fPos3D),
+                            "The elements should be orthogonal"),
+                    () -> assertEquals(memoRefMag, fVector.getMagnitude(),
+                            jitter, "The FVector magnitude is erroneous"),
+                    () -> assertSame(results, fVector,
+                            "The reference should stay the same")
+            );
+        }
+
+        @Test
         @DisplayName("Is zero")
         void isZero() {
             FPoint fPointBase = factory.getFPoint();
@@ -3635,29 +4294,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is exact with FPairPos3D")
-        void isExactWithFPairPos3D() {
-            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
-            FPairPos3D fPairPos3D = factory.getFVector(1, 2, 3, 4, 5, 6).toFPairPos3D();
-
-            assertTrue(fVector.isExact(fPairPos3D), "Elements should be equal");
-        }
-
-        @Test
-        @DisplayName("Is exact with FPairPos3D (fail)")
-        void isExactWithFPairPos3DFail() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-
-            FVector fVector = factory.getFVector(factory.getFPoint(), fPointHead);
-            FPairPos3D fPairPos3D = factory.getFVector(fPointBase, factory.getFPoint()).toFPairPos3D();
-
-            assertFalse(fVector.isExact(fPairPos3D), "Elements should not be equal");
-        }
-
-        @Test
-        @DisplayName("Is exact with parameters")
-        void isExactWithParameters() {
+        @DisplayName("Is exact with primitives A")
+        void isExactWithPrimitivesA() {
             double bX = random.nextDouble();
             double bY = random.nextDouble();
             double bZ = random.nextDouble();
@@ -3672,27 +4310,43 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is exact with parameters (fail)")
-        void isExactWithParametersFail() {
-            double bX = random.nextDouble();
-            double bY = random.nextDouble();
-            double bZ = random.nextDouble();
+        @DisplayName("Is exact with primitives B")
+        void isExactWithPrimitivesB() {
             double hX = random.nextDouble();
             double hY = random.nextDouble();
             double hZ = random.nextDouble();
 
-            FVector fVector = factory.getFVector(bX, bY, bZ, hX, hY, hZ);
+            FVector fVector = factory.getFVector(0, 0, 0, hX, hY, hZ);
 
-            assertFalse(fVector.isExact(0, 0, 0, 0, 0, 0),
-                    "FVector values should not be equal");
+            assertTrue(fVector.isExactSimple(hX, hY, hZ),
+                    "FVector values should be equal");
         }
 
         @Test
-        @DisplayName("Is exact with parameters (validate)")
-        void isExactWithParametersValidate() {
-            FVector fVector = factory.getFVector(1, 2, 3);
+        @DisplayName("Is exact with FPairPos3D")
+        void isExactWithFPairPos3D() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+            FPairPos3D fPairPos3D = factory.getFVector(1, 2, 3, 4, 5, 6).toFPairPos3D();
 
-            FVectorTestHelper.testValue(e -> e.isExact(0, 0, 0, 0, 0, 0), fVector);
+            assertTrue(fVector.isExact(fPairPos3D), "Elements should be equal");
+        }
+
+        @Test
+        @DisplayName("Is exact with FPoint")
+        void isExactWithFPoint() {
+            FVector fVector = factory.getFVector(0, 0, 0, 4, 5, 6);
+            FPoint fPoint = factory.getFPoint(4, 5, 6);
+
+            assertTrue(fVector.isExactSimple(fPoint), "Elements should be equal");
+        }
+
+        @Test
+        @DisplayName("Is exact with FPos3D")
+        void isExactWithFPos3D() {
+            FVector fVector = factory.getFVector(0, 0, 0, 4, 5, 6);
+            FPos3D fPos3D = factory.getFPos3D(4, 5, 6);
+
+            assertTrue(fVector.isExactSimple(fPos3D), "Elements should be equal");
         }
 
         @Test
@@ -3738,32 +4392,8 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is similar with FPairPos3D")
-        void isSimilarWithFPairPos3D() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-
-            FVector fVector = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FPairPos3D fPairPos3D = factory.getFVector(fPointBase.addX(jitter * 0.5), fPointHead).toFPairPos3D();
-
-            assertTrue(fVector.isSimilar(fPairPos3D), "Elements should be similar");
-        }
-
-        @Test
-        @DisplayName("Is similar with FPairPos3D (fail)")
-        void isSimilarWithPairPos3DFail() {
-            FPoint fPointBase = TestHelper.getRandomFPoint();
-            FPoint fPointHead = TestHelper.getRandomFPoint();
-
-            FVector fVector = factory.getFVector(fPointBase.copy(), fPointHead.copy());
-            FPairPos3D fPairPos3D = factory.getFVector(fPointBase.addX(jitter * 1.5), fPointHead).toFPairPos3D();
-
-            assertFalse(fVector.isSimilar(fPairPos3D), "Elements should not be similar");
-        }
-
-        @Test
-        @DisplayName("Is similar with parameters")
-        void isSimilarWithParameters() {
+        @DisplayName("Is similar with primitives A")
+        void isSimilarWithPrimitivesA() {
             double bX = random.nextDouble();
             double bY = random.nextDouble();
             double bZ = random.nextDouble();
@@ -3780,29 +4410,54 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Is similar with parameters (fail)")
-        void isSimilarWithParametersFail() {
-            double bX = random.nextDouble();
-            double bY = random.nextDouble();
-            double bZ = random.nextDouble();
+        @DisplayName("Is similar with primitives B")
+        void isSimilarWithPrimitivesB() {
             double hX = random.nextDouble();
             double hY = random.nextDouble();
             double hZ = random.nextDouble();
 
             FVector fVector = factory.getFVector(
-                    bX + (1.5 * jitter), bY + (1.5 * jitter), bZ + (1.5 * jitter),
-                    hX + (1.5 * jitter), hY + (1.5 * jitter), hZ + (1.5 * jitter));
+                    0, 0, 0,
+                    hX + (0.5 * jitter), hY + (0.5 * jitter), hZ + (0.5 * jitter));
 
-            assertFalse(fVector.isSimilar(bX, bY, bZ, hX, hY, hZ),
-                    "FVector values should not be equal");
+            assertTrue(fVector.isSimilarSimple(hX, hY, hZ),
+                    "FVector values should be equal");
         }
 
         @Test
-        @DisplayName("Is similar with parameters (validate)")
-        void isSimilarWithParametersValidate() {
-            FVector fVector = factory.getFVector(1, 2, 3);
+        @DisplayName("Is similar with FPairPos3D")
+        void isSimilarWithFPairPos3D() {
+            FPoint fPointBase = TestHelper.getRandomFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
 
-            FVectorTestHelper.testValue(e -> e.isSimilar(0, 0, 0, 0, 0, 0), fVector);
+            FVector fVector = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            FPairPos3D fPairPos3D = factory.getFVector(fPointBase.addX(jitter * 0.5), fPointHead).toFPairPos3D();
+
+            assertTrue(fVector.isSimilar(fPairPos3D), "Elements should be similar");
+        }
+
+        @Test
+        @DisplayName("Is similar with FPoint")
+        void isSimilarWithFPoint() {
+            FPoint fPointBase = factory.getFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+
+            FVector fVector = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            FPoint fPoint = fPointHead.copy();
+
+            assertTrue(fVector.isSimilarSimple(fPoint), "Elements should be similar");
+        }
+
+        @Test
+        @DisplayName("Is similar with FPos3D")
+        void isSimilarWithFPos3D() {
+            FPoint fPointBase = factory.getFPoint();
+            FPoint fPointHead = TestHelper.getRandomFPoint();
+
+            FVector fVector = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            FPos3D fPos3D = fPointHead.toFPos3D();
+
+            assertTrue(fVector.isSimilarSimple(fPos3D), "Elements should be similar");
         }
 
         @Test

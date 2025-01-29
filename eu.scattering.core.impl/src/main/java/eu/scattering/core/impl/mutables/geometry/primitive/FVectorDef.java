@@ -307,6 +307,24 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public boolean isExactSimple(double hX, double hY, double hZ) {
+
+        return isExact(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isExactSimple(FPoint head) {
+
+        return isExactSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public boolean isExactSimple(FPos3D head) {
+
+        return isExactSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
     public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         return getRefBase().isSimilar(bX, bY, bZ) && getRefHead().isSimilar(hX, hY, hZ);
@@ -328,6 +346,24 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         boolean isHeadSimilar = getRefHead().isSimilar(arg.getPosB());
 
         return isBaseSimilar && isHeadSimilar;
+    }
+
+    @Override
+    public boolean isSimilarSimple(double hX, double hY, double hZ) {
+
+        return isSimilar(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isSimilarSimple(FPoint head) {
+
+        return isSimilarSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public boolean isSimilarSimple(FPos3D head) {
+
+        return isSimilarSimple(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -397,38 +433,62 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FVector add(FVector arg) {
+    public FVector add(double bX, double bY, double bZ, double hX, double hY, double hZ) {
         double memoOBX = getBaseX();
         double memoOBY = getBaseY();
         double memoOBZ = getBaseZ();
 
-        FPoint aBase = arg.getRefBase();
-        FPoint aHead = arg.getRefHead();
-
         moveBaseToCenter();
-        getRefHead().add(
-                aHead.getX() - aBase.getX(),
-                aHead.getY() - aBase.getY(),
-                aHead.getZ() - aBase.getZ());
+        getRefHead().add(hX - bX, hY - bY, hZ - bZ);
         moveBase(memoOBX, memoOBY, memoOBZ);
 
         return this;
     }
 
     @Override
+    public FVector add(FVector arg) {
+
+        return add(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
+    }
+
+    @Override
     public FVector add(FPairPos3D arg) {
+
+        return add(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
+
+    @Override
+    public FVector addSimple(double hX, double hY, double hZ) {
+
+        return add(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public FVector addSimple(FPoint head) {
+
+        return addSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public FVector addSimple(FPos3D head) {
+
+        return addSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public FVector sub(double bX, double bY, double bZ, double hX, double hY, double hZ) {
         double memoOBX = getBaseX();
         double memoOBY = getBaseY();
         double memoOBZ = getBaseZ();
 
-        FPos3D aBase = arg.getPosA();
-        FPos3D aHead = arg.getPosB();
-
         moveBaseToCenter();
-        getRefHead().add(
-                aHead.getD0() - aBase.getD0(),
-                aHead.getD1() - aBase.getD1(),
-                aHead.getD2() - aBase.getD2());
+        getRefHead().sub(hX - bX, hY - bY, hZ - bZ);
         moveBase(memoOBX, memoOBY, memoOBZ);
 
         return this;
@@ -436,40 +496,38 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
 
     @Override
     public FVector sub(FVector arg) {
-        double memoOBX = getBaseX();
-        double memoOBY = getBaseY();
-        double memoOBZ = getBaseZ();
 
-        FPoint aBase = arg.getRefBase();
-        FPoint aHead = arg.getRefHead();
-
-        moveBaseToCenter();
-        getRefHead().sub(
-                aHead.getX() - aBase.getX(),
-                aHead.getY() - aBase.getY(),
-                aHead.getZ() - aBase.getZ());
-        moveBase(memoOBX, memoOBY, memoOBZ);
-
-        return this;
+        return sub(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
     }
 
     @Override
     public FVector sub(FPairPos3D arg) {
-        double memoOBX = getBaseX();
-        double memoOBY = getBaseY();
-        double memoOBZ = getBaseZ();
 
-        FPos3D aBase = arg.getPosA();
-        FPos3D aHead = arg.getPosB();
+        return sub(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
 
-        moveBaseToCenter();
-        getRefHead().sub(
-                aHead.getD0() - aBase.getD0(),
-                aHead.getD1() - aBase.getD1(),
-                aHead.getD2() - aBase.getD2());
-        moveBase(memoOBX, memoOBY, memoOBZ);
+    @Override
+    public FVector subSimple(double hX, double hY, double hZ) {
 
-        return this;
+        return sub(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public FVector subSimple(FPoint head) {
+
+        return subSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public FVector subSimple(FPos3D head) {
+
+        return subSimple(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -764,25 +822,61 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getDotProduct(FVector arg) {
+    public double getDotProduct(double bX, double bY, double bZ, double hX, double hY, double hZ) {
         double distOX = getHeadX() - getBaseX();
         double distOY = getHeadY() - getBaseY();
         double distOZ = getHeadZ() - getBaseZ();
-        double distAX = arg.getHeadX() - arg.getBaseX();
-        double distAY = arg.getHeadY() - arg.getBaseY();
-        double distAZ = arg.getHeadZ() - arg.getBaseZ();
+        double distAX = hX - bX;
+        double distAY = hY - bY;
+        double distAZ = hZ - bZ;
 
         return (distOX * distAX) + (distOY * distAY) + (distOZ * distAZ);
     }
 
     @Override
-    public FVector setCrossProduct(FVector arg) {
+    public double getDotProduct(FVector arg) {
+
+        return getDotProduct(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
+    }
+
+    @Override
+    public double getDotProduct(FPairPos3D arg) {
+
+        return getDotProduct(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
+
+    @Override
+    public double getDotProductSimple(double hX, double hY, double hZ) {
+
+        return getDotProduct(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public double getDotProductSimple(FPoint head) {
+
+        return getDotProductSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public double getDotProductSimple(FPos3D head) {
+
+        return getDotProductSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public FVector setCrossProduct(double bX, double bY, double bZ, double hX, double hY, double hZ) {
         double memoOBX = getBaseX();
         double memoOBY = getBaseY();
         double memoOBZ = getBaseZ();
-        double zeroAX = arg.getHeadX() - arg.getBaseX();
-        double zeroAY = arg.getHeadY() - arg.getBaseY();
-        double zeroAZ = arg.getHeadZ() - arg.getBaseZ();
+        double zeroAX = hX - bX;
+        double zeroAY = hY - bY;
+        double zeroAZ = hZ - bZ;
 
         moveBaseToCenter();
         getRefHead().setCrossProduct(zeroAX, zeroAY, zeroAZ);
@@ -792,35 +886,127 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public FVector setCrossProduct(FVector arg) {
+
+        return setCrossProduct(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
+    }
+
+    @Override
+    public FVector setCrossProduct(FPairPos3D arg) {
+
+        return setCrossProduct(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
+
+    @Override
+    public FVector setCrossProductSimple(double hX, double hY, double hZ) {
+
+        return setCrossProduct(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public FVector setCrossProductSimple(FPoint head) {
+
+        return setCrossProductSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public FVector setCrossProductSimple(FPos3D head) {
+
+        return setCrossProductSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public boolean isCollinear(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        return isParallel(bX, bY, bZ, hX, hY, hZ) || isAntiParallel(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    @Override
     public boolean isCollinear(FVector arg) {
 
-        return isParallel(arg) || isAntiParallel(arg);
+        return isCollinear(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
     }
 
     @Override
     public boolean isCollinear(FPairPos3D arg) {
 
-        return isParallel(arg) || isAntiParallel(arg);
+        return isCollinear(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
+
+    @Override
+    public boolean isCollinearSimple(double hX, double hY, double hZ) {
+
+        return isCollinear(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isCollinearSimple(FPoint head) {
+
+        return isCollinearSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public boolean isCollinearSimple(FPos3D head) {
+
+        return isCollinearSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public FVector setCollinear(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        if (getAngle(bX, bY, bZ, hX, hY, hZ) < Math.PI / 2) {
+            return setParallel(bX, bY, bZ, hX, hY, hZ);
+        }
+
+        return setAntiParallel(bX, bY, bZ, hX, hY, hZ);
     }
 
     @Override
     public FVector setCollinear(FVector arg) {
 
-        if (getAngle(arg) < Math.PI / 2) {
-            return setParallel(arg);
-        }
-
-        return setAntiParallel(arg);
+        return setCollinear(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
     }
 
     @Override
     public FVector setCollinear(FPairPos3D arg) {
 
-        if (getAngle(arg) < Math.PI / 2) {
-            return setParallel(arg);
-        }
+        return setCollinear(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
 
-        return setAntiParallel(arg);
+    @Override
+    public FVector setCollinearSimple(double hX, double hY, double hZ) {
+
+        return setCollinear(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public FVector setCollinearSimple(FPoint head) {
+
+        return setCollinearSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public FVector setCollinearSimple(FPos3D head) {
+
+        return setCollinearSimple(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -870,21 +1056,21 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public boolean isParallel(double hX, double hY, double hZ) {
+    public boolean isParallelSimple(double hX, double hY, double hZ) {
 
         return isParallel(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public boolean isParallel(FPoint arg) {
+    public boolean isParallelSimple(FPoint head) {
 
-        return isParallel(0, 0, 0, arg.getX(), arg.getY(), arg.getZ());
+        return isParallel(0, 0, 0, head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public boolean isParallel(FPos3D arg) {
+    public boolean isParallelSimple(FPos3D head) {
 
-        return isParallel(0, 0, 0, arg.getD0(), arg.getD1(), arg.getD2());
+        return isParallel(0, 0, 0, head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -929,113 +1115,190 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector setParallel(double hX, double hY, double hZ) {
+    public FVector setParallelSimple(double hX, double hY, double hZ) {
 
         return setParallel(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector setParallel(FPoint head) {
+    public FVector setParallelSimple(FPoint head) {
 
-        return setParallel(head.getX(), head.getY(), head.getZ());
+        return setParallelSimple(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector setParallel(FPos3D head) {
+    public FVector setParallelSimple(FPos3D head) {
 
-        return setParallel(head.getD0(), head.getD1(), head.getD2());
+        return setParallelSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public boolean isAntiParallel(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        if (isNearZeroLength()) {
+            throw new IllegalStateException("The direction of the input FVector is not defined");
+        }
+
+        if (isNearZeroLength(bX, bY, bZ, hX, hY, hZ)) {
+            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
+        }
+
+        double magO = getMagnitude();
+        double headOX = (getHeadX() - getBaseX()) / magO;
+        double headOY = (getHeadY() - getBaseY()) / magO;
+        double headOZ = (getHeadZ() - getBaseZ()) / magO;
+
+        double magA = getMagnitude(bX, bY, bZ, hX, hY, hZ);
+        double headAX = (hX - bX) / magA;
+        double headAY = (hY - bY) / magA;
+        double headAZ = (hZ - bZ) / magA;
+
+        double distX = Math.abs(headOX + headAX);
+        double distY = Math.abs(headOY + headAY);
+        double distZ = Math.abs(headOZ + headAZ);
+
+        return distX < epsilon && distY < epsilon && distZ < epsilon;
     }
 
     @Override
     public boolean isAntiParallel(FVector arg) {
 
-        if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the input FVector is not defined");
-        }
-
-        if (arg.isNearZeroLength()) {
-            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
-        }
-
-        double magO = getMagnitude();
-        double headOX = (getHeadX() - getBaseX()) / magO;
-        double headOY = (getHeadY() - getBaseY()) / magO;
-        double headOZ = (getHeadZ() - getBaseZ()) / magO;
-
-        double magA = arg.getMagnitude();
-        double headAX = (arg.getHeadX() - arg.getBaseX()) / magA;
-        double headAY = (arg.getHeadY() - arg.getBaseY()) / magA;
-        double headAZ = (arg.getHeadZ() - arg.getBaseZ()) / magA;
-
-        double distX = Math.abs(headOX + headAX);
-        double distY = Math.abs(headOY + headAY);
-        double distZ = Math.abs(headOZ + headAZ);
-
-        return distX < epsilon && distY < epsilon && distZ < epsilon;
+        return isAntiParallel(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
     }
 
     @Override
     public boolean isAntiParallel(FPairPos3D arg) {
 
-        if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the input FVector is not defined");
-        }
+        return isAntiParallel(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
 
-        if (isNearZeroLength(arg)) {
-            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
-        }
+    @Override
+    public boolean isAntiParallelSimple(double hX, double hY, double hZ) {
 
-        double magO = getMagnitude();
-        double headOX = (getHeadX() - getBaseX()) / magO;
-        double headOY = (getHeadY() - getBaseY()) / magO;
-        double headOZ = (getHeadZ() - getBaseZ()) / magO;
+        return isAntiParallel(0 ,0, 0, hX, hY, hZ);
+    }
 
-        double magA = getMagnitude(arg);
-        double headAX = (arg.getPosB().getD0() - arg.getPosA().getD0()) / magA;
-        double headAY = (arg.getPosB().getD1() - arg.getPosA().getD1()) / magA;
-        double headAZ = (arg.getPosB().getD2() - arg.getPosA().getD2()) / magA;
+    @Override
+    public boolean isAntiParallelSimple(FPoint head) {
 
-        double distX = Math.abs(headOX + headAX);
-        double distY = Math.abs(headOY + headAY);
-        double distZ = Math.abs(headOZ + headAZ);
+        return isAntiParallelSimple(head.getX(), head.getY(), head.getZ());
+    }
 
-        return distX < epsilon && distY < epsilon && distZ < epsilon;
+    @Override
+    public boolean isAntiParallelSimple(FPos3D head) {
+
+        return isAntiParallelSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public FVector setAntiParallel(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        return setParallel(bX, bY, bZ, hX, hY, hZ).reflectHead();
     }
 
     @Override
     public FVector setAntiParallel(FVector arg) {
 
-       return setParallel(arg).reflectHead();
+        return setAntiParallel(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
     }
 
     @Override
     public FVector setAntiParallel(FPairPos3D arg) {
 
-        return setParallel(arg).reflectHead();
+        return setAntiParallel(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
     }
 
     @Override
-    public boolean isOrthogonal(FVector arg) {
+    public FVector setAntiParallelSimple(double hX, double hY, double hZ) {
+
+        return setAntiParallel(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public FVector setAntiParallelSimple(FPoint head) {
+
+        return setAntiParallelSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public FVector setAntiParallelSimple(FPos3D head) {
+
+        return setAntiParallelSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public boolean isOrthogonal(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
-        if (arg.isNearZeroLength()) {
+        if (isNearZeroLength(bX, bY, bZ, hX, hY, hZ)) {
             throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
-        return (Math.abs(getDotProduct(arg)) < epsilon) || (Math.abs((Math.PI * 0.5) - getAngle(arg)) < epsilon);
+        boolean dotProduct = Math.abs(getDotProduct(bX, bY, bZ, hX, hY, hZ)) < epsilon;
+        boolean angle = Math.abs((Math.PI * 0.5) - getAngle(bX, bY, bZ, hX, hY, hZ)) < epsilon;
+
+        return  dotProduct || angle;
     }
 
     @Override
-    public FVector setOrthogonal(FVector arg) {
+    public boolean isOrthogonal(FVector arg) {
 
-        if (isParallel(arg)) {
+        return isOrthogonal(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
+    }
+
+    @Override
+    public boolean isOrthogonal(FPairPos3D arg) {
+
+        return isOrthogonal(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
+
+    @Override
+    public boolean isOrthogonalSimple(double hX, double hY, double hZ) {
+
+        return isOrthogonal(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isOrthogonalSimple(FPoint head) {
+
+        return isOrthogonalSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public boolean isOrthogonalSimple(FPos3D head) {
+
+        return isOrthogonalSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public FVector setOrthogonal(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        if (isParallel(bX, bY, bZ, hX, hY, hZ)) {
             throw new IllegalStateException("FVectors are parallel");
         }
 
-        if (isAntiParallel(arg)) {
+        if (isAntiParallel(bX, bY, bZ, hX, hY, hZ)) {
             throw new IllegalStateException("FVectors are anti-parallel");
         }
 
@@ -1043,9 +1306,9 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         double memoOBX = getBaseX();
         double memoOBY = getBaseY();
         double memoOBZ = getBaseZ();
-        double zeroAX = arg.getHeadX() - arg.getBaseX();
-        double zeroAY = arg.getHeadY() - arg.getBaseY();
-        double zeroAZ = arg.getHeadZ() - arg.getBaseZ();
+        double zeroAX = hX - bX;
+        double zeroAY = hY - bY;
+        double zeroAZ = hZ - bZ;
 
         moveBaseToCenter();
         getRefHead().setCrossProduct(zeroAX, zeroAY, zeroAZ);
@@ -1057,22 +1320,90 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public FVector rotateAround(FVector arg, double angle) {
-        double memoABX = arg.getBaseX();
-        double memoABY = arg.getBaseY();
-        double memoABZ = arg.getBaseZ();
-        double memoAHX = arg.getHeadX();
-        double memoAHY = arg.getHeadY();
-        double memoAHZ = arg.getHeadZ();
+    public FVector setOrthogonal(FVector arg) {
 
-        sub(memoABX, memoABY, memoABZ);
+        return setOrthogonal(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
+    }
 
-        getRefHead().rotateAround(memoAHX - memoABX, memoAHY - memoABY, memoAHZ - memoABZ, angle);
-        getRefBase().rotateAround(memoAHX - memoABX, memoAHY - memoABY, memoAHZ - memoABZ, angle);
+    @Override
+    public FVector setOrthogonal(FPairPos3D arg) {
 
-        add(memoABX, memoABY, memoABZ);
+        return setOrthogonal(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
+    }
+
+    @Override
+    public FVector setOrthogonalSimple(double hX, double hY, double hZ) {
+
+        return setOrthogonal(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public FVector setOrthogonalSimple(FPoint head) {
+
+        return setOrthogonalSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public FVector setOrthogonalSimple(FPos3D head) {
+
+        return setOrthogonalSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public FVector rotateAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
+
+        sub(bX, bY, bZ);
+
+        getRefHead().rotateAround(hX - bX, hY - bY, hZ - bZ, angle);
+        getRefBase().rotateAround(hX - bX, hY - bY, hZ - bZ, angle);
+
+        add(bX, bY, bZ);
 
         return this;
+    }
+
+    @Override
+    public FVector rotateAround(FVector arg, double angle) {
+
+        return rotateAround(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ(),
+                angle
+        );
+    }
+
+    @Override
+    public FVector rotateAround(FPairPos3D arg, double angle) {
+
+        return rotateAround(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2(),
+                angle
+        );
+    }
+
+    @Override
+    public FVector rotateAroundSimple(double hX, double hY, double hZ, double angle) {
+
+        return rotateAround(0, 0, 0, hX, hY, hZ, angle);
+    }
+
+    @Override
+    public FVector rotateAroundSimple(FPoint head, double angle) {
+
+        return rotateAroundSimple(head.getX(), head.getY(), head.getZ(), angle);
+    }
+
+    @Override
+    public FVector rotateAroundSimple(FPos3D head, double angle) {
+
+        return rotateAroundSimple(head.getD0(), head.getD1(), head.getD2(), angle);
     }
 
     @Override
@@ -1141,22 +1472,22 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
-    public double getAngle(FVector arg) {
+    public double getAngle(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
-        if (arg.isNearZeroLength()) {
+        if (isNearZeroLength(bX, bY, bZ, hX, hY, hZ)) {
             throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
         double memoOHX = getHeadX();
         double memoOHY = getHeadY();
         double memoOHZ = getHeadZ();
-        double zeroAX = arg.getHeadX() - arg.getBaseX();
-        double zeroAY = arg.getHeadY() - arg.getBaseY();
-        double zeroAZ = arg.getHeadZ() - arg.getBaseZ();
+        double zeroAX = hX - bX;
+        double zeroAY = hY - bY;
+        double zeroAZ = hZ - bZ;
 
         getRefHead().sub(getRefBase());
 
@@ -1165,52 +1496,61 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         getRefHead().set(memoOHX, memoOHY, memoOHZ);
 
         return results;
+    }
+
+    @Override
+    public double getAngle(FVector arg) {
+
+        return getAngle(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ()
+        );
     }
 
     @Override
     public double getAngle(FPairPos3D arg) {
 
-        if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the FVector is not defined");
-        }
-
-        if (isNearZeroLength(arg)) {
-            throw new IllegalArgumentException("The direction of the argument FPairPos3D is not defined");
-        }
-
-        double memoOHX = getHeadX();
-        double memoOHY = getHeadY();
-        double memoOHZ = getHeadZ();
-        double zeroAX = arg.getPosB().getD0() - arg.getPosA().getD0();
-        double zeroAY = arg.getPosB().getD1() - arg.getPosA().getD1();
-        double zeroAZ = arg.getPosB().getD2() - arg.getPosA().getD2();
-
-        getRefHead().sub(getRefBase());
-
-        double results = getRefHead().getAngle(zeroAX, zeroAY, zeroAZ);
-
-        getRefHead().set(memoOHX, memoOHY, memoOHZ);
-
-        return results;
+        return getAngle(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2()
+        );
     }
 
     @Override
-    public FVector setAngle(FVector arg, double angle) {
+    public double getAngleSimple(double hX, double hY, double hZ) {
+
+        return getAngle(0, 0, 0, hX, hY, hZ);
+    }
+
+    @Override
+    public double getAngleSimple(FPoint head) {
+
+        return getAngleSimple(head.getX(), head.getY(), head.getZ());
+    }
+
+    @Override
+    public double getAngleSimple(FPos3D head) {
+
+        return getAngleSimple(head.getD0(), head.getD1(), head.getD2());
+    }
+
+    @Override
+    public FVector setAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         if (isNearZeroLength()) {
             throw new IllegalStateException("The direction of the FVector is not defined");
         }
 
-        if (arg.isNearZeroLength()) {
+        if (isNearZeroLength(bX, bY, bZ, hX, hY, hZ)) {
             throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
         double memoOBX = getBaseX();
         double memoOBY = getBaseY();
         double memoOBZ = getBaseZ();
-        double zeroAX = arg.getHeadX() - arg.getBaseX();
-        double zeroAY = arg.getHeadY() - arg.getBaseY();
-        double zeroAZ = arg.getHeadZ() - arg.getBaseZ();
+        double zeroAX = hX - bX;
+        double zeroAY = hY - bY;
+        double zeroAZ = hZ - bZ;
 
         moveBaseToCenter();
         getRefHead().setAngle(zeroAX, zeroAY, zeroAZ, angle);
@@ -1220,28 +1560,41 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public FVector setAngle(FVector arg, double angle) {
+
+        return setAngle(
+                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
+                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ(),
+                angle
+        );
+    }
+
+    @Override
     public FVector setAngle(FPairPos3D arg, double angle) {
 
-        if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the FVector is not defined");
-        }
+        return setAngle(
+                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
+                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2(),
+                angle
+        );
+    }
 
-        if (isNearZeroLength(arg)) {
-            throw new IllegalArgumentException("The direction of the argument FPairPos3D is not defined");
-        }
+    @Override
+    public FVector setAngleSimple(double hX, double hY, double hZ, double angle) {
 
-        double memoOBX = getBaseX();
-        double memoOBY = getBaseY();
-        double memoOBZ = getBaseZ();
-        double zeroAX = arg.getPosB().getD0() - arg.getPosA().getD0();
-        double zeroAY = arg.getPosB().getD1() - arg.getPosA().getD1();
-        double zeroAZ = arg.getPosB().getD2() - arg.getPosA().getD2();
+        return setAngle(0, 0, 0, hX, hY, hZ, angle);
+    }
 
-        moveBaseToCenter();
-        getRefHead().setAngle(zeroAX, zeroAY, zeroAZ, angle);
-        moveBase(memoOBX, memoOBY, memoOBZ);
+    @Override
+    public FVector setAngleSimple(FPoint head, double angle) {
 
-        return this;
+        return setAngleSimple(head.getX(), head.getY(), head.getZ(), angle);
+    }
+
+    @Override
+    public FVector setAngleSimple(FPos3D head, double angle) {
+
+        return setAngleSimple(head.getD0(), head.getD1(), head.getD2(), angle);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -1342,22 +1695,6 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         boolean posZ = Math.abs(bZ - hZ) < epsilon;
 
         return posX && posY && posZ;
-    }
-
-    private boolean isNearZeroLength(FPairPos3D arg) {
-        boolean posX = Math.abs(arg.getPosA().getD0() - arg.getPosB().getD0()) < epsilon;
-        boolean posY = Math.abs(arg.getPosA().getD1() - arg.getPosB().getD1()) < epsilon;
-        boolean posZ = Math.abs(arg.getPosA().getD2() - arg.getPosB().getD2()) < epsilon;
-
-        return posX && posY && posZ;
-    }
-
-    private double getMagnitude(FPairPos3D arg) {
-        double distX = arg.getPosB().getD0() - arg.getPosA().getD0();
-        double distY = arg.getPosB().getD1() - arg.getPosA().getD1();
-        double distZ = arg.getPosB().getD2() - arg.getPosA().getD2();
-
-        return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
     }
 
     private double getMagnitude(double bX, double bY, double bZ, double hX, double hY, double hZ) {
