@@ -1,7 +1,6 @@
 package eu.scattering.core.impl.mutables.geometry.primitive;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
-import eu.scattering.core.impl.mutables.geometry.primitive.support.PrimitivePresetDef;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
@@ -16,7 +15,7 @@ import java.util.function.Function;
 
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
-public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
+public class FPointDef implements FPoint {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "point";
     private static final String JSON_VAL = "val";
@@ -124,6 +123,14 @@ public class FPointDef extends PrimitivePresetDef<FPoint> implements FPoint {
         var z = structure.getDouble(2);
 
         return set(x, y, z);
+    }
+
+    @Override
+    public FPoint applyStateTo(FPoint arg) {
+
+        arg.applyStateFrom(this);
+
+        return this;
     }
 
     // -------------------------------------------------------------------------------------------------

@@ -2,7 +2,6 @@ package eu.scattering.core.impl.mutables.geometry.primitive;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.impl.mutables.geometry.primitive.support.PrimitivePresetDef;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
@@ -14,11 +13,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
-public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
+public class FVectorDef implements FVector {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "vector";
     private static final String JSON_VAL = "val";
@@ -280,6 +280,14 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
         return set(base, head);
     }
 
+    @Override
+    public FVector applyStateTo(FVector arg) {
+
+        arg.applyStateFrom(this);
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -531,9 +539,63 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public FVector addXYZ(FPoint arg) {
+
+        return addXYZ(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
     public FVector addXYZ(FPos3D arg) {
 
         return addXYZ(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public FVector addXYZ(double x, double y, double z) {
+
+        getRefBase().addXYZ(x, y, z);
+        getRefHead().addXYZ(x, y, z);
+
+        return this;
+    }
+
+    @Override
+    public FVector addFactor(double factor) {
+
+        return addXYZ(factor, factor, factor);
+    }
+
+    @Override
+    public FVector addX(double x) {
+
+        getRefBase().addX(x);
+        getRefHead().addX(x);
+
+        return this;
+    }
+
+    @Override
+    public FVector addY(double y) {
+
+        getRefBase().addY(y);
+        getRefHead().addY(y);
+
+        return this;
+    }
+
+    @Override
+    public FVector addZ(double z) {
+
+        getRefBase().addZ(z);
+        getRefHead().addZ(z);
+
+        return this;
+    }
+
+    @Override
+    public FVector subXYZ(FPoint arg) {
+
+        return subXYZ(arg.getX(), arg.getY(), arg.getZ());
     }
 
     @Override
@@ -543,15 +605,153 @@ public class FVectorDef extends PrimitivePresetDef<FVector> implements FVector {
     }
 
     @Override
+    public FVector subXYZ(double x, double y, double z) {
+
+        getRefBase().subXYZ(x, y, z);
+        getRefHead().subXYZ(x, y, z);
+
+        return this;
+    }
+
+    @Override
+    public FVector subFactor(double factor) {
+
+        return subXYZ(factor, factor, factor);
+    }
+
+    @Override
+    public FVector subX(double x) {
+
+        getRefBase().subX(x);
+        getRefHead().subX(x);
+
+        return this;
+    }
+
+    @Override
+    public FVector subY(double y) {
+
+        getRefBase().subY(y);
+        getRefHead().subY(y);
+
+        return this;
+    }
+
+    @Override
+    public FVector subZ(double z) {
+
+        getRefBase().subZ(z);
+        getRefHead().subZ(z);
+
+        return this;
+    }
+
+    @Override
+    public FVector mulXYZ(FPoint arg) {
+
+        return mulXYZ(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
     public FVector mulXYZ(FPos3D arg) {
 
         return mulXYZ(arg.getD0(), arg.getD1(), arg.getD2());
     }
 
     @Override
+    public FVector mulXYZ(double x, double y, double z) {
+
+        getRefBase().mulXYZ(x, y, z);
+        getRefHead().mulXYZ(x, y, z);
+
+        return this;
+    }
+
+    @Override
+    public FVector mulFactor(double factor) {
+
+        return mulXYZ(factor, factor, factor);
+    }
+
+    @Override
+    public FVector mulX(double x) {
+
+        getRefBase().mulX(x);
+        getRefHead().mulX(x);
+
+        return this;
+    }
+
+    @Override
+    public FVector mulY(double y) {
+
+        getRefBase().mulY(y);
+        getRefHead().mulY(y);
+
+        return this;
+    }
+
+    @Override
+    public FVector mulZ(double z) {
+
+        getRefBase().mulZ(z);
+        getRefHead().mulZ(z);
+
+        return this;
+    }
+
+    @Override
+    public FVector divXYZ(FPoint arg) {
+
+        return divXYZ(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
     public FVector divXYZ(FPos3D arg) {
 
         return divXYZ(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public FVector divXYZ(double x, double y, double z) {
+
+        getRefBase().divXYZ(x, y, z);
+        getRefHead().divXYZ(x, y, z);
+
+        return this;
+    }
+
+    @Override
+    public FVector divFactor(double factor) {
+
+        return divXYZ(factor, factor, factor);
+    }
+
+    @Override
+    public FVector divX(double x) {
+
+        getRefBase().divX(x);
+        getRefHead().divX(x);
+
+        return this;
+    }
+
+    @Override
+    public FVector divY(double y) {
+
+        getRefBase().divY(y);
+        getRefHead().divY(y);
+
+        return this;
+    }
+
+    @Override
+    public FVector divZ(double z) {
+
+        getRefBase().divZ(z);
+        getRefHead().divZ(z);
+
+        return this;
     }
 
     @Override
