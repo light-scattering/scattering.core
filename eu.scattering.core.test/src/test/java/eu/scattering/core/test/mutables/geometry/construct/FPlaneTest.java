@@ -222,8 +222,8 @@ public class FPlaneTest {
             FPlane fPlaneB = factory.getRefFPlane(fVector.copy().addFactor(0.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fPlaneA.isCoplanar(fPlaneB), "FPlanes should be coplanar"),
-                    () -> assertTrue(fPlaneB.isCoplanar(fPlaneA), "FPlanes should be coplanar")
+                    () -> assertTrue(fPlaneA.isSamePlane(fPlaneB), "FPlanes should be coplanar"),
+                    () -> assertTrue(fPlaneB.isSamePlane(fPlaneA), "FPlanes should be coplanar")
             );
         }
 
@@ -241,8 +241,8 @@ public class FPlaneTest {
             fPlaneB.getRefOrigin().moveBase(fPointA);
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fPlaneA.isCoplanar(fPlaneB), "FPlanes should be coplanar"),
-                    () -> assertTrue(fPlaneB.isCoplanar(fPlaneA), "FPlanes should be coplanar")
+                    () -> assertTrue(fPlaneA.isSamePlane(fPlaneB), "FPlanes should be coplanar"),
+                    () -> assertTrue(fPlaneB.isSamePlane(fPlaneA), "FPlanes should be coplanar")
             );
         }
 
@@ -254,8 +254,8 @@ public class FPlaneTest {
             FPlane fPlaneB = factory.getRefFPlane(fVector.copy().addX(1.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertFalse(fPlaneA.isCoplanar(fPlaneB), "FPlanes should not be coplanar"),
-                    () -> assertFalse(fPlaneB.isCoplanar(fPlaneA), "FPlanes should not be coplanar")
+                    () -> assertFalse(fPlaneA.isSamePlane(fPlaneB), "FPlanes should not be coplanar"),
+                    () -> assertFalse(fPlaneB.isSamePlane(fPlaneA), "FPlanes should not be coplanar")
             );
         }
 
@@ -267,8 +267,8 @@ public class FPlaneTest {
             FPlane fPlaneB = factory.getRefFPlane(fVector.copy().addY(1.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertFalse(fPlaneA.isCoplanar(fPlaneB), "FPlanes should not be coplanar"),
-                    () -> assertFalse(fPlaneB.isCoplanar(fPlaneA), "FPlanes should not be coplanar")
+                    () -> assertFalse(fPlaneA.isSamePlane(fPlaneB), "FPlanes should not be coplanar"),
+                    () -> assertFalse(fPlaneB.isSamePlane(fPlaneA), "FPlanes should not be coplanar")
             );
         }
 
@@ -280,8 +280,8 @@ public class FPlaneTest {
             FPlane fPlaneB = factory.getRefFPlane(fVector.copy().addZ(1.5 * jitter));
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertFalse(fPlaneA.isCoplanar(fPlaneB), "FPlanes should not be coplanar"),
-                    () -> assertFalse(fPlaneB.isCoplanar(fPlaneA), "FPlanes should not be coplanar")
+                    () -> assertFalse(fPlaneA.isSamePlane(fPlaneB), "FPlanes should not be coplanar"),
+                    () -> assertFalse(fPlaneB.isSamePlane(fPlaneA), "FPlanes should not be coplanar")
             );
         }
 

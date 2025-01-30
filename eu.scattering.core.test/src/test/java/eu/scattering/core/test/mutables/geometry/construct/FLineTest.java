@@ -232,8 +232,8 @@ public class FLineTest {
             fLineB.getRefOrigin().shiftForward(10);
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isCollinear(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isCollinear(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
@@ -247,8 +247,8 @@ public class FLineTest {
             fLineB.getRefOrigin().shiftForward(10).reflectHead();
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isCollinear(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isCollinear(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
@@ -262,8 +262,8 @@ public class FLineTest {
             fLineB.getRefOrigin().shiftBackward(10);
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isCollinear(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isCollinear(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
@@ -277,8 +277,8 @@ public class FLineTest {
             fLineB.getRefOrigin().shiftBackward(10).reflectHead();
 
             Assertions.assertAll("Validate exactness",
-                    () -> assertTrue(fLineA.isCollinear(fLineB), "FLines should be similar"),
-                    () -> assertTrue(fLineB.isCollinear(fLineA), "FLines should be similar")
+                    () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
         }
 
@@ -288,7 +288,7 @@ public class FLineTest {
             FLine fLineA = factory.getRefFLine(TestHelper.getRandomFVector());
             FLine fLineB = factory.getRefFLine(TestHelper.getRandomFVector());
 
-            FLineTestHelper.testValue(FLine::isCollinear, fLineA, fLineB);
+            FLineTestHelper.testValue(FLine::isSameLine, fLineA, fLineB);
         }
 
         @Test

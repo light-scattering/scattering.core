@@ -4,5 +4,5 @@ import eu.scattering.core.design.mutables.geometry.Geometry;
 
 public interface FRayEngineRotation {
 
-    void rotate(FRay origin, Geometry geometry, double angle);
+    void rotQtAround(FRay ref, Geometry in, double angle);
 }

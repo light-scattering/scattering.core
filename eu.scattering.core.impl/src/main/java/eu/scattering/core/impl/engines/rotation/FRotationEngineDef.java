@@ -12,6 +12,8 @@ import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
+import java.util.Collection;
+
 public class FRotationEngineDef implements FRotationEngine {
     private final FRotationProcessor core;
 
@@ -26,54 +28,55 @@ public class FRotationEngineDef implements FRotationEngine {
     }
 
     @Override
-    public Geometry rotate(Geometry geometry, FRotQt qt) {
+    public Geometry rot(Geometry in, FRotQt qt) {
 
         FMatrix3x3D matrix = qt.getMatrix();
-        FPos3D rotOffset = qt.getOffset();
+        FPos3D offset = qt.getOffset();
 
-        geometry.disassemble().forEach((e) -> e.disassemble().forEach(p -> p
-                .subX(rotOffset.getD0())
-                .subY(rotOffset.getD1())
-                .subZ(rotOffset.getD2())
-                .set(
-                        (matrix.get0x0() * p.getX()) + (matrix.get0x1() * p.getY()) + (matrix.get0x2() * p.getZ()),
-                        (matrix.get1x0() * p.getX()) + (matrix.get1x1() * p.getY()) + (matrix.get1x2() * p.getZ()),
-                        (matrix.get2x0() * p.getX()) + (matrix.get2x1() * p.getY()) + (matrix.get2x2() * p.getZ())
-                )
-                .addX(rotOffset.getD0())
-                .addY(rotOffset.getD1())
-                .addZ(rotOffset.getD2())
-        ));
+        Collection<FPoint> assembly = in.disassemble();
 
-        return geometry;
+        for(FPoint point : assembly) {
+            rot(point, offset, matrix);
+        }
+
+        return in;
     }
 
-//    private void rotate(FPoint in, FRotQt qt) {
-//
-//    }
+    private FPoint rot(FPoint point, FPos3D offset, FMatrix3x3D matrix) {
+
+        point.sub(offset);
+        point.mul(matrix);
+        point.add(offset);
+
+        return point;
+    }
 
     //--------------------------------------------------
 
     @Override
-    public FPoint setFPointQtAngle(FPoint in, FPoint arg, double angle) {
-        var axis = in.copy().setCrossProduct(arg);
-        var fPointCopy = arg.copy();
+    public FPoint setQtAngle(FPoint in, FPoint arg, double angle) {
+        in.setCrossProduct(arg);
 
-        fPointCopy.apply(p -> rotFPointQt(p, core.getRotationQt(axis.toFPos3D(), angle)));
+        FPos3D axis = in.toFPos3D();
 
-        return in.applyStateFrom(fPointCopy);
+        in.applyStateFrom(arg);
+
+        FRotQt qt = core.getRotQt(axis, angle);
+
+        return rotQt(in, qt);
     }
 
     @Override
-    public FPoint rotFPointQtAround(FPoint in, FPoint arg, double angle) {
+    public FPoint rotQtAround(FPoint in, FPoint arg, double angle) {
+        FRotQt qt = core.getRotQt(arg.toFPos3D(), angle);
 
-        return in.apply(p -> rotFPointQt(p, core.getRotationQt(arg.toFPos3D(), angle)));
+        return rotQt(in, qt);
     }
 
     @Override
-    public FPoint rotFPointQt(FPoint in, FRotQt core) {
+    public FPoint rotQt(FPoint in, FRotQt qt) {
 
-        return in.apply(p -> rotate(p, core));
+        return rot(in, qt.getOffset(), qt.getMatrix());
     }
 
     //--------------------------------------------------
@@ -92,7 +95,7 @@ public class FRotationEngineDef implements FRotationEngine {
         var fCopyLocal = origin.copy().moveBaseToCenter();
         var fCopyExternal = ref.copy().moveBaseToCenter();
 
-        setFPointQtAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
+        setQtAngle(fCopyLocal.getRefHead(), fCopyExternal.getRefHead(), angle);
 
         fCopyLocal.moveBase(origin.getRefBase());
 
@@ -108,7 +111,7 @@ public class FRotationEngineDef implements FRotationEngine {
 
         FVector fCopyLocal = origin.copy().set(origin.getRefBase(), ref);
 
-        rotate(origin, core.getRotationQt(fCopyLocal.toFPairPos3D(), angle));
+        rot(origin, core.getRotQt(fCopyLocal.toFPairPos3D(), angle));
 
         return origin;
     }
@@ -120,51 +123,51 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
         }
 
-        rotate(origin, core.getRotationQt(ref.toFPairPos3D(), angle));
+        rot(origin, core.getRotQt(ref.toFPairPos3D(), angle));
 
         return origin;
     }
 
     @Override
-    public void rotate(FLine origin, Geometry geometry, double angle) {
+    public void rotQtAround(FLine ref, Geometry in, double angle) {
 
-        if (origin.getRefOrigin().isNearZeroLength()) {
+        if (ref.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var rotor = core.getRotationQt(origin.getRefOrigin().toFPairPos3D(), angle);
+        var rotor = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        geometry.disassemble().forEach(p -> rotFPointQt(p, rotor));
+        in.disassemble().forEach(p -> rotQt(p, rotor));
     }
 
     @Override
-    public void rotate(FRay origin, Geometry geometry, double angle) {
+    public void rotQtAround(FRay ref, Geometry in, double angle) {
 
-        if (origin.getRefOrigin().isNearZeroLength()) {
+        if (ref.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var rotor = core.getRotationQt(origin.getRefOrigin().toFPairPos3D(), angle);
+        var rotor = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        geometry.disassemble().forEach(p -> {
-            if (p.copy().apply(origin::project).toBoolean(origin::isPartOf)) {
-                rotFPointQt(p, rotor);
+        in.disassemble().forEach(p -> {
+            if (p.copy().apply(ref::project).toBoolean(ref::isPartOf)) {
+                rotQt(p, rotor);
             }
         });
     }
 
     @Override
-    public void rotate(FSegment origin, Geometry geometry, double angle) {
+    public void rotQtAround(FSegment ref, Geometry in, double angle) {
 
-        if (origin.getRefOrigin().isNearZeroLength()) {
+        if (ref.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var rotor = core.getRotationQt(origin.getRefOrigin().toFPairPos3D(), angle);
+        var rotor = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        geometry.disassemble().forEach(p -> {
-            if (p.copy().apply(origin::project).toBoolean(origin::isPartOf)) {
-                rotFPointQt(p, rotor);
+        in.disassemble().forEach(p -> {
+            if (p.copy().apply(ref::project).toBoolean(ref::isPartOf)) {
+                rotQt(p, rotor);
             }
         });
     }

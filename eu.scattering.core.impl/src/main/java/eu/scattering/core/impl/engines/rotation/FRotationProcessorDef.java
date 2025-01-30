@@ -20,13 +20,13 @@ public class FRotationProcessorDef implements FRotationProcessor {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FRotQt getRotationQt(FPos3D axis, double angle) {
+    public FRotQt getRotQt(FPos3D axis, double angle) {
 
-        return getRotationQt(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
+        return getRotQt(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
     }
 
     @Override
-    public FRotQt getRotationQt(FPairPos3D axis, double angle) {
+    public FRotQt getRotQt(FPairPos3D axis, double angle) {
         FPos4D quaternion = getQuaternion(axis, angle);
         FPos3D offset = getOffset(axis);
         FMatrix3x3D matrix = getMatrix(quaternion);

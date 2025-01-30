@@ -424,11 +424,17 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public double getDistanceP2(FComplex arg) {
-        double distRe = Math.abs(getRe() - arg.getRe());
-        double distIm = Math.abs(getIm() - arg.getIm());
+    public double getDistanceP2(double re, double im) {
+        double distRe = Math.abs(getRe() - re);
+        double distIm = Math.abs(getIm() - im);
 
         return (distRe * distRe) + (distIm * distIm);
+    }
+
+    @Override
+    public double getDistanceP2(FComplex arg) {
+
+        return getDistanceP2(arg.getRe(), arg.getIm());
     }
 
     @Override

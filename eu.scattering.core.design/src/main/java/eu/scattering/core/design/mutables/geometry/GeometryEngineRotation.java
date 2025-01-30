@@ -7,5 +7,5 @@ import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 
 public interface GeometryEngineRotation extends ConstructEngineRotation, PrimitiveEngineRotation, ShapeEngineRotation {
 
-    Geometry rotate(Geometry geometry, FRotQt core);
+    Geometry rot(Geometry in, FRotQt core);
 }

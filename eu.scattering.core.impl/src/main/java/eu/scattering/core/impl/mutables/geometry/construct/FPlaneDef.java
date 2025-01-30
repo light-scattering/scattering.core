@@ -158,7 +158,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isCoplanar(FPlane arg) {
+    public boolean isSamePlane(FPlane arg) {
 
         return getRefOrigin().isCollinear(arg.getRefOrigin()) && isPartOf(arg.getRefOrigin().getRefBase());
     }

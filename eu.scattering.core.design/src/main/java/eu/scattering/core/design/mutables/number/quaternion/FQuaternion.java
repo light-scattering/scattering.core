@@ -2,6 +2,7 @@ package eu.scattering.core.design.mutables.number.quaternion;
 
 import eu.scattering.core.design.annotations.Extension;
 import eu.scattering.core.design.annotations.Facade;
+import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.number.Number;
 import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
@@ -11,7 +12,7 @@ import java.util.function.Function;
 
 public interface FQuaternion extends Number<FQuaternion> {
 
-    FQuaternion set(double re, double i, double j, double k);
+    FQuaternion applyStateFrom(double re, double i, double j, double k);
 
     double getRe();
     FQuaternion setRe(double re);
@@ -25,14 +26,20 @@ public interface FQuaternion extends Number<FQuaternion> {
 
     //--------------------------------------------------
 
-    FQuaternion set(FPos4D position);
+    FQuaternion applyStateFrom(FPos4D position);
 
     FPos4D toFPos4D();
 
     //--------------------------------------------------
 
     boolean isExact(double re, double i, double j, double k);
+    boolean isExact(FPos4D arg);
+
     boolean isSimilar(double re, double i, double j, double k);
+    boolean isSimilar(FPos4D arg);
+
+    FQuaternion add(FPos4D arg);
+    FQuaternion sub(FPos4D arg);
 
     FQuaternion add(double re, double i, double j, double k);
     FQuaternion addRe(double re);
@@ -60,7 +67,22 @@ public interface FQuaternion extends Number<FQuaternion> {
     FQuaternion divJ(double j);
     FQuaternion divK(double k);
 
+    double getDistance(double re, double i, double j, double k);
+    double getDistance(FPos4D arg);
+
+    FQuaternion setDistance(double re, double i, double j, double k, double distance);
+    FQuaternion setDistance(FPos4D arg, double distance);
+
     //--------------------------------------------------
+
+    @Fragment
+    double getMagnitudeP2();
+    @Fragment
+    double getDistanceP2(double re, double i, double j, double k);
+    @Fragment
+    double getDistanceP2(FQuaternion arg);
+    @Fragment
+    double getDistanceP2(FPos4D arg);
 
     @Extension
     FQuaternion apply(Consumer<FQuaternion> action);

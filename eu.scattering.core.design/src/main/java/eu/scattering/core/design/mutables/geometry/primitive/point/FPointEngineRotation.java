@@ -4,8 +4,10 @@ import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 
 public interface FPointEngineRotation {
 
-    FPoint setFPointQtAngle(FPoint in, FPoint arg, double angle);
+    FPoint setQtAngle(FPoint in, FPoint arg, double angle);
+    // TODO - should be - FPoint rotQtAround(FPoint ref, FPoint in, double angle);
+    FPoint rotQtAround(FPoint in, FPoint arg, double angle);
+//    FPoint rotFPointQtAround(FPoint in, FPos3D arg, double angle);
 
-    FPoint rotFPointQtAround(FPoint in, FPoint arg, double angle);
-    FPoint rotFPointQt(FPoint in, FRotQt core);
+    FPoint rotQt(FPoint in, FRotQt qt);
 }

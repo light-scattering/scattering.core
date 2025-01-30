@@ -52,7 +52,7 @@ public class FRandomEngineDef implements FRandomEngine {
     public FQuaternion rndPosition(FQuaternion origin, FPairPos4D range, FQuaternion... exclusion) {
         FPos4D[] exc = Arrays.stream(exclusion).map(FQuaternion::toFPos4D).toArray(FPos4D[]::new);
 
-        origin.set(core.nextDouble4D(range, exc));
+        origin.applyStateFrom(core.nextDouble4D(range, exc));
 
         return origin;
     }

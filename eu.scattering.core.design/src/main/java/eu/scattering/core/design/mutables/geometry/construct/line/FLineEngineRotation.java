@@ -4,5 +4,5 @@ import eu.scattering.core.design.mutables.geometry.Geometry;
 
 public interface FLineEngineRotation {
 
-    void rotate(FLine origin, Geometry geometry, double angle);
+    void rotQtAround(FLine ref, Geometry in, double angle);
 }

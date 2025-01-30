@@ -97,7 +97,7 @@ public class FQuaternionTest {
         void setWithPrimitives() {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
-            fQuaternion.set(1, 2, 3, 4);
+            fQuaternion.applyStateFrom(1, 2, 3, 4);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(1, fQuaternion.getRe(),
@@ -135,7 +135,7 @@ public class FQuaternionTest {
         void setWithFPos4D() {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
-            fQuaternion.set(factory.getFPos4D(1, 2, 3, 4));
+            fQuaternion.applyStateFrom(factory.getFPos4D(1, 2, 3, 4));
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(1, fQuaternion.getRe(),
@@ -230,7 +230,7 @@ public class FQuaternionTest {
         void toFPos4D() {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
-            fQuaternion.set(1, 2, 3, 4);
+            fQuaternion.applyStateFrom(1, 2, 3, 4);
 
             FPos4D fPos4D = fQuaternion.toFPos4D();
 
@@ -272,7 +272,7 @@ public class FQuaternionTest {
         @DisplayName("Add FQuaternion")
         void addFQuaternion() {
 
-            refFQuaternion.add(argFQuaternion);
+            FQuaternion results = refFQuaternion.add(argFQuaternion);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe + argRe, refFQuaternion.getRe(),
@@ -282,7 +282,9 @@ public class FQuaternionTest {
                     () -> assertEquals(refJ + argJ, refFQuaternion.getJ(),
                             "The imaginary part (J) is incorrect"),
                     () -> assertEquals(refK + argK, refFQuaternion.getK(),
-                            "The imaginary part (K) is incorrect")
+                            "The imaginary part (K) is incorrect"),
+                    () -> assertSame(refFQuaternion, results,
+                            "The reference should not change")
             );
         }
 
@@ -316,6 +318,26 @@ public class FQuaternionTest {
         void addPrimitivesValidate() {
 
             FQuaternionTestHelper.restReference(e -> e.add(0, 0, 0, 0), refFQuaternion);
+        }
+
+        @Test
+        @DisplayName("Add FPos4D")
+        void addFPos4D() {
+
+            FQuaternion results = refFQuaternion.add(factory.getFPos4D(argRe, argI, argJ, argK));
+
+            Assertions.assertAll("Validate FQuaternion values",
+                    () -> assertEquals(refRe + argRe, refFQuaternion.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(refI + argI, refFQuaternion.getI(),
+                            "The imaginary part (I) is incorrect"),
+                    () -> assertEquals(refJ + argJ, refFQuaternion.getJ(),
+                            "The imaginary part (J) is incorrect"),
+                    () -> assertEquals(refK + argK, refFQuaternion.getK(),
+                            "The imaginary part (K) is incorrect"),
+                    () -> assertSame(refFQuaternion, results,
+                            "The reference should not change")
+            );
         }
 
         @Test
@@ -517,6 +539,24 @@ public class FQuaternionTest {
         void subPrimitivesValidate() {
 
             FQuaternionTestHelper.restReference(e -> e.sub(0, 0, 0, 0), refFQuaternion);
+        }
+
+        @Test
+        @DisplayName("Sub FPos4D")
+        void subFPos4D() {
+
+            refFQuaternion.sub(factory.getFPos4D(argRe, argI, argJ, argK));
+
+            Assertions.assertAll("Validate FQuaternion values",
+                    () -> assertEquals(refRe - argRe, refFQuaternion.getRe(),
+                            "The real part is incorrect"),
+                    () -> assertEquals(refI - argI, refFQuaternion.getI(),
+                            "The imaginary part (I) is incorrect"),
+                    () -> assertEquals(refJ - argJ, refFQuaternion.getJ(),
+                            "The imaginary part (J) is incorrect"),
+                    () -> assertEquals(refK - argK, refFQuaternion.getK(),
+                            "The imaginary part (K) is incorrect")
+            );
         }
 
         @Test
@@ -1222,6 +1262,15 @@ public class FQuaternionTest {
         }
 
         @Test
+        @DisplayName("Exactness with FPos4D")
+        void isExactWithFPos4D() {
+            FPos4D fPos4D = factory.getFPos4D(refRe, refI, refJ, refK);
+
+            assertTrue(refFQuaternion.isExact(fPos4D),
+                            "Values should be equal");
+        }
+
+        @Test
         @DisplayName("Similarity")
         void isSimilar() {
             double ref = jitter * 0.5;
@@ -1326,6 +1375,16 @@ public class FQuaternionTest {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
             FQuaternionTestHelper.testValue(e -> e.isSimilar(0, 0, 0, 0), fQuaternion);
+        }
+
+        @Test
+        @DisplayName("Similarity with FPos4D")
+        void isSimilarWithFPos4D() {
+            double error = 0.5 * jitter;
+            FPos4D fPos4D = factory.getFPos4D(refRe + error, refI + error, refJ + error, refK + error);
+
+            assertTrue(refFQuaternion.isSimilar(fPos4D),
+                    "FComplex values should be similar");
         }
 
         @Test
@@ -1467,12 +1526,13 @@ public class FQuaternionTest {
 
             double distanceRe = Math.pow(Math.abs(fQuaternionRef.getRe() - fQuaternionArg.getRe()), 2);
             double distanceI = Math.pow(Math.abs(fQuaternionRef.getI() - fQuaternionArg.getI()), 2);
-            double distanceJ = Math.pow(Math.abs(fQuaternionRef.getJ() - fQuaternionArg.getI()), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternionRef.getJ() - fQuaternionArg.getJ()), 2);
             double distanceK = Math.pow(Math.abs(fQuaternionRef.getK() - fQuaternionArg.getK()), 2);
 
             double res = Math.sqrt(distanceRe + distanceI + distanceJ + distanceK);
 
-            assertEquals(res, fQuaternionRef.getDistance(fQuaternionArg), jitter, "The distance is erroneous");
+            assertEquals(res, fQuaternionRef.getDistance(fQuaternionArg),
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -1485,6 +1545,43 @@ public class FQuaternionTest {
         }
 
         @Test
+        @DisplayName("Get distance with primitives")
+        void getDistanceWithPrimitives() {
+            double re = random.nextDouble();
+            double i = random.nextDouble();
+            double j = random.nextDouble();
+            double k = random.nextDouble();
+
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
+
+            double distanceRe = Math.pow(Math.abs(fQuaternion.getRe() - re), 2);
+            double distanceI = Math.pow(Math.abs(fQuaternion.getI() - i), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternion.getJ() - j), 2);
+            double distanceK = Math.pow(Math.abs(fQuaternion.getK() - k), 2);
+
+            double res = Math.sqrt(distanceRe + distanceI + distanceJ + distanceK);
+
+            assertEquals(res, fQuaternion.getDistance(re, i, j, k),
+                    jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance with FPos4D")
+        void getDistanceWithFPos4D() {
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
+            FPos4D fPos4D = TestHelper.getRandomFQuaternion(fQuaternion).toFPos4D();
+
+            double distanceRe = Math.pow(Math.abs(fQuaternion.getRe() - fPos4D.getD0()), 2);
+            double distanceI = Math.pow(Math.abs(fQuaternion.getI() - fPos4D.getD1()), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternion.getJ() - fPos4D.getD2()), 2);
+            double distanceK = Math.pow(Math.abs(fQuaternion.getK() - fPos4D.getD3()), 2);
+
+            double res = Math.sqrt(distanceRe + distanceI + distanceJ + distanceK);
+
+            assertEquals(res, fQuaternion.getDistance(fPos4D), jitter, "The distance is erroneous");
+        }
+
+        @Test
         @DisplayName("Get distance P2")
         void getDistanceP2() {
             FQuaternion fQuaternionRef = TestHelper.getRandomFQuaternion();
@@ -1492,12 +1589,13 @@ public class FQuaternionTest {
 
             double distanceRe = Math.pow(Math.abs(fQuaternionRef.getRe() - fQuaternionArg.getRe()), 2);
             double distanceI = Math.pow(Math.abs(fQuaternionRef.getI() - fQuaternionArg.getI()), 2);
-            double distanceJ = Math.pow(Math.abs(fQuaternionRef.getJ() - fQuaternionArg.getI()), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternionRef.getJ() - fQuaternionArg.getJ()), 2);
             double distanceK = Math.pow(Math.abs(fQuaternionRef.getK() - fQuaternionArg.getK()), 2);
 
             double res = distanceRe + distanceI + distanceJ + distanceK;
 
-            assertEquals(res, fQuaternionRef.getDistanceP2(fQuaternionArg), jitter, "The distance is erroneous");
+            assertEquals(res, fQuaternionRef.getDistanceP2(fQuaternionArg),
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -1507,6 +1605,44 @@ public class FQuaternionTest {
             FQuaternion fQuaternionArg = factory.getFQuaternion();
 
             FQuaternionTestHelper.testValue(FQuaternion::getDistanceP2, fQuaternionRef, fQuaternionArg);
+        }
+
+        @Test
+        @DisplayName("Get distance P2 with primitives")
+        void getDistanceP2WithPrimitives() {
+            double re = random.nextDouble();
+            double i = random.nextDouble();
+            double j = random.nextDouble();
+            double k = random.nextDouble();
+
+            FQuaternion fQuaternionRef = TestHelper.getRandomFQuaternion();
+
+            double distanceRe = Math.pow(Math.abs(fQuaternionRef.getRe() - re), 2);
+            double distanceI = Math.pow(Math.abs(fQuaternionRef.getI() - i), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternionRef.getJ() - j), 2);
+            double distanceK = Math.pow(Math.abs(fQuaternionRef.getK() - k), 2);
+
+            double res = distanceRe + distanceI + distanceJ + distanceK;
+
+            assertEquals(res, fQuaternionRef.getDistanceP2(re, i, j, k),
+                    jitter, "The distance is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get distance P2 with FPos4D")
+        void getDistanceP2WithFPos4D() {
+            FQuaternion fQuaternion = TestHelper.getRandomFQuaternion();
+            FPos4D fPos4D = TestHelper.getRandomFQuaternion(fQuaternion).toFPos4D();
+
+            double distanceRe = Math.pow(Math.abs(fQuaternion.getRe() - fPos4D.getD0()), 2);
+            double distanceI = Math.pow(Math.abs(fQuaternion.getI() - fPos4D.getD1()), 2);
+            double distanceJ = Math.pow(Math.abs(fQuaternion.getJ() - fPos4D.getD2()), 2);
+            double distanceK = Math.pow(Math.abs(fQuaternion.getK() - fPos4D.getD3()), 2);
+
+            double res = distanceRe + distanceI + distanceJ + distanceK;
+
+            assertEquals(res, fQuaternion.getDistanceP2(fPos4D),
+                    jitter, "The distance is erroneous");
         }
 
         @Test

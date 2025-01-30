@@ -17,7 +17,7 @@ public interface FPlane extends Construct<FPlane> {
 
     //--------------------------------------------------
 
-    boolean isCoplanar(FPlane ref);
+    boolean isSamePlane(FPlane ref);
 
     boolean isCut(Geometry geometry);
     boolean isOnSide(Geometry geometry);

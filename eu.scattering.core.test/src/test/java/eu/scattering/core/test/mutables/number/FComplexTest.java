@@ -1012,7 +1012,8 @@ public class FComplexTest {
 
             double res = Math.sqrt((fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm()));
 
-            assertEquals(res, fComplex.getMagnitude(), "The magnitude is erroneous");
+            assertEquals(res, fComplex.getMagnitude(),
+                    "The magnitude is erroneous");
         }
 
         @Test
@@ -1030,7 +1031,8 @@ public class FComplexTest {
 
             double res = (fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm());
 
-            assertEquals(res, fComplex.getMagnitudeP2(), "The magnitude is erroneous");
+            assertEquals(res, fComplex.getMagnitudeP2(),
+                    "The magnitude is erroneous");
         }
 
         @Test
@@ -1051,7 +1053,8 @@ public class FComplexTest {
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - fComplexArg.getIm()), 2);
             double res = Math.sqrt(distanceRe + distanceIm);
 
-            assertEquals(res, fComplexRef.getDistance(fComplexArg), jitter, "The distance is erroneous");
+            assertEquals(res, fComplexRef.getDistance(fComplexArg),
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -1075,7 +1078,8 @@ public class FComplexTest {
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - argIm), 2);
             double res = Math.sqrt(distanceRe + distanceIm);
 
-            assertEquals(res, fComplexRef.getDistance(argRe, argIm), jitter, "The distance is erroneous");
+            assertEquals(res, fComplexRef.getDistance(argRe, argIm),
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -1091,7 +1095,8 @@ public class FComplexTest {
             double distanceIm = Math.pow(Math.abs(fComplex.getIm() - fPos2D.getD1()), 2);
             double res = Math.sqrt(distanceRe + distanceIm);
 
-            assertEquals(res, fComplex.getDistance(fPos2D), jitter, "The distance is erroneous");
+            assertEquals(res, fComplex.getDistance(fPos2D),
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -1104,7 +1109,8 @@ public class FComplexTest {
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - fComplexArg.getIm()), 2);
             double res = distanceRe + distanceIm;
 
-            assertEquals(res, fComplexRef.getDistanceP2(fComplexArg), jitter, "The distance is erroneous");
+            assertEquals(res, fComplexRef.getDistanceP2(fComplexArg),
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -1117,6 +1123,22 @@ public class FComplexTest {
         }
 
         @Test
+        @DisplayName("Get distance P2 with primitives")
+        void getDistanceP2WithPrimitives() {
+            double re = random.nextDouble();
+            double im = random.nextDouble();
+
+            FComplex fComplexRef = TestHelper.getRandomFComplex();
+
+            double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - re), 2);
+            double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - im), 2);
+            double res = distanceRe + distanceIm;
+
+            assertEquals(res, fComplexRef.getDistanceP2(re, im),
+                    jitter, "The distance is erroneous");
+        }
+
+        @Test
         @DisplayName("Get distance P2 with FPos2D")
         void getDistanceP2WithFPos2D() {
             FComplex fComplexRef = TestHelper.getRandomFComplex();
@@ -1126,7 +1148,8 @@ public class FComplexTest {
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - fPos2D.getD1()), 2);
             double res = distanceRe + distanceIm;
 
-            assertEquals(res, fComplexRef.getDistanceP2(fPos2D), jitter, "The distance is erroneous");
+            assertEquals(res, fComplexRef.getDistanceP2(fPos2D),
+                    jitter, "The distance is erroneous");
         }
 
         @Test
@@ -1151,7 +1174,8 @@ public class FComplexTest {
             fComplexA.setMagnitude(-magnitude);
             fComplexB.setMagnitude(magnitude);
 
-            assertTrue(fComplexA.isSimilar(fComplexB), "The magnitude is erroneous");
+            assertTrue(fComplexA.isSimilar(fComplexB),
+                    "The magnitude is erroneous");
         }
 
         @Test
@@ -1373,7 +1397,8 @@ public class FComplexTest {
         public void isZero() {
             FComplex fComplex = factory.getFComplex();
 
-            assertTrue(fComplex.isZero(), "The FComplex value should be zero");
+            assertTrue(fComplex.isZero(),
+                    "The FComplex value should be zero");
         }
 
         @Test
@@ -1381,7 +1406,8 @@ public class FComplexTest {
         public void isZeroFail() {
             FComplex fComplex = TestHelper.getRandomFComplex();
 
-            assertFalse(fComplex.isZero(), "The FComplex value should not be zero");
+            assertFalse(fComplex.isZero(),
+                    "The FComplex value should not be zero");
         }
 
         @Test
@@ -1400,7 +1426,8 @@ public class FComplexTest {
 
             FComplex res = fComplex.copy().mul(fComplex).mul(fComplex);
 
-            assertTrue(fComplex.power(n).isSimilar(res), "The value is erroneous");
+            assertTrue(fComplex.power(n).isSimilar(res),
+                    "The value is erroneous");
         }
 
         @Test
@@ -1412,7 +1439,8 @@ public class FComplexTest {
             FComplex res = factory.getFComplex(1, 0)
                     .div(fComplex.copy().mul(fComplex).mul(fComplex));
 
-            assertTrue(fComplex.power(n).isSimilar(res), "The value is erroneous");
+            assertTrue(fComplex.power(n).isSimilar(res),
+                    "The value is erroneous");
         }
 
         @Test
@@ -1420,7 +1448,8 @@ public class FComplexTest {
         public void powZero() {
             FComplex fComplex = TestHelper.getRandomFComplex();
 
-            assertTrue(fComplex.power(0).isExact(1, 0), "The value is erroneous");
+            assertTrue(fComplex.power(0).isExact(1, 0),
+                    "The value is erroneous");
         }
 
         @Test

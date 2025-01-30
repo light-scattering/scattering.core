@@ -67,6 +67,8 @@ public interface FComplex extends Number<FComplex> {
     @Fragment
     double getMagnitudeP2();
     @Fragment
+    double getDistanceP2(double re, double im);
+    @Fragment
     double getDistanceP2(FComplex arg);
     @Fragment
     double getDistanceP2(FPos2D arg);

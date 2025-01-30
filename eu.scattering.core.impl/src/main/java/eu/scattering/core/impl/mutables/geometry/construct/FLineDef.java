@@ -157,7 +157,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isCollinear(FLine arg) {
+    public boolean isSameLine(FLine arg) {
 
         return arg.isPartOf(origin);
     }

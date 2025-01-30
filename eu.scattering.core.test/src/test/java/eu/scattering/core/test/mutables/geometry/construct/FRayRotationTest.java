@@ -22,7 +22,7 @@ public class FRayRotationTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FRay fRay = factory.getRefFRay(factory.getFVector(0, -1, 0, 0, 1, 0));
 
-        rotation.rotate(fRay, fVector, Math.PI * 0.5);
+        rotation.rotQtAround(fRay, fVector, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                 "The position of the rotated FVector is erroneous");
@@ -34,7 +34,7 @@ public class FRayRotationTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FRay fRay = factory.getRefFRay(factory.getFVector(0, -1, 0, 0, 1, 0));
 
-        rotation.rotate(fRay, fVector, -(Math.PI * 0.5));
+        rotation.rotQtAround(fRay, fVector, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
                 "The position of the rotated FVector is erroneous");
@@ -46,7 +46,7 @@ public class FRayRotationTest {
         FVector fVector = factory.getFVector(-2, 2, 0, 0, 2, 0);
         FRay fRay = factory.getRefFRay(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rotation.rotate(fRay, fVector, Math.PI);
+        rotation.rotQtAround(fRay, fVector, Math.PI);
 
         assertTrue(fVector.isSimilar(-2, 2, 0, 0, -2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -58,7 +58,7 @@ public class FRayRotationTest {
         FVector fVector = factory.getFVector(0, 2, 0, 2, 2, 0);
         FRay fRay = factory.getRefFRay(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rotation.rotate(fRay, fVector, Math.PI);
+        rotation.rotQtAround(fRay, fVector, Math.PI);
 
         assertTrue(fVector.isSimilar(0, -2, 0, 2, -2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -70,7 +70,7 @@ public class FRayRotationTest {
         FVector fVector = TestHelper.getRandomFVector();
         FRay fRay = factory.getRefFRay(factory.getFVector());
 
-        Assertions.assertThrows(IllegalStateException.class, () -> rotation.rotate(fRay, fVector, Math.PI * 0.5),
+        Assertions.assertThrows(IllegalStateException.class, () -> rotation.rotQtAround(fRay, fVector, Math.PI * 0.5),
                 "The direction of the FRay is not defined");
     }
 }

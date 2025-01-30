@@ -16,7 +16,7 @@ public interface FLine extends Construct<FLine> {
 
     //--------------------------------------------------
 
-    boolean isCollinear(FLine arg);
+    boolean isSameLine(FLine arg);
 
     Optional<FPoint> getFPointAtX(double x);
     Optional<FPoint> getFPointAtY(double y);
