@@ -23,22 +23,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
+      <change afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/engine/FPointRotationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/engines/rotation/processor/FRotationProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/engines/rotation/processor/FRotationProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPoint.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPointEngineRotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/point/FPointEngineRotation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/vector/FVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/vector/FVector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/vector/FVectorEngineRotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/primitive/vector/FVectorEngineRotation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engines/rotation/FRotationEngineDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engines/rotation/FRotationEngineDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engines/rotation/FRotationProcessorDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engines/rotation/FRotationProcessorDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FPointDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FPointDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FVectorDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutables/geometry/primitive/FVectorDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/engines/FRotationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/engines/FRotationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointRotationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointRotationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointRandomTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/engine/FPointRandomTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointRotationTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FPointTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorRotationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorRotationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorRandomTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/engine/FVectorRandomTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/FVectorRotationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutables/geometry/primitive/engine/FVectorRotationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +168,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
-    <configuration name="FPointRotationTest.rotateWithFRotQt" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPointRotationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -185,7 +181,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FPointRotationTest.rotateWithFRotQt&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FPointRotationTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -195,7 +191,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FVectorRotationTest.rotateFPointWithFPairPos3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPointRotationTest.rotateRgSimplePositiveA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -208,7 +204,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorRotationTest.rotateFPointWithFPairPos3D&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FPointRotationTest.rotateRgSimplePositiveA&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -218,7 +214,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FVectorRotationTest.rotateFPointWithPrimitives" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPointRotationTest.setAngleValidate" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -231,7 +227,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorRotationTest.rotateFPointWithPrimitives&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FPointRotationTest.setAngleValidate&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -241,7 +237,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FVectorRotationTest.rotateWithFVectorSimple" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPointRotationTest.setRgAngleSimpleA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -254,7 +250,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FVectorRotationTest.rotateWithFVectorSimple&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutables.geometry.primitive.FPointRotationTest.setRgAngleSimpleA&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -288,10 +284,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FVectorRotationTest.rotateWithFVectorSimple" />
-        <item itemvalue="Gradle.FVectorRotationTest.rotateFPointWithFPairPos3D" />
-        <item itemvalue="Gradle.FVectorRotationTest.rotateFPointWithPrimitives" />
-        <item itemvalue="Gradle.FPointRotationTest.rotateWithFRotQt" />
+        <item itemvalue="Gradle.FPointRotationTest" />
+        <item itemvalue="Gradle.FPointRotationTest.setAngleValidate" />
+        <item itemvalue="Gradle.FPointRotationTest.setRgAngleSimpleA" />
+        <item itemvalue="Gradle.FPointRotationTest.rotateRgSimplePositiveA" />
       </list>
     </recent_temporary>
   </component>

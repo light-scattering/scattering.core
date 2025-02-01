@@ -1,4 +1,4 @@
-package eu.scattering.core.test.mutables.geometry.primitive;
+package eu.scattering.core.test.mutables.geometry.primitive.engine;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.engines.random.FRandomEngine;
