@@ -48,8 +48,6 @@ public interface FPoint extends Primitive<FPoint> {
     boolean isSimilar(double x, double y, double z);
     boolean isSimilar(FPos3D arg);
 
-    FPoint normalize();
-
     FPoint reflectThroughCenter();
     FPoint reflect(double x, double y, double z);
     FPoint reflect(FPoint arg);
@@ -57,6 +55,8 @@ public interface FPoint extends Primitive<FPoint> {
 
     double getMagnitude();
     FPoint setMagnitude(double magnitude);
+
+    FPoint normalize();
 
     double getDistance(double x, double y, double z);
     double getDistance(FPoint arg);
@@ -82,9 +82,9 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setAngle(FPoint arg, double angle);
     FPoint setAngle(FPos3D arg, double angle);
 
-    FPoint rotateAround(double x, double y, double z, double angle);
-    FPoint rotateAround(FPoint arg, double angle);
-    FPoint rotateAround(FPos3D arg, double angle);
+    FPoint rotAround(double x, double y, double z, double angle);
+    FPoint rotAround(FPoint arg, double angle);
+    FPoint rotAround(FPos3D arg, double angle);
 
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 

@@ -20,6 +20,26 @@ public class FRotationProcessorDef implements FRotationProcessor {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public FRotQt getRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
+
+        return getRotQt(factory.getFPairPos3D(
+                factory.getFPos3D(bX, bY, bZ),
+                factory.getFPos3D(hX, hY, hZ)),
+                angle
+        );
+    }
+
+    @Override
+    public FRotQt getRotQt(double x, double y, double z, double angle) {
+
+        return getRotQt(factory.getFPairPos3D(
+                factory.getFPos3D(0, 0, 0),
+                factory.getFPos3D(x, y, z)),
+                angle
+        );
+    }
+
+    @Override
     public FRotQt getRotQt(FPos3D axis, double angle) {
 
         return getRotQt(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);

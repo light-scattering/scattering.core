@@ -1556,12 +1556,12 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector rotateAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
+    public FVector rotAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         subXYZ(bX, bY, bZ);
 
-        getRefHead().rotateAround(hX - bX, hY - bY, hZ - bZ, angle);
-        getRefBase().rotateAround(hX - bX, hY - bY, hZ - bZ, angle);
+        getRefHead().rotAround(hX - bX, hY - bY, hZ - bZ, angle);
+        getRefBase().rotAround(hX - bX, hY - bY, hZ - bZ, angle);
 
         addXYZ(bX, bY, bZ);
 
@@ -1569,9 +1569,9 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector rotateAround(FVector arg, double angle) {
+    public FVector rotAround(FVector arg, double angle) {
 
-        return rotateAround(
+        return rotAround(
                 arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
                 arg.getHeadX(), arg.getHeadY(), arg.getHeadZ(),
                 angle
@@ -1579,9 +1579,9 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector rotateAround(FPairPos3D arg, double angle) {
+    public FVector rotAround(FPairPos3D arg, double angle) {
 
-        return rotateAround(
+        return rotAround(
                 arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
                 arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2(),
                 angle
@@ -1589,21 +1589,21 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector rotateAroundSimple(double hX, double hY, double hZ, double angle) {
+    public FVector rotAroundSimple(double hX, double hY, double hZ, double angle) {
 
-        return rotateAround(0, 0, 0, hX, hY, hZ, angle);
+        return rotAround(0, 0, 0, hX, hY, hZ, angle);
     }
 
     @Override
-    public FVector rotateAroundSimple(FPoint head, double angle) {
+    public FVector rotAroundSimple(FPoint head, double angle) {
 
-        return rotateAroundSimple(head.getX(), head.getY(), head.getZ(), angle);
+        return rotAroundSimple(head.getX(), head.getY(), head.getZ(), angle);
     }
 
     @Override
-    public FVector rotateAroundSimple(FPos3D head, double angle) {
+    public FVector rotAroundSimple(FPos3D head, double angle) {
 
-        return rotateAroundSimple(head.getD0(), head.getD1(), head.getD2(), angle);
+        return rotAroundSimple(head.getD0(), head.getD1(), head.getD2(), angle);
     }
 
     @Override

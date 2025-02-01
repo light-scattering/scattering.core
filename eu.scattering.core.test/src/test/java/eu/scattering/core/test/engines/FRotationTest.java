@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Timeout(5)
 @DisplayName("FRotation")
 public class FRotationTest {
-    private FRotationProcessor fRot = factory.getFRotationProcessor();
-    private FRotationEngine fRotHelper = factory.getFRotationEngine();
+    private final FRotationProcessor fRot = factory.getFRotationProcessor();
+    private final FRotationEngine fRotHelper = factory.getFRotationEngine();
 
     @Test
     @DisplayName("Create with FPoint (positive angle)")
@@ -31,7 +31,9 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector()
+                                .applyStateFrom(fRot.getAxis(rotor))
+                                .isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -47,7 +49,9 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(-angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isAntiParallel(factory.getFVector(axis)),
+                () -> assertTrue(factory.getFVector()
+                                .applyStateFrom(fRot.getAxis(rotor))
+                                .isAntiParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }
@@ -63,7 +67,9 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isParallel(axis),
+                () -> assertTrue(factory.getFVector()
+                                .applyStateFrom(fRot.getAxis(rotor))
+                                .isParallel(axis),
                         "The axis is incorrect")
         );
     }
@@ -79,7 +85,58 @@ public class FRotationTest {
         Assertions.assertAll("Validate FRotQt",
                 () -> assertEquals(-angle, fRot.getAngle(rotor),
                         jitter, "The angle is incorrect"),
-                () -> assertTrue(factory.getFVector().applyStateFrom(fRot.getAxis(rotor)).isAntiParallel(axis),
+                () -> assertTrue(factory.getFVector()
+                                .applyStateFrom(fRot.getAxis(rotor))
+                                .isAntiParallel(axis),
+                        "The axis is incorrect")
+        );
+    }
+
+    @Test
+    @DisplayName("Create with primitives A")
+    public void createWithPrimitivesA() {
+        FVector axis = TestHelper.getRandomFVector();
+
+        double bX = axis.getBaseX();
+        double bY = axis.getBaseY();
+        double bZ = axis.getBaseZ();
+        double hX = axis.getHeadX();
+        double hY = axis.getHeadY();
+        double hZ = axis.getHeadZ();
+
+        double angle = Math.abs(random.nextDouble() % (2 * Math.PI));
+
+        FRotQt rotor = fRot.getRotQt(bX, bY, bZ, hX, hY, hZ, angle);
+
+        Assertions.assertAll("Validate FRotQt",
+                () -> assertEquals(angle, fRot.getAngle(rotor),
+                        jitter, "The angle is incorrect"),
+                () -> assertTrue(factory.getFVector()
+                                .applyStateFrom(fRot.getAxis(rotor))
+                                .isParallel(axis),
+                        "The axis is incorrect")
+        );
+    }
+
+    @Test
+    @DisplayName("Create with primitives B")
+    public void createWithPrimitivesB() {
+        FPoint axis = TestHelper.getRandomFPoint();
+
+        double hX = axis.getX();
+        double hY = axis.getY();
+        double hZ = axis.getZ();
+
+        double angle = Math.abs(random.nextDouble() % (2 * Math.PI));
+
+        FRotQt rotor = fRot.getRotQt(hX, hY, hZ, angle);
+
+        Assertions.assertAll("Validate FRotQt",
+                () -> assertEquals(angle, fRot.getAngle(rotor),
+                        jitter, "The angle is incorrect"),
+                () -> assertTrue(factory.getFVector()
+                                .applyStateFrom(fRot.getAxis(rotor))
+                                .isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
     }

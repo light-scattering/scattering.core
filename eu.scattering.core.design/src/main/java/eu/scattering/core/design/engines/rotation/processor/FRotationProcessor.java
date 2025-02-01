@@ -6,8 +6,10 @@ import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 public interface FRotationProcessor {
 
-    FRotQt getRotQt(FPos3D axis, double angle);
+    FRotQt getRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
     FRotQt getRotQt(FPairPos3D axis, double angle);
+    FRotQt getRotQt(double x, double y, double z, double angle);
+    FRotQt getRotQt(FPos3D axis, double angle);
 
     double getAngle(FRotQt core);
     FPairPos3D getAxis(FRotQt core);

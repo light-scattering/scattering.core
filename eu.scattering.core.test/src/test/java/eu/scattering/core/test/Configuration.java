@@ -3,6 +3,7 @@ package eu.scattering.core.test;
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.engines.random.processor.FRandomProcessor;
 import eu.scattering.core.design.engines.rotation.FRotationEngine;
+import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
 import eu.scattering.core.impl.FactoryProd;
 
 public final class Configuration {

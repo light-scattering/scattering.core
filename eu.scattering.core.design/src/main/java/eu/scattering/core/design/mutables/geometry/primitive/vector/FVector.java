@@ -101,14 +101,14 @@ public interface FVector extends Primitive<FVector> {
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
 
-    FVector normalize();
-
     double getLengthX();
     double getLengthY();
     double getLengthZ();
 
     double getMagnitude();
     FVector setMagnitude(double magnitude);
+
+    FVector normalize();
 
     boolean isCollinear(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isCollinear(FVector arg);
@@ -194,12 +194,12 @@ public interface FVector extends Primitive<FVector> {
     FVector setAngleSimple(FPoint head, double angle);
     FVector setAngleSimple(FPos3D head, double angle);
 
-    FVector rotateAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
-    FVector rotateAround(FVector arg, double angle);
-    FVector rotateAround(FPairPos3D arg, double angle);
-    FVector rotateAroundSimple(double hX, double hY, double hZ, double angle);
-    FVector rotateAroundSimple(FPoint head, double angle);
-    FVector rotateAroundSimple(FPos3D head, double angle);
+    FVector rotAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FVector rotAround(FVector arg, double angle);
+    FVector rotAround(FPairPos3D arg, double angle);
+    FVector rotAroundSimple(double hX, double hY, double hZ, double angle);
+    FVector rotAroundSimple(FPoint head, double angle);
+    FVector rotAroundSimple(FPos3D head, double angle);
 
     FVector setSphericalCoordinates(double inclination, double azimuth);
 

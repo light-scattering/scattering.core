@@ -714,7 +714,7 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public FPoint rotateAround(double x, double y, double z, double angle) {
+    public FPoint rotAround(double x, double y, double z, double angle) {
 
         if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
             throw new IllegalArgumentException("The reference vector is non-directional");
@@ -755,15 +755,15 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public FPoint rotateAround(FPoint arg, double angle) {
+    public FPoint rotAround(FPoint arg, double angle) {
 
-       return rotateAround(arg.getX(), arg.getY(), arg.getZ(), angle);
+       return rotAround(arg.getX(), arg.getY(), arg.getZ(), angle);
     }
 
     @Override
-    public FPoint rotateAround(FPos3D arg, double angle) {
+    public FPoint rotAround(FPos3D arg, double angle) {
 
-        return rotateAround(arg.getD0(), arg.getD1(), arg.getD2(), angle);
+        return rotAround(arg.getD0(), arg.getD1(), arg.getD2(), angle);
     }
 
     @Override

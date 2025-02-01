@@ -2647,7 +2647,7 @@ public class FVectorTest {
             FVector fVectorRef = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FVector fVectorArg = factory.getFVector(0, 1, 0);
 
-            fVectorRef.rotateAround(fVectorArg,Math.PI * 0.5);
+            fVectorRef.rotAround(fVectorArg,Math.PI * 0.5);
 
             assertTrue(fVectorRef.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
@@ -2659,7 +2659,7 @@ public class FVectorTest {
             FVector fVectorRef = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FVector fVectorArg = factory.getFVector(0, 1, 0);
 
-            fVectorRef.rotateAround(fVectorArg, -Math.PI * 0.5);
+            fVectorRef.rotAround(fVectorArg, -Math.PI * 0.5);
 
             assertTrue(fVectorRef.isSimilar(0, 1, 1, 0, 2, 2),
                     "The position of the rotated FVector is erroneous");
@@ -2672,7 +2672,7 @@ public class FVectorTest {
             FVector fVectorArg = factory.getFVector();
             double angle = Math.abs(random.nextDouble() % Math.PI);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorRef.rotateAround(fVectorArg, angle),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorRef.rotAround(fVectorArg, angle),
                     "The direction of the provided FVector is not defined");
         }
 
@@ -2682,7 +2682,7 @@ public class FVectorTest {
             FVector fVectorRef = TestHelper.getRandomFVector();
             FVector fVectorArg = TestHelper.getRandomFVector();
 
-            FVectorTestHelper.testReference((a, b) -> a.rotateAround(b, Math.PI), fVectorRef, fVectorArg);
+            FVectorTestHelper.testReference((a, b) -> a.rotAround(b, Math.PI), fVectorRef, fVectorArg);
         }
 
         @Test
@@ -2690,7 +2690,7 @@ public class FVectorTest {
         void rotateWithPrimitivesA() {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-            FVector results = fVector.rotateAround(0, 0, 0, 0, 1, 0,Math.PI * 0.5);
+            FVector results = fVector.rotAround(0, 0, 0, 0, 1, 0,Math.PI * 0.5);
 
             assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
@@ -2703,7 +2703,7 @@ public class FVectorTest {
         void rotateWithPrimitivesB() {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-            FVector results = fVector.rotateAroundSimple( 0, 1, 0,Math.PI * 0.5);
+            FVector results = fVector.rotAroundSimple( 0, 1, 0,Math.PI * 0.5);
 
             assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
@@ -2717,7 +2717,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FPairPos3D fPairPos3D = factory.getFPairPos3D(0, 0, 0, 0, 1, 0);
 
-            FVector results = fVector.rotateAround(fPairPos3D,Math.PI * 0.5);
+            FVector results = fVector.rotAround(fPairPos3D,Math.PI * 0.5);
 
             assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
@@ -2731,7 +2731,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FPoint fPoint = factory.getFPoint(0, 1, 0);
 
-            FVector results = fVector.rotateAroundSimple(fPoint,Math.PI * 0.5);
+            FVector results = fVector.rotAroundSimple(fPoint,Math.PI * 0.5);
 
             assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
@@ -2745,7 +2745,7 @@ public class FVectorTest {
             FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
             FPos3D fPos3D = factory.getFPos3D(0, 1, 0);
 
-            FVector results = fVector.rotateAroundSimple(fPos3D, Math.PI * 0.5);
+            FVector results = fVector.rotAroundSimple(fPos3D, Math.PI * 0.5);
 
             assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                     "The position of the rotated FVector is erroneous");
