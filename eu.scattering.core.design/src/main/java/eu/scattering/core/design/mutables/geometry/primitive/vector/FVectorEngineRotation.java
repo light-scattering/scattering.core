@@ -17,12 +17,23 @@ public interface FVectorEngineRotation {
     FVector setRgAngleCompact(FPoint ref, FVector in, double angle);
     FVector setRgAngleCompact(FPos3D ref, FVector in, double angle);
 
+    FPoint rotRgAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FPoint in, double angle);
+    FPoint rotRgAround(FVector ref, FPoint in, double angle);
+    FPoint rotRgAround(FPairPos3D ref, FPoint in, double angle);
+
     FVector rotRgAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle);
     FVector rotRgAround(FVector ref, FVector in, double angle);
     FVector rotRgAround(FPairPos3D ref, FVector in, double angle);
     FVector rotRgAroundCompact(double hX, double hY, double hZ, FVector in, double angle);
     FVector rotRgAroundCompact(FPoint ref, FVector in, double angle);
     FVector rotRgAroundCompact(FPos3D ref, FVector in, double angle);
+
+    FVector rotRgAroundBase(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle);
+    FVector rotRgAroundBase(FVector ref, FVector in, double angle);
+    FVector rotRgAroundBase(FPairPos3D ref, FVector in, double angle);
+    FVector rotRgAroundBaseCompact(double hX, double hY, double hZ, FVector in, double angle);
+    FVector rotRgAroundBaseCompact(FPoint ref, FVector in, double angle);
+    FVector rotRgAroundBaseCompact(FPos3D ref, FVector in, double angle);
 
     // Methods utilizing the quaternion rotation formula.
     // Included for consistency but offer no advantages over 'Rg' methods.

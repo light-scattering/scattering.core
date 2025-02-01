@@ -38,10 +38,8 @@ public interface FQuaternion extends Number<FQuaternion> {
     boolean isSimilar(double re, double i, double j, double k);
     boolean isSimilar(FPos4D arg);
 
-    FQuaternion add(FPos4D arg);
-    FQuaternion sub(FPos4D arg);
-
     FQuaternion add(double re, double i, double j, double k);
+    FQuaternion add(FPos4D arg);
     FQuaternion addRe(double re);
     FQuaternion addIm(double i, double j, double k);
     FQuaternion addI(double i);
@@ -49,6 +47,7 @@ public interface FQuaternion extends Number<FQuaternion> {
     FQuaternion addK(double k);
 
     FQuaternion sub(double re, double i, double j, double k);
+    FQuaternion sub(FPos4D arg);
     FQuaternion subRe(double re);
     FQuaternion subIm(double i, double j, double k);
     FQuaternion subI(double i);

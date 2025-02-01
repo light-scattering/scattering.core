@@ -37,14 +37,13 @@ public interface FComplex extends Number<FComplex> {
     double getPhase();
     FComplex setPhase(double phase);
 
-    FComplex add(FPos2D arg);
-    FComplex sub(FPos2D arg);
-
     FComplex add(double re, double im);
+    FComplex add(FPos2D arg);
     FComplex addRe(double re);
     FComplex addIm(double im);
 
     FComplex sub(double re, double im);
+    FComplex sub(FPos2D arg);
     FComplex subRe(double re);
     FComplex subIm(double re);
 
