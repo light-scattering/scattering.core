@@ -10,19 +10,19 @@ public interface FVectorEngineRotation {
     // Methods utilizing the Rodrigues rotation formula.
     // Optimized for rotating a single element using only primitive operations.
 
-    FVector setAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle);
-    FVector setAngle(FVector ref, FVector in, double angle);
-    FVector setAngle(FPairPos3D ref, FVector in, double angle);
-    FVector setAngleSimple(double hX, double hY, double hZ, FVector in, double angle);
-    FVector setAngleSimple(FPoint ref, FVector in, double angle);
-    FVector setAngleSimple(FPos3D ref, FVector in, double angle);
+    FVector setRgAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle);
+    FVector setRgAngle(FVector ref, FVector in, double angle);
+    FVector setRgAngle(FPairPos3D ref, FVector in, double angle);
+    FVector setRgAngleCompact(double hX, double hY, double hZ, FVector in, double angle);
+    FVector setRgAngleCompact(FPoint ref, FVector in, double angle);
+    FVector setRgAngleCompact(FPos3D ref, FVector in, double angle);
 
-    FVector rotAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle);
-    FVector rotAround(FVector ref, FVector in, double angle);
-    FVector rotAround(FPairPos3D ref, FVector in, double angle);
-    FVector rotAroundSimple(double hX, double hY, double hZ, FVector in, double angle);
-    FVector rotAroundSimple(FPoint ref, FVector in, double angle);
-    FVector rotAroundSimple(FPos3D ref, FVector in, double angle);
+    FVector rotRgAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle);
+    FVector rotRgAround(FVector ref, FVector in, double angle);
+    FVector rotRgAround(FPairPos3D ref, FVector in, double angle);
+    FVector rotRgAroundCompact(double hX, double hY, double hZ, FVector in, double angle);
+    FVector rotRgAroundCompact(FPoint ref, FVector in, double angle);
+    FVector rotRgAroundCompact(FPos3D ref, FVector in, double angle);
 
     // Methods utilizing the quaternion rotation formula.
     // Included for consistency but offer no advantages over 'Rg' methods.

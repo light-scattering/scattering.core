@@ -1556,57 +1556,6 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector rotAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
-
-        subXYZ(bX, bY, bZ);
-
-        getRefHead().rotAround(hX - bX, hY - bY, hZ - bZ, angle);
-        getRefBase().rotAround(hX - bX, hY - bY, hZ - bZ, angle);
-
-        addXYZ(bX, bY, bZ);
-
-        return this;
-    }
-
-    @Override
-    public FVector rotAround(FVector arg, double angle) {
-
-        return rotAround(
-                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
-                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ(),
-                angle
-        );
-    }
-
-    @Override
-    public FVector rotAround(FPairPos3D arg, double angle) {
-
-        return rotAround(
-                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
-                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2(),
-                angle
-        );
-    }
-
-    @Override
-    public FVector rotAroundSimple(double hX, double hY, double hZ, double angle) {
-
-        return rotAround(0, 0, 0, hX, hY, hZ, angle);
-    }
-
-    @Override
-    public FVector rotAroundSimple(FPoint head, double angle) {
-
-        return rotAroundSimple(head.getX(), head.getY(), head.getZ(), angle);
-    }
-
-    @Override
-    public FVector rotAroundSimple(FPos3D head, double angle) {
-
-        return rotAroundSimple(head.getD0(), head.getD1(), head.getD2(), angle);
-    }
-
-    @Override
     public FVector setSphericalCoordinates(double inclination, double azimuth) {
         double memoOBX = getBaseX();
         double memoOBY = getBaseY();
@@ -1732,69 +1681,6 @@ public class FVectorDef implements FVector {
     public double getAngleSimple(FPos3D head) {
 
         return getAngleSimple(head.getD0(), head.getD1(), head.getD2());
-    }
-
-    @Override
-    public FVector setAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
-
-        if (isNearZeroLength()) {
-            throw new IllegalStateException("The direction of the FVector is not defined");
-        }
-
-        if (isNearZeroLength(bX, bY, bZ, hX, hY, hZ)) {
-            throw new IllegalArgumentException("The direction of the argument FVector is not defined");
-        }
-
-        double memoOBX = getBaseX();
-        double memoOBY = getBaseY();
-        double memoOBZ = getBaseZ();
-        double zeroAX = hX - bX;
-        double zeroAY = hY - bY;
-        double zeroAZ = hZ - bZ;
-
-        moveBaseToCenter();
-        getRefHead().setAngle(zeroAX, zeroAY, zeroAZ, angle);
-        moveBase(memoOBX, memoOBY, memoOBZ);
-
-        return this;
-    }
-
-    @Override
-    public FVector setAngle(FVector arg, double angle) {
-
-        return setAngle(
-                arg.getBaseX(), arg.getBaseY(), arg.getBaseZ(),
-                arg.getHeadX(), arg.getHeadY(), arg.getHeadZ(),
-                angle
-        );
-    }
-
-    @Override
-    public FVector setAngle(FPairPos3D arg, double angle) {
-
-        return setAngle(
-                arg.getPosA().getD0(), arg.getPosA().getD1(), arg.getPosA().getD2(),
-                arg.getPosB().getD0(), arg.getPosB().getD1(), arg.getPosB().getD2(),
-                angle
-        );
-    }
-
-    @Override
-    public FVector setAngleSimple(double hX, double hY, double hZ, double angle) {
-
-        return setAngle(0, 0, 0, hX, hY, hZ, angle);
-    }
-
-    @Override
-    public FVector setAngleSimple(FPoint head, double angle) {
-
-        return setAngleSimple(head.getX(), head.getY(), head.getZ(), angle);
-    }
-
-    @Override
-    public FVector setAngleSimple(FPos3D head, double angle) {
-
-        return setAngleSimple(head.getD0(), head.getD1(), head.getD2(), angle);
     }
 
     // -------------------------------------------------------------------------------------------------

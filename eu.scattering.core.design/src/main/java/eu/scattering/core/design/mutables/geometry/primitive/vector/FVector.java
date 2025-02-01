@@ -180,27 +180,6 @@ public interface FVector extends Primitive<FVector> {
     FVector setCrossProductSimple(FPoint head);
     FVector setCrossProductSimple(FPos3D head);
 
-    double getAngle(double bX, double bY, double bZ, double hX, double hY, double hZ);
-    double getAngle(FVector arg);
-    double getAngle(FPairPos3D arg);
-    double getAngleSimple(double hX, double hY, double hZ);
-    double getAngleSimple(FPoint head);
-    double getAngleSimple(FPos3D head);
-
-    FVector setAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
-    FVector setAngle(FVector arg, double angle);
-    FVector setAngle(FPairPos3D arg, double angle);
-    FVector setAngleSimple(double hX, double hY, double hZ, double angle);
-    FVector setAngleSimple(FPoint head, double angle);
-    FVector setAngleSimple(FPos3D head, double angle);
-
-    FVector rotAround(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
-    FVector rotAround(FVector arg, double angle);
-    FVector rotAround(FPairPos3D arg, double angle);
-    FVector rotAroundSimple(double hX, double hY, double hZ, double angle);
-    FVector rotAroundSimple(FPoint head, double angle);
-    FVector rotAroundSimple(FPos3D head, double angle);
-
     FVector setSphericalCoordinates(double inclination, double azimuth);
 
     double getInclination();
@@ -208,6 +187,13 @@ public interface FVector extends Primitive<FVector> {
 
     double getAzimuth();
     FVector setAzimuth(double azimuth);
+
+    double getAngle(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    double getAngle(FVector arg);
+    double getAngle(FPairPos3D arg);
+    double getAngleSimple(double hX, double hY, double hZ);
+    double getAngleSimple(FPoint head);
+    double getAngleSimple(FPos3D head);
 
     //--------------------------------------------------
 

@@ -74,18 +74,6 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint setCrossProduct(FPoint arg);
     FPoint setCrossProduct(FPos3D arg);
 
-    double getAngle(double x, double y, double z);
-    double getAngle(FPoint arg);
-    double getAngle(FPos3D arg);
-
-    FPoint setAngle(double x, double y, double z, double angle);
-    FPoint setAngle(FPoint arg, double angle);
-    FPoint setAngle(FPos3D arg, double angle);
-
-    FPoint rotAround(double x, double y, double z, double angle);
-    FPoint rotAround(FPoint arg, double angle);
-    FPoint rotAround(FPos3D arg, double angle);
-
     FPoint setSphericalCoordinates(double inclination, double azimuth);
 
     double getInclination();
@@ -93,6 +81,10 @@ public interface FPoint extends Primitive<FPoint> {
 
     double getAzimuth();
     FPoint setAzimuth(double azimuth);
+
+    double getAngle(double x, double y, double z);
+    double getAngle(FPoint arg);
+    double getAngle(FPos3D arg);
 
     //--------------------------------------------------
 
