@@ -1,7 +1,8 @@
 package eu.scattering.core.test;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
-import eu.scattering.core.design.engines.random.processor.FRandomProcessor;
+import eu.scattering.core.design.engines.prot.FProtEngine;
+import eu.scattering.core.design.engines.rand.processor.FRandProcessor;
 import eu.scattering.core.design.engines.rot.FRotEngine;
 import eu.scattering.core.impl.FactoryDef;
 
@@ -11,7 +12,8 @@ public final class Configuration {
     }
 
     public static final FactoryDesignConcrete factory = FactoryDef.create();
-    public static final double jitter = 1E-8;
-    public static final FRandomProcessor random = factory.getFRandomProcessor();
-    public static final FRotEngine rotation = factory.getFRotEngine();
+    public static final double epsilon = 1E-8;
+    public static final FRandProcessor rand = factory.getFRandProcessor();
+    public static final FRotEngine rot = factory.getFRotEngine();
+    public static final FProtEngine prot = factory.getFProtEngine();
 }

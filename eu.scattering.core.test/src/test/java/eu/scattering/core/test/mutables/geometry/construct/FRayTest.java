@@ -43,7 +43,7 @@ public class FRayTest {
         @Test
         @DisplayName("Construct with FVector")
         void constructWithFVector() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRay = factory.getRefFRay(fVector);
 
             assertNotNull(fRay, "The instance is null");
@@ -52,7 +52,7 @@ public class FRayTest {
         @Test
         @DisplayName("Construct with FVector (validate references)")
         void constructWithFVectorValidateReferences() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRay = factory.getRefFRay(fVector);
 
             assertSame(fVector, fRay.getRefOrigin(), "The FVector reference is erroneous");
@@ -61,12 +61,12 @@ public class FRayTest {
         @Test
         @DisplayName("Construct with FVector (validate positions)")
         void constructWithFVectorValidatePositions() {
-            double refAX = random.nextDouble();
-            double refAY = random.nextDouble();
-            double refAZ = random.nextDouble();
-            double refBX = random.nextDouble();
-            double refBY = random.nextDouble();
-            double refBZ = random.nextDouble();
+            double refAX = rand.nextDouble();
+            double refAY = rand.nextDouble();
+            double refAZ = rand.nextDouble();
+            double refBX = rand.nextDouble();
+            double refBY = rand.nextDouble();
+            double refBZ = rand.nextDouble();
             FPoint fPointBase = factory.getFPoint(refAX, refAY, refAZ);
             FPoint fPointHead = factory.getFPoint(refBX, refBY, refBZ);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
@@ -113,8 +113,8 @@ public class FRayTest {
         @Test
         @DisplayName("Set reference core")
         void setRefCore() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            FVector fVectorA = TestHelper.getRandFVector();
+            FVector fVectorB = TestHelper.getRandFVector(fVectorA);
 
             FRay fRay = factory.getRefFRay(fVectorA);
             FRay fRayRef = fRay.setRefOrigin(fVectorB);
@@ -129,7 +129,7 @@ public class FRayTest {
         @Test
         @DisplayName("Get core")
         void getCore() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRay = factory.getRefFRay(fVector);
 
             assertSame(fVector, fRay.getRefOrigin(), "The FVector reference is erroneous");
@@ -143,7 +143,7 @@ public class FRayTest {
         @Test
         @DisplayName("JSON parser")
         void parseJSON() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector);
 
             JSONObject json = fRayA.toJSON();
@@ -163,7 +163,7 @@ public class FRayTest {
         @Test
         @DisplayName("Exactness")
         void isExact() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector.copy());
             FRay fRayB = factory.getRefFRay(fVector.copy());
 
@@ -176,9 +176,9 @@ public class FRayTest {
         @Test
         @DisplayName("Exactness (fail)")
         void isExactFail() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector.copy());
-            FRay fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * jitter));
+            FRay fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * epsilon));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fRayA.isExact(fRayB), "FRays should not be equal"),
@@ -198,9 +198,9 @@ public class FRayTest {
         @Test
         @DisplayName("Similarity")
         void isSimilar() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector.copy());
-            FRay fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * jitter));
+            FRay fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * epsilon));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fRayA.isSimilar(fRayB), "FRays should be similar"),
@@ -211,8 +211,8 @@ public class FRayTest {
         @Test
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
-            FRay fRayA = factory.getRefFRay(TestHelper.getRandomFVector());
-            FRay fRayB = factory.getRefFRay(TestHelper.getRandomFVector(fRayA.getRefOrigin()));
+            FRay fRayA = factory.getRefFRay(TestHelper.getRandFVector());
+            FRay fRayB = factory.getRefFRay(TestHelper.getRandFVector(fRayA.getRefOrigin()));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fRayA.isSimilar(fRayB), "FRays should not be similar"),
@@ -223,7 +223,7 @@ public class FRayTest {
         @Test
         @DisplayName("Get hash code")
         void getHashCode() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector.copy());
             FRay fRayB = factory.getRefFRay(fVector.copy());
 
@@ -234,9 +234,9 @@ public class FRayTest {
         @Test
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector);
-            FRay fRayB = factory.getRefFRay(TestHelper.getRandomFVector(fVector));
+            FRay fRayB = factory.getRefFRay(TestHelper.getRandFVector(fVector));
 
             assertNotEquals(fRayA.hashCode(), fRayB.hashCode(),
                     "Two different FRays should not have the same hash code");
@@ -253,7 +253,7 @@ public class FRayTest {
         @Test
         @DisplayName("Copy")
         void copy() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector);
             FRay fRayB = fRayA.copy();
 
@@ -276,7 +276,7 @@ public class FRayTest {
         @Test
         @DisplayName("Copy zero")
         void copyZero() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector);
             FRay fRayB = fRayA.copyZero();
 
@@ -363,7 +363,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint offset = TestHelper.getRandomFPoint();
+            FPoint offset = TestHelper.getRandFPoint();
 
             fRay.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
@@ -489,7 +489,7 @@ public class FRayTest {
         @DisplayName("Location")
         void isPartOf() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * jitter);
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
             assertTrue(fRay.isPartOf(fPoint), "The distance should be negligible");
         }
@@ -498,7 +498,7 @@ public class FRayTest {
         @DisplayName("Location (fail)")
         void isPartOfFail() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * jitter);
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
 
             assertFalse(fRay.isPartOf(fPoint), "The distance should not be negligible");
         }
@@ -518,7 +518,7 @@ public class FRayTest {
         void isPartOfPositionHead() {
             FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
-            FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
+            FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * epsilon);
 
             assertTrue(fRay.isPartOf(fPoint));
         }
@@ -539,7 +539,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint offset = TestHelper.getRandomFPoint();
+            FPoint offset = TestHelper.getRandFPoint();
 
             fRay.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
@@ -563,14 +563,14 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = TestHelper.getRandomFPoint();
+            FPoint relocation = TestHelper.getRandFPoint();
 
             fRay.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
             fRay.setDistance(fPoint, 1);
 
-            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0) - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
                     "The distance is erroneous");
         }
 
@@ -595,7 +595,7 @@ public class FRayTest {
 
             fRay.setDistance(fPoint, 1);
 
-            assertEquals(1, fRay.getAtomicDistance(fPoint).get(0), jitter);
+            assertEquals(1, fRay.getAtomicDistance(fPoint).get(0), epsilon);
         }
 
         @Test
@@ -604,14 +604,14 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = TestHelper.getRandomFPoint();
+            FPoint relocation = TestHelper.getRandFPoint();
 
             fRay.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
             fRay.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0) - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
                     "The distance between FPoints is erroneous");
         }
 
@@ -621,7 +621,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = TestHelper.getRandomFPoint();
+            FPoint relocation = TestHelper.getRandFPoint();
 
             fRay.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
@@ -632,7 +632,7 @@ public class FRayTest {
             FPoint fPointB = fPoint.copy();
             fRay.setDistance(fPointB, -1);
 
-            Assertions.assertTrue(fPointA.getDistance(fPointB) - 2 < jitter,
+            Assertions.assertTrue(fPointA.getDistance(fPointB) - 2 < epsilon,
                     "The distance between FPoints is erroneous");
         }
 
@@ -721,7 +721,7 @@ public class FRayTest {
         @Test
         @DisplayName("Get FPoint")
         void getFPoint() {
-            FRay fRay = factory.getRefFRay(TestHelper.getRandomFVector());
+            FRay fRay = factory.getRefFRay(TestHelper.getRandFVector());
             double length = fRay.getRefOrigin().getMagnitude();
 
             Assertions.assertAll("Validate FPoint",
@@ -746,7 +746,7 @@ public class FRayTest {
         @Test
         @DisplayName("Get FPoint (throw IllegalArgumentException)")
         void getFPointThrowIllegalArgumentException() {
-            FRay fRay = factory.getRefFRay(TestHelper.getRandomFVector());
+            FRay fRay = factory.getRefFRay(TestHelper.getRandFVector());
 
             Assertions.assertThrows(IllegalArgumentException.class, () -> fRay.getFPointAtDistance(-1),
                     "The origin is a non-directional FVector");
@@ -755,7 +755,7 @@ public class FRayTest {
         @Test
         @DisplayName("Get FPoint (validate)")
         void getFPointValidatePositions() {
-            FVector fVectorOrigin = TestHelper.getRandomFVector();
+            FVector fVectorOrigin = TestHelper.getRandFVector();
             FRay fRay = factory.getRefFRay(fVectorOrigin.copy());
 
             fRay.getFPointAtDistance(0);

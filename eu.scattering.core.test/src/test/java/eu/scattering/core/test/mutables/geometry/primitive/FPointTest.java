@@ -9,7 +9,6 @@ import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static eu.scattering.core.test.Configuration.*;
@@ -24,9 +23,9 @@ public class FPointTest {
     @DisplayName("Functionality")
     class FPointBasicTest {
 
-        private final double refX = random.nextDouble();
-        private final double refY = random.nextDouble();
-        private final double refZ = random.nextDouble();
+        private final double refX = rand.nextDouble();
+        private final double refY = rand.nextDouble();
+        private final double refZ = rand.nextDouble();
 
         @Test
         @DisplayName("Construct")
@@ -266,10 +265,10 @@ public class FPointTest {
         @Test
         @DisplayName("Normalize")
         void normalize() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
+            FPoint fPoint = TestHelper.getRandFPoint();
 
             assertEquals(1, fPoint.normalize().getMagnitude(),
-                    jitter, "The magnitude of the normalized vector should be equal to one");
+                    epsilon, "The magnitude of the normalized vector should be equal to one");
         }
 
         @Test
@@ -284,7 +283,7 @@ public class FPointTest {
         @Test
         @DisplayName("Normalize (validate)")
         void normalizeValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testReference(FPoint::normalize, fPointRef);
         }
@@ -292,9 +291,9 @@ public class FPointTest {
         @Test
         @DisplayName("Reflect")
         void reflect() {
-            double refX = random.nextDouble();
-            double refY = random.nextDouble();
-            double refZ = random.nextDouble();
+            double refX = rand.nextDouble();
+            double refY = rand.nextDouble();
+            double refZ = rand.nextDouble();
 
             FPoint fPoint = factory.getFPoint(refX, refY, refZ).reflectThroughCenter();
 
@@ -308,7 +307,7 @@ public class FPointTest {
         @Test
         @DisplayName("Reflect (validate)")
         void reflectValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testReference(FPoint::reflectThroughCenter, fPointRef);
         }
@@ -328,7 +327,7 @@ public class FPointTest {
         @Test
         @DisplayName("Reflect with primitives (validate)")
         void reflectWithPrimitivesValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testReference(p -> p.reflect(1, 2, 3), fPointRef);
         }
@@ -336,14 +335,14 @@ public class FPointTest {
         @Test
         @DisplayName("Reflect through FPoint")
         void reflectThroughFPoint() {
-            double refAX = random.nextDouble();
-            double refAY = random.nextDouble();
-            double refAZ = random.nextDouble();
+            double refAX = rand.nextDouble();
+            double refAY = rand.nextDouble();
+            double refAZ = rand.nextDouble();
             FPoint fPointA = factory.getFPoint(refAX, refAY, refAZ);
 
-            double refBX = random.nextDouble();
-            double refBY = random.nextDouble();
-            double refBZ = random.nextDouble();
+            double refBX = rand.nextDouble();
+            double refBY = rand.nextDouble();
+            double refBZ = rand.nextDouble();
             FPoint fPointB = factory.getFPoint(refBX, refBY, refBZ);
 
             fPointA.reflect(fPointB);
@@ -361,8 +360,8 @@ public class FPointTest {
         @Test
         @DisplayName("Reflect through point (validate)")
         void reflectThroughFPointValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
-            FPoint fPointArg = TestHelper.getRandomFPoint(fPointRef);
+            FPoint fPointRef = TestHelper.getRandFPoint();
+            FPoint fPointArg = TestHelper.getRandFPoint(fPointRef);
 
             FPointTestHelper.testReference(FPoint::reflect, fPointRef, fPointArg);
         }
@@ -370,14 +369,14 @@ public class FPointTest {
         @Test
         @DisplayName("Reflect through FPos3D")
         void reflectThroughFPos3D() {
-            double refAX = random.nextDouble();
-            double refAY = random.nextDouble();
-            double refAZ = random.nextDouble();
+            double refAX = rand.nextDouble();
+            double refAY = rand.nextDouble();
+            double refAZ = rand.nextDouble();
             FPoint fPoint = factory.getFPoint(refAX, refAY, refAZ);
 
-            double refBX = random.nextDouble();
-            double refBY = random.nextDouble();
-            double refBZ = random.nextDouble();
+            double refBX = rand.nextDouble();
+            double refBY = rand.nextDouble();
+            double refBZ = rand.nextDouble();
             FPos3D fPos3D = factory.getFPos3D(refBX, refBY, refBZ);
 
             fPoint.reflect(fPos3D);
@@ -395,89 +394,89 @@ public class FPointTest {
         @Test
         @DisplayName("Get length (axes: 1)")
         void getLengthAxes1() {
-            double ref = random.nextDouble();
+            double ref = rand.nextDouble();
             double expected = Math.abs(ref);
 
             Assertions.assertAll("Validate FPoint radius",
                     () -> assertEquals(expected, factory.getFPoint().setX(ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [X]"),
+                            epsilon, "The magnitude is invalid [X]"),
                     () -> assertEquals(expected, factory.getFPoint().setX(-ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X]"),
+                            epsilon, "The magnitude is invalid [-X]"),
                     () -> assertEquals(expected, factory.getFPoint().setY(ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [Y]"),
+                            epsilon, "The magnitude is invalid [Y]"),
                     () -> assertEquals(expected, factory.getFPoint().setY(-ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-Y]"),
+                            epsilon, "The magnitude is invalid [-Y]"),
                     () -> assertEquals(expected, factory.getFPoint().setZ(ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [Z]"),
+                            epsilon, "The magnitude is invalid [Z]"),
                     () -> assertEquals(expected, factory.getFPoint().setZ(-ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-Z]")
+                            epsilon, "The magnitude is invalid [-Z]")
             );
         }
 
         @Test
         @DisplayName("Get length (axes: 2)")
         void getLengthAxes2() {
-            double ref = random.nextDouble();
+            double ref = rand.nextDouble();
             double expected = Math.abs(ref * Math.sqrt(2));
 
             Assertions.assertAll("Validate FPoint radius",
                     () -> assertEquals(expected, factory.getFPoint(ref, ref, 0).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, Y]"),
+                            epsilon, "The magnitude is invalid [X, Y]"),
                     () -> assertEquals(expected, factory.getFPoint(ref, -ref, 0).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, -Y]"),
+                            epsilon, "The magnitude is invalid [X, -Y]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, ref, 0).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, Y]"),
+                            epsilon, "The magnitude is invalid [-X, Y]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, -ref, 0).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, -Y]"),
+                            epsilon, "The magnitude is invalid [-X, -Y]"),
                     () -> assertEquals(expected, factory.getFPoint(ref, 0, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, Z]"),
+                            epsilon, "The magnitude is invalid [X, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(ref, 0, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, -Z]"),
+                            epsilon, "The magnitude is invalid [X, -Z]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, 0, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, Z]"),
+                            epsilon, "The magnitude is invalid [-X, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, 0, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, -Z]"),
+                            epsilon, "The magnitude is invalid [-X, -Z]"),
                     () -> assertEquals(expected, factory.getFPoint(0, ref, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [Y, Z]"),
+                            epsilon, "The magnitude is invalid [Y, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(0, ref, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [Y, -Z]"),
+                            epsilon, "The magnitude is invalid [Y, -Z]"),
                     () -> assertEquals(expected, factory.getFPoint(0, -ref, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-Y, Z]"),
+                            epsilon, "The magnitude is invalid [-Y, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(0, -ref, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-Y, -Z]")
+                            epsilon, "The magnitude is invalid [-Y, -Z]")
             );
         }
 
         @Test
         @DisplayName("Get length (axes: 3)")
         void getLengthAxes3() {
-            double ref = random.nextDouble();
+            double ref = rand.nextDouble();
             double expected = Math.abs(ref * Math.sqrt(3));
 
             Assertions.assertAll("Validate radius",
                     () -> assertEquals(expected, factory.getFPoint(ref, ref, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, Y, Z]"),
+                            epsilon, "The magnitude is invalid [X, Y, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(ref, ref, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, Y, -Z]"),
+                            epsilon, "The magnitude is invalid [X, Y, -Z]"),
                     () -> assertEquals(expected, factory.getFPoint(ref, -ref, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, -Y, Z]"),
+                            epsilon, "The magnitude is invalid [X, -Y, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(ref, -ref, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [X, -Y, -Z]"),
+                            epsilon, "The magnitude is invalid [X, -Y, -Z]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, ref, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, Y, Z]"),
+                            epsilon, "The magnitude is invalid [-X, Y, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, ref, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, Y, -Z]"),
+                            epsilon, "The magnitude is invalid [-X, Y, -Z]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, -ref, ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, -Y, Z]"),
+                            epsilon, "The magnitude is invalid [-X, -Y, Z]"),
                     () -> assertEquals(expected, factory.getFPoint(-ref, -ref, -ref).getMagnitude(),
-                            jitter, "The magnitude is invalid [-X, -Y, -Z]")
+                            epsilon, "The magnitude is invalid [-X, -Y, -Z]")
             );
         }
 
         @Test
         @DisplayName("Get length (validate)")
         void getLengthValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testValue(FPoint::getMagnitude, fPointRef);
         }
@@ -485,21 +484,21 @@ public class FPointTest {
         @Test
         @DisplayName("Get length P2")
         void getLengthP2() {
-            double x = random.nextDouble();
-            double y = random.nextDouble();
-            double z = random.nextDouble();
+            double x = rand.nextDouble();
+            double y = rand.nextDouble();
+            double z = rand.nextDouble();
 
             FPoint fPoint = factory.getFPoint(x, y, z);
             double lengthP2 = (x * x) + (y * y) + (z * z);
 
             assertEquals(lengthP2, fPoint.getMagnitudeP2(),
-                    jitter, "The squared length is erroneous");
+                    epsilon, "The squared length is erroneous");
         }
 
         @Test
         @DisplayName("Get length P2 (validate)")
         void getLengthP2Validate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testValue(FPoint::getMagnitudeP2, fPointRef);
         }
@@ -510,7 +509,7 @@ public class FPointTest {
             FPoint fPoint = factory.getFPoint(1, 2, 3).setMagnitude(9);
 
             assertEquals(9, fPoint.getMagnitude(),
-                    jitter, "The magnitude of the vector is incorrect");
+                    epsilon, "The magnitude of the vector is incorrect");
         }
 
         @Test
@@ -519,7 +518,7 @@ public class FPointTest {
             FPoint fPoint = factory.getFPoint(1, 2, 3).setMagnitude(-9);
 
             assertEquals(9, fPoint.getMagnitude(),
-                    jitter, "The magnitude of the vector is incorrect");
+                    epsilon, "The magnitude of the vector is incorrect");
         }
 
         @Test
@@ -528,9 +527,9 @@ public class FPointTest {
             FPoint fPoint = factory.getFPoint(1, 1, 1).setMagnitude(5 * Math.sqrt(3));
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(5, fPoint.getX(), jitter, "The X value is incorrect"),
-                    () -> assertEquals(5, fPoint.getY(), jitter, "The Y value is incorrect"),
-                    () -> assertEquals(5, fPoint.getZ(), jitter, "The Z value is incorrect")
+                    () -> assertEquals(5, fPoint.getX(), epsilon, "The X value is incorrect"),
+                    () -> assertEquals(5, fPoint.getY(), epsilon, "The Y value is incorrect"),
+                    () -> assertEquals(5, fPoint.getZ(), epsilon, "The Z value is incorrect")
             );
         }
 
@@ -540,9 +539,9 @@ public class FPointTest {
             FPoint fPoint = factory.getFPoint(1, 1, 1).setMagnitude(-5 * Math.sqrt(3));
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(-5, fPoint.getX(), jitter, "The X value is incorrect"),
-                    () -> assertEquals(-5, fPoint.getY(), jitter, "The Y value is incorrect"),
-                    () -> assertEquals(-5, fPoint.getZ(), jitter, "The Z value is incorrect")
+                    () -> assertEquals(-5, fPoint.getX(), epsilon, "The X value is incorrect"),
+                    () -> assertEquals(-5, fPoint.getY(), epsilon, "The Y value is incorrect"),
+                    () -> assertEquals(-5, fPoint.getZ(), epsilon, "The Z value is incorrect")
             );
         }
 
@@ -558,7 +557,7 @@ public class FPointTest {
         @Test
         @DisplayName("Set length (validate)")
         void setLengthValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testReference(e -> e.setMagnitude(1), fPointRef);
         }
@@ -569,15 +568,15 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(0.00, factory.getFPoint(0, 1, 0).getInclination(),
-                            jitter, "The polar angle is incorrect [0/8 rad]"),
+                            epsilon, "The polar angle is incorrect [0/8 rad]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, 1, 0).getInclination(),
-                            jitter, "The polar angle is incorrect [1/8 rad]"),
+                            epsilon, "The polar angle is incorrect [1/8 rad]"),
                     () -> assertEquals(Math.PI * 0.50, factory.getFPoint(1, 0, 0).getInclination(),
-                            jitter, "The polar angle is incorrect [2/8 rad]"),
+                            epsilon, "The polar angle is incorrect [2/8 rad]"),
                     () -> assertEquals(Math.PI * 0.75, factory.getFPoint(1, -1, 0).getInclination(),
-                            jitter, "The polar angle is incorrect [3/8 rad]"),
+                            epsilon, "The polar angle is incorrect [3/8 rad]"),
                     () -> assertEquals(Math.PI, factory.getFPoint(0, -1, 0).getInclination(),
-                            jitter, "The polar angle is incorrect [4/8 rad]")
+                            epsilon, "The polar angle is incorrect [4/8 rad]")
             );
         }
 
@@ -587,20 +586,20 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, 1, 0).getInclination(),
-                            jitter, "The polar angle is incorrect [1,1,0]"),
+                            epsilon, "The polar angle is incorrect [1,1,0]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(0, 1, 1).getInclination(),
-                            jitter, "The polar angle is incorrect [0,1,1]"),
+                            epsilon, "The polar angle is incorrect [0,1,1]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(-1, 1, 0).getInclination(),
-                            jitter, "The polar angle is incorrect [-1,1,0]"),
+                            epsilon, "The polar angle is incorrect [-1,1,0]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(0, 1, -1).getInclination(),
-                            jitter, "The polar angle is incorrect [0,1,-1]")
+                            epsilon, "The polar angle is incorrect [0,1,-1]")
             );
         }
 
         @Test
         @DisplayName("Get inclination (validate)")
         void getInclinationValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testValue(FPoint::getInclination, fPointRef);
         }
@@ -611,15 +610,15 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(0.00, factory.getFPoint(1, 1, 0).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [0/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [0/8 rad]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, 1, 1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [1/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [1/8 rad]"),
                     () -> assertEquals(Math.PI * 0.50, factory.getFPoint(0, 1, 1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [2/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [2/8 rad]"),
                     () -> assertEquals(Math.PI * 0.75, factory.getFPoint(-1, 1, 1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [3/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [3/8 rad]"),
                     () -> assertEquals(Math.PI, factory.getFPoint(-1, 1, 0).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [4/8 rad]")
+                            epsilon, "The azimuthal angle is incorrect [4/8 rad]")
             );
         }
 
@@ -629,11 +628,11 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(-Math.PI * 0.25, factory.getFPoint(1, 1, -1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [-1/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [-1/8 rad]"),
                     () -> assertEquals(-Math.PI * 0.50, factory.getFPoint(0, 1, -1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [-2/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [-2/8 rad]"),
                     () -> assertEquals(-Math.PI * 0.75, factory.getFPoint(-1, 1, -1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [-3/8 rad]")
+                            epsilon, "The azimuthal angle is incorrect [-3/8 rad]")
             );
         }
 
@@ -643,18 +642,18 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, 1, 1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [1,1,1]"),
+                            epsilon, "The azimuthal angle is incorrect [1,1,1]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, 0, 1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [1,0,0]"),
+                            epsilon, "The azimuthal angle is incorrect [1,0,0]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, -1, 1).getAzimuth(),
-                            jitter, "The azimuthal angle is incorrect [1,-1,1]")
+                            epsilon, "The azimuthal angle is incorrect [1,-1,1]")
             );
         }
 
         @Test
         @DisplayName("Get azimuth (validate)")
         void getAzimuthValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testValue(FPoint::getAzimuth, fPointRef);
         }
@@ -668,20 +667,20 @@ public class FPointTest {
                 fPointRef = factory.getFPoint(1, 0, 1).normalize().setInclination(angle);
 
                 assertEquals(angle, fPointRef.getInclination(),
-                        jitter, "The polar angle is incorrect [" + angle + " rad]");
+                        epsilon, "The polar angle is incorrect [" + angle + " rad]");
                 assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
-                        jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                        epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
                 assertEquals(1, fPointRef.getMagnitude(),
-                        jitter, "The magnitude is incorrect [" + angle + " rad]");
+                        epsilon, "The magnitude is incorrect [" + angle + " rad]");
 
                 fPointRef = factory.getFPoint(1, 0, 1).normalize().setInclination(-angle);
 
                 assertEquals(angle, fPointRef.getInclination(),
-                        jitter, "The polar angle is incorrect [" + angle + " rad]");
+                        epsilon, "The polar angle is incorrect [" + angle + " rad]");
                 assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
-                        jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                        epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
                 assertEquals(1, fPointRef.getMagnitude(),
-                        jitter, "The magnitude is incorrect [" + angle + " rad]");
+                        epsilon, "The magnitude is incorrect [" + angle + " rad]");
             }
         }
 
@@ -692,11 +691,11 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 0, 1).normalize().setInclination(angle);
 
             assertEquals(0.5 * Math.PI, fPointRef.getInclination(),
-                    jitter, "The polar angle is incorrect [" + angle + " rad]");
+                    epsilon, "The polar angle is incorrect [" + angle + " rad]");
             assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
-                    jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                    epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
             assertEquals(1, fPointRef.getMagnitude(),
-                    jitter, "The magnitude is incorrect [" + angle + " rad]");
+                    epsilon, "The magnitude is incorrect [" + angle + " rad]");
         }
 
         @Test
@@ -706,17 +705,17 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 0, 1).normalize().setInclination(angle);
 
             assertEquals(0, fPointRef.getInclination(),
-                    jitter, "The polar angle is incorrect [" + angle + " rad]");
+                    epsilon, "The polar angle is incorrect [" + angle + " rad]");
             assertEquals(0, fPointRef.getX() - fPointRef.getZ(),
-                    jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                    epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
             assertEquals(1, fPointRef.getMagnitude(),
-                    jitter, "The magnitude is incorrect [" + angle + " rad]");
+                    epsilon, "The magnitude is incorrect [" + angle + " rad]");
         }
 
         @Test
         @DisplayName("Set inclination (validate)")
         void setInclinationValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testReference(e -> e.setInclination(Math.PI * 0.5), fPointRef);
         }
@@ -730,20 +729,20 @@ public class FPointTest {
                 fPointRef = factory.getFPoint(1, 1, 0).normalize().setAzimuth(angle);
 
                 assertEquals(angle, fPointRef.getAzimuth(),
-                        jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                        epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
                 assertEquals(Math.PI * 0.25, fPointRef.getInclination(),
-                        jitter, "The polar angle is incorrect [" + angle + " rad]");
+                        epsilon, "The polar angle is incorrect [" + angle + " rad]");
                 assertEquals(1, fPointRef.getMagnitude(),
-                        jitter, "The magnitude is incorrect [" + angle + " rad]");
+                        epsilon, "The magnitude is incorrect [" + angle + " rad]");
 
                 fPointRef = factory.getFPoint(1, 1, 0).normalize().setAzimuth(-angle);
 
                 assertEquals(-angle, fPointRef.getAzimuth(),
-                        jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                        epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
                 assertEquals(Math.PI * 0.25, fPointRef.getInclination(),
-                        jitter, "The polar angle is incorrect [" + angle + " rad]");
+                        epsilon, "The polar angle is incorrect [" + angle + " rad]");
                 assertEquals(1, fPointRef.getMagnitude(),
-                        jitter, "The magnitude is incorrect [" + angle + " rad]");
+                        epsilon, "The magnitude is incorrect [" + angle + " rad]");
             }
         }
 
@@ -754,11 +753,11 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 1, 0).normalize().setAzimuth(angle);
 
             assertEquals(-Math.PI * 0.5, fPointRef.getAzimuth(),
-                    jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                    epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
             assertEquals(Math.PI * 0.25, fPointRef.getInclination(),
-                    jitter, "The polar angle is incorrect [" + angle + " rad]");
+                    epsilon, "The polar angle is incorrect [" + angle + " rad]");
             assertEquals(1, fPointRef.getMagnitude(),
-                    jitter, "The magnitude is incorrect [" + angle + " rad]");
+                    epsilon, "The magnitude is incorrect [" + angle + " rad]");
         }
 
         @Test
@@ -768,18 +767,18 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 1, 0).normalize().setAzimuth(angle);
 
             assertEquals(0, fPointRef.getAzimuth(),
-                    jitter, "The azimuthal angle is incorrect [" + angle + " rad]");
+                    epsilon, "The azimuthal angle is incorrect [" + angle + " rad]");
             assertEquals(Math.PI * 0.25, fPointRef.getInclination(),
-                    jitter, "The polar angle is incorrect [" + angle + " rad]");
+                    epsilon, "The polar angle is incorrect [" + angle + " rad]");
             assertEquals(1, fPointRef.getMagnitude(),
-                    jitter, "The magnitude is incorrect [" + angle + " rad]");
+                    epsilon, "The magnitude is incorrect [" + angle + " rad]");
 
         }
 
         @Test
         @DisplayName("Set azimuth (validate)")
         void setAzimuthValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testReference(e -> e.setAzimuth(Math.PI * 0.5), fPointRef);
         }
@@ -787,10 +786,10 @@ public class FPointTest {
         @Test
         @DisplayName("Set spherical coordinates")
         void setSphericalCoordinates() {
-            double radius = Math.abs(random.nextDouble());
+            double radius = Math.abs(rand.nextDouble());
 
-            double inclination = Math.abs(random.nextDouble()) % Math.PI;
-            double azimuth = Math.abs(random.nextDouble()) % Math.PI;
+            double inclination = Math.abs(rand.nextDouble()) % Math.PI;
+            double azimuth = Math.abs(rand.nextDouble()) % Math.PI;
 
             FPoint fPointRef = factory.getFPoint(radius).setSphericalCoordinates(inclination, azimuth);
 
@@ -798,16 +797,16 @@ public class FPointTest {
 
             Assertions.assertAll("Validate spherical coordinates",
                     () -> assertEquals(inclination, fPointRef.getInclination(),
-                            jitter, "The inclination is incorrect"),
+                            epsilon, "The inclination is incorrect"),
                     () -> assertEquals(azimuth, fPointRef.getAzimuth(),
-                            jitter, "The azimuth is incorrect")
+                            epsilon, "The azimuth is incorrect")
             );
         }
 
         @Test
         @DisplayName("Set spherical coordinates (validate)")
         void setSphericalCoordinatesValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testReference(e -> e.setSphericalCoordinates(Math.PI, Math.PI), fPointRef);
         }
@@ -830,7 +829,7 @@ public class FPointTest {
         @Test
         @DisplayName("Is zero (validate)")
         void isZeroValidateRef() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
+            FPoint fPoint = TestHelper.getRandFPoint();
 
             FPointTestHelper.testValue(FPoint::isZero, fPoint);
         }
@@ -855,7 +854,7 @@ public class FPointTest {
         @Test
         @DisplayName("Is non-directional (validate)")
         void isNonDirectionalValidate() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             FPointTestHelper.testValue(FPoint::isNearZero, fPointRef);
         }
@@ -863,7 +862,7 @@ public class FPointTest {
         @Test
         @DisplayName("Get dot product with primitives")
         void getDotProductWithPrimitives() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             double result = fPointRef.getDotProduct(1, 2, 3);
 
@@ -872,7 +871,7 @@ public class FPointTest {
             double dimZ = fPointRef.getZ() * 3;
 
             Assertions.assertEquals(dimX + dimY + dimZ, result,
-                    jitter, "The dot product value is erroneous");
+                    epsilon, "The dot product value is erroneous");
         }
 
         @Test
@@ -886,8 +885,8 @@ public class FPointTest {
         @Test
         @DisplayName("Get dot product")
         void getDotProduct() {
-            FPoint fPointA = TestHelper.getRandomFPoint();
-            FPoint fPointB = TestHelper.getRandomFPoint(fPointA);
+            FPoint fPointA = TestHelper.getRandFPoint();
+            FPoint fPointB = TestHelper.getRandFPoint(fPointA);
 
             double result = fPointA.getDotProduct(fPointB);
 
@@ -896,7 +895,7 @@ public class FPointTest {
             double dimZ = fPointA.getZ() * fPointB.getZ();
 
             Assertions.assertEquals(dimX + dimY + dimZ, result,
-                    jitter, "The dot product value is erroneous");
+                    epsilon, "The dot product value is erroneous");
         }
 
         @Test
@@ -911,8 +910,8 @@ public class FPointTest {
         @Test
         @DisplayName("Get dot product with FPos3D")
         void getDotProductWithFPos3D() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
-            FPos3D fPos3D = TestHelper.getRandomFPoint(fPoint).toFPos3D();
+            FPoint fPoint = TestHelper.getRandFPoint();
+            FPos3D fPos3D = TestHelper.getRandFPoint(fPoint).toFPos3D();
 
             double result = fPoint.getDotProduct(fPos3D);
 
@@ -921,15 +920,15 @@ public class FPointTest {
             double dimZ = fPoint.getZ() * fPos3D.getD2();
 
             Assertions.assertEquals(dimX + dimY + dimZ, result,
-                    jitter, "The dot product value is erroneous");
+                    epsilon, "The dot product value is erroneous");
         }
 
         @Test
         @DisplayName("Set cross product with primitives")
         void setCrossProductWithPrimitives() {
-            double refAX = random.nextDouble();
-            double refAY = random.nextDouble();
-            double refAZ = random.nextDouble();
+            double refAX = rand.nextDouble();
+            double refAY = rand.nextDouble();
+            double refAZ = rand.nextDouble();
             FPoint fPointRef = factory.getFPoint(refAX, refAY, refAZ);
 
             FPoint fPointRes = fPointRef.copy().setCrossProduct(1, 2, 3);
@@ -952,14 +951,14 @@ public class FPointTest {
         @Test
         @DisplayName("Set cross product")
         void setCrossProduct() {
-            double refAX = random.nextDouble();
-            double refAY = random.nextDouble();
-            double refAZ = random.nextDouble();
+            double refAX = rand.nextDouble();
+            double refAY = rand.nextDouble();
+            double refAZ = rand.nextDouble();
             FPoint fPointA = factory.getFPoint(refAX, refAY, refAZ);
 
-            double refBX = random.nextDouble();
-            double refBY = random.nextDouble();
-            double refBZ = random.nextDouble();
+            double refBX = rand.nextDouble();
+            double refBY = rand.nextDouble();
+            double refBZ = rand.nextDouble();
             FPoint fPointB = factory.getFPoint(refBX, refBY, refBZ);
 
             FPoint fPointRes = fPointA.copy().setCrossProduct(fPointB);
@@ -983,14 +982,14 @@ public class FPointTest {
         @Test
         @DisplayName("Set cross product with FPos3D")
         void setCrossProductWithFPos3D() {
-            double refAX = random.nextDouble();
-            double refAY = random.nextDouble();
-            double refAZ = random.nextDouble();
+            double refAX = rand.nextDouble();
+            double refAY = rand.nextDouble();
+            double refAZ = rand.nextDouble();
             FPoint fPoint = factory.getFPoint(refAX, refAY, refAZ);
 
-            double refBX = random.nextDouble();
-            double refBY = random.nextDouble();
-            double refBZ = random.nextDouble();
+            double refBX = rand.nextDouble();
+            double refBY = rand.nextDouble();
+            double refBZ = rand.nextDouble();
             FPos3D fPos3D = factory.getFPoint(refBX, refBY, refBZ).toFPos3D();
 
             FPoint fPointRes = fPoint.copy().setCrossProduct(fPos3D);
@@ -1009,7 +1008,7 @@ public class FPointTest {
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(Math.PI * 0.5, fPointRef.getAngle(4, -4, 0),
-                            jitter, "The angle is incorrect")
+                            epsilon, "The angle is incorrect")
             );
         }
 
@@ -1019,7 +1018,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(2, 2, 2);
 
             assertEquals(0, fPointRef.getAngle(4, 4, 4),
-                    jitter, "The angle is incorrect");
+                    epsilon, "The angle is incorrect");
         }
 
         @Test
@@ -1028,7 +1027,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(2, 2, 2);
 
             assertEquals(0, fPointRef.getAngle(-4, -4, -4),
-                    jitter, "The angle is incorrect");
+                    epsilon, "The angle is incorrect");
         }
 
         @Test
@@ -1037,7 +1036,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(0, 1, 0);
 
             assertEquals(Math.PI * 0.5, fPointRef.getAngle(5, 0, 5),
-                    jitter, "The angle is incorrect");
+                    epsilon, "The angle is incorrect");
         }
 
         @Test
@@ -1052,7 +1051,7 @@ public class FPointTest {
         @Test
         @DisplayName("Get angle with primitives (throw IllegalArgumentException, argument)")
         void getAngleWithPrimitivesThrowIllegalStateExceptionArgument() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.getAngle(0, 0, 0),
                     "The direction of the argument vector is not defined");
@@ -1083,9 +1082,9 @@ public class FPointTest {
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(Math.PI * 0.5, fPointRef.getAngle(fPointArg),
-                            jitter, "The angle is incorrect"),
+                            epsilon, "The angle is incorrect"),
                     () -> assertEquals(Math.PI * 0.5, fPointArg.getAngle(fPointRef),
-                            jitter, "The angle is incorrect")
+                            epsilon, "The angle is incorrect")
             );
         }
 
@@ -1096,7 +1095,7 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(4, 4, 4);
 
             assertEquals(0, fPointRef.getAngle(fPointArg),
-                    jitter, "The angle is incorrect");
+                    epsilon, "The angle is incorrect");
         }
 
         @Test
@@ -1106,24 +1105,24 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint(-4, -4, -4);
 
             assertEquals(0, fPointRef.getAngle(fPointArg),
-                    jitter, "The angle is incorrect");
+                    epsilon, "The angle is incorrect");
         }
 
         @Test
         @DisplayName("Get angle (orthogonal)")
         void getAngleOrthogonal() {
             FPoint fPointRef = factory.getFPoint(0, 1, 0);
-            FPoint fPointArg = TestHelper.getRandomFPoint().setY(0);
+            FPoint fPointArg = TestHelper.getRandFPoint().setY(0);
 
             assertEquals(Math.PI * 0.5, fPointRef.getAngle(fPointArg),
-                    jitter, "The angle is incorrect");
+                    epsilon, "The angle is incorrect");
         }
 
         @Test
         @DisplayName("Get angle (throw IllegalStateException, input)")
         void getAngleThrowIllegalStateExceptionInput() {
             FPoint fPointRef = factory.getFPoint();
-            FPoint fPointArg = TestHelper.getRandomFPoint();
+            FPoint fPointArg = TestHelper.getRandFPoint();
 
             Assertions.assertThrows(IllegalStateException.class, () -> fPointRef.getAngle(fPointArg),
                     "The direction of the input vector is not defined");
@@ -1132,7 +1131,7 @@ public class FPointTest {
         @Test
         @DisplayName("Get angle (throw IllegalArgumentException, argument)")
         void getAngleThrowIllegalStateExceptionArgument() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
             FPoint fPointArg = factory.getFPoint();
 
             Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.getAngle(fPointArg),
@@ -1164,14 +1163,14 @@ public class FPointTest {
             FPoint fPoint = factory.getFPoint(2, 2, 0);
             FPos3D fPos3D = factory.getFPoint(4, -4, 0).toFPos3D();
 
-            assertEquals(Math.PI * 0.5, fPoint.getAngle(fPos3D), jitter, "The angle is incorrect");
+            assertEquals(Math.PI * 0.5, fPoint.getAngle(fPos3D), epsilon, "The angle is incorrect");
         }
 
         @Test
         @DisplayName("Get distance")
         void getDistance() {
-            FPoint fPointA = TestHelper.getRandomFPoint();
-            FPoint fPointB = TestHelper.getRandomFPoint();
+            FPoint fPointA = TestHelper.getRandFPoint();
+            FPoint fPointB = TestHelper.getRandFPoint();
 
             double dimX = fPointA.getX() - fPointB.getX();
             double dimY = fPointA.getY() - fPointB.getY();
@@ -1179,14 +1178,14 @@ public class FPointTest {
             double reference = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
 
             assertEquals(reference, fPointA.getDistance(fPointB),
-                    jitter, "The distance between FPoints is incorrect");
+                    epsilon, "The distance between FPoints is incorrect");
         }
 
         @Test
         @DisplayName("Get distance with FPos3D")
         void getDistanceWithFPos3D() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
-            FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
+            FPoint fPoint = TestHelper.getRandFPoint();
+            FPos3D fPos3D = TestHelper.getRandFPoint().toFPos3D();
 
             double dimX = fPoint.getX() - fPos3D.getD0();
             double dimY = fPoint.getY() - fPos3D.getD1();
@@ -1194,13 +1193,13 @@ public class FPointTest {
             double reference = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
 
             assertEquals(reference, fPoint.getDistance(fPos3D),
-                    jitter, "The distance between elements is incorrect");
+                    epsilon, "The distance between elements is incorrect");
         }
 
         @Test
         @DisplayName("Get distance with primitives")
         void getDistanceWithPrimitives() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             double dimX = fPointRef.getX() - 1;
             double dimY = fPointRef.getY() - 2;
@@ -1208,7 +1207,7 @@ public class FPointTest {
             double reference = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
 
             assertEquals(reference, fPointRef.getDistance(1, 2, 3),
-                    jitter, "The distance between FPoints is incorrect");
+                    epsilon, "The distance between FPoints is incorrect");
         }
 
         @Test
@@ -1231,7 +1230,7 @@ public class FPointTest {
         @Test
         @DisplayName("Get distance with primitives P2")
         void getDistanceWithPrimitivesP2() {
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             double dimX = fPointRef.getX() - 1;
             double dimY = fPointRef.getY() - 2;
@@ -1239,7 +1238,7 @@ public class FPointTest {
             double reference = (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
 
             assertEquals(reference, fPointRef.getDistanceP2(1, 2, 3),
-                    jitter, "The distance between FPoints is incorrect");
+                    epsilon, "The distance between FPoints is incorrect");
         }
 
         @Test
@@ -1253,8 +1252,8 @@ public class FPointTest {
         @Test
         @DisplayName("Get distance P2")
         void getDistanceP2() {
-            FPoint fPointA = TestHelper.getRandomFPoint();
-            FPoint fPointB = TestHelper.getRandomFPoint();
+            FPoint fPointA = TestHelper.getRandFPoint();
+            FPoint fPointB = TestHelper.getRandFPoint();
 
             double dimX = fPointA.getX() - fPointB.getX();
             double dimY = fPointA.getY() - fPointB.getY();
@@ -1262,7 +1261,7 @@ public class FPointTest {
             double reference = (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
 
             assertEquals(reference, fPointA.getDistanceP2(fPointB),
-                    jitter, "The distance between FPoints is incorrect");
+                    epsilon, "The distance between FPoints is incorrect");
         }
 
         @Test
@@ -1277,8 +1276,8 @@ public class FPointTest {
         @Test
         @DisplayName("Get distance with FPos3D P2")
         void getDistanceWithFPos3DP2() {
-            FPoint fPoint = TestHelper.getRandomFPoint();
-            FPos3D fPos3D = TestHelper.getRandomFPoint().toFPos3D();
+            FPoint fPoint = TestHelper.getRandFPoint();
+            FPos3D fPos3D = TestHelper.getRandFPoint().toFPos3D();
 
             double dimX = fPoint.getX() - fPos3D.getD0();
             double dimY = fPoint.getY() - fPos3D.getD1();
@@ -1286,31 +1285,31 @@ public class FPointTest {
             double reference = (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
 
             assertEquals(reference, fPoint.getDistanceP2(fPos3D),
-                    jitter, "The distance between elements is incorrect");
+                    epsilon, "The distance between elements is incorrect");
         }
 
         @Test
         @DisplayName("Set distance with primitives")
         void setDistanceWithPrimitives() {
-            double distance = Math.abs(random.nextDouble());
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            double distance = Math.abs(rand.nextDouble());
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             fPointRef.setDistance(1, 2, 3, distance);
 
             assertEquals(distance, fPointRef.getDistance(1, 2, 3),
-                    jitter, "The distance between FPoints is erroneous");
+                    epsilon, "The distance between FPoints is erroneous");
         }
 
         @Test
         @DisplayName("Set distance with primitives (negative)")
         void setDistanceWithPrimitivesNegative() {
-            double distance = Math.abs(random.nextDouble());
-            FPoint fPointRef = TestHelper.getRandomFPoint();
+            double distance = Math.abs(rand.nextDouble());
+            FPoint fPointRef = TestHelper.getRandFPoint();
 
             fPointRef.setDistance(1, 2, 3, -distance);
 
             assertEquals(distance, fPointRef.getDistance(1, 2, 3),
-                    jitter, "The distance between FPoints is erroneous");
+                    epsilon, "The distance between FPoints is erroneous");
         }
 
         @Test
@@ -1321,9 +1320,9 @@ public class FPointTest {
             fPointRef.setDistance(-1, -1, -1, 6 * Math.sqrt(3));
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(5, fPointRef.getX(), jitter, "The X value is incorrect"),
-                    () -> assertEquals(5, fPointRef.getY(), jitter, "The Y value is incorrect"),
-                    () -> assertEquals(5, fPointRef.getZ(), jitter, "The Z value is incorrect")
+                    () -> assertEquals(5, fPointRef.getX(), epsilon, "The X value is incorrect"),
+                    () -> assertEquals(5, fPointRef.getY(), epsilon, "The Y value is incorrect"),
+                    () -> assertEquals(5, fPointRef.getZ(), epsilon, "The Z value is incorrect")
             );
         }
 
@@ -1335,9 +1334,9 @@ public class FPointTest {
             fPointRef.setDistance(-1, -1, -1, -4 * Math.sqrt(3));
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(-5, fPointRef.getX(), jitter, "The X value is incorrect"),
-                    () -> assertEquals(-5, fPointRef.getY(), jitter, "The Y value is incorrect"),
-                    () -> assertEquals(-5, fPointRef.getZ(), jitter, "The Z value is incorrect")
+                    () -> assertEquals(-5, fPointRef.getX(), epsilon, "The X value is incorrect"),
+                    () -> assertEquals(-5, fPointRef.getY(), epsilon, "The Y value is incorrect"),
+                    () -> assertEquals(-5, fPointRef.getZ(), epsilon, "The Z value is incorrect")
             );
         }
 
@@ -1361,27 +1360,27 @@ public class FPointTest {
         @Test
         @DisplayName("Set distance")
         void setDistance() {
-            double distance = Math.abs(random.nextDouble());
-            FPoint fPointA = TestHelper.getRandomFPoint();
-            FPoint fPointB = TestHelper.getRandomFPoint(fPointA);
+            double distance = Math.abs(rand.nextDouble());
+            FPoint fPointA = TestHelper.getRandFPoint();
+            FPoint fPointB = TestHelper.getRandFPoint(fPointA);
 
             fPointA.setDistance(fPointB, distance);
 
             assertEquals(distance, fPointA.getDistance(fPointB),
-                    jitter, "The distance between FPoints is erroneous");
+                    epsilon, "The distance between FPoints is erroneous");
         }
 
         @Test
         @DisplayName("Set distance (negative)")
         void setDistanceNegative() {
-            double distance = Math.abs(random.nextDouble());
-            FPoint fPointA = TestHelper.getRandomFPoint();
-            FPoint fPointB = TestHelper.getRandomFPoint(fPointA);
+            double distance = Math.abs(rand.nextDouble());
+            FPoint fPointA = TestHelper.getRandFPoint();
+            FPoint fPointB = TestHelper.getRandFPoint(fPointA);
 
             fPointA.setDistance(fPointB, -distance);
 
             assertEquals(distance, fPointA.getDistance(fPointB),
-                    jitter, "The distance between FPoints is erroneous");
+                    epsilon, "The distance between FPoints is erroneous");
         }
 
         @Test
@@ -1393,9 +1392,9 @@ public class FPointTest {
             fPointA.setDistance(fPointB, 6 * Math.sqrt(3));
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(5, fPointA.getX(), jitter, "The X value is incorrect"),
-                    () -> assertEquals(5, fPointA.getY(), jitter, "The Y value is incorrect"),
-                    () -> assertEquals(5, fPointA.getZ(), jitter, "The Z value is incorrect")
+                    () -> assertEquals(5, fPointA.getX(), epsilon, "The X value is incorrect"),
+                    () -> assertEquals(5, fPointA.getY(), epsilon, "The Y value is incorrect"),
+                    () -> assertEquals(5, fPointA.getZ(), epsilon, "The Z value is incorrect")
             );
         }
 
@@ -1408,16 +1407,16 @@ public class FPointTest {
             fPointA.setDistance(fPointB, -4 * Math.sqrt(3));
 
             Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(-5, fPointA.getX(), jitter, "The X value is incorrect"),
-                    () -> assertEquals(-5, fPointA.getY(), jitter, "The Y value is incorrect"),
-                    () -> assertEquals(-5, fPointA.getZ(), jitter, "The Z value is incorrect")
+                    () -> assertEquals(-5, fPointA.getX(), epsilon, "The X value is incorrect"),
+                    () -> assertEquals(-5, fPointA.getY(), epsilon, "The Y value is incorrect"),
+                    () -> assertEquals(-5, fPointA.getZ(), epsilon, "The Z value is incorrect")
             );
         }
 
         @Test
         @DisplayName("Set distance (throw IllegalStateException)")
         void setDistanceThrowIllegalStateException() {
-            FPoint fPointA = TestHelper.getRandomFPoint();
+            FPoint fPointA = TestHelper.getRandFPoint();
             FPoint fPointB = fPointA.copy();
 
             Assertions.assertThrows(IllegalStateException.class, () -> fPointA.setDistance(fPointB, 1),
@@ -1436,14 +1435,14 @@ public class FPointTest {
         @Test
         @DisplayName("Set distance with FPos3D")
         void setDistanceWithFPos3D() {
-            double distance = Math.abs(random.nextDouble());
-            FPoint fPoint = TestHelper.getRandomFPoint();
-            FPos3D fPos3D = TestHelper.getRandomFPoint(fPoint).toFPos3D();
+            double distance = Math.abs(rand.nextDouble());
+            FPoint fPoint = TestHelper.getRandFPoint();
+            FPos3D fPos3D = TestHelper.getRandFPoint(fPoint).toFPos3D();
 
             fPoint.setDistance(fPos3D, distance);
 
             assertEquals(distance, fPoint.getDistance(fPos3D),
-                    jitter, "The distance between elements is erroneous");
+                    epsilon, "The distance between elements is erroneous");
         }
     }
 
@@ -1452,9 +1451,9 @@ public class FPointTest {
     @DisplayName("Core features")
     class FPointCoreTest {
 
-        private final double refX = random.nextDouble();
-        private final double refY = random.nextDouble();
-        private final double refZ = random.nextDouble();
+        private final double refX = rand.nextDouble();
+        private final double refY = rand.nextDouble();
+        private final double refZ = rand.nextDouble();
 
         @Test
         @DisplayName("JSON parser")
@@ -1493,7 +1492,7 @@ public class FPointTest {
         @DisplayName("Exactness (fail)")
         void isExactFail() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
-            FPoint fPointArg = factory.getFPoint(refX, refY, refZ).addFactor(0.5 * jitter);
+            FPoint fPointArg = factory.getFPoint(refX, refY, refZ).addFactor(0.5 * epsilon);
 
             Assertions.assertAll("Check combinations",
                     () -> assertFalse(fPointRef.isExact(fPointArg), "FPoints should not be equal"),
@@ -1547,7 +1546,7 @@ public class FPointTest {
         @DisplayName("Exactness with FPos3D (fail)")
         void isExactWithFPos3DFail() {
             FPoint fPoint = factory.getFPoint(refX, refY, refZ);
-            FPos3D fPos3D = factory.getFPos3D(refX + jitter, refY + jitter, refZ + jitter);
+            FPos3D fPos3D = factory.getFPos3D(refX + epsilon, refY + epsilon, refZ + epsilon);
 
             assertFalse(fPoint.isExact(fPos3D), "Elements should not be equal");
         }
@@ -1556,7 +1555,7 @@ public class FPointTest {
         @DisplayName("Similarity")
         void isSimilar() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
-            double ref = jitter * 0.5;
+            double ref = epsilon * 0.5;
 
             Assertions.assertAll("Check combinations (true)",
                     () -> assertTrue(fPointRef.isSimilar(factory.getFPoint().add(fPointRef)),
@@ -1580,7 +1579,7 @@ public class FPointTest {
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
-            double ref = jitter * 2;
+            double ref = epsilon * 2;
 
             Assertions.assertAll("Check combinations (false)",
                     () -> assertFalse(fPointRef.isSimilar(factory.getFPoint().add(fPointRef).addX(ref)),
@@ -1613,9 +1612,9 @@ public class FPointTest {
             FPoint fPoint = factory.getFPoint(refX, refY, refZ);
 
             assertTrue(fPoint.isSimilar(
-                    refX + (0.5 * jitter),
-                    refY + (0.5 * jitter),
-                    refZ + (0.5 * jitter)),
+                    refX + (0.5 * epsilon),
+                    refY + (0.5 * epsilon),
+                    refZ + (0.5 * epsilon)),
                     "FPoint values should be equal");
         }
 
@@ -1624,7 +1623,7 @@ public class FPointTest {
         void isSimilarWithParametersFail() {
             FPoint fPoint = factory.getFPoint(refX, refY, refZ);
 
-            assertFalse(fPoint.isSimilar(refX + (1.5 * jitter), refY + (1.5 * jitter), refZ + (1.5 * jitter)),
+            assertFalse(fPoint.isSimilar(refX + (1.5 * epsilon), refY + (1.5 * epsilon), refZ + (1.5 * epsilon)),
                     "FPoint values should not be equal");
         }
 
@@ -1640,7 +1639,7 @@ public class FPointTest {
         @DisplayName("Similarity with FPos3D")
         void isSimilarWithFPos3D() {
             FPoint fPoint = factory.getFPoint(refX, refY, refZ);
-            FPos3D fPos3D = factory.getFPos3D(refX + 0.5 * jitter, refY + 0.5 * jitter, refZ + 0.5 * jitter);
+            FPos3D fPos3D = factory.getFPos3D(refX + 0.5 * epsilon, refY + 0.5 * epsilon, refZ + 0.5 * epsilon);
 
             assertTrue(fPoint.isSimilar(fPos3D), "Elements should be similar");
         }
@@ -1649,7 +1648,7 @@ public class FPointTest {
         @DisplayName("Similarity with FPos3D (fail)")
         void isSimilarWithFPos3DFail() {
             FPoint fPoint = factory.getFPoint(refX, refY, refZ);
-            FPos3D fPos3D = factory.getFPos3D(refX + 1.5 * jitter, refY + 1.5 * jitter, refZ + 1.5 * jitter);
+            FPos3D fPos3D = factory.getFPos3D(refX + 1.5 * epsilon, refY + 1.5 * epsilon, refZ + 1.5 * epsilon);
 
             assertFalse(fPoint.isSimilar(fPos3D), "Elements should not be similar");
         }
@@ -1737,12 +1736,12 @@ public class FPointTest {
     @DisplayName("Base mutable")
     class FPointMutableTest {
 
-        private final double refX = random.nextDouble();
-        private final double refY = random.nextDouble();
-        private final double refZ = random.nextDouble();
-        private final double argX = random.nextDouble();
-        private final double argY = random.nextDouble();
-        private final double argZ = random.nextDouble();
+        private final double refX = rand.nextDouble();
+        private final double refY = rand.nextDouble();
+        private final double refZ = rand.nextDouble();
+        private final double argX = rand.nextDouble();
+        private final double argY = rand.nextDouble();
+        private final double argZ = rand.nextDouble();
         private FPoint fPoint;
 
         @BeforeEach
@@ -2486,11 +2485,11 @@ public class FPointTest {
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals((1.5 * 4) + (2.5 * 5) + (3.5 * 6), fPoint.getX(),
-                            jitter, "The X value is incorrect"),
+                            epsilon, "The X value is incorrect"),
                     () -> assertEquals((4.5 * 4) + (5.5 * 5) + (6.5 * 6), fPoint.getY(),
-                            jitter, "The Y value is incorrect"),
+                            epsilon, "The Y value is incorrect"),
                     () -> assertEquals((7.5 * 4) + (8.5 * 5) + (9.5 * 6), fPoint.getZ(),
-                            jitter, "The Z value is incorrect")
+                            epsilon, "The Z value is incorrect")
             );
         }
 
@@ -2559,40 +2558,6 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Apply with fixed state")
-        void applyWithFixedState() {
-            FPoint fPoint = factory.getFPoint(0, 0, 0);
-
-            List<Double> intermediate = new ArrayList<>();
-
-            var fPointRes = fPoint.applyWithFixedState(p -> intermediate.add(p.set(1, 2, 3).getMagnitudeP2()));
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(0, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(0, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(0, fPoint.getZ(), "The Z value is incorrect"),
-                    () -> assertEquals(1, intermediate.size(), "The size of the array list is incorrect"),
-                    () -> assertEquals(14, intermediate.get(0), jitter, "The value is incorrect"),
-                    () -> assertSame(fPoint, fPointRes, "The reference is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Apply with fixed length")
-        void applyWithFixedLength() {
-            FPoint fPoint = factory.getFPoint(1, 0, 0);
-
-            var fPointRes = fPoint.applyWithFixedMagnitude(p -> p.set(-10, 0, 0));
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(-1, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(0, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(0, fPoint.getZ(), "The Z value is incorrect"),
-                    () -> assertSame(fPoint, fPointRes, "The reference is incorrect")
-            );
-        }
-
-        @Test
         @DisplayName("Terminate with double")
         void terminateWithDouble() {
             FPoint fPoint = factory.getFPoint(1, 2, 3);
@@ -2624,42 +2589,6 @@ public class FPointTest {
                     () -> assertEquals(-1, fPoint.getX(), "The X value is incorrect"),
                     () -> assertEquals(-2, fPoint.getY(), "The Y value is incorrect"),
                     () -> assertEquals(-3, fPoint.getZ(), "The Z value is incorrect"),
-                    () -> assertTrue(res, "The value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Terminate with double (fixed state)")
-        void terminateWithDoubleFixedState() {
-            FPoint fPoint = factory.getFPoint(1, 2, 3);
-
-            var res = fPoint.toDoubleWithFixedState(p -> {
-                p.reflectThroughCenter();
-                return p.getX() + p.getY() + p.getZ();
-            });
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(1, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(2, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(3, fPoint.getZ(), "The Z value is incorrect"),
-                    () -> assertEquals(-6, res, "The value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Terminate with boolean (fixed state)")
-        void terminateWithBooleanFixedState() {
-            FPoint fPoint = factory.getFPoint(1, 2, 3);
-
-            var res = fPoint.toBooleanWithFixedState(p -> {
-                p.reflectThroughCenter();
-                return p.getX() + p.getY() + p.getZ() == -6;
-            });
-
-            Assertions.assertAll("Validate FPoint values",
-                    () -> assertEquals(1, fPoint.getX(), "The X value is incorrect"),
-                    () -> assertEquals(2, fPoint.getY(), "The Y value is incorrect"),
-                    () -> assertEquals(3, fPoint.getZ(), "The Z value is incorrect"),
                     () -> assertTrue(res, "The value is incorrect")
             );
         }

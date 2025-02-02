@@ -1,7 +1,6 @@
 package eu.scattering.core.design.mutables.geometry.primitive.point;
 
 import eu.scattering.core.design.annotations.Extension;
-import eu.scattering.core.design.annotations.Facade;
 import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.geometry.primitive.Primitive;
@@ -100,18 +99,8 @@ public interface FPoint extends Primitive<FPoint> {
     @Extension
     FPoint apply(Consumer<FPoint> action);
 
-    @Facade
-    FPoint applyWithFixedState(Consumer<FPoint> action);
-    @Facade
-    FPoint applyWithFixedMagnitude(Consumer<FPoint> action);
-
     @Termination
     double toDouble(Function<FPoint, Double> action);
     @Termination
     boolean toBoolean(Function<FPoint, Boolean> action);
-
-    @Facade
-    double toDoubleWithFixedState(Function<FPoint, Double> action);
-    @Facade
-    boolean toBooleanWithFixedState(Function<FPoint, Boolean> action);
 }

@@ -1688,42 +1688,6 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector applyWithFixedState(Consumer<FVector> action) {
-        double memoBX = this.getBaseX();
-        double memoBY = this.getBaseY();
-        double memoBZ = this.getBaseZ();
-        double memoHX = this.getHeadX();
-        double memoHY = this.getHeadY();
-        double memoHZ = this.getHeadZ();
-
-        action.accept(this);
-
-        return this.set(memoBX, memoBY, memoBZ, memoHX, memoHY, memoHZ);
-    }
-
-    @Override
-    public FVector applyWithFixedMagnitude(Consumer<FVector> action) {
-        double magnitude = getMagnitude();
-
-        action.accept(this);
-
-        return setMagnitude(magnitude);
-    }
-
-    @Override
-    public FVector applyWithCenteredPosition(Consumer<FVector> action) {
-        double memoBX = this.getBaseX();
-        double memoBY = this.getBaseY();
-        double memoBZ = this.getBaseZ();
-
-        moveBaseToCenter();
-
-        action.accept(this);
-
-        return moveBase(memoBX, memoBY, memoBZ);
-    }
-
-    @Override
     public double toDouble(Function<FVector, Double> action) {
 
         return action.apply(this);
@@ -1733,38 +1697,6 @@ public class FVectorDef implements FVector {
     public boolean toBoolean(Function<FVector, Boolean> action) {
 
         return action.apply(this);
-    }
-
-    @Override
-    public double toDoubleWithFixedState(Function<FVector, Double> action) {
-        double memoBX = this.getBaseX();
-        double memoBY = this.getBaseY();
-        double memoBZ = this.getBaseZ();
-        double memoHX = this.getHeadX();
-        double memoHY = this.getHeadY();
-        double memoHZ = this.getHeadZ();
-
-        double res = action.apply(this);
-
-        set(memoBX, memoBY, memoBZ, memoHX, memoHY, memoHZ);
-
-        return res;
-    }
-
-    @Override
-    public boolean toBooleanWithFixedState(Function<FVector, Boolean> action) {
-        double memoBX = this.getBaseX();
-        double memoBY = this.getBaseY();
-        double memoBZ = this.getBaseZ();
-        double memoHX = this.getHeadX();
-        double memoHY = this.getHeadY();
-        double memoHZ = this.getHeadZ();
-
-        boolean res = action.apply(this);
-
-        set(memoBX, memoBY, memoBZ, memoHX, memoHY, memoHZ);
-
-        return res;
     }
 
     // -------------------------------------------------------------------------------------------------

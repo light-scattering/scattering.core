@@ -15,11 +15,12 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.engines.rot;
     exports eu.scattering.core.design.mutables.geometry.shape;
     exports eu.scattering.core.design.helpers.auxiliary;
-    exports eu.scattering.core.design.engines.random;
-    exports eu.scattering.core.design.engines.random.processor;
+    exports eu.scattering.core.design.engines.rand;
+    exports eu.scattering.core.design.engines.rand.processor;
     exports eu.scattering.core.design.engines.rot.processor;
-    exports eu.scattering.core.design.engines.random.processor.core;
+    exports eu.scattering.core.design.engines.rand.processor.core;
     exports eu.scattering.core.design.mutables.geometry.construct.ray;
     exports eu.scattering.core.design.mutables.geometry.construct.segment;
     exports eu.scattering.core.design.mutables;
+    exports eu.scattering.core.design.engines.prot;
 }

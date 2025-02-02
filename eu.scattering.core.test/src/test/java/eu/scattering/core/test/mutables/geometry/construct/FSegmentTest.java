@@ -43,7 +43,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Construct with FVector")
         void constructWithFVector() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegment = factory.getRefFSegment(fVector);
 
             assertNotNull(fSegment, "The instance is null");
@@ -52,7 +52,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Construct with FVector (validate references)")
         void constructWithFVectorValidateReferences() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegment = factory.getRefFSegment(fVector);
 
             assertSame(fVector, fSegment.getRefOrigin(), "The FVector reference is erroneous");
@@ -61,12 +61,12 @@ public class FSegmentTest {
         @Test
         @DisplayName("Construct with FVector (validate positions)")
         void constructWithFVectorValidatePositions() {
-            double refAX = random.nextDouble();
-            double refAY = random.nextDouble();
-            double refAZ = random.nextDouble();
-            double refBX = random.nextDouble();
-            double refBY = random.nextDouble();
-            double refBZ = random.nextDouble();
+            double refAX = rand.nextDouble();
+            double refAY = rand.nextDouble();
+            double refAZ = rand.nextDouble();
+            double refBX = rand.nextDouble();
+            double refBY = rand.nextDouble();
+            double refBZ = rand.nextDouble();
             FPoint fPointBase = factory.getFPoint(refAX, refAY, refAZ);
             FPoint fPointHead = factory.getFPoint(refBX, refBY, refBZ);
             FVector fVector = factory.getFVector(fPointBase, fPointHead);
@@ -113,8 +113,8 @@ public class FSegmentTest {
         @Test
         @DisplayName("Set reference core")
         void setRefCore() {
-            FVector fVectorA = TestHelper.getRandomFVector();
-            FVector fVectorB = TestHelper.getRandomFVector(fVectorA);
+            FVector fVectorA = TestHelper.getRandFVector();
+            FVector fVectorB = TestHelper.getRandFVector(fVectorA);
 
             FSegment fSegment = factory.getRefFSegment(fVectorA);
             FSegment fSegmentRef = fSegment.setRefOrigin(fVectorB);
@@ -129,7 +129,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Get core")
         void getCore() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegment = factory.getRefFSegment(fVector);
 
             assertSame(fVector, fSegment.getRefOrigin(), "The FVector reference is erroneous");
@@ -143,7 +143,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("JSON parser")
         void parseJSON() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector);
 
             JSONObject json = fSegmentA.toJSON();
@@ -163,7 +163,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Exactness")
         void isExact() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector.copy());
             FSegment fSegmentB = factory.getRefFSegment(fVector.copy());
 
@@ -176,9 +176,9 @@ public class FSegmentTest {
         @Test
         @DisplayName("Exactness (fail)")
         void isExactFail() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector.copy());
-            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * jitter));
+            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * epsilon));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fSegmentA.isExact(fSegmentB), "FSegments should not be equal"),
@@ -198,9 +198,9 @@ public class FSegmentTest {
         @Test
         @DisplayName("Similarity")
         void isSimilar() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector.copy());
-            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * jitter));
+            FSegment fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * epsilon));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fSegmentA.isSimilar(fSegmentB), "FSegments should be similar"),
@@ -211,8 +211,8 @@ public class FSegmentTest {
         @Test
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
-            FSegment fSegmentA = factory.getRefFSegment(TestHelper.getRandomFVector());
-            FSegment fSegmentB = factory.getRefFSegment(TestHelper.getRandomFVector(fSegmentA.getRefOrigin()));
+            FSegment fSegmentA = factory.getRefFSegment(TestHelper.getRandFVector());
+            FSegment fSegmentB = factory.getRefFSegment(TestHelper.getRandFVector(fSegmentA.getRefOrigin()));
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fSegmentA.isSimilar(fSegmentB), "FSegments should not be similar"),
@@ -223,7 +223,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Get hash code")
         void getHashCode() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector.copy());
             FSegment fSegmentB = factory.getRefFSegment(fVector.copy());
 
@@ -234,9 +234,9 @@ public class FSegmentTest {
         @Test
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector);
-            FSegment fSegmentB = factory.getRefFSegment(TestHelper.getRandomFVector(fVector));
+            FSegment fSegmentB = factory.getRefFSegment(TestHelper.getRandFVector(fVector));
 
             assertNotEquals(fSegmentA.hashCode(), fSegmentB.hashCode(),
                     "Two different FSegments should not have the same hash code");
@@ -253,7 +253,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Copy")
         void copy() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector);
             FSegment fSegmentB = fSegmentA.copy();
 
@@ -276,7 +276,7 @@ public class FSegmentTest {
         @Test
         @DisplayName("Copy zero")
         void copyZero() {
-            FVector fVector = TestHelper.getRandomFVector();
+            FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector);
             FSegment fSegmentB = fSegmentA.copyZero();
 
@@ -363,7 +363,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint offset = TestHelper.getRandomFPoint();
+            FPoint offset = TestHelper.getRandFPoint();
 
             fSegment.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
@@ -489,7 +489,7 @@ public class FSegmentTest {
         @DisplayName("Location")
         void isPartOf() {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * jitter);
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
             assertTrue(fSegment.isPartOf(fPoint), "The distance should be negligible");
         }
@@ -498,7 +498,7 @@ public class FSegmentTest {
         @DisplayName("Location (fail)")
         void isPartOfFail() {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
-            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * jitter);
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
 
             assertFalse(fSegment.isPartOf(fPoint), "The distance should not be negligible");
         }
@@ -518,7 +518,7 @@ public class FSegmentTest {
         void isPartOfPositionHead() {
             FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
-            FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * jitter);
+            FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * epsilon);
 
             assertFalse(fSegment.isPartOf(fPoint));
         }
@@ -539,7 +539,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint offset = TestHelper.getRandomFPoint();
+            FPoint offset = TestHelper.getRandFPoint();
 
             fSegment.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
@@ -563,14 +563,14 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = TestHelper.getRandomFPoint();
+            FPoint relocation = TestHelper.getRandFPoint();
 
             fSegment.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
             fSegment.setDistance(fPoint, 1);
 
-            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
                     "The distance is erroneous");
         }
 
@@ -604,14 +604,14 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = TestHelper.getRandomFPoint();
+            FPoint relocation = TestHelper.getRandFPoint();
 
             fSegment.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
             fSegment.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < jitter,
+            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
                     "The distance between FPoints is erroneous");
         }
 
@@ -621,7 +621,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            FPoint relocation = TestHelper.getRandomFPoint();
+            FPoint relocation = TestHelper.getRandFPoint();
 
             fSegment.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
@@ -632,7 +632,7 @@ public class FSegmentTest {
             FPoint fPointB = fPoint.copy();
             fSegment.setDistance(fPointB, -1);
 
-            Assertions.assertTrue(fPointA.getDistance(fPointB) - 2 < jitter,
+            Assertions.assertTrue(fPointA.getDistance(fPointB) - 2 < epsilon,
                     "The distance between FPoints is erroneous");
         }
 

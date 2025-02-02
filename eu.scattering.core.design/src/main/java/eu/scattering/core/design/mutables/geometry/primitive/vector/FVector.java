@@ -218,20 +218,8 @@ public interface FVector extends Primitive<FVector> {
     @Extension
     FVector apply(Consumer<FVector> action);
 
-    @Facade
-    FVector applyWithFixedState(Consumer<FVector> action);
-    @Facade
-    FVector applyWithFixedMagnitude(Consumer<FVector> action);
-    @Facade
-    FVector applyWithCenteredPosition(Consumer<FVector> action);
-
     @Termination
     double toDouble(Function<FVector, Double> action);
     @Termination
     boolean toBoolean(Function<FVector, Boolean> action);
-
-    @Facade
-    double toDoubleWithFixedState(Function<FVector, Double> action);
-    @Facade
-    boolean toBooleanWithFixedState(Function<FVector, Boolean> action);
 }

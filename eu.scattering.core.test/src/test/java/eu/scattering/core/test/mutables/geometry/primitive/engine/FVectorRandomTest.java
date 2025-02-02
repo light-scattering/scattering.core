@@ -2,7 +2,7 @@ package eu.scattering.core.test.mutables.geometry.primitive.engine;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.engines.random.FRandomEngine;
+import eu.scattering.core.design.engines.rand.FRandEngine;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.geometry.primitive.support.FVectorTestHelper;
 import org.junit.jupiter.api.Assertions;
@@ -25,7 +25,7 @@ public class FVectorRandomTest {
         FPoint fPointHead = factory.getFPoint(2, 1, 0);
         FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-        factory.getFRandomEngine().rndAngle(fPointHead);
+        factory.getFRandEngine().rndAngle(fPointHead);
 
         Assertions.assertAll("Validate FPoint values",
                 () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
@@ -38,8 +38,8 @@ public class FVectorRandomTest {
     @Test
     @DisplayName("Set random angle (validate)")
     void setRandomAngleValidate() {
-        FVector fVector = TestHelper.getRandomFVector();
-        FRandomEngine random = factory.getFRandomEngine();
+        FVector fVector = TestHelper.getRandFVector();
+        FRandEngine random = factory.getFRandEngine();
 
         FVectorTestHelper.testReference(random::rndAngle, fVector);
     }

@@ -7,9 +7,6 @@ import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static eu.scattering.core.test.Configuration.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -178,11 +175,11 @@ public class FComplexTest {
 
         @BeforeEach
         void beforeEach() {
-            refRe = random.nextDouble();
-            refIm = random.nextDouble();
+            refRe = rand.nextDouble();
+            refIm = rand.nextDouble();
 
-            argRe = random.nextDouble();
-            argIm = random.nextDouble();
+            argRe = rand.nextDouble();
+            argIm = rand.nextDouble();
 
             refFComplex = factory.getFComplex(refRe, refIm);
             argFComplex = factory.getFComplex(argRe, argIm);
@@ -444,9 +441,9 @@ public class FComplexTest {
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(valueRe, fComplex.getRe(),
-                            jitter, "The real part is incorrect"),
+                            epsilon, "The real part is incorrect"),
                     () -> assertEquals(valueIm, fComplex.getIm(),
-                            jitter, "The imaginary part is incorrect")
+                            epsilon, "The imaginary part is incorrect")
             );
         }
 
@@ -471,9 +468,9 @@ public class FComplexTest {
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(valueRe, fComplex.getRe(),
-                            jitter, "The real part is incorrect"),
+                            epsilon, "The real part is incorrect"),
                     () -> assertEquals(valueIm, fComplex.getIm(),
-                            jitter, "The imaginary part is incorrect")
+                            epsilon, "The imaginary part is incorrect")
             );
         }
 
@@ -750,8 +747,8 @@ public class FComplexTest {
         @BeforeEach
         void beforeEach() {
 
-            refRe = random.nextDouble();
-            refIm = random.nextDouble();
+            refRe = rand.nextDouble();
+            refIm = rand.nextDouble();
             refFComplex = factory.getFComplex(refRe, refIm);
         }
 
@@ -786,7 +783,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Exactness (fail)")
         void isExactFail() {
-            FComplex fComplexOp = refFComplex.copy().addFactor(0.5 * jitter);
+            FComplex fComplexOp = refFComplex.copy().addFactor(0.5 * epsilon);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(refFComplex.isExact(fComplexOp),
@@ -839,7 +836,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity")
         void isSimilar() {
-            double ref = jitter * 0.5;
+            double ref = epsilon * 0.5;
 
             Assertions.assertAll("Check combinations (true)",
                     () -> assertTrue(refFComplex
@@ -863,7 +860,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity (fail)")
         void isSimilarFail() {
-            double ref = jitter * 2;
+            double ref = epsilon * 2;
 
             Assertions.assertAll("Check combinations (true)",
                     () -> assertFalse(refFComplex
@@ -892,7 +889,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Similarity with parameters")
         void isSimilarWithParameters() {
-            double error = 0.5 * jitter;
+            double error = 0.5 * epsilon;
 
             assertTrue(refFComplex.isSimilar(
                     refRe + error,
@@ -905,15 +902,15 @@ public class FComplexTest {
         void isSimilarWithParametersFail() {
 
             assertFalse(refFComplex.isSimilar(
-                    refRe + (1.5 * jitter),
-                    refRe + (1.5 * jitter)),
+                    refRe + (1.5 * epsilon),
+                    refRe + (1.5 * epsilon)),
                     "FComplex values should not be similar");
         }
 
         @Test
         @DisplayName("Similarity with FPos2D")
         void isSimilarWithFPos2D() {
-            double error = 0.5 * jitter;
+            double error = 0.5 * epsilon;
             FPos2D fPos2D = factory.getFPos2D(refRe + error, refIm + error);
 
             assertTrue(refFComplex.isSimilar(fPos2D),
@@ -971,7 +968,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             FComplexTestHelper.testValue(FComplex::copy, fComplex);
         }
@@ -994,7 +991,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Copy zero (validate)")
         void copyZeroValidate() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             FComplexTestHelper.testValue(FComplex::copyZero, fComplex);
         }
@@ -1008,7 +1005,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get magnitude")
         void getMagnitude() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             double res = Math.sqrt((fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm()));
 
@@ -1027,7 +1024,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Get magnitude P2")
         void getMagnitudeP2() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             double res = (fComplex.getRe() * fComplex.getRe()) + (fComplex.getIm() * fComplex.getIm());
 
@@ -1046,15 +1043,15 @@ public class FComplexTest {
         @Test
         @DisplayName("Get distance")
         void getDistance() {
-            FComplex fComplexRef = TestHelper.getRandomFComplex();
-            FComplex fComplexArg = TestHelper.getRandomFComplex(fComplexRef);
+            FComplex fComplexRef = TestHelper.getRandFComplex();
+            FComplex fComplexArg = TestHelper.getRandFComplex(fComplexRef);
 
             double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - fComplexArg.getRe()), 2);
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - fComplexArg.getIm()), 2);
             double res = Math.sqrt(distanceRe + distanceIm);
 
             assertEquals(res, fComplexRef.getDistance(fComplexArg),
-                    jitter, "The distance is erroneous");
+                    epsilon, "The distance is erroneous");
         }
 
         @Test
@@ -1069,26 +1066,26 @@ public class FComplexTest {
         @Test
         @DisplayName("Get distance with primitives")
         void getDistanceWithPrimitives() {
-            double argRe = random.nextDouble();
-            double argIm = random.nextDouble();
+            double argRe = rand.nextDouble();
+            double argIm = rand.nextDouble();
 
-            FComplex fComplexRef = TestHelper.getRandomFComplex();
+            FComplex fComplexRef = TestHelper.getRandFComplex();
 
             double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - argRe), 2);
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - argIm), 2);
             double res = Math.sqrt(distanceRe + distanceIm);
 
             assertEquals(res, fComplexRef.getDistance(argRe, argIm),
-                    jitter, "The distance is erroneous");
+                    epsilon, "The distance is erroneous");
         }
 
         @Test
         @DisplayName("Get distance with FPos2D")
         void getDistanceWithFPos2D() {
-            double argRe = random.nextDouble();
-            double argIm = random.nextDouble();
+            double argRe = rand.nextDouble();
+            double argIm = rand.nextDouble();
 
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
             FPos2D fPos2D = factory.getFPos2D(argRe, argIm);
 
             double distanceRe = Math.pow(Math.abs(fComplex.getRe() - fPos2D.getD0()), 2);
@@ -1096,21 +1093,21 @@ public class FComplexTest {
             double res = Math.sqrt(distanceRe + distanceIm);
 
             assertEquals(res, fComplex.getDistance(fPos2D),
-                    jitter, "The distance is erroneous");
+                    epsilon, "The distance is erroneous");
         }
 
         @Test
         @DisplayName("Get distance P2")
         void getDistanceP2() {
-            FComplex fComplexRef = TestHelper.getRandomFComplex();
-            FComplex fComplexArg = TestHelper.getRandomFComplex(fComplexRef);
+            FComplex fComplexRef = TestHelper.getRandFComplex();
+            FComplex fComplexArg = TestHelper.getRandFComplex(fComplexRef);
 
             double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - fComplexArg.getRe()), 2);
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - fComplexArg.getIm()), 2);
             double res = distanceRe + distanceIm;
 
             assertEquals(res, fComplexRef.getDistanceP2(fComplexArg),
-                    jitter, "The distance is erroneous");
+                    epsilon, "The distance is erroneous");
         }
 
         @Test
@@ -1125,51 +1122,51 @@ public class FComplexTest {
         @Test
         @DisplayName("Get distance P2 with primitives")
         void getDistanceP2WithPrimitives() {
-            double re = random.nextDouble();
-            double im = random.nextDouble();
+            double re = rand.nextDouble();
+            double im = rand.nextDouble();
 
-            FComplex fComplexRef = TestHelper.getRandomFComplex();
+            FComplex fComplexRef = TestHelper.getRandFComplex();
 
             double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - re), 2);
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - im), 2);
             double res = distanceRe + distanceIm;
 
             assertEquals(res, fComplexRef.getDistanceP2(re, im),
-                    jitter, "The distance is erroneous");
+                    epsilon, "The distance is erroneous");
         }
 
         @Test
         @DisplayName("Get distance P2 with FPos2D")
         void getDistanceP2WithFPos2D() {
-            FComplex fComplexRef = TestHelper.getRandomFComplex();
-            FPos2D fPos2D = TestHelper.getRandomFComplex(fComplexRef).toFPos2D();
+            FComplex fComplexRef = TestHelper.getRandFComplex();
+            FPos2D fPos2D = TestHelper.getRandFComplex(fComplexRef).toFPos2D();
 
             double distanceRe = Math.pow(Math.abs(fComplexRef.getRe() - fPos2D.getD0()), 2);
             double distanceIm = Math.pow(Math.abs(fComplexRef.getIm() - fPos2D.getD1()), 2);
             double res = distanceRe + distanceIm;
 
             assertEquals(res, fComplexRef.getDistanceP2(fPos2D),
-                    jitter, "The distance is erroneous");
+                    epsilon, "The distance is erroneous");
         }
 
         @Test
         @DisplayName("Set magnitude")
         void setMagnitude() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
-            double magnitude = Math.abs(random.nextDouble());
+            FComplex fComplex = TestHelper.getRandFComplex();
+            double magnitude = Math.abs(rand.nextDouble());
 
             fComplex.setMagnitude(magnitude);
 
             assertEquals(magnitude, fComplex.getMagnitude(),
-                    jitter, "The magnitude is erroneous");
+                    epsilon, "The magnitude is erroneous");
         }
 
         @Test
         @DisplayName("Set magnitude (negative)")
         void setMagnitudeNegative() {
-            FComplex fComplexA = TestHelper.getRandomFComplex();
+            FComplex fComplexA = TestHelper.getRandFComplex();
             FComplex fComplexB = fComplexA.copy().negate();
-            double magnitude = Math.abs(random.nextDouble());
+            double magnitude = Math.abs(rand.nextDouble());
 
             fComplexA.setMagnitude(-magnitude);
             fComplexB.setMagnitude(magnitude);
@@ -1182,7 +1179,8 @@ public class FComplexTest {
         @DisplayName("Set magnitude (throw IllegalStateException)")
         void setMagnitudeThrowIllegalStateException() {
 
-            Assertions.assertThrows(IllegalStateException.class, () -> factory.getFComplex().setMagnitude(1),
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> factory.getFComplex().setMagnitude(1),
                     "The direction is not defined");
         }
 
@@ -1197,37 +1195,37 @@ public class FComplexTest {
         @Test
         @DisplayName("Get phase")
         void getPhase() {
-            double re = random.nextDouble();
-            double im = random.nextDouble();
+            double re = rand.nextDouble();
+            double im = rand.nextDouble();
 
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertNotEquals(Math.PI, fComplex.getPhase(),
-                    jitter, "The phase is erroneous");
+                    epsilon, "The phase is erroneous");
         }
 
         @Test
         @DisplayName("Get phase (zero)")
         void getPhaseZero() {
-            double re = Math.abs(random.nextDouble());
+            double re = Math.abs(rand.nextDouble());
             double im = 0;
 
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(0, fComplex.getPhase(),
-                    jitter, "The phase is erroneous");
+                    epsilon, "The phase is erroneous");
         }
 
         @Test
         @DisplayName("Get phase (pi)")
         void getPhasePi() {
-            double re = -Math.abs(random.nextDouble());
+            double re = -Math.abs(rand.nextDouble());
             double im = 0;
 
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI, fComplex.getPhase(),
-                    jitter, "The phase is erroneous");
+                    epsilon, "The phase is erroneous");
         }
 
         @Test
@@ -1239,7 +1237,7 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI * 0.25, fComplex.getPhase(),
-                    jitter, "The phase is erroneous");
+                    epsilon, "The phase is erroneous");
         }
 
         @Test
@@ -1251,14 +1249,15 @@ public class FComplexTest {
             FComplex fComplex = factory.getFComplex(re, im);
 
             assertEquals(Math.PI * -0.25, fComplex.getPhase(),
-                    jitter, "The phase is erroneous");
+                    epsilon, "The phase is erroneous");
         }
 
         @Test
         @DisplayName("Get phase (throw IllegalStateException)")
         void getPhaseThrowIllegalStateException() {
 
-            Assertions.assertThrows(IllegalStateException.class, () -> factory.getFComplex().getPhase(),
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> factory.getFComplex().getPhase(),
                     "The direction is not defined");
         }
 
@@ -1274,12 +1273,12 @@ public class FComplexTest {
         @DisplayName("Set phase")
         void setPhase() {
             FComplex fComplex = factory.getFComplex(1, 1);
-            double phase = random.nextDouble() % Math.PI;
+            double phase = rand.nextDouble() % Math.PI;
 
             fComplex.setPhase(phase);
 
             assertEquals(phase, fComplex.getPhase(),
-                    jitter, "The phase is erroneous");
+                    epsilon, "The phase is erroneous");
         }
 
         @Test
@@ -1293,17 +1292,17 @@ public class FComplexTest {
         @Test
         @DisplayName("Negate")
         public void negate() {
-            double re = random.nextDouble();
-            double im = random.nextDouble();
+            double re = rand.nextDouble();
+            double im = rand.nextDouble();
             FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.negate();
 
             Assertions.assertAll("Validate FComplex",
                     () -> assertEquals(-re, fComplex.getRe(),
-                            jitter, "The Re value is erroneous"),
+                            epsilon, "The Re value is erroneous"),
                     () -> assertEquals(-im, fComplex.getIm(),
-                            jitter, "The Im value is erroneous")
+                            epsilon, "The Im value is erroneous")
             );
         }
 
@@ -1318,8 +1317,8 @@ public class FComplexTest {
         @Test
         @DisplayName("Inverse")
         public void inverse() {
-            double re = random.nextDouble();
-            double im = random.nextDouble();
+            double re = rand.nextDouble();
+            double im = rand.nextDouble();
             FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.inverse();
@@ -1327,9 +1326,9 @@ public class FComplexTest {
 
             Assertions.assertAll("Validate FComplex",
                     () -> assertEquals(1, fComplex.getRe(),
-                            jitter, "The Re value is erroneous"),
+                            epsilon, "The Re value is erroneous"),
                     () -> assertEquals(0, fComplex.getIm(),
-                            jitter, "The Im value is erroneous")
+                            epsilon, "The Im value is erroneous")
             );
         }
 
@@ -1344,17 +1343,17 @@ public class FComplexTest {
         @Test
         @DisplayName("Conjugate")
         public void conjugate() {
-            double re = random.nextDouble();
-            double im = random.nextDouble();
+            double re = rand.nextDouble();
+            double im = rand.nextDouble();
             FComplex fComplex = factory.getFComplex(re, im);
 
             fComplex.conjugate();
 
             Assertions.assertAll("Validate FComplex",
                     () -> assertEquals(re, fComplex.getRe(),
-                            jitter, "The Re value is erroneous"),
+                            epsilon, "The Re value is erroneous"),
                     () -> assertEquals(-im, fComplex.getIm(),
-                            jitter, "The Im value is erroneous"));
+                            epsilon, "The Im value is erroneous"));
         }
 
         @Test
@@ -1368,19 +1367,20 @@ public class FComplexTest {
         @Test
         @DisplayName("Normalize")
         public void normalize() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             fComplex.normalize();
 
             assertEquals(1, fComplex.getMagnitude(),
-                    jitter, "The magnitude is erroneous");
+                    epsilon, "The magnitude is erroneous");
         }
 
         @Test
         @DisplayName("Normalize (throw IllegalStateException)")
         void normalizeThrowIllegalStateException() {
 
-            Assertions.assertThrows(IllegalStateException.class, () -> factory.getFComplex().normalize(),
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> factory.getFComplex().normalize(),
                     "The direction is not defined");
         }
 
@@ -1404,7 +1404,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Is zero (fail)")
         public void isZeroFail() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             assertFalse(fComplex.isZero(),
                     "The FComplex value should not be zero");
@@ -1446,7 +1446,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Power (zero)")
         public void powZero() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             assertTrue(fComplex.power(0).isExact(1, 0),
                     "The value is erroneous");
@@ -1455,7 +1455,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Power (validate)")
         public void powValidate() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             FComplexTestHelper.testReference(e -> e.power(3), fComplex);
         }
@@ -1463,7 +1463,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Root")
         public void root() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             FComplex[] fComplexRes = fComplex.root(3);
 
@@ -1480,7 +1480,7 @@ public class FComplexTest {
         @Test
         @DisplayName("Root (size)")
         public void rootSize() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             FComplex[] fComplexRes = fComplex.root(3);
 
@@ -1492,14 +1492,15 @@ public class FComplexTest {
         @DisplayName("Root (throw IllegalArgumentException)")
         public void rootThrowIllegalArgumentException() {
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> TestHelper.getRandomFComplex().root(-1),
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> TestHelper.getRandFComplex().root(-1),
                     "The root value must be greater than zero");
         }
 
         @Test
         @DisplayName("Root (validate)")
         public void rootValidate() {
-            FComplex fComplex = TestHelper.getRandomFComplex();
+            FComplex fComplex = TestHelper.getRandFComplex();
 
             FComplexTestHelper.testValue(e -> e.root(3), fComplex);
         }
@@ -1520,24 +1521,6 @@ public class FComplexTest {
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(1, fComplex.getRe(), "The 're' value is incorrect"),
                     () -> assertEquals(2, fComplex.getIm(), "The 'im' value is incorrect"),
-                    () -> assertSame(fComplexRes, fComplex, "The reference is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Apply with fixed state")
-        void applyWithFixedState() {
-            FComplex fComplex = factory.getFComplex(0, 0);
-
-            List<Double> intermediate = new ArrayList<>();
-
-            var fComplexRes = fComplex.applyWithFixedState(p -> intermediate.add(p.setRe(2).setIm(2).getMagnitude()));
-
-            Assertions.assertAll("Validate FComplex values",
-                    () -> assertEquals(0, fComplex.getRe(), "The 're' value is incorrect"),
-                    () -> assertEquals(0, fComplex.getIm(), "The 'im' value is incorrect"),
-                    () -> assertEquals(1, intermediate.size(), "The size of the array list is incorrect"),
-                    () -> assertEquals(2 * Math.sqrt(2), intermediate.get(0), jitter, "The value is incorrect"),
                     () -> assertSame(fComplexRes, fComplex, "The reference is incorrect")
             );
         }
@@ -1572,40 +1555,6 @@ public class FComplexTest {
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(4, fComplex.getRe(), "The 're' value is incorrect"),
                     () -> assertEquals(6, fComplex.getIm(), "The 'im' value is incorrect"),
-                    () -> assertTrue(res, "The value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Terminate with double (fixed state)")
-        void terminateWithDoubleFixedState() {
-            FComplex fComplex = factory.getFComplex(1, 2);
-
-            var res = fComplex.toDoubleWithFixedState(p -> {
-                p.add(3, 4);
-                return p.getRe() + p.getIm();
-            });
-
-            Assertions.assertAll("Validate FComplex values",
-                    () -> assertEquals(1, fComplex.getRe(), "The 're' value is incorrect"),
-                    () -> assertEquals(2, fComplex.getIm(), "The 'im' value is incorrect"),
-                    () -> assertEquals(10, res, "The value is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Terminate with boolean (fixed state)")
-        void terminateWithBooleanFixedState() {
-            FComplex fComplex = factory.getFComplex(1, 2);
-
-            var res = fComplex.toBooleanWithFixedState(p -> {
-                p.add(3, 4);
-                return p.getRe() + p.getIm() == 10;
-            });
-
-            Assertions.assertAll("Validate FComplex values",
-                    () -> assertEquals(1, fComplex.getRe(), "The 're' value is incorrect"),
-                    () -> assertEquals(2, fComplex.getIm(), "The 'im' value is incorrect"),
                     () -> assertTrue(res, "The value is incorrect")
             );
         }

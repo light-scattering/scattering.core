@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import static eu.scattering.core.test.Configuration.factory;
-import static eu.scattering.core.test.Configuration.rotation;
+import static eu.scattering.core.test.Configuration.rot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Timeout(5)
@@ -22,7 +22,7 @@ public class FLineRotationTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
 
-        rotation.rotQtAround(fLine, fVector, Math.PI * 0.5);
+        rot.rotQtAround(fLine, fVector, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                 "The position of the rotated FVector is erroneous");
@@ -34,7 +34,7 @@ public class FLineRotationTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
 
-        rotation.rotQtAround(fLine, fVector, -(Math.PI * 0.5));
+        rot.rotQtAround(fLine, fVector, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
                 "The position of the rotated FVector is erroneous");
@@ -46,7 +46,7 @@ public class FLineRotationTest {
         FVector fVector = factory.getFVector(-2, 2, 0, 0, 2, 0);
         FLine fLine = factory.getRefFLine(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rotation.rotQtAround(fLine, fVector, Math.PI);
+        rot.rotQtAround(fLine, fVector, Math.PI);
 
         assertTrue(fVector.isSimilar(-2, -2, 0, 0, -2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -58,7 +58,7 @@ public class FLineRotationTest {
         FVector fVector = factory.getFVector(0, 2, 0, 2, 2, 0);
         FLine fLine = factory.getRefFLine(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rotation.rotQtAround(fLine, fVector, Math.PI);
+        rot.rotQtAround(fLine, fVector, Math.PI);
 
         assertTrue(fVector.isSimilar(0, -2, 0, 2, -2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -67,11 +67,11 @@ public class FLineRotationTest {
     @Test
     @DisplayName("Rotate  (throw IllegalStateException)")
     void rotateThrowIllegalStateException() {
-        FVector fVector = TestHelper.getRandomFVector();
+        FVector fVector = TestHelper.getRandFVector();
         FLine fLine = factory.getRefFLine(factory.getFVector());
 
         Assertions.assertThrows(IllegalStateException.class,
-                () -> rotation.rotQtAround(fLine, fVector, Math.PI * 0.5),
+                () -> rot.rotQtAround(fLine, fVector, Math.PI * 0.5),
                 "The direction of the FLine is not defined");
     }
 }

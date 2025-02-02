@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import static eu.scattering.core.test.Configuration.factory;
-import static eu.scattering.core.test.Configuration.jitter;
+import static eu.scattering.core.test.Configuration.epsilon;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -48,7 +48,7 @@ public class FTrigHelperTest {
 
         var angle = helper.getAngleBetweenVectors(base, headA, headB);
 
-        assertEquals(Math.PI / 2, angle, jitter, "The angle is invalid");
+        assertEquals(Math.PI / 2, angle, epsilon, "The angle is invalid");
     }
 
     @Test
@@ -62,7 +62,7 @@ public class FTrigHelperTest {
 
         var angle = helper.getAngleBetweenVectors(base, headA, headB);
 
-        assertEquals(Math.PI, angle, jitter, "The angle is invalid");
+        assertEquals(Math.PI, angle, epsilon, "The angle is invalid");
     }
 
     @Test
@@ -76,7 +76,7 @@ public class FTrigHelperTest {
 
         var angle = helper.getAngleBetweenVectors(base, headA, headB);
 
-        assertEquals(Math.PI / 4, angle, jitter, "The angle is invalid");
+        assertEquals(Math.PI / 4, angle, epsilon, "The angle is invalid");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class FTrigHelperTest {
 
         var angle = helper.getAngleBetweenVectors(base, headA, headB);
 
-        assertEquals(Math.asin(1 / Math.sqrt(3)), angle, jitter, "The angle is invalid");
+        assertEquals(Math.asin(1 / Math.sqrt(3)), angle, epsilon, "The angle is invalid");
     }
 
     @Test
@@ -104,6 +104,6 @@ public class FTrigHelperTest {
 
         var angle = helper.getAngleBetweenVectors(base, headA, headB);
 
-        assertEquals(Math.asin(1 / Math.sqrt(3)), angle, jitter, "The angle is invalid");
+        assertEquals(Math.asin(1 / Math.sqrt(3)), angle, epsilon, "The angle is invalid");
     }
 }

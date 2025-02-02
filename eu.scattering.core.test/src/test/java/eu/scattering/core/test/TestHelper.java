@@ -21,31 +21,31 @@ public class TestHelper {
     public static final FPairPos3D range3D = factory.getFPositionHelper().getFPairPos3DWithRange(range);
     public static final FPairPos2D range2D = factory.getFPositionHelper().getFPairPos2DWithRange(range);
 
-    public static FPoint getRandomFPoint(FPoint... exc) {
+    public static FPoint getRandFPoint(FPoint... exc) {
 
-        return factory.getFRandomEngine().rndPosition(factory.getFPoint(), range3D, exc);
+        return factory.getFRandEngine().rndPosition(factory.getFPoint(), range3D, exc);
     }
 
-    public static FVector getRandomFVector(FVector... exc) {
+    public static FVector getRandFVector(FVector... exc) {
         List<FPoint> parsedBaseList = Arrays.stream(exc).map(FVector::getRefBase).collect(Collectors.toList());
         List<FPoint> parsedHeadList = Arrays.stream(exc).map(FVector::getRefHead).collect(Collectors.toList());
 
-        FPoint base = getRandomFPoint(parsedBaseList.toArray(FPoint[]::new));
+        FPoint base = getRandFPoint(parsedBaseList.toArray(FPoint[]::new));
 
         parsedHeadList.add(base);
 
-        FPoint head = getRandomFPoint(parsedHeadList.toArray(FPoint[]::new));
+        FPoint head = getRandFPoint(parsedHeadList.toArray(FPoint[]::new));
 
         return factory.getFVector(base, head);
     }
 
-    public static FComplex getRandomFComplex(FComplex... exc) {
+    public static FComplex getRandFComplex(FComplex... exc) {
 
-        return factory.getFRandomEngine().rndPosition(factory.getFComplex(), range2D, exc);
+        return factory.getFRandEngine().rndPosition(factory.getFComplex(), range2D, exc);
     }
 
-    public static FQuaternion getRandomFQuaternion(FQuaternion... exc) {
+    public static FQuaternion getRandFQuaternion(FQuaternion... exc) {
 
-        return factory.getFRandomEngine().rndPosition(factory.getFQuaternion(), range4D, exc);
+        return factory.getFRandEngine().rndPosition(factory.getFQuaternion(), range4D, exc);
     }
 }

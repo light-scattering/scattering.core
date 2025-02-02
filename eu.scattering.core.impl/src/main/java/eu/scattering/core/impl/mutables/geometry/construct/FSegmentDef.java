@@ -210,19 +210,9 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     // -------------------------------------------------------------------------------------------------
 
     private boolean isUnitPartOf(FPoint arg) {
-        double memoX = arg.getX();
-        double memoY = arg.getY();
-        double memoZ = arg.getZ();
+        double dist = getUnitDistance(arg);
 
-        return arg.toBooleanWithFixedState(p -> {
-            boolean isValid = projectUnit(p);
-
-            if (!isValid) {
-                return false;
-            }
-
-            return p.getDistance(memoX, memoY, memoZ) < EPSILON;
-        });
+        return dist != -1 && dist < EPSILON;
     }
 
     private boolean isUnitPartOfSegment(double x, double y, double z) {

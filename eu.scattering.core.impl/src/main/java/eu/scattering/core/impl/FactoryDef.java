@@ -1,6 +1,7 @@
 package eu.scattering.core.impl;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
+import eu.scattering.core.design.engines.prot.FProtEngine;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
@@ -10,13 +11,14 @@ import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.mutables.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.mutables.number.complex.FComplex;
 import eu.scattering.core.design.mutables.number.quaternion.FQuaternion;
-import eu.scattering.core.design.engines.random.processor.FRandomProcessor;
+import eu.scattering.core.design.engines.rand.processor.FRandProcessor;
 import eu.scattering.core.design.engines.rot.processor.FRotProcessor;
 import eu.scattering.core.design.helpers.auxiliary.FTrigHelper;
-import eu.scattering.core.design.engines.random.FRandomEngine;
+import eu.scattering.core.design.engines.rand.FRandEngine;
 import eu.scattering.core.design.engines.rot.FRotEngine;
-import eu.scattering.core.impl.engines.random.FRandomEngineDef;
-import eu.scattering.core.impl.engines.random.FRandomProcessorDef;
+import eu.scattering.core.impl.engines.prot.FProtEngineDef;
+import eu.scattering.core.impl.engines.rand.FRandEngineDef;
+import eu.scattering.core.impl.engines.rand.FRandProcessorDef;
 import eu.scattering.core.impl.engines.rot.FRotEngineDef;
 import eu.scattering.core.impl.engines.rot.FRotProcessorDef;
 import eu.scattering.core.impl.helpers.FTrigHelperDef;
@@ -31,26 +33,31 @@ import eu.scattering.core.impl.mutables.number.FQuaternionDef;
 
 public final class FactoryDef extends FactoryDesignConcrete {
     private final FTrigHelper fAngleHelper;
-    private final FRandomEngine fRandomHelper;
+    private final FRandEngine fRandHelper;
     private final FRotEngine fRotEngine;
+    private final FProtEngine fProtEngine;
 
     private FactoryDef() {
-        FRandomProcessor fRandomInternal = FRandomProcessorDef.create();
+        FRandProcessor fRandInternal = FRandProcessorDef.create();
 
-        fRandomInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
+        fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
-        this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
+        this.fRandHelper = FRandEngineDef.create(fRandInternal);
         this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
+        this.fProtEngine = FProtEngineDef.create();
+
         this.fAngleHelper = FTrigHelperDef.create();
     }
 
     private FactoryDef(long seed) {
-        FRandomProcessor fRandomInternal = FRandomProcessorDef.create(seed);
+        FRandProcessor fRandInternal = FRandProcessorDef.create(seed);
 
-        fRandomInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
+        fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
-        this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
+        this.fRandHelper = FRandEngineDef.create(fRandInternal);
         this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
+        this.fProtEngine = FProtEngineDef.create();
+
         this.fAngleHelper = FTrigHelperDef.create();
     }
 
@@ -189,9 +196,9 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     @Override
-    public FRandomEngine getFRandomEngine() {
+    public FRandEngine getFRandEngine() {
 
-        return fRandomHelper;
+        return fRandHelper;
     }
 
     @Override
@@ -200,18 +207,24 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return fRotEngine;
     }
 
+    @Override
+    public FProtEngine getFProtEngine() {
+
+        return fProtEngine;
+    }
+
 //--------------------------------------------------
 
     @Override
-    public FRandomProcessor getFRandomProcessor() {
+    public FRandProcessor getFRandProcessor() {
 
-        return FRandomProcessorDef.create();
+        return FRandProcessorDef.create();
     }
 
     @Override
-    public FRandomProcessor getFRandomProcessor(long seed) {
+    public FRandProcessor getFRandProcessor(long seed) {
 
-        return FRandomProcessorDef.create(seed);
+        return FRandProcessorDef.create(seed);
     }
 
     @Override
@@ -219,4 +232,6 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         return FRotProcessorDef.create();
     }
+
+
 }

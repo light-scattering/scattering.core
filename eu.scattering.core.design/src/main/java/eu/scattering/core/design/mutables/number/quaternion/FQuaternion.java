@@ -1,7 +1,6 @@
 package eu.scattering.core.design.mutables.number.quaternion;
 
 import eu.scattering.core.design.annotations.Extension;
-import eu.scattering.core.design.annotations.Facade;
 import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.number.Number;
@@ -86,16 +85,8 @@ public interface FQuaternion extends Number<FQuaternion> {
     @Extension
     FQuaternion apply(Consumer<FQuaternion> action);
 
-    @Facade
-    FQuaternion applyWithFixedState(Consumer<FQuaternion> action);
-
     @Termination
     double toDouble(Function<FQuaternion, Double> action);
     @Termination
     boolean toBoolean(Function<FQuaternion, Boolean> action);
-
-    @Facade
-    double toDoubleWithFixedState(Function<FQuaternion, Double> action);
-    @Facade
-    boolean toBooleanWithFixedState(Function<FQuaternion, Boolean> action);
 }

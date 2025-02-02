@@ -666,18 +666,6 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion applyWithFixedState(Consumer<FQuaternion> action) {
-        double memoRe = this.getRe();
-        double memoI = this.getI();
-        double memoJ = this.getJ();
-        double memoK = this.getK();
-
-        action.accept(this);
-
-        return applyStateFrom(memoRe, memoI, memoJ, memoK);
-    }
-
-    @Override
     public double toDouble(Function<FQuaternion, Double> action) {
 
         return action.apply(this);
@@ -687,34 +675,6 @@ public class FQuaternionDef implements FQuaternion {
     public boolean toBoolean(Function<FQuaternion, Boolean> action) {
 
         return action.apply(this);
-    }
-
-    @Override
-    public double toDoubleWithFixedState(Function<FQuaternion, Double> action) {
-        double memoRe = this.getRe();
-        double memoI = this.getI();
-        double memoJ = this.getJ();
-        double memoK = this.getK();
-
-        double results = action.apply(this);
-
-        applyStateFrom(memoRe, memoI, memoJ, memoK);
-
-        return results;
-    }
-
-    @Override
-    public boolean toBooleanWithFixedState(Function<FQuaternion, Boolean> action) {
-        double memoRe = this.getRe();
-        double memoI = this.getI();
-        double memoJ = this.getJ();
-        double memoK = this.getK();
-
-        boolean results = action.apply(this);
-
-        applyStateFrom(memoRe, memoI, memoJ, memoK);
-
-        return results;
     }
 }
 

@@ -1,7 +1,7 @@
 package eu.scattering.core.test.mutables.geometry.primitive.engine;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.engines.random.FRandomEngine;
+import eu.scattering.core.design.engines.rand.FRandEngine;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.geometry.primitive.support.FPointTestHelper;
 import org.junit.jupiter.api.Assertions;
@@ -23,21 +23,21 @@ public class FPointRandomTest {
     @Test
     @DisplayName("Set random angle (validate vector magnitude)")
     void setRandomAngleValidateMagnitude() {
-        double radius = Math.abs(random.nextDouble());
+        double radius = Math.abs(rand.nextDouble());
 
-        FPoint fPoint = factory.getFRandomEngine().rndAngle(factory.getFPoint(radius));
+        FPoint fPoint = factory.getFRandEngine().rndAngle(factory.getFPoint(radius));
 
         assertEquals(radius, fPoint.getMagnitude(),
-                jitter, "The radius is invalid");
+                epsilon, "The radius is invalid");
     }
 
     @Test
     @DisplayName("Set random angle (validate correctness)")
     void setRandomAngleValidateCorrectness() {
-        double radius = Math.abs(random.nextDouble());
+        double radius = Math.abs(rand.nextDouble());
 
-        FPoint fPointA = factory.getFRandomEngine().rndAngle(factory.getFPoint(radius));
-        FPoint fPointB = factory.getFRandomEngine().rndAngle(factory.getFPoint(radius), fPointA);
+        FPoint fPointA = factory.getFRandEngine().rndAngle(factory.getFPoint(radius));
+        FPoint fPointB = factory.getFRandEngine().rndAngle(factory.getFPoint(radius), fPointA);
 
         assertNotEquals(fPointA, fPointB, "Two randomly generated points should be different");
     }
@@ -45,17 +45,17 @@ public class FPointRandomTest {
     @Test
     @DisplayName("Set random angle (validate timeout)")
     void setRandomAngleValidateTimeout() {
-        double radius = Math.abs(random.nextDouble());
+        double radius = Math.abs(rand.nextDouble());
         FPoint fPoint = factory.getFPoint(radius);
 
-        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.getFRandomEngine().rndAngle(fPoint));
+        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.getFRandEngine().rndAngle(fPoint));
     }
 
     @Test
     @DisplayName("Set random angle (validate)")
     void setRandomAngleValidate() {
-        FPoint fPoint = TestHelper.getRandomFPoint();
-        FRandomEngine random = factory.getFRandomEngine();
+        FPoint fPoint = TestHelper.getRandFPoint();
+        FRandEngine random = factory.getFRandEngine();
 
         FPointTestHelper.testReference(random::rndAngle, fPoint);
     }

@@ -1,7 +1,6 @@
 package eu.scattering.core.design.mutables.number.complex;
 
 import eu.scattering.core.design.annotations.Extension;
-import eu.scattering.core.design.annotations.Facade;
 import eu.scattering.core.design.annotations.Fragment;
 import eu.scattering.core.design.annotations.Termination;
 import eu.scattering.core.design.mutables.number.Number;
@@ -75,16 +74,8 @@ public interface FComplex extends Number<FComplex> {
     @Extension
     FComplex apply(Consumer<FComplex> action);
 
-    @Facade
-    FComplex applyWithFixedState(Consumer<FComplex> action);
-
     @Termination
     double toDouble(Function<FComplex, Double> action);
     @Termination
     boolean toBoolean(Function<FComplex, Boolean> action);
-
-    @Facade
-    double toDoubleWithFixedState(Function<FComplex, Double> action);
-    @Facade
-    boolean toBooleanWithFixedState(Function<FComplex, Boolean> action);
 }

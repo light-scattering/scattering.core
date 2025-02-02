@@ -744,26 +744,6 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public FPoint applyWithFixedState(Consumer<FPoint> action) {
-        double memoX = this.getX();
-        double memoY = this.getY();
-        double memoZ = this.getZ();
-
-        action.accept(this);
-
-        return set(memoX, memoY, memoZ);
-    }
-
-    @Override
-    public FPoint applyWithFixedMagnitude(Consumer<FPoint> action) {
-        double memoMag = getMagnitude();
-
-        action.accept(this);
-
-        return setMagnitude(memoMag);
-    }
-
-    @Override
     public double toDouble(Function<FPoint, Double> action) {
 
         return action.apply(this);
@@ -773,31 +753,5 @@ public class FPointDef implements FPoint {
     public boolean toBoolean(Function<FPoint, Boolean> action) {
 
         return action.apply(this);
-    }
-
-    @Override
-    public double toDoubleWithFixedState(Function<FPoint, Double> action) {
-        double memoX = this.getX();
-        double memoY = this.getY();
-        double memoZ = this.getZ();
-
-        double results = action.apply(this);
-
-        set(memoX, memoY, memoZ);
-
-        return results;
-    }
-
-    @Override
-    public boolean toBooleanWithFixedState(Function<FPoint, Boolean> action) {
-        double memoX = this.getX();
-        double memoY = this.getY();
-        double memoZ = this.getZ();
-
-        boolean results = action.apply(this);
-
-        set(memoX, memoY, memoZ);
-
-        return results;
     }
 }

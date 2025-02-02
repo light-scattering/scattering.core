@@ -573,16 +573,6 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex applyWithFixedState(Consumer<FComplex> action) {
-        double memoRe = this.getRe();
-        double memoIm = this.getIm();
-
-        action.accept(this);
-
-        return set(memoRe, memoIm);
-    }
-
-    @Override
     public double toDouble(Function<FComplex, Double> action) {
 
         return action.apply(this);
@@ -592,29 +582,5 @@ public class FComplexDef implements FComplex {
     public boolean toBoolean(Function<FComplex, Boolean> action) {
 
         return action.apply(this);
-    }
-
-    @Override
-    public double toDoubleWithFixedState(Function<FComplex, Double> action) {
-        double memoRe = this.getRe();
-        double memoIm = this.getIm();
-
-        double results = action.apply(this);
-
-        set(memoRe, memoIm);
-
-        return results;
-    }
-
-    @Override
-    public boolean toBooleanWithFixedState(Function<FComplex, Boolean> action) {
-        double memoRe = this.getRe();
-        double memoIm = this.getIm();
-
-        boolean results = action.apply(this);
-
-        set(memoRe, memoIm);
-
-        return results;
     }
 }
