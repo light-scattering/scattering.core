@@ -5,7 +5,7 @@ import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
-public interface FVectorEngineRotation {
+public interface FVectorEngineRot {
 
     // Methods utilizing the Rodrigues rotation formula.
     // Optimized for rotating a single element using only primitive operations.

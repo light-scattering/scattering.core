@@ -3,7 +3,7 @@ package eu.scattering.core.design.mutables.geometry.primitive.point;
 import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
-public interface FPointEngineRotation {
+public interface FPointEngineRot {
 
     // Methods utilizing the Rodrigues rotation formula.
     // Optimized for rotating a single element using only primitive operations.

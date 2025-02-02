@@ -1,6 +1,6 @@
 package eu.scattering.core.test.mutables.geometry.primitive.engine;
 
-import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
+import eu.scattering.core.design.engines.rot.processor.FRotProcessor;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.mutables.geometry.primitive.support.FPointTestHelper;
@@ -644,7 +644,7 @@ public class FPointRotationTest {
     @Test
     @DisplayName("Rotate Qt")
     void rotateQt() {
-        FRotationProcessor fRot = factory.getFRotationProcessor();
+        FRotProcessor fRot = factory.getFRotProcessor();
 
         FPoint fPoint = factory.getFPoint(1, 1, 0);
 

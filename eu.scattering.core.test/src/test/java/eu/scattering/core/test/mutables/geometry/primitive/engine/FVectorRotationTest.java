@@ -1,6 +1,6 @@
 package eu.scattering.core.test.mutables.geometry.primitive.engine;
 
-import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
+import eu.scattering.core.design.engines.rot.processor.FRotProcessor;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.test.TestHelper;
@@ -919,7 +919,7 @@ public class FVectorRotationTest {
     @Test
     @DisplayName("Rotate with FRotQt")
     void rotateWithFRotQt() {
-        FRotationProcessor fRot = factory.getFRotationProcessor();
+        FRotProcessor fRot = factory.getFRotProcessor();
 
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 

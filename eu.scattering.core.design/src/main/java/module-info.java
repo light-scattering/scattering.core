@@ -12,12 +12,12 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.mutables.geometry.shape.sphere;
     exports eu.scattering.core.design.mutables.number.complex;
     exports eu.scattering.core.design.mutables.number.quaternion;
-    exports eu.scattering.core.design.engines.rotation;
+    exports eu.scattering.core.design.engines.rot;
     exports eu.scattering.core.design.mutables.geometry.shape;
     exports eu.scattering.core.design.helpers.auxiliary;
     exports eu.scattering.core.design.engines.random;
     exports eu.scattering.core.design.engines.random.processor;
-    exports eu.scattering.core.design.engines.rotation.processor;
+    exports eu.scattering.core.design.engines.rot.processor;
     exports eu.scattering.core.design.engines.random.processor.core;
     exports eu.scattering.core.design.mutables.geometry.construct.ray;
     exports eu.scattering.core.design.mutables.geometry.construct.segment;

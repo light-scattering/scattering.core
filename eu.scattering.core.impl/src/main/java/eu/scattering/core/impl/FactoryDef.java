@@ -11,14 +11,14 @@ import eu.scattering.core.design.mutables.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.mutables.number.complex.FComplex;
 import eu.scattering.core.design.mutables.number.quaternion.FQuaternion;
 import eu.scattering.core.design.engines.random.processor.FRandomProcessor;
-import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
+import eu.scattering.core.design.engines.rot.processor.FRotProcessor;
 import eu.scattering.core.design.helpers.auxiliary.FTrigHelper;
 import eu.scattering.core.design.engines.random.FRandomEngine;
-import eu.scattering.core.design.engines.rotation.FRotationEngine;
+import eu.scattering.core.design.engines.rot.FRotEngine;
 import eu.scattering.core.impl.engines.random.FRandomEngineDef;
 import eu.scattering.core.impl.engines.random.FRandomProcessorDef;
-import eu.scattering.core.impl.engines.rotation.FRotationEngineDef;
-import eu.scattering.core.impl.engines.rotation.FRotationProcessorDef;
+import eu.scattering.core.impl.engines.rot.FRotEngineDef;
+import eu.scattering.core.impl.engines.rot.FRotProcessorDef;
 import eu.scattering.core.impl.helpers.FTrigHelperDef;
 import eu.scattering.core.impl.mutables.geometry.construct.FLineDef;
 import eu.scattering.core.impl.mutables.geometry.construct.FPlaneDef;
@@ -29,12 +29,10 @@ import eu.scattering.core.impl.mutables.geometry.primitive.FVectorDef;
 import eu.scattering.core.impl.mutables.number.FComplexDef;
 import eu.scattering.core.impl.mutables.number.FQuaternionDef;
 
-import java.util.function.Supplier;
-
 public final class FactoryDef extends FactoryDesignConcrete {
     private final FTrigHelper fAngleHelper;
     private final FRandomEngine fRandomHelper;
-    private final FRotationEngine fRotationHelper;
+    private final FRotEngine fRotEngine;
 
     private FactoryDef() {
         FRandomProcessor fRandomInternal = FRandomProcessorDef.create();
@@ -42,7 +40,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         fRandomInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
         this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
-        this.fRotationHelper = FRotationEngineDef.create(getFRotationProcessor());
+        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
         this.fAngleHelper = FTrigHelperDef.create();
     }
 
@@ -52,7 +50,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         fRandomInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
         this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
-        this.fRotationHelper = FRotationEngineDef.create(getFRotationProcessor());
+        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
         this.fAngleHelper = FTrigHelperDef.create();
     }
 
@@ -197,9 +195,9 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     @Override
-    public FRotationEngine getFRotationEngine() {
+    public FRotEngine getFRotEngine() {
 
-        return fRotationHelper;
+        return fRotEngine;
     }
 
 //--------------------------------------------------
@@ -217,8 +215,8 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     @Override
-    public FRotationProcessor getFRotationProcessor() {
+    public FRotProcessor getFRotProcessor() {
 
-        return FRotationProcessorDef.create();
+        return FRotProcessorDef.create();
     }
 }

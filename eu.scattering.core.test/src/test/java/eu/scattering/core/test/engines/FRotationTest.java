@@ -2,8 +2,8 @@ package eu.scattering.core.test.engines;
 
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
-import eu.scattering.core.design.engines.rotation.FRotationEngine;
+import eu.scattering.core.design.engines.rot.processor.FRotProcessor;
+import eu.scattering.core.design.engines.rot.FRotEngine;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 import org.junit.jupiter.api.Assertions;
@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Timeout(5)
 @DisplayName("FRotation")
 public class FRotationTest {
-    private final FRotationProcessor fRot = factory.getFRotationProcessor();
-    private final FRotationEngine fRotHelper = factory.getFRotationEngine();
+    private final FRotProcessor fRot = factory.getFRotProcessor();
+    private final FRotEngine fRotHelper = factory.getFRotEngine();
 
     @Test
     @DisplayName("Create with FPoint (positive angle)")
