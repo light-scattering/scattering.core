@@ -5,7 +5,7 @@ import eu.scattering.core.design.annotations.Facade;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface FVectorEngineProt {
+public interface FVectorEngineProto {
 
     @Facade
     FVector applyWithFixedState(FVector in, Consumer<FVector> action);

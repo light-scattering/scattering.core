@@ -5,7 +5,7 @@ import eu.scattering.core.design.annotations.Facade;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface FComplexEngineProt {
+public interface FComplexEngineProto {
 
     @Facade
     FComplex applyWithFixedState(FComplex in, Consumer<FComplex> action);

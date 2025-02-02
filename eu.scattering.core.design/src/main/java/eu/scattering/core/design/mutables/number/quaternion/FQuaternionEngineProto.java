@@ -5,7 +5,7 @@ import eu.scattering.core.design.annotations.Facade;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface FQuaternionEngineProt {
+public interface FQuaternionEngineProto {
 
     @Facade
     FQuaternion applyWithFixedState(FQuaternion in, Consumer<FQuaternion> action);

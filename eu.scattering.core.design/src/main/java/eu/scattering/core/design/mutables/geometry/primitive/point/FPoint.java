@@ -38,6 +38,11 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint sub(FPoint arg);
     FPoint sub(FPos3D arg);
 
+    FPoint normalize();
+
+    double getMagnitude();
+    FPoint setMagnitude(double magnitude);
+
     boolean isZero();
     boolean isNearZero();
 
@@ -51,11 +56,6 @@ public interface FPoint extends Primitive<FPoint> {
     FPoint reflect(double x, double y, double z);
     FPoint reflect(FPoint arg);
     FPoint reflect(FPos3D arg);
-
-    double getMagnitude();
-    FPoint setMagnitude(double magnitude);
-
-    FPoint normalize();
 
     double getDistance(double x, double y, double z);
     double getDistance(FPoint arg);

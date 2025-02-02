@@ -22,7 +22,7 @@ public class FVectorPrototypeTest {
 
         List<Double> intermediate = new ArrayList<>();
 
-        FVector fVectorRes = prot.applyWithFixedState(fVector,
+        FVector fVectorRes = proto.applyWithFixedState(fVector,
                 p -> intermediate.add(p.set(1, 2, 3, 4, 5, 6).getMagnitudeP2()));
 
         Assertions.assertAll("Validate FPoint values",
@@ -43,7 +43,7 @@ public class FVectorPrototypeTest {
     void applyWithFixedLength() {
         FVector fVector = factory.getFVector(1, 0, 0);
 
-        FVector fVectorRes = prot.applyWithFixedMagnitude(fVector,
+        FVector fVectorRes = proto.applyWithFixedMagnitude(fVector,
                 p -> p.setHead(-10, 0, 0));
 
         Assertions.assertAll("Validate FPoint values",
@@ -62,7 +62,7 @@ public class FVectorPrototypeTest {
     void applyWithCenteredPosition() {
         FVector fVector = factory.getFVector(5, 0, 0, 9, 0, 0);
 
-        FVector fVectorRes = prot.applyWithCenteredPosition(fVector,
+        FVector fVectorRes = proto.applyWithCenteredPosition(fVector,
                 p -> p.getRefHead().reflect(factory.getFPoint(9, 0, 0)));
 
         Assertions.assertAll("Validate FPoint values",
@@ -81,7 +81,7 @@ public class FVectorPrototypeTest {
     void terminateWithDoubleFixedState() {
         FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
-        double res = prot.toDoubleWithFixedState(fVector, p -> {
+        double res = proto.toDoubleWithFixedState(fVector, p -> {
             p.reflect(factory.getFPoint());
             return p.getMagnitudeP2();
         });
@@ -102,7 +102,7 @@ public class FVectorPrototypeTest {
     void terminateWithBooleanFixedState() {
         FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
 
-        boolean res = prot.toBooleanWithFixedState(fVector, p -> {
+        boolean res = proto.toBooleanWithFixedState(fVector, p -> {
             p.reflect(factory.getFPoint());
             return p.isNearZeroLength();
         });

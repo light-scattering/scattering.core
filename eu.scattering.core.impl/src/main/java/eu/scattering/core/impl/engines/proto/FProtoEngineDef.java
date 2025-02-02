@@ -1,6 +1,6 @@
-package eu.scattering.core.impl.engines.prot;
+package eu.scattering.core.impl.engines.proto;
 
-import eu.scattering.core.design.engines.prot.FProtEngine;
+import eu.scattering.core.design.engines.proto.FProtoEngine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.design.mutables.number.complex.FComplex;
@@ -9,13 +9,13 @@ import eu.scattering.core.design.mutables.number.quaternion.FQuaternion;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class FProtEngineDef implements FProtEngine {
+public class FProtoEngineDef implements FProtoEngine {
 
-    private FProtEngineDef() {}
+    private FProtoEngineDef() {}
 
-    public static FProtEngineDef create() {
+    public static FProtoEngineDef create() {
 
-        return new FProtEngineDef();
+        return new FProtoEngineDef();
     }
 
     //--------------------------------------------------

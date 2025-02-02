@@ -41,6 +41,10 @@ public interface FVector extends Primitive<FVector> {
     double getHeadZ();
     FVector setHeadZ(double hZ);
 
+    double getLengthX();
+    double getLengthY();
+    double getLengthZ();
+
     //--------------------------------------------------
 
     FVector applyStateFrom(FPairPos3D position);
@@ -62,6 +66,11 @@ public interface FVector extends Primitive<FVector> {
     FVector subCompact(double hX, double hY, double hZ);
     FVector subCompact(FPoint head);
     FVector subCompact(FPos3D head);
+
+    FVector normalize();
+
+    double getMagnitude();
+    FVector setMagnitude(double magnitude);
 
     boolean isZeroLength();
     boolean isNearZeroLength();
@@ -100,15 +109,6 @@ public interface FVector extends Primitive<FVector> {
 
     FVector shiftForward(double distance);
     FVector shiftBackward(double distance);
-
-    double getLengthX();
-    double getLengthY();
-    double getLengthZ();
-
-    double getMagnitude();
-    FVector setMagnitude(double magnitude);
-
-    FVector normalize();
 
     boolean isCollinear(double bX, double bY, double bZ, double hX, double hY, double hZ);
     boolean isCollinear(FVector arg);

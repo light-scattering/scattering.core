@@ -22,5 +22,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.mutables.geometry.construct.ray;
     exports eu.scattering.core.design.mutables.geometry.construct.segment;
     exports eu.scattering.core.design.mutables;
-    exports eu.scattering.core.design.engines.prot;
+    exports eu.scattering.core.design.engines.proto;
 }

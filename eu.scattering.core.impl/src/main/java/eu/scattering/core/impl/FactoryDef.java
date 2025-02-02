@@ -1,7 +1,7 @@
 package eu.scattering.core.impl;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
-import eu.scattering.core.design.engines.prot.FProtEngine;
+import eu.scattering.core.design.engines.proto.FProtoEngine;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
@@ -16,7 +16,7 @@ import eu.scattering.core.design.engines.rot.processor.FRotProcessor;
 import eu.scattering.core.design.helpers.auxiliary.FTrigHelper;
 import eu.scattering.core.design.engines.rand.FRandEngine;
 import eu.scattering.core.design.engines.rot.FRotEngine;
-import eu.scattering.core.impl.engines.prot.FProtEngineDef;
+import eu.scattering.core.impl.engines.proto.FProtoEngineDef;
 import eu.scattering.core.impl.engines.rand.FRandEngineDef;
 import eu.scattering.core.impl.engines.rand.FRandProcessorDef;
 import eu.scattering.core.impl.engines.rot.FRotEngineDef;
@@ -35,7 +35,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     private final FTrigHelper fAngleHelper;
     private final FRandEngine fRandHelper;
     private final FRotEngine fRotEngine;
-    private final FProtEngine fProtEngine;
+    private final FProtoEngine fProtEngine;
 
     private FactoryDef() {
         FRandProcessor fRandInternal = FRandProcessorDef.create();
@@ -44,7 +44,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         this.fRandHelper = FRandEngineDef.create(fRandInternal);
         this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
-        this.fProtEngine = FProtEngineDef.create();
+        this.fProtEngine = FProtoEngineDef.create();
 
         this.fAngleHelper = FTrigHelperDef.create();
     }
@@ -56,7 +56,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         this.fRandHelper = FRandEngineDef.create(fRandInternal);
         this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
-        this.fProtEngine = FProtEngineDef.create();
+        this.fProtEngine = FProtoEngineDef.create();
 
         this.fAngleHelper = FTrigHelperDef.create();
     }
@@ -208,7 +208,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     @Override
-    public FProtEngine getFProtEngine() {
+    public FProtoEngine getFProtoEngine() {
 
         return fProtEngine;
     }

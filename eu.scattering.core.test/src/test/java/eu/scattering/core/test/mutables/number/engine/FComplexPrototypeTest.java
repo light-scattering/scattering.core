@@ -23,7 +23,7 @@ public class FComplexPrototypeTest {
 
         List<Double> intermediate = new ArrayList<>();
 
-        FComplex fComplexRes = prot.applyWithFixedState(fComplex,
+        FComplex fComplexRes = proto.applyWithFixedState(fComplex,
                 p -> intermediate.add(p.setRe(2).setIm(2).getMagnitude()));
 
         Assertions.assertAll("Validate FComplex values",
@@ -40,7 +40,7 @@ public class FComplexPrototypeTest {
     void terminateWithDoubleFixedState() {
         FComplex fComplex = factory.getFComplex(1, 2);
 
-        double res = prot.toDoubleWithFixedState(fComplex, p -> {
+        double res = proto.toDoubleWithFixedState(fComplex, p -> {
             p.add(3, 4);
             return p.getRe() + p.getIm();
         });
@@ -57,7 +57,7 @@ public class FComplexPrototypeTest {
     void terminateWithBooleanFixedState() {
         FComplex fComplex = factory.getFComplex(1, 2);
 
-        boolean res = prot.toBooleanWithFixedState(fComplex, p -> {
+        boolean res = proto.toBooleanWithFixedState(fComplex, p -> {
             p.add(3, 4);
             return p.getRe() + p.getIm() == 10;
         });

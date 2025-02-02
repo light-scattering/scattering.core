@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static eu.scattering.core.test.Configuration.factory;
-import static eu.scattering.core.test.Configuration.prot;
+import static eu.scattering.core.test.Configuration.proto;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
@@ -24,7 +24,7 @@ public class FQuaternionPrototypeTest {
 
         List<Double> intermediate = new ArrayList<>();
 
-        FQuaternion fComplexRes = prot.applyWithFixedState(fQuaternion,
+        FQuaternion fComplexRes = proto.applyWithFixedState(fQuaternion,
                 p -> intermediate.add(p.setRe(1).setI(2).setJ(3).setK(4).getMagnitude()));
 
         Assertions.assertAll("Validate FComplex values",
@@ -43,7 +43,7 @@ public class FQuaternionPrototypeTest {
     void terminateWithDoubleFixedState() {
         FQuaternion fQuaternion = factory.getFQuaternion(1, 2, 3, 4);
 
-        double res = prot.toDoubleWithFixedState(fQuaternion, p -> {
+        double res = proto.toDoubleWithFixedState(fQuaternion, p -> {
             p.add(3, 4, 5, 6);
             return p.getRe() + p.getI() + p.getJ() + p.getK();
         });
@@ -62,7 +62,7 @@ public class FQuaternionPrototypeTest {
     void terminateWithBooleanFixedState() {
         FQuaternion fQuaternion = factory.getFQuaternion(1, 2, 3, 4);
 
-        boolean res = prot.toBooleanWithFixedState(fQuaternion, p -> {
+        boolean res = proto.toBooleanWithFixedState(fQuaternion, p -> {
             p.add(3, 4, 5, 6);
             return p.getRe() + p.getI() + p.getJ() + p.getK() == 28;
         });
