@@ -25,7 +25,7 @@ public class SpringProd {
     @Bean("prod")
     public FactoryDesignConcrete getFactoryDefault() {
 
-        return FactoryProd.create();
+        return FactoryDef.create();
     }
 
     @PostConstruct

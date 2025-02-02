@@ -10,28 +10,14 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private static final String JSON_MAIN = "line";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    private static Supplier<FPoint> fPointSupplier;
-    private static Supplier<FVector> fVectorSupplier;
-
-    public static void initialize(double epsilon,
-                                  Supplier<FPoint> fPointSupplier,
-                                  Supplier<FVector> fVectorSupplier) {
-
-        FLineDef.epsilon = epsilon;
-        FLineDef.fPointSupplier = fPointSupplier;
-        FLineDef.fVectorSupplier = fVectorSupplier;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -87,7 +73,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FVector origin = fVectorSupplier.get().applyStateFrom(json.getJSONObject(JSON_VAL));
+        FVector origin = supplyFVector().applyStateFrom(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -109,7 +95,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine copyZero() {
 
-        return create(fVectorSupplier.get());
+        return create(supplyFVector());
     }
 
     @Override
@@ -220,7 +206,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     @Override
     public Optional<FPoint> getFPointAtX(double x) {
-        FPoint fPoint = fPointSupplier.get().setX(x);
+        FPoint fPoint = supplyFPoint().setX(x);
 
         setFPointAtX(fPoint);
 
@@ -229,7 +215,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     @Override
     public Optional<FPoint> getFPointAtY(double y) {
-        FPoint fPoint = fPointSupplier.get().setY(y);
+        FPoint fPoint = supplyFPoint().setY(y);
 
         setFPointAtY(fPoint);
 
@@ -238,7 +224,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     @Override
     public Optional<FPoint> getFPointAtZ(double z) {
-        FPoint fPoint = fPointSupplier.get().setZ(z);
+        FPoint fPoint = supplyFPoint().setZ(z);
 
         setFPointAtZ(fPoint);
 
@@ -515,7 +501,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     private boolean isUnitPartOf(FPoint arg) {
 
-        return getUnitDistance(arg) < epsilon;
+        return getUnitDistance(arg) < EPSILON;
     }
 
     private double getUnitDistance(FPoint arg) {
@@ -603,6 +589,18 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private void invalidate(FPoint in) {
 
         in.set(Double.NaN, Double.NaN, Double.NaN);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FVector supplyFVector() {
+
+        return getRefOrigin().copyZero();
+    }
+
+    private FPoint supplyFPoint() {
+
+        return getRefOrigin().getRefBase().copyZero();
     }
 }
 

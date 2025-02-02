@@ -6,23 +6,18 @@ import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.containers.position.FPos2D.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FComplexDef implements FComplex {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "cpx";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    public static void initialize(double epsilon) {
-
-        FComplexDef.epsilon = epsilon;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -378,7 +373,7 @@ public class FComplexDef implements FComplex {
         double distRe = Math.abs(getRe() - re);
         double distIm = Math.abs(getIm() - im);
 
-        return distRe < epsilon && distIm < epsilon;
+        return distRe < EPSILON && distIm < EPSILON;
     }
 
     @Override
@@ -395,7 +390,7 @@ public class FComplexDef implements FComplex {
         double distanceRe = Math.abs(getRe() - arg.getRe());
         double distanceIm = Math.abs(getIm() - arg.getIm());
 
-        return distanceRe < epsilon && distanceIm < epsilon;
+        return distanceRe < EPSILON && distanceIm < EPSILON;
     }
 
     @Override

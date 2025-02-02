@@ -13,19 +13,13 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FPointDef implements FPoint {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "point";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    public static void initialize(double epsilon) {
-
-        FPointDef.epsilon = epsilon;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -163,7 +157,7 @@ public class FPointDef implements FPoint {
         double distanceY = Math.abs(getY() - y);
         double distanceZ = Math.abs(getZ() - z);
 
-        return distanceX < epsilon && distanceY < epsilon && distanceZ < epsilon;
+        return distanceX < EPSILON && distanceY < EPSILON && distanceZ < EPSILON;
     }
 
     @Override
@@ -613,7 +607,7 @@ public class FPointDef implements FPoint {
             throw new IllegalStateException("The input vector is non-directional");
         }
 
-        if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+        if (Math.abs(x) < EPSILON && Math.abs(y) < EPSILON && Math.abs(z) < EPSILON) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 

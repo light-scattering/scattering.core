@@ -1,4 +1,4 @@
-package eu.scattering.core.test.mutables.geometry.construct;
+package eu.scattering.core.test.mutables.geometry.construct.engine;
 
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
@@ -70,7 +70,8 @@ public class FRayRotationTest {
         FVector fVector = TestHelper.getRandomFVector();
         FRay fRay = factory.getRefFRay(factory.getFVector());
 
-        Assertions.assertThrows(IllegalStateException.class, () -> rotation.rotQtAround(fRay, fVector, Math.PI * 0.5),
+        Assertions.assertThrows(IllegalStateException.class,
+                () -> rotation.rotQtAround(fRay, fVector, Math.PI * 0.5),
                 "The direction of the FRay is not defined");
     }
 }

@@ -4,6 +4,7 @@ import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface FPlane extends Construct<FPlane> {
     boolean isOnSide(Geometry geometry);
 
     Optional<FPoint> getFPointAtIntersection(FLine ref);
-    Optional<FLine> getFLineAtIntersection(FPlane ref);
+    Optional<FVector> getFLineOriginAtIntersection(FPlane ref);
 
     void setDistance(Geometry geometry, double distance);
 

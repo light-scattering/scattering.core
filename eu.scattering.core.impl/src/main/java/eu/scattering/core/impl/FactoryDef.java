@@ -31,28 +31,25 @@ import eu.scattering.core.impl.mutables.number.FQuaternionDef;
 
 import java.util.function.Supplier;
 
-public final class FactoryProd extends FactoryDesignConcrete {
-    private final static double epsilon = 1E-8;
-    private final static double proximityLimit = 1E-6;
-
+public final class FactoryDef extends FactoryDesignConcrete {
     private final FTrigHelper fAngleHelper;
     private final FRandomEngine fRandomHelper;
     private final FRotationEngine fRotationHelper;
 
-    private FactoryProd() {
+    private FactoryDef() {
         FRandomProcessor fRandomInternal = FRandomProcessorDef.create();
 
-        fRandomInternal.setProximityLimit(proximityLimit);
+        fRandomInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
         this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
         this.fRotationHelper = FRotationEngineDef.create(getFRotationProcessor());
         this.fAngleHelper = FTrigHelperDef.create();
     }
 
-    private FactoryProd(long seed) {
+    private FactoryDef(long seed) {
         FRandomProcessor fRandomInternal = FRandomProcessorDef.create(seed);
 
-        fRandomInternal.setProximityLimit(proximityLimit);
+        fRandomInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
         this.fRandomHelper = FRandomEngineDef.create(fRandomInternal);
         this.fRotationHelper = FRotationEngineDef.create(getFRotationProcessor());
@@ -61,32 +58,12 @@ public final class FactoryProd extends FactoryDesignConcrete {
 
     public static FactoryDesignConcrete create() {
 
-        return new FactoryProd();
+        return new FactoryDef();
     }
 
     public static FactoryDesignConcrete create(long seed) {
 
-        return new FactoryProd(seed);
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public void initialize() {
-        Supplier<FLine> fLineSupplier = this::getFLine;
-        Supplier<FPoint> fPointSupplier = this::getFPoint;
-        Supplier<FVector> fVectorSupplier = this::getFVector;
-
-        FComplexDef.initialize(epsilon);
-        FQuaternionDef.initialize(epsilon);
-
-        FPointDef.initialize(epsilon);
-        FVectorDef.initialize(epsilon);
-
-        FLineDef.initialize(epsilon, fPointSupplier, fVectorSupplier);
-        FRayDef.initialize(epsilon, fPointSupplier, fVectorSupplier);
-        FSegmentDef.initialize(epsilon, fVectorSupplier);
-        FPlaneDef.initialize(epsilon, fLineSupplier, fVectorSupplier);
+        return new FactoryDef(seed);
     }
 
     //--------------------------------------------------

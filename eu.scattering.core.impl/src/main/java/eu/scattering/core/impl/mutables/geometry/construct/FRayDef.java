@@ -9,28 +9,14 @@ import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     private static final String JSON_MAIN = "ray";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    private static Supplier<FPoint> fPointSupplier;
-    private static Supplier<FVector> fVectorSupplier;
-
-    public static void initialize(double epsilon,
-                                  Supplier<FPoint> fPointSupplier,
-                                  Supplier<FVector> fVectorSupplier) {
-
-        FRayDef.epsilon = epsilon;
-        FRayDef.fPointSupplier = fPointSupplier;
-        FRayDef.fVectorSupplier = fVectorSupplier;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -86,7 +72,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FVector origin = fVectorSupplier.get().applyStateFrom(json.getJSONObject(JSON_VAL));
+        FVector origin = supplyFVector().applyStateFrom(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -108,7 +94,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public FRay copyZero() {
 
-        return create(fVectorSupplier.get());
+        return create(supplyFVector());
     }
 
     @Override
@@ -154,6 +140,16 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isProjectable(FPoint arg) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return getUnitDistance(arg) > -1;
+    }
 
     @Override
     public void project(Geometry geometry) {
@@ -244,7 +240,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var fPoint = fPointSupplier.get();
+        var fPoint = supplyFPoint();
 
         fPoint.applyStateFrom(getRefOrigin().getRefHead());
         fPoint.subXYZ(getRefOrigin().getRefBase());
@@ -263,7 +259,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     private boolean isUnitPartOf(FPoint arg) {
         double dist = getUnitDistance(arg);
 
-        return dist != -1 && dist < epsilon;
+        return dist != -1 && dist < EPSILON;
     }
 
     private boolean isUnitPartOfRay(double x, double y, double z) {
@@ -275,7 +271,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         double distBase = oBase.getDistance(x, y, z);
         double distHead = oHead.getDistance(x, y, z);
 
-        if (Math.abs(distBase + distHead - oMagnitude) < epsilon) {
+        if (Math.abs(distBase + distHead - oMagnitude) < EPSILON) {
             return true;
         }
 
@@ -432,5 +428,17 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         in.set(memoX, memoY, memoZ);
 
         return false;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FVector supplyFVector() {
+
+        return getRefOrigin().copyZero();
+    }
+
+    private FPoint supplyFPoint() {
+
+        return getRefOrigin().getRefBase().copyZero();
     }
 }

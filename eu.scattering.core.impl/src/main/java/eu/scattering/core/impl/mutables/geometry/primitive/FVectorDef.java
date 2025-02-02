@@ -16,19 +16,13 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FVectorDef implements FVector {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "vector";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    public static void initialize(double epsilon) {
-
-        FVectorDef.epsilon = epsilon;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -1234,7 +1228,7 @@ public class FVectorDef implements FVector {
         double distY = Math.abs(headOY - headAY);
         double distZ = Math.abs(headOZ - headAZ);
 
-        return distX < epsilon && distY < epsilon && distZ < epsilon;
+        return distX < EPSILON && distY < EPSILON && distZ < EPSILON;
     }
 
     @Override
@@ -1357,7 +1351,7 @@ public class FVectorDef implements FVector {
         double distY = Math.abs(headOY + headAY);
         double distZ = Math.abs(headOZ + headAZ);
 
-        return distX < epsilon && distY < epsilon && distZ < epsilon;
+        return distX < EPSILON && distY < EPSILON && distZ < EPSILON;
     }
 
     @Override
@@ -1449,8 +1443,8 @@ public class FVectorDef implements FVector {
             throw new IllegalArgumentException("The direction of the argument FVector is not defined");
         }
 
-        boolean dotProduct = Math.abs(getDotProduct(bX, bY, bZ, hX, hY, hZ)) < epsilon;
-        boolean angle = Math.abs((Math.PI * 0.5) - getAngle(bX, bY, bZ, hX, hY, hZ)) < epsilon;
+        boolean dotProduct = Math.abs(getDotProduct(bX, bY, bZ, hX, hY, hZ)) < EPSILON;
+        boolean angle = Math.abs((Math.PI * 0.5) - getAngle(bX, bY, bZ, hX, hY, hZ)) < EPSILON;
 
         return  dotProduct || angle;
     }
@@ -1776,9 +1770,9 @@ public class FVectorDef implements FVector {
     // -------------------------------------------------------------------------------------------------
 
     private boolean isNearZeroLength(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-        boolean posX = Math.abs(bX - hX) < epsilon;
-        boolean posY = Math.abs(bY - hY) < epsilon;
-        boolean posZ = Math.abs(bZ - hZ) < epsilon;
+        boolean posX = Math.abs(bX - hX) < EPSILON;
+        boolean posY = Math.abs(bY - hY) < EPSILON;
+        boolean posZ = Math.abs(bZ - hZ) < EPSILON;
 
         return posX && posY && posZ;
     }

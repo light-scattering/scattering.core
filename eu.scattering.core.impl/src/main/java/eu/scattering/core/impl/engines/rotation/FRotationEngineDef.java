@@ -1,13 +1,13 @@
 package eu.scattering.core.impl.engines.rotation;
 
+import eu.scattering.core.design.engines.rotation.FRotationEngine;
+import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutables.geometry.construct.ray.FRay;
 import eu.scattering.core.design.mutables.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.engines.rotation.processor.FRotationProcessor;
-import eu.scattering.core.design.engines.rotation.FRotationEngine;
 import eu.scattering.core.transfer.containers.engine.FRotQt.FRotQt;
 import eu.scattering.core.transfer.containers.grid.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
@@ -15,9 +15,9 @@ import eu.scattering.core.transfer.containers.position.FPos3D.FPos3D;
 
 import java.util.Collection;
 
-public class FRotationEngineDef implements FRotationEngine {
-    private static double epsilon = 1E-8;
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
+public class FRotationEngineDef implements FRotationEngine {
     private final FRotationProcessor core;
 
     private FRotationEngineDef(FRotationProcessor core) {
@@ -66,7 +66,7 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The vectors are similar");
         }
 
-        if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+        if (Math.abs(x) < EPSILON && Math.abs(y) < EPSILON && Math.abs(z) < EPSILON) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
@@ -94,7 +94,7 @@ public class FRotationEngineDef implements FRotationEngine {
         opY *= opFactor;
         opZ *= opFactor;
 
-        if (Math.abs(opX) < epsilon && Math.abs(opY) < epsilon && Math.abs(opZ) < epsilon) {
+        if (Math.abs(opX) < EPSILON && Math.abs(opY) < EPSILON && Math.abs(opZ) < EPSILON) {
             throw new IllegalStateException("The rotation vector is non-directional");
         }
 
@@ -131,7 +131,7 @@ public class FRotationEngineDef implements FRotationEngine {
     @Override
     public FPoint rotRgAround(double x, double y, double z, FPoint in, double angle) {
 
-        if (Math.abs(x) < epsilon && Math.abs(y) < epsilon && Math.abs(z) < epsilon) {
+        if (Math.abs(x) < EPSILON && Math.abs(y) < EPSILON && Math.abs(z) < EPSILON) {
             throw new IllegalArgumentException("The reference vector is non-directional");
         }
 
@@ -149,7 +149,7 @@ public class FRotationEngineDef implements FRotationEngine {
         opRawY *= opRawFactor;
         opRawZ *= opRawFactor;
 
-        if (Math.abs(opRawX) < epsilon && Math.abs(opRawY) < epsilon && Math.abs(opRawZ) < epsilon) {
+        if (Math.abs(opRawX) < EPSILON && Math.abs(opRawY) < EPSILON && Math.abs(opRawZ) < EPSILON) {
             throw new IllegalStateException("The rotation vector is non-directional");
         }
 
@@ -183,6 +183,19 @@ public class FRotationEngineDef implements FRotationEngine {
 
     @Override
     public FPoint setQtAngle(double x, double y, double z, FPoint in, double angle) {
+
+        if (in.isNearZero()) {
+            throw new IllegalArgumentException("The input vector is non-directional");
+        }
+
+        if (in.isSimilar(x, y, z)) {
+            throw new IllegalStateException("The vectors are similar");
+        }
+
+        if (Math.abs(x) < EPSILON && Math.abs(y) < EPSILON && Math.abs(z) < EPSILON) {
+            throw new IllegalArgumentException("The reference vector is non-directional");
+        }
+
         in.setCrossProduct(x, y, z);
 
         FPos3D axis = in.toFPos3D();
@@ -659,9 +672,10 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var rotor = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        in.disassemble().forEach(p -> rotQt(p, rotor));
+        rot(in, qt);
+
     }
 
     @Override
@@ -671,13 +685,13 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var rotor = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        in.disassemble().forEach(p -> {
-            if (p.copy().apply(ref::project).toBoolean(ref::isPartOf)) {
-                rotQt(p, rotor);
+        for (FPoint p : in.disassemble()) {
+            if (ref.isProjectable(p)) {
+                rotQt(p, qt);
             }
-        });
+        }
     }
 
     @Override
@@ -687,30 +701,22 @@ public class FRotationEngineDef implements FRotationEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        var rotor = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
+        FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        in.disassemble().forEach(p -> {
-            if (p.copy().apply(ref::project).toBoolean(ref::isPartOf)) {
-                rotQt(p, rotor);
+        for (FPoint p : in.disassemble()) {
+            if (ref.isProjectable(p)) {
+                rotQt(p, qt);
             }
-        });
+        }
     }
 
     // -------------------------------------------------------------------------------------------------
 
     private boolean isNearZeroLength(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-        boolean posX = Math.abs(bX - hX) < epsilon;
-        boolean posY = Math.abs(bY - hY) < epsilon;
-        boolean posZ = Math.abs(bZ - hZ) < epsilon;
+        boolean posX = Math.abs(bX - hX) < EPSILON;
+        boolean posY = Math.abs(bY - hY) < EPSILON;
+        boolean posZ = Math.abs(bZ - hZ) < EPSILON;
 
         return posX && posY && posZ;
-    }
-
-    private double getMagnitude(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-        double distX = hX - bX;
-        double distY = hY - bY;
-        double distZ = hZ - bZ;
-
-        return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
     }
 }

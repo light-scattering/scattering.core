@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("FPointRotation")
 public class FPointRotationTest {
 
-
     @Test
     @DisplayName("Rotate Rg with primitives A (simple, positive)")
     void rotateRgWithPrimitivesSimplePositiveA() {
@@ -586,7 +585,8 @@ public class FPointRotationTest {
     void setAngleQtThrowIllegalArgumentException() {
         FPoint fPoint = TestHelper.getRandomFPoint();
 
-        Assertions.assertThrows(IllegalArgumentException.class, () -> rotation.setQtAngle(fPoint, factory.getFPoint(), Math.PI),
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> rotation.setQtAngle(fPoint, factory.getFPoint(), Math.PI),
                 "The rotation axis is not defined");
     }
 
@@ -596,7 +596,8 @@ public class FPointRotationTest {
         FPoint fPointIn = TestHelper.getRandomFPoint();
         FPoint fPointArg = TestHelper.getRandomFPoint(fPointIn);
 
-        FPointTestHelper.testReference((a, b) -> rotation.setQtAngle(b, a, Math.PI), fPointIn, fPointArg);
+        FPointTestHelper.testReference(
+                (a, b) -> rotation.setQtAngle(b, a, Math.PI), fPointIn, fPointArg);
     }
 
     @Test

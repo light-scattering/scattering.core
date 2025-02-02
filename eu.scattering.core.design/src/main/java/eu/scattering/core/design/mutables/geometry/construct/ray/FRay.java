@@ -15,6 +15,8 @@ public interface FRay extends Construct<FRay> {
 
     //--------------------------------------------------
 
+    boolean isProjectable(FPoint arg);
+
     FPoint getFPointAtDistance(double length);
 
     void shiftForward(Geometry geometry, double distance);

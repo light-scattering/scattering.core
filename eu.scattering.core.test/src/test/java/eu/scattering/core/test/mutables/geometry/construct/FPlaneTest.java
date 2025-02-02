@@ -796,22 +796,22 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Optional<FLine> fLineOpt = fPlane1.getFLineAtIntersection(fPlane2);
+            Optional<FVector> fLineOpt = fPlane1.getFLineOriginAtIntersection(fPlane2);
 
             if (fLineOpt.isEmpty()) {
                 Assertions.fail("The common FLine should exist");
             }
 
-            FLine fLine = fLineOpt.get();
+            FVector fVector = fLineOpt.get();
 
             Assertions.assertAll("Validate FLine",
-                    () -> assertTrue(fPlane1.isPartOf(fLine.getRefOrigin().getRefBase()),
+                    () -> assertTrue(fPlane1.isPartOf(fVector.getRefBase()),
                             "The FLine base does not belong to FPlane 1"),
-                    () -> assertTrue(fPlane1.isPartOf(fLine.getRefOrigin().getRefHead()),
+                    () -> assertTrue(fPlane1.isPartOf(fVector.getRefHead()),
                             "The FLine head does not belong to FPlane 1"),
-                    () -> assertTrue(fPlane2.isPartOf(fLine.getRefOrigin().getRefBase()),
+                    () -> assertTrue(fPlane2.isPartOf(fVector.getRefBase()),
                             "The FLine base does not belong to FPlane 2"),
-                    () -> assertTrue(fPlane2.isPartOf(fLine.getRefOrigin().getRefHead()),
+                    () -> assertTrue(fPlane2.isPartOf(fVector.getRefHead()),
                             "The FLine head does not belong to FPlane 2")
             );
         }
@@ -830,9 +830,9 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Optional<FLine> fLineOpt = fPlane1.getFLineAtIntersection(fPlane2);
+            Optional<FVector> fVectorOp = fPlane1.getFLineOriginAtIntersection(fPlane2);
 
-            if (fLineOpt.isPresent()) {
+            if (fVectorOp.isPresent()) {
                 Assertions.fail("The common FLine should not exist");
             }
         }
@@ -846,7 +846,7 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane1.getFLineAtIntersection(fPlane2),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane1.getFLineOriginAtIntersection(fPlane2),
                     "The origin is a non-directional FVector");
         }
 
@@ -859,7 +859,7 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fPlane1.getFLineAtIntersection(fPlane2),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPlane1.getFLineOriginAtIntersection(fPlane2),
                     "The argument is a non-directional FVector");
         }
 

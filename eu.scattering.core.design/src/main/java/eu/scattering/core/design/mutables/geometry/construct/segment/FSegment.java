@@ -2,6 +2,7 @@ package eu.scattering.core.design.mutables.geometry.construct.segment;
 
 import eu.scattering.core.design.mutables.geometry.Geometry;
 import eu.scattering.core.design.mutables.geometry.construct.Construct;
+import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
 import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface FSegment extends Construct<FSegment> {
     FPairPos3D toFPairPos3D();
 
     //--------------------------------------------------
+
+    boolean isProjectable(FPoint arg);
 
     void setDistance(Geometry geometry, double distance);
 

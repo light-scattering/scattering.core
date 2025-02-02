@@ -11,19 +11,13 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FQuaternionDef implements FQuaternion {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "qt";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    public static void initialize(double epsilon) {
-
-        FQuaternionDef.epsilon = epsilon;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -500,7 +494,7 @@ public class FQuaternionDef implements FQuaternion {
         double distanceJ = Math.abs(getJ() - j);
         double distanceK = Math.abs(getK() - k);
 
-        return distanceRe < epsilon && distanceI < epsilon && distanceJ < epsilon && distanceK < epsilon;
+        return distanceRe < EPSILON && distanceI < EPSILON && distanceJ < EPSILON && distanceK < EPSILON;
     }
 
     @Override

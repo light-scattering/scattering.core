@@ -11,28 +11,14 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private static final String JSON_MAIN = "plane";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    private static Supplier<FLine> fLineSupplier;
-    private static Supplier<FVector> fVectorSupplier;
-
-    public static void initialize(double epsilon,
-                                  Supplier<FLine> fLineSupplier,
-                                  Supplier<FVector> fVectorSupplier) {
-
-        FPlaneDef.epsilon = epsilon;
-        FPlaneDef.fLineSupplier = fLineSupplier;
-        FPlaneDef.fVectorSupplier = fVectorSupplier;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -88,7 +74,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FVector origin = fVectorSupplier.get().applyStateFrom(json.getJSONObject(JSON_VAL));
+        FVector origin = supplyFVector().applyStateFrom(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -110,7 +96,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane copyZero() {
 
-        return create(fVectorSupplier.get());
+        return create(supplyFVector());
     }
 
     @Override
@@ -249,16 +235,16 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     // TODO - Not optimized
     @Override
-    public Optional<FLine> getFLineAtIntersection(FPlane ref) {
+    public Optional<FVector> getFLineOriginAtIntersection(FPlane ref) {
 
         if (getRefOrigin().isCollinear(ref.getRefOrigin())) {
             return Optional.empty();
         }
 
-        FLine result = fLineSupplier.get();
+        FVector result = supplyFVector();
 
-        FPoint resBase = result.getRefOrigin().getRefBase();
-        FPoint resHead = result.getRefOrigin().getRefHead();
+        FPoint resBase = result.getRefBase();
+        FPoint resHead = result.getRefHead();
 
         FVector u = getRefOrigin().copy();
         FVector v = ref.getRefOrigin().copy();
@@ -305,7 +291,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint result = fVectorSupplier.get().getRefBase().copyZero();
+        FPoint result = supplyFVector().getRefBase().copyZero();
 
         FVector u = getRefOrigin().copy();
         FVector v = ref.getRefOrigin().copy();
@@ -335,7 +321,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     private boolean isUnitPartOf(FPoint arg) {
 
-        return getUnitDistance(arg) < epsilon;
+        return getUnitDistance(arg) < EPSILON;
     }
 
     private double getUnitDistance(FPoint arg) {
@@ -434,11 +420,18 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         double distBase = origin.getRefBase().getDistance(opX, opY, opZ);
         double distHead = origin.getRefHead().getDistance(opX, opY, opZ);
 
-        if ((distBase < originMag + epsilon) && (distHead < originMag + epsilon)) {
+        if ((distBase < originMag + EPSILON) && (distHead < originMag + EPSILON)) {
             return true;
         }
 
-        return distHead < distBase + epsilon;
+        return distHead < distBase + EPSILON;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FVector supplyFVector() {
+
+        return getRefOrigin().copyZero();
     }
 }
 

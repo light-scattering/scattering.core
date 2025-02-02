@@ -9,25 +9,14 @@ import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.configurations.NameConfigDef.JSON_TYPE;
 
 public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegment {
     private static final String JSON_MAIN = "segment";
     private static final String JSON_VAL = "val";
-
-    private static double epsilon = 0;
-
-    private static Supplier<FVector> fVectorSupplier;
-
-    public static void initialize(double epsilon,
-                                  Supplier<FVector> fVectorSupplier) {
-
-        FSegmentDef.epsilon = epsilon;
-        FSegmentDef.fVectorSupplier = fVectorSupplier;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
@@ -83,7 +72,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        var origin = fVectorSupplier.get().applyStateFrom(json.getJSONObject(JSON_VAL));
+        var origin = supplyFVector().applyStateFrom(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -105,7 +94,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public FSegment copyZero() {
 
-        return create(fVectorSupplier.get());
+        return create(supplyFVector());
     }
 
     @Override
@@ -151,6 +140,16 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isProjectable(FPoint arg) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return getUnitDistance(arg) > -1;
+    }
 
     @Override
     public void project(Geometry geometry) {
@@ -222,7 +221,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
                 return false;
             }
 
-            return p.getDistance(memoX, memoY, memoZ) < epsilon;
+            return p.getDistance(memoX, memoY, memoZ) < EPSILON;
         });
     }
 
@@ -235,7 +234,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         double distBase = oBase.getDistance(x, y, z);
         double distHead = oHead.getDistance(x, y, z);
 
-        return Math.abs(distBase + distHead - oMagnitude) < epsilon;
+        return Math.abs(distBase + distHead - oMagnitude) < EPSILON;
     }
 
     private double getUnitDistance(FPoint arg) {
@@ -343,5 +342,12 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         in.set(memoX, memoY, memoZ);
 
         return false;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FVector supplyFVector() {
+
+        return getRefOrigin().copyZero();
     }
 }

@@ -10,11 +10,6 @@ public class Application {
         System.setProperty("spring.profiles.default", "dev");
         var context = new AnnotationConfigApplicationContext(SpringProd.class);
         context.registerShutdownHook();
-
-        FactoryDesignConcrete factorySpring = context.getBean(FactoryDesignConcrete.class);
-        System.out.println(factorySpring.getEpsilon());
-
-        System.out.println(factorySpring.getEpsilon());
     }
 
 }
