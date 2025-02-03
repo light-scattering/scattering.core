@@ -1,0 +1,8 @@
+package eu.scattering.core.transfer.container;
+
+import eu.scattering.core.transfer.container.engine.EngineFactory;
+import eu.scattering.core.transfer.container.position.PositionFactory;
+import eu.scattering.core.transfer.container.storage.StorageFactory;
+
+public interface ContainerFactory extends EngineFactory, PositionFactory, StorageFactory {
+}

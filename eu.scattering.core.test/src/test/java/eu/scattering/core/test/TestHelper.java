@@ -1,18 +1,18 @@
 package eu.scattering.core.test;
 
-import eu.scattering.core.design.mutables.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.mutables.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.mutables.number.complex.FComplex;
-import eu.scattering.core.design.mutables.number.quaternion.FQuaternion;
-import eu.scattering.core.transfer.containers.position.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.containers.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.containers.position.FPairPos4D.FPairPos4D;
+import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.mutable.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutable.number.complex.FComplex;
+import eu.scattering.core.design.mutable.number.quaternion.FQuaternion;
+import eu.scattering.core.transfer.container.position.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.position.FPairPos4D.FPairPos4D;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static eu.scattering.core.test.Configuration.factory;
+import static eu.scattering.core.test.Config.factory;
 
 public class TestHelper {
 
@@ -41,7 +41,7 @@ public class TestHelper {
 
     public static FComplex getRandFComplex(FComplex... exc) {
 
-        return factory.getFRandEngine().rndPosition(factory.getFComplex(), range2D, exc);
+        return factory.getFRandEngine().rndPos(factory.getFComplex(), range2D, exc);
     }
 
     public static FQuaternion getRandFQuaternion(FQuaternion... exc) {

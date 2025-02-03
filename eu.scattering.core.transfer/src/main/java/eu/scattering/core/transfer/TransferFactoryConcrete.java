@@ -1,8 +1,8 @@
 package eu.scattering.core.transfer;
 
-import eu.scattering.core.transfer.helpers.transfer.FPositionHelper;
-import eu.scattering.core.transfer.helpers.transfer.FPositionHelperFactory;
-import eu.scattering.core.transfer.helpers.transfer.FPositionHelperFactoryConcrete;
+import eu.scattering.core.transfer.helper.transfer.FPositionHelper;
+import eu.scattering.core.transfer.helper.transfer.FPositionHelperFactory;
+import eu.scattering.core.transfer.helper.transfer.FPositionHelperFactoryConcrete;
 
 public class TransferFactoryConcrete implements TransferFactory {
     private final FPositionHelperFactory positionHelperFactory;

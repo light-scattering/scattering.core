@@ -1,5 +1,7 @@
 package eu.scattering.core.transfer.containers.position;
 
+import eu.scattering.core.transfer.container.position.PositionFactory;
+import eu.scattering.core.transfer.container.position.PositionFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -9,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @Timeout(1)
 @DisplayName("FPairPos3D")
 public class FPairPos3DTest {
-    private PositionFactory factory = PositionFactoryConcrete.create();
+    private final PositionFactory factory = PositionFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")
@@ -24,8 +26,10 @@ public class FPairPos3DTest {
             var dto = factory.getFPairPos3D(dtoPosA, dtoPosB);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(dto.getPosA(), dtoPosA, "Position A is incorrect"),
-                    () -> assertEquals(dto.getPosB(), dtoPosB, "Position B is incorrect")
+                    () -> assertEquals(dto.getPosA(), dtoPosA,
+                            "Position A is incorrect"),
+                    () -> assertEquals(dto.getPosB(), dtoPosB,
+                            "Position B is incorrect")
             );
         }
     }
@@ -44,7 +48,8 @@ public class FPairPos3DTest {
 
             var dtoCopy = factory.getFPairPos3D(jsonOrigin);
 
-            assertEquals(dtoOrigin, dtoCopy, "The parsed JSON object is erroneous");
+            assertEquals(dtoOrigin, dtoCopy,
+                    "The parsed JSON object is erroneous");
         }
     }
 
@@ -61,21 +66,40 @@ public class FPairPos3DTest {
             var dto2b = factory.getFPairPos3D(factory.getFPos3D(6, 5, 4), factory.getFPos3D(3, 2, 1));
 
             Assertions.assertAll("Check hash codes",
-                    () -> assertEquals(dto1.hashCode(), dto2a.hashCode(), "The hash code should be exact"),
-                    () -> assertNotEquals(dto1.hashCode(), dto2b.hashCode(), "The hash code should be different")
+                    () -> assertEquals(dto1.hashCode(), dto2a.hashCode(),
+                            "The hash code should be exact"),
+                    () -> assertNotEquals(dto1.hashCode(), dto2b.hashCode(),
+                            "The hash code should be different")
             );
         }
 
         @Test
-        @DisplayName("Equality")
-        void validateEqualityTest() {
+        @DisplayName("Equality A")
+        void validateEqualityTestA() {
             var dto1 = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
             var dto2a = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
             var dto2b = factory.getFPairPos3D(factory.getFPos3D(6, 5, 4), factory.getFPos3D(3, 2, 1));
 
             Assertions.assertAll("Check hash codes",
-                    () -> assertEquals(dto1, dto2a, "The objects should be exact"),
-                    () -> assertNotEquals(dto1, dto2b, "The objects should be different")
+                    () -> assertEquals(dto1, dto2a,
+                            "The objects should be exact"),
+                    () -> assertNotEquals(dto1, dto2b,
+                            "The objects should be different")
+            );
+        }
+
+        @Test
+        @DisplayName("Equality B")
+        void validateEqualityTestB() {
+            var dto1 = factory.getFPairPos3D(factory.getFPos3D(1, 2, 3), factory.getFPos3D(4, 5, 6));
+            var dto2a = factory.getFPairPos3D(1, 2, 3, 4, 5, 6);
+            var dto2b = factory.getFPairPos3D(6, 5, 4, 3, 2, 1);
+
+            Assertions.assertAll("Check hash codes",
+                    () -> assertEquals(dto1, dto2a,
+                            "The objects should be exact"),
+                    () -> assertNotEquals(dto1, dto2b,
+                            "The objects should be different")
             );
         }
     }

@@ -1,5 +1,7 @@
 package eu.scattering.core.transfer.containers.position;
 
+import eu.scattering.core.transfer.container.position.PositionFactory;
+import eu.scattering.core.transfer.container.position.PositionFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

@@ -1,6 +1,8 @@
 package eu.scattering.core.transfer.containers.position;
 
-import eu.scattering.core.transfer.containers.position.FPos4D.FPos4D;
+import eu.scattering.core.transfer.container.position.FPos4D.FPos4D;
+import eu.scattering.core.transfer.container.position.PositionFactory;
+import eu.scattering.core.transfer.container.position.PositionFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
