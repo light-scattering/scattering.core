@@ -13,7 +13,7 @@ import java.util.Objects;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FRotQt implements Engine<FRotQt> {
-    private static ContainerFactory factory = ContainerFactoryConcrete.create();
+    private static final ContainerFactory factory = ContainerFactoryConcrete.create();
     private static final String JSON_MAIN = "engRotQt";
     private static final String JSON_OFFSET = "offset";
     private static final String JSON_QUATERNION = "qt";

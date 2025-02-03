@@ -9,7 +9,7 @@ import java.util.Objects;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FPos3D implements Position<FPos3D> {
-    private static final String JSON_TAG = "pos3D";
+    private static final String JSON_MAIN = "pos3D";
     private static final String JSON_VAL = "val";
 
     private final double d0;
@@ -30,14 +30,14 @@ public class FPos3D implements Position<FPos3D> {
 
     protected static FPos3D create(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_TAG) {
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
         JSONArray structure = json.getJSONArray(JSON_VAL);
-        var d0 = structure.getDouble(0);
-        var d1 = structure.getDouble(1);
-        var d2 = structure.getDouble(2);
+        double d0 = structure.getDouble(0);
+        double d1 = structure.getDouble(1);
+        double d2 = structure.getDouble(2);
 
         return new FPos3D(d0, d1, d2);
     }
@@ -63,7 +63,7 @@ public class FPos3D implements Position<FPos3D> {
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
-        json.put(JSON_TYPE, JSON_TAG);
+        json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getD0());
         json.append(JSON_VAL, getD1());
         json.append(JSON_VAL, getD2());

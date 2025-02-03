@@ -14,7 +14,7 @@ import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FPairPos4DI implements Position<FPairPos4DI> {
     private static final PositionFactory factory = PositionFactoryConcrete.create();
-    private static final String JSON_TAG = "pairPos4DI";
+    private static final String JSON_MAIN = "pairPos4DI";
     private static final String JSON_VAL = "val";
 
     private final FPos4DI posA;
@@ -41,13 +41,13 @@ public class FPairPos4DI implements Position<FPairPos4DI> {
 
     protected static FPairPos4DI create(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_TAG) {
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
         JSONArray structure = json.getJSONArray(JSON_VAL);
-        var posA = factory.getFPos4DI(structure.getJSONObject(0));
-        var posB = factory.getFPos4DI(structure.getJSONObject(1));
+        FPos4DI posA = factory.getFPos4DI(structure.getJSONObject(0));
+        FPos4DI posB = factory.getFPos4DI(structure.getJSONObject(1));
 
         return new FPairPos4DI(posA, posB);
     }
@@ -71,7 +71,7 @@ public class FPairPos4DI implements Position<FPairPos4DI> {
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
-        json.put(JSON_TYPE, JSON_TAG);
+        json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, getPosA().toJSON());
         json.append(JSON_VAL, getPosB().toJSON());
 
