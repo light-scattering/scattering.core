@@ -9,7 +9,7 @@ import java.util.Arrays;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FMatrix3x3D implements Storage<FMatrix3x3D> {
-    private static final String JSON_TAG = "matrix3x3D";
+    private static final String JSON_MAIN = "matrix3x3D";
     private static final String JSON_VAL = "val";
 
     private final double[][] core;
@@ -34,7 +34,7 @@ public class FMatrix3x3D implements Storage<FMatrix3x3D> {
 
     protected static FMatrix3x3D create(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_TAG) {
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
@@ -101,7 +101,7 @@ public class FMatrix3x3D implements Storage<FMatrix3x3D> {
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
-        json.put(JSON_TYPE, JSON_TAG);
+        json.put(JSON_TYPE, JSON_MAIN);
         json.append(JSON_VAL, get0x0());
         json.append(JSON_VAL, get0x1());
         json.append(JSON_VAL, get0x2());

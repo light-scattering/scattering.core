@@ -10,7 +10,7 @@ import eu.scattering.core.transfer.container.position.PositionFactory;
 import eu.scattering.core.transfer.container.position.PositionFactoryConcrete;
 
 public class FPositionHelperConcrete implements FPositionHelper {
-    private PositionFactory factory = PositionFactoryConcrete.create();
+    private final PositionFactory factory = PositionFactoryConcrete.create();
 
     private FPositionHelperConcrete() {}
 

@@ -1,6 +1,6 @@
 package eu.scattering.core.test.mutable.geometry.construct.engine;
 
-import eu.scattering.core.design.mutable.geometry.construct.ray.FRay;
+import eu.scattering.core.design.mutable.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutable.geometry.primitive.vector.FVector;
 import eu.scattering.core.test.TestHelper;
 import org.junit.jupiter.api.Assertions;
@@ -13,16 +13,16 @@ import static eu.scattering.core.test.Config.rot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Timeout(5)
-@DisplayName("FRayRotation")
-public class FRayRotationTest {
+@DisplayName("FLineRotation")
+public class FLineRotateTest {
 
     @Test
     @DisplayName("Rotate (simple)")
     void rotateSimple() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
-        FRay fRay = factory.getRefFRay(factory.getFVector(0, -1, 0, 0, 1, 0));
+        FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
 
-        rot.rotQtAround(fRay, fVector, Math.PI * 0.5);
+        rot.rotQtAround(fLine, fVector, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
                 "The position of the rotated FVector is erroneous");
@@ -32,9 +32,9 @@ public class FRayRotationTest {
     @DisplayName("Rotate (simple, negative)")
     void rotateSimpleNegative() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
-        FRay fRay = factory.getRefFRay(factory.getFVector(0, -1, 0, 0, 1, 0));
+        FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
 
-        rot.rotQtAround(fRay, fVector, -(Math.PI * 0.5));
+        rot.rotQtAround(fLine, fVector, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(0, 1, 1, 0, 2, 2),
                 "The position of the rotated FVector is erroneous");
@@ -44,11 +44,11 @@ public class FRayRotationTest {
     @DisplayName("Rotate (below base)")
     void rotateBelowBase() {
         FVector fVector = factory.getFVector(-2, 2, 0, 0, 2, 0);
-        FRay fRay = factory.getRefFRay(factory.getFVector(-1, 0, 0, 1, 0, 0));
+        FLine fLine = factory.getRefFLine(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rot.rotQtAround(fRay, fVector, Math.PI);
+        rot.rotQtAround(fLine, fVector, Math.PI);
 
-        assertTrue(fVector.isSimilar(-2, 2, 0, 0, -2, 0),
+        assertTrue(fVector.isSimilar(-2, -2, 0, 0, -2, 0),
                 "The position of the rotated FVector is erroneous");
     }
 
@@ -56,9 +56,9 @@ public class FRayRotationTest {
     @DisplayName("Rotate (above head)")
     void rotateAboveHead() {
         FVector fVector = factory.getFVector(0, 2, 0, 2, 2, 0);
-        FRay fRay = factory.getRefFRay(factory.getFVector(-1, 0, 0, 1, 0, 0));
+        FLine fLine = factory.getRefFLine(factory.getFVector(-1, 0, 0, 1, 0, 0));
 
-        rot.rotQtAround(fRay, fVector, Math.PI);
+        rot.rotQtAround(fLine, fVector, Math.PI);
 
         assertTrue(fVector.isSimilar(0, -2, 0, 2, -2, 0),
                 "The position of the rotated FVector is erroneous");
@@ -68,10 +68,10 @@ public class FRayRotationTest {
     @DisplayName("Rotate  (throw IllegalStateException)")
     void rotateThrowIllegalStateException() {
         FVector fVector = TestHelper.getRandFVector();
-        FRay fRay = factory.getRefFRay(factory.getFVector());
+        FLine fLine = factory.getRefFLine(factory.getFVector());
 
         Assertions.assertThrows(IllegalStateException.class,
-                () -> rot.rotQtAround(fRay, fVector, Math.PI * 0.5),
-                "The direction of the FRay is not defined");
+                () -> rot.rotQtAround(fLine, fVector, Math.PI * 0.5),
+                "The direction of the FLine is not defined");
     }
 }

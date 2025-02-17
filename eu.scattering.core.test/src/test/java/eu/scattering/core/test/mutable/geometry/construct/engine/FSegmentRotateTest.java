@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Timeout(5)
 @DisplayName("FSegmentRotation")
-public class FSegmentRotationTest {
+public class FSegmentRotateTest {
 
     @Test
     @DisplayName("Rotate (simple)")

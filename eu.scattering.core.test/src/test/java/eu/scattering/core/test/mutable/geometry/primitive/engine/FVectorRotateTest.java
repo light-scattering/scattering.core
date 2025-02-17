@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FVectorRotation")
-public class FVectorRotationTest {
+public class FVectorRotateTest {
 
     @Test
     @DisplayName("Set Rg angle")

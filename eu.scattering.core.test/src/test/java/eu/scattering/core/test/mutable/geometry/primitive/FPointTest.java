@@ -568,15 +568,15 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(0.00, factory.getFPoint(0, 1, 0).getInclination(),
-                            epsilon, "The polar angle is incorrect [0/8 rad]"),
+                            epsilon, "The polar angle is incorrect [0 pi rad]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, 1, 0).getInclination(),
-                            epsilon, "The polar angle is incorrect [1/8 rad]"),
+                            epsilon, "The polar angle is incorrect [1/4 pi rad]"),
                     () -> assertEquals(Math.PI * 0.50, factory.getFPoint(1, 0, 0).getInclination(),
-                            epsilon, "The polar angle is incorrect [2/8 rad]"),
+                            epsilon, "The polar angle is incorrect [2/4 pi rad]"),
                     () -> assertEquals(Math.PI * 0.75, factory.getFPoint(1, -1, 0).getInclination(),
-                            epsilon, "The polar angle is incorrect [3/8 rad]"),
+                            epsilon, "The polar angle is incorrect [3/4 pi rad]"),
                     () -> assertEquals(Math.PI, factory.getFPoint(0, -1, 0).getInclination(),
-                            epsilon, "The polar angle is incorrect [4/8 rad]")
+                            epsilon, "The polar angle is incorrect [1 pi rad]")
             );
         }
 
@@ -610,15 +610,15 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(0.00, factory.getFPoint(1, 1, 0).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [0/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [0 pi rad]"),
                     () -> assertEquals(Math.PI * 0.25, factory.getFPoint(1, 1, 1).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [1/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [1/4 pi rad]"),
                     () -> assertEquals(Math.PI * 0.50, factory.getFPoint(0, 1, 1).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [2/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [2/4 pi rad]"),
                     () -> assertEquals(Math.PI * 0.75, factory.getFPoint(-1, 1, 1).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [3/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [3/4 pi rad]"),
                     () -> assertEquals(Math.PI, factory.getFPoint(-1, 1, 0).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [4/8 rad]")
+                            epsilon, "The azimuthal angle is incorrect [1 pi rad]")
             );
         }
 
@@ -628,11 +628,11 @@ public class FPointTest {
 
             Assertions.assertAll("Validate angle values",
                     () -> assertEquals(-Math.PI * 0.25, factory.getFPoint(1, 1, -1).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [-1/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [-1/4 pi rad]"),
                     () -> assertEquals(-Math.PI * 0.50, factory.getFPoint(0, 1, -1).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [-2/8 rad]"),
+                            epsilon, "The azimuthal angle is incorrect [-2/4 pi rad]"),
                     () -> assertEquals(-Math.PI * 0.75, factory.getFPoint(-1, 1, -1).getAzimuth(),
-                            epsilon, "The azimuthal angle is incorrect [-3/8 rad]")
+                            epsilon, "The azimuthal angle is incorrect [-3/4 pi rad]")
             );
         }
 

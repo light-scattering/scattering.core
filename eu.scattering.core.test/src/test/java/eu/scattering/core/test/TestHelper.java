@@ -23,7 +23,7 @@ public class TestHelper {
 
     public static FPoint getRandFPoint(FPoint... exc) {
 
-        return factory.getFRandEngine().rndPosition(factory.getFPoint(), range3D, exc);
+        return factory.getFRandEngine().rndPos(factory.getFPoint(), range3D, exc);
     }
 
     public static FVector getRandFVector(FVector... exc) {
@@ -46,6 +46,6 @@ public class TestHelper {
 
     public static FQuaternion getRandFQuaternion(FQuaternion... exc) {
 
-        return factory.getFRandEngine().rndPosition(factory.getFQuaternion(), range4D, exc);
+        return factory.getFRandEngine().rndPos(factory.getFQuaternion(), range4D, exc);
     }
 }

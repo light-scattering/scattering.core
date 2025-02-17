@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FPointRotation")
-public class FPointRotationTest {
+public class FPointRotateTest {
 
     @Test
     @DisplayName("Rotate Rg with primitives A (simple, positive)")

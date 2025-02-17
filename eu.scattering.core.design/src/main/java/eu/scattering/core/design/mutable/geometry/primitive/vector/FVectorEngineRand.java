@@ -5,8 +5,10 @@ import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
 
 public interface FVectorEngineRand {
 
-    FVector rndAngle(FVector origin, FPoint... exclusion);
+    FVector rndAngle(FVector in, FPoint... exclusion);
 
-    FVector rndPosition(FVector origin, FPairPos3D range, FPoint... exclusion);
-    FVector rndPosition(FVector origin, double radius, FPoint... exclusion);
+    FVector rndPos(FVector in, FPairPos3D range, FPoint... exclusion);
+
+    FVector rndPosInSphere(FVector in, double radius, FPoint... exclusion);
+    FVector rndPosOnSphere(FVector in, double radius, FPoint... exclusion);
 }
