@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Timeout(1)
 @DisplayName("FRotQt")
 public class FRotQtTest {
-    private ContainerFactory factory = ContainerFactoryConcrete.create();
+    private final ContainerFactory factory = ContainerFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

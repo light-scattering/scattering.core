@@ -2,17 +2,19 @@ package eu.scattering.core.design.mutable.geometry.shape;
 
 import eu.scattering.core.design.mutable.geometry.Geometry;
 import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
+import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.position.FPos3DI.FPos3DI;
+
+import java.util.Collection;
 
 public interface Shape<T> extends Geometry {
 
     boolean contains(FPoint fPoint);
+    boolean contains(FPos3D fPos3D);
 
-    boolean intersectsStronglyWith(Shape shape);
-    boolean intersectsLooselyWith(Shape shape);
+    boolean intersectsWith(Shape shape);
 
-    Shape[] getStronglyIntersectingShapes(Shape... shapes);
-    Shape[] getLooselyIntersectingShapes(Shape... shapes);
+    void getIntersectingShapes(Collection<Shape> in, Collection<Shape> arg);
 
     Iterable<FPoint> getDoubleVolumeMesh(double distance);
     Iterable<FPos3DI> getIntegerVolumeMesh(double distance);
@@ -20,20 +22,16 @@ public interface Shape<T> extends Geometry {
     Iterable<FPoint> getDoubleSurfaceMesh(double distance);
     Iterable<FPos3DI> getIntegerSurfaceMesh(double distance);
 
-    double getVolume(Shape... exclusion);
-    double getExactVolume(Shape... exclusion);
-    double getApproximateVolume(Shape... exclusion);
+    double getAlgebraicVolume();
+    Shape setAlgebraicVolume(double volume);
 
-    double getSurface(Shape... exclusion);
-    double getExactSurface(Shape... exclusion);
-    double getApproximateSurface(Shape... exclusion);
+    double getAlgebraicSurface();
+    Shape setAlgebraicSurface(double surface);
 
     double getOuterRadius();
-    double getOuterRadiusP2();
     T setOuterRadius(double radius);
 
     double getInnerRadius();
-    double getInnerRadiusP2();
     T setInnerRadius(double innerRadius);
 
     FPoint getCenter();
