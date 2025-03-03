@@ -18,9 +18,9 @@ public interface Shape<T> extends Geometry {
 
     void getPosCenter(FPoint in);
 
-    boolean contains(double x, double y, double z, boolean include);
-    boolean contains(FPoint fPoint, boolean include);
-    boolean contains(FPos3D fPos3D, boolean include);
+    boolean contains(double x, double y, double z);
+    boolean contains(FPoint fPoint);
+    boolean contains(FPos3D fPos3D);
 
     // boolean cuts(T shape);
     boolean intersects(T shape);

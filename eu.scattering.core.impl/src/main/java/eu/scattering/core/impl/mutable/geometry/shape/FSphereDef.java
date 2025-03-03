@@ -189,7 +189,7 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
-    public boolean contains(double x, double y, double z, boolean include) {
+    public boolean contains(double x, double y, double z) {
         double tX = x - center.getX();
         double tY = y - center.getY();
         double tZ = z - center.getZ();
@@ -197,23 +197,19 @@ public class FSphereDef implements FSphere {
         double radP2 = radius * radius;
         double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
 
-        if (!include) {
-            return distP2 < radP2 - EPSILON;
-        }
-
         return distP2 < radP2 + EPSILON;
     }
 
     @Override
-    public boolean contains(FPoint fPoint, boolean include) {
+    public boolean contains(FPoint fPoint) {
 
-        return contains(fPoint.getX(), fPoint.getY(), fPoint.getZ(), include);
+        return contains(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public boolean contains(FPos3D fPos3D, boolean include) {
+    public boolean contains(FPos3D fPos3D) {
 
-        return contains(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2(), include);
+        return contains(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
     }
 
     @Override
@@ -226,23 +222,40 @@ public class FSphereDef implements FSphere {
 
     @Override
     public void getVolumeStream(FStream3D stream, double delta) {
-        double radiusParsed = radius + delta ;
+        double radiusParsed = radius + delta;
         double radiusP2 = radius * radius;
 
-        double minX = center.getX() - radiusParsed;
-        double maxX = center.getX() + radiusParsed;
-        double minY = center.getY() - radiusParsed;
-        double maxY = center.getY() + radiusParsed;
-        double minZ = center.getZ() - radiusParsed;
-        double maxZ = center.getZ() + radiusParsed;
+        double cX = center.getX();
+        double cY = center.getY();
+        double cZ = center.getZ();
+
+        double minX = cX - radiusParsed;
+        double maxX = cX + radiusParsed;
+        double minY = cY - radiusParsed;
+        double maxY = cY + radiusParsed;
+        double minZ = cZ - radiusParsed;
+        double maxZ = cZ + radiusParsed;
+
+        double tX, tXP2;
+        double tY, tYP2;
+        double tZ, tZP2;
 
         stream.reset();
 
         for (double x = minX ; x <= maxX ; x += delta) {
+            tX = x - cX;
+            tXP2 = tX * tX;
+
             for (double y = minY ; y <= maxY ; y += delta) {
+                tY = y - cY;
+                tYP2 = tY * tY;
+
                 for (double z = minZ ; z <= maxZ ; z += delta) {
-                    if (contains(radiusP2, x, y, z)) {
-                        stream.add(x, y, z, 0);
+                    tZ = z - cZ;
+                    tZP2 = tZ * tZ;
+
+                    if (tXP2 + tYP2 + tZP2 <= radiusP2) {
+                        stream.add(x, y, z);
                     }
                 }
             }
@@ -251,18 +264,45 @@ public class FSphereDef implements FSphere {
 
     @Override
     public void getVolumeStream(FStream3DI stream, double delta) {
+        double factor = 1 / delta;
 
+        double radiusParsed = radius + delta;
+        double radiusP2 = factor * factor * radius * radius;
+
+        int minX = (int) Math.floor(factor * (center.getX() - radiusParsed));
+        int maxX = (int) Math.ceil(factor * (center.getX() + radiusParsed));
+        int minY = (int) Math.floor(factor * (center.getY() - radiusParsed));
+        int maxY = (int) Math.ceil(factor * (center.getY() + radiusParsed));
+        int minZ = (int) Math.floor(factor * (center.getZ() - radiusParsed));
+        int maxZ = (int) Math.ceil(factor * (center.getZ() + radiusParsed));
+
+        int tX, tXP2;
+        int tY, tYP2;
+        int tZ, tZP2;
+
+        stream.reset();
+
+        for (int x = minX ; x <= maxX ; x++) {
+            tX = (int) (x - (factor * center.getX()));
+            tXP2 = tX * tX;
+
+            for (int y = minY ; y <= maxY ; y++) {
+                tY = (int) (y - (factor * center.getY()));
+                tYP2 = tY * tY;
+
+                for (int z = minZ ; z <= maxZ ; z++) {
+                    tZ = (int) (z - (factor * center.getZ()));
+                    tZP2 = tZ * tZ;
+
+                    if (tXP2 + tYP2 + tZP2 <= radiusP2) {
+                        stream.add(x, y, z, 0);
+                    }
+                }
+            }
+        }
     }
 
-    private boolean contains(double radiusP2, double x, double y, double z) {
-        double tX = x - center.getX();
-        double tY = y - center.getY();
-        double tZ = z - center.getZ();
 
-        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-
-        return distP2 < radiusP2;
-    }
 
 
 

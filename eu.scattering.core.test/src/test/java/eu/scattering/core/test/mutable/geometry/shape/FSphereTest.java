@@ -4,6 +4,7 @@ import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutable.geometry.shape.sphere.FSphere;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
+import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.epsilon;
@@ -395,11 +396,9 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Contains with parameters - inclusive")
-        void containsWithParametersInc() {
+        @DisplayName("Contains with parameters")
+        void containsWithParameters() {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            boolean inc = true;
 
             double max = fSphere.getRadius();
 
@@ -410,65 +409,29 @@ public class FSphereTest {
             double mid = max * 0.5;
 
             Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(x, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x + mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x - mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y + mid, z ,inc)),
-                    () -> assertTrue(fSphere.contains(x, y - mid, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z + mid, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z - mid, inc)),
-                    () -> assertTrue(fSphere.contains(x + max, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x - max, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y + max, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y - max, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z + max, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z - max, inc)),
-                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max, inc)),
-                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max, inc))
+                    () -> assertTrue(fSphere.contains(x, y, z)),
+                    () -> assertTrue(fSphere.contains(x + mid, y, z)),
+                    () -> assertTrue(fSphere.contains(x - mid, y, z)),
+                    () -> assertTrue(fSphere.contains(x, y + mid, z)),
+                    () -> assertTrue(fSphere.contains(x, y - mid, z)),
+                    () -> assertTrue(fSphere.contains(x, y, z + mid)),
+                    () -> assertTrue(fSphere.contains(x, y, z - mid)),
+                    () -> assertTrue(fSphere.contains(x + max, y, z)),
+                    () -> assertTrue(fSphere.contains(x - max, y, z)),
+                    () -> assertTrue(fSphere.contains(x, y + max, z)),
+                    () -> assertTrue(fSphere.contains(x, y - max, z)),
+                    () -> assertTrue(fSphere.contains(x, y, z + max)),
+                    () -> assertTrue(fSphere.contains(x, y, z - max)),
+                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
+                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
             );
         }
 
         @Test
-        @DisplayName("Contains with parameters - exclusive")
-        void containsWithParametersExc() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            boolean inc = false;
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getRefCenter().getX();
-            double y = fSphere.getRefCenter().getY();
-            double z = fSphere.getRefCenter().getZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(x, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x + mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x - mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y + mid, z ,inc)),
-                    () -> assertTrue(fSphere.contains(x, y - mid, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z + mid, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z - mid, inc)),
-                    () -> assertFalse(fSphere.contains(x + max, y, z, inc)),
-                    () -> assertFalse(fSphere.contains(x - max, y, z, inc)),
-                    () -> assertFalse(fSphere.contains(x, y + max, z, inc)),
-                    () -> assertFalse(fSphere.contains(x, y - max, z, inc)),
-                    () -> assertFalse(fSphere.contains(x, y, z + max, inc)),
-                    () -> assertFalse(fSphere.contains(x, y, z - max, inc)),
-                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max, inc)),
-                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max, inc))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with parameters (min) - inclusive")
-        void containsWithParametersMinInc() {
+        @DisplayName("Contains with parameters (min)")
+        void containsWithParametersMin() {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 0.01);
 
-            boolean inc = true;
-
             double max = fSphere.getRadius();
 
             double x = fSphere.getRefCenter().getX();
@@ -478,65 +441,29 @@ public class FSphereTest {
             double mid = max * 0.5;
 
             Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(x, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x + mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x - mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y + mid, z ,inc)),
-                    () -> assertTrue(fSphere.contains(x, y - mid, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z + mid, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z - mid, inc)),
-                    () -> assertTrue(fSphere.contains(x + max, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x - max, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y + max, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y - max, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z + max, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z - max, inc)),
-                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max, inc)),
-                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max, inc))
+                    () -> assertTrue(fSphere.contains(x, y, z)),
+                    () -> assertTrue(fSphere.contains(x + mid, y, z)),
+                    () -> assertTrue(fSphere.contains(x - mid, y, z)),
+                    () -> assertTrue(fSphere.contains(x, y + mid, z)),
+                    () -> assertTrue(fSphere.contains(x, y - mid, z)),
+                    () -> assertTrue(fSphere.contains(x, y, z + mid)),
+                    () -> assertTrue(fSphere.contains(x, y, z - mid)),
+                    () -> assertTrue(fSphere.contains(x + max, y, z)),
+                    () -> assertTrue(fSphere.contains(x - max, y, z)),
+                    () -> assertTrue(fSphere.contains(x, y + max, z)),
+                    () -> assertTrue(fSphere.contains(x, y - max, z)),
+                    () -> assertTrue(fSphere.contains(x, y, z + max)),
+                    () -> assertTrue(fSphere.contains(x, y, z - max)),
+                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
+                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
             );
         }
 
         @Test
-        @DisplayName("Contains with parameters (min) - exclusive")
-        void containsWithParametersMinExc() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 0.01);
-
-            boolean inc = false;
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getRefCenter().getX();
-            double y = fSphere.getRefCenter().getY();
-            double z = fSphere.getRefCenter().getZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(x, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x + mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x - mid, y, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y + mid, z ,inc)),
-                    () -> assertTrue(fSphere.contains(x, y - mid, z, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z + mid, inc)),
-                    () -> assertTrue(fSphere.contains(x, y, z - mid, inc)),
-                    () -> assertFalse(fSphere.contains(x + max, y, z, inc)),
-                    () -> assertFalse(fSphere.contains(x - max, y, z, inc)),
-                    () -> assertFalse(fSphere.contains(x, y + max, z, inc)),
-                    () -> assertFalse(fSphere.contains(x, y - max, z, inc)),
-                    () -> assertFalse(fSphere.contains(x, y, z + max, inc)),
-                    () -> assertFalse(fSphere.contains(x, y, z - max, inc)),
-                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max, inc)),
-                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max, inc))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with FPoint - inclusive")
-        void containsWithFPointInc() {
+        @DisplayName("Contains with FPoint")
+        void containsWithFPoint() {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
 
-            boolean inc = true;
-
             double max = fSphere.getRadius();
 
             double x = fSphere.getRefCenter().getX();
@@ -546,30 +473,28 @@ public class FSphereTest {
             double mid = max * 0.5;
 
             Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x + mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x - mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + mid, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - mid, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + mid), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - mid), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x + max, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x - max, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + max, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - max, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + max), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x + max, y + max, z + max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x - max, y - max, z - max), inc))
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x + mid, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x - mid, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + mid, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - mid, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + mid))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - mid))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x + max, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x - max, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + max, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - max, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + max))),
+                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - max))),
+                    () -> assertFalse(fSphere.contains(factory.getFPoint(x + max, y + max, z + max))),
+                    () -> assertFalse(fSphere.contains(factory.getFPoint(x - max, y - max, z - max)))
             );
         }
 
         @Test
-        @DisplayName("Contains with FPoint - exclusive")
-        void containsWithFPointExc() {
+        @DisplayName("Contains with FPos3D")
+        void containsWithFPos3D() {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            boolean inc = false;
 
             double max = fSphere.getRadius();
 
@@ -580,89 +505,21 @@ public class FSphereTest {
             double mid = max * 0.5;
 
             Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x + mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x - mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + mid, z),inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - mid, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + mid), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - mid), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x + max, y, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x - max, y, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x, y + max, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x, y - max, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x, y, z + max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x, y, z - max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x + max, y + max, z + max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x - max, y - max, z - max), inc))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with FPos3D - inclusive")
-        void containsWithFPos3DInc() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            boolean inc = true;
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getRefCenter().getX();
-            double y = fSphere.getRefCenter().getY();
-            double z = fSphere.getRefCenter().getZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x + mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x - mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + mid, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - mid, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + mid), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - mid), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x + max, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x - max, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + max, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - max, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + max), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x + max, y + max, z + max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x - max, y - max, z - max), inc))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with FPos3D - exclusive")
-        void containsWithFPos3DExc() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            boolean inc = false;
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getRefCenter().getX();
-            double y = fSphere.getRefCenter().getY();
-            double z = fSphere.getRefCenter().getZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x + mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x - mid, y, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + mid, z),inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - mid, z), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + mid), inc)),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - mid), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x + max, y, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x - max, y, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x, y + max, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x, y - max, z), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x, y, z + max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x, y, z - max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x + max, y + max, z + max), inc)),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x - max, y - max, z - max), inc))
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x + mid, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x - mid, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + mid, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - mid, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + mid))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - mid))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x + max, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x - max, y, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + max, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - max, z))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + max))),
+                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - max))),
+                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x + max, y + max, z + max))),
+                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x - max, y - max, z - max)))
             );
         }
 
@@ -753,11 +610,10 @@ public class FSphereTest {
         @Test
         @DisplayName("Volume stream 3D")
         void volumeStream3D() {
-            FStream3D fStream = factory.getFStream3D(10000);
+            FStream3D fStream = factory.getFStream3D(5000);
 
             FSphere fSphere = factory.getFSphere(5, 5, 5, 1);
 
-            boolean inclusive = true;
             double delta = 0.1;
 
             fSphere.getVolumeStream(fStream, delta);
@@ -765,8 +621,37 @@ public class FSphereTest {
             int elements = fStream.getNumberOfElements();
 
             fStream.iterate((index, d0, d1, d2, value) -> {
-                assertTrue(fSphere.contains(d0, d1, d2, inclusive));
+                assertTrue(fSphere.contains(d0, d1, d2));
             });
+
+            double volUnit = delta * delta * delta;
+            double volStream = elements * volUnit;
+            double volCalc = fSphere.getVolume();
+
+            Assertions.assertAll("Validate stream",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(volCalc, volStream, 0.01),
+                            "The volume relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Volume stream 3DI")
+        void volumeStream3DI() {
+            FStream3DI fStream = factory.getFStream3DI(5000);
+
+            FSphere fSphere = factory.getFSphere(5, 5, 5, 1);
+
+            double delta = 0.1;
+
+            fSphere.getVolumeStream(fStream, delta);
+
+            int elements = fStream.getNumberOfElements();
+
+//            fStream.iterate((index, d0, d1, d2, value) -> {
+//                assertTrue(fSphere.contains(d0, d1, d2));
+//            });
 
             double volUnit = delta * delta * delta;
             double volStream = elements * volUnit;
