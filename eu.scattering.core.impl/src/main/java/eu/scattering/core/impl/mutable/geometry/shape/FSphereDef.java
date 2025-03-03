@@ -266,15 +266,19 @@ public class FSphereDef implements FSphere {
     public void getVolumeStream(FStream3DI stream, double delta) {
         double factor = 1 / delta;
 
-        double radiusParsed = radius + delta;
-        double radiusP2 = factor * factor * radius * radius;
+        double radiusParsed = factor * (radius + delta);
+        double radiusP2 = (factor * radius ) * (factor * radius);
 
-        int minX = (int) Math.floor(factor * (center.getX() - radiusParsed));
-        int maxX = (int) Math.ceil(factor * (center.getX() + radiusParsed));
-        int minY = (int) Math.floor(factor * (center.getY() - radiusParsed));
-        int maxY = (int) Math.ceil(factor * (center.getY() + radiusParsed));
-        int minZ = (int) Math.floor(factor * (center.getZ() - radiusParsed));
-        int maxZ = (int) Math.ceil(factor * (center.getZ() + radiusParsed));
+        double cX = factor * center.getX();
+        double cY = factor * center.getY();
+        double cZ = factor * center.getZ();
+
+        int minX = (int) Math.floor(cX - radiusParsed);
+        int maxX = (int) Math.ceil(cX + radiusParsed);
+        int minY = (int) Math.floor(cY - radiusParsed);
+        int maxY = (int) Math.ceil(cY + radiusParsed);
+        int minZ = (int) Math.floor(cZ - radiusParsed);
+        int maxZ = (int) Math.ceil(cZ + radiusParsed);
 
         int tX, tXP2;
         int tY, tYP2;
@@ -283,19 +287,19 @@ public class FSphereDef implements FSphere {
         stream.reset();
 
         for (int x = minX ; x <= maxX ; x++) {
-            tX = (int) (x - (factor * center.getX()));
+            tX = (int) (x - cX);
             tXP2 = tX * tX;
 
             for (int y = minY ; y <= maxY ; y++) {
-                tY = (int) (y - (factor * center.getY()));
+                tY = (int) (y - cY);
                 tYP2 = tY * tY;
 
                 for (int z = minZ ; z <= maxZ ; z++) {
-                    tZ = (int) (z - (factor * center.getZ()));
+                    tZ = (int) (z - cZ);
                     tZP2 = tZ * tZ;
 
                     if (tXP2 + tYP2 + tZP2 <= radiusP2) {
-                        stream.add(x, y, z, 0);
+                        stream.add(x, y, z);
                     }
                 }
             }

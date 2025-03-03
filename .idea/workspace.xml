@@ -24,7 +24,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutable/geometry/shape/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutable/geometry/shape/Shape.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutable/geometry/shape/FSphereDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/mutable/geometry/shape/FSphereDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutable/geometry/shape/FSphereTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutable/geometry/shape/FSphereTest.java" afterDir="false" />
     </list>
@@ -160,7 +159,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.FSphereTest">
-    <configuration name="FSphereAdvancedTest.containsWithFPoint" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSphereAdvancedTest.containsWithFPos3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -173,7 +172,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.mutable.geometry.shape.FSphereTest$FSphereAdvancedTest.containsWithFPoint&quot;" />
+            <option value="&quot;eu.scattering.core.test.mutable.geometry.shape.FSphereTest$FSphereAdvancedTest.containsWithFPos3D&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -278,10 +277,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.FSphereTest" />
+        <item itemvalue="Gradle.FSphereAdvancedTest.containsWithFPos3D" />
         <item itemvalue="Gradle.FSphereAdvancedTest.volumeStream3DI" />
         <item itemvalue="Gradle.FSphereAdvancedTest.volumeStream3D" />
         <item itemvalue="Gradle.FSphereAdvancedTest.containsWithParametersMin" />
-        <item itemvalue="Gradle.FSphereAdvancedTest.containsWithFPoint" />
       </list>
     </recent_temporary>
   </component>
@@ -514,16 +513,6 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/containers/buffer/FLayerTest.java</url>
           <line>43</line>
           <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutable/geometry/shape/FSphereTest.java</url>
-          <line>630</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/mutable/geometry/shape/FSphereTest.java</url>
-          <line>659</line>
-          <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
