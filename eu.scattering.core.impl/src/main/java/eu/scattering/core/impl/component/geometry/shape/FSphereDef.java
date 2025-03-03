@@ -1,9 +1,8 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.shape.ShapeFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -13,7 +12,6 @@ import java.util.List;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FSphereDef implements FSphere {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "center";
     private static final String JSON_RADIUS = "radius";
 
@@ -21,19 +19,23 @@ public class FSphereDef implements FSphere {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final ShapeFactory factory;
+
     private FPoint center;
 
     private double radius;
 
-    private FSphereDef() {}
+    private FSphereDef(ShapeFactory factory) {
 
-    public static FSphere create(FPoint refCenter, double radius) {
+        this.factory = factory;
+    }
 
-        var fSphere = new FSphereDef();
+    public static FSphere create(ShapeFactory factory, FPoint refCenter, double radius) {
+
+        var fSphere = new FSphereDef(factory);
 
         fSphere.setRefCenter(refCenter);
         fSphere.setRadius(radius);
-
 
         return fSphere;
     }

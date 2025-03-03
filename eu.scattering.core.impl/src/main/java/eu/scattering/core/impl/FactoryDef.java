@@ -171,19 +171,19 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FSphere getFSphere(double radius) {
 
-        return FSphereDef.create(getFPoint(), radius);
+        return FSphereDef.create(this, getFPoint(), radius);
     }
 
     @Override
     public FSphere getFSphere(double x, double y, double z, double radius) {
 
-        return FSphereDef.create(getFPoint(x, y, z), radius);
+        return FSphereDef.create(this, getFPoint(x, y, z), radius);
     }
 
     @Override
     public FSphere getRefFSphere(FPoint refCenter, double radius) {
 
-        return FSphereDef.create(refCenter, radius);
+        return FSphereDef.create(this, refCenter, radius);
     }
 
     //--------------------------------------------------
