@@ -2,38 +2,44 @@ package eu.scattering.core.design.mutable.geometry.shape;
 
 import eu.scattering.core.design.mutable.geometry.Geometry;
 import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
+import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
+import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.position.FPos3DI.FPos3DI;
-
-import java.util.Collection;
 
 public interface Shape<T> extends Geometry {
 
-    boolean contains(FPoint fPoint);
-    boolean contains(FPos3D fPos3D);
+    T setPosCenter(double x, double y, double z);
+    T setPosCenter(FPoint fPoint);
+    T setPosCenter(FPos3D fPos3D);
 
-    boolean intersectsWith(Shape shape);
+    T setPosCenterX(double x);
+    T setPosCenterY(double Y);
+    T setPosCenterZ(double z);
 
-    void getIntersectingShapes(Collection<Shape> in, Collection<Shape> arg);
+    void getPosCenter(FPoint in);
 
-    Iterable<FPoint> getDoubleVolumeMesh(double distance);
-    Iterable<FPos3DI> getIntegerVolumeMesh(double distance);
+    boolean contains(double x, double y, double z, boolean include);
+    boolean contains(FPoint fPoint, boolean include);
+    boolean contains(FPos3D fPos3D, boolean include);
 
-    Iterable<FPoint> getDoubleSurfaceMesh(double distance);
-    Iterable<FPos3DI> getIntegerSurfaceMesh(double distance);
+    // boolean cuts(T shape);
+    boolean intersects(T shape);
 
-    double getAlgebraicVolume();
-    Shape setAlgebraicVolume(double volume);
+    double getVolume();
+    T setVolume(double volume);
 
-    double getAlgebraicSurface();
-    Shape setAlgebraicSurface(double surface);
+    double getSurface();
+    T setSurface(double surface);
 
     double getOuterRadius();
     T setOuterRadius(double radius);
 
     double getInnerRadius();
-    T setInnerRadius(double innerRadius);
+    T setInnerRadius(double radius);
 
-    FPoint getCenter();
-    T setCenter(FPoint position);
+    void getVolumeStream(FStream3DI stream, double delta);
+    void getVolumeStream(FStream3D stream, double delta);
+
+    void getSurfaceStream(FStream3DI stream, double delta);
+    void getSurfaceStream(FStream3D stream, double delta);
 }

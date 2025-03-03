@@ -1,4 +1,4 @@
-package eu.scattering.core.design.helper.auxiliary;
+package eu.scattering.core.design.helper.trigonometry;
 
 public interface FTrigHelperFactory {
 

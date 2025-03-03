@@ -14,4 +14,5 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.mutable.geometry.primitive.engine;
     opens eu.scattering.core.test.mutable.geometry.construct.engine;
     opens eu.scattering.core.test.mutable.number.engine;
+    opens eu.scattering.core.test.mutable.geometry.shape;
 }

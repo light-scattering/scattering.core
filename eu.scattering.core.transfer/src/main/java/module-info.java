@@ -18,4 +18,6 @@ module eu.scattering.core.transfer {
     exports eu.scattering.core.transfer.helper.transfer;
     exports eu.scattering.core.transfer.container.engine.FRotQt;
     exports eu.scattering.core.transfer.container.storage.FMatrix3x3D;
+    exports eu.scattering.core.transfer.container.buffer.FStream3D;
+    exports eu.scattering.core.transfer.container.buffer.FStream3DI;
 }

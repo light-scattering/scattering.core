@@ -25,7 +25,7 @@ public class FVectorTest {
     class FVectorBasicTest {
 
         @Test
-        @DisplayName("Constructor")
+        @DisplayName("Construct")
         void construct() {
             FVector fVector = factory.getFVector();
 

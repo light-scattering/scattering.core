@@ -2,6 +2,7 @@ package eu.scattering.core.impl;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
+import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.mutable.geometry.construct.line.FLine;
 import eu.scattering.core.design.mutable.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.mutable.geometry.construct.ray.FRay;
@@ -13,7 +14,7 @@ import eu.scattering.core.design.mutable.number.complex.FComplex;
 import eu.scattering.core.design.mutable.number.quaternion.FQuaternion;
 import eu.scattering.core.design.engine.randomize.processor.FRandProcessor;
 import eu.scattering.core.design.engine.rotate.processor.FRotProcessor;
-import eu.scattering.core.design.helper.auxiliary.FTrigHelper;
+import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
@@ -21,6 +22,7 @@ import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandProcessorDef;
 import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
+import eu.scattering.core.impl.helper.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
 import eu.scattering.core.impl.mutable.geometry.construct.FLineDef;
 import eu.scattering.core.impl.mutable.geometry.construct.FPlaneDef;
@@ -28,11 +30,13 @@ import eu.scattering.core.impl.mutable.geometry.construct.FRayDef;
 import eu.scattering.core.impl.mutable.geometry.construct.FSegmentDef;
 import eu.scattering.core.impl.mutable.geometry.primitive.FPointDef;
 import eu.scattering.core.impl.mutable.geometry.primitive.FVectorDef;
+import eu.scattering.core.impl.mutable.geometry.shape.FSphereDef;
 import eu.scattering.core.impl.mutable.number.FComplexDef;
 import eu.scattering.core.impl.mutable.number.FQuaternionDef;
 
 public final class FactoryDef extends FactoryDesignConcrete {
     private final FTrigHelper fAngleHelper;
+    private final FStatHelper fStatHelper;
     private final FRandEngine fRandHelper;
     private final FRotEngine fRotEngine;
     private final FProtoEngine fProtEngine;
@@ -47,6 +51,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         this.fProtEngine = FProtoEngineDef.create();
 
         this.fAngleHelper = FTrigHelperDef.create();
+        this.fStatHelper = FStatHelperDef.create();
     }
 
     private FactoryDef(long seed) {
@@ -59,6 +64,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         this.fProtEngine = FProtoEngineDef.create();
 
         this.fAngleHelper = FTrigHelperDef.create();
+        this.fStatHelper = FStatHelperDef.create();
     }
 
     public static FactoryDesignConcrete create() {
@@ -157,13 +163,27 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return FPlaneDef.create(refOrigin);
     }
 
-    @Override
-    public FSphere getFSphere() {
+    //--------------------------------------------------
 
-        return null;
+    @Override
+    public FSphere getFSphere(double radius) {
+
+        return FSphereDef.create(getFPoint(), radius);
     }
 
-//--------------------------------------------------
+    @Override
+    public FSphere getFSphere(double x, double y, double z, double radius) {
+
+        return FSphereDef.create(getFPoint(x, y, z), radius);
+    }
+
+    @Override
+    public FSphere getRefFSphere(FPoint refCenter, double radius) {
+
+        return FSphereDef.create(refCenter, radius);
+    }
+
+    //--------------------------------------------------
 
     @Override
     public FComplex getFComplex() {
@@ -187,12 +207,18 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return FQuaternionDef.create(re, i, j, k);
     }
 
-//--------------------------------------------------
+    //--------------------------------------------------
 
     @Override
     public FTrigHelper getFTrigHelper() {
 
         return fAngleHelper;
+    }
+
+    @Override
+    public FStatHelper getFStatHelper() {
+
+        return fStatHelper;
     }
 
     @Override
@@ -213,7 +239,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return fProtEngine;
     }
 
-//--------------------------------------------------
+    //--------------------------------------------------
 
     @Override
     public FRandProcessor getFRandProcessor() {
@@ -232,6 +258,4 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         return FRotProcessorDef.create();
     }
-
-
 }

@@ -2,6 +2,7 @@ package eu.scattering.core.test;
 
 import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
 import eu.scattering.core.design.mutable.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.mutable.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.mutable.number.complex.FComplex;
 import eu.scattering.core.design.mutable.number.quaternion.FQuaternion;
 import eu.scattering.core.transfer.container.position.FPairPos2D.FPairPos2D;
@@ -47,5 +48,13 @@ public class TestHelper {
     public static FQuaternion getRandFQuaternion(FQuaternion... exc) {
 
         return factory.getFRandEngine().rndPos(factory.getFQuaternion(), range4D, exc);
+    }
+
+    public static FSphere getRandFSphere(FSphere... exc) {
+        List<FPoint> parsedCenterList = Arrays.stream(exc).map(FSphere::getRefCenter).collect(Collectors.toList());
+
+        FPoint center = getRandFPoint(parsedCenterList.toArray(FPoint[]::new));
+
+        return factory.getRefFSphere(center, factory.getFRandProcessor().nextDouble(0, range, 0));
     }
 }

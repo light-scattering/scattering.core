@@ -211,7 +211,7 @@ public class FStream3DI implements Buffer<FStream3DI> {
     @Override
     public String toString() {
 
-        return toJSON().toString();
+        return "FStream3DI";
     }
 
     //--------------------------------------------------

@@ -211,7 +211,7 @@ public class FStream3D implements Buffer<FStream3D> {
     @Override
     public String toString() {
 
-        return toJSON().toString();
+        return "FStream3D";
     }
 
     //--------------------------------------------------

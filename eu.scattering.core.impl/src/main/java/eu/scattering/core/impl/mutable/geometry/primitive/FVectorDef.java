@@ -33,7 +33,7 @@ public class FVectorDef implements FVector {
 
     private FVectorDef() {}
 
-    public static FVector create( FPoint refBase, FPoint refHead) {
+    public static FVector create(FPoint refBase, FPoint refHead) {
 
         if (refBase == null) {
             throw new NullPointerException("The base FPoint cannot be null");

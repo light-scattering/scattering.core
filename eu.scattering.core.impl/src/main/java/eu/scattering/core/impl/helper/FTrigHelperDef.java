@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.helper;
 
-import eu.scattering.core.design.helper.auxiliary.FTrigHelper;
+import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
