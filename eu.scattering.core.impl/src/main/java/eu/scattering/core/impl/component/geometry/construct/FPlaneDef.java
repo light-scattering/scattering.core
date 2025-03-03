@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -24,16 +25,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final ConstructFactory factory;
+
     private FVector origin;
 
-    private FPlaneDef(FVector origin) {
+    private FPlaneDef(ConstructFactory factory, FVector origin) {
 
+        this.factory = factory;
         this.origin = origin;
     }
 
-    public static FPlane create(FVector origin) {
+    public static FPlane create(ConstructFactory factory, FVector origin) {
 
-        return new FPlaneDef(origin);
+        return new FPlaneDef(factory, origin);
     }
 
     @Override
@@ -96,7 +100,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane copyZero() {
 
-        return create(supplyFVector());
+        return create(factory, supplyFVector());
     }
 
     @Override
@@ -235,16 +239,17 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     // TODO - Not optimized
     @Override
-    public Optional<FVector> getFLineOriginAtIntersection(FPlane ref) {
+    public Optional<FLine> getFLineAtIntersection(FPlane ref) {
 
         if (getRefOrigin().isCollinear(ref.getRefOrigin())) {
             return Optional.empty();
         }
 
-        FVector result = supplyFVector();
+        FLine result = supplyFLine();
+        FVector resultOrigin = result.getRefOrigin();
 
-        FPoint resBase = result.getRefBase();
-        FPoint resHead = result.getRefHead();
+        FPoint resBase = resultOrigin.getRefBase();
+        FPoint resHead = resultOrigin.getRefHead();
 
         FVector u = getRefOrigin().copy();
         FVector v = ref.getRefOrigin().copy();
@@ -429,9 +434,14 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     // -------------------------------------------------------------------------------------------------
 
+    private FLine supplyFLine() {
+
+        return factory.getFLine();
+    }
+
     private FVector supplyFVector() {
 
-        return getRefOrigin().copyZero();
+        return factory.getFVector();
     }
 }
 

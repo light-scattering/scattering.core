@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -23,16 +24,19 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final ConstructFactory factory;
+
     private FVector origin;
 
-    private FLineDef(FVector origin) {
+    private FLineDef(ConstructFactory factory, FVector origin) {
 
+        this.factory = factory;
         this.origin = origin;
     }
 
-    public static FLine create(FVector origin) {
+    public static FLine create(ConstructFactory factory, FVector origin) {
 
-        return new FLineDef(origin);
+        return new FLineDef(factory, origin);
     }
 
     @Override
@@ -95,7 +99,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine copyZero() {
 
-        return create(supplyFVector());
+        return create(factory, supplyFVector());
     }
 
     @Override
@@ -595,12 +599,12 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     private FVector supplyFVector() {
 
-        return getRefOrigin().copyZero();
+        return factory.getFVector();
     }
 
     private FPoint supplyFPoint() {
 
-        return getRefOrigin().getRefBase().copyZero();
+        return factory.getFPoint();
     }
 }
 

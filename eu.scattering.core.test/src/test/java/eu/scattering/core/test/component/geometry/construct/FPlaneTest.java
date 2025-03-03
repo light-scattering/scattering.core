@@ -796,13 +796,13 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Optional<FVector> fLineOpt = fPlane1.getFLineOriginAtIntersection(fPlane2);
+            Optional<FLine> fLineOpt = fPlane1.getFLineAtIntersection(fPlane2);
 
             if (fLineOpt.isEmpty()) {
                 Assertions.fail("The common FLine should exist");
             }
 
-            FVector fVector = fLineOpt.get();
+            FVector fVector = fLineOpt.get().getRefOrigin();
 
             Assertions.assertAll("Validate FLine",
                     () -> assertTrue(fPlane1.isPartOf(fVector.getRefBase()),
@@ -830,7 +830,7 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Optional<FVector> fVectorOp = fPlane1.getFLineOriginAtIntersection(fPlane2);
+            Optional<FLine> fVectorOp = fPlane1.getFLineAtIntersection(fPlane2);
 
             if (fVectorOp.isPresent()) {
                 Assertions.fail("The common FLine should not exist");
@@ -846,7 +846,7 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane1.getFLineOriginAtIntersection(fPlane2),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane1.getFLineAtIntersection(fPlane2),
                     "The origin is a non-directional FVector");
         }
 
@@ -859,7 +859,7 @@ public class FPlaneTest {
             FPlane fPlane1 = factory.getRefFPlane(fVector1);
             FPlane fPlane2 = factory.getRefFPlane(fVector2);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fPlane1.getFLineOriginAtIntersection(fPlane2),
+            Assertions.assertThrows(IllegalArgumentException.class, () -> fPlane1.getFLineAtIntersection(fPlane2),
                     "The argument is a non-directional FVector");
         }
 

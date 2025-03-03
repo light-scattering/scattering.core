@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -22,16 +23,19 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final ConstructFactory factory;
+
     private FVector origin;
 
-    private FRayDef(FVector origin) {
+    private FRayDef(ConstructFactory factory, FVector origin) {
 
+        this.factory = factory;
         this.origin = origin;
     }
 
-    public static FRay create(FVector origin) {
+    public static FRay create(ConstructFactory factory, FVector origin) {
 
-        return new FRayDef(origin);
+        return new FRayDef(factory, origin);
     }
 
     @Override
@@ -94,7 +98,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public FRay copyZero() {
 
-        return create(supplyFVector());
+        return create(factory, supplyFVector());
     }
 
     @Override
@@ -434,11 +438,11 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
     private FVector supplyFVector() {
 
-        return getRefOrigin().copyZero();
+        return factory.getFVector();
     }
 
     private FPoint supplyFPoint() {
 
-        return getRefOrigin().getRefBase().copyZero();
+        return factory.getFPoint();
     }
 }

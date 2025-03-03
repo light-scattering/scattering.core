@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -22,16 +23,19 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final ConstructFactory factory;
+
     private FVector origin;
 
-    private FSegmentDef(FVector origin) {
+    private FSegmentDef(ConstructFactory factory, FVector origin) {
 
+        this.factory = factory;
         this.origin = origin;
     }
 
-    public static FSegment create(FVector origin) {
+    public static FSegment create(ConstructFactory factory, FVector origin) {
 
-        return new FSegmentDef(origin);
+        return new FSegmentDef(factory, origin);
     }
 
     @Override
@@ -94,7 +98,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public FSegment copyZero() {
 
-        return create(supplyFVector());
+        return create(factory, supplyFVector());
     }
 
     @Override
@@ -338,6 +342,6 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
     private FVector supplyFVector() {
 
-        return getRefOrigin().copyZero();
+        return factory.getFVector();
     }
 }

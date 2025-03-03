@@ -35,20 +35,21 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 
 public final class FactoryDef extends FactoryDesignConcrete {
+    private final FProtoEngine fProtEngine;
+    private final FRandEngine fRandEngine;
+    private final FRotEngine fRotEngine;
+
     private final FTrigHelper fAngleHelper;
     private final FStatHelper fStatHelper;
-    private final FRandEngine fRandHelper;
-    private final FRotEngine fRotEngine;
-    private final FProtoEngine fProtEngine;
 
     private FactoryDef() {
         FRandProcessor fRandInternal = FRandProcessorDef.create();
 
         fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
-        this.fRandHelper = FRandEngineDef.create(fRandInternal);
-        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
+        this.fRandEngine = FRandEngineDef.create(fRandInternal);
         this.fProtEngine = FProtoEngineDef.create();
+        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
 
         this.fAngleHelper = FTrigHelperDef.create();
         this.fStatHelper = FStatHelperDef.create();
@@ -59,9 +60,9 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
-        this.fRandHelper = FRandEngineDef.create(fRandInternal);
-        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
+        this.fRandEngine = FRandEngineDef.create(fRandInternal);
         this.fProtEngine = FProtoEngineDef.create();
+        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
 
         this.fAngleHelper = FTrigHelperDef.create();
         this.fStatHelper = FStatHelperDef.create();
@@ -115,52 +116,54 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return FVectorDef.create(refBase, refHead);
     }
 
-    @Override
-    public FLine getFLine() {
-
-        return FLineDef.create(getFVector());
-    }
-
-    @Override
-    public FLine getRefFLine(FVector refOrigin) {
-
-        return FLineDef.create(refOrigin);
-    }
-
-    @Override
-    public FRay getFRay() {
-
-        return FRayDef.create(getFVector());
-    }
-
-    @Override
-    public FRay getRefFRay(FVector refOrigin) {
-
-        return FRayDef.create(refOrigin);
-    }
-
-    @Override
-    public FSegment getFSegment() {
-
-        return FSegmentDef.create(getFVector());
-    }
-
-    @Override
-    public FSegment getRefFSegment(FVector refOrigin) {
-
-        return FSegmentDef.create(refOrigin);
-    }
+    //--------------------------------------------------
 
     @Override
     public FPlane getFPlane() {
 
-        return FPlaneDef.create(getFVector());
+        return FPlaneDef.create(this, getFVector());
     }
 
     @Override
     public FPlane getRefFPlane(FVector refOrigin) {
 
-        return FPlaneDef.create(refOrigin);
+        return FPlaneDef.create(this, refOrigin);
+    }
+
+    @Override
+    public FRay getFRay() {
+
+        return FRayDef.create(this, getFVector());
+    }
+
+    @Override
+    public FRay getRefFRay(FVector refOrigin) {
+
+        return FRayDef.create(this, refOrigin);
+    }
+
+    @Override
+    public FLine getFLine() {
+
+        return FLineDef.create(this, getFVector());
+    }
+
+    @Override
+    public FLine getRefFLine(FVector refOrigin) {
+
+        return FLineDef.create(this, refOrigin);
+    }
+
+    @Override
+    public FSegment getFSegment() {
+
+        return FSegmentDef.create(this, getFVector());
+    }
+
+    @Override
+    public FSegment getRefFSegment(FVector refOrigin) {
+
+        return FSegmentDef.create(this, refOrigin);
     }
 
     //--------------------------------------------------
@@ -191,6 +194,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return FComplexDef.create(0, 0);
     }
 
+    @Override
     public FComplex getFComplex(double re, double im) {
 
         return FComplexDef.create(re, im);
@@ -202,9 +206,30 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return FQuaternionDef.create(0, 0, 0, 0);
     }
 
+    @Override
     public FQuaternion getFQuaternion(double re, double i, double j, double k) {
 
         return FQuaternionDef.create(re, i, j, k);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FProtoEngine getFProtoEngine() {
+
+        return fProtEngine;
+    }
+
+    @Override
+    public FRandEngine getFRandEngine() {
+
+        return fRandEngine;
+    }
+
+    @Override
+    public FRotEngine getFRotEngine() {
+
+        return fRotEngine;
     }
 
     //--------------------------------------------------
@@ -219,24 +244,6 @@ public final class FactoryDef extends FactoryDesignConcrete {
     public FStatHelper getFStatHelper() {
 
         return fStatHelper;
-    }
-
-    @Override
-    public FRandEngine getFRandEngine() {
-
-        return fRandHelper;
-    }
-
-    @Override
-    public FRotEngine getFRotEngine() {
-
-        return fRotEngine;
-    }
-
-    @Override
-    public FProtoEngine getFProtoEngine() {
-
-        return fProtEngine;
     }
 
     //--------------------------------------------------
