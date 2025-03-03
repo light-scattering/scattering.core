@@ -1,6 +1,6 @@
 package eu.scattering.core.test.engine;
 
-import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.engine.randomize.processor.FRandProcessor;
 import eu.scattering.core.transfer.container.position.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;

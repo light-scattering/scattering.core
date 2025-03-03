@@ -2,12 +2,12 @@ package eu.scattering.core.impl.engine.rotate;
 
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.processor.FRotProcessor;
-import eu.scattering.core.design.mutable.geometry.Geometry;
-import eu.scattering.core.design.mutable.geometry.construct.line.FLine;
-import eu.scattering.core.design.mutable.geometry.construct.ray.FRay;
-import eu.scattering.core.design.mutable.geometry.construct.segment.FSegment;
-import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.mutable.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.transfer.container.engine.FRotQt.FRotQt;
 import eu.scattering.core.transfer.container.storage.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;

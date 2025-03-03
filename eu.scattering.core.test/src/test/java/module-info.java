@@ -5,14 +5,14 @@ module eu.scattering.core.test {
     requires eu.scattering.core.design;
     requires eu.scattering.core.transfer;
     requires eu.scattering.core.impl.def;
-    opens eu.scattering.core.test.mutable.geometry.primitive;
-    opens eu.scattering.core.test.mutable.geometry.construct;
-    opens eu.scattering.core.test.mutable.number;
+    opens eu.scattering.core.test.component.geometry.base;
+    opens eu.scattering.core.test.component.geometry.construct;
+    opens eu.scattering.core.test.component.number;
     opens eu.scattering.core.test.engine;
     opens eu.scattering.core.test.helper;
     opens eu.scattering.core.test;
-    opens eu.scattering.core.test.mutable.geometry.primitive.engine;
-    opens eu.scattering.core.test.mutable.geometry.construct.engine;
-    opens eu.scattering.core.test.mutable.number.engine;
-    opens eu.scattering.core.test.mutable.geometry.shape;
+    opens eu.scattering.core.test.component.geometry.base.engine;
+    opens eu.scattering.core.test.component.geometry.construct.engine;
+    opens eu.scattering.core.test.component.number.engine;
+    opens eu.scattering.core.test.component.geometry.shape;
 }

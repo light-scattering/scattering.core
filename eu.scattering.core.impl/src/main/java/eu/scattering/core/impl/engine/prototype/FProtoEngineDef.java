@@ -1,10 +1,10 @@
 package eu.scattering.core.impl.engine.prototype;
 
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
-import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.mutable.geometry.primitive.vector.FVector;
-import eu.scattering.core.design.mutable.number.complex.FComplex;
-import eu.scattering.core.design.mutable.number.quaternion.FQuaternion;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.number.complex.FComplex;
+import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

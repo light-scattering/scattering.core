@@ -1,7 +1,7 @@
 package eu.scattering.core.design.engine.prototype;
 
 import eu.scattering.core.design.engine.Engine;
-import eu.scattering.core.design.mutable.MutableEngineProto;
+import eu.scattering.core.design.component.ComponentEngineProto;
 
-public interface FProtoEngine extends MutableEngineProto, Engine<FProtoEngine> {
+public interface FProtoEngine extends ComponentEngineProto, Engine<FProtoEngine> {
 }

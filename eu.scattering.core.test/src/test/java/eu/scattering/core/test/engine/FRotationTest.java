@@ -1,7 +1,7 @@
 package eu.scattering.core.test.engine;
 
-import eu.scattering.core.design.mutable.geometry.primitive.point.FPoint;
-import eu.scattering.core.design.mutable.geometry.primitive.vector.FVector;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.engine.rotate.processor.FRotProcessor;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.test.TestHelper;
