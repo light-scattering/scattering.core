@@ -1,8 +1,8 @@
 package eu.scattering.core.design.engine.rotate.processor;
 
-import eu.scattering.core.transfer.container.engine.FRotQt.FRotQt;
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FRotQt.FRotQt;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public interface FRotProcessor {
 

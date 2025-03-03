@@ -5,9 +5,9 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.transfer.container.position.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.position.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
 
 import java.util.Arrays;
 import java.util.List;

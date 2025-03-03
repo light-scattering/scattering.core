@@ -1,8 +1,8 @@
 package eu.scattering.core.transfer.containers.position;
 
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.position.PositionFactory;
-import eu.scattering.core.transfer.container.position.PositionFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.StorageFactory;
+import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Timeout(1)
 @DisplayName("FPairPos3DI")
 public class FPairPos3DITest {
-    private final PositionFactory factory = PositionFactoryConcrete.create();
+    private static final StorageFactory factory = StorageFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

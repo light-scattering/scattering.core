@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.complex;
 
-import eu.scattering.core.transfer.container.position.FPos2D.FPos2D;
+import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 
 public interface FComplexFactory {
 

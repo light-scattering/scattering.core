@@ -4,12 +4,12 @@ import eu.scattering.core.design.engine.randomize.processor.FRandProcessor;
 import eu.scattering.core.design.engine.randomize.processor.core.FRandProcessorCore;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.position.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.position.FPairPos4D.FPairPos4D;
-import eu.scattering.core.transfer.container.position.FPos2D.FPos2D;
-import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.position.FPos4D.FPos4D;
+import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 import java.util.Optional;
 

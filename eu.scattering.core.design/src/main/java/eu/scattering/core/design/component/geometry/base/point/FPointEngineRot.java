@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
-import eu.scattering.core.transfer.container.engine.FRotQt.FRotQt;
-import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FRotQt.FRotQt;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public interface FPointEngineRot {
 

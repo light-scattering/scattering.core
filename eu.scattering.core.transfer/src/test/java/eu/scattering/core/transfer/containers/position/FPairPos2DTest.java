@@ -1,7 +1,7 @@
 package eu.scattering.core.transfer.containers.position;
 
-import eu.scattering.core.transfer.container.position.PositionFactory;
-import eu.scattering.core.transfer.container.position.PositionFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.StorageFactory;
+import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @Timeout(1)
 @DisplayName("FPairPos2D")
 public class FPairPos2DTest {
-    private final PositionFactory factory = PositionFactoryConcrete.create();
+    private static final StorageFactory factory = StorageFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

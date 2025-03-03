@@ -3,8 +3,8 @@ package eu.scattering.core.design.component.geometry.base.vector;
 import eu.scattering.core.design.annotation.*;
 import eu.scattering.core.design.component.geometry.base.Base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

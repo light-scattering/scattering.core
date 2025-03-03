@@ -1,7 +1,7 @@
 package eu.scattering.core.test.component.number.engine;
 
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.transfer.container.position.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;

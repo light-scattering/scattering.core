@@ -3,7 +3,7 @@ package eu.scattering.core.impl.helper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public class FTrigHelperDef implements FTrigHelper {
     private static final TransferFactory factory = TransferFactoryConcrete.create();

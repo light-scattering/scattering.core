@@ -1,16 +1,16 @@
 package eu.scattering.core.transfer.helper.transfer;
 
-import eu.scattering.core.transfer.container.position.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.position.FPairPos4D.FPairPos4D;
-import eu.scattering.core.transfer.container.position.FPos2D.FPos2D;
-import eu.scattering.core.transfer.container.position.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.position.FPos4D.FPos4D;
-import eu.scattering.core.transfer.container.position.PositionFactory;
-import eu.scattering.core.transfer.container.position.PositionFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
+import eu.scattering.core.transfer.container.storage.StorageFactory;
+import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
 
 public class FPositionHelperConcrete implements FPositionHelper {
-    private final PositionFactory factory = PositionFactoryConcrete.create();
+    private static final StorageFactory factory = StorageFactoryConcrete.create();
 
     private FPositionHelperConcrete() {}
 

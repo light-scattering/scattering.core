@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 public interface FPointEngineRand {
 

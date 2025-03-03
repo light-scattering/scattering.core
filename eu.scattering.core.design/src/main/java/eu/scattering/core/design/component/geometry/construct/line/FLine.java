@@ -3,7 +3,7 @@ package eu.scattering.core.design.component.geometry.construct.line;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.transfer.container.position.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.List;
 import java.util.Optional;

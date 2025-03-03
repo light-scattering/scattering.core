@@ -4,7 +4,7 @@ import eu.scattering.core.design.annotation.Extension;
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Terminator;
 import eu.scattering.core.design.component.number.Number;
-import eu.scattering.core.transfer.container.position.FPos4D.FPos4D;
+import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
