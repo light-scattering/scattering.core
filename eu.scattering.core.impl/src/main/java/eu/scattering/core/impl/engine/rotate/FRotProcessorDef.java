@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.engine.rotate;
 
-import eu.scattering.core.design.engine.rotate.processor.FRotProcessor;
+import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FRotQt.FRotQt;
@@ -9,10 +9,10 @@ import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
-public class FRotProcessorDef implements FRotProcessor {
+public class FRotProcessorDef implements FRotGenerator {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
 
-    public static FRotProcessor create() {
+    public static FRotGenerator create() {
 
         return new FRotProcessorDef();
     }

@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.engine.randomize;
 
-import eu.scattering.core.design.engine.randomize.processor.core.FRandProcessorCore;
+import eu.scattering.core.design.engine.randomize.generator.core.FRandProcessorCore;
 
 import java.util.Optional;
 import java.util.Random;

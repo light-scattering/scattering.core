@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.design.engine.randomize.processor.FRandProcessor;
+import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
@@ -16,14 +16,14 @@ import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import java.util.Arrays;
 
 public class FRandEngineDef implements FRandEngine {
-    private final FRandProcessor core;
+    private final FRandGenerator core;
 
-    private FRandEngineDef(FRandProcessor core) {
+    private FRandEngineDef(FRandGenerator core) {
 
         this.core = core;
     }
 
-    public static FRandEngine create(FRandProcessor core) {
+    public static FRandEngine create(FRandGenerator core) {
 
         return new FRandEngineDef(core);
     }

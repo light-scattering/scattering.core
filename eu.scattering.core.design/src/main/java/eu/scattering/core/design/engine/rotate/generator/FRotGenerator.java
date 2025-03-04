@@ -1,10 +1,10 @@
-package eu.scattering.core.design.engine.rotate.processor;
+package eu.scattering.core.design.engine.rotate.generator;
 
 import eu.scattering.core.transfer.container.storage.FRotQt.FRotQt;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
-public interface FRotProcessor {
+public interface FRotGenerator {
 
     FRotQt getRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
     FRotQt getRotQt(FPairPos3D axis, double angle);

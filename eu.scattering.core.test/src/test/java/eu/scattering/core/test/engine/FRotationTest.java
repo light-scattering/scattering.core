@@ -2,7 +2,7 @@ package eu.scattering.core.test.engine;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.engine.rotate.processor.FRotProcessor;
+import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.storage.FRotQt.FRotQt;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Timeout(5)
 @DisplayName("FRotation")
 public class FRotationTest {
-    private final FRotProcessor fRot = factory.getFRotProcessor();
+    private final FRotGenerator fRot = factory.getFRotGenerator();
     private final FRotEngine fRotHelper = factory.getFRotEngine();
 
     @Test

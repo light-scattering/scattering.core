@@ -12,8 +12,8 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.design.engine.randomize.processor.FRandProcessor;
-import eu.scattering.core.design.engine.rotate.processor.FRotProcessor;
+import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
@@ -43,26 +43,26 @@ public final class FactoryDef extends FactoryDesignConcrete {
     private final FStatHelper fStatHelper;
 
     private FactoryDef() {
-        FRandProcessor fRandInternal = FRandProcessorDef.create();
+        FRandGenerator fRandInternal = FRandProcessorDef.create();
 
         fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
         this.fRandEngine = FRandEngineDef.create(fRandInternal);
         this.fProtEngine = FProtoEngineDef.create();
-        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
+        this.fRotEngine = FRotEngineDef.create(getFRotGenerator());
 
         this.fAngleHelper = FTrigHelperDef.create();
         this.fStatHelper = FStatHelperDef.create();
     }
 
     private FactoryDef(long seed) {
-        FRandProcessor fRandInternal = FRandProcessorDef.create(seed);
+        FRandGenerator fRandInternal = FRandProcessorDef.create(seed);
 
         fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
         this.fRandEngine = FRandEngineDef.create(fRandInternal);
         this.fProtEngine = FProtoEngineDef.create();
-        this.fRotEngine = FRotEngineDef.create(getFRotProcessor());
+        this.fRotEngine = FRotEngineDef.create(getFRotGenerator());
 
         this.fAngleHelper = FTrigHelperDef.create();
         this.fStatHelper = FStatHelperDef.create();
@@ -249,19 +249,19 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
-    public FRandProcessor getFRandProcessor() {
+    public FRandGenerator getFRandGenerator() {
 
         return FRandProcessorDef.create();
     }
 
     @Override
-    public FRandProcessor getFRandProcessor(long seed) {
+    public FRandGenerator getFRandGenerator(long seed) {
 
         return FRandProcessorDef.create(seed);
     }
 
     @Override
-    public FRotProcessor getFRotProcessor() {
+    public FRotGenerator getFRotGenerator() {
 
         return FRotProcessorDef.create();
     }

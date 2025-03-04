@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.engine.rotate;
 
 import eu.scattering.core.design.engine.rotate.FRotEngine;
-import eu.scattering.core.design.engine.rotate.processor.FRotProcessor;
+import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
@@ -18,14 +18,14 @@ import java.util.Collection;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FRotEngineDef implements FRotEngine {
-    private final FRotProcessor core;
+    private final FRotGenerator core;
 
-    private FRotEngineDef(FRotProcessor core) {
+    private FRotEngineDef(FRotGenerator core) {
 
         this.core = core;
     }
 
-    public static FRotEngine create(FRotProcessor core) {
+    public static FRotEngine create(FRotGenerator core) {
 
         return new FRotEngineDef(core);
     }

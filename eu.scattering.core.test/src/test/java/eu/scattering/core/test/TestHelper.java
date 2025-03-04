@@ -55,6 +55,6 @@ public class TestHelper {
 
         FPoint center = getRandFPoint(parsedCenterList.toArray(FPoint[]::new));
 
-        return factory.getRefFSphere(center, factory.getFRandProcessor().nextDouble(0, range, 0));
+        return factory.getRefFSphere(center, factory.getFRandGenerator().nextDouble(0, range, 0));
     }
 }

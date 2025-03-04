@@ -2,11 +2,11 @@ package eu.scattering.core.design.engine;
 
 import eu.scattering.core.design.engine.prototype.FProtoEngineFactory;
 import eu.scattering.core.design.engine.randomize.FRandEngineFactory;
-import eu.scattering.core.design.engine.randomize.processor.FRandProcessorFactory;
+import eu.scattering.core.design.engine.randomize.generator.FRandGeneratorFactory;
 import eu.scattering.core.design.engine.rotate.FRotEngineFactory;
-import eu.scattering.core.design.engine.rotate.processor.FRotProcessorFactory;
+import eu.scattering.core.design.engine.rotate.generator.FRotGeneratorFactory;
 
-public interface EngineFactory extends FRandProcessorFactory, FRandEngineFactory,
-        FRotProcessorFactory, FRotEngineFactory,
+public interface EngineFactory extends FRandGeneratorFactory, FRandEngineFactory,
+        FRotGeneratorFactory, FRotEngineFactory,
         FProtoEngineFactory {
 }

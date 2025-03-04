@@ -1,7 +1,7 @@
-package eu.scattering.core.design.engine.randomize.processor;
+package eu.scattering.core.design.engine.randomize.generator;
 
 import eu.scattering.core.design.annotation.Fragment;
-import eu.scattering.core.design.engine.randomize.processor.core.FRandProcessorCore;
+import eu.scattering.core.design.engine.randomize.generator.core.FRandProcessorCore;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
@@ -11,7 +11,7 @@ import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 import java.util.Optional;
 
-public interface FRandProcessor extends FRandProcessorCore {
+public interface FRandGenerator extends FRandProcessorCore {
 
     Optional<Long> getSeed();
 

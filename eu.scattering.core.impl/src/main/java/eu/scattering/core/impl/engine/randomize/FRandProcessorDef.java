@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.engine.randomize;
 
-import eu.scattering.core.design.engine.randomize.processor.FRandProcessor;
-import eu.scattering.core.design.engine.randomize.processor.core.FRandProcessorCore;
+import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.engine.randomize.generator.core.FRandProcessorCore;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
@@ -13,7 +13,7 @@ import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 import java.util.Optional;
 
-public class FRandProcessorDef implements FRandProcessor {
+public class FRandProcessorDef implements FRandGenerator {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     private static final FPos2D posZero2D = factory.getFPos2D(0, 0);
@@ -38,12 +38,12 @@ public class FRandProcessorDef implements FRandProcessor {
         this.core = FRandCoreSimpleDef.create(seed);
     }
 
-    public static FRandProcessor create() {
+    public static FRandGenerator create() {
 
         return new FRandProcessorDef();
     }
 
-    public static FRandProcessor create(long seed) {
+    public static FRandGenerator create(long seed) {
 
         return new FRandProcessorDef(seed);
     }

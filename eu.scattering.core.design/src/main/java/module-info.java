@@ -16,9 +16,9 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.geometry.shape;
     exports eu.scattering.core.design.helper.trigonometry;
     exports eu.scattering.core.design.engine.randomize;
-    exports eu.scattering.core.design.engine.randomize.processor;
-    exports eu.scattering.core.design.engine.rotate.processor;
-    exports eu.scattering.core.design.engine.randomize.processor.core;
+    exports eu.scattering.core.design.engine.randomize.generator;
+    exports eu.scattering.core.design.engine.rotate.generator;
+    exports eu.scattering.core.design.engine.randomize.generator.core;
     exports eu.scattering.core.design.component.geometry.construct.ray;
     exports eu.scattering.core.design.component.geometry.construct.segment;
     exports eu.scattering.core.design.component;
