@@ -1,12 +1,18 @@
 package eu.scattering.core.transfer.container.buffer.FCache;
 
+import eu.scattering.core.transfer.container.buffer.Buffer;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class FCache {
+import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
+
+public class FCache implements Buffer<FCache> {
     private static final String JSON_MAIN = "cache";
+    private static final String JSON_SIZE = "size";
 
     private final Map<Long, Map<String, Object>> cacheString;
     private final Map<Long, Map<Class<?>, Object>> cacheClass;
@@ -17,7 +23,16 @@ public class FCache {
         this.cacheClass = new HashMap<>();
     }
 
-    public static FCache create() {
+    protected static FCache create() {
+
+        return new FCache();
+    }
+
+    protected static FCache create(JSONObject json) {
+
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
 
         return new FCache();
     }
@@ -166,7 +181,42 @@ public class FCache {
         return Math.max(cacheString.size(), cacheClass.size());
     }
 
-    // -------------------------------------------------------------------------------------------------
+    //--------------------------------------------------
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_SIZE, getSize());
+
+        return json;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public int hashCode() {
+        int hashCode = cacheString.hashCode();
+
+        hashCode = 31 * hashCode + cacheClass.hashCode();
+
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        return this == object;
+    }
+
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
+    }
+
+    //--------------------------------------------------
 
     private Map<String, Object> getMapString(long id) {
 

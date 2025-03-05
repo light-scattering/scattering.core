@@ -620,9 +620,8 @@ public class FSphereTest {
 
             int elements = fStream.getNumberOfElements();
 
-            fStream.iterate((index, d0, d1, d2, value) -> {
-                assertTrue(fSphere.contains(d0, d1, d2));
-            });
+            fStream.iterate((index, d0, d1, d2, value) ->
+                    assertTrue(fSphere.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
             double volStream = elements * volUnit;
@@ -649,9 +648,8 @@ public class FSphereTest {
 
             int elements = fStream.getNumberOfElements();
 
-            fStream.iterate((index, d0, d1, d2, value) -> {
-                assertTrue(fSphere.contains(d0 * delta, d1 * delta, d2 * delta));
-            });
+            fStream.iterate((index, d0, d1, d2, value) ->
+                    assertTrue(fSphere.contains(d0 * delta, d1 * delta, d2 * delta)));
 
             double volUnit = delta * delta * delta;
             double volStream = elements * volUnit;
@@ -663,7 +661,6 @@ public class FSphereTest {
                     () -> assertTrue(factory.getFStatHelper().valRelErr(volCalc, volStream, 0.01),
                             "The volume relative error is erroneous")
             );
-
         }
     }
 

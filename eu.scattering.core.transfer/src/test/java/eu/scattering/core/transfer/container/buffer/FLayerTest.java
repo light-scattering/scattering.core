@@ -287,7 +287,8 @@ public class FLayerTest {
 
             FLayer dtoCopy = factory.getFLayer(jsonOrigin);
 
-            assertEquals(dtoOrigin, dtoCopy, "The parsed JSON object is erroneous");
+            assertEquals(dtoOrigin, dtoCopy,
+                    "The parsed JSON object is erroneous");
         }
 
         @Test
@@ -304,9 +305,7 @@ public class FLayerTest {
 
             double[] values = new double[fLayer.getNumberOfLayers() + 1];
 
-            fLayer.iterate((index, value) -> {
-                values[index] = fLayer.get(index);
-            });
+            fLayer.iterate((index, value) -> values[index] = fLayer.get(index));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, values[0],

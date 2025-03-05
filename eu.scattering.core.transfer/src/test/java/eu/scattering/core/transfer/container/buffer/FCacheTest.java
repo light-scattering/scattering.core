@@ -6,6 +6,7 @@ import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import eu.scattering.core.transfer.container.storage.Storage;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,8 +26,12 @@ public class FCacheTest {
         void creationTest() {
             FCache fCache = factory.getFCache();
 
-            assertEquals(0, fCache.getNumberOfThreads(),
-                    "The initial number of pages is incorrect");
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, fCache.getNumberOfThreads(),
+                            "The number of threads is incorrect"),
+                    () -> assertEquals(0, fCache.getSize(),
+                            "The number of elements is incorrect")
+            );
         }
 
         @Test
@@ -44,6 +49,8 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
                             "The number of threads is incorrect"),
+                    () -> assertEquals(1, fCache.getSize(),
+                            "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
                     () -> assertSame(fPos3D, resultSuper,
@@ -69,6 +76,8 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
                             "The number of threads is incorrect"),
+                    () -> assertEquals(1, fCache.getSize(),
+                            "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
                     () -> assertSame(fPos3D, resultSuper,
@@ -92,6 +101,8 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
                             "The number of threads is incorrect"),
+                    () -> assertEquals(1, fCache.getSize(),
+                            "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
                     () -> assertFalse(isReplaced,
@@ -114,6 +125,8 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
                             "The number of threads is incorrect"),
+                    () -> assertEquals(1, fCache.getSize(),
+                            "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
                     () -> assertTrue(isReplaced,
@@ -166,6 +179,8 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
                             "The number of threads is incorrect"),
+                    () -> assertEquals(2, fCache.getSize(),
+                            "The number of elements is incorrect"),
                     () -> assertEquals(factory.getFPos3D(1, 2, 3), resultA,
                             "The object should be equal"),
                     () -> assertSame(resultA, resultB,
@@ -186,6 +201,8 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
                             "The number of threads is incorrect"),
+                    () -> assertEquals(2, fCache.getSize(),
+                            "The number of elements is incorrect"),
                     () -> assertEquals(factory.getFPos3D(1, 2, 3), resultA,
                             "The object should be equal"),
                     () -> assertSame(resultA, resultB,
@@ -264,6 +281,29 @@ public class FCacheTest {
                     () -> assertEquals(3, size,
                             "The number of deleted elements is incorrect")
             );
+        }
+    }
+
+    @Nested
+    @Tag("Advanced")
+    @DisplayName("Advanced")
+    class FCacheAdvancedTest {
+
+        @Test
+        @DisplayName("JSON")
+        void parseJSONTest() {
+            FCache dtoOrigin = factory.getFCache();
+
+            dtoOrigin.put("val1", factory.getFPos3D(1, 2, 3));
+            dtoOrigin.put("val2", factory.getFPos3D(4, 5, 6));
+            dtoOrigin.put(FPos4D.class, factory.getFPos4D(7, 8, 9, 0));
+
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
+
+            FCache dtoCopy = factory.getFCache(jsonOrigin);
+
+            assertEquals(0, dtoCopy.getSize(),
+                    "The parsed JSON object should be empty");
         }
     }
 }
