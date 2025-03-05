@@ -1,29 +1,27 @@
-package eu.scattering.core.transfer.containers.position;
+package eu.scattering.core.transfer.container.storage;
 
-import eu.scattering.core.transfer.container.storage.StorageFactory;
-import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(1)
-@DisplayName("FPairPos4D")
-public class FPairPos4DTest {
+@DisplayName("FPairPos2DI")
+public class FPairPos2DITest {
     private static final StorageFactory factory = StorageFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")
     @DisplayName("Basic")
-    class FPairPos4DBasicTest {
+    class FPairPos2DIBasicTest {
 
         @Test
         @DisplayName("Values")
         void getValuesTest() {
-            var dtoPosA = factory.getFPos4D(1, 2, 3, 4);
-            var dtoPosB = factory.getFPos4D(5, 6, 7, 8);
-            var dto = factory.getFPairPos4D(dtoPosA, dtoPosB);
+            var dtoPosA = factory.getFPos2DI(1, 2);
+            var dtoPosB = factory.getFPos2DI(3, 4);
+            var dto = factory.getFPairPos2DI(dtoPosA, dtoPosB);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(dto.getPosA(), dtoPosA,
@@ -37,33 +35,49 @@ public class FPairPos4DTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Advanced")
-    class FPairPos4DAdvancedTest {
+    class FPairPos2DIAdvancedTest {
 
         @Test
         @DisplayName("JSON")
         void parseJSONTest() {
-            var dtoOrigin = factory.getFPairPos4D(factory.getFPos4D(1, 2, 3, 4), factory.getFPos4D(5, 6, 7, 8));
+            var dtoOrigin = factory.getFPairPos2DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
-            var dtoCopy = factory.getFPairPos4D(jsonOrigin);
+            var dtoCopy = factory.getFPairPos2DI(jsonOrigin);
 
             assertEquals(dtoOrigin, dtoCopy,
                     "The parsed JSON object is erroneous");
+        }
+
+        @Test
+        @DisplayName("To double")
+        void parseToDouble() {
+            var dtoOrigin = factory.getFPairPos2DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
+            var dtoTarget = dtoOrigin.toDouble();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(dtoOrigin.getPosA().toDouble(), dtoTarget.getPosA(),
+                            "Position A is incorrect"),
+                    () -> assertEquals(dtoOrigin.getPosB().toDouble(), dtoTarget.getPosB(),
+                            "Position B is incorrect"),
+                    () -> assertTrue(dtoTarget instanceof FPairPos2D,
+                            "The type of the target object is erroneous")
+            );
         }
     }
 
     @Nested
     @Tag("Java")
     @DisplayName("Java")
-    class FPairPos3DJavaTest {
+    class FPairPos2DIJavaTest {
 
         @Test
         @DisplayName("Hash codes")
         void validateHashCodeTest() {
-            var dto1 = factory.getFPairPos4D(factory.getFPos4D(1, 2, 3, 4), factory.getFPos4D(5, 6, 7, 8));
-            var dto2a = factory.getFPairPos4D(factory.getFPos4D(1, 2, 3, 4), factory.getFPos4D(5, 6, 7, 8));
-            var dto2b = factory.getFPairPos4D(factory.getFPos4D(8, 7, 6, 5), factory.getFPos4D(4, 3, 2, 1));
+            var dto1 = factory.getFPairPos2DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
+            var dto2a = factory.getFPairPos2DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
+            var dto2b = factory.getFPairPos2DI(factory.getFPos2DI(4, 3), factory.getFPos2DI(2, 1));
 
             Assertions.assertAll("Check hash codes",
                     () -> assertEquals(dto1.hashCode(), dto2a.hashCode(),
@@ -76,9 +90,9 @@ public class FPairPos4DTest {
         @Test
         @DisplayName("Equality A")
         void validateEqualityTestA() {
-            var dto1 = factory.getFPairPos4D(factory.getFPos4D(1, 2, 3, 4), factory.getFPos4D(5, 6, 7, 8));
-            var dto2a = factory.getFPairPos4D(factory.getFPos4D(1, 2, 3, 4), factory.getFPos4D(5, 6, 7, 8));
-            var dto2b = factory.getFPairPos4D(factory.getFPos4D(8, 7, 6, 5), factory.getFPos4D(4, 3, 2, 1));
+            var dto1 = factory.getFPairPos2DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
+            var dto2a = factory.getFPairPos2DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
+            var dto2b = factory.getFPairPos2DI(factory.getFPos2DI(4, 3), factory.getFPos2DI(2, 1));
 
             Assertions.assertAll("Check hash codes",
                     () -> assertEquals(dto1, dto2a,
@@ -91,9 +105,9 @@ public class FPairPos4DTest {
         @Test
         @DisplayName("Equality B")
         void validateEqualityTestB() {
-            var dto1 = factory.getFPairPos4D(factory.getFPos4D(1, 2, 3, 4), factory.getFPos4D(5, 6, 7, 8));
-            var dto2a = factory.getFPairPos4D(1, 2, 3, 4, 5, 6, 7, 8);
-            var dto2b = factory.getFPairPos4D(8, 7, 6, 5, 4, 3, 2, 1);
+            var dto1 = factory.getFPairPos2DI(factory.getFPos2DI(1, 2), factory.getFPos2DI(3, 4));
+            var dto2a = factory.getFPairPos2DI(1, 2, 3, 4);
+            var dto2b = factory.getFPairPos2DI(4, 3, 2, 1);
 
             Assertions.assertAll("Check hash codes",
                     () -> assertEquals(dto1, dto2a,

@@ -1,9 +1,8 @@
-package eu.scattering.core.transfer.containers.buffer;
+package eu.scattering.core.transfer.container.buffer;
 
 import eu.scattering.core.transfer.container.ContainerFactory;
 import eu.scattering.core.transfer.container.ContainerFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.FLayer.FLayer;
-import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
