@@ -22,8 +22,11 @@ public interface Shape<T> extends Geometry {
     boolean contains(FPoint fPoint);
     boolean contains(FPos3D fPos3D);
 
-    // boolean cuts(T shape);
-    boolean intersects(T shape);
+    boolean encloses(T shape, double epsilon);
+
+    boolean touches(T shape, double epsilon);
+    boolean overlaps(T shape, double epsilon);
+    boolean intersects(T shape, double epsilon);
 
     double getVolume();
     T setVolume(double volume);

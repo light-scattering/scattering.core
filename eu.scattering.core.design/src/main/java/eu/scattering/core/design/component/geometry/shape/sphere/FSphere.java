@@ -11,6 +11,7 @@ public interface FSphere extends Shape<FSphere> {
     double getRadius();
     FSphere setRadius(double radius);
 
+    // boolean setMinRadius(List<FSphere> field, double limit);
 //    boolean setMaxRadius(List<FSphere> field, double limit);
 
     boolean push(FSphere arg);

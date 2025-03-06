@@ -215,11 +215,60 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
-    public boolean intersects(FSphere shape) {
-        double distP2 = center.getDistanceP2(shape.getRefCenter());
-        double minDistP2 = (radius + shape.getRadius()) * (radius + shape.getRadius());
+    public boolean encloses(FSphere shape, double epsilon) {
 
-        return distP2 < minDistP2 - EPSILON;
+        if (radius < shape.getRadius()) {
+            return false;
+        }
+
+        double distP2 = center.getDistanceP2(shape.getRefCenter());
+        double reqDist = radius - shape.getRadius() - epsilon;
+        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        return distP2 < reqDistP2;
+    }
+
+    @Override
+    public boolean touches(FSphere shape, double epsilon) {
+        double distP2 = center.getDistanceP2(shape.getRefCenter());
+
+        double reqDist = radius + shape.getRadius() + epsilon;
+        double reqDistP2 = reqDist * reqDist;
+
+        if (distP2 > reqDistP2) {
+            return false;
+        }
+
+        reqDist = radius + shape.getRadius() - epsilon;
+        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        return distP2 >= reqDistP2;
+    }
+
+    @Override
+    public boolean overlaps(FSphere shape, double epsilon) {
+        double distP2 = center.getDistanceP2(shape.getRefCenter());
+        double reqDist = radius + shape.getRadius() - epsilon;
+        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        return distP2 < reqDistP2;
+    }
+
+    @Override
+    public boolean intersects(FSphere shape, double epsilon) {
+        double distP2 = center.getDistanceP2(shape.getRefCenter());
+
+        double reqDist = radius + shape.getRadius() - epsilon;
+        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 > reqDistP2) {
+            return false;
+        }
+
+        reqDist = Math.abs(radius - shape.getRadius()) - epsilon;
+        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        return distP2 > reqDistP2;
     }
 
     @Override
@@ -308,7 +357,21 @@ public class FSphereDef implements FSphere {
         }
     }
 
+    @Override
+    public boolean push(FSphere arg) {
+        double distance = getRadius() + arg.getRadius() + EPSILON;
 
+        if (getRefCenter().isSimilar(arg.getRefCenter())) {
+
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean push(FSphere arg, List<FSphere> field, int bounce) {
+        return false;
+    }
 
 
 
@@ -336,15 +399,7 @@ public class FSphereDef implements FSphere {
 
     }
 
-    @Override
-    public boolean push(FSphere arg) {
-        return false;
-    }
 
-    @Override
-    public boolean push(FSphere arg, List<FSphere> field, int bounce) {
-        return false;
-    }
 
     @Override
     public boolean project(FPoint aim, List<FSphere> field) {
