@@ -1,36 +1,60 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
+import eu.scattering.core.design.FactoryDesign;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.shape.ShapeFactory;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.engine.rotate.FRotEngine;
+import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import org.json.JSONObject;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FSphereDef implements FSphere {
-    private static final String JSON_MAIN = "center";
+    private static final String JSON_MAIN = "sphere";
     private static final String JSON_RADIUS = "radius";
+    private static final String JSON_CENTER = "center";
+
+    private static final double DEF_RADIUS = 1;
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final ShapeFactory factory;
+    private final FactoryDesign factory;
+    private final FCache cache;
 
     private FPoint center;
-
     private double radius;
 
-    private FSphereDef(ShapeFactory factory) {
+    private FSphereDef(FactoryDesign factory) {
 
         this.factory = factory;
+        this.cache = factory.getFCache();
+
+        this.cache.put(FactoryDesign.class, this.factory);
     }
 
-    public static FSphere create(ShapeFactory factory, FPoint refCenter, double radius) {
+    public static FSphere create(FactoryDesign factory, FPoint refCenter) {
+
+        var fSphere = new FSphereDef(factory);
+
+        fSphere.setRefCenter(refCenter);
+        fSphere.setRadius(DEF_RADIUS);
+
+        return fSphere;
+    }
+
+    public static FSphere create(FactoryDesign factory, FPoint refCenter, double radius) {
 
         var fSphere = new FSphereDef(factory);
 
@@ -79,6 +103,115 @@ public class FSphereDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
     // The following fields do not have to modified while extending the class.
     // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FSphere applyStateFrom(FSphere arg) {
+
+        getRefCenter().applyStateFrom(arg.getRefCenter());
+        setRadius(arg.getRadius());
+
+        return this;
+    }
+
+    @Override
+    public FSphere applyStateFrom(JSONObject json) {
+
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        FPoint center = factory.getFPoint().applyStateFrom(json.getJSONObject(JSON_CENTER));
+        double radius = json.getDouble(JSON_RADIUS);
+
+       setRefCenter(center);
+       setRadius(radius);
+
+        return this;
+    }
+
+    @Override
+    public FSphere applyStateTo(FSphere arg) {
+
+        arg.getRefCenter().applyStateFrom(this.getRefCenter());
+        arg.setRadius(getRadius());
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isExact(FSphere arg) {
+
+        return getRefCenter().isExact(arg.getRefCenter()) && getRadius() == arg.getRadius();
+    }
+
+    @Override
+    public boolean isSimilar(FSphere arg) {
+
+        if (Math.abs(getRadius() - arg.getRadius()) > EPSILON) {
+            return false;
+        }
+
+        return getRefCenter().isSimilar(arg.getRefCenter());
+    }
+
+    @Override
+    public FSphere self() {
+
+        return this;
+    }
+
+    @Override
+    public FSphere copy() {
+
+        return copyZero().applyStateFrom(this);
+    }
+
+    @Override
+    public FSphere copyZero() {
+
+        return FSphereDef.create(factory, factory.getFPoint());
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_CENTER, getRefCenter().toJSON());
+        json.put(JSON_RADIUS, radius);
+
+        return json;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getRefCenter(), radius);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FSphere) {
+            FSphere ref = (FSphere) object;
+
+            return isExact(ref);
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -358,22 +491,90 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
-    public boolean push(FSphere arg) {
-        double distance = getRadius() + arg.getRadius() + EPSILON;
+    public boolean push(FSphere arg, double epsilon) {
+        boolean isOverlapping = overlaps(arg, epsilon);
 
-        if (getRefCenter().isSimilar(arg.getRefCenter())) {
-
+        if (!isOverlapping) {
+            return false;
         }
 
-        return false;
+        // Such a situation should be extremely rare, but cannot be discarded.
+        if (getRefCenter().isSimilar(arg.getRefCenter())) {
+            getRefCenter().mulFactor(2);
+        }
+
+        getRefCenter().setDistance(arg.getRefCenter(), radius + arg.getRadius());
+
+        return true;
     }
 
     @Override
-    public boolean push(FSphere arg, List<FSphere> field, int bounce) {
-        return false;
+    public int push(FSphere arg, double epsilon, Collection<FSphere> field, int maxBounce) {
+        int repositions = 1;
+
+        push(arg, epsilon);
+
+        FSphere neighbour = getNeighbour(arg, epsilon, field);
+
+        if (neighbour == null) {
+            return repositions;
+        }
+
+        while (neighbour != null && repositions++ < maxBounce + 1) {
+            bounce(arg, neighbour);
+
+            neighbour = getNeighbour(arg, epsilon, field);
+        }
+
+       return neighbour != null ? -1 : repositions;
     }
 
+    private FSphere getNeighbour(FSphere arg, double epsilon, Collection<FSphere> field) {
+        double minDist = Double.MAX_VALUE;
+        FSphere neighbour = null;
 
+        for (FSphere fSphere : field) {
+
+            if (fSphere == this || fSphere == arg) {
+                continue;
+            }
+
+            if (overlaps(fSphere, epsilon)) {
+                double dist = getRefCenter().getDistanceP2(fSphere.getRefCenter());
+
+                if (dist < minDist) {
+                    neighbour = fSphere;
+                    minDist = dist;
+                }
+            }
+        }
+
+        return neighbour;
+    }
+
+    private void bounce(FSphere arg, FSphere neighbour) {
+        FTrigHelper trigHelper = factory.getFTrigHelper();
+        FRotEngine rotEngine = factory.getFRotEngine();
+
+        FVector vecRef = cache.get("bVec1", FVector.class,
+                (core) -> core.get(FactoryDesign.class).getFVector());
+
+        FVector vecArg = cache.get("bVec2", FVector.class,
+                (core) -> core.get(FactoryDesign.class).getFVector());
+
+        vecRef.set(arg.getRefCenter(), this.getRefCenter());
+        vecArg.set(arg.getRefCenter(), neighbour.getRefCenter());
+
+        double sideRef = vecRef.getMagnitude();
+        double sideArg = vecArg.getMagnitude();
+
+        double dist = getRadius() + neighbour.getRadius();
+        double ang = trigHelper.getAngle(sideRef, sideArg, dist);
+
+        rotEngine.setRgAngle(vecArg, vecRef, ang);
+
+        getRefCenter().applyStateFrom(vecRef.getRefHead());
+    }
 
 
 
@@ -401,10 +602,14 @@ public class FSphereDef implements FSphere {
 
 
 
+
     @Override
     public boolean project(FPoint aim, List<FSphere> field) {
         return false;
     }
+
+
+
 
 
 }

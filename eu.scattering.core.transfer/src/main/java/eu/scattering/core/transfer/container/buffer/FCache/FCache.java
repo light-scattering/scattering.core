@@ -59,33 +59,33 @@ public class FCache implements Buffer<FCache> {
         return result != null;
     }
 
-    public <T> Optional<T> get(String key, Class<T> type) {
+    public <T> T get(String key, Class<T> type) {
         long id = Thread.currentThread().getId();
 
         Map<String, Object> mapString = getMapString(id);
 
         if (!mapString.containsKey(key)) {
-            return Optional.empty();
+            throw new IllegalArgumentException("The object does not exist");
         }
 
         try {
-            return Optional.of(type.cast(mapString.get(key)));
+            return type.cast(mapString.get(key));
         } catch (ClassCastException e) {
             throw new IllegalArgumentException("The object type is erroneous");
         }
     }
 
-    public <T> Optional<T> get(Class<T> type) {
+    public <T> T get(Class<T> type) {
         long id = Thread.currentThread().getId();
 
         Map<Class<?>, Object> mapClass = getMapClass(id);
 
         if (!mapClass.containsKey(type)) {
-            return Optional.empty();
+            throw new IllegalArgumentException("The object does not exist");
         }
 
         try {
-            return Optional.of(type.cast(mapClass.get(type)));
+            return type.cast(mapClass.get(type));
         } catch (ClassCastException e) {
             throw new IllegalArgumentException("The object type is erroneous");
         }
@@ -118,6 +118,38 @@ public class FCache implements Buffer<FCache> {
 
         try {
             return type.cast(mapClass.get(type));
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException("The object type is erroneous");
+        }
+    }
+
+    public <T> Optional<T> getOptional(String key, Class<T> type) {
+        long id = Thread.currentThread().getId();
+
+        Map<String, Object> mapString = getMapString(id);
+
+        if (!mapString.containsKey(key)) {
+            return Optional.empty();
+        }
+
+        try {
+            return Optional.of(type.cast(mapString.get(key)));
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException("The object type is erroneous");
+        }
+    }
+
+    public <T> Optional<T> getOptional(Class<T> type) {
+        long id = Thread.currentThread().getId();
+
+        Map<Class<?>, Object> mapClass = getMapClass(id);
+
+        if (!mapClass.containsKey(type)) {
+            return Optional.empty();
+        }
+
+        try {
+            return Optional.of(type.cast(mapClass.get(type)));
         } catch (ClassCastException e) {
             throw new IllegalArgumentException("The object type is erroneous");
         }

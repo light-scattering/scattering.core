@@ -4274,7 +4274,7 @@ public class FVectorTest {
                     () -> assertNotSame(fVectorA, fVectorB,
                             "FVectors represent different objects"),
                     () -> assertFalse(fVectorA.isExact(fVectorB),
-                            "FVectors should have the same values"),
+                            "FVectors should not have the same values"),
                     () -> assertNotSame(fVectorA.getRefBase(), fVectorB.getRefBase(),
                             "The base FPoints should be different"),
                     () -> assertNotSame(fVectorA.getRefHead(), fVectorB.getRefHead(),

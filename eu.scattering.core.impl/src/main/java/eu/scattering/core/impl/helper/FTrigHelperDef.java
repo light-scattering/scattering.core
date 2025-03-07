@@ -38,6 +38,12 @@ public class FTrigHelperDef implements FTrigHelper {
         return Math.acos(dotProduct / magAB);
     }
 
+    @Override
+    public double getAngle(double adjA, double adjB, double oppC) {
+
+        return Math.acos(((adjA * adjA) + (adjB * adjB) - (oppC * oppC)) / (2 * adjA * adjB));
+    }
+
     //--------------------------------------------------
 
     private FPos3D sub(FPos3D origin, FPos3D ref) {

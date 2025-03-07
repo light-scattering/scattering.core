@@ -1,12 +1,13 @@
 package eu.scattering.core.design.component.geometry.shape;
 
+import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
-public interface Shape<T> extends Geometry {
+public interface Shape<T> extends Geometry, Component<T> {
 
     T setPosCenter(double x, double y, double z);
     T setPosCenter(FPoint fPoint);
@@ -45,4 +46,7 @@ public interface Shape<T> extends Geometry {
 
     void getSurfaceStream(FStream3DI stream, double delta);
     void getSurfaceStream(FStream3D stream, double delta);
+
+    T applyStateTo(T arg);
+    T applyStateFrom(T arg);
 }

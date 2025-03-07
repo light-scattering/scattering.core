@@ -8,4 +8,6 @@ public interface FTrigHelper {
     double convertDegToRad(double degree);
 
     double getAngleBetweenVectors(FPos3D origin, FPos3D headA, FPos3D headB);
+
+    double getAngle(double adjA, double adjB, double oppC);
 }

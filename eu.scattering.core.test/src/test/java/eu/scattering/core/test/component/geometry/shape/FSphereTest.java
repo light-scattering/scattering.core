@@ -1,14 +1,18 @@
 package eu.scattering.core.test.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import static eu.scattering.core.test.Config.epsilon;
-import static eu.scattering.core.test.Config.factory;
+import java.util.Collection;
+import java.util.HashSet;
+
+import static eu.scattering.core.test.Config.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
@@ -23,7 +27,7 @@ public class FSphereTest {
         @Test
         @DisplayName("Construct")
         void construct() {
-            FSphere fSphere = factory.getFSphere(1);
+            FSphere fSphere = factory.getFSphere();
 
             FPoint refCenter = fSphere.getRefCenter();
 
@@ -40,16 +44,76 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Construct (fail)")
-        void constructFail() {
+        @DisplayName("Construct with position")
+        void constructWithPosition() {
+            FSphere fSphere = factory.getFSphere(1, 2, 3);
+
+            FPoint refCenter = fSphere.getRefCenter();
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, refCenter.getX(),
+                            "The X value is incorrect"),
+                    () -> assertEquals(2, refCenter.getY(),
+                            "The Y value is incorrect"),
+                    () -> assertEquals(3, refCenter.getZ(),
+                            "The Z value is incorrect"),
+                    () -> assertEquals(1, fSphere.getRadius(),
+                            "The radius is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with FPoint")
+        void constructWithFPoint() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+            FSphere fSphere = factory.getRefFSphere(fPoint);
+
+            FPoint refCenter = fSphere.getRefCenter();
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, refCenter.getX(),
+                            "The X value is incorrect"),
+                    () -> assertEquals(2, refCenter.getY(),
+                            "The Y value is incorrect"),
+                    () -> assertEquals(3, refCenter.getZ(),
+                            "The Z value is incorrect"),
+                    () -> assertEquals(1, fSphere.getRadius(),
+                            "The radius is incorrect"),
+                    () -> assertSame(fPoint, refCenter,
+                            "The core reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with radius")
+        void constructWithRadius() {
+            FSphere fSphere = factory.getFSphere(5);
+
+            FPoint refCenter = fSphere.getRefCenter();
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(0, refCenter.getX(),
+                            "The X value is incorrect"),
+                    () -> assertEquals(0, refCenter.getY(),
+                            "The Y value is incorrect"),
+                    () -> assertEquals(0, refCenter.getZ(),
+                            "The Z value is incorrect"),
+                    () -> assertEquals(5, fSphere.getRadius(),
+                            "The radius is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with radius (fail)")
+        void constructWithRadiusFail() {
 
             assertThrows(IllegalArgumentException.class, () -> factory.getFSphere(-1),
                     "The radius value is incorrect, an exception should be thrown");
         }
 
         @Test
-        @DisplayName("Construct with parameters")
-        void constructWithParameters() {
+        @DisplayName("Construct with position and radius")
+        void constructWithPositionAndRadius() {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 4);
 
             FPoint refCenter = fSphere.getRefCenter();
@@ -67,16 +131,16 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Constructor with parameters (fail)")
-        void constructWithParametersFail() {
+        @DisplayName("Constructor with position and radius (fail)")
+        void constructWithPositionAndRadiusFail() {
 
             assertThrows(IllegalArgumentException.class, () -> factory.getFSphere(1, 2, 3, -1),
                     "The radius value is incorrect, an exception should be thrown");
         }
 
         @Test
-        @DisplayName("Construct with FPoint")
-        void constructWithFPoint() {
+        @DisplayName("Construct with FPoint and radius")
+        void constructWithFPointAndRadius() {
             FPoint fPoint = factory.getFPoint(1, 2, 3);
             FSphere fSphere = factory.getRefFSphere(fPoint, 4);
 
@@ -97,8 +161,8 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Constructor with FPoint (fail)")
-        void constructWithFPointFail() {
+        @DisplayName("Constructor with FPoint  and radius (fail)")
+        void constructWithFPointAndRadiusFail() {
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
             assertThrows(IllegalArgumentException.class, () -> factory.getRefFSphere(fPoint, -1),
@@ -898,6 +962,300 @@ public class FSphereTest {
                             "The number of elements should be greater than zero"),
                     () -> assertTrue(factory.getFStatHelper().valRelErr(volCalc, volStream, 0.01),
                             "The volume relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Push")
+        void push() {
+            FSphere fSphereRef = factory.getFSphere(1);
+            FSphere fSphereArg = TestHelper.getRandFSphere();
+
+            factory.getFRandEngine().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
+
+            assertTrue(fSphereRef.overlaps(fSphereArg, 0), "Spheres should overlap");
+
+            boolean result = fSphereRef.push(fSphereArg, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(result,
+                            "The reference sphere should be repositioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should touch")
+            );
+        }
+
+        @Test
+        @DisplayName("Push - distant")
+        void pushDistant() {
+            FSphere fSphereRef = factory.getFSphere(1);
+            FSphere fSphereArg = TestHelper.getRandFSphere().setRadius(1);
+
+            factory.getFRandEngine().rndPosOnSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 3);
+
+            assertFalse(fSphereRef.overlaps(fSphereArg, 0), "Spheres should not overlap");
+
+            boolean result = fSphereRef.push(fSphereArg, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertFalse(result,
+                            "The reference sphere should not be repositioned"),
+                    () -> assertFalse(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should not touch")
+            );
+        }
+
+        @Test
+        @DisplayName("Push - same position")
+        void pushSamePosition() {
+            FSphere fSphereRef = TestHelper.getRandFSphere();
+            FSphere fSphereArg = fSphereRef.copy().setRadius(1);
+
+            assertTrue(fSphereRef.overlaps(fSphereArg, 0), "Spheres should overlap");
+
+            boolean result = fSphereRef.push(fSphereArg, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(result,
+                            "The reference sphere should be repositioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should touch")
+            );
+        }
+
+        @Test
+        @DisplayName("Push (field) - empty")
+        void pushFieldEmpty() {
+            FSphere fSphereRef = factory.getFSphere(1);
+            FSphere fSphereArg = TestHelper.getRandFSphere();
+
+            Collection<FSphere> fSphereField = new HashSet<>();
+
+            factory.getFRandEngine().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
+
+            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(1, repositions,
+                            "The number of repositions is incorrect"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should touch")
+            );
+        }
+
+        @Test
+        @DisplayName("Push (field) - self")
+        void pushFieldOrigin() {
+            FSphere fSphereRef = factory.getFSphere(1);
+            FSphere fSphereArg = TestHelper.getRandFSphere();
+
+            Collection<FSphere> fSphereField = new HashSet<>();
+            fSphereField.add(fSphereRef);
+            fSphereField.add(fSphereArg);
+
+            factory.getFRandEngine().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
+
+            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(1, repositions,
+                            "The number of repositions is incorrect"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should touch")
+            );
+        }
+
+        @Test
+        @DisplayName("Push (field) - bounce 1")
+        void pushFieldBounce1() {
+            FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
+            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
+            FSphere fSphereField1 = factory.getFSphere(-0.25, 3, 0, 1);
+
+            Collection<FSphere> fSphereField = new HashSet<>();
+            fSphereField.add(fSphereRef);
+            fSphereField.add(fSphereArg);
+            fSphereField.add(fSphereField1);
+
+            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 5);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(2, repositions,
+                            "The number of repositions is incorrect"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should touch (arg)"),
+                    () -> assertTrue(fSphereRef.touches(fSphereField1, epsilon),
+                            "The spheres should touch (neighbour)")
+            );
+        }
+
+        @Test
+        @DisplayName("Push (field) - bounce 1 - same position")
+        void pushFieldBounce1SamePosition() {
+            FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
+            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
+            FSphere fSphereField1 = factory.getFSphere(0, 3, 0, 1);
+
+            Collection<FSphere> fSphereField = new HashSet<>();
+            fSphereField.add(fSphereRef);
+            fSphereField.add(fSphereArg);
+            fSphereField.add(fSphereField1);
+
+            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 5);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(2, repositions,
+                            "The number of repositions is incorrect"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should touch (arg)"),
+                    () -> assertTrue(fSphereRef.touches(fSphereField1, epsilon),
+                            "The spheres should touch (neighbour)")
+            );
+        }
+
+        @Test
+        @DisplayName("Push (field, error) - incorrect bounce")
+        void pushFieldErrorBounce1() {
+            FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
+            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
+            FSphere fSphereField1 = factory.getFSphere(-0.25, 3, 0, 1);
+
+            Collection<FSphere> fSphereField = new HashSet<>();
+            fSphereField.add(fSphereRef);
+            fSphereField.add(fSphereArg);
+            fSphereField.add(fSphereField1);
+
+            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(-1, repositions,
+                            "The number of repositions is incorrect"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "The spheres should touch (arg)"),
+                    () -> assertFalse(fSphereRef.touches(fSphereField1, epsilon),
+                            "The spheres should not touch (neighbour)")
+            );
+        }
+    }
+
+    @Nested
+    @Tag("Core")
+    @DisplayName("Core features")
+    class FSphereCoreTest {
+
+        @Test
+        @DisplayName("JSON parser")
+        void parseJSON() {
+            FSphere fSphere = TestHelper.getRandFSphere();
+
+            JSONObject json = fSphere.toJSON();
+
+            FSphere fSphereRef = factory.getFSphere(1).applyStateFrom(json);
+
+            Assertions.assertAll("Validate JSON parser",
+                    () -> assertNotSame(fSphere, fSphereRef,
+                            "FSphere references should point at different objects"),
+                    () -> assertTrue(fSphere.isExact(fSphereRef),
+                            "FSpheres should be exact")
+            );
+        }
+
+        @Test
+        @DisplayName("Is exact")
+        void isExact() {
+            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            FSphere fSphereArg = factory.getFSphere(1, 2, 3, 4);
+
+            assertTrue((fSphereRef.isExact(fSphereArg)), "FSpheres should be exact");
+        }
+
+        @Test
+        @DisplayName("Is exact (fail)")
+        void isExactFail() {
+            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            FSphere fSphereArg = factory.getFSphere(5, 6, 7, 8);
+
+            assertFalse((fSphereRef.isExact(fSphereArg)), "FSpheres should not be exact");
+        }
+
+        @Test
+        @DisplayName("Is similar")
+        void isSimilar() {
+            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            FSphere fSphereArg = factory.getFSphere(1, 2, 3 + (epsilon * 0.5), 4 + (epsilon * 0.5));
+
+            assertTrue((fSphereRef.isSimilar(fSphereArg)), "FSpheres should be similar");
+        }
+
+        @Test
+        @DisplayName("Is exact (fail) A")
+        void isSimilarFailA() {
+            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            FSphere fSphereArg = factory.getFSphere(1, 2, 3, 4 + (epsilon * 1.5));
+
+            assertFalse((fSphereRef.isSimilar(fSphereArg)), "FSpheres should not be similar");
+        }
+
+        @Test
+        @DisplayName("Is exact (fail) B")
+        void isSimilarFailB() {
+            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            FSphere fSphereArg = factory.getFSphere(1, 2, 3 + (epsilon * 1.5), 4);
+
+            assertFalse((fSphereRef.isSimilar(fSphereArg)), "FSpheres should not be similar");
+        }
+
+        @Test
+        @DisplayName("Get hash code")
+        void getHashCode() {
+            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            FSphere fSphereArg = factory.getFSphere(1, 2, 3, 4);
+
+            assertEquals(fSphereRef.hashCode(), fSphereArg.hashCode(),
+                    "Two identical FSpheres should have the same hash code");
+        }
+
+        @Test
+        @DisplayName("Get hash code (fail)")
+        void getHashCodeFail() {
+            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            FSphere fSphereArg = factory.getFSphere(5, 6, 7, 8);
+
+            assertNotEquals(fSphereRef.hashCode(), fSphereArg.hashCode(),
+                    "Two different FSpheres should not have the same hash code");
+        }
+
+        @Test
+        @DisplayName("Copy")
+        void copy() {
+            FSphere fSphereA = TestHelper.getRandFSphere();
+            FSphere fSphereB = fSphereA.copy();
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertNotSame(fSphereA, fSphereB,
+                            "FSpheres represent different objects"),
+                    () -> assertTrue(fSphereA.isExact(fSphereB),
+                            "FSpheres should have the same values"),
+                    () -> assertNotSame(fSphereA.getRefCenter(), fSphereB.getRefCenter(),
+                            "The center FPoints should be different")
+            );
+        }
+
+        @Test
+        @DisplayName("Copy zero")
+        void copyZero() {
+            FSphere fSphereA = TestHelper.getRandFSphere();
+            FSphere fSphereB = fSphereA.copyZero();
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertNotSame(fSphereA, fSphereB,
+                            "FSpheres represent different objects"),
+                    () -> assertFalse(fSphereA.isExact(fSphereB),
+                            "FSpheres should not have the same values"),
+                    () -> assertNotSame(fSphereA.getRefCenter(), fSphereB.getRefCenter(),
+                            "The center FPoints should be different"),
+                    () -> assertTrue(fSphereB.isExact(factory.getFSphere(1)),
+                            "FSpheres should have the same values")
             );
         }
     }

@@ -1,13 +1,14 @@
 package eu.scattering.core.test.helper;
 
+import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import static eu.scattering.core.test.Config.factory;
 import static eu.scattering.core.test.Config.epsilon;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FPointRandom")
@@ -105,5 +106,36 @@ public class FTrigHelperTest {
         var angle = helper.getAngleBetweenVectors(base, headA, headB);
 
         assertEquals(Math.asin(1 / Math.sqrt(3)), angle, epsilon, "The angle is invalid");
+    }
+
+    @Test
+    @DisplayName("Get angle SSS - A")
+    void getAngleSSSA() {
+        FTrigHelper helper = factory.getFTrigHelper();
+
+        double angle = helper.getAngle(3, 4, 5);
+
+        assertEquals(Math.PI * 0.5, angle, epsilon, "The angle is incorrect");
+    }
+
+    @Test
+    @DisplayName("Get angle SSS - B")
+    void getAngleSSSB() {
+        FTrigHelper helper = factory.getFTrigHelper();
+
+        double resA = helper.getAngle(2, 2, 2 * Math.sqrt(2));
+        double resB = helper.getAngle(2 * Math.sqrt(2), 2, 2);
+        double resC = helper.getAngle(2, 2 * Math.sqrt(2), 2);
+
+        Assertions.assertAll("Validate results",
+                () -> assertEquals(Math.PI * 0.50, resA, epsilon,
+                        "Result A is incorrect"),
+                () -> assertEquals(Math.PI * 0.25, resB, epsilon,
+                        "Result B is incorrect"),
+                () -> assertEquals(Math.PI * 0.25, resC, epsilon,
+                        "Result C is incorrect")
+
+
+        );
     }
 }

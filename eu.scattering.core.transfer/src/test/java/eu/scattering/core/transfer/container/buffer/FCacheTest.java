@@ -43,8 +43,8 @@ public class FCacheTest {
 
             boolean isReplaced = fCache.put("data", fPos3D);
 
-            FPos3D result = fCache.get("data", FPos3D.class).orElseThrow();
-            Storage<?> resultSuper = fCache.get("data", Storage.class).orElseThrow();
+            FPos3D result = fCache.getOptional("data", FPos3D.class).orElseThrow();
+            Storage<?> resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
@@ -70,8 +70,8 @@ public class FCacheTest {
             fCache.put("data", factory.getFPos3D(3, 2, 1));
             boolean isReplaced = fCache.put("data", fPos3D);
 
-            FPos3D result = fCache.get("data", FPos3D.class).orElseThrow();
-            Storage<?> resultSuper = fCache.get("data", Storage.class).orElseThrow();
+            FPos3D result = fCache.getOptional("data", FPos3D.class).orElseThrow();
+            Storage<?> resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
@@ -96,7 +96,7 @@ public class FCacheTest {
 
             boolean isReplaced = fCache.put(FPos3D.class, fPos3D);
 
-            FPos3D result = fCache.get(FPos3D.class).orElseThrow();
+            FPos3D result = fCache.getOptional(FPos3D.class).orElseThrow();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
@@ -120,7 +120,7 @@ public class FCacheTest {
             fCache.put(FPos3D.class, factory.getFPos3D(3, 2, 1));
             boolean isReplaced = fCache.put(FPos3D.class, fPos3D);
 
-            FPos3D result = fCache.get(FPos3D.class).orElseThrow();
+            FPos3D result = fCache.getOptional(FPos3D.class).orElseThrow();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
@@ -139,7 +139,7 @@ public class FCacheTest {
         void getWithKeyEmptyTest() {
             FCache fCache = factory.getFCache();
 
-            assertTrue(fCache.get("data", FPos3D.class).isEmpty(),
+            assertThrows(IllegalArgumentException.class, () -> fCache.get("data", FPos3D.class),
                     "The element should not exist");
         }
 
@@ -148,7 +148,25 @@ public class FCacheTest {
         void getWithClassEmptyTest() {
             FCache fCache = factory.getFCache();
 
-            assertTrue(fCache.get(FPos3D.class).isEmpty(),
+            assertThrows(IllegalArgumentException.class, () -> fCache.get(FPos3D.class),
+                    "The element should not exist");
+        }
+
+        @Test
+        @DisplayName("Get optional with key - Non-existent")
+        void getOptionalWithKeyEmptyTest() {
+            FCache fCache = factory.getFCache();
+
+            assertTrue(fCache.getOptional("data", FPos3D.class).isEmpty(),
+                    "The element should not exist");
+        }
+
+        @Test
+        @DisplayName("Get optional with class - Non-existent")
+        void getOptionalWithClassEmptyTest() {
+            FCache fCache = factory.getFCache();
+
+            assertTrue(fCache.getOptional(FPos3D.class).isEmpty(),
                     "The element should not exist");
         }
 
@@ -162,7 +180,7 @@ public class FCacheTest {
             fCache.put("data", data);
 
             assertThrows(IllegalArgumentException.class,
-                    () -> fCache.get("data", FPos4D.class),
+                    () -> fCache.getOptional("data", FPos4D.class),
                     "The element type is erroneous");
         }
 
@@ -173,8 +191,8 @@ public class FCacheTest {
             fCache.put(ContainerFactory.class, factory);
 
             FPos3D resultA = fCache.get("data", FPos3D.class,
-                    (cache) -> cache.get(ContainerFactory.class).orElseThrow().getFPos3D(1, 2, 3));
-            FPos3D resultB = fCache.get("data", FPos3D.class).orElseThrow();
+                    (cache) -> cache.get(ContainerFactory.class).getFPos3D(1, 2, 3));
+            FPos3D resultB = fCache.get("data", FPos3D.class);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
@@ -195,8 +213,8 @@ public class FCacheTest {
             fCache.put(ContainerFactory.class, factory);
 
             FPos3D resultA = fCache.get(FPos3D.class,
-                    (cache) -> cache.get(ContainerFactory.class).orElseThrow().getFPos3D(1, 2, 3));
-            FPos3D resultB = fCache.get(FPos3D.class).orElseThrow();
+                    (cache) -> cache.get(ContainerFactory.class).getFPos3D(1, 2, 3));
+            FPos3D resultB = fCache.get(FPos3D.class);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fCache.getNumberOfThreads(),
@@ -227,7 +245,7 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(2, fCache.getSize(),
                             "The size is incorrect"),
-                    () -> assertFalse(fCache.get("val2", FPos3D.class).isPresent(),
+                    () -> assertFalse(fCache.getOptional("val2", FPos3D.class).isPresent(),
                             "The object should not be available"),
                     () -> assertTrue(isDeletedA,
                             "The object should exist"),
@@ -253,7 +271,7 @@ public class FCacheTest {
             Assertions.assertAll("Check values",
                     () -> assertEquals(2, fCache.getSize(),
                             "The size is incorrect"),
-                    () -> assertFalse(fCache.get(FPos3D.class).isPresent(),
+                    () -> assertFalse(fCache.getOptional(FPos3D.class).isPresent(),
                             "The object should not be available"),
                     () -> assertTrue(isDeletedA,
                             "The object should exist"),
