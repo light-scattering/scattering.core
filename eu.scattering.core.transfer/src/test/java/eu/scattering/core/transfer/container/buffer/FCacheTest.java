@@ -27,8 +27,6 @@ public class FCacheTest {
             FCache fCache = factory.getFCache();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(0, fCache.getNumberOfThreads(),
-                            "The number of threads is incorrect"),
                     () -> assertEquals(0, fCache.getSize(),
                             "The number of elements is incorrect")
             );
@@ -47,8 +45,6 @@ public class FCacheTest {
             Storage<?> resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getNumberOfThreads(),
-                            "The number of threads is incorrect"),
                     () -> assertEquals(1, fCache.getSize(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
@@ -74,8 +70,6 @@ public class FCacheTest {
             Storage<?> resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getNumberOfThreads(),
-                            "The number of threads is incorrect"),
                     () -> assertEquals(1, fCache.getSize(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
@@ -99,8 +93,6 @@ public class FCacheTest {
             FPos3D result = fCache.getOptional(FPos3D.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getNumberOfThreads(),
-                            "The number of threads is incorrect"),
                     () -> assertEquals(1, fCache.getSize(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
@@ -123,8 +115,6 @@ public class FCacheTest {
             FPos3D result = fCache.getOptional(FPos3D.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getNumberOfThreads(),
-                            "The number of threads is incorrect"),
                     () -> assertEquals(1, fCache.getSize(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
@@ -195,8 +185,6 @@ public class FCacheTest {
             FPos3D resultB = fCache.get("data", FPos3D.class);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getNumberOfThreads(),
-                            "The number of threads is incorrect"),
                     () -> assertEquals(2, fCache.getSize(),
                             "The number of elements is incorrect"),
                     () -> assertEquals(factory.getFPos3D(1, 2, 3), resultA,
@@ -217,8 +205,6 @@ public class FCacheTest {
             FPos3D resultB = fCache.get(FPos3D.class);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getNumberOfThreads(),
-                            "The number of threads is incorrect"),
                     () -> assertEquals(2, fCache.getSize(),
                             "The number of elements is incorrect"),
                     () -> assertEquals(factory.getFPos3D(1, 2, 3), resultA,

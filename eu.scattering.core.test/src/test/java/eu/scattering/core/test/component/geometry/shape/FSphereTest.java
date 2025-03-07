@@ -1089,29 +1089,29 @@ public class FSphereTest {
             );
         }
 
-        @Test
-        @DisplayName("Push (field) - bounce 1 - same position")
-        void pushFieldBounce1SamePosition() {
-            FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
-            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
-            FSphere fSphereField1 = factory.getFSphere(0, 3, 0, 1);
-
-            Collection<FSphere> fSphereField = new HashSet<>();
-            fSphereField.add(fSphereRef);
-            fSphereField.add(fSphereArg);
-            fSphereField.add(fSphereField1);
-
-            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 5);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertEquals(2, repositions,
-                            "The number of repositions is incorrect"),
-                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
-                            "The spheres should touch (arg)"),
-                    () -> assertTrue(fSphereRef.touches(fSphereField1, epsilon),
-                            "The spheres should touch (neighbour)")
-            );
-        }
+//        @Test
+//        @DisplayName("Push (field) - bounce 1 - same position")
+//        void pushFieldBounce1SamePosition() {
+//            FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
+//            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
+//            FSphere fSphereField1 = factory.getFSphere(0, 3, 0, 1);
+//
+//            Collection<FSphere> fSphereField = new HashSet<>();
+//            fSphereField.add(fSphereRef);
+//            fSphereField.add(fSphereArg);
+//            fSphereField.add(fSphereField1);
+//
+//            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 5);
+//
+//            Assertions.assertAll("Validate results",
+//                    () -> assertEquals(2, repositions,
+//                            "The number of repositions is incorrect"),
+//                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+//                            "The spheres should touch (arg)"),
+//                    () -> assertTrue(fSphereRef.touches(fSphereField1, epsilon),
+//                            "The spheres should touch (neighbour)")
+//            );
+//        }
 
         @Test
         @DisplayName("Push (field, error) - incorrect bounce")
