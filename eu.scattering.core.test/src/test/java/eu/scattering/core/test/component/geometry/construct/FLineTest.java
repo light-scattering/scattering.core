@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.construct;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -396,12 +397,28 @@ public class FLineTest {
     class FLineAdvancedTest {
 
         @Test
+        @DisplayName("Project unit")
+        void projectUnit() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fLine.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
+
+            fLine.project(fPoint);
+
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
+        }
+
+        @Test
         @DisplayName("Project simple - X")
         void projectX() {
             FLine fLine = factory.getRefFLine(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.project(fPoint);
+            fLine.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 5, 5).isSimilar(fPoint));
         }
@@ -412,7 +429,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, -1, 5, 5, 1, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.project(fPoint);
+            fLine.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(5, 2, 5).isSimilar(fPoint));
         }
@@ -423,7 +440,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, 5, -1, 5, 5, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.project(fPoint);
+            fLine.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(5, 5, 3).isSimilar(fPoint));
         }
@@ -439,7 +456,7 @@ public class FLineTest {
             fLine.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fLine.project(fPoint);
+            fLine.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
@@ -451,7 +468,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector);
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fLine.project(fPoint);
+            fLine.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(-3, -3, -3).isSimilar(fPoint));
 
@@ -471,7 +488,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fLine.project(fPoint);
+            fLine.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(3, 3, 3).isSimilar(fPoint));
 
@@ -490,8 +507,19 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.project(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.project((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Reflect unit")
+        void reflectUnit() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            fLine.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
         @Test
@@ -500,7 +528,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.reflect(fPoint);
+            fLine.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 8, 7).isSimilar(fPoint));
         }
@@ -511,7 +539,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, -1, 5, 5, 1, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.reflect(fPoint);
+            fLine.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(9, 2, 7).isSimilar(fPoint));
         }
@@ -522,7 +550,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, 5, -1, 5, 5, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.reflect(fPoint);
+            fLine.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(9, 8, 3).isSimilar(fPoint));
         }
@@ -533,7 +561,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fLine.reflect(fPoint);
+            fLine.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
@@ -545,7 +573,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fLine.reflect(fPoint);
+            fLine.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(-6, 3, -6).isSimilar(fPoint));
         }
@@ -557,7 +585,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fLine.reflect(fPoint);
+            fLine.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(6, -3, 6).isSimilar(fPoint));
         }
@@ -568,8 +596,17 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.reflect(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.reflect((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Location unit")
+        void isUnitPartOf() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
+
+            assertTrue(fLine.isPartOf(fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -578,7 +615,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
-            assertTrue(fLine.isPartOf(fPoint), "The distance should be negligible");
+            assertTrue(fLine.isPartOf((Geometry) fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -587,7 +624,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
 
-            assertFalse(fLine.isPartOf(fPoint), "The distance should not be negligible");
+            assertFalse(fLine.isPartOf((Geometry) fPoint), "The distance should not be negligible");
         }
 
         @Test
@@ -597,7 +634,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4).addY(0.5 * epsilon);
 
-            assertTrue(fLine.isPartOf(fPoint));
+            assertTrue(fLine.isPartOf((Geometry) fPoint));
         }
 
         @Test
@@ -607,7 +644,7 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * epsilon);
 
-            assertTrue(fLine.isPartOf(fPoint));
+            assertTrue(fLine.isPartOf((Geometry) fPoint));
         }
 
         @Test
@@ -616,8 +653,22 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fLine.isPartOf((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Get unit distance")
+        void getUnitDistance() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fLine.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
+
+            assertEquals(Math.sqrt(6), fLine.getDistance(fPoint));
         }
 
         @Test
@@ -645,6 +696,23 @@ public class FLineTest {
         }
 
         @Test
+        @DisplayName("Set unit distance")
+        void setUnitDistance() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint relocation = TestHelper.getRandFPoint();
+
+            fLine.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
+
+            fLine.setDistance(fPoint, 1);
+
+            Assertions.assertTrue(Math.abs(fLine.getDistance(fPoint) - 1) < epsilon,
+                    "The distance is erroneous");
+        }
+
+        @Test
         @DisplayName("Set distance")
         void setDistance() {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
@@ -655,7 +723,7 @@ public class FLineTest {
             fLine.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
-            fLine.setDistance(fPoint, 1);
+            fLine.setDistance((Geometry) fPoint, 1);
 
             Assertions.assertTrue(Math.abs(fLine.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
                     "The distance is erroneous");

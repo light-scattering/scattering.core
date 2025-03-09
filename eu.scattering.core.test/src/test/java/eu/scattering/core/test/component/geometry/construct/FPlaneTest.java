@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.construct;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -415,41 +416,8 @@ public class FPlaneTest {
     class FPlaneAdvancedTest {
 
         @Test
-        @DisplayName("Project simple - X")
-        void projectX() {
-            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 0, 0));
-            FPoint fPoint = factory.getFPoint(1, 2, 3);
-
-            fPlane.project(fPoint);
-
-            assertTrue(factory.getFPoint(0, 2, 3).isSimilar(fPoint));
-        }
-
-        @Test
-        @DisplayName("Project simple - Y")
-        void projectY() {
-            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 1, 0));
-            FPoint fPoint = factory.getFPoint(1, 2, 3);
-
-            fPlane.project(fPoint);
-
-            assertTrue(factory.getFPoint(1, 0, 3).isSimilar(fPoint));
-        }
-
-        @Test
-        @DisplayName("Project simple - Z")
-        void projectZ() {
-            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 0, 1));
-            FPoint fPoint = factory.getFPoint(1, 2, 3);
-
-            fPlane.project(fPoint);
-
-            assertTrue(factory.getFPoint(1, 2, 0).isSimilar(fPoint));
-        }
-
-        @Test
-        @DisplayName("Project with offset")
-        void projectWithOffset() {
+        @DisplayName("Project unit")
+        void projectUnit() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
@@ -465,13 +433,75 @@ public class FPlaneTest {
         }
 
         @Test
+        @DisplayName("Project simple - X")
+        void projectX() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 0, 0));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fPlane.project((Geometry) fPoint);
+
+            assertTrue(factory.getFPoint(0, 2, 3).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project simple - Y")
+        void projectY() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 1, 0));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fPlane.project((Geometry) fPoint);
+
+            assertTrue(factory.getFPoint(1, 0, 3).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project simple - Z")
+        void projectZ() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 0, 1));
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            fPlane.project((Geometry) fPoint);
+
+            assertTrue(factory.getFPoint(1, 2, 0).isSimilar(fPoint));
+        }
+
+        @Test
+        @DisplayName("Project with offset")
+        void projectWithOffset() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fPlane.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
+
+            fPlane.project((Geometry) fPoint);
+
+            assertTrue(factory.getFPoint(-1, 2, -1).addXYZ(offset).isSimilar(fPoint),
+                    "The projection is erroneous");
+        }
+
+        @Test
         @DisplayName("Project (throw IllegalStateException)")
         void projectThrowIllegalStateException() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.project(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.project((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Reflect unit")
+        void reflectUnit() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            fPlane.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(-2, 1, -2).isSimilar(fPoint),
+                    "The reflection is erroneous");
         }
 
         @Test
@@ -480,7 +510,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 0, 0));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.reflect(fPoint);
+            fPlane.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(-1, 2, 3).isSimilar(fPoint));
         }
@@ -491,7 +521,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 1, 0));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.reflect(fPoint);
+            fPlane.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, -2, 3).isSimilar(fPoint));
         }
@@ -502,7 +532,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 0, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.reflect(fPoint);
+            fPlane.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 2, -3).isSimilar(fPoint));
         }
@@ -513,7 +543,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fPlane.reflect(fPoint);
+            fPlane.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(-2, 1, -2).isSimilar(fPoint),
                     "The reflection is erroneous");
@@ -525,8 +555,18 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.reflect(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.reflect((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Location")
+        void isUnitPartOf() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+            FPoint fPoint = factory.getFPoint(-1, 2, -1).addFactor(0.5 * epsilon);
+
+            assertTrue(fPlane.isPartOf(fPoint),
+                    "The distance should be negligible");
         }
 
         @Test
@@ -535,7 +575,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(-1, 2, -1).addFactor(0.5 * epsilon);
 
-            assertTrue(fPlane.isPartOf(fPoint),
+            assertTrue(fPlane.isPartOf((Geometry) fPoint),
                     "The distance should be negligible");
         }
 
@@ -545,7 +585,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(-1, 2, -1).addFactor(1.5 * epsilon);
 
-            assertFalse(fPlane.isPartOf(fPoint),
+            assertFalse(fPlane.isPartOf((Geometry) fPoint),
                     "The distance should not be negligible");
         }
 
@@ -555,8 +595,23 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isPartOf((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Get unit distance")
+        void getUnitDistance() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint relocation = TestHelper.getRandFPoint();
+
+            fPlane.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
+
+            assertEquals(Math.sqrt(3), fPlane.getDistance(fPoint),
+                    epsilon, "The distance is erroneous");
         }
 
         @Test
@@ -585,12 +640,24 @@ public class FPlaneTest {
         }
 
         @Test
+        @DisplayName("Set unit distance")
+        void setUnitDistance() {
+            FPlane fPlane = factory.getRefFPlane(TestHelper.getRandFVector());
+            FPoint fPoint = TestHelper.getRandFPoint();
+
+            fPlane.setDistance(fPoint, 1);
+
+            assertEquals(1, fPlane.getDistance(fPoint),
+                    epsilon, "The distance is erroneous");
+        }
+
+        @Test
         @DisplayName("Set distance")
         void setDistance() {
             FPlane fPlane = factory.getRefFPlane(TestHelper.getRandFVector());
             FPoint fPoint = TestHelper.getRandFPoint();
 
-            fPlane.setDistance(fPoint, 1);
+            fPlane.setDistance((Geometry) fPoint, 1);
 
             assertEquals(1, fPlane.getAtomicDistance(fPoint).get(0),
                     epsilon, "The distance is erroneous");

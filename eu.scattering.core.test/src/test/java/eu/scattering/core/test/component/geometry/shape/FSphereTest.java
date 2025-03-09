@@ -1,7 +1,6 @@
 package eu.scattering.core.test.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
@@ -966,8 +965,8 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Push")
-        void push() {
+        @DisplayName("Attach")
+        void attach() {
             FSphere fSphereRef = factory.getFSphere(1);
             FSphere fSphereArg = TestHelper.getRandFSphere();
 
@@ -975,19 +974,19 @@ public class FSphereTest {
 
             assertTrue(fSphereRef.overlaps(fSphereArg, 0), "Spheres should overlap");
 
-            boolean result = fSphereRef.push(fSphereArg, 0);
+            boolean isRepositioned = fSphereRef.attach(fSphereArg, 0);
 
             Assertions.assertAll("Validate results",
-                    () -> assertTrue(result,
+                    () -> assertTrue(isRepositioned,
                             "The reference sphere should be repositioned"),
                     () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
-                            "The spheres should touch")
+                            "Spheres should be in point contact")
             );
         }
 
         @Test
-        @DisplayName("Push - distant")
-        void pushDistant() {
+        @DisplayName("Attach - distant")
+        void attachDistant() {
             FSphere fSphereRef = factory.getFSphere(1);
             FSphere fSphereArg = TestHelper.getRandFSphere().setRadius(1);
 
@@ -995,59 +994,75 @@ public class FSphereTest {
 
             assertFalse(fSphereRef.overlaps(fSphereArg, 0), "Spheres should not overlap");
 
-            boolean result = fSphereRef.push(fSphereArg, 0);
+            boolean isRepositioned = fSphereRef.attach(fSphereArg, 0);
 
             Assertions.assertAll("Validate results",
-                    () -> assertFalse(result,
-                            "The reference sphere should not be repositioned"),
-                    () -> assertFalse(fSphereRef.touches(fSphereArg, epsilon),
-                            "The spheres should not touch")
+                    () -> assertTrue(isRepositioned,
+                            "The reference sphere should be repositioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "Spheres should be in point contact")
             );
         }
 
         @Test
-        @DisplayName("Push - same position")
-        void pushSamePosition() {
+        @DisplayName("Attach - same position")
+        void attachSamePosition() {
             FSphere fSphereRef = TestHelper.getRandFSphere();
             FSphere fSphereArg = fSphereRef.copy().setRadius(1);
 
             assertTrue(fSphereRef.overlaps(fSphereArg, 0), "Spheres should overlap");
 
-            boolean result = fSphereRef.push(fSphereArg, 0);
+            boolean isRepositioned = fSphereRef.attach(fSphereArg, 0);
 
             Assertions.assertAll("Validate results",
-                    () -> assertTrue(result,
+                    () -> assertTrue(isRepositioned,
                             "The reference sphere should be repositioned"),
                     () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
-                            "The spheres should touch")
+                            "Spheres should be in point contact")
             );
         }
 
         @Test
-        @DisplayName("Push (field) - empty")
-        void pushFieldEmpty() {
-            FSphere fSphereRef = factory.getFSphere(1);
-            FSphere fSphereArg = TestHelper.getRandFSphere();
+        @DisplayName("Attach - point contact")
+        void attachPointContact() {
+            FSphere fSphereRef = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereArg = factory.getFSphere(2, 0, 0, 1);
+
+            boolean isRepositioned = fSphereRef.attach(fSphereArg, 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertFalse(isRepositioned,
+                            "The reference sphere should not be repositioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach (field) - empty")
+        void attachFieldEmpty() {
+            FSphere fSphereRef = factory.getFSphere();
+            FSphere fSphereArg = factory.getFSphere();
 
             Collection<FSphere> fSphereField = new HashSet<>();
 
             factory.getFRandEngine().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
 
-            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 0);
+            int isRepositioned = fSphereRef.attach(fSphereArg, epsilon, fSphereField, 0);
 
             Assertions.assertAll("Validate results",
-                    () -> assertEquals(1, repositions,
+                    () -> assertEquals(1, isRepositioned,
                             "The number of repositions is incorrect"),
                     () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
-                            "The spheres should touch")
+                            "Spheres should be in point contact")
             );
         }
 
         @Test
-        @DisplayName("Push (field) - self")
-        void pushFieldOrigin() {
-            FSphere fSphereRef = factory.getFSphere(1);
-            FSphere fSphereArg = TestHelper.getRandFSphere();
+        @DisplayName("Attach (field) - self")
+        void attachFieldOrigin() {
+            FSphere fSphereRef = factory.getFSphere();
+            FSphere fSphereArg = factory.getFSphere();
 
             Collection<FSphere> fSphereField = new HashSet<>();
             fSphereField.add(fSphereRef);
@@ -1055,19 +1070,19 @@ public class FSphereTest {
 
             factory.getFRandEngine().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
 
-            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 0);
+            int repositions = fSphereRef.attach(fSphereArg, epsilon, fSphereField, 0);
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(1, repositions,
                             "The number of repositions is incorrect"),
                     () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
-                            "The spheres should touch")
+                            "Spheres should be in point contact")
             );
         }
 
         @Test
-        @DisplayName("Push (field) - bounce 1")
-        void pushFieldBounce1() {
+        @DisplayName("Attach (field) - bounce 1")
+        void attachFieldBounce1() {
             FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
             FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
             FSphere fSphereField1 = factory.getFSphere(-0.25, 3, 0, 1);
@@ -1077,15 +1092,15 @@ public class FSphereTest {
             fSphereField.add(fSphereArg);
             fSphereField.add(fSphereField1);
 
-            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 5);
+            int repositions = fSphereRef.attach(fSphereArg, epsilon, fSphereField, 5);
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(2, repositions,
                             "The number of repositions is incorrect"),
                     () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon),
-                            "The spheres should touch (arg)"),
+                            "Spheres should be in point contact (arg)"),
                     () -> assertTrue(fSphereRef.touches(fSphereField1, epsilon),
-                            "The spheres should touch (neighbour)")
+                            "Spheres should be in point contact (neighbour)")
             );
         }
 
@@ -1125,7 +1140,7 @@ public class FSphereTest {
             fSphereField.add(fSphereArg);
             fSphereField.add(fSphereField1);
 
-            int repositions = fSphereRef.push(fSphereArg, epsilon, fSphereField, 0);
+            int repositions = fSphereRef.attach(fSphereArg, epsilon, fSphereField, 0);
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(-1, repositions,

@@ -3,6 +3,7 @@ package eu.scattering.core.design.component.geometry.construct;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 
 public interface Construct<T> extends Geometry, Component<T> {
@@ -14,8 +15,12 @@ public interface Construct<T> extends Geometry, Component<T> {
 
     //--------------------------------------------------
 
-    boolean isPartOf(Geometry geometry);
+    boolean isPartOf(FPoint arg);
+    boolean isPartOf(Geometry arg);
 
-    void project(Geometry geometry);
-    void reflect(Geometry geometry);
+    void project(FPoint in);
+    void project(Geometry in);
+
+    void reflect(FPoint in);
+    void reflect(Geometry in);
 }

@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.construct;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -325,12 +326,28 @@ public class FSegmentTest {
     class FSegmentAdvancedTest {
 
         @Test
+        @DisplayName("Project unit")
+        void projectUnit() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fSegment.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
+
+            fSegment.project(fPoint);
+
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
+        }
+
+        @Test
         @DisplayName("Project simple - X")
         void projectX() {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.project(fPoint);
+            fSegment.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 5, 5).isSimilar(fPoint));
         }
@@ -341,7 +358,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, -5, 5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.project(fPoint);
+            fSegment.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(5, 2, 5).isSimilar(fPoint));
         }
@@ -352,7 +369,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, -5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.project(fPoint);
+            fSegment.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(5, 5, 3).isSimilar(fPoint));
         }
@@ -368,7 +385,7 @@ public class FSegmentTest {
             fSegment.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fSegment.project(fPoint);
+            fSegment.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
@@ -380,7 +397,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector);
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fSegment.project(fPoint);
+            fSegment.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(0, -9, 0).isSimilar(fPoint));
         }
@@ -392,7 +409,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fSegment.project(fPoint);
+            fSegment.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(0, 9, 0).isSimilar(fPoint));
         }
@@ -403,8 +420,19 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.project(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.project((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Reflect unit")
+        void reflectUnit() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            fSegment.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
         @Test
@@ -413,7 +441,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-5, 5, 5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.reflect(fPoint);
+            fSegment.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 8, 7).isSimilar(fPoint));
         }
@@ -424,7 +452,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, -5, 5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.reflect(fPoint);
+            fSegment.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(9, 2, 7).isSimilar(fPoint));
         }
@@ -435,7 +463,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, -5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.reflect(fPoint);
+            fSegment.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(9, 8, 3).isSimilar(fPoint));
         }
@@ -446,7 +474,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fSegment.reflect(fPoint);
+            fSegment.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
@@ -458,7 +486,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fSegment.reflect(fPoint);
+            fSegment.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(0, -9, 0).isSimilar(fPoint));
         }
@@ -470,7 +498,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fSegment.reflect(fPoint);
+            fSegment.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(0, 9, 0).isSimilar(fPoint));
         }
@@ -481,8 +509,17 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.reflect(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.reflect((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Location unit")
+        void isUnitPartOf() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
+
+            assertTrue(fSegment.isPartOf(fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -491,7 +528,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
-            assertTrue(fSegment.isPartOf(fPoint), "The distance should be negligible");
+            assertTrue(fSegment.isPartOf((Geometry) fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -500,7 +537,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
 
-            assertFalse(fSegment.isPartOf(fPoint), "The distance should not be negligible");
+            assertFalse(fSegment.isPartOf((Geometry) fPoint), "The distance should not be negligible");
         }
 
         @Test
@@ -510,7 +547,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4);
 
-            assertFalse(fSegment.isPartOf(fPoint));
+            assertFalse(fSegment.isPartOf((Geometry) fPoint));
         }
 
         @Test
@@ -520,7 +557,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * epsilon);
 
-            assertFalse(fSegment.isPartOf(fPoint));
+            assertFalse(fSegment.isPartOf((Geometry) fPoint));
         }
 
         @Test
@@ -529,8 +566,22 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.isPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.isPartOf((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Get unit distance")
+        void getUnitDistance() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fSegment.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
+
+            assertEquals(Math.sqrt(6), fSegment.getDistance(fPoint));
         }
 
         @Test
@@ -558,6 +609,23 @@ public class FSegmentTest {
         }
 
         @Test
+        @DisplayName("Set unit distance")
+        void setUnitDistance() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint relocation = TestHelper.getRandFPoint();
+
+            fSegment.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
+
+            fSegment.setDistance(fPoint, 1);
+
+            Assertions.assertTrue(Math.abs(fSegment.getDistance(fPoint) - 1) < epsilon,
+                    "The distance is erroneous");
+        }
+
+        @Test
         @DisplayName("Set distance")
         void setDistance() {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
@@ -568,7 +636,7 @@ public class FSegmentTest {
             fSegment.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
-            fSegment.setDistance(fPoint, 1);
+            fSegment.setDistance((Geometry) fPoint, 1);
 
             Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
                     "The distance is erroneous");

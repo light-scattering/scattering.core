@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.construct;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -325,12 +326,28 @@ public class FRayTest {
     class FRayAdvancedTest {
 
         @Test
+        @DisplayName("Project unit")
+        void projectUnit() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fRay.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
+
+            fRay.project(fPoint);
+
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
+        }
+
+        @Test
         @DisplayName("Project simple - X")
         void projectX() {
             FRay fRay = factory.getRefFRay(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fRay.project(fPoint);
+            fRay.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 5, 5).isSimilar(fPoint));
         }
@@ -341,7 +358,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(5, -1, 5, 5, 1, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fRay.project(fPoint);
+            fRay.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(5, 2, 5).isSimilar(fPoint));
         }
@@ -352,7 +369,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(5, 5, -1, 5, 5, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fRay.project(fPoint);
+            fRay.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(5, 5, 3).isSimilar(fPoint));
         }
@@ -368,7 +385,7 @@ public class FRayTest {
             fRay.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fRay.project(fPoint);
+            fRay.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
@@ -380,7 +397,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector);
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fRay.project(fPoint);
+            fRay.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(0, -9, 0).isSimilar(fPoint));
         }
@@ -392,7 +409,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fRay.project(fPoint);
+            fRay.project((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(3, 3, 3).isSimilar(fPoint));
         }
@@ -403,8 +420,19 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.project(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fRay.project((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Reflect unit")
+        void reflectUnit() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            fRay.reflect(fPoint);
+
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
         @Test
@@ -413,7 +441,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fRay.reflect(fPoint);
+            fRay.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(1, 8, 7).isSimilar(fPoint));
         }
@@ -424,7 +452,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(5, -1, 5, 5, 1, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fRay.reflect(fPoint);
+            fRay.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(9, 2, 7).isSimilar(fPoint));
         }
@@ -435,7 +463,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(5, 5, -1, 5, 5, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fRay.reflect(fPoint);
+            fRay.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(9, 8, 3).isSimilar(fPoint));
         }
@@ -446,7 +474,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fRay.reflect(fPoint);
+            fRay.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
@@ -458,7 +486,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fRay.reflect(fPoint);
+            fRay.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(0, -9, 0).isSimilar(fPoint));
         }
@@ -470,7 +498,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fRay.reflect(fPoint);
+            fRay.reflect((Geometry) fPoint);
 
             assertTrue(factory.getFPoint(6, -3, 6).isSimilar(fPoint));
         }
@@ -481,8 +509,17 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.reflect(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fRay.reflect((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Location unit")
+        void isUnitPartOf() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
+
+            assertTrue(fRay.isPartOf(fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -491,7 +528,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
-            assertTrue(fRay.isPartOf(fPoint), "The distance should be negligible");
+            assertTrue(fRay.isPartOf((Geometry) fPoint), "The distance should be negligible");
         }
 
         @Test
@@ -500,7 +537,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
 
-            assertFalse(fRay.isPartOf(fPoint), "The distance should not be negligible");
+            assertFalse(fRay.isPartOf((Geometry) fPoint), "The distance should not be negligible");
         }
 
         @Test
@@ -510,7 +547,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(-4, -4, -4);
 
-            assertFalse(fRay.isPartOf(fPoint));
+            assertFalse(fRay.isPartOf((Geometry) fPoint));
         }
 
         @Test
@@ -520,7 +557,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(4, 4, 4).addY(0.5 * epsilon);
 
-            assertTrue(fRay.isPartOf(fPoint));
+            assertTrue(fRay.isPartOf((Geometry) fPoint));
         }
 
         @Test
@@ -529,8 +566,22 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.isPartOf(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fRay.isPartOf((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Get unit distance")
+        void getUnitDistance() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fRay.getRefOrigin().addXYZ(offset);
+            fPoint.addXYZ(offset);
+
+            assertEquals(Math.sqrt(6), fRay.getDistance(fPoint));
         }
 
         @Test
@@ -558,6 +609,23 @@ public class FRayTest {
         }
 
         @Test
+        @DisplayName("Set unit distance")
+        void setUnitDistance() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(0, 3, 0);
+
+            FPoint relocation = TestHelper.getRandFPoint();
+
+            fRay.getRefOrigin().addXYZ(relocation);
+            fPoint.addXYZ(relocation);
+
+            fRay.setDistance(fPoint, 1);
+
+            Assertions.assertTrue(Math.abs(fRay.getDistance(fPoint) - 1) < epsilon,
+                    "The distance is erroneous");
+        }
+
+        @Test
         @DisplayName("Set distance")
         void setDistance() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
@@ -568,7 +636,7 @@ public class FRayTest {
             fRay.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
-            fRay.setDistance(fPoint, 1);
+            fRay.setDistance((Geometry) fPoint, 1);
 
             Assertions.assertTrue(Math.abs(fRay.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
                     "The distance is erroneous");
@@ -647,13 +715,26 @@ public class FRayTest {
         }
 
         @Test
+        @DisplayName("Move unit forward")
+        void moveUnitForward() {
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
+            FRay fRay = factory.getRefFRay(fVector.copy());
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            fRay.shiftForward(fPoint, Math.sqrt(3));
+
+            assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
+                    "The translation is erroneous");
+        }
+
+        @Test
         @DisplayName("Move forward")
         void moveForward() {
             FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fRay.shiftForward(fPoint, Math.sqrt(3));
+            fRay.shiftForward((Geometry) fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
                     "The translation is erroneous");
@@ -666,7 +747,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fRay.shiftForward(fPoint, -Math.sqrt(3));
+            fRay.shiftForward((Geometry) fPoint, -Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
                     "The translation is erroneous");
@@ -678,8 +759,22 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector());
             FPoint fPoint = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.shiftForward(fPoint, Math.sqrt(3)),
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fRay.shiftForward((Geometry) fPoint, Math.sqrt(3)),
                     "The direction of the FRay is not defined");
+        }
+
+        @Test
+        @DisplayName("Move unit backward")
+        void moveUnitBackward() {
+            FVector fVector = factory.getFVector(4, 4, 4).subFactor(2);
+            FRay fRay = factory.getRefFRay(fVector.copy());
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            fRay.shiftBackward(fPoint, Math.sqrt(3));
+
+            assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
+                    "The translation is erroneous");
         }
 
         @Test
@@ -689,7 +784,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fRay.shiftBackward(fPoint, Math.sqrt(3));
+            fRay.shiftBackward((Geometry) fPoint, Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(0, -1, -1)),
                     "The translation is erroneous");
@@ -702,7 +797,7 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(fVector.copy());
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            fRay.shiftBackward(fPoint, -Math.sqrt(3));
+            fRay.shiftBackward((Geometry) fPoint, -Math.sqrt(3));
 
             assertTrue(fPoint.isSimilar(factory.getFPoint(2, 1, 1)),
                     "The translation is erroneous");
@@ -714,7 +809,8 @@ public class FRayTest {
             FRay fRay = factory.getRefFRay(factory.getFVector());
             FPoint fPoint = factory.getFPoint();
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fRay.shiftBackward(fPoint, Math.sqrt(3)),
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fRay.shiftBackward((Geometry) fPoint, Math.sqrt(3)),
                     "The direction of the FRay is not defined");
         }
 

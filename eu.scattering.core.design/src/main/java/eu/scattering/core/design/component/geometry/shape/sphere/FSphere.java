@@ -15,8 +15,8 @@ public interface FSphere extends Shape<FSphere> {
     // boolean setMinRadius(List<FSphere> field, double limit);
 //    boolean setMaxRadius(List<FSphere> field, double limit);
 
-    boolean push(FSphere arg, double epsilon);
-    int push(FSphere arg, double epsilon, Collection<FSphere> field, int maxBounce);
+    boolean attach(FSphere target, double epsilon);
+    int attach(FSphere target, double epsilon, Collection<FSphere> field, int maxBounce);
 
     boolean project(FPoint aim, List<FSphere> field);
 

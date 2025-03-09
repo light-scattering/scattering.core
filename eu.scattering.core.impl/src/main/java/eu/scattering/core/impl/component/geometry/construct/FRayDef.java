@@ -156,80 +156,150 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public void project(Geometry geometry) {
+    public void project(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        projectUnit(in);
+    }
+
+    @Override
+    public void project(Geometry in) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(this::projectUnit);
     }
 
     @Override
-    public void reflect(Geometry geometry) {
+    public void reflect(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        reflectUnit(in);
+    }
+
+    @Override
+    public void reflect(Geometry in) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(this::reflectUnit);
     }
 
     @Override
-    public boolean isPartOf(Geometry geometry) {
+    public boolean isPartOf(FPoint arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream()
+        return isUnitPartOf(arg);
+    }
+
+    @Override
+    public boolean isPartOf(Geometry arg) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return arg.disassemble().stream()
                 .allMatch(this::isUnitPartOf);
     }
 
     @Override
-    public List<Double> getAtomicDistance(Geometry geometry) {
+    public double getDistance(FPoint arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream()
+        return getUnitDistance(arg);
+    }
+
+    @Override
+    public List<Double> getAtomicDistance(Geometry arg) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return arg.disassemble().stream()
                 .map(this::getUnitDistance)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void setDistance(Geometry geometry, double distance) {
+    public void setDistance(FPoint in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        setUnitDistance(in, distance);
+    }
+
+    @Override
+    public void setDistance(Geometry in, double distance) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(p -> setUnitDistance(p, distance));
     }
 
     @Override
-    public void shiftForward(Geometry geometry, double distance) {
+    public void shiftForward(FPoint in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        shiftUnitForward(in, distance);
+    }
+
+    @Override
+    public void shiftForward(Geometry in, double distance) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(p -> shiftUnitForward(p, distance));
     }
 
     @Override
-    public void shiftBackward(Geometry geometry, double distance) {
+    public void shiftBackward(FPoint in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        shiftUnitBackward(in, distance);
+    }
+
+    @Override
+    public void shiftBackward(Geometry in, double distance) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(p -> shiftUnitBackward(p, distance));
     }
 

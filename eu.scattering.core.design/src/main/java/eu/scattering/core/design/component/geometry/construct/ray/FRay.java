@@ -19,12 +19,15 @@ public interface FRay extends Construct<FRay> {
 
     FPoint getFPointAtDistance(double length);
 
-    void shiftForward(Geometry geometry, double distance);
-    void shiftBackward(Geometry geometry, double distance);
+    void shiftForward(FPoint in, double distance);
+    void shiftForward(Geometry in, double distance);
 
-    void setDistance(Geometry geometry, double distance);
+    void shiftBackward(FPoint in, double distance);
+    void shiftBackward(Geometry in, double distance);
 
-    //--------------------------------------------------
+    void setDistance(FPoint in, double distance);
+    void setDistance(Geometry in, double distance);
 
-    List<Double> getAtomicDistance(Geometry geometry);
+    double getDistance(FPoint arg);
+    List<Double> getAtomicDistance(Geometry arg);
 }

@@ -4,6 +4,7 @@ import eu.scattering.core.design.FactoryDesign;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.transfer.container.buffer.FCache.FCache;
@@ -491,39 +492,40 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
-    public boolean push(FSphere arg, double epsilon) {
-        boolean isOverlapping = overlaps(arg, epsilon);
-
-        if (!isOverlapping) {
+    public boolean attach(FSphere target, double epsilon) {
+        boolean isTouching = touches(target, epsilon);
+// TODO should return int code 0 already positioned, -1 cannot reposition (same center)
+        if (isTouching) {
             return false;
         }
 
-        // Such a situation should be extremely rare, but cannot be discarded.
-        if (getRefCenter().isSimilar(arg.getRefCenter())) {
-            getRefCenter().mulFactor(2);
+        if (getRefCenter().isSimilar(target.getRefCenter())) {
+            // TODO remove random
+            factory.getFRandEngine().rndPosOnSphere(getRefCenter(), target.getRadius() * 0.5);
         }
 
-        getRefCenter().setDistance(arg.getRefCenter(), radius + arg.getRadius());
+        getRefCenter().setDistance(target.getRefCenter(), radius + target.getRadius());
 
         return true;
     }
 
     @Override
-    public int push(FSphere arg, double epsilon, Collection<FSphere> field, int maxBounce) {
+    public int attach(FSphere target, double epsilon, Collection<FSphere> field, int maxBounce) {
+        // TODO 0 already positioned, -1 same center initial, -2 colinear point after bounce, -3 bounce limit
         int repositions = 1;
 
-        push(arg, epsilon);
+        attach(target, epsilon);
 
-        FSphere neighbour = getNeighbour(arg, epsilon, field);
+        FSphere neighbour = getNeighbour(target, epsilon, field);
 
         if (neighbour == null) {
             return repositions;
         }
 
         while (neighbour != null && repositions++ < maxBounce + 1) {
-            bounce(arg, neighbour);
+            bounceSpherical(target, neighbour);
 
-            neighbour = getNeighbour(arg, epsilon, field);
+            neighbour = getNeighbour(target, epsilon, field);
         }
 
        return neighbour != null ? -1 : repositions;
@@ -552,7 +554,14 @@ public class FSphereDef implements FSphere {
         return neighbour;
     }
 
-    private void bounce(FSphere arg, FSphere neighbour) {
+    private void bounceLinear(FSphere arg, FSphere neighbour) {
+
+    }
+
+    private void bounceSpherical(FSphere arg, FSphere neighbour) {
+        // TODO point cannot be on the same line
+
+
         FTrigHelper trigHelper = factory.getFTrigHelper();
         FRotEngine rotEngine = factory.getFRotEngine();
 
@@ -575,6 +584,8 @@ public class FSphereDef implements FSphere {
 
         getRefCenter().applyStateFrom(vecRef.getRefHead());
     }
+
+
 
 
 

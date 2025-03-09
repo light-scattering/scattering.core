@@ -17,9 +17,9 @@ public interface FSegment extends Construct<FSegment> {
 
     boolean isProjectable(FPoint arg);
 
+    void setDistance(FPoint arg, double distance);
     void setDistance(Geometry geometry, double distance);
 
-    //--------------------------------------------------
-
+    double getDistance(FPoint arg);
     List<Double> getAtomicDistance(Geometry geometry);
 }

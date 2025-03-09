@@ -154,69 +154,119 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public void project(Geometry geometry) {
+    public void project(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        projectUnitOnPlane(in);
+    }
+
+    @Override
+    public void project(Geometry in) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(this::projectUnitOnPlane);
     }
 
     @Override
-    public void reflect(Geometry geometry) {
+    public void reflect(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        reflectUnit(in);
+    }
+
+    @Override
+    public void reflect(Geometry in) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(this::reflectUnit);
     }
 
     @Override
-    public boolean isPartOf(Geometry geometry) {
+    public boolean isPartOf(FPoint arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream()
+        return isUnitPartOf(arg);
+    }
+
+    @Override
+    public boolean isPartOf(Geometry arg) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return arg.disassemble().stream()
                 .allMatch(this::isUnitPartOf);
     }
 
     @Override
-    public List<Double> getAtomicDistance(Geometry geometry) {
+    public double getDistance(FPoint arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream()
+        return getUnitDistance(arg);
+    }
+
+    @Override
+    public List<Double> getAtomicDistance(Geometry arg) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return arg.disassemble().stream()
                 .map(this::getUnitDistance)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void setDistance(Geometry geometry, double distance) {
+    public void setDistance(FPoint in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        setUnitDistance(in, distance);
+    }
+
+    @Override
+    public void setDistance(Geometry in, double distance) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble()
                 .forEach(p -> setUnitDistance(p, distance));
     }
 
     @Override
-    public boolean isCut(Geometry geometry) {
+    public boolean isCut(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        List<Boolean> isInHalfSpace = geometry.disassemble().stream()
+        List<Boolean> isInHalfSpace = arg.disassemble().stream()
                 .map(this::isUnitInHalfSpace)
                 .collect(Collectors.toList());
 
@@ -227,21 +277,21 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public boolean isOnSide(Geometry geometry) {
+    public boolean isOnSide(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream()
+        return arg.disassemble().stream()
                 .allMatch(this::isUnitInHalfSpace);
     }
 
     // TODO - Not optimized
     @Override
-    public Optional<FLine> getFLineAtIntersection(FPlane ref) {
+    public Optional<FLine> getFLineAtIntersection(FPlane arg) {
 
-        if (getRefOrigin().isCollinear(ref.getRefOrigin())) {
+        if (getRefOrigin().isCollinear(arg.getRefOrigin())) {
             return Optional.empty();
         }
 
@@ -252,7 +302,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         FPoint resHead = resultOrigin.getRefHead();
 
         FVector u = getRefOrigin().copy();
-        FVector v = ref.getRefOrigin().copy();
+        FVector v = arg.getRefOrigin().copy();
 
         double aBX = u.getBaseX();
         double aBY = u.getBaseY();
@@ -290,16 +340,16 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     // TODO - Not optimized
     @Override
-    public Optional<FPoint> getFPointAtIntersection(FLine ref) {
+    public Optional<FPoint> getFPointAtIntersection(FLine arg) {
 
-        if (getRefOrigin().isOrthogonal(ref.getRefOrigin())) {
+        if (getRefOrigin().isOrthogonal(arg.getRefOrigin())) {
             return Optional.empty();
         }
 
         FPoint result = supplyFVector().getRefBase().copyZero();
 
         FVector u = getRefOrigin().copy();
-        FVector v = ref.getRefOrigin().copy();
+        FVector v = arg.getRefOrigin().copy();
 
         double aBX = u.getBaseX();
         double aBY = u.getBaseY();

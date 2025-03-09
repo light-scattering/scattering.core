@@ -12,23 +12,24 @@ import java.util.Optional;
 public interface FPlane extends Construct<FPlane> {
 
     FPlane set(FPairPos3D position);
+    // FPlane set(FPoint ptA, FPoint ptB, FPoint ptC);
 
     FPairPos3D toFPairPos3D();
 
     //--------------------------------------------------
 
-    boolean isSamePlane(FPlane ref);
+    boolean isSamePlane(FPlane arg);
 
-    boolean isCut(Geometry geometry);
-    boolean isOnSide(Geometry geometry);
+    boolean isCut(Geometry arg);
+    boolean isOnSide(Geometry arg);
 
-    Optional<FPoint> getFPointAtIntersection(FLine ref);
-    Optional<FLine> getFLineAtIntersection(FPlane ref);
+    Optional<FPoint> getFPointAtIntersection(FLine arg);
+    Optional<FLine> getFLineAtIntersection(FPlane arg);
 
-    void setDistance(Geometry geometry, double distance);
+    void setDistance(FPoint in, double distance);
+    void setDistance(Geometry in, double distance);
 
-    //--------------------------------------------------
-
-    List<Double> getAtomicDistance(Geometry geometry);
+    double getDistance(FPoint arg);
+    List<Double> getAtomicDistance(Geometry arg);
 }
 
