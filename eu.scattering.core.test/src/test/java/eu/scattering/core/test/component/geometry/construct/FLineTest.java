@@ -795,7 +795,7 @@ public class FLineTest {
 
             fLine.setDistance(fPoint, 1);
 
-            assertEquals(1, fLine.getDistance((Geometry) fPoint).get(0), epsilon);
+            assertEquals(1, fLine.getDistance(fPoint), epsilon);
         }
 
         @Test
@@ -811,7 +811,7 @@ public class FLineTest {
 
             fLine.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fLine.getDistance((Geometry) fPoint).get(0) - 1) < epsilon,
+            Assertions.assertTrue(Math.abs(fLine.getDistance(fPoint) - 1) < epsilon,
                     "The distance between FPoints is erroneous");
         }
 
@@ -1018,10 +1018,10 @@ public class FLineTest {
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fLineA.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance((Geometry) fPointRes.get()).get(0)+ ")"),
+                                    "(distance: " + fLineA.getDistance(fPointRes.get()) + ")"),
                     () -> assertTrue(fLineB.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance((Geometry) fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getDistance(fPointRes.get()) + ")")
             );
         }
 
@@ -1081,10 +1081,10 @@ public class FLineTest {
             Assertions.assertAll("Validate FPoint",
                     () -> assertTrue(fLineA.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance((Geometry) fPointRes.get()).get(0)+ ")"),
+                                    "(distance: " + fLineA.getDistance(fPointRes.get()) + ")"),
                     () -> assertTrue(fLineB.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance((Geometry) fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getDistance(fPointRes.get()) + ")")
             );
         }
 
@@ -1104,10 +1104,10 @@ public class FLineTest {
                             "The FPoint is erroneous"),
                     () -> assertTrue(fLineA.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance((Geometry) fPointRes.get()).get(0)+ ")"),
+                                    "(distance: " + fLineA.getDistance(fPointRes.get()) + ")"),
                     () -> assertTrue(fLineB.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance((Geometry) fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getDistance(fPointRes.get()) + ")")
             );
         }
         @Test
@@ -1126,10 +1126,10 @@ public class FLineTest {
                             "The FPoint is erroneous"),
                     () -> assertTrue(fLineA.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance((Geometry) fPointRes.get()).get(0)+ ")"),
+                                    "(distance: " + fLineA.getDistance(fPointRes.get()) + ")"),
                     () -> assertTrue(fLineB.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance((Geometry) fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getDistance(fPointRes.get()) + ")")
             );
         }
 
@@ -1149,10 +1149,10 @@ public class FLineTest {
                             "The FPoint is erroneous"),
                     () -> assertTrue(fLineA.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 1 " +
-                                    "(distance: " + fLineA.getDistance((Geometry) fPointRes.get()).get(0)+ ")"),
+                                    "(distance: " + fLineA.getDistance(fPointRes.get()) + ")"),
                     () -> assertTrue(fLineB.isPartOf(fPointRes.get()),
                             "The FPoint should be part of FLine 2 " +
-                                    "(distance: " + fLineB.getDistance((Geometry) fPointRes.get()).get(0)+ ")")
+                                    "(distance: " + fLineB.getDistance(fPointRes.get()) + ")")
             );
         }
 

@@ -227,18 +227,6 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public List<Double> getDistance(Geometry arg) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return arg.disassemble().stream()
-                .map(this::getUnitDistance)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public void setDistance(FPoint in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
