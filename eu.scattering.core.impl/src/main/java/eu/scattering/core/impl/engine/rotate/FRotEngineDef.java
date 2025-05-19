@@ -675,7 +675,17 @@ public class FRotEngineDef implements FRotEngine {
         FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
         rot(in, qt);
+    }
 
+    @Override
+    public void rotRgAround(FLine ref, Geometry in, double angle) {
+        FVector refOrigin = ref.getRefOrigin();
+
+        if (refOrigin.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.disassemble().forEach(p -> rotRgAround(refOrigin, p, angle));
     }
 
     @Override
@@ -695,6 +705,21 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
+    public void rotRgAround(FRay ref, Geometry in, double angle) {
+        FVector refOrigin = ref.getRefOrigin();
+
+        if (refOrigin.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        for (FPoint p : in.disassemble()) {
+            if (ref.isProjectable(p)) {
+                rotRgAround(refOrigin, p, angle);
+            }
+        }
+    }
+
+    @Override
     public void rotQtAround(FSegment ref, Geometry in, double angle) {
 
         if (ref.getRefOrigin().isNearZeroLength()) {
@@ -706,6 +731,21 @@ public class FRotEngineDef implements FRotEngine {
         for (FPoint p : in.disassemble()) {
             if (ref.isProjectable(p)) {
                 rotQt(p, qt);
+            }
+        }
+    }
+
+    @Override
+    public void rotRgAround(FSegment ref, Geometry in, double angle) {
+        FVector refOrigin = ref.getRefOrigin();
+
+        if (refOrigin.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        for (FPoint p : in.disassemble()) {
+            if (ref.isProjectable(p)) {
+                rotRgAround(refOrigin, p, angle);
             }
         }
     }

@@ -5,4 +5,5 @@ import eu.scattering.core.design.component.geometry.Geometry;
 public interface FSegmentEngineRot {
 
     void rotQtAround(FSegment ref, Geometry in, double angle);
+    void rotRgAround(FSegment ref, Geometry in, double angle);
 }

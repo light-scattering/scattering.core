@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface FPlane extends Construct<FPlane> {
 
     FPlane set(FPairPos3D position);
-    // FPlane set(FPoint ptA, FPoint ptB, FPoint ptC);
+//    FPlane set(FPoint ptBase, FPoint ptA, FPoint ptB);
 
     FPairPos3D toFPairPos3D();
 
@@ -30,6 +30,6 @@ public interface FPlane extends Construct<FPlane> {
     void setDistance(Geometry in, double distance);
 
     double getDistance(FPoint arg);
-    List<Double> getAtomicDistance(Geometry arg);
+    List<Double> getDistance(Geometry arg);
 }
 

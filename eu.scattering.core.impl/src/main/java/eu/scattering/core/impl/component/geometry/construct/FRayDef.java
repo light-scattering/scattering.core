@@ -229,7 +229,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public List<Double> getAtomicDistance(Geometry arg) {
+    public List<Double> getDistance(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");

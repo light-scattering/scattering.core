@@ -227,7 +227,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public List<Double> getAtomicDistance(Geometry arg) {
+    public List<Double> getDistance(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -588,40 +588,60 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
     }
 
-    private void setUnitDistance(FPoint in, double distance) {
+    private boolean setUnitDistance(FPoint in, double distance) {
         double oX = in.getX();
         double oY = in.getY();
         double oZ = in.getZ();
 
-        projectUnit(in);
+        boolean isMoved = projectUnit(in);
+
+        if (!isMoved) {
+            if (distance > EPSILON) {
+                throw new IllegalStateException("The unit distance cannot be changed");
+            }
+
+            return false;
+        }
 
         double pX = in.getX();
         double pY = in.getY();
         double pZ = in.getZ();
 
         in.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
+
+        return true;
     }
 
-    private void reflectUnit(FPoint in) {
+    private boolean reflectUnit(FPoint in) {
         double oX = in.getX();
         double oY = in.getY();
         double oZ = in.getZ();
 
-        projectUnit(in);
+        boolean isMoved = projectUnit(in);
+
+        if (!isMoved) {
+            return false;
+        }
 
         double pX = in.getX();
         double pY = in.getY();
         double pZ = in.getZ();
 
         in.set(oX, oY, oZ).reflect(pX, pY, pZ);
+
+        return true;
     }
 
-    private void projectUnit(FPoint in) {
+    private boolean projectUnit(FPoint in) {
         FVector origin = getRefOrigin();
 
-        double headX = in.getX() - origin.getBaseX();
-        double headY = in.getY() - origin.getBaseY();
-        double headZ = in.getZ() - origin.getBaseZ();
+        double memoX = in.getX();
+        double memoY = in.getY();
+        double memoZ = in.getZ();
+
+        double headX = memoX - origin.getBaseX();
+        double headY = memoY - origin.getBaseY();
+        double headZ = memoZ - origin.getBaseZ();
 
         in.applyStateFrom(origin.getRefHead());
 
@@ -632,6 +652,14 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         in.mulFactor(dotProduct);
         in.addXYZ(origin.getRefBase());
+
+        if (in.isSimilar(memoX, memoY, memoZ)) {
+            in.set(memoX, memoY, memoZ);
+
+            return false;
+        }
+
+        return true;
     }
 
     // -------------------------------------------------------------------------------------------------

@@ -595,7 +595,7 @@ public class FSegmentTest {
             fSegment.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            assertEquals(Math.sqrt(6), fSegment.getAtomicDistance(fPoint).get(0));
+            assertEquals(Math.sqrt(6), fSegment.getDistance((Geometry) fPoint).get(0));
         }
 
         @Test
@@ -604,7 +604,7 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.getAtomicDistance(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fSegment.getDistance(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -638,7 +638,7 @@ public class FSegmentTest {
 
             fSegment.setDistance((Geometry) fPoint, 1);
 
-            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
+            Assertions.assertTrue(Math.abs(fSegment.getDistance((Geometry) fPoint).get(0) - 1) < epsilon,
                     "The distance is erroneous");
         }
 
@@ -679,7 +679,7 @@ public class FSegmentTest {
 
             fSegment.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fSegment.getAtomicDistance(fPoint).get(0) - 1) < epsilon,
+            Assertions.assertTrue(Math.abs(fSegment.getDistance((Geometry) fPoint).get(0) - 1) < epsilon,
                     "The distance between FPoints is erroneous");
         }
 

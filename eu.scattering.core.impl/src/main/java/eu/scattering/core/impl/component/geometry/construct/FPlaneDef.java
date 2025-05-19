@@ -71,6 +71,12 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         return this;
     }
 
+//    @Override
+//    public FPlane set(FPoint ptBase, FPoint ptA, FPoint ptB) {
+//        getRefOrigin().set(ptBase, ptA).setCrossProduct(ptB);
+//        return null;
+//    }
+
     @Override
     public FPlane applyStateFrom(JSONObject json) {
 
@@ -227,7 +233,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public List<Double> getAtomicDistance(Geometry arg) {
+    public List<Double> getDistance(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");

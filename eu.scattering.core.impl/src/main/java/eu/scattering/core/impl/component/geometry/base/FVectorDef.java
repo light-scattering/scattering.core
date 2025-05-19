@@ -291,6 +291,18 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public boolean isExact(FPoint base, FPoint head) {
+
+        return getRefBase().isExact(base) && getRefHead().isExact(head);
+    }
+
+    @Override
+    public boolean isExact(FPos3D base, FPos3D head) {
+
+        return getRefBase().isExact(base) && getRefHead().isExact(head);
+    }
+
+    @Override
     public boolean isExact(FVector arg) {
 
         if (this == arg) {
@@ -309,27 +321,63 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public boolean isExactCompact(double hX, double hY, double hZ) {
+    public boolean isExactBaseCommon(double hX, double hY, double hZ) {
+
+        return getRefHead().isExact(hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isExactBaseCommon(FPoint head) {
+
+        return getRefHead().isExact(head);
+    }
+
+    @Override
+    public boolean isExactBaseCommon(FPos3D head) {
+
+        return getRefHead().isExact(head);
+    }
+
+    @Override
+    public boolean isExactBaseZero(double hX, double hY, double hZ) {
 
         return isExact(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public boolean isExactCompact(FPoint head) {
+    public boolean isExactBaseZero(FPoint head) {
 
-        return isExactCompact(head.getX(), head.getY(), head.getZ());
+        return isExactBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public boolean isExactCompact(FPos3D head) {
+    public boolean isExactBaseZero(FPos3D head) {
 
-        return isExactCompact(head.getD0(), head.getD1(), head.getD2());
+        return isExactBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
     public boolean isSimilar(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         return getRefBase().isSimilar(bX, bY, bZ) && getRefHead().isSimilar(hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isSimilar(FPoint base, FPoint head) {
+
+        return isSimilar(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isSimilar(FPos3D base, FPos3D head) {
+
+        return isSimilar(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
     }
 
     @Override
@@ -351,21 +399,39 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public boolean isSimilarCompact(double hX, double hY, double hZ) {
+    public boolean isSimilarBaseCommon(double hX, double hY, double hZ) {
+
+        return getRefHead().isSimilar(hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isSimilarBaseCommon(FPoint head) {
+
+        return getRefHead().isSimilar(head);
+    }
+
+    @Override
+    public boolean isSimilarBaseCommon(FPos3D head) {
+
+        return getRefHead().isSimilar(head);
+    }
+
+    @Override
+    public boolean isSimilarBaseZero(double hX, double hY, double hZ) {
 
         return isSimilar(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public boolean isSimilarCompact(FPoint head) {
+    public boolean isSimilarBaseZero(FPoint head) {
 
-        return isSimilarCompact(head.getX(), head.getY(), head.getZ());
+        return isSimilarBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public boolean isSimilarCompact(FPos3D head) {
+    public boolean isSimilarBaseZero(FPos3D head) {
 
-        return isSimilarCompact(head.getD0(), head.getD1(), head.getD2());
+        return isSimilarBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -448,6 +514,24 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public FVector add(FPoint base, FPoint head) {
+
+        return add(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector add(FPos3D base, FPos3D head) {
+
+        return add(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
     public FVector add(FVector arg) {
 
         return add(
@@ -466,21 +550,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector addCompact(double hX, double hY, double hZ) {
+    public FVector addBaseCommon(double hX, double hY, double hZ) {
+
+        return add(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public FVector addBaseCommon(FPoint head) {
+
+        return add(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector addBaseCommon(FPos3D head) {
+
+        return add(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FVector addBaseZero(double hX, double hY, double hZ) {
 
         return add(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector addCompact(FPoint head) {
+    public FVector addBaseZero(FPoint head) {
 
-        return addCompact(head.getX(), head.getY(), head.getZ());
+        return addBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector addCompact(FPos3D head) {
+    public FVector addBaseZero(FPos3D head) {
 
-        return addCompact(head.getD0(), head.getD1(), head.getD2());
+        return addBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -494,6 +605,24 @@ public class FVectorDef implements FVector {
         moveBase(memoOBX, memoOBY, memoOBZ);
 
         return this;
+    }
+
+    @Override
+    public FVector sub(FPoint base, FPoint head) {
+
+        return sub(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector sub(FPos3D base, FPos3D head) {
+
+        return sub(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
     }
 
     @Override
@@ -515,21 +644,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector subCompact(double hX, double hY, double hZ) {
+    public FVector subBaseCommon(double hX, double hY, double hZ) {
+
+        return sub(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public FVector subBaseCommon(FPoint head) {
+
+        return sub(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector subBaseCommon(FPos3D head) {
+
+        return sub(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FVector subBaseZero(double hX, double hY, double hZ) {
 
         return sub(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector subCompact(FPoint head) {
+    public FVector subBaseZero(FPoint head) {
 
-        return subCompact(head.getX(), head.getY(), head.getZ());
+        return subBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector subCompact(FPos3D head) {
+    public FVector subBaseZero(FPos3D head) {
 
-        return subCompact(head.getD0(), head.getD1(), head.getD2());
+        return subBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1028,6 +1184,24 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public double getDotProduct(FPoint base, FPoint head) {
+
+        return getDotProduct(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public double getDotProduct(FPos3D base, FPos3D head) {
+
+        return getDotProduct(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
     public double getDotProduct(FVector arg) {
 
         return getDotProduct(
@@ -1046,21 +1220,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public double getDotProductCompact(double hX, double hY, double hZ) {
+    public double getDotProductBaseCommon(double hX, double hY, double hZ) {
+
+        return getDotProduct(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public double getDotProductBaseCommon(FPoint head) {
+
+        return getDotProduct(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public double getDotProductBaseCommon(FPos3D head) {
+
+        return getDotProduct(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public double getDotProductBaseZero(double hX, double hY, double hZ) {
 
         return getDotProduct(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public double getDotProductCompact(FPoint head) {
+    public double getDotProductBaseZero(FPoint head) {
 
-        return getDotProductCompact(head.getX(), head.getY(), head.getZ());
+        return getDotProductBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public double getDotProductCompact(FPos3D head) {
+    public double getDotProductBaseZero(FPos3D head) {
 
-        return getDotProductCompact(head.getD0(), head.getD1(), head.getD2());
+        return getDotProductBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1077,6 +1278,24 @@ public class FVectorDef implements FVector {
         moveBase(memoOBX, memoOBY, memoOBZ);
 
         return this;
+    }
+
+    @Override
+    public FVector setCrossProduct(FPoint base, FPoint head) {
+
+        return setCrossProduct(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setCrossProduct(FPos3D base, FPos3D head) {
+
+        return setCrossProduct(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
     }
 
     @Override
@@ -1098,27 +1317,72 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector setCrossProductCompact(double hX, double hY, double hZ) {
+    public FVector setCrossProductBaseCommon(double hX, double hY, double hZ) {
+
+        return setCrossProduct(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public FVector setCrossProductBaseCommon(FPoint head) {
+
+        return setCrossProduct(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setCrossProductBaseCommon(FPos3D head) {
+
+        return setCrossProduct(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FVector setCrossProductBaseZero(double hX, double hY, double hZ) {
 
         return setCrossProduct(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector setCrossProductCompact(FPoint head) {
+    public FVector setCrossProductBaseZero(FPoint head) {
 
-        return setCrossProductCompact(head.getX(), head.getY(), head.getZ());
+        return setCrossProductBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector setCrossProductCompact(FPos3D head) {
+    public FVector setCrossProductBaseZero(FPos3D head) {
 
-        return setCrossProductCompact(head.getD0(), head.getD1(), head.getD2());
+        return setCrossProductBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
     public boolean isCollinear(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         return isParallel(bX, bY, bZ, hX, hY, hZ) || isAntiParallel(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    @Override
+    public boolean isCollinear(FPoint base, FPoint head) {
+
+        return isCollinear(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isCollinear(FPos3D base, FPos3D head) {
+
+        return isCollinear(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
     }
 
     @Override
@@ -1140,21 +1404,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public boolean isCollinearCompact(double hX, double hY, double hZ) {
+    public boolean isCollinearBaseCommon(double hX, double hY, double hZ) {
+
+        return isCollinear(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public boolean isCollinearBaseCommon(FPoint head) {
+
+        return isCollinear(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isCollinearBaseCommon(FPos3D head) {
+
+        return isCollinear(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public boolean isCollinearBaseZero(double hX, double hY, double hZ) {
 
         return isCollinear(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public boolean isCollinearCompact(FPoint head) {
+    public boolean isCollinearBaseZero(FPoint head) {
 
-        return isCollinearCompact(head.getX(), head.getY(), head.getZ());
+        return isCollinearBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public boolean isCollinearCompact(FPos3D head) {
+    public boolean isCollinearBaseZero(FPos3D head) {
 
-        return isCollinearCompact(head.getD0(), head.getD1(), head.getD2());
+        return isCollinearBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1165,6 +1456,24 @@ public class FVectorDef implements FVector {
         }
 
         return setAntiParallel(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    @Override
+    public FVector setCollinear(FPoint base, FPoint head) {
+
+        return setCollinear(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setCollinear(FPos3D base, FPos3D head) {
+
+        return setCollinear(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
     }
 
     @Override
@@ -1186,21 +1495,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector setCollinearCompact(double hX, double hY, double hZ) {
+    public FVector setCollinearBaseCommon(double hX, double hY, double hZ) {
+
+        return setCollinear(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public FVector setCollinearBaseCommon(FPoint head) {
+
+        return setCollinear(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setCollinearBaseCommon(FPos3D head) {
+
+        return setCollinear(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FVector setCollinearBaseZero(double hX, double hY, double hZ) {
 
         return setCollinear(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector setCollinearCompact(FPoint head) {
+    public FVector setCollinearBaseZero(FPoint head) {
 
-        return setCollinearCompact(head.getX(), head.getY(), head.getZ());
+        return setCollinearBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector setCollinearCompact(FPos3D head) {
+    public FVector setCollinearBaseZero(FPos3D head) {
 
-        return setCollinearCompact(head.getD0(), head.getD1(), head.getD2());
+        return setCollinearBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1232,6 +1568,24 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public boolean isParallel(FPoint base, FPoint head) {
+
+        return isParallel(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isParallel(FPos3D base, FPos3D head) {
+
+        return isParallel(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
     public boolean isParallel(FVector arg) {
 
         return isParallel(
@@ -1250,19 +1604,46 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public boolean isParallelCompact(double hX, double hY, double hZ) {
+    public boolean isParallelBaseCommon(double hX, double hY, double hZ) {
+
+        return isParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public boolean isParallelBaseCommon(FPoint head) {
+
+        return isParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isParallelBaseCommon(FPos3D head) {
+
+        return isParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public boolean isParallelBaseZero(double hX, double hY, double hZ) {
 
         return isParallel(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public boolean isParallelCompact(FPoint head) {
+    public boolean isParallelBaseZero(FPoint head) {
 
         return isParallel(0, 0, 0, head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public boolean isParallelCompact(FPos3D head) {
+    public boolean isParallelBaseZero(FPos3D head) {
 
         return isParallel(0, 0, 0, head.getD0(), head.getD1(), head.getD2());
     }
@@ -1291,6 +1672,24 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public FVector setParallel(FPoint base, FPoint head) {
+
+        return setParallel(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setParallel(FPos3D base, FPos3D head) {
+
+        return setParallel(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
     public FVector setParallel(FVector arg) {
 
        return setParallel(
@@ -1309,21 +1708,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector setParallelCompact(double hX, double hY, double hZ) {
+    public FVector setParallelBaseCommon(double hX, double hY, double hZ) {
+
+        return setParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public FVector setParallelBaseCommon(FPoint head) {
+
+        return setParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setParallelBaseCommon(FPos3D head) {
+
+        return setParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FVector setParallelBaseZero(double hX, double hY, double hZ) {
 
         return setParallel(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector setParallelCompact(FPoint head) {
+    public FVector setParallelBaseZero(FPoint head) {
 
-        return setParallelCompact(head.getX(), head.getY(), head.getZ());
+        return setParallelBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector setParallelCompact(FPos3D head) {
+    public FVector setParallelBaseZero(FPos3D head) {
 
-        return setParallelCompact(head.getD0(), head.getD1(), head.getD2());
+        return setParallelBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1355,6 +1781,24 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public boolean isAntiParallel(FPoint base, FPoint head) {
+
+        return isAntiParallel(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isAntiParallel(FPos3D base, FPos3D head) {
+
+        return isAntiParallel(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
     public boolean isAntiParallel(FVector arg) {
 
         return isAntiParallel(
@@ -1373,27 +1817,72 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public boolean isAntiParallelCompact(double hX, double hY, double hZ) {
+    public boolean isAntiParallelBaseCommon(double hX, double hY, double hZ) {
+
+        return isAntiParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public boolean isAntiParallelBaseCommon(FPoint head) {
+
+        return isAntiParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isAntiParallelBaseCommon(FPos3D head) {
+
+        return isAntiParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public boolean isAntiParallelBaseZero(double hX, double hY, double hZ) {
 
         return isAntiParallel(0 ,0, 0, hX, hY, hZ);
     }
 
     @Override
-    public boolean isAntiParallelCompact(FPoint head) {
+    public boolean isAntiParallelBaseZero(FPoint head) {
 
-        return isAntiParallelCompact(head.getX(), head.getY(), head.getZ());
+        return isAntiParallelBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public boolean isAntiParallelCompact(FPos3D head) {
+    public boolean isAntiParallelBaseZero(FPos3D head) {
 
-        return isAntiParallelCompact(head.getD0(), head.getD1(), head.getD2());
+        return isAntiParallelBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
     public FVector setAntiParallel(double bX, double bY, double bZ, double hX, double hY, double hZ) {
 
         return setParallel(bX, bY, bZ, hX, hY, hZ).reflectHead();
+    }
+
+    @Override
+    public FVector setAntiParallel(FPoint base, FPoint head) {
+
+        return setAntiParallel(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setAntiParallel(FPos3D base, FPos3D head) {
+
+        return setAntiParallel(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
     }
 
     @Override
@@ -1415,21 +1904,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector setAntiParallelCompact(double hX, double hY, double hZ) {
+    public FVector setAntiParallelBaseCommon(double hX, double hY, double hZ) {
+
+        return setAntiParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public FVector setAntiParallelBaseCommon(FPoint head) {
+
+        return setAntiParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setAntiParallelBaseCommon(FPos3D head) {
+
+        return setAntiParallel(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FVector setAntiParallelBaseZero(double hX, double hY, double hZ) {
 
         return setAntiParallel(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector setAntiParallelCompact(FPoint head) {
+    public FVector setAntiParallelBaseZero(FPoint head) {
 
-        return setAntiParallelCompact(head.getX(), head.getY(), head.getZ());
+        return setAntiParallelBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector setAntiParallelCompact(FPos3D head) {
+    public FVector setAntiParallelBaseZero(FPos3D head) {
 
-        return setAntiParallelCompact(head.getD0(), head.getD1(), head.getD2());
+        return setAntiParallelBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1447,6 +1963,24 @@ public class FVectorDef implements FVector {
         boolean angle = Math.abs((Math.PI * 0.5) - getAngle(bX, bY, bZ, hX, hY, hZ)) < EPSILON;
 
         return  dotProduct || angle;
+    }
+
+    @Override
+    public boolean isOrthogonal(FPoint base, FPoint head) {
+
+        return isOrthogonal(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isOrthogonal(FPos3D base, FPos3D head) {
+
+        return isOrthogonal(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
     }
 
     @Override
@@ -1468,21 +2002,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public boolean isOrthogonalCompact(double hX, double hY, double hZ) {
+    public boolean isOrthogonalBaseCommon(double hX, double hY, double hZ) {
+
+        return isOrthogonal(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public boolean isOrthogonalBaseCommon(FPoint head) {
+
+        return isOrthogonal(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public boolean isOrthogonalBaseCommon(FPos3D head) {
+
+        return isOrthogonal(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public boolean isOrthogonalBaseZero(double hX, double hY, double hZ) {
 
         return isOrthogonal(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public boolean isOrthogonalCompact(FPoint head) {
+    public boolean isOrthogonalBaseZero(FPoint head) {
 
-        return isOrthogonalCompact(head.getX(), head.getY(), head.getZ());
+        return isOrthogonalBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public boolean isOrthogonalCompact(FPos3D head) {
+    public boolean isOrthogonalBaseZero(FPos3D head) {
 
-        return isOrthogonalCompact(head.getD0(), head.getD1(), head.getD2());
+        return isOrthogonalBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1514,6 +2075,24 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public FVector setOrthogonal(FPoint base, FPoint head) {
+
+        return setOrthogonal(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setOrthogonal(FPos3D base, FPos3D head) {
+
+        return setOrthogonal(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
     public FVector setOrthogonal(FVector arg) {
 
         return setOrthogonal(
@@ -1532,21 +2111,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector setOrthogonalCompact(double hX, double hY, double hZ) {
+    public FVector setOrthogonalBaseCommon(double hX, double hY, double hZ) {
+
+        return setOrthogonal(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public FVector setOrthogonalBaseCommon(FPoint head) {
+
+        return setOrthogonal(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FVector setOrthogonalBaseCommon(FPos3D head) {
+
+        return setOrthogonal(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FVector setOrthogonalBaseZero(double hX, double hY, double hZ) {
 
         return setOrthogonal(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public FVector setOrthogonalCompact(FPoint head) {
+    public FVector setOrthogonalBaseZero(FPoint head) {
 
-        return setOrthogonalCompact(head.getX(), head.getY(), head.getZ());
+        return setOrthogonalBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public FVector setOrthogonalCompact(FPos3D head) {
+    public FVector setOrthogonalBaseZero(FPos3D head) {
 
-        return setOrthogonalCompact(head.getD0(), head.getD1(), head.getD2());
+        return setOrthogonalBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     @Override
@@ -1642,6 +2248,24 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public double getAngle(FPoint base, FPoint head) {
+
+        return getAngle(
+                base.getX(), base.getY(), getBaseZ(),
+                head.getY(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public double getAngle(FPos3D base, FPos3D head) {
+
+        return getAngle(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
     public double getAngle(FVector arg) {
 
         return getAngle(
@@ -1660,21 +2284,48 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public double getAngleCompact(double hX, double hY, double hZ) {
+    public double getAngleBaseCommon(double hX, double hY, double hZ) {
+
+        return getAngle(
+                getBaseX(), getBaseY(), getBaseZ(),
+                hX, hY, hZ
+        );
+    }
+
+    @Override
+    public double getAngleBaseCommon(FPoint head) {
+
+        return getAngle(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getY(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public double getAngleBaseCommon(FPos3D head) {
+
+        return getAngle(
+                getBaseX(), getBaseY(), getBaseZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public double getAngleBaseZero(double hX, double hY, double hZ) {
 
         return getAngle(0, 0, 0, hX, hY, hZ);
     }
 
     @Override
-    public double getAngleCompact(FPoint head) {
+    public double getAngleBaseZero(FPoint head) {
 
-        return getAngleCompact(head.getX(), head.getY(), head.getZ());
+        return getAngleBaseZero(head.getX(), head.getY(), head.getZ());
     }
 
     @Override
-    public double getAngleCompact(FPos3D head) {
+    public double getAngleBaseZero(FPos3D head) {
 
-        return getAngleCompact(head.getD0(), head.getD1(), head.getD2());
+        return getAngleBaseZero(head.getD0(), head.getD1(), head.getD2());
     }
 
     // -------------------------------------------------------------------------------------------------

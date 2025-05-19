@@ -28,5 +28,5 @@ public interface FLine extends Construct<FLine> {
     void setDistance(Geometry in, double distance);
 
     double getDistance(FPoint arg);
-    List<Double> getAtomicDistance(Geometry arg);
+    List<Double> getDistance(Geometry arg);
 }

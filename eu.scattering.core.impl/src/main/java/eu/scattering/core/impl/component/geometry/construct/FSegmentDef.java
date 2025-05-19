@@ -229,35 +229,35 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     @Override
-    public List<Double> getAtomicDistance(Geometry geometry) {
+    public List<Double> getDistance(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return geometry.disassemble().stream()
+        return arg.disassemble().stream()
                 .map(this::getUnitDistance)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void setDistance(FPoint arg, double distance) {
+    public void setDistance(FPoint in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        setUnitDistance(arg, distance);
+        setUnitDistance(in, distance);
     }
 
     @Override
-    public void setDistance(Geometry geometry, double distance) {
+    public void setDistance(Geometry in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        geometry.disassemble()
+        in.disassemble()
                 .forEach(p -> setUnitDistance(p, distance));
     }
 

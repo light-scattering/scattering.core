@@ -625,7 +625,7 @@ public class FPlaneTest {
             fPlane.getRefOrigin().addXYZ(relocation);
             fPoint.addXYZ(relocation);
 
-            assertEquals(Math.sqrt(3), fPlane.getAtomicDistance(fPoint).get(0),
+            assertEquals(Math.sqrt(3), fPlane.getDistance((Geometry) fPoint).get(0),
                     epsilon, "The distance is erroneous");
         }
 
@@ -635,7 +635,7 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.getAtomicDistance(fPoint),
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.getDistance(fPoint),
                     "The origin is a non-directional FVector");
         }
 
@@ -659,7 +659,7 @@ public class FPlaneTest {
 
             fPlane.setDistance((Geometry) fPoint, 1);
 
-            assertEquals(1, fPlane.getAtomicDistance(fPoint).get(0),
+            assertEquals(1, fPlane.getDistance((Geometry) fPoint).get(0),
                     epsilon, "The distance is erroneous");
         }
 

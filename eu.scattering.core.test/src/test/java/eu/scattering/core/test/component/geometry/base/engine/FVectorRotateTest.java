@@ -114,7 +114,7 @@ public class FVectorRotateTest {
 
         FVector results = rot.setRgAngleCompact(1, 0, 0, fVector, angle);
 
-        assertEquals(angle, fVector.getAngleCompact(1, 0, 0),
+        assertEquals(angle, fVector.getAngleBaseZero(1, 0, 0),
                 epsilon, "The angle is incorrect");
         assertSame(results, fVector,
                 "The reference should not change");
@@ -144,7 +144,7 @@ public class FVectorRotateTest {
 
         FVector results = rot.setRgAngleCompact(fPoint, fVector, angle);
 
-        assertEquals(angle, fVector.getAngleCompact(fPoint),
+        assertEquals(angle, fVector.getAngleBaseZero(fPoint),
                 epsilon, "The angle is incorrect");
         assertSame(results, fVector,
                 "The reference should not change");
@@ -159,7 +159,7 @@ public class FVectorRotateTest {
 
         FVector results = rot.setRgAngleCompact(fPos3D, fVector, angle);
 
-        assertEquals(angle, fVector.getAngleCompact(fPos3D),
+        assertEquals(angle, fVector.getAngleBaseZero(fPos3D),
                 epsilon, "The angle is incorrect");
         assertSame(results, fVector,
                 "The reference should not change");
@@ -553,7 +553,7 @@ public class FVectorRotateTest {
                 fVectorIn, angle
         );
 
-        assertEquals(angle, fVectorIn.getAngleCompact(fVectorArg.getHeadX(), fVectorArg.getHeadY(), fVectorArg.getHeadZ()),
+        assertEquals(angle, fVectorIn.getAngleBaseZero(fVectorArg.getHeadX(), fVectorArg.getHeadY(), fVectorArg.getHeadZ()),
                 epsilon, "The angle is incorrect");
         assertSame(fVectorIn, results,
                 "The reference should stay the same");
@@ -583,7 +583,7 @@ public class FVectorRotateTest {
 
         FVector results = rot.setQtAngleCompact(fPoint, fVector, angle);
 
-        assertEquals(angle, fVector.getAngleCompact(fPoint),
+        assertEquals(angle, fVector.getAngleBaseZero(fPoint),
                 epsilon, "The angle is incorrect");
         assertSame(fVector, results,
                 "The reference should stay the same");
@@ -598,7 +598,7 @@ public class FVectorRotateTest {
 
         FVector results = rot.setQtAngleCompact(fPos3D, fVector, angle);
 
-        assertEquals(angle, fVector.getAngleCompact(fPos3D),
+        assertEquals(angle, fVector.getAngleBaseZero(fPos3D),
                 epsilon, "The angle is incorrect");
         assertSame(fVector, results,
                 "The reference should stay the same");
