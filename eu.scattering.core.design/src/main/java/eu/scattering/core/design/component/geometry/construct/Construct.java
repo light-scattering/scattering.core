@@ -16,10 +16,10 @@ public interface Construct<T> extends Geometry, Component<T> {
     //--------------------------------------------------
 
     boolean isPartOf(FPoint arg);
-//    boolean isPartOf(FPoint arg, double epsilon);
+    boolean isPartOf(FPoint arg, double epsilon);
 
     boolean isPartOf(Geometry arg);
-//    boolean isPartOf(Geometry arg, double epsilon);
+    boolean isPartOf(Geometry arg, double epsilon);
 
     void project(FPoint in);
     void project(Geometry in);

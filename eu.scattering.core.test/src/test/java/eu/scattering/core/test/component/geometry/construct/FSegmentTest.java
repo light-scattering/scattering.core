@@ -519,7 +519,8 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
-            assertTrue(fSegment.isPartOf(fPoint), "The distance should be negligible");
+            assertTrue(fSegment.isPartOf(fPoint),
+                    "The distance should be negligible");
         }
 
         @Test
@@ -528,7 +529,18 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(0.5 * epsilon);
 
-            assertTrue(fSegment.isPartOf((Geometry) fPoint), "The distance should be negligible");
+            assertTrue(fSegment.isPartOf((Geometry) fPoint),
+                    "The distance should be negligible");
+        }
+
+        @Test
+        @DisplayName("Location unit (fail)")
+        void isUnitPartOfFail() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
+            FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
+
+            assertFalse(fSegment.isPartOf(fPoint),
+                    "The distance should not be negligible");
         }
 
         @Test
@@ -537,7 +549,48 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(1, 1, 1).addY(1.5 * epsilon);
 
-            assertFalse(fSegment.isPartOf((Geometry) fPoint), "The distance should not be negligible");
+            assertFalse(fSegment.isPartOf((Geometry) fPoint),
+                    "The distance should not be negligible");
+        }
+
+        @Test
+        @DisplayName("Location unit epsilon")
+        void isUnitPartOfEpsilon() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
+            FPoint fPoint = factory.getFPoint(0, 3, 1);
+
+            assertTrue(fSegment.isPartOf(fPoint, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location epsilon")
+        void isPartOfEpsilon() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
+            FPoint fPoint = factory.getFPoint(0, 1, 3);
+
+            assertTrue(fSegment.isPartOf((Geometry) fPoint, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location unit epsilon (fail)")
+        void isUnitPartOfEpsilonFail() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
+            FPoint fPoint = factory.getFPoint(0, 5, 1);
+
+            assertFalse(fSegment.isPartOf(fPoint, 3),
+                    "The distance should not be correct");
+        }
+
+        @Test
+        @DisplayName("Location epsilon (fail)")
+        void isPartOfEpsilonFail() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 0, 0, 1, 0, 0));
+            FPoint fPoint = factory.getFPoint(0, 1, 5);
+
+            assertFalse(fSegment.isPartOf((Geometry) fPoint, 3),
+                    "The distance should not be correct");
         }
 
         @Test

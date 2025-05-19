@@ -1,16 +1,13 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
-import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -208,6 +205,16 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     @Override
+    public boolean isPartOf(FPoint arg, double epsilon) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return isUnitPartOf(arg, epsilon);
+    }
+
+    @Override
     public boolean isPartOf(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
@@ -216,6 +223,17 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
         return arg.disassemble().stream()
                 .allMatch(this::isUnitPartOf);
+    }
+
+    @Override
+    public boolean isPartOf(Geometry arg, double epsilon) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return arg.disassemble().stream()
+                .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
     @Override
@@ -255,6 +273,12 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         double dist = getUnitDistance(arg);
 
         return dist != -1 && dist < EPSILON;
+    }
+
+    private boolean isUnitPartOf(FPoint arg, double epsilon) {
+        double dist = getUnitDistance(arg);
+
+        return dist != -1 && dist < epsilon;
     }
 
     private boolean isUnitPartOfSegment(double x, double y, double z) {

@@ -649,7 +649,7 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Location")
+        @DisplayName("Location unit")
         void isUnitPartOf() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(-1, 2, -1).addFactor(0.5 * epsilon);
@@ -669,6 +669,16 @@ public class FPlaneTest {
         }
 
         @Test
+        @DisplayName("Location unit (fail)")
+        void isUnitPartOfFail() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+            FPoint fPoint = factory.getFPoint(-1, 2, -1).addFactor(1.5 * epsilon);
+
+            assertFalse(fPlane.isPartOf(fPoint),
+                    "The distance should not be negligible");
+        }
+
+        @Test
         @DisplayName("Location (fail)")
         void isPartOfFail() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
@@ -676,6 +686,45 @@ public class FPlaneTest {
 
             assertFalse(fPlane.isPartOf((Geometry) fPoint),
                     "The distance should not be negligible");
+        }
+        @Test
+        @DisplayName("Location unit epsilon")
+        void isUnitPartOfEpsilon() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 0.1, 0));
+            FPoint fPoint = factory.getFPoint(1, 4, 3);
+
+            assertTrue(fPlane.isPartOf(fPoint, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location epsilon")
+        void isPartOfEpsilon() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, -0.1, 0));
+            FPoint fPoint = factory.getFPoint(1, 4, 3);
+
+            assertTrue(fPlane.isPartOf((Geometry) fPoint, 5),
+                    "The distance should be correct");
+        }
+
+        @Test
+        @DisplayName("Location unit epsilon (fail)")
+        void isUnitPartOfEpsilonFail() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 0.1, 0));
+            FPoint fPoint = factory.getFPoint(1, 4, 3);
+
+            assertFalse(fPlane.isPartOf(fPoint, 3),
+                    "The distance should not be correct");
+        }
+
+        @Test
+        @DisplayName("Location epsilon (fail)")
+        void isPartOfEpsilonFail() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, -0.1, 0));
+            FPoint fPoint = factory.getFPoint(1, 4, 3);
+
+            assertFalse(fPlane.isPartOf((Geometry) fPoint, 3),
+                    "The distance should not be correct");
         }
 
         @Test

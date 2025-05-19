@@ -223,6 +223,16 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
+    public boolean isPartOf(FPoint arg, double epsilon) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return isUnitPartOf(arg, epsilon);
+    }
+
+    @Override
     public boolean isPartOf(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
@@ -231,6 +241,17 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         return arg.disassemble().stream()
                 .allMatch(this::isUnitPartOf);
+    }
+
+    @Override
+    public boolean isPartOf(Geometry arg, double epsilon) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return arg.disassemble().stream()
+                .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
     @Override
@@ -392,6 +413,11 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private boolean isUnitPartOf(FPoint arg) {
 
         return getUnitDistance(arg) < EPSILON;
+    }
+
+    private boolean isUnitPartOf(FPoint arg, double epsilon) {
+
+        return getUnitDistance(arg) < epsilon;
     }
 
     private double getUnitDistance(FPoint arg) {

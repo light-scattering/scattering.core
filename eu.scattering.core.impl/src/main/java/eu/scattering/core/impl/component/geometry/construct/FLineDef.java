@@ -1,17 +1,15 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
-import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -205,6 +203,16 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
+    public boolean isPartOf(FPoint arg, double epsilon) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return isUnitPartOf(arg, epsilon);
+    }
+
+    @Override
     public boolean isPartOf(Geometry arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
@@ -213,6 +221,17 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         return arg.disassemble().stream()
                 .allMatch(this::isUnitPartOf);
+    }
+
+    @Override
+    public boolean isPartOf(Geometry arg, double epsilon) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return arg.disassemble().stream()
+                .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
 
@@ -547,6 +566,11 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return getUnitDistance(arg) < EPSILON;
     }
 
+    private boolean isUnitPartOf(FPoint arg, double epsilon) {
+
+        return getUnitDistance(arg) < epsilon;
+    }
+
     private double getUnitDistance(FPoint arg) {
         FVector origin = getRefOrigin();
         double originMag = origin.getMagnitude();
@@ -576,7 +600,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
     }
 
-    private boolean setUnitDistance(FPoint in, double distance) {
+    private void setUnitDistance(FPoint in, double distance) {
         double oX = in.getX();
         double oY = in.getY();
         double oZ = in.getZ();
@@ -588,7 +612,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
                 throw new IllegalStateException("The unit distance cannot be changed");
             }
 
-            return false;
+            return;
         }
 
         double pX = in.getX();
@@ -596,11 +620,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double pZ = in.getZ();
 
         in.set(oX, oY, oZ).setDistance(pX, pY, pZ, distance);
-
-        return true;
     }
 
-    private boolean reflectUnit(FPoint in) {
+    private void reflectUnit(FPoint in) {
         double oX = in.getX();
         double oY = in.getY();
         double oZ = in.getZ();
@@ -608,7 +630,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         boolean isMoved = projectUnit(in);
 
         if (!isMoved) {
-            return false;
+            return;
         }
 
         double pX = in.getX();
@@ -616,8 +638,6 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double pZ = in.getZ();
 
         in.set(oX, oY, oZ).reflect(pX, pY, pZ);
-
-        return true;
     }
 
     private boolean projectUnit(FPoint in) {
