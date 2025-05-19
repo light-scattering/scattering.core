@@ -29,5 +29,4 @@ public interface FRay extends Construct<FRay> {
     void setDistance(Geometry in, double distance);
 
     double getDistance(FPoint arg);
-    List<Double> getDistance(Geometry arg);
 }

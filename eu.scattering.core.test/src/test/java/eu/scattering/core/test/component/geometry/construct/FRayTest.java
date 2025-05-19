@@ -595,7 +595,7 @@ public class FRayTest {
             fRay.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            assertEquals(Math.sqrt(6), fRay.getDistance((Geometry) fPoint).get(0));
+            assertEquals(Math.sqrt(6), fRay.getDistance(fPoint));
         }
 
         @Test
@@ -638,7 +638,7 @@ public class FRayTest {
 
             fRay.setDistance((Geometry) fPoint, 1);
 
-            Assertions.assertTrue(Math.abs(fRay.getDistance((Geometry) fPoint).get(0) - 1) < epsilon,
+            Assertions.assertTrue(Math.abs(fRay.getDistance(fPoint) - 1) < epsilon,
                     "The distance is erroneous");
         }
 
@@ -663,7 +663,7 @@ public class FRayTest {
 
             fRay.setDistance(fPoint, 1);
 
-            assertEquals(1, fRay.getDistance((Geometry) fPoint).get(0), epsilon);
+            assertEquals(1, fRay.getDistance(fPoint), epsilon);
         }
 
         @Test
@@ -679,7 +679,7 @@ public class FRayTest {
 
             fRay.setDistance(fPoint, -1);
 
-            Assertions.assertTrue(Math.abs(fRay.getDistance((Geometry) fPoint).get(0) - 1) < epsilon,
+            Assertions.assertTrue(Math.abs(fRay.getDistance(fPoint) - 1) < epsilon,
                     "The distance between FPoints is erroneous");
         }
 
