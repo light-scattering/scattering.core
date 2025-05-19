@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FPlaneTestHelper;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -130,8 +131,8 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Set origin ref (throw NullPointerException)")
-        void setOriginRefThrowNullPointerException() {
+        @DisplayName("Set reference core (throw NullPointerException)")
+        void setRefCoreThrowNullPointerException() {
             FPlane fPlane = factory.getRefFPlane(TestHelper.getRandFVector());
 
             Assertions.assertThrows(NullPointerException.class, () -> fPlane.setRefOrigin(null),
@@ -187,6 +188,94 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
 
             FPlaneTestHelper.testValue(FPlane::toJSON, fPlane);
+        }
+
+        @Test
+        @DisplayName("Set core with FPoint A")
+        void setWithFPointA() {
+            FPlane fPlane = factory.getFPlane();
+            FPoint ptBase = factory.getFPoint(1, 1, 0);
+            FPoint ptA = factory.getFPoint(2, 1, 0);
+            FPoint ptB = factory.getFPoint(1, 2, 0);
+
+            fPlane.set(ptBase, ptA, ptB);
+
+            Assertions.assertAll("Validate FPlane",
+                    () -> assertTrue(fPlane.isPartOf(factory.getFPoint(-1, -2, 0)),
+                            "The FPoint should be a part of the plane"),
+                    () -> assertFalse(fPlane.isPartOf(factory.getFPoint(1, 2, 3)),
+                            "The FPoint should not be a part of the plane"),
+                    () -> assertTrue(fPlane.isOnSide(factory.getFPoint(0, 0, 1)),
+                            "The FPoint should be in a half-plane"),
+                    () -> assertFalse(fPlane.isOnSide(factory.getFPoint(0, 0, -1)),
+                            "The FPoint should not be in a half-plane")
+            );
+        }
+
+        @Test
+        @DisplayName("Set core with FPoint B")
+        void setWithFPointB() {
+            FPlane fPlane = factory.getFPlane();
+            FPoint ptBase = factory.getFPoint(1, 1, 0);
+            FPoint ptA = factory.getFPoint(2, 1, 0);
+            FPoint ptB = factory.getFPoint(1, 2, 0);
+
+            fPlane.set(ptBase, ptB, ptA);
+
+            Assertions.assertAll("Validate FPlane",
+                    () -> assertTrue(fPlane.isPartOf(factory.getFPoint(-1, -2, 0)),
+                            "The FPoint should be a part of the plane"),
+                    () -> assertFalse(fPlane.isPartOf(factory.getFPoint(1, 2, 3)),
+                            "The FPoint should not be a part of the plane"),
+                    () -> assertTrue(fPlane.isOnSide(factory.getFPoint(0, 0, -1)),
+                            "The FPoint should be in a half-plane"),
+                    () -> assertFalse(fPlane.isOnSide(factory.getFPoint(0, 0, 1)),
+                            "The FPoint should not be in a half-plane")
+            );
+        }
+
+        @Test
+        @DisplayName("Set core with FPos3D A")
+        void setWithFPos3DA() {
+            FPlane fPlane = factory.getFPlane();
+            FPos3D ptBase = factory.getFPos3D(1, 1, 0);
+            FPos3D ptA = factory.getFPos3D(2, 1, 0);
+            FPos3D ptB = factory.getFPos3D(1, 2, 0);
+
+            fPlane.set(ptBase, ptA, ptB);
+
+            Assertions.assertAll("Validate FPlane",
+                    () -> assertTrue(fPlane.isPartOf(factory.getFPoint(-1, -2, 0)),
+                            "The FPoint should be a part of the plane"),
+                    () -> assertFalse(fPlane.isPartOf(factory.getFPoint(1, 2, 3)),
+                            "The FPoint should not be a part of the plane"),
+                    () -> assertTrue(fPlane.isOnSide(factory.getFPoint(0, 0, 1)),
+                            "The FPoint should be in a half-plane"),
+                    () -> assertFalse(fPlane.isOnSide(factory.getFPoint(0, 0, -1)),
+                            "The FPoint should not be in a half-plane")
+            );
+        }
+
+        @Test
+        @DisplayName("Set core with FPos3D B")
+        void setWithFPos3DB() {
+            FPlane fPlane = factory.getFPlane();
+            FPos3D ptBase = factory.getFPos3D(1, 1, 0);
+            FPos3D ptA = factory.getFPos3D(2, 1, 0);
+            FPos3D ptB = factory.getFPos3D(1, 2, 0);
+
+            fPlane.set(ptBase, ptB, ptA);
+
+            Assertions.assertAll("Validate FPlane",
+                    () -> assertTrue(fPlane.isPartOf(factory.getFPoint(-1, -2, 0)),
+                            "The FPoint should be a part of the plane"),
+                    () -> assertFalse(fPlane.isPartOf(factory.getFPoint(1, 2, 3)),
+                            "The FPoint should not be a part of the plane"),
+                    () -> assertTrue(fPlane.isOnSide(factory.getFPoint(0, 0, -1)),
+                            "The FPoint should be in a half-plane"),
+                    () -> assertFalse(fPlane.isOnSide(factory.getFPoint(0, 0, 1)),
+                            "The FPoint should not be in a half-plane")
+            );
         }
 
         @Test
@@ -615,21 +704,6 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Get distance")
-        void getDistance() {
-            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
-            FPoint fPoint = factory.getFPoint(0, 3, 0);
-
-            FPoint relocation = TestHelper.getRandFPoint();
-
-            fPlane.getRefOrigin().addXYZ(relocation);
-            fPoint.addXYZ(relocation);
-
-            assertEquals(Math.sqrt(3), fPlane.getDistance((Geometry) fPoint).get(0),
-                    epsilon, "The distance is erroneous");
-        }
-
-        @Test
         @DisplayName("Get distance (throw IllegalStateException)")
         void getDistanceThrowIllegalStateException() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
@@ -659,7 +733,7 @@ public class FPlaneTest {
 
             fPlane.setDistance((Geometry) fPoint, 1);
 
-            assertEquals(1, fPlane.getDistance((Geometry) fPoint).get(0),
+            assertEquals(1, fPlane.getDistance(fPoint),
                     epsilon, "The distance is erroneous");
         }
 
@@ -674,8 +748,8 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Determine half-space")
-        void isInHalfSpace() {
+        @DisplayName("Determine half-space with FPoint")
+        void isFPointInHalfSpace() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFVector(1, 1, 1)
                     .mulFactor(epsilon)
@@ -691,8 +765,8 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Determine half-space (fail)")
-        void isInHalfSpaceFail() {
+        @DisplayName("Determine half-space with FPoint (fail)")
+        void isFPointInHalfSpaceFail() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFVector(1, 1, 1)
                     .mulFactor(epsilon)
@@ -709,12 +783,57 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Determine half-space (throw IllegalStateException)")
-        void isInHalfSpaceThrowIllegalStateException() {
+        @DisplayName("Determine half-space with FPoint (throw IllegalStateException)")
+        void isFPointInHalfSpaceThrowIllegalStateException() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
             Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isOnSide(fPoint),
+                    "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Determine half-space with geometry")
+        void isGeometryInHalfSpace() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+            Geometry fGeometry = factory.getFVector(1, 1, 1)
+                    .mulFactor(epsilon)
+                    .moveBase(-1, 2, -1)
+                    .getRefHead();
+
+            FPoint relocation = TestHelper.getRandFPoint();
+
+            fPlane.getRefOrigin().addXYZ(relocation);
+            fGeometry.disassemble().get(0).addXYZ(relocation);
+
+            assertTrue(fPlane.isOnSide(fGeometry),"The half-space is erroneous");
+        }
+
+        @Test
+        @DisplayName("Determine half-space with geometry (fail)")
+        void isGeometryInHalfSpaceFail() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+            Geometry fGeometry = factory.getFVector(1, 1, 1)
+                    .mulFactor(epsilon)
+                    .reflectHead()
+                    .moveBase(-1, 2, -1)
+                    .getRefHead();
+
+            FPoint relocation = TestHelper.getRandFPoint();
+
+            fPlane.getRefOrigin().addXYZ(relocation);
+            fGeometry.disassemble().get(0).addXYZ(relocation);
+
+            assertFalse(fPlane.isOnSide(fGeometry),"The half-space is erroneous");
+        }
+
+        @Test
+        @DisplayName("Determine half-space with geometry (throw IllegalStateException)")
+        void isGeometryInHalfSpaceThrowIllegalStateException() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector());
+            Geometry fGeometry = factory.getFPoint(0, 3, 0);
+
+            Assertions.assertThrows(IllegalStateException.class, () -> fPlane.isOnSide(fGeometry),
                     "The origin is a non-directional FVector");
         }
 

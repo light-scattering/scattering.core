@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -71,11 +72,21 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         return this;
     }
 
-//    @Override
-//    public FPlane set(FPoint ptBase, FPoint ptA, FPoint ptB) {
-//        getRefOrigin().set(ptBase, ptA).setCrossProduct(ptB);
-//        return null;
-//    }
+    @Override
+    public FPlane set(FPoint ptBase, FPoint ptA, FPoint ptB) {
+
+        getRefOrigin().set(ptBase, ptA).setCrossProductBaseCommon(ptB);
+
+        return this;
+    }
+
+    @Override
+    public FPlane set(FPos3D ptBase, FPos3D ptA, FPos3D ptB) {
+
+        getRefOrigin().set(ptBase, ptA).setCrossProductBaseCommon(ptB);
+
+        return this;
+    }
 
     @Override
     public FPlane applyStateFrom(JSONObject json) {
@@ -233,18 +244,6 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public List<Double> getDistance(Geometry arg) {
-
-        if (getRefOrigin().isNearZeroLength()) {
-            throw new IllegalStateException("The origin is a non-directional FVector");
-        }
-
-        return arg.disassemble().stream()
-                .map(this::getUnitDistance)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public void setDistance(FPoint in, double distance) {
 
         if (getRefOrigin().isNearZeroLength()) {
@@ -280,6 +279,16 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         boolean conditionFalse = isInHalfSpace.stream().anyMatch(e -> !e);
 
         return conditionTrue && conditionFalse;
+    }
+
+    @Override
+    public boolean isOnSide(FPoint arg) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return isUnitInHalfSpace(arg);
     }
 
     @Override

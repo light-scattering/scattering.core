@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,8 @@ import java.util.Optional;
 public interface FPlane extends Construct<FPlane> {
 
     FPlane set(FPairPos3D position);
-//    FPlane set(FPoint ptBase, FPoint ptA, FPoint ptB);
+    FPlane set(FPoint ptBase, FPoint ptA, FPoint ptB);
+    FPlane set(FPos3D ptBase, FPos3D ptA, FPos3D ptB);
 
     FPairPos3D toFPairPos3D();
 
@@ -21,6 +23,8 @@ public interface FPlane extends Construct<FPlane> {
     boolean isSamePlane(FPlane arg);
 
     boolean isCut(Geometry arg);
+
+    boolean isOnSide(FPoint arg);
     boolean isOnSide(Geometry arg);
 
     Optional<FPoint> getFPointAtIntersection(FLine arg);
@@ -30,6 +34,5 @@ public interface FPlane extends Construct<FPlane> {
     void setDistance(Geometry in, double distance);
 
     double getDistance(FPoint arg);
-    List<Double> getDistance(Geometry arg);
 }
 
