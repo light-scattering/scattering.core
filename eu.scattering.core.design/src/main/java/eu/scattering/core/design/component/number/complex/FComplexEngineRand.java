@@ -4,8 +4,8 @@ import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 
 public interface FComplexEngineRand {
 
-    FComplex rndPos(FComplex in, FPairPos2D range, FComplex... exclusion);
+    FComplex rndPos(FComplex in, FPairPos2D range);
 
-    FComplex rndPosInCircle(FComplex in, double radius, FComplex... exclusion);
-    FComplex rndPosOnCircle(FComplex in, double radius, FComplex... exclusion);
+    FComplex rndPosInCircle(FComplex in, double radius);
+    FComplex rndPosOnCircle(FComplex in, double radius);
 }

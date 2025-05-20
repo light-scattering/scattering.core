@@ -30,17 +30,6 @@ public class FPointRandomizeTest {
     }
 
     @Test
-    @DisplayName("Set random angle (validate correctness)")
-    void setRandomAngleValidateCorrectness() {
-        double radius = Math.abs(rand.nextDouble());
-
-        FPoint fPointA = factory.getFRandEngine().rndAngle(factory.getFPoint(radius));
-        FPoint fPointB = factory.getFRandEngine().rndAngle(factory.getFPoint(radius), fPointA);
-
-        assertNotEquals(fPointA, fPointB, "Two randomly generated points should be different");
-    }
-
-    @Test
     @DisplayName("Set random angle (validate timeout)")
     void setRandomAngleValidateTimeout() {
         double radius = Math.abs(rand.nextDouble());
@@ -64,7 +53,7 @@ public class FPointRandomizeTest {
         FPoint fPoint = factory.getFPoint();
         FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPos(fPoint, factory.getFPairPos3D(
+        FPoint results = random.rndPosInRange(fPoint, factory.getFPairPos3D(
                 0.01, 0.01, 0.01, 0.02, 0.02, 0.02));
 
         Assertions.assertAll("Validate position",

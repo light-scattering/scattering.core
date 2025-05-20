@@ -31,37 +31,33 @@ public class FRandEngineDef implements FRandEngine {
     //--------------------------------------------------
 
     @Override
-    public FComplex rndPos(FComplex in, FPairPos2D range, FComplex... exclusion) {
-        FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
+    public FComplex rndPos(FComplex in, FPairPos2D range) {
 
-        in.applyStateFrom(core.nextDouble2D(range, exc));
-
-        return in;
-    }
-
-    @Override
-    public FComplex rndPosInCircle(FComplex in, double radius, FComplex... exclusion) {
-        FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
-
-        in.applyStateFrom(core.nextDoubleInCircle(radius, exc));
+        in.applyStateFrom(core.nextDouble2D(range));
 
         return in;
     }
 
     @Override
-    public FComplex rndPosOnCircle(FComplex in, double radius, FComplex... exclusion) {
-        FPos2D[] exc = Arrays.stream(exclusion).map(FComplex::toFPos2D).toArray(FPos2D[]::new);
+    public FComplex rndPosInCircle(FComplex in, double radius) {
 
-        in.applyStateFrom(core.nextDoubleOnCircle(radius, exc));
+        in.applyStateFrom(core.nextDoubleInCircle(radius));
 
         return in;
     }
 
     @Override
-    public FQuaternion rndPos(FQuaternion in, FPairPos4D range, FQuaternion... exclusion) {
-        FPos4D[] exc = Arrays.stream(exclusion).map(FQuaternion::toFPos4D).toArray(FPos4D[]::new);
+    public FComplex rndPosOnCircle(FComplex in, double radius) {
 
-        in.applyStateFrom(core.nextDouble4D(range, exc));
+        in.applyStateFrom(core.nextDoubleOnCircle(radius));
+
+        return in;
+    }
+
+    @Override
+    public FQuaternion rndPos(FQuaternion in, FPairPos4D range) {
+
+        in.applyStateFrom(core.nextDouble4D(range));
 
         return in;
     }
@@ -69,7 +65,7 @@ public class FRandEngineDef implements FRandEngine {
     //--------------------------------------------------
 
     @Override
-    public FPoint rndAngle(FPoint in, FPoint... exclusion) {
+    public FPoint rndAngle(FPoint in) {
         double radius = in.getMagnitude();
 
         in.applyStateFrom(core.nextDoubleOnSphere(radius));
@@ -78,43 +74,34 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPos(FPoint in, FPairPos3D range, FPoint... exclusion) {
-        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
+    public FPoint rndPosInRange(FPoint in, FPairPos3D range) {
 
-        in.applyStateFrom(core.nextDouble3D(range, exc));
-
-        return in;
-    }
-
-    @Override
-    public FPoint rndPosInSphere(FPoint in, double radius, FPoint... exclusion) {
-        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
-
-        in.applyStateFrom(core.nextDoubleInSphere(radius, exc));
+        in.applyStateFrom(core.nextDouble3D(range));
 
         return in;
     }
 
     @Override
-    public FPoint rndPosOnSphere(FPoint in, double radius, FPoint... exclusion) {
-        FPos3D[] exc = Arrays.stream(exclusion).map(FPoint::toFPos3D).toArray(FPos3D[]::new);
+    public FPoint rndPosInSphere(FPoint in, double radius) {
 
-        in.applyStateFrom(core.nextDoubleOnSphere(radius, exc));
+        in.applyStateFrom(core.nextDoubleInSphere(radius));
 
         return in;
     }
 
     @Override
-    public FVector rndAngle(FVector in, FPoint... exclusion) {
+    public FPoint rndPosOnSphere(FPoint in, double radius) {
+
+        in.applyStateFrom(core.nextDoubleOnSphere(radius));
+
+        return in;
+    }
+
+    @Override
+    public FVector rndAngle(FVector in) {
         FVector fCopyLocal = in.copy().moveBaseToCenter();
 
-        FPoint[] exc = new FPoint[exclusion.length];
-
-        for (int i = 0; i < exclusion.length ; i++ ) {
-            exc[i] = exclusion[i].copy().subXYZ(in.getRefBase());
-        }
-
-        rndAngle(fCopyLocal.getRefHead(), exc);
+        rndAngle(fCopyLocal.getRefHead());
 
         fCopyLocal.moveBase(in.getRefBase());
 
@@ -124,58 +111,28 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FVector rndPos(FVector in, FPairPos3D range, FPoint... exclusion) {
+    public FVector rndPos(FVector in, FPairPos3D range) {
 
-        rndPos(in.getRefBase(), range, exclusion);
-
-        FPoint[] exc = new FPoint[exclusion.length + 1];
-
-        int i = 0;
-        for (; i < exclusion.length ; i++ ) {
-            exc[i] = exclusion[i];
-        }
-
-        exc[i] = in.getRefBase();
-
-        rndPos(in.getRefHead(), range, exc);
+        rndPosInRange(in.getRefBase(), range);
+        rndPosInRange(in.getRefHead(), range);
 
         return in;
     }
 
     @Override
-    public FVector rndPosInSphere(FVector in, double radius, FPoint... exclusion) {
+    public FVector rndPosInSphere(FVector in, double radius) {
 
-        rndPosInSphere(in.getRefBase(), radius, exclusion);
-
-        FPoint[] exc = new FPoint[exclusion.length + 1];
-
-        int i = 0;
-        for (; i < exclusion.length ; i++ ) {
-            exc[i] = exclusion[i];
-        }
-
-        exc[i] = in.getRefBase();
-
-        rndPosInSphere(in.getRefHead(), radius, exc);
+        rndPosInSphere(in.getRefBase(), radius);
+        rndPosInSphere(in.getRefHead(), radius);
 
         return in;
     }
 
     @Override
-    public FVector rndPosOnSphere(FVector in, double radius, FPoint... exclusion) {
+    public FVector rndPosOnSphere(FVector in, double radius) {
 
-        rndPosOnSphere(in.getRefBase(), radius, exclusion);
-
-        FPoint[] exc = new FPoint[exclusion.length + 1];
-
-        int i = 0;
-        for (; i < exclusion.length ; i++ ) {
-            exc[i] = exclusion[i];
-        }
-
-        exc[i] = in.getRefBase();
-
-        rndPosOnSphere(in.getRefHead(), radius, exc);
+        rndPosOnSphere(in.getRefBase(), radius);
+        rndPosOnSphere(in.getRefHead(), radius);
 
         return in;
     }

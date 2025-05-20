@@ -9,10 +9,6 @@ import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static eu.scattering.core.test.Config.factory;
 
 public class TestHelper {
@@ -24,36 +20,30 @@ public class TestHelper {
 
     public static FPoint getRandFPoint(FPoint... exc) {
 
-        return factory.getFRandEngine().rndPos(factory.getFPoint(), range3D, exc);
+        return factory.getFRandEngine().rndPosInRange(factory.getFPoint(), range3D);
     }
 
     public static FVector getRandFVector(FVector... exc) {
-        List<FPoint> parsedBaseList = Arrays.stream(exc).map(FVector::getRefBase).collect(Collectors.toList());
-        List<FPoint> parsedHeadList = Arrays.stream(exc).map(FVector::getRefHead).collect(Collectors.toList());
 
-        FPoint base = getRandFPoint(parsedBaseList.toArray(FPoint[]::new));
-
-        parsedHeadList.add(base);
-
-        FPoint head = getRandFPoint(parsedHeadList.toArray(FPoint[]::new));
+        FPoint base = getRandFPoint();
+        FPoint head = getRandFPoint();
 
         return factory.getFVector(base, head);
     }
 
     public static FComplex getRandFComplex(FComplex... exc) {
 
-        return factory.getFRandEngine().rndPos(factory.getFComplex(), range2D, exc);
+        return factory.getFRandEngine().rndPos(factory.getFComplex(), range2D);
     }
 
     public static FQuaternion getRandFQuaternion(FQuaternion... exc) {
 
-        return factory.getFRandEngine().rndPos(factory.getFQuaternion(), range4D, exc);
+        return factory.getFRandEngine().rndPos(factory.getFQuaternion(), range4D);
     }
 
     public static FSphere getRandFSphere(FSphere... exc) {
-        List<FPoint> parsedCenterList = Arrays.stream(exc).map(FSphere::getRefCenter).collect(Collectors.toList());
 
-        FPoint center = getRandFPoint(parsedCenterList.toArray(FPoint[]::new));
+        FPoint center = getRandFPoint();
 
         return factory.getRefFSphere(center, factory.getFRandGenerator().nextDouble(0, range, 0));
     }
