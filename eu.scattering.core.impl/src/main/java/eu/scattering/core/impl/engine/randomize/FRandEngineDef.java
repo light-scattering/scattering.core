@@ -98,14 +98,25 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
+    public FPoint rndPosInCircle(FPoint in, FPoint dir, double radius) {
+        FPos2D base = core.nextDoubleInCircle(radius);
+
+        in.set(base.getD0(), base.getD1(), 0);
+
+//        in.orth
+
+        return null;
+    }
+
+    @Override
     public FVector rndAngle(FVector in) {
-        FVector fCopyLocal = in.copy().moveBaseToCenter();
+        double memoOBX = in.getBaseX();
+        double memoOBY = in.getBaseY();
+        double memoOBZ = in.getBaseZ();
 
-        rndAngle(fCopyLocal.getRefHead());
-
-        fCopyLocal.moveBase(in.getRefBase());
-
-        in.applyStateFrom(fCopyLocal);
+        in.moveBaseToCenter();
+        rndAngle(in.getRefHead());
+        in.moveBase(memoOBX, memoOBY, memoOBZ);
 
         return in;
     }

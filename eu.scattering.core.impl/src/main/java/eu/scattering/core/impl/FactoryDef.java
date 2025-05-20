@@ -45,8 +45,6 @@ public final class FactoryDef extends FactoryDesignConcrete {
     private FactoryDef() {
         FRandGenerator fRandInternal = FRandProcessorDef.create();
 
-        fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
-
         this.fRandEngine = FRandEngineDef.create(fRandInternal);
         this.fProtEngine = FProtoEngineDef.create();
         this.fRotEngine = FRotEngineDef.create(getFRotGenerator());
@@ -57,8 +55,6 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
     private FactoryDef(long seed) {
         FRandGenerator fRandInternal = FRandProcessorDef.create(seed);
-
-        fRandInternal.setProximityLimit(ConfigDef.PROXIMITY_LIMIT);
 
         this.fRandEngine = FRandEngineDef.create(fRandInternal);
         this.fProtEngine = FProtoEngineDef.create();

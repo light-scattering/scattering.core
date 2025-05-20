@@ -9,6 +9,7 @@ import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.test.Config.factory;
 
 public class TestHelper {
@@ -20,31 +21,86 @@ public class TestHelper {
 
     public static FPoint getRandFPoint(FPoint... exc) {
 
-        return factory.getFRandEngine().rndPosInRange(factory.getFPoint(), range3D);
+        main:
+        while (true) {
+            var candidate =  factory.getFRandEngine().rndPosInRange(factory.getFPoint(), range3D);
+
+            for (FPoint fPoint : exc) {
+                if (candidate.isSimilar(fPoint)) {
+                    continue main;
+                }
+            }
+
+            return candidate;
+        }
     }
 
     public static FVector getRandFVector(FVector... exc) {
 
-        FPoint base = getRandFPoint();
-        FPoint head = getRandFPoint();
+        main:
+        while (true) {
+            var base = getRandFPoint();
+            var head = getRandFPoint();
+            var candidate = factory.getFVector(base, head);
 
-        return factory.getFVector(base, head);
+            for (FVector fVector : exc) {
+                if (candidate.isSimilar(fVector)) {
+                    continue main;
+                }
+            }
+
+            return candidate;
+        }
     }
 
     public static FComplex getRandFComplex(FComplex... exc) {
 
-        return factory.getFRandEngine().rndPos(factory.getFComplex(), range2D);
+        main:
+        while (true) {
+            var candidate =  factory.getFRandEngine().rndPos(factory.getFComplex(), range2D);
+
+            for (FComplex fComplex : exc) {
+                if (candidate.isSimilar(fComplex)) {
+                    continue main;
+                }
+            }
+
+            return candidate;
+        }
     }
 
     public static FQuaternion getRandFQuaternion(FQuaternion... exc) {
 
-        return factory.getFRandEngine().rndPos(factory.getFQuaternion(), range4D);
+        main:
+        while (true) {
+            var candidate =  factory.getFRandEngine().rndPos(factory.getFQuaternion(), range4D);
+
+            for (FQuaternion fQuaternion : exc) {
+                if (candidate.isSimilar(fQuaternion)) {
+                    continue main;
+                }
+            }
+
+            return candidate;
+        }
     }
 
     public static FSphere getRandFSphere(FSphere... exc) {
 
-        FPoint center = getRandFPoint();
+        main:
+        while (true) {
+            var candidate =  factory.getRefFSphere(
+                    getRandFPoint(),
+                    factory.getFRandGenerator().nextDouble(EPSILON, range)
+            );
 
-        return factory.getRefFSphere(center, factory.getFRandGenerator().nextDouble(0, range, 0));
+            for (FSphere fSphere : exc) {
+                if (candidate.isSimilar(fSphere)) {
+                    continue main;
+                }
+            }
+
+            return candidate;
+        }
     }
 }

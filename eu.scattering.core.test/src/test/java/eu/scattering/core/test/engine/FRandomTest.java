@@ -4,8 +4,10 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import org.junit.jupiter.api.*;
 
 import java.util.Optional;
@@ -20,7 +22,7 @@ public class FRandomTest {
     @Nested
     @Tag("Basic")
     @DisplayName("Functionality - Basic")
-    class FEngineBasic {
+    class FEngineBasicTest {
 
         @Test
         @DisplayName("Get retry limit - Default")
@@ -67,53 +69,6 @@ public class FRandomTest {
 
             Assertions.assertAll("Validate return value",
                     () -> assertEquals(Optional.empty(), fRandom.getRetryLimit()));
-        }
-
-        @Test
-        @DisplayName("Get separation distance - Default")
-        void getSeparationDistanceDefault() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.empty(), fRandom.getProximityLimit()));
-        }
-
-        @Test
-        @DisplayName("Set separation distance")
-        void setSeparationDistance() {
-            double value = 1.2345;
-
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            fRandom.setProximityLimit(value);
-
-            Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.of(value), fRandom.getProximityLimit()));
-        }
-
-        @Test
-        @DisplayName("Set separation distance - Throw exception")
-        void setSeparationDistanceThrowException() {
-            double value = -1.2345;
-
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            assertThrows(IllegalArgumentException.class,
-                    () -> fRandom.setProximityLimit(value));
-        }
-
-        @Test
-        @DisplayName("Clear separation distance")
-        void clearSeparationDistance() {
-            double value = 1.2345;
-
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            fRandom.setProximityLimit(value);
-            fRandom.clearProximityLimit();
-
-            Assertions.assertAll("Validate return value",
-                    () -> assertEquals(Optional.empty(), fRandom.getProximityLimit()));
         }
 
         @Test
@@ -195,42 +150,6 @@ public class FRandomTest {
         }
 
         @Test
-        @DisplayName("Get random with range and exclusion")
-        void nextDouble1DRangeWithExclusion() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            double separationDistance = 1;
-
-            double min = 0;
-            double max = 1.5;
-
-            fRandom.setProximityLimit(separationDistance);
-
-            double value = fRandom.nextDouble(min, max, 0);
-
-            Assertions.assertAll("Validate random value",
-                    () -> assertTrue(value >= 1 && value < max, "The value is not in the range"));
-        }
-
-        @Test
-        @DisplayName("Get random with range and exclusion - Retry limit")
-        void validateRetryLimit() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            double separationDistance = 1;
-            int retryLimit = 100;
-
-            double min = 0;
-            double max = 0.5;
-
-            fRandom.setProximityLimit(separationDistance);
-            fRandom.setRetryLimit(retryLimit);
-
-            assertThrows(ArithmeticException.class,
-                    ()-> fRandom.nextDouble(min, max, 0));
-        }
-
-        @Test
         @DisplayName("Get random with reversed range - Seed enabled")
         void nextDoubleWithReversedRangeSeedEnabled() {
             long seed = 12345;
@@ -288,115 +207,9 @@ public class FRandomTest {
     }
 
     @Nested
-    @Tag("Utilities")
-    @DisplayName("Functionality - Utilities")
-    class FEngineUtils {
-
-        @Test
-        @DisplayName("Validate 1D")
-        void validate1D() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            double separationDistance = 0.1;
-
-            double exc1 = -1;
-            double exc2 = 1;
-
-            fRandom.setProximityLimit(separationDistance);
-
-            Assertions.assertAll("Validate 1D point",
-                    () -> assertTrue(fRandom.valExc1D(0.85, exc1, exc2)),
-                    () -> assertTrue(fRandom.valExc1D(1.15, exc1, exc2)),
-                    () -> assertTrue(fRandom.valExc1D(-0.85, exc1, exc2)),
-                    () -> assertTrue(fRandom.valExc1D(-1.15, exc1, exc2)),
-                    () -> assertFalse(fRandom.valExc1D(0.95, exc1, exc2)),
-                    () -> assertFalse(fRandom.valExc1D(1.05, exc1, exc2)),
-                    () -> assertFalse(fRandom.valExc1D(-0.95, exc1, exc2)),
-                    () -> assertFalse(fRandom.valExc1D(-1.05, exc1, exc2))
-            );
-        }
-
-        @Test
-        @DisplayName("Validate 2D")
-        void validate2D() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            double separationDistance = 0.1;
-
-            FPos2D exc1 = factory.getFPos2D(-1, 0);
-            FPos2D exc2 = factory.getFPos2D(1, 0);
-            FPos2D exc3 = factory.getFPos2D(0, -1);
-            FPos2D exc4 = factory.getFPos2D(0, 1);
-
-            fRandom.setProximityLimit(separationDistance);
-
-            Assertions.assertAll("Validate 2D point",
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(0.85, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(1.15, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(-0.85, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(-1.15, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(0, 0.85), exc1, exc2, exc3, exc4)),
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(0, 1.15), exc1, exc2, exc3, exc4)),
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(0, -0.85), exc1, exc2, exc3, exc4)),
-                    () -> assertTrue(fRandom.valExc2D(factory.getFPos2D(0, -1.15), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(0.95, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(1.05, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(-0.95, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(-1.05, 0), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(0, 0.95), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(0, 1.05), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(0, -0.95), exc1, exc2, exc3, exc4)),
-                    () -> assertFalse(fRandom.valExc2D(factory.getFPos2D(0, -1.05), exc1, exc2, exc3, exc4)));
-        }
-
-        @Test
-        @DisplayName("Validate 3D")
-        void validate3D() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            double separationDistance = 0.1;
-
-            FPos3D exc1 = factory.getFPos3D(-1, 0, 0);
-            FPos3D exc2 = factory.getFPos3D(1, 0, 0);
-            FPos3D exc3 = factory.getFPos3D(0, -1, 0);
-            FPos3D exc4 = factory.getFPos3D(0, 1, 0);
-            FPos3D exc5 = factory.getFPos3D(0, 0, 1);
-            FPos3D exc6 = factory.getFPos3D(0, 0, -1);
-
-            fRandom.setProximityLimit(separationDistance);
-
-            Assertions.assertAll("Validate 2D point",
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0.85, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(1.15, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(-0.85, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(-1.15, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, 0.85, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, 1.15, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, -0.85, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, -1.15, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, 0, 0.85), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, 0, 1.15), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, 0, -0.85), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertTrue(fRandom.valExc3D(factory.getFPos3D(0, 0, -1.15), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0.95, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(1.05, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(-0.95, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(-1.05, 0, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, 0.95, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, 1.05, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, -0.95, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, -1.05, 0), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, 0, 0.95), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, 0, 1.05), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, 0, -0.95), exc1, exc2, exc3, exc4, exc5, exc6)),
-                    () -> assertFalse(fRandom.valExc3D(factory.getFPos3D(0, 0, -1.05), exc1, exc2, exc3, exc4, exc5, exc6)));
-        }
-    }
-
-    @Nested
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
-    class FEngineAdvanced {
+    class FEngineAdvanceTest {
 
         @Test
         @DisplayName("Get random 2D with range")
@@ -414,30 +227,6 @@ public class FRandomTest {
             Assertions.assertAll("Validate random value",
                     () -> assertTrue(value.getD0() >= -range && value.getD0() < range),
                     () -> assertTrue(value.getD1() >= -range && value.getD1() < range));
-        }
-
-        @Test
-        @DisplayName("Get random 2D with range and exclusion")
-        void nextDouble2DRangeWithExclusion() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
-
-            double separationDistance = 1;
-            double range = 1.5;
-
-            FPos2D rangeMin = factory.getFPos2D(-range, -range);
-            FPos2D rangeMax = factory.getFPos2D(range, range);
-            FPairPos2D range2D = factory.getFPairPos2D(rangeMin, rangeMax);
-
-            fRandom.setProximityLimit(separationDistance);
-
-            FPos2D value = fRandom.nextDouble2D(range2D, factory.getFPos2D(0, 0));
-
-            double distX = value.getD0() * value.getD0();
-            double distY = value.getD1() * value.getD1();
-            double dist = Math.sqrt(distX + distY);
-
-            Assertions.assertAll("Validate random value",
-                    () -> assertFalse(dist < separationDistance));
         }
 
         @Test
@@ -460,28 +249,23 @@ public class FRandomTest {
         }
 
         @Test
-        @DisplayName("Get random 3D with range and exclusion")
-        void nextDouble3DRangeWithExclusion() {
+        @DisplayName("Get random 4D with range")
+        void nextDouble4DRange() {
             FRandGenerator fRandom = factory.getFRandGenerator();
 
-            double separationDistance = 1;
-            double range = 1.5;
+            double range = 0.00001;
 
-            FPos3D rangeMin = factory.getFPos3D(-range, -range, -range);
-            FPos3D rangeMax = factory.getFPos3D(range, range, range);
-            FPairPos3D range3D = factory.getFPairPos3D(rangeMin, rangeMax);
+            FPos4D rangeMin = factory.getFPos4D(-range, -range, -range, -range);
+            FPos4D rangeMax = factory.getFPos4D(range, range, range, range);
+            FPairPos4D range4D = factory.getFPairPos4D(rangeMin, rangeMax);
 
-            fRandom.setProximityLimit(separationDistance);
-
-            FPos3D value = fRandom.nextDouble3D(range3D, factory.getFPos3D(0, 0, 0));
-
-            double distX = value.getD0() * value.getD0();
-            double distY = value.getD1() * value.getD1();
-            double distZ = value.getD2() * value.getD2();
-            double dist = Math.sqrt(distX + distY + distZ);
+            FPos4D value = fRandom.nextDouble4D(range4D);
 
             Assertions.assertAll("Validate random value",
-                    () -> assertFalse(dist < separationDistance));
+                    () -> assertTrue(value.getD0() >= -range && value.getD0() < range),
+                    () -> assertTrue(value.getD1() >= -range && value.getD1() < range),
+                    () -> assertTrue(value.getD2() >= -range && value.getD2() < range),
+                    () -> assertTrue(value.getD3() >= -range && value.getD3() < range));
         }
 
         @Test

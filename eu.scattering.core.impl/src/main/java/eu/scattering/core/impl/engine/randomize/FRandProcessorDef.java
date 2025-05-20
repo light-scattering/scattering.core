@@ -23,9 +23,6 @@ public class FRandProcessorDef implements FRandGenerator {
 
     private int retryLimit = -1;
 
-    private double proximityLimit = -1;
-    private double proximityLimitP2 = -1;
-
     //--------------------------------------------------
 
     private FRandProcessorDef() {
@@ -54,33 +51,6 @@ public class FRandProcessorDef implements FRandGenerator {
     public Optional<Long> getSeed() {
 
         return this.core.getSeed();
-    }
-
-    @Override
-    public Optional<Double> getProximityLimit() {
-
-        if (this.proximityLimit >= 0) {
-            return Optional.of(this.proximityLimit);
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public void setProximityLimit(double proximityLimit) {
-
-        if (proximityLimit < 0) {
-            throw new IllegalArgumentException("The proximity limit cannot be lower than zero");
-        }
-
-        this.proximityLimit = proximityLimit;
-        this.proximityLimitP2 = proximityLimit * proximityLimit;
-    }
-
-    @Override
-    public void clearProximityLimit() {
-
-        this.proximityLimit = -1;
-        this.proximityLimitP2 = -1;
     }
 
     @Override
@@ -128,103 +98,34 @@ public class FRandProcessorDef implements FRandGenerator {
     }
 
     @Override
-    public double nextDouble(double origin, double bound, double... exclude) {
-        int retries = 0;
+    public FPos2D nextDouble2D(FPairPos2D range) {
+        double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
+        double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
 
-        while (true) {
-            double rnd = nextDouble(origin, bound);
-
-            if (valExc1D(rnd, exclude)) {
-                return rnd;
-            }
-
-            if (this.retryLimit > 0) {
-                if (retries > this.retryLimit) {
-                    throw new ArithmeticException("The retry limit has been reached");
-                }
-            }
-
-            retries++;
-        }
+        return factory.getFPos2D(rndD0, rndD1);
     }
 
     @Override
-    public FPos2D nextDouble2D(FPairPos2D range, FPos2D... exclude) {
-        int retries = 0;
+    public FPos3D nextDouble3D(FPairPos3D range) {
+        double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
+        double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
+        double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
 
-        while (true) {
-            double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
-            double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
-
-            FPos2D rnd = factory.getFPos2D(rndD0, rndD1);
-
-            if (valExc2D(rnd, exclude)) {
-                return rnd;
-            }
-
-            if (this.retryLimit > 0) {
-                if (retries > this.retryLimit) {
-                    throw new ArithmeticException("The retry limit has been reached");
-                }
-            }
-
-            retries++;
-        }
+        return factory.getFPos3D(rndD0, rndD1, rndD2);
     }
 
     @Override
-    public FPos3D nextDouble3D(FPairPos3D range, FPos3D... exclude) {
-        int retries = 0;
+    public FPos4D nextDouble4D(FPairPos4D range) {
+        double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
+        double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
+        double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
+        double rndD3 = nextDouble(range.getPosA().getD3(), range.getPosB().getD3());
 
-        while (true) {
-            double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
-            double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
-            double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
-
-            FPos3D rnd = factory.getFPos3D(rndD0, rndD1, rndD2);
-
-            if (valExc3D(rnd, exclude)) {
-                return rnd;
-            }
-
-            if (this.retryLimit > 0) {
-                if (retries > this.retryLimit) {
-                    throw new ArithmeticException("The retry limit has been reached");
-                }
-            }
-
-            retries++;
-        }
+        return factory.getFPos4D(rndD0, rndD1, rndD2, rndD3);
     }
 
     @Override
-    public FPos4D nextDouble4D(FPairPos4D range, FPos4D... exclude) {
-        int retries = 0;
-
-        while (true) {
-            double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
-            double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
-            double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
-            double rndD3 = nextDouble(range.getPosA().getD3(), range.getPosB().getD3());
-
-            FPos4D rnd = factory.getFPos4D(rndD0, rndD1, rndD2, rndD3);
-
-            if (valExc4D(rnd, exclude)) {
-                return rnd;
-            }
-
-            if (this.retryLimit > 0) {
-                if (retries > this.retryLimit) {
-                    throw new ArithmeticException("The retry limit has been reached");
-                }
-            }
-
-            retries++;
-        }
-    }
-
-    @Override
-    public FPos2D nextDoubleOnCircle(double radius, FPos2D... exclude) {
+    public FPos2D nextDoubleOnCircle(double radius) {
         double rnd = nextDouble(0, 2 * Math.PI);
 
         double d0 = Math.sin(rnd) * radius;
@@ -234,7 +135,7 @@ public class FRandProcessorDef implements FRandGenerator {
     }
 
     @Override
-    public FPos2D nextDoubleInCircle(double radius, FPos2D... exclude) {
+    public FPos2D nextDoubleInCircle(double radius) {
         double radiusP2 = radius * radius;
 
         FPos2D posA = factory.getFPos2D(-radius, -radius);
@@ -245,7 +146,7 @@ public class FRandProcessorDef implements FRandGenerator {
         int retries = 0;
 
         while (true) {
-            FPos2D rnd = nextDouble2D(range, exclude);
+            FPos2D rnd = nextDouble2D(range);
 
             if (distP22D(posZero2D, rnd) < radiusP2) {
                 if (this.retryLimit > 0) {
@@ -264,7 +165,7 @@ public class FRandProcessorDef implements FRandGenerator {
     }
 
     @Override
-    public FPos3D nextDoubleOnSphere(double radius, FPos3D... exclude) {
+    public FPos3D nextDoubleOnSphere(double radius) {
         double x1 = 0, x2 = 0, f = 10;
 
         while (f >= 1) {
@@ -281,7 +182,7 @@ public class FRandProcessorDef implements FRandGenerator {
     }
 
     @Override
-    public FPos3D nextDoubleInSphere(double radius, FPos3D... exclude) {
+    public FPos3D nextDoubleInSphere(double radius) {
         double radiusP2 = radius * radius;
 
         FPos3D posA = factory.getFPos3D(-radius, -radius, -radius);
@@ -292,7 +193,7 @@ public class FRandProcessorDef implements FRandGenerator {
         int retries = 0;
 
         while (true) {
-            FPos3D rnd = nextDouble3D(range, exclude);
+            FPos3D rnd = nextDouble3D(range);
 
             if (distP23D(posZero3D, rnd) < radiusP2) {
                 if (this.retryLimit > 0) {
@@ -311,60 +212,6 @@ public class FRandProcessorDef implements FRandGenerator {
     }
 
     //--------------------------------------------------
-
-    @Override
-    public boolean valExc1D(double val, double... exc) {
-
-        for (double point : exc) {
-            if (dist(val, point) < this.proximityLimit) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean valExc2D(FPos2D val, FPos2D... exc) {
-
-        for (FPos2D point : exc) {
-            if (distP22D(val, point) < this.proximityLimitP2) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean valExc3D(FPos3D val, FPos3D... exc) {
-
-        for (FPos3D point : exc) {
-            if (distP23D(val, point) < this.proximityLimitP2) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean valExc4D(FPos4D val, FPos4D... exc) {
-
-        for (FPos4D point : exc) {
-            if (distP24D(val, point) < this.proximityLimitP2) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    //--------------------------------------------------
-
-    private double dist(double val, double ref) {
-
-        return Math.abs(ref - val);
-    }
 
     private double distP2(double val, double ref) {
 
@@ -386,15 +233,5 @@ public class FRandProcessorDef implements FRandGenerator {
         var d2 = distP2(val.getD2(), ref.getD2());
 
         return d0 + d1 + d2;
-    }
-
-    private double distP24D(FPos4D val, FPos4D ref) {
-
-        var d0 = distP2(val.getD0(), ref.getD0());
-        var d1 = distP2(val.getD1(), ref.getD1());
-        var d2 = distP2(val.getD2(), ref.getD2());
-        var d3 = distP2(val.getD3(), ref.getD3());
-
-        return d0 + d1 + d2 + d3;
     }
 }
