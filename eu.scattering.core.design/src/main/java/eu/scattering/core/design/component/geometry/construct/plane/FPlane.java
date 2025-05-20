@@ -7,7 +7,6 @@ import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface FPlane extends Construct<FPlane> {

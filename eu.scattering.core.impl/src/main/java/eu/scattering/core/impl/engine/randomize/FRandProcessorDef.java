@@ -310,18 +310,6 @@ public class FRandProcessorDef implements FRandGenerator {
         }
     }
 
-    // TODO - Not implemented
-    @Override
-    public FPos4D nextDoubleOnHyperSphere(double radius, FPos4D... exclude) {
-        return null;
-    }
-
-    // TODO - Not implemented
-    @Override
-    public FPos4D nextDoubleInHyperSphere(double radius, FPos4D... exclude) {
-        return null;
-    }
-
     //--------------------------------------------------
 
     @Override

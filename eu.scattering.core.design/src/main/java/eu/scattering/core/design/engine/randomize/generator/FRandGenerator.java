@@ -39,9 +39,6 @@ public interface FRandGenerator extends FRandProcessorCore {
     FPos3D nextDoubleOnSphere(double radius, FPos3D... exclude);
     FPos3D nextDoubleInSphere(double radius, FPos3D... exclude);
 
-    FPos4D nextDoubleOnHyperSphere(double radius, FPos4D... exclude);
-    FPos4D nextDoubleInHyperSphere(double radius, FPos4D... exclude);
-
     @Fragment
     boolean valExc1D(double value, double... exclude);
     @Fragment
