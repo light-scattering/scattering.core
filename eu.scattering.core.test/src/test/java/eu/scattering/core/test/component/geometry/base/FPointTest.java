@@ -263,6 +263,715 @@ public class FPointTest {
     class FPointAdvancedTest {
 
         @Test
+        @DisplayName("Is parallel")
+        void isParallel() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(2, 4, 6);
+
+            assertTrue(fPointRef.isParallel(fPointArg),
+                    "The two FPoints should be parallel");
+        }
+
+        @Test
+        @DisplayName("Is parallel (fail)")
+        void isParallelFail() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(2, 5, 6);
+
+            assertFalse(fPointRef.isParallel(fPointArg),
+                    "The two FPoints should not be parallel");
+        }
+
+        @Test
+        @DisplayName("Is parallel (fail, opposite direction)")
+        void isParallelOppositeDirection() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(-2, -4, -6);
+
+            assertFalse(fPointRef.isParallel(fPointArg),
+                    "The two FPoints should not be parallel");
+        }
+
+        @Test
+        @DisplayName("Is parallel (throw IllegalStateException)")
+        void isParallelThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.isParallel(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is parallel (throw IllegalArgumentException)")
+        void isParallelThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.isParallel(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is parallel (validate)")
+        void isParallelValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testValue(FPoint::isParallel, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Is parallel with primitives")
+        void isParallelWithPrimitives() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            assertTrue(fPoint.isParallel(2, 4, 6),
+                    "The two elements should be parallel");
+        }
+
+        @Test
+        @DisplayName("Is parallel with FPos3D")
+        void isParallelWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+            FPos3D fPos3D = factory.getFPos3D(2, 4, 6);
+
+            assertTrue(fPoint.isParallel(fPos3D),
+                    "The two elements should be parallel");
+        }
+
+        @Test
+        @DisplayName("Set parallel")
+        void setParallel() {
+            FPoint fPointRef = TestHelper.getRandFPoint();
+            FPoint fPointArg = TestHelper.getRandFPoint(fPointRef);
+
+            double memoRefMag = fPointRef.getMagnitude();
+
+            fPointRef.setParallel(fPointArg);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPointRef.isParallel(fPointArg),
+                            "The FPoints should be parallel"),
+                    () -> assertEquals(memoRefMag, fPointRef.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set parallel (throw IllegalStateException)")
+        void setParallelThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.setParallel(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set parallel (throw IllegalArgumentException)")
+        void setParallelThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.setParallel(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set parallel (validate)")
+        void setParallelValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testReference(FPoint::setParallel, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Set parallel with primitives")
+        void setParallelWithPrimitives() {
+            FPoint fPoint = TestHelper.getRandFPoint();
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            fPoint.setParallel(1, 2, 3);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isParallel(1, 2, 3),
+                            "The elements should be parallel"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set parallel with FPos3D")
+        void setParallelWithFPos3D() {
+            FPoint fPoint = TestHelper.getRandFPoint();
+            FPos3D fPos3D = TestHelper.getRandFPoint(fPoint).toFPos3D();
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            FPoint results = fPoint.setParallel(fPos3D);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isParallel(fPos3D),
+                            "The elements should be parallel"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous"),
+                    () -> assertSame(results, fPoint,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel")
+        void isAntiParallel() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(-2, -4, -6);
+
+            assertTrue(fPointRef.isAntiParallel(fPointArg),
+                    "The two FPoints should be anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel (fail)")
+        void isAntiParallelFail() {
+            FPoint fPointRef = factory.getFPoint(-1, -2, -3);
+            FPoint fPointArg = factory.getFPoint(2, 5, 6);
+
+            assertFalse(fPointRef.isAntiParallel(fPointArg),
+                    "The two FPoints should not be anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel (fail, same direction)")
+        void isAntiParallelOppositeDirection() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(2, 4, 6);
+
+            assertFalse(fPointRef.isAntiParallel(fPointArg),
+                    "The two FPoints should not be anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel (throw IllegalStateException)")
+        void isAntiParallelThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.isAntiParallel(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel (throw IllegalArgumentException)")
+        void isAntiParallelThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.isAntiParallel(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel (validate)")
+        void isAntiParallelValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testValue(FPoint::isAntiParallel, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel with primitives")
+        void isAntiParallelWithPrimitives() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            assertTrue(fPoint.isAntiParallel(-2, -4, -6),
+                    "The two elements should be anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Is anti-parallel with FPos3D")
+        void isAntiParallelWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(-1, -2, -3);
+            FPos3D fPos3D = factory.getFPos3D(2, 4, 6);
+
+            assertTrue(fPoint.isAntiParallel(fPos3D),
+                    "The two elements should be anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Set anti-parallel")
+        void setAntiParallel() {
+            FPoint fPointRef = TestHelper.getRandFPoint();
+            FPoint fPointArg = TestHelper.getRandFPoint(fPointRef);
+
+            double memoRefMag = fPointRef.getMagnitude();
+
+            fPointRef.setAntiParallel(fPointArg);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPointRef.isAntiParallel(fPointArg),
+                            "The FPoints should be anti-parallel"),
+                    () -> assertEquals(memoRefMag, fPointRef.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set anti-parallel (throw IllegalStateException)")
+        void setAntiParallelThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.setAntiParallel(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set anti-parallel (throw IllegalArgumentException)")
+        void setAntiParallelThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.setAntiParallel(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set anti-parallel (validate)")
+        void setAntiParallelValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testReference(FPoint::setAntiParallel, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Set anti-parallel with primitives")
+        void setAntiParallelWithPrimitives() {
+            FPoint fPoint = TestHelper.getRandFPoint();
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            fPoint.setAntiParallel(1, 2, 3);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isAntiParallel(1, 2, 3),
+                            "The elements should be anti-parallel"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set anti-parallel with FPos3D")
+        void setAntiParallelWithFPos3D() {
+            FPoint fPoint = TestHelper.getRandFPoint();
+            FPos3D fPos3D = TestHelper.getRandFPoint(fPoint).toFPos3D();
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            FPoint results = fPoint.setAntiParallel(fPos3D);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isAntiParallel(fPos3D),
+                            "The elements should be anti-parallel"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous"),
+                    () -> assertSame(results, fPoint,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Is collinear A")
+        void isCollinearA() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(2, 4, 6);
+
+            assertTrue(fPointRef.isCollinear(fPointArg),
+                    "The two FPoints should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear B")
+        void isCollinearB() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(-2, -4, -6);
+
+            assertTrue(fPointRef.isCollinear(fPointArg),
+                    "The two FPoints should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear (fail)")
+        void isCollinearFail() {
+            FPoint fPointRef = factory.getFPoint(1, -2, 3);
+            FPoint fPointArg = factory.getFPoint(2, 5, 6);
+
+            assertFalse(fPointRef.isParallel(fPointArg),
+                    "The two FPoints should not be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear (throw IllegalStateException)")
+        void isCollinearThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.isCollinear(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is collinear (throw IllegalArgumentException)")
+        void isCollinearThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.isCollinear(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is collinear (validate)")
+        void isCollinearValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testValue(FPoint::isCollinear, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Is collinear with primitives")
+        void isCollinearWithPrimitives() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            assertTrue(fPoint.isCollinear(2, 4, 6),
+                    "The two elements should be collinear");
+        }
+
+        @Test
+        @DisplayName("Is collinear with FPos3D")
+        void isCollinearWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+            FPos3D fPos3D = factory.getFPos3D(2, 4, 6);
+
+            assertTrue(fPoint.isCollinear(fPos3D),
+                    "The two elements should be collinear");
+        }
+
+        @Test
+        @DisplayName("Set collinear A")
+        void setCollinearA() {
+            FPoint fPointRef = factory.getFPoint(1, 0, 0);
+            FPoint fPointArg = factory.getFPoint(2, 3, 4);
+
+            double memoRefMag = fPointRef.getMagnitude();
+
+            fPointRef.setCollinear(fPointArg);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPointRef.isParallel(fPointArg),
+                            "The FPoints should be parallel"),
+                    () -> assertTrue(fPointRef.isCollinear(fPointArg),
+                            "The FPoints should be collinear"),
+                    () -> assertEquals(memoRefMag, fPointRef.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set collinear B")
+        void setCollinearB() {
+            FPoint fPointRef = factory.getFPoint(1, 0, 0);
+            FPoint fPointArg = factory.getFPoint(-2, 3, 4);
+
+            double memoRefMag = fPointRef.getMagnitude();
+
+            fPointRef.setCollinear(fPointArg);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPointRef.isAntiParallel(fPointArg),
+                            "The FPoints should be anti-parallel"),
+                    () -> assertTrue(fPointRef.isCollinear(fPointArg),
+                            "The FPoints should be collinear"),
+                    () -> assertEquals(memoRefMag, fPointRef.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set collinear (throw IllegalStateException)")
+        void setCollinearThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.setCollinear(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set collinear (throw IllegalArgumentException)")
+        void setCollinearThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.setCollinear(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set collinear (validate)")
+        void setCollinearValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testReference(FPoint::setCollinear, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Set collinear with primitives")
+        void setCollinearWithPrimitives() {
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            fPoint.setCollinear(2, 3, 4);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isParallel(2, 3, 4),
+                            "The elements should be parallel"),
+                    () -> assertTrue(fPoint.isCollinear(2, 3, 4),
+                            "The elements should be collinear"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set collinear with FPos3D")
+        void setCollinearWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+            FPos3D fPos3D = factory.getFPos3D(-2, 5, 8);
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            FPoint results = fPoint.setCollinear(fPos3D);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isAntiParallel(fPos3D),
+                            "The elements should be anti-parallel"),
+                    () -> assertTrue(fPoint.isCollinear(fPos3D),
+                            "The elements should be collinear"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous"),
+                    () -> assertSame(results, fPoint,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Is orthogonal A")
+        void isOrthogonalA() {
+            FPoint fPointRef = factory.getFPoint(1, 0, 0);
+            FPoint fPointArg = factory.getFPoint(0, 1, 1);
+
+            assertTrue(fPointRef.isOrthogonal(fPointArg),
+                    "The two FPoints should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal B")
+        void isOrthogonalB() {
+            FPoint fPointRef = factory.getFPoint(1, 1, 0);
+            FPoint fPointArg = factory.getFPoint(0, 0, 1);
+
+            assertTrue(fPointRef.isOrthogonal(fPointArg),
+                    "The two FPoints should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal (fail)")
+        void isOrthogonalFail() {
+            FPoint fPointRef = factory.getFPoint(1, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 1, 1);
+
+            assertFalse(fPointRef.isOrthogonal(fPointArg),
+                    "The two FPoints should not be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal (throw IllegalStateException)")
+        void isOrthogonalThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.isOrthogonal(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal (throw IllegalArgumentException)")
+        void isOrthogonalThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.isOrthogonal(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal (validate)")
+        void isOrthogonalValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testValue(FPoint::isOrthogonal, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Is orthogonal with primitives")
+        void isOrthogonalWithPrimitives() {
+            FPoint fPoint = factory.getFPoint(-1, 0, -1);
+
+            assertTrue(fPoint.isOrthogonal(0, -1, 0),
+                    "The two elements should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Is orthogonal with FPos3D")
+        void isOrthogonalWithFPos3D() {
+            FPoint fPoint = factory.getFPoint(0, 0, -1);
+            FPos3D fPos3D = factory.getFPos3D(5, 5, 0);
+
+            assertTrue(fPoint.isOrthogonal(fPos3D),
+                    "The two elements should be orthogonal");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal")
+        void setOrthogonal() {
+            FPoint fPointRef = TestHelper.getRandFPoint();
+            FPoint fPointArg = TestHelper.getRandFPoint(fPointRef);
+
+            double memoRefMag = fPointRef.getMagnitude();
+
+            fPointRef.setOrthogonal(fPointArg);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPointRef.isOrthogonal(fPointArg),
+                            "The FPoints should be orthogonal"),
+                    () -> assertEquals(fPointRef.getAngle(fPointArg), Math.PI * 0.5,
+                            epsilon, "The angle is incorrect"),
+                    () -> assertEquals(memoRefMag, fPointRef.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set orthogonal (throw IllegalStateException)")
+        void setOrthogonalThrowIllegalStateException() {
+            FPoint fPointRef = factory.getFPoint(0, 0, 0);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPointRef.setOrthogonal(fPointArg),
+                    "The input FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal (throw IllegalStateException, position)")
+        void setOrthogonalThrowIllegalStateExceptionPosition() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPoint.setOrthogonal(2, 4, 6),
+                    "The elements are parallel");
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fPoint.setOrthogonal(-2, -4, -6),
+                    "The elements are anti-parallel");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal (throw IllegalArgumentException)")
+        void setOrthogonalThrowIllegalArgumentException() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(0, 0, 0);
+
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fPointRef.setOrthogonal(fPointArg),
+                    "The argument FPoint direction is not defined");
+        }
+
+        @Test
+        @DisplayName("Set orthogonal (validate)")
+        void setOrthogonalValidate() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(4, 5, 6);
+
+            FPointTestHelper.testReference(FPoint::setOrthogonal, fPointRef, fPointArg);
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with primitives")
+        void setOrthogonalWithPrimitives() {
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            fPoint.setOrthogonal(2, 3, 4);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isOrthogonal(2, 3, 4),
+                            "The elements should be orthogonal"),
+                    () -> assertEquals(fPoint.getAngle(2, 3, 4), Math.PI * 0.5,
+                            epsilon, "The angle is incorrect"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Set orthogonal with FPos3D")
+        void setOrthogonalWithFPos3D() {
+            FPoint fPoint = TestHelper.getRandFPoint();
+            FPos3D fPos3D = TestHelper.getRandFPoint(fPoint).toFPos3D();
+
+            double memoRefMag = fPoint.getMagnitude();
+
+            FPoint results = fPoint.setOrthogonal(fPos3D);
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPoint.isOrthogonal(fPos3D),
+                            "The elements should be orthogonal"),
+                    () -> assertEquals(fPoint.getAngle(fPos3D), Math.PI * 0.5,
+                            epsilon, "The angle is incorrect"),
+                    () -> assertEquals(memoRefMag, fPoint.getMagnitude(),
+                            epsilon, "The FPoint magnitude is erroneous"),
+                    () -> assertSame(results, fPoint,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Normalize")
         void normalize() {
             FPoint fPoint = TestHelper.getRandFPoint();

@@ -549,6 +549,237 @@ public class FPointDef implements FPoint {
     }
 
     @Override
+    public boolean isCollinear(double x, double y, double z) {
+
+        return isParallel(x, y, z) || isAntiParallel(x, y, z);
+    }
+
+    @Override
+    public boolean isCollinear(FPoint arg) {
+
+        return isCollinear(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public boolean isCollinear(FPos3D arg) {
+
+        return isCollinear(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public FPoint setCollinear(double x, double y, double z) {
+
+        if (getAngle(x, y, z) < Math.PI / 2) {
+            return setParallel(x, y, z);
+        }
+
+        return setAntiParallel(x, y, z);
+    }
+
+    @Override
+    public FPoint setCollinear(FPoint arg) {
+
+        return setCollinear(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FPoint setCollinear(FPos3D arg) {
+
+        return setCollinear(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public boolean isParallel(double x, double y, double z) {
+
+        if (isNearZero()) {
+            throw new IllegalStateException("The direction of the FPoint is not defined");
+        }
+
+        if (isNearZero(x, y, z)) {
+            throw new IllegalArgumentException("The direction of the argument FPoint is not defined");
+        }
+
+        double ref = x / getX();
+
+        if (Math.abs(ref - (y / getY())) > EPSILON || Math.abs(ref - (z / getZ())) > EPSILON) {
+            return false;
+        }
+
+        return ref > 0;
+    }
+
+    @Override
+    public boolean isParallel(FPoint arg) {
+
+        return isParallel(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public boolean isParallel(FPos3D arg) {
+
+        return isParallel(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public FPoint setParallel(double x, double y, double z) {
+
+        if (isNearZero()) {
+            throw new IllegalStateException("The direction of the FPoint is not defined");
+        }
+
+        if (isNearZero(x, y, z)) {
+            throw new IllegalArgumentException("The direction of the argument FPoint is not defined");
+        }
+
+        double memoMagnitude = getMagnitude();
+
+        set(x, y, z);
+        setMagnitude(memoMagnitude);
+
+        return this;
+    }
+
+    @Override
+    public FPoint setParallel(FPoint arg) {
+
+        return setParallel(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FPoint setParallel(FPos3D arg) {
+
+        return setParallel(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public boolean isAntiParallel(double x, double y, double z) {
+
+        if (isNearZero()) {
+            throw new IllegalStateException("The direction of the FPoint is not defined");
+        }
+
+        if (isNearZero(x, y, z)) {
+            throw new IllegalArgumentException("The direction of the argument FPoint is not defined");
+        }
+
+        double ref = x / getX();
+
+        if (Math.abs(ref - (y / getY())) > EPSILON || Math.abs(ref - (z / getZ())) > EPSILON) {
+            return false;
+        }
+
+        return ref < 0;
+    }
+
+    @Override
+    public boolean isAntiParallel(FPoint arg) {
+
+        return isAntiParallel(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public boolean isAntiParallel(FPos3D arg) {
+
+        return isAntiParallel(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public FPoint setAntiParallel(double x, double y, double z) {
+
+        if (isNearZero()) {
+            throw new IllegalStateException("The direction of the FPoint is not defined");
+        }
+
+        if (isNearZero(x, y, z)) {
+            throw new IllegalArgumentException("The direction of the argument FPoint is not defined");
+        }
+
+        double memoMagnitude = getMagnitude();
+
+        set(-x, -y, -z);
+        setMagnitude(memoMagnitude);
+
+        return this;
+    }
+
+    @Override
+    public FPoint setAntiParallel(FPoint arg) {
+
+        return setAntiParallel(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FPoint setAntiParallel(FPos3D arg) {
+
+        return setAntiParallel(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public boolean isOrthogonal(double x, double y, double z) {
+
+        if (isNearZero()) {
+            throw new IllegalStateException("The direction of the FPoint is not defined");
+        }
+
+        if (isNearZero(x, y, z)) {
+            throw new IllegalArgumentException("The direction of the argument FPoint is not defined");
+        }
+
+        boolean dotProduct = Math.abs(getDotProduct(x, y, z)) < EPSILON;
+        boolean angle = Math.abs((Math.PI * 0.5) - getAngle(x, y, z)) < EPSILON;
+
+        return  dotProduct || angle;
+    }
+
+    @Override
+    public boolean isOrthogonal(FPoint arg) {
+
+        return isOrthogonal(
+                arg.getX(), arg.getY(), arg.getZ()
+        );
+    }
+
+    @Override
+    public boolean isOrthogonal(FPos3D arg) {
+
+        return isOrthogonal(
+                arg.getD0(), arg.getD1(), arg.getD2()
+        );
+    }
+
+    @Override
+    public FPoint setOrthogonal(double x, double y, double z) {
+
+        if (isParallel(x, y, z)) {
+            throw new IllegalStateException("FPoints are parallel");
+        }
+
+        if (isAntiParallel(x, y, z)) {
+            throw new IllegalStateException("FPoints are anti-parallel");
+        }
+
+        double memoMag = getMagnitude();
+
+        setCrossProduct(x, y, z);
+        setCrossProduct(-x, -y, -z);
+        setMagnitude(memoMag);
+
+        return this;
+    }
+
+    @Override
+    public FPoint setOrthogonal(FPoint arg) {
+
+        return setOrthogonal(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FPoint setOrthogonal(FPos3D arg) {
+
+        return setOrthogonal(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
     public double getMagnitudeP2() {
 
         return (getX() * getX()) + (getY() * getY()) + (getZ() * getZ());
@@ -753,5 +984,15 @@ public class FPointDef implements FPoint {
     public boolean toBoolean(Function<FPoint, Boolean> action) {
 
         return action.apply(this);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private boolean isNearZero(double x, double y, double z) {
+        boolean posX = Math.abs(x) < EPSILON;
+        boolean posY = Math.abs(y) < EPSILON;
+        boolean posZ = Math.abs(z) < EPSILON;
+
+        return posX && posY && posZ;
     }
 }

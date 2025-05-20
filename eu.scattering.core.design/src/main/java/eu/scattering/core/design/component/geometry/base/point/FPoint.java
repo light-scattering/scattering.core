@@ -65,6 +65,38 @@ public interface FPoint extends Base<FPoint> {
     FPoint setDistance(FPoint arg, double distance);
     FPoint setDistance(FPos3D arg, double distance);
 
+    boolean isCollinear(double x, double y, double z);
+    boolean isCollinear(FPoint arg);
+    boolean isCollinear(FPos3D arg);
+
+    FPoint setCollinear(double x, double y, double z);
+    FPoint setCollinear(FPoint arg);
+    FPoint setCollinear(FPos3D arg);
+
+    boolean isParallel(double x, double y, double z);
+    boolean isParallel(FPoint arg);
+    boolean isParallel(FPos3D arg);
+
+    FPoint setParallel(double x, double y, double z);
+    FPoint setParallel(FPoint arg);
+    FPoint setParallel(FPos3D arg);
+
+    boolean isAntiParallel(double x, double y, double z);
+    boolean isAntiParallel(FPoint arg);
+    boolean isAntiParallel(FPos3D arg);
+
+    FPoint setAntiParallel(double x, double y, double z);
+    FPoint setAntiParallel(FPoint arg);
+    FPoint setAntiParallel(FPos3D arg);
+
+    boolean isOrthogonal(double x, double y, double z);
+    boolean isOrthogonal(FPoint arg);
+    boolean isOrthogonal(FPos3D arg);
+
+    FPoint setOrthogonal(double x, double y, double z);
+    FPoint setOrthogonal(FPoint arg);
+    FPoint setOrthogonal(FPos3D arg);
+
     double getDotProduct(double x, double y, double z);
     double getDotProduct(FPoint arg);
     double getDotProduct(FPos3D arg);

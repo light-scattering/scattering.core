@@ -3601,7 +3601,8 @@ public class FVectorTest {
             FVector fVectorRef = factory.getFVector(0, 0, 0);
             FVector fVectorArg = factory.getFVector(1, 2, 3);
 
-            Assertions.assertThrows(IllegalStateException.class, () -> fVectorRef.isParallel(fVectorArg),
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> fVectorRef.isParallel(fVectorArg),
                     "The input FVector direction is not defined");
         }
 
@@ -3611,7 +3612,8 @@ public class FVectorTest {
             FVector fVectorRef = factory.getFVector(1, 2, 3);
             FVector fVectorArg = factory.getFVector(0, 0, 0);
 
-            Assertions.assertThrows(IllegalArgumentException.class, () -> fVectorRef.isParallel(fVectorArg),
+            Assertions.assertThrows(IllegalArgumentException.class,
+                    () -> fVectorRef.isParallel(fVectorArg),
                     "The argument FVector direction is not defined");
         }
 
