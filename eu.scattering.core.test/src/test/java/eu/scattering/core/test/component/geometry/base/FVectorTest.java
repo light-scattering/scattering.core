@@ -2794,7 +2794,7 @@ public class FVectorTest {
         @DisplayName("Get angle (common) with FPoint")
         void getAngleCommonWithFPoint() {
             FVector fVector = factory.getFVector(2, 2, 0, 2, 3, 0);
-            FPoint fPoint = factory.getFPoint(1, 0, 0);
+            FPoint fPoint = factory.getFPoint(1, 1, 0);
 
             assertEquals(Math.PI * 0.75, fVector.getAngleBaseCommon(fPoint),
                     epsilon, "The angle is incorrect");

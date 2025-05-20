@@ -19,6 +19,17 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FPointRotateTest {
 
     @Test
+    @DisplayName("Rotate Rg with primitives (zero)")
+    void rotateRgWithPrimitivesZero() {
+        FPoint fPoint = factory.getFPoint(0, 0, 0);
+
+        rot.rotRgAround(1, 0, 0, fPoint, Math.PI / 2);
+
+        assertTrue(factory.getFPoint(0, 0, 0).isSimilar(fPoint),
+                "The FPoint position is incorrect");
+    }
+
+    @Test
     @DisplayName("Rotate Rg with primitives A (simple, positive)")
     void rotateRgWithPrimitivesSimplePositiveA() {
         FPoint fPoint = factory.getFPoint(0, 2, 0);
@@ -434,6 +445,18 @@ public class FPointRotateTest {
                 () -> assertSame(fPoint, results,
                         "The reference should stay the same")
         );
+    }
+
+    @Test
+    @DisplayName("Rotate Qt (zero)")
+    void rotateQtZero() {
+        FPoint fPointIn = factory.getFPoint(0, 0, 0);
+        FPoint fPointArg = factory.getFPoint(0, 1, 0);
+
+        fPointIn.apply(p -> rot.rotQtAround(fPointArg, p, Math.PI));
+
+        assertTrue(factory.getFPoint(0, 0, 0).isSimilar(fPointIn),
+                "The position is incorrect");
     }
 
     @Test

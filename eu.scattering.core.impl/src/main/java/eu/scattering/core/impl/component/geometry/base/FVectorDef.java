@@ -2297,7 +2297,7 @@ public class FVectorDef implements FVector {
 
         return getAngle(
                 getBaseX(), getBaseY(), getBaseZ(),
-                head.getY(), head.getY(), head.getZ()
+                head.getX(), head.getY(), head.getZ()
         );
     }
 
