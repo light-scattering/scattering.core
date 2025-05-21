@@ -1021,8 +1021,8 @@ public class FPlaneTest {
                 fVector1 = factory.getFVector(1, 0, 0);
                 fVector2 = factory.getFVector(1, 0, 0);
 
-                factory.getFRandEngine().rndAngle(fVector1);
-                factory.getFRandEngine().rndAngle(fVector2);
+                factory.getFRandEngine().varyAngle(fVector1);
+                factory.getFRandEngine().varyAngle(fVector2);
 
                 fVector1.moveBase(TestHelper.getRandFPoint().divFactor(100));
                 fVector2.moveBase(TestHelper.getRandFPoint().divFactor(100));

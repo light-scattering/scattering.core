@@ -2,6 +2,7 @@ package eu.scattering.core.design.component.geometry.construct.plane;
 
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 public interface FPlaneFactory {
@@ -13,8 +14,24 @@ public interface FPlaneFactory {
 
     //--------------------------------------------------
 
+    default FPlane getFPlane(FVector refOrigin) {
+
+        return getRefFPlane(refOrigin.copy());
+    }
+
+    default FPlane getFPlane(Construct<?> construct) {
+
+        return getRefFPlane(construct.getRefOrigin().copy());
+    }
+
     default FPlane getFPlane(FPairPos3D position) {
 
         return getFPlane().set(position);
+    }
+
+    @Modificator
+    default FPlane getRefFPlane(Construct<?> construct) {
+
+        return getRefFPlane(construct.getRefOrigin());
     }
 }

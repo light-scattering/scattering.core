@@ -2,18 +2,17 @@ package eu.scattering.core.impl.engine.randomize;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
-import java.util.Arrays;
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FRandEngineDef implements FRandEngine {
     private final FRandGenerator core;
@@ -65,7 +64,7 @@ public class FRandEngineDef implements FRandEngine {
     //--------------------------------------------------
 
     @Override
-    public FPoint rndAngle(FPoint in) {
+    public FPoint varyAngle(FPoint in) {
         double radius = in.getMagnitude();
 
         in.applyStateFrom(core.nextDoubleOnSphere(radius));
@@ -98,24 +97,60 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosInCircle(FPoint in, FPoint dir, double radius) {
-        FPos2D base = core.nextDoubleInCircle(radius);
+    public FPoint rndPosOnAxis(FPoint in, FPoint dir) {
 
-        in.set(base.getD0(), base.getD1(), 0);
+        in.applyStateFrom(dir);
+        in.setMagnitude(core.nextDouble(EPSILON, dir.getMagnitude()));
 
-//        in.orth
-
-        return null;
+        return in;
     }
 
     @Override
-    public FVector rndAngle(FVector in) {
+    public FPoint rndPosBaseInCircle(FPoint in, FPoint dir, double radius) {
+
+        in.applyStateFrom(core.nextDoubleInSphere(radius));
+        in.setOrthogonal(dir);
+
+        return in;
+    }
+
+    @Override
+    public FPoint rndPosBaseOnCircle(FPoint in, FPoint dir, double radius) {
+
+        in.applyStateFrom(core.nextDoubleOnSphere(radius));
+        in.setOrthogonal(dir);
+
+        return in;
+    }
+
+    @Override
+    public FPoint rndPosHeadInCircle(FPoint in, FPoint dir, double radius) {
+
+        rndPosBaseInCircle(in, dir, radius);
+
+        in.add(dir);
+
+        return in;
+    }
+
+    @Override
+    public FPoint rndPosHeadOnCircle(FPoint in, FPoint dir, double radius) {
+
+        rndPosBaseOnCircle(in, dir, radius);
+
+        in.add(dir);
+
+        return in;
+    }
+
+    @Override
+    public FVector varyAngle(FVector in) {
         double memoOBX = in.getBaseX();
         double memoOBY = in.getBaseY();
         double memoOBZ = in.getBaseZ();
 
         in.moveBaseToCenter();
-        rndAngle(in.getRefHead());
+        varyAngle(in.getRefHead());
         in.moveBase(memoOBX, memoOBY, memoOBZ);
 
         return in;
@@ -146,5 +181,124 @@ public class FRandEngineDef implements FRandEngine {
         rndPosOnSphere(in.getRefHead(), radius);
 
         return in;
+    }
+
+    @Override
+    public FPoint rndPosOnAxis(FPoint in, FVector dir) {
+
+        in.applyStateFrom(dir.getRefHead());
+        in.sub(dir.getRefBase());
+        in.setMagnitude(core.nextDouble(EPSILON, in.getMagnitude()));
+        in.add(dir.getRefBase());
+
+        return in;
+    }
+
+    @Override
+    public FPoint rndPosBaseInCircle(FPoint in, FVector dir, double radius) {
+
+        in.applyStateFrom(core.nextDoubleInSphere(radius));
+
+        in.setOrthogonal(
+                dir.getHeadX() - dir.getBaseX(),
+                dir.getHeadY() - dir.getBaseY(),
+                dir.getHeadZ() - dir.getBaseZ()
+        );
+
+        in.add(dir.getRefBase());
+
+        return in;
+    }
+
+    @Override
+    public FPoint rndPosBaseOnCircle(FPoint in, FVector dir, double radius) {
+
+        in.applyStateFrom(core.nextDoubleOnSphere(radius));
+
+        in.setOrthogonal(
+                dir.getHeadX() - dir.getBaseX(),
+                dir.getHeadY() - dir.getBaseY(),
+                dir.getHeadZ() - dir.getBaseZ()
+        );
+
+        in.add(dir.getRefBase());
+
+        return in;
+    }
+
+    @Override
+    public FPoint rndPosHeadInCircle(FPoint in, FVector dir, double radius) {
+
+        in.applyStateFrom(core.nextDoubleInSphere(radius));
+
+        in.setOrthogonal(
+                dir.getHeadX() - dir.getBaseX(),
+                dir.getHeadY() - dir.getBaseY(),
+                dir.getHeadZ() - dir.getBaseZ()
+        );
+
+        in.add(dir.getRefHead());
+
+        return in;
+    }
+
+    @Override
+    public FPoint rndPosHeadOnCircle(FPoint in, FVector dir, double radius) {
+
+        in.applyStateFrom(core.nextDoubleOnSphere(radius));
+
+        in.setOrthogonal(
+                dir.getHeadX() - dir.getBaseX(),
+                dir.getHeadY() - dir.getBaseY(),
+                dir.getHeadZ() - dir.getBaseZ()
+        );
+
+        in.add(dir.getRefHead());
+
+        return in;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FPoint rndPosBaseInCircle(FPoint in, FRay dir, double radius) {
+
+        return rndPosBaseInCircle(in, dir.getRefOrigin(), radius);
+    }
+
+    @Override
+    public FPoint rndPosBaseOnCircle(FPoint in, FRay dir, double radius) {
+
+        return rndPosBaseOnCircle(in, dir.getRefOrigin(), radius);
+    }
+
+    @Override
+    public FPoint rndPosOnSegment(FPoint in, FSegment dir) {
+
+        return rndPosOnAxis(in, dir.getRefOrigin());
+    }
+
+    @Override
+    public FPoint rndPosBaseInCircle(FPoint in, FSegment dir, double radius) {
+
+        return rndPosBaseInCircle(in, dir.getRefOrigin(), radius);
+    }
+
+    @Override
+    public FPoint rndPosBaseOnCircle(FPoint in, FSegment dir, double radius) {
+
+        return rndPosBaseOnCircle(in, dir.getRefOrigin(), radius);
+    }
+
+    @Override
+    public FPoint rndPosHeadInCircle(FPoint in, FSegment dir, double radius) {
+
+        return rndPosHeadInCircle(in, dir.getRefOrigin(), radius);
+    }
+
+    @Override
+    public FPoint rndPosHeadOnCircle(FPoint in, FSegment dir, double radius) {
+
+        return rndPosHeadOnCircle(in, dir.getRefOrigin(), radius);
     }
 }

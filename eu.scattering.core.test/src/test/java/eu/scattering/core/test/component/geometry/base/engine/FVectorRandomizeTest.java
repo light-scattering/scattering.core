@@ -25,7 +25,7 @@ public class FVectorRandomizeTest {
         FPoint fPointHead = factory.getFPoint(2, 1, 0);
         FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-        factory.getFRandEngine().rndAngle(fPointHead);
+        factory.getFRandEngine().varyAngle(fPointHead);
 
         Assertions.assertAll("Validate FPoint values",
                 () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
@@ -41,7 +41,7 @@ public class FVectorRandomizeTest {
         FVector fVector = TestHelper.getRandFVector();
         FRandEngine random = factory.getFRandEngine();
 
-        FVectorTestHelper.testReference(random::rndAngle, fVector);
+        FVectorTestHelper.testReference(random::varyAngle, fVector);
     }
 
     @Test
@@ -101,6 +101,224 @@ public class FVectorRandomizeTest {
                 () -> assertEquals(0.01, fVector.getRefHead().getMagnitude(),
                         epsilon, "The head position is incorrect"),
                 () -> assertSame(fVector, results, "The reference is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position base in circle A")
+    void setRandomPositionBaseInCircleA() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosBaseInCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertEquals(fPointIn.getZ(), 1,
+                        epsilon, "The position is erroneous"),
+                () -> assertTrue(fVectorDir.isOrthogonalBaseCommon(fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertTrue(results.getDistance(fVectorDir.getRefBase()) < radius,
+                        "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position base in circle B")
+    void setRandomPositionBaseInCircleB() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = TestHelper.getRandFVector();
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosBaseInCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertTrue(fVectorDir.isOrthogonalBaseCommon(fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertTrue(results.getDistance(fVectorDir.getRefBase()) < radius,
+                        "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position base on circle A")
+    void setRandomPositionBaseOnCircleA() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosBaseOnCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertEquals(fPointIn.getZ(), 1,
+                        epsilon, "The position is erroneous"),
+                () -> assertTrue(fVectorDir.isOrthogonalBaseCommon(fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertEquals(radius, results.getDistance(fVectorDir.getRefBase()),
+                        epsilon, "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position base on circle B")
+    void setRandomPositionBaseOnCircleB() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = TestHelper.getRandFVector();
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosBaseOnCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertTrue(fVectorDir.isOrthogonalBaseCommon(fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertEquals(radius, results.getDistance(fVectorDir.getRefBase()),
+                        epsilon, "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position head in circle A")
+    void setRandomPositionHeadInCircleA() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosHeadInCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertEquals(fPointIn.getZ(), 2,
+                        epsilon, "The position is erroneous"),
+                () -> assertTrue(fVectorDir.isOrthogonal(fVectorDir.getRefHead(), fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertTrue(results.getDistance(fVectorDir.getRefHead()) < radius,
+                        "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position head in circle B")
+    void setRandomPositionHeadInCircleB() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = TestHelper.getRandFVector();
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosHeadInCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertTrue(fVectorDir.isOrthogonal(fVectorDir.getRefHead(), fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertTrue(results.getDistance(fVectorDir.getRefHead()) < radius,
+                        "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position head on circle A")
+    void setRandomPositionHeadOnCircleA() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosHeadOnCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertEquals(fPointIn.getZ(), 2,
+                        epsilon, "The position is erroneous"),
+                () -> assertTrue(fVectorDir.isOrthogonal(fVectorDir.getRefHead(), fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertEquals(radius, results.getDistance(fVectorDir.getRefHead()),
+                        epsilon, "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position head on circle B")
+    void setRandomPositionHeadOnCircleB() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = TestHelper.getRandFVector();
+        double radius = 0.05;
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosHeadOnCircle(fPointIn, fVectorDir, radius);
+
+        Assertions.assertAll("Validate position",
+                () -> assertTrue(fVectorDir.isOrthogonal(fVectorDir.getRefHead(), fPointIn),
+                        "The elements should be orthogonal"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertEquals(radius, results.getDistance(fVectorDir.getRefHead()),
+                        epsilon, "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position on axis A")
+    void setRandomPositionOnAxisA() {
+        FPoint fPointIn = factory.getFPoint(1, -2, 3);
+        FVector fVectorDir = factory.getFVector(0.001, 0.001, 0.001, 0.002, 0.002, 0.002);
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosOnAxis(fPointIn, fVectorDir);
+
+        Assertions.assertAll("Validate position",
+                () -> assertEquals(fVectorDir.getMagnitude(),
+                        fPointIn.getDistance(fVectorDir.getRefBase()) + fPointIn.getDistance(fVectorDir.getRefHead()),
+                        epsilon, "The elements should be parallel"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertTrue(fPointIn.getDistance(fVectorDir.getRefBase()) <= fVectorDir.getMagnitude(),
+                        "The magnitude is not correct")
+        );
+    }
+
+    @Test
+    @DisplayName("Set random position on axis B")
+    void setRandomPositionOnAxisB() {
+        FPoint fPointIn = factory.getFPoint();
+        FVector fVectorDir = TestHelper.getRandFVector();
+
+        FRandEngine random = factory.getFRandEngine();
+
+        FPoint results = random.rndPosOnAxis(fPointIn, fVectorDir);
+
+        Assertions.assertAll("Validate position",
+                () -> assertEquals(fVectorDir.getMagnitude(),
+                        fPointIn.getDistance(fVectorDir.getRefBase()) + fPointIn.getDistance(fVectorDir.getRefHead()),
+                        epsilon, "The elements should be parallel"),
+                () -> assertSame(fPointIn, results,
+                        "The reference is erroneous"),
+                () -> assertTrue(fPointIn.getDistance(fVectorDir.getRefBase()) <= fVectorDir.getMagnitude(),
+                        "The magnitude is not correct")
         );
     }
 }
