@@ -5448,32 +5448,6 @@ public class FVectorTest {
 
             FVectorTestHelper.testValue(FVector::copy, fVector);
         }
-
-        @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FVector fVectorA = TestHelper.getRandFVector();
-            FVector fVectorB = fVectorA.copyZero();
-
-            Assertions.assertAll("Validate similarity",
-                    () -> assertNotSame(fVectorA, fVectorB,
-                            "FVectors represent different objects"),
-                    () -> assertFalse(fVectorA.isExact(fVectorB),
-                            "FVectors should not have the same values"),
-                    () -> assertNotSame(fVectorA.getRefBase(), fVectorB.getRefBase(),
-                            "The base FPoints should be different"),
-                    () -> assertNotSame(fVectorA.getRefHead(), fVectorB.getRefHead(),
-                            "The head FPoints should be different")
-            );
-        }
-
-        @Test
-        @DisplayName("Copy zero (validate)")
-        void copyZeroValidate() {
-            FVector fVector = factory.getFVector(1, 2, 3);
-
-            FVectorTestHelper.testValue(FVector::copyZero, fVector);
-        }
     }
 
     @Nested

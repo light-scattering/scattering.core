@@ -972,29 +972,6 @@ public class FComplexTest {
 
             FComplexTestHelper.testValue(FComplex::copy, fComplex);
         }
-
-        @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FComplex fComplex = refFComplex.copyZero();
-
-            Assertions.assertAll("Validate copy",
-                    () -> assertNotSame(refFComplex, fComplex,
-                            "FComplex objects contain different values"),
-                    () -> assertEquals(0, fComplex.getRe(),
-                            "FComplex Re values are incorrect"),
-                    () -> assertEquals(0, fComplex.getIm(),
-                            "FComplex Im values are incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Copy zero (validate)")
-        void copyZeroValidate() {
-            FComplex fComplex = TestHelper.getRandFComplex();
-
-            FComplexTestHelper.testValue(FComplex::copyZero, fComplex);
-        }
     }
 
     @Nested

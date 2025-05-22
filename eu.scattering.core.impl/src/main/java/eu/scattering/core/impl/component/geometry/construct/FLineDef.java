@@ -91,13 +91,11 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine copy() {
 
-        return copyZero().setRefOrigin(getRefOrigin().copy());
-    }
+        FLine element = supplyFLine();
 
-    @Override
-    public FLine copyZero() {
+        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
 
-        return create(factory, supplyFVector());
+        return element;
     }
 
     @Override
@@ -683,6 +681,11 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    private FLine supplyFLine() {
+
+        return factory.getFLine();
+    }
 
     private FVector supplyFVector() {
 

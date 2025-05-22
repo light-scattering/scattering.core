@@ -475,29 +475,6 @@ public class FPlaneTest {
         }
 
         @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FVector fVector = TestHelper.getRandFVector();
-            FPlane fPlaneA = factory.getRefFPlane(fVector);
-            FPlane fPlaneB = fPlaneA.copyZero();
-
-            Assertions.assertAll("Validate copy",
-                    () -> assertNotSame(fPlaneA, fPlaneB,
-                            "FPlanes represent different objects"),
-                    () -> assertTrue(fPlaneB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
-                            "FPlanes should have the same values")
-            );
-        }
-
-        @Test
-        @DisplayName("Copy zero (validate)")
-        void copyZeroValidate() {
-            FPlane fPlane = factory.getRefFPlane(factory.getFVector());
-
-            FPlaneTestHelper.testValue(FPlane::copyZero, fPlane);
-        }
-
-        @Test
         @DisplayName("Export to FPairPos3D")
         void toPairPos3D() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);

@@ -156,12 +156,6 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion copyZero() {
-
-        return supplyFQuaternion();
-    }
-
-    @Override
     public FPos4D toFPos4D() {
 
         return factory.getFPos4D(getRe(), getI(), getJ(), getK());

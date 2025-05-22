@@ -296,29 +296,6 @@ public class FRayTest {
         }
 
         @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FVector fVector = TestHelper.getRandFVector();
-            FRay fRayA = factory.getRefFRay(fVector);
-            FRay fRayB = fRayA.copyZero();
-
-            Assertions.assertAll("Validate copy",
-                    () -> assertNotSame(fRayA, fRayB,
-                            "FRays represent different objects"),
-                    () -> assertTrue(fRayB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
-                            "FRays should have the same values")
-            );
-        }
-
-        @Test
-        @DisplayName("Copy zero (validate)")
-        void copyZeroValidate() {
-            FRay fRay = factory.getRefFRay(factory.getFVector());
-
-            FRayTestHelper.testValue(FRay::copyZero, fRay);
-        }
-
-        @Test
         @DisplayName("Export to FPairPos3D")
         void toPairPos3D() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);

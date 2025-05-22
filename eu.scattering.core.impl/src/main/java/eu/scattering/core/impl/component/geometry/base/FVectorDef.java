@@ -453,12 +453,6 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector copyZero() {
-
-        return supplyFVector();
-    }
-
-    @Override
     public FPairPos3D toFPairPos3D() {
 
         FPos3D posA = getRefBase().toFPos3D();

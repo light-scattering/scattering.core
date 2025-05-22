@@ -2412,32 +2412,6 @@ public class FPointTest {
 
             FPointTestHelper.testValue(FPoint::copy, fPointRef);
         }
-
-        @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
-            FPoint fPoint = fPointRef.copyZero();
-
-            Assertions.assertAll("Validate copy",
-                    () -> assertNotSame(fPointRef, fPoint,
-                            "FPoints represent different objects"),
-                    () -> assertEquals(0, fPoint.getX(),
-                            "FPoints X values are incorrect"),
-                    () -> assertEquals(0, fPoint.getY(),
-                            "FPoints Y Im values are incorrect"),
-                    () -> assertEquals(0, fPoint.getZ(),
-                            "FPoints Y Im values are incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Copy zero (validate)")
-        void copyZeroValidate() {
-            FPoint fPointRef = factory.getFPoint(1, 2, 3);
-
-            FPointTestHelper.testValue(FPoint::copyZero, fPointRef);
-        }
     }
 
     @Nested

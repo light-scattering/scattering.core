@@ -89,13 +89,11 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public FRay copy() {
 
-        return copyZero().setRefOrigin(getRefOrigin().copy());
-    }
+        FRay element = supplyFRay();
 
-    @Override
-    public FRay copyZero() {
+        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
 
-        return create(factory, supplyFVector());
+        return element;
     }
 
     @Override
@@ -517,6 +515,11 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    private FRay supplyFRay() {
+
+        return factory.getFRay();
+    }
 
     private FVector supplyFVector() {
 

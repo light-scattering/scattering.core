@@ -296,29 +296,6 @@ public class FSegmentTest {
         }
 
         @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FVector fVector = TestHelper.getRandFVector();
-            FSegment fSegmentA = factory.getRefFSegment(fVector);
-            FSegment fSegmentB = fSegmentA.copyZero();
-
-            Assertions.assertAll("Validate copy",
-                    () -> assertNotSame(fSegmentA, fSegmentB,
-                            "FSegments represent different objects"),
-                    () -> assertTrue(fSegmentB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
-                            "FSegments should have the same values")
-            );
-        }
-
-        @Test
-        @DisplayName("Copy zero (validate)")
-        void copyZeroValidate() {
-            FSegment fSegment = factory.getRefFSegment(factory.getFVector());
-
-            FSegmentTestHelper.testValue(FSegment::copyZero, fSegment);
-        }
-
-        @Test
         @DisplayName("Export to FPairPos3D")
         void toPairPos3D() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);

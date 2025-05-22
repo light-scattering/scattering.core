@@ -1255,23 +1255,5 @@ public class FSphereTest {
                             "The center FPoints should be different")
             );
         }
-
-        @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FSphere fSphereA = TestHelper.getRandFSphere();
-            FSphere fSphereB = fSphereA.copyZero();
-
-            Assertions.assertAll("Validate similarity",
-                    () -> assertNotSame(fSphereA, fSphereB,
-                            "FSpheres represent different objects"),
-                    () -> assertFalse(fSphereA.isExact(fSphereB),
-                            "FSpheres should not have the same values"),
-                    () -> assertNotSame(fSphereA.getRefCenter(), fSphereB.getRefCenter(),
-                            "The center FPoints should be different"),
-                    () -> assertTrue(fSphereB.isExact(factory.getFSphere(1)),
-                            "FSpheres should have the same values")
-            );
-        }
     }
 }

@@ -111,13 +111,11 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane copy() {
 
-        return copyZero().setRefOrigin(getRefOrigin().copy());
-    }
+        FPlane element = supplyFPlane();
 
-    @Override
-    public FPlane copyZero() {
+        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
 
-        return create(factory, supplyFVector());
+        return element;
     }
 
     @Override
@@ -382,7 +380,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             return Optional.empty();
         }
 
-        FPoint result = supplyFVector().getRefBase().copyZero();
+        FPoint result = supplyFPoint();
 
         FVector u = getRefOrigin().copy();
         FVector v = arg.getRefOrigin().copy();
@@ -525,6 +523,11 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     // -------------------------------------------------------------------------------------------------
 
+    private FPlane supplyFPlane() {
+
+        return factory.getFPlane();
+    }
+
     private FLine supplyFLine() {
 
         return factory.getFLine();
@@ -533,6 +536,11 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     private FVector supplyFVector() {
 
         return factory.getFVector();
+    }
+
+    private FPoint supplyFPoint() {
+
+        return factory.getFPoint();
     }
 }
 

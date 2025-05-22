@@ -126,12 +126,6 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex copyZero() {
-
-        return supplyFComplex();
-    }
-
-    @Override
     public FPos2D toFPos2D() {
 
         return factory.getFPos2D(getRe(), getIm());
@@ -533,7 +527,7 @@ public class FComplexDef implements FComplex {
             double valueRe = tmp * Math.cos((phase + (2 * i * Math.PI)) / n);
             double valueIm = tmp * Math.sin((phase + (2 * i * Math.PI)) / n);
 
-            res[i] = copyZero().set(valueRe, valueIm);
+            res[i] = supplyFComplex().set(valueRe, valueIm);
         }
 
         return res;

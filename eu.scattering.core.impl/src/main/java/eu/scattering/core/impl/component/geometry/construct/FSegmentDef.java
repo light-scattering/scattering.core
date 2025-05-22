@@ -89,13 +89,11 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public FSegment copy() {
 
-        return copyZero().setRefOrigin(getRefOrigin().copy());
-    }
+        FSegment element = supplyFSegment();
 
-    @Override
-    public FSegment copyZero() {
+        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
 
-        return create(factory, supplyFVector());
+        return element;
     }
 
     @Override
@@ -401,6 +399,11 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    private FSegment supplyFSegment() {
+
+        return factory.getFSegment();
+    }
 
     private FVector supplyFVector() {
 

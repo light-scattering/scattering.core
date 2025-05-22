@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.geometry.shape;
 import eu.scattering.core.design.FactoryDesign;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
@@ -156,13 +157,7 @@ public class FSphereDef implements FSphere {
     @Override
     public FSphere copy() {
 
-        return copyZero().applyStateFrom(this);
-    }
-
-    @Override
-    public FSphere copyZero() {
-
-        return FSphereDef.create(factory, factory.getFPoint());
+        return supplyFSphere().applyStateFrom(this);
     }
 
     @Override
@@ -611,5 +606,10 @@ public class FSphereDef implements FSphere {
 
 
 
+    // -------------------------------------------------------------------------------------------------
 
+    private FSphere supplyFSphere() {
+
+        return factory.getFSphere();
+    }
 }

@@ -12,7 +12,6 @@ public interface Component<T> {
     T self();
 
     T copy();
-    T copyZero();
 
     JSONObject toJSON();
 }

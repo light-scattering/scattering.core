@@ -190,12 +190,6 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public FPoint copyZero() {
-
-        return supplyFPoint();
-    }
-
-    @Override
     public FPos3D toFPos3D() {
 
         return factory.getFPos3D(getX(), getY(), getZ());

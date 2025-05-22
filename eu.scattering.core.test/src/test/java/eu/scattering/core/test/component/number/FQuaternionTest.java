@@ -1412,34 +1412,6 @@ public class FQuaternionTest {
         }
 
         @Test
-        @DisplayName("Copy zero")
-        void copyZero() {
-            FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-            FQuaternion fQuaternion = fQuaternionRef.copyZero();
-
-            Assertions.assertAll("Validate copy",
-                    () -> assertNotSame(fQuaternionRef, fQuaternion,
-                            "FQuaternion objects contain different values"),
-                    () -> assertEquals(0, fQuaternion.getRe(),
-                            "FQuaternion Re values are incorrect"),
-                    () -> assertEquals(0, fQuaternion.getI(),
-                            "FQuaternion I values are incorrect"),
-                    () -> assertEquals(0, fQuaternion.getJ(),
-                            "FQuaternion J values are incorrect"),
-                    () -> assertEquals(0, fQuaternion.getK(),
-                            "FQuaternion K values are incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Copy (validate)")
-        void copyZeroValidate() {
-            FQuaternion fQuaternion = factory.getFQuaternion();
-
-            FQuaternionTestHelper.testValue(FQuaternion::copyZero, fQuaternion);
-        }
-
-        @Test
         @DisplayName("Copy")
         void copy() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
