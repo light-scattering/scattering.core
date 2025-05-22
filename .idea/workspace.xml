@@ -24,6 +24,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FPointDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FPointDef.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -158,7 +159,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
-    <configuration name="FSegmentRandomizeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FLineBasicTest.constructWithConstructValidateReferences" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -171,7 +172,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.construct.engine.FSegmentRandomizeTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FLineTest$FLineBasicTest.constructWithConstructValidateReferences&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -181,7 +182,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSegmentRandomizeTest.setRandomPositionBaseInCircleA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPlaneTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -194,7 +195,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.construct.engine.FSegmentRandomizeTest.setRandomPositionBaseInCircleA&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FPlaneTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -204,7 +205,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSegmentRandomizeTest.setRandomPositionHeadInCircleB" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FRayTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -217,7 +218,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.construct.engine.FSegmentRandomizeTest.setRandomPositionHeadInCircleB&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FRayTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -227,7 +228,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSegmentRandomizeTest.setRandomPositionOnAxisA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSegmentTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -240,7 +241,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.construct.engine.FSegmentRandomizeTest.setRandomPositionOnAxisA&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FSegmentTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -274,10 +275,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FSegmentRandomizeTest" />
-        <item itemvalue="Gradle.FSegmentRandomizeTest.setRandomPositionBaseInCircleA" />
-        <item itemvalue="Gradle.FSegmentRandomizeTest.setRandomPositionOnAxisA" />
-        <item itemvalue="Gradle.FSegmentRandomizeTest.setRandomPositionHeadInCircleB" />
+        <item itemvalue="Gradle.FSegmentTest" />
+        <item itemvalue="Gradle.FRayTest" />
+        <item itemvalue="Gradle.FPlaneTest" />
+        <item itemvalue="Gradle.FLineBasicTest.constructWithConstructValidateReferences" />
       </list>
     </recent_temporary>
   </component>

@@ -25,17 +25,11 @@ public class FQuaternionDef implements FQuaternion {
 
     private double oRe, oI, oJ, oK;
 
-    private FQuaternionDef(double re, double i, double j, double k) {
+    private FQuaternionDef() {}
 
-        this.oRe = re;
-        this.oI = i;
-        this.oJ = j;
-        this.oK = k;
-    }
+    public static FQuaternion create() {
 
-    public static FQuaternion create(double re, double i, double j, double k) {
-
-        return new FQuaternionDef(re, i, j, k);
+        return new FQuaternionDef();
     }
 
     @Override
@@ -158,7 +152,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FQuaternion copyZero() {
 
-        return FQuaternionDef.create(0, 0, 0, 0);
+        return FQuaternionDef.create();
     }
 
     @Override

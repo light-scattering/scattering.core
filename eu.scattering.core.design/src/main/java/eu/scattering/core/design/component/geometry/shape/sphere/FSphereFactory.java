@@ -7,15 +7,29 @@ public interface FSphereFactory {
 
     FSphere getFSphere();
 
-    FSphere getFSphere(double radius);
-
-    FSphere getFSphere(double x, double y, double z);
-
-    FSphere getFSphere(double x, double y, double z, double radius);
-
     @Modificator
     FSphere getRefFSphere(FPoint refCenter);
 
+    //--------------------------------------------------
+
+    default FSphere getFSphere(double radius) {
+
+        return getFSphere().setRadius(radius);
+    }
+
+    default FSphere getFSphere(double x, double y, double z) {
+
+        return getFSphere().setPosCenter(x, y, z);
+    }
+
+    default FSphere getFSphere(double x, double y, double z, double radius) {
+
+        return getFSphere().setPosCenter(x, y, z).setRadius(radius);
+    }
+
     @Modificator
-    FSphere getRefFSphere(FPoint refCenter, double radius);
+    default FSphere getRefFSphere(FPoint refCenter, double radius) {
+
+        return getRefFSphere(refCenter).setRadius(radius);
+    }
 }

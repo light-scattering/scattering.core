@@ -25,15 +25,11 @@ public class FComplexDef implements FComplex {
 
     private double oRe, oIm;
 
-    private FComplexDef(double re, double im) {
+    private FComplexDef() {}
 
-        this.oRe = re;
-        this.oIm = im;
-    }
+    public static FComplex create() {
 
-    public static FComplex create(double re, double im) {
-
-        return new FComplexDef(re, im);
+        return new FComplexDef();
     }
 
     @Override
@@ -126,7 +122,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FComplex copyZero() {
 
-        return FComplexDef.create(0, 0);
+        return FComplexDef.create();
     }
 
     @Override

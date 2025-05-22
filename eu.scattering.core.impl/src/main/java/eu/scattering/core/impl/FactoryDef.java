@@ -79,13 +79,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FPoint getFPoint() {
 
-        return FPointDef.create(0, 0, 0);
-    }
-
-    @Override
-    public FPoint getFPoint(double x, double y, double z) {
-
-        return FPointDef.create(x, y, z);
+        return FPointDef.create();
     }
 
     @Override
@@ -95,21 +89,15 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     @Override
-    public FVector getFVector(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+    public FVector getRefFVector(FPoint refBase, FPoint refHead) {
 
-        return FVectorDef.create(getFPoint(bX, bY, bZ), getFPoint(hX, hY, hZ));
+        return FVectorDef.create(refBase, refHead);
     }
 
     @Override
     public FVector getRefFVector(FPoint refHead) {
 
         return FVectorDef.create(getFPoint(), refHead);
-    }
-
-    @Override
-    public FVector getRefFVector(FPoint refBase, FPoint refHead) {
-
-        return FVectorDef.create(refBase, refHead);
     }
 
     //--------------------------------------------------
@@ -171,33 +159,9 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     @Override
-    public FSphere getFSphere(double radius) {
-
-        return FSphereDef.create(this, getFPoint(), radius);
-    }
-
-    @Override
-    public FSphere getFSphere(double x, double y, double z) {
-
-        return FSphereDef.create(this, getFPoint(x, y, z));
-    }
-
-    @Override
-    public FSphere getFSphere(double x, double y, double z, double radius) {
-
-        return FSphereDef.create(this, getFPoint(x, y, z), radius);
-    }
-
-    @Override
     public FSphere getRefFSphere(FPoint refCenter) {
 
         return FSphereDef.create(this, refCenter);
-    }
-
-    @Override
-    public FSphere getRefFSphere(FPoint refCenter, double radius) {
-
-        return FSphereDef.create(this, refCenter, radius);
     }
 
     //--------------------------------------------------
@@ -205,25 +169,13 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FComplex getFComplex() {
 
-        return FComplexDef.create(0, 0);
-    }
-
-    @Override
-    public FComplex getFComplex(double re, double im) {
-
-        return FComplexDef.create(re, im);
+        return FComplexDef.create();
     }
 
     @Override
     public FQuaternion getFQuaternion() {
 
-        return FQuaternionDef.create(0, 0, 0, 0);
-    }
-
-    @Override
-    public FQuaternion getFQuaternion(double re, double i, double j, double k) {
-
-        return FQuaternionDef.create(re, i, j, k);
+        return FQuaternionDef.create();
     }
 
     //--------------------------------------------------

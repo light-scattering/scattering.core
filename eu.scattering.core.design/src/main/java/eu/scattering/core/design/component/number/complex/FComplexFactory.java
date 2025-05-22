@@ -6,19 +6,22 @@ public interface FComplexFactory {
 
     FComplex getFComplex();
 
-    FComplex getFComplex(double re, double im);
-
     //--------------------------------------------------
+
+    default FComplex getFComplex(double re, double im) {
+
+        return getFComplex().set(re, im);
+    }
 
     default FComplex getFComplex(double re) {
 
-        return getFComplex(re, 0);
+        return getFComplex().setRe(re);
     }
 
     //--------------------------------------------------
 
-    default FComplex getFComplex(FPos2D origin) {
+    default FComplex getFComplex(FPos2D position) {
 
-        return getFComplex(origin.getD0(), origin.getD1());
+        return getFComplex().applyStateFrom(position);
     }
 }

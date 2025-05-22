@@ -4,7 +4,6 @@ import eu.scattering.core.design.FactoryDesign;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.transfer.container.buffer.FCache.FCache;
@@ -51,16 +50,6 @@ public class FSphereDef implements FSphere {
 
         fSphere.setRefCenter(refCenter);
         fSphere.setRadius(DEF_RADIUS);
-
-        return fSphere;
-    }
-
-    public static FSphere create(FactoryDesign factory, FPoint refCenter, double radius) {
-
-        var fSphere = new FSphereDef(factory);
-
-        fSphere.setRefCenter(refCenter);
-        fSphere.setRadius(radius);
 
         return fSphere;
     }

@@ -6,24 +6,27 @@ public interface FPointFactory {
 
     FPoint getFPoint();
 
-    FPoint getFPoint(double x, double y, double z);
-
     //--------------------------------------------------
 
-    default FPoint getFPoint(double x) {
+    default FPoint getFPoint(double x, double y, double z) {
 
-        return getFPoint(x, 0, 0);
+        return getFPoint().setX(x).setY(y).setZ(z);
     }
 
     default FPoint getFPoint(double x, double y) {
 
-        return getFPoint(x, y, 0);
+        return getFPoint().setX(x).setY(y);
+    }
+
+    default FPoint getFPoint(double x) {
+
+        return getFPoint().setX(x);
     }
 
     //--------------------------------------------------
 
     default FPoint getFPoint(FPos3D position) {
 
-        return getFPoint(position.getD0(), position.getD1(), position.getD2());
+        return getFPoint().applyStateFrom(position);
     }
 }

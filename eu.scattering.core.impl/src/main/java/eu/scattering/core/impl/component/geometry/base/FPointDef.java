@@ -27,16 +27,11 @@ public class FPointDef implements FPoint {
 
     private double oX, oY, oZ;
 
-    private FPointDef(double x, double y, double z) {
+    private FPointDef() {}
 
-        this.oX = x;
-        this.oY = y;
-        this.oZ = z;
-    }
+    public static FPoint create() {
 
-    public static FPoint create(double x, double y, double z) {
-
-        return new FPointDef(x, y, z);
+        return new FPointDef();
     }
 
     @Override
@@ -191,7 +186,7 @@ public class FPointDef implements FPoint {
     @Override
     public FPoint copyZero() {
 
-        return FPointDef.create(0, 0, 0);
+        return FPointDef.create();
     }
 
     @Override
