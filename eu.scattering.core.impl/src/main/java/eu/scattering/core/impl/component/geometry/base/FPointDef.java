@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FMatrix3x3D.FMatrix3x3D;
@@ -25,13 +26,18 @@ public class FPointDef implements FPoint {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final FPointFactory factorySelf;
+
     private double oX, oY, oZ;
 
-    private FPointDef() {}
+    private FPointDef(FPointFactory factorySelf) {
 
-    public static FPoint create() {
+        this.factorySelf = factorySelf;
+    }
 
-        return new FPointDef();
+    public static FPoint create(FPointFactory factorySelf) {
+
+        return new FPointDef(factorySelf);
     }
 
     @Override
@@ -180,13 +186,13 @@ public class FPointDef implements FPoint {
     @Override
     public FPoint copy() {
 
-        return copyZero().applyStateFrom(this);
+        return supplyFPoint().applyStateFrom(this);
     }
 
     @Override
     public FPoint copyZero() {
 
-        return FPointDef.create();
+        return supplyFPoint();
     }
 
     @Override
@@ -990,5 +996,12 @@ public class FPointDef implements FPoint {
         boolean posZ = Math.abs(z) < EPSILON;
 
         return posX && posY && posZ;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FPoint supplyFPoint() {
+
+        return factorySelf.getFPoint();
     }
 }

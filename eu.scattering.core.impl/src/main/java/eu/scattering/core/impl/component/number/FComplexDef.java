@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.complex.FComplex;
+import eu.scattering.core.design.component.number.complex.FComplexFactory;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
@@ -23,13 +24,18 @@ public class FComplexDef implements FComplex {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final FComplexFactory factorySelf;
+
     private double oRe, oIm;
 
-    private FComplexDef() {}
+    private FComplexDef(FComplexFactory factorySelf) {
 
-    public static FComplex create() {
+        this.factorySelf = factorySelf;
+    }
 
-        return new FComplexDef();
+    public static FComplex create(FComplexFactory factorySelf) {
+
+        return new FComplexDef(factorySelf);
     }
 
     @Override
@@ -116,13 +122,13 @@ public class FComplexDef implements FComplex {
     @Override
     public FComplex copy() {
 
-        return copyZero().applyStateFrom(this);
+        return supplyFComplex().applyStateFrom(this);
     }
 
     @Override
     public FComplex copyZero() {
 
-        return FComplexDef.create();
+        return supplyFComplex();
     }
 
     @Override
@@ -578,5 +584,12 @@ public class FComplexDef implements FComplex {
     public boolean toBoolean(Function<FComplex, Boolean> action) {
 
         return action.apply(this);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FComplex supplyFComplex() {
+
+        return factorySelf.getFComplex();
     }
 }

@@ -2,6 +2,7 @@ package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FMatrix3x3D.FMatrix3x3D;
@@ -28,12 +29,17 @@ public class FVectorDef implements FVector {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final FVectorFactory factorySelf;
+
     private FPoint oBase;
     private FPoint oHead;
 
-    private FVectorDef() {}
+    private FVectorDef(FVectorFactory factorySelf) {
 
-    public static FVector create(FPoint refBase, FPoint refHead) {
+        this.factorySelf = factorySelf;
+    }
+
+    public static FVector create(FVectorFactory factorySelf, FPoint refBase, FPoint refHead) {
 
         if (refBase == null) {
             throw new NullPointerException("The base FPoint cannot be null");
@@ -43,7 +49,7 @@ public class FVectorDef implements FVector {
             throw new NullPointerException("The head FPoint cannot be null");
         }
 
-        var fVector = new FVectorDef();
+        var fVector = new FVectorDef(factorySelf);
 
         fVector.setRefBase(refBase);
         fVector.setRefHead(refHead);
@@ -443,13 +449,13 @@ public class FVectorDef implements FVector {
     @Override
     public FVector copy() {
 
-        return create(getRefBase().copy(), getRefHead().copy());
+        return supplyFVector().applyStateFrom(this);
     }
 
     @Override
     public FVector copyZero() {
 
-        return create(getRefBase().copyZero(), getRefHead().copyZero());
+        return supplyFVector();
     }
 
     @Override
@@ -2366,5 +2372,12 @@ public class FVectorDef implements FVector {
         double distZ = hZ - bZ;
 
         return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FVector supplyFVector() {
+
+        return factorySelf.getFVector();
     }
 }

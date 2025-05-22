@@ -73,31 +73,44 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         return new FactoryDef(seed);
     }
+    //--------------------------------------------------
+
+    @Override
+    public FComplex getFComplex() {
+
+        return FComplexDef.create(this);
+    }
+
+    @Override
+    public FQuaternion getFQuaternion() {
+
+        return FQuaternionDef.create(this);
+    }
 
     //--------------------------------------------------
 
     @Override
     public FPoint getFPoint() {
 
-        return FPointDef.create();
+        return FPointDef.create(this);
     }
 
     @Override
     public FVector getFVector() {
 
-        return FVectorDef.create(getFPoint(), getFPoint());
+        return FVectorDef.create(this, getFPoint(), getFPoint());
     }
 
     @Override
     public FVector getRefFVector(FPoint refBase, FPoint refHead) {
 
-        return FVectorDef.create(refBase, refHead);
+        return FVectorDef.create(this, refBase, refHead);
     }
 
     @Override
     public FVector getRefFVector(FPoint refHead) {
 
-        return FVectorDef.create(getFPoint(), refHead);
+        return FVectorDef.create(this, getFPoint(), refHead);
     }
 
     //--------------------------------------------------
@@ -162,20 +175,6 @@ public final class FactoryDef extends FactoryDesignConcrete {
     public FSphere getRefFSphere(FPoint refCenter) {
 
         return FSphereDef.create(this, refCenter);
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FComplex getFComplex() {
-
-        return FComplexDef.create();
-    }
-
-    @Override
-    public FQuaternion getFQuaternion() {
-
-        return FQuaternionDef.create();
     }
 
     //--------------------------------------------------

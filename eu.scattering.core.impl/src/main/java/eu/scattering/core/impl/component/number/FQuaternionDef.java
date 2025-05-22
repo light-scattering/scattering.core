@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
+import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
@@ -23,13 +24,18 @@ public class FQuaternionDef implements FQuaternion {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final FQuaternionFactory factorySelf;
+
     private double oRe, oI, oJ, oK;
 
-    private FQuaternionDef() {}
+    private FQuaternionDef(FQuaternionFactory factorySelf) {
 
-    public static FQuaternion create() {
+        this.factorySelf = factorySelf;
+    }
 
-        return new FQuaternionDef();
+    public static FQuaternion create(FQuaternionFactory factorySelf) {
+
+        return new FQuaternionDef(factorySelf);
     }
 
     @Override
@@ -146,13 +152,13 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FQuaternion copy() {
 
-        return copyZero().applyStateFrom(this);
+        return supplyFQuaternion().applyStateFrom(this);
     }
 
     @Override
     public FQuaternion copyZero() {
 
-        return FQuaternionDef.create();
+        return supplyFQuaternion();
     }
 
     @Override
@@ -669,6 +675,13 @@ public class FQuaternionDef implements FQuaternion {
     public boolean toBoolean(Function<FQuaternion, Boolean> action) {
 
         return action.apply(this);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FQuaternion supplyFQuaternion() {
+
+        return factorySelf.getFQuaternion();
     }
 }
 
