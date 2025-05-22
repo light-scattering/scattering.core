@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FRayTestHelper;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
@@ -55,6 +56,26 @@ public class FRayTest {
         void constructWithFVectorValidateReferences() {
             FVector fVector = TestHelper.getRandFVector();
             FRay fRay = factory.getRefFRay(fVector);
+
+            assertSame(fVector, fRay.getRefOrigin(), "The FVector reference is erroneous");
+        }
+
+        @Test
+        @DisplayName("Construct with Construct")
+        void constructWithConstruct() {
+            FVector fVector = TestHelper.getRandFVector();
+            FSegment fSegment = factory.getRefFSegment(fVector);
+            FRay fRay = factory.getRefFRay(fSegment);
+
+            assertNotNull(fRay, "The instance is null");
+        }
+
+        @Test
+        @DisplayName("Construct with Segment (validate references)")
+        void constructWithSegmentValidateReferences() {
+            FVector fVector = TestHelper.getRandFVector();
+            FSegment fSegment = factory.getRefFSegment(fVector);
+            FRay fRay = factory.getRefFRay(fSegment);
 
             assertSame(fVector, fRay.getRefOrigin(), "The FVector reference is erroneous");
         }

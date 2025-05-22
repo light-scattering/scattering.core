@@ -1,6 +1,7 @@
 package eu.scattering.core.test.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -55,6 +56,26 @@ public class FSegmentTest {
         void constructWithFVectorValidateReferences() {
             FVector fVector = TestHelper.getRandFVector();
             FSegment fSegment = factory.getRefFSegment(fVector);
+
+            assertSame(fVector, fSegment.getRefOrigin(), "The FVector reference is erroneous");
+        }
+
+        @Test
+        @DisplayName("Construct with Construct")
+        void constructWithConstruct() {
+            FVector fVector = TestHelper.getRandFVector();
+            FLine fLine = factory.getRefFLine(fVector);
+            FSegment fSegment = factory.getRefFSegment(fLine);
+
+            assertNotNull(fSegment, "The instance is null");
+        }
+
+        @Test
+        @DisplayName("Construct with Construct (validate references)")
+        void constructWithConstructValidateReferences() {
+            FVector fVector = TestHelper.getRandFVector();
+            FLine fLine = factory.getRefFLine(fVector);
+            FSegment fSegment = factory.getRefFSegment(fLine);
 
             assertSame(fVector, fSegment.getRefOrigin(), "The FVector reference is erroneous");
         }

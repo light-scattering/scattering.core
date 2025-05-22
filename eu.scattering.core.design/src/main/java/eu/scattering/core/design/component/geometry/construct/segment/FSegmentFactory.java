@@ -14,24 +14,14 @@ public interface FSegmentFactory {
 
     //--------------------------------------------------
 
-    default FSegment getFSegment(FVector refOrigin) {
+    @Modificator
+    default FSegment getRefFSegment(Construct<?> construct) {
 
-        return getRefFSegment(refOrigin.copy());
-    }
-
-    default FSegment getFSegment(Construct<?> construct) {
-
-        return getRefFSegment(construct.getRefOrigin().copy());
+        return getRefFSegment(construct.getRefOrigin());
     }
 
     default FSegment getFSegment(FPairPos3D position) {
 
         return getFSegment().set(position);
-    }
-
-    @Modificator
-    default FSegment getRefFSegment(Construct<?> construct) {
-
-        return getRefFSegment(construct.getRefOrigin());
     }
 }

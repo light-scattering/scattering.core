@@ -14,24 +14,14 @@ public interface FLineFactory {
 
     //--------------------------------------------------
 
-    default FLine getLine(FVector refOrigin) {
+    @Modificator
+    default FLine getRefFLine(Construct<?> construct) {
 
-        return getRefFLine(refOrigin.copy());
-    }
-
-    default FLine getFLine(Construct<?> construct) {
-
-        return getRefFLine(construct.getRefOrigin().copy());
+        return getRefFLine(construct.getRefOrigin());
     }
 
     default FLine getFLine(FPairPos3D position) {
 
         return getFLine().set(position);
-    }
-
-    @Modificator
-    default FLine getRefFLine(Construct<?> construct) {
-
-        return getRefFLine(construct.getRefOrigin());
     }
 }

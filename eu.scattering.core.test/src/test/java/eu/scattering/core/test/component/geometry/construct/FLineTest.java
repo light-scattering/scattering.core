@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FLineTestHelper;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
@@ -57,6 +58,26 @@ public class FLineTest {
         void constructWithFVectorValidateReferences() {
             FVector fVector = TestHelper.getRandFVector();
             FLine fLine = factory.getRefFLine(fVector);
+
+            assertSame(fVector, fLine.getRefOrigin(), "The FVector reference is erroneous");
+        }
+
+        @Test
+        @DisplayName("Construct with Construct")
+        void constructWithConstruct() {
+            FVector fVector = TestHelper.getRandFVector();
+            FPlane fPlane = factory.getRefFPlane(fVector);
+            FLine fLine = factory.getRefFLine(fPlane);
+
+            assertNotNull(fLine, "The instance is null");
+        }
+
+        @Test
+        @DisplayName("Construct with Construct (validate references)")
+        void constructWithConstructValidateReferences() {
+            FVector fVector = TestHelper.getRandFVector();
+            FPlane fPlane = factory.getRefFPlane(fVector);
+            FLine fLine = factory.getRefFLine(fPlane);
 
             assertSame(fVector, fLine.getRefOrigin(), "The FVector reference is erroneous");
         }

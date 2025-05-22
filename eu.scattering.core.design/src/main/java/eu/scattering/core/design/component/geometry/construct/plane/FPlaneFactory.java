@@ -14,24 +14,14 @@ public interface FPlaneFactory {
 
     //--------------------------------------------------
 
-    default FPlane getFPlane(FVector refOrigin) {
+    @Modificator
+    default FPlane getRefFPlane(Construct<?> construct) {
 
-        return getRefFPlane(refOrigin.copy());
-    }
-
-    default FPlane getFPlane(Construct<?> construct) {
-
-        return getRefFPlane(construct.getRefOrigin().copy());
+        return getRefFPlane(construct.getRefOrigin());
     }
 
     default FPlane getFPlane(FPairPos3D position) {
 
         return getFPlane().set(position);
-    }
-
-    @Modificator
-    default FPlane getRefFPlane(Construct<?> construct) {
-
-        return getRefFPlane(construct.getRefOrigin());
     }
 }

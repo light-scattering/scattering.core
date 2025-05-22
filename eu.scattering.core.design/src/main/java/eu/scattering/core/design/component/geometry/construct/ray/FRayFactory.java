@@ -14,24 +14,14 @@ public interface FRayFactory {
 
     //--------------------------------------------------
 
-    default FRay getFRay(FVector refOrigin) {
+    @Modificator
+    default FRay getRefFRay(Construct<?> construct) {
 
-        return getRefFRay(refOrigin.copy());
-    }
-
-    default FRay getFRay(Construct<?> construct) {
-
-        return getRefFRay(construct.getRefOrigin().copy());
+        return getRefFRay(construct.getRefOrigin());
     }
 
     default FRay getFRay(FPairPos3D position) {
 
         return getFRay().set(position);
-    }
-
-    @Modificator
-    default FRay getRefFRay(Construct<?> construct) {
-
-        return getRefFRay(construct.getRefOrigin());
     }
 }

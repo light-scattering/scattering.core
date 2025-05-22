@@ -35,7 +35,7 @@ public class FSegmentRandomizeTest {
                         "The reference is erroneous"),
                 () -> assertTrue(fSegmentDir.getDistance(fPointIn) < radius,
                         "The magnitude is not correct"),
-                () -> assertTrue(factory.getFPlane(fSegmentDir).isPartOf(fPointIn),
+                () -> assertTrue(factory.getRefFPlane(fSegmentDir.copy()).isPartOf(fPointIn),
                         "The point should be a part of a plane")
         );
     }
@@ -56,7 +56,7 @@ public class FSegmentRandomizeTest {
                         "The reference is erroneous"),
                 () -> assertTrue(fSegmentDir.getDistance(fPointIn) < radius,
                         "The magnitude is not correct"),
-                () -> assertTrue(factory.getFPlane(fSegmentDir).isPartOf(fPointIn),
+                () -> assertTrue(factory.getRefFPlane(fSegmentDir.copy()).isPartOf(fPointIn),
                         "The point should be a part of a plane")
         );
     }
@@ -79,7 +79,7 @@ public class FSegmentRandomizeTest {
                         "The reference is erroneous"),
                 () -> assertEquals(radius, fSegmentDir.getDistance(fPointIn),
                         epsilon, "The magnitude is not correct"),
-                () -> assertTrue(factory.getFPlane(fSegmentDir).isPartOf(fPointIn),
+                () -> assertTrue(factory.getRefFPlane(fSegmentDir.copy()).isPartOf(fPointIn),
                         "The point should be a part of a plane")
         );
     }
@@ -100,7 +100,7 @@ public class FSegmentRandomizeTest {
                         "The reference is erroneous"),
                 () -> assertEquals(radius, fSegmentDir.getDistance(fPointIn),
                         epsilon, "The magnitude is not correct"),
-                () -> assertTrue(factory.getFPlane(fSegmentDir).isPartOf(fPointIn),
+                () -> assertTrue(factory.getRefFPlane(fSegmentDir.copy()).isPartOf(fPointIn),
                         "The point should be a part of a plane")
         );
     }

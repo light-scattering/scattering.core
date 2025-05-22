@@ -261,6 +261,7 @@ public class FPointDef implements FPoint {
 
     @Override
     public FPoint sub(double x, double y, double z) {
+
         return subXYZ(x, y, z);
     }
 
