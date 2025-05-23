@@ -4,6 +4,10 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public interface FPointFactory {
 
+    FPointProducer getFPointProducer();
+
+    //--------------------------------------------------
+
     FPoint getFPoint();
 
     //--------------------------------------------------

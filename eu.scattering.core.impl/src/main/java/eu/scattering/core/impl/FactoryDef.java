@@ -1,6 +1,7 @@
 package eu.scattering.core.impl;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
+import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
 import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
@@ -17,6 +18,7 @@ import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
+import eu.scattering.core.impl.component.geometry.base.FPointProducerDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandProcessorDef;
@@ -35,6 +37,8 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 
 public final class FactoryDef extends FactoryDesignConcrete {
+    private final FRandGenerator fRandGenerator;
+
     private final FProtoEngine fProtEngine;
     private final FRandEngine fRandEngine;
     private final FRotEngine fRotEngine;
@@ -43,9 +47,9 @@ public final class FactoryDef extends FactoryDesignConcrete {
     private final FStatHelper fStatHelper;
 
     private FactoryDef() {
-        FRandGenerator fRandInternal = FRandProcessorDef.create();
+        this.fRandGenerator = FRandProcessorDef.create();
 
-        this.fRandEngine = FRandEngineDef.create(fRandInternal);
+        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
         this.fProtEngine = FProtoEngineDef.create();
         this.fRotEngine = FRotEngineDef.create(getFRotGenerator());
 
@@ -54,9 +58,9 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     private FactoryDef(long seed) {
-        FRandGenerator fRandInternal = FRandProcessorDef.create(seed);
+        this.fRandGenerator = FRandProcessorDef.create(seed);
 
-        this.fRandEngine = FRandEngineDef.create(fRandInternal);
+        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
         this.fProtEngine = FProtoEngineDef.create();
         this.fRotEngine = FRotEngineDef.create(getFRotGenerator());
 
@@ -88,6 +92,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public FPointProducer getFPointProducer() {
+
+        return FPointProducerDef.create(this, this.fRandGenerator);
+    }
 
     @Override
     public FPoint getFPoint() {
