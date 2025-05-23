@@ -183,6 +183,46 @@ public class FSegmentTest {
         }
 
         @Test
+        @DisplayName("Apply state from")
+        void applyStateFrom() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(1, 2, 3, 4, 5, 6));
+            FLine fLine = factory.getRefFLine(factory.getFVector(9, 8, 7, 6, 5, 4));
+
+            FSegment results = fSegment.applyStateFrom(fLine);
+
+            Assertions.assertAll("Validate FSegment",
+                    () -> assertSame(fSegment, results,
+                            "The reference should not change"),
+                    () -> assertNotSame(fSegment.getRefOrigin(), fLine.getRefOrigin(),
+                            "FSegment core references should point at different objects"),
+                    () -> assertTrue(fSegment.getRefOrigin().isExact(9, 8, 7, 6, 5, 4),
+                            "The value is erroneous"),
+                    () -> assertTrue(fLine.getRefOrigin().isExact(9, 8, 7, 6, 5, 4),
+                            "The value is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply state to")
+        void applyStateTo() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(1, 2, 3, 4, 5, 6));
+            FLine fLine = factory.getRefFLine(factory.getFVector(9, 8, 7, 6, 5, 4));
+
+            FSegment results = fSegment.applyStateTo(fLine);
+
+            Assertions.assertAll("Validate FLine",
+                    () -> assertSame(fSegment, results,
+                            "The reference should not change"),
+                    () -> assertNotSame(fSegment.getRefOrigin(), fLine.getRefOrigin(),
+                            "FLine core references should point at different objects"),
+                    () -> assertTrue(fSegment.getRefOrigin().isExact(1, 2, 3, 4, 5, 6),
+                            "The value is erroneous"),
+                    () -> assertTrue(fLine.getRefOrigin().isExact(1, 2, 3, 4, 5, 6),
+                            "The value is erroneous")
+            );
+        }
+
+        @Test
         @DisplayName("Exactness")
         void isExact() {
             FVector fVector = TestHelper.getRandFVector();

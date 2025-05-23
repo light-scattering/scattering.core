@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.geometry.construct;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
@@ -55,6 +56,8 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return this;
     }
 
+
+
     // -------------------------------------------------------------------------------------------------
     // The following fields do not have to modified while extending the class.
     // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
@@ -64,6 +67,22 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     public FLine set(FPairPos3D position) {
 
         getRefOrigin().applyStateFrom(position);
+
+        return this;
+    }
+
+    @Override
+    public FLine applyStateTo(Construct<?> in) {
+
+        getRefOrigin().applyStateTo(in.getRefOrigin());
+
+        return this;
+    }
+
+    @Override
+    public FLine applyStateFrom(Construct<?> arg) {
+
+        getRefOrigin().applyStateFrom(arg.getRefOrigin());
 
         return this;
     }

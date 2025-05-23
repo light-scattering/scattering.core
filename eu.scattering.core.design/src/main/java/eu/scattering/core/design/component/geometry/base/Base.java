@@ -42,6 +42,6 @@ public interface Base<T> extends Geometry, Component<T> {
 
     T mul(FMatrix3x3D arg);
 
-    T applyStateTo(T arg);
+    T applyStateTo(T in);
     T applyStateFrom(T arg);
 }

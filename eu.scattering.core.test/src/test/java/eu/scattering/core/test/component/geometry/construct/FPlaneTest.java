@@ -204,6 +204,46 @@ public class FPlaneTest {
         }
 
         @Test
+        @DisplayName("Apply state from")
+        void applyStateFrom() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 2, 3, 4, 5, 6));
+            FRay fPay = factory.getRefFRay(factory.getFVector(9, 8, 7, 6, 5, 4));
+
+            FPlane results = fPlane.applyStateFrom(fPay);
+
+            Assertions.assertAll("Validate FPlane",
+                    () -> assertSame(fPlane, results,
+                            "The reference should not change"),
+                    () -> assertNotSame(fPlane.getRefOrigin(), fPay.getRefOrigin(),
+                            "FPlane core references should point at different objects"),
+                    () -> assertTrue(fPlane.getRefOrigin().isExact(9, 8, 7, 6, 5, 4),
+                            "The value is erroneous"),
+                    () -> assertTrue(fPay.getRefOrigin().isExact(9, 8, 7, 6, 5, 4),
+                            "The value is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply state to")
+        void applyStateTo() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 2, 3, 4, 5, 6));
+            FRay fRay = factory.getRefFRay(factory.getFVector(9, 8, 7, 6, 5, 4));
+
+            FPlane results = fPlane.applyStateTo(fRay);
+
+            Assertions.assertAll("Validate FPlane",
+                    () -> assertSame(fPlane, results,
+                            "The reference should not change"),
+                    () -> assertNotSame(fPlane.getRefOrigin(), fRay.getRefOrigin(),
+                            "FPlane core references should point at different objects"),
+                    () -> assertTrue(fPlane.getRefOrigin().isExact(1, 2, 3, 4, 5, 6),
+                            "The value is erroneous"),
+                    () -> assertTrue(fRay.getRefOrigin().isExact(1, 2, 3, 4, 5, 6),
+                            "The value is erroneous")
+            );
+        }
+
+        @Test
         @DisplayName("Parse JSON export (validate)")
         void parseJSONExportValidate() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());

@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.geometry.construct;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
@@ -62,6 +63,22 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     public FRay set(FPairPos3D position) {
 
         getRefOrigin().applyStateFrom(position);
+
+        return this;
+    }
+
+    @Override
+    public FRay applyStateTo(Construct<?> in) {
+
+        getRefOrigin().applyStateTo(in.getRefOrigin());
+
+        return this;
+    }
+
+    @Override
+    public FRay applyStateFrom(Construct<?> arg) {
+
+        getRefOrigin().applyStateFrom(arg.getRefOrigin());
 
         return this;
     }

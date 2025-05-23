@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
@@ -84,6 +85,22 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     public FPlane set(FPos3D ptBase, FPos3D ptA, FPos3D ptB) {
 
         getRefOrigin().set(ptBase, ptA).setCrossProductBaseCommon(ptB);
+
+        return this;
+    }
+
+    @Override
+    public FPlane applyStateTo(Construct<?> in) {
+
+        getRefOrigin().applyStateTo(in.getRefOrigin());
+
+        return this;
+    }
+
+    @Override
+    public FPlane applyStateFrom(Construct<?> arg) {
+
+        getRefOrigin().applyStateFrom(arg.getRefOrigin());
 
         return this;
     }

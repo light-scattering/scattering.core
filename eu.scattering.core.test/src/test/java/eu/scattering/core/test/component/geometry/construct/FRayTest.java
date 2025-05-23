@@ -1,9 +1,9 @@
 package eu.scattering.core.test.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FRayTestHelper;
@@ -179,6 +179,46 @@ public class FRayTest {
                             "FRay core references should point at different objects"),
                     () -> assertTrue(fRayA.getRefOrigin().isExact(fRayB.getRefOrigin()),
                             "The origin of FRay should be exact")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply state from")
+        void applyStateFrom() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(1, 2, 3, 4, 5, 6));
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(9, 8, 7, 6, 5, 4));
+
+            FRay results = fRay.applyStateFrom(fSegment);
+
+            Assertions.assertAll("Validate FRay",
+                    () -> assertSame(fRay, results,
+                            "The reference should not change"),
+                    () -> assertNotSame(fRay.getRefOrigin(), fSegment.getRefOrigin(),
+                            "FRay core references should point at different objects"),
+                    () -> assertTrue(fRay.getRefOrigin().isExact(9, 8, 7, 6, 5, 4),
+                            "The value is erroneous"),
+                    () -> assertTrue(fSegment.getRefOrigin().isExact(9, 8, 7, 6, 5, 4),
+                            "The value is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Apply state to")
+        void applyStateTo() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(1, 2, 3, 4, 5, 6));
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(9, 8, 7, 6, 5, 4));
+
+            FRay results = fRay.applyStateTo(fSegment);
+
+            Assertions.assertAll("Validate FRay",
+                    () -> assertSame(fRay, results,
+                            "The reference should not change"),
+                    () -> assertNotSame(fRay.getRefOrigin(), fSegment.getRefOrigin(),
+                            "FRay core references should point at different objects"),
+                    () -> assertTrue(fRay.getRefOrigin().isExact(1, 2, 3, 4, 5, 6),
+                            "The value is erroneous"),
+                    () -> assertTrue(fSegment.getRefOrigin().isExact(1, 2, 3, 4, 5, 6),
+                            "The value is erroneous")
             );
         }
 
