@@ -20,21 +20,24 @@ public class FPointProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FPointProducer producer = factory.getFPointProducer();
+        FPointProducer producer = factory.getFPointProducer().setPresetEmpty();
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertTrue(resultA.isExact(0, 0, 0), "The FPoint A is erroneous"),
-                () -> assertTrue(resultB.isExact(0, 0, 0), "The FPoint B is erroneous"),
-                () -> assertNotSame(resultA, resultB, "Elements should not be the same")
+                () -> assertTrue(resultA.isExact(0, 0, 0),
+                        "The FPoint A value is erroneous"),
+                () -> assertTrue(resultB.isExact(0, 0, 0),
+                        "The FPoint B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 
     @Test
-    @DisplayName("Produce default")
-    void produceDefault() {
+    @DisplayName("Produce custom")
+    void produceCustom() {
         FPointProducer producer = factory.getFPointProducer();
 
         AtomicInteger length = new AtomicInteger(1);
@@ -50,19 +53,23 @@ public class FPointProducerTest {
         FPoint resultB = producer.produce();
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertTrue(resultA.isExact(1, 1, 1), "The FPoint A is erroneous"),
-                () -> assertTrue(resultB.isExact(2, 2, 2), "The FPoint B is erroneous"),
-                () -> assertNotSame(resultA, resultB, "Elements should not be the same")
+                () -> assertTrue(resultA.isExact(1, 1, 1),
+                        "The FPoint A value is erroneous"),
+                () -> assertTrue(resultB.isExact(2, 2, 2),
+                        "The FPoint B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 
     @Test
-    @DisplayName("Produce modal")
-    void produceModal() {
+    @DisplayName("Produce distribution")
+    void produceDistribution() {
         FPointProducer producer = factory.getFPointProducer();
 
-        producer.addConfig((fPoint) -> fPoint.setX(1), 0.25);
-        producer.addConfig((fPoint) -> fPoint.setX(2), 0.75);
+        producer
+                .addConfig((fPoint) -> fPoint.setX(1), 0.25)
+                .addConfig((fPoint) -> fPoint.setX(2), 0.75);
 
         int countA = 0;
         int countB = 0;
@@ -80,7 +87,8 @@ public class FPointProducerTest {
         int countFinalB = countB;
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertTrue(countFinalA < countFinalB, "The distribution is erroneous")
+                () -> assertTrue(countFinalA < countFinalB,
+                        "The distribution is erroneous")
         );
     }
 
@@ -94,10 +102,14 @@ public class FPointProducerTest {
         FPoint resultB = producer.produce();
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertTrue(Math.abs(resultA.getX()) < 0.01, "Value X is incorrect"),
-                () -> assertTrue(Math.abs(resultA.getY()) < 0.01, "Value Y is incorrect"),
-                () -> assertTrue(Math.abs(resultA.getZ()) < 0.01, "Value Z is incorrect"),
-                () -> assertFalse(resultA.isExact(resultB), "Values should be different")
+                () -> assertTrue(Math.abs(resultA.getX()) < 0.01,
+                        "Value X is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getY()) < 0.01,
+                        "Value Y is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getZ()) < 0.01,
+                        "Value Z is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
         );
     }
 
@@ -110,8 +122,10 @@ public class FPointProducerTest {
         FPoint resultB = producer.produce();
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertTrue(resultA.getMagnitude() < 0.01, "Position is incorrect"),
-                () -> assertFalse(resultA.isExact(resultB), "Values should be different")
+                () -> assertTrue(resultA.getMagnitude() < 0.01,
+                        "Position is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
         );
     }
 
@@ -124,8 +138,10 @@ public class FPointProducerTest {
         FPoint resultB = producer.produce();
 
         Assertions.assertAll("Validate FPoint values",
-                () -> assertEquals(resultA.getMagnitude(), 0.01, epsilon, "Position is incorrect"),
-                () -> assertFalse(resultA.isExact(resultB), "Values should be different")
+                () -> assertEquals(resultA.getMagnitude(), 0.01,
+                        epsilon, "Position is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
         );
     }
 }

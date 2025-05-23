@@ -4,6 +4,10 @@ import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 
 public interface FComplexFactory {
 
+    FComplexProducer getFComplexProducer();
+
+    //--------------------------------------------------
+
     FComplex getFComplex();
 
     //--------------------------------------------------

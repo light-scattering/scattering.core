@@ -94,7 +94,7 @@ public class FQuaternionTest {
         void setWithPrimitives() {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
-            fQuaternion.applyStateFrom(1, 2, 3, 4);
+            fQuaternion.set(1, 2, 3, 4);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(1, fQuaternion.getRe(),
@@ -227,7 +227,7 @@ public class FQuaternionTest {
         void toFPos4D() {
             FQuaternion fQuaternion = factory.getFQuaternion();
 
-            fQuaternion.applyStateFrom(1, 2, 3, 4);
+            fQuaternion.set(1, 2, 3, 4);
 
             FPos4D fPos4D = fQuaternion.toFPos4D();
 

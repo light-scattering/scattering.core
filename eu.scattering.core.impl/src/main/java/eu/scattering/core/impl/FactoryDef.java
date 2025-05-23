@@ -2,6 +2,9 @@ package eu.scattering.core.impl;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+import eu.scattering.core.design.component.number.complex.FComplexProducer;
+import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
 import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
@@ -19,6 +22,9 @@ import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.impl.component.geometry.base.FPointProducerDef;
+import eu.scattering.core.impl.component.geometry.base.FVectorProducerDef;
+import eu.scattering.core.impl.component.number.FComplexProducerDef;
+import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandProcessorDef;
@@ -39,7 +45,7 @@ import eu.scattering.core.impl.component.number.FQuaternionDef;
 public final class FactoryDef extends FactoryDesignConcrete {
     private final FRandGenerator fRandGenerator;
 
-    private final FProtoEngine fProtEngine;
+    private final FProtoEngine fProtoEngine;
     private final FRandEngine fRandEngine;
     private final FRotEngine fRotEngine;
 
@@ -50,7 +56,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         this.fRandGenerator = FRandProcessorDef.create();
 
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
-        this.fProtEngine = FProtoEngineDef.create();
+        this.fProtoEngine = FProtoEngineDef.create();
         this.fRotEngine = FRotEngineDef.create(getFRotGenerator());
 
         this.fAngleHelper = FTrigHelperDef.create();
@@ -61,7 +67,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
         this.fRandGenerator = FRandProcessorDef.create(seed);
 
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
-        this.fProtEngine = FProtoEngineDef.create();
+        this.fProtoEngine = FProtoEngineDef.create();
         this.fRotEngine = FRotEngineDef.create(getFRotGenerator());
 
         this.fAngleHelper = FTrigHelperDef.create();
@@ -77,12 +83,27 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         return new FactoryDef(seed);
     }
+
     //--------------------------------------------------
+
+    @Override
+    public FComplexProducer getFComplexProducer() {
+
+        return FComplexProducerDef.create(this, this.fRandGenerator);
+    }
 
     @Override
     public FComplex getFComplex() {
 
         return FComplexDef.create(this);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FQuaternionProducer getFQuaternionProducer() {
+
+        return FQuaternionProducerDef.create(this, this.fRandGenerator);
     }
 
     @Override
@@ -103,6 +124,14 @@ public final class FactoryDef extends FactoryDesignConcrete {
     public FPoint getFPoint() {
 
         return FPointDef.create(this);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FVectorProducer getFVectorProducer() {
+
+        return FVectorProducerDef.create(this, this.fRandGenerator);
     }
 
     @Override
@@ -137,6 +166,8 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return FPlaneDef.create(this, refOrigin);
     }
 
+    //--------------------------------------------------
+
     @Override
     public FRay getFRay() {
 
@@ -149,6 +180,8 @@ public final class FactoryDef extends FactoryDesignConcrete {
         return FRayDef.create(this, refOrigin);
     }
 
+    //--------------------------------------------------
+
     @Override
     public FLine getFLine() {
 
@@ -160,6 +193,8 @@ public final class FactoryDef extends FactoryDesignConcrete {
 
         return FLineDef.create(this, refOrigin);
     }
+
+    //--------------------------------------------------
 
     @Override
     public FSegment getFSegment() {
@@ -192,7 +227,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FProtoEngine getFProtoEngine() {
 
-        return fProtEngine;
+        return fProtoEngine;
     }
 
     @Override

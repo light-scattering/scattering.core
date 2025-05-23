@@ -6,6 +6,9 @@ import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 public interface FVectorFactory {
 
+    FVectorProducer getFVectorProducer();
+
+    //--------------------------------------------------
     FVector getFVector();
 
     @Modificator

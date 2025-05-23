@@ -65,7 +65,7 @@ public class FProtoEngineDef implements FProtoEngine {
 
         action.accept(in);
 
-        return in.applyStateFrom(memoRe, memoI, memoJ, memoK);
+        return in.set(memoRe, memoI, memoJ, memoK);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class FProtoEngineDef implements FProtoEngine {
 
         double results = action.apply(in);
 
-        in.applyStateFrom(memoRe, memoI, memoJ, memoK);
+        in.set(memoRe, memoI, memoJ, memoK);
 
         return results;
     }
@@ -91,7 +91,7 @@ public class FProtoEngineDef implements FProtoEngine {
 
         boolean results = action.apply(in);
 
-        in.applyStateFrom(memoRe, memoI, memoJ, memoK);
+        in.set(memoRe, memoI, memoJ, memoK);
 
         return results;
     }

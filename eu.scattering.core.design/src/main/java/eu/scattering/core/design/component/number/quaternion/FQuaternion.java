@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public interface FQuaternion extends Number<FQuaternion> {
 
-    FQuaternion applyStateFrom(double re, double i, double j, double k);
+    FQuaternion set(double re, double i, double j, double k);
 
     double getRe();
     FQuaternion setRe(double re);

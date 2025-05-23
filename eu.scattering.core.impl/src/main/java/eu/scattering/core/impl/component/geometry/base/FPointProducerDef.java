@@ -4,26 +4,24 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 public class FPointProducerDef implements FPointProducer {
 
+    private final ProducerCoreDef<FPointProducer, FPoint> core;
+
     private final FRandGenerator random;
     private final FPointFactory factory;
-
-    private final List<AbstractMap.SimpleEntry<Double, Function<FPoint, FPoint>>> config;
 
     private FPointProducerDef(FPointFactory factory, FRandGenerator random) {
 
         this.random = random;
         this.factory = factory;
 
-        this.config = new ArrayList<>();
+        this.core = new ProducerCoreDef<>(this, this.random);
     }
 
     public static FPointProducerDef create(FPointFactory factory, FRandGenerator random) {
@@ -32,33 +30,33 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public void setConfig(Function<FPoint, FPoint> function) {
-        config.clear();
+    public FPointProducer setConfig(Function<FPoint, FPoint> function) {
 
-        config.add(new AbstractMap.SimpleEntry<>(1.0, function));
+        return core.setConfig(function);
     }
 
     @Override
-    public void addConfig(Function<FPoint, FPoint> function, double probability) {
+    public FPointProducer addConfig(Function<FPoint, FPoint> function, double probability) {
 
-        config.add(new AbstractMap.SimpleEntry<>(probability, function));
+        return core.addConfig(function, probability);
     }
 
     @Override
     public FPoint produce() {
 
-        if (config.isEmpty()) {
-            return produceEmpty();
-        }
-
-        if (config.size() == 1) {
-            return produceDefault();
-        }
-
-        return produceRandomized();
+        return core.getFunction().apply(factory.getFPoint());
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FPointProducer setPresetEmpty() {
+        Function<FPoint, FPoint> function = (fPoint) -> fPoint;
+
+        setConfig(function);
+
+        return this;
+    }
 
     @Override
     public FPointProducer setPresetInRange(FPairPos3D range) {
@@ -85,33 +83,5 @@ public class FPointProducerDef implements FPointProducer {
         setConfig(function);
 
         return this;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    private FPoint produceEmpty() {
-
-        return factory.getFPoint();
-    }
-
-    private FPoint produceDefault() {
-
-        return config.get(0).getValue().apply(factory.getFPoint());
-    }
-
-    private FPoint produceRandomized() {
-        double valueMax = config.stream().map(AbstractMap.SimpleEntry::getKey).reduce(0d, Double::sum);
-        double valueRandom = random.nextDouble(0, valueMax);
-
-        double value = 0;
-        for (var record : config) {
-            value += record.getKey();
-
-            if (valueRandom < value) {
-                return record.getValue().apply(factory.getFPoint());
-            }
-        }
-
-        throw new IllegalStateException("The FPoint could not be created");
     }
 }

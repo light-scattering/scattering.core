@@ -100,7 +100,7 @@ public class FQuaternionDef implements FQuaternion {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FQuaternion applyStateFrom(double re, double i, double j, double k) {
+    public FQuaternion set(double re, double i, double j, double k) {
 
         return setRe(re).setI(i).setJ(j).setK(k);
     }
@@ -108,7 +108,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FQuaternion applyStateFrom(FPos4D position) {
 
-        return applyStateFrom(position.getD0(), position.getD1(), position.getD2(), position.getD3());
+        return set(position.getD0(), position.getD1(), position.getD2(), position.getD3());
     }
 
     @Override
@@ -122,7 +122,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FQuaternion applyStateFrom(FQuaternion arg) {
 
-        return applyStateFrom(arg.getRe(), arg.getI(), arg.getJ(), arg.getK());
+        return set(arg.getRe(), arg.getI(), arg.getJ(), arg.getK());
     }
 
     @Override
@@ -138,7 +138,7 @@ public class FQuaternionDef implements FQuaternion {
         double j = structure.getDouble(2);
         double k = structure.getDouble(3);
 
-        return applyStateFrom(re, i, j, k);
+        return set(re, i, j, k);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -322,7 +322,7 @@ public class FQuaternionDef implements FQuaternion {
         double valueK = (arg.getRe() * getK()) - (arg.getI() * getJ()) +
                 (arg.getJ() * getI()) + (arg.getK() * getRe());
 
-        return applyStateFrom(valueRe, valueI, valueJ, valueK);
+        return set(valueRe, valueI, valueJ, valueK);
     }
 
     @Override
@@ -337,7 +337,7 @@ public class FQuaternionDef implements FQuaternion {
         double valueK = (re * getK()) - (i * getJ()) +
                 (j * getI()) + (k * getRe());
 
-        return applyStateFrom(valueRe, valueI, valueJ, valueK);
+        return set(valueRe, valueI, valueJ, valueK);
     }
 
     @Override
@@ -599,7 +599,7 @@ public class FQuaternionDef implements FQuaternion {
     public FQuaternion power(int n) {
 
         if (n == 0) {
-            return applyStateFrom(1, 0, 0, 0);
+            return set(1, 0, 0, 0);
         }
 
         FQuaternion factor = copy();
@@ -634,7 +634,7 @@ public class FQuaternionDef implements FQuaternion {
         double factor = (getRe() * getRe()) + (getI() * getI()) +
                 (getJ() * getJ()) + (getK() * getK());
 
-        return applyStateFrom(getRe() / factor, -getI() / factor, -getJ() / factor, -getK() / factor);
+        return set(getRe() / factor, -getI() / factor, -getJ() / factor, -getK() / factor);
     }
 
     @Override

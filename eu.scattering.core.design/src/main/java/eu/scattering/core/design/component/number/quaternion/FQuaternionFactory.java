@@ -4,6 +4,9 @@ import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 public interface FQuaternionFactory {
 
+    FQuaternionProducer getFQuaternionProducer();
+
+    //--------------------------------------------------
     FQuaternion getFQuaternion();
 
     //--------------------------------------------------
