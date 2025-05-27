@@ -1,5 +1,7 @@
 package eu.scattering.core.design.component.geometry.construct.segment;
 
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+
 import java.util.function.Function;
 
 public interface FSegmentProducer {
@@ -16,4 +18,6 @@ public interface FSegmentProducer {
     FSegmentProducer setPresetUnitX();
     FSegmentProducer setPresetUnitY();
     FSegmentProducer setPresetUnitZ();
+
+    FSegmentProducer setPresetFixedPoint(FPos3D point, double length);
 }

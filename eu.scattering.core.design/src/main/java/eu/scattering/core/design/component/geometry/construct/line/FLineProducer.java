@@ -1,5 +1,7 @@
 package eu.scattering.core.design.component.geometry.construct.line;
 
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+
 import java.util.function.Function;
 
 public interface FLineProducer {
@@ -16,4 +18,6 @@ public interface FLineProducer {
     FLineProducer setPresetUnitX();
     FLineProducer setPresetUnitY();
     FLineProducer setPresetUnitZ();
+
+    FLineProducer setPresetFixedPoint(FPos3D point);
 }

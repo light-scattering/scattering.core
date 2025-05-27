@@ -21,6 +21,7 @@ public interface FVectorProducer {
     FVectorProducer setPresetUnitZ();
 
     FVectorProducer setPresetInRange(FPos3D base, FPairPos3D range);
+
     FVectorProducer setPresetInSphere(FPos3D base, double radius);
     FVectorProducer setPresetOnSphere(FPos3D base, double radius);
 }

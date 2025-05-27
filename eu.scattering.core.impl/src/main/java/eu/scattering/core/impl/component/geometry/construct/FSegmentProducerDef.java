@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
@@ -89,6 +90,21 @@ public class FSegmentProducerDef implements FSegmentProducer {
             fSegment.getRefOrigin().getRefHead().setZ(1);
 
             return fSegment;
+        };
+
+        setConfig(function);
+
+        return this;
+    }
+
+    @Override
+    public FSegmentProducer setPresetFixedPoint(FPos3D point, double length) {
+        Function<FSegment, FSegment> function = (fRay) -> {
+            fRay.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(length));
+            fRay.getRefOrigin().moveBase(point);
+            fRay.getRefOrigin().shiftBackward(random.nextDouble(0, length));
+
+            return fRay;
         };
 
         setConfig(function);

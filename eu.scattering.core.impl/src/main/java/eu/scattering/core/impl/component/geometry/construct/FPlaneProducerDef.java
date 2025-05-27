@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
@@ -87,6 +88,20 @@ public class FPlaneProducerDef implements FPlaneProducer {
     public FPlaneProducer setPresetUnitZ() {
         Function<FPlane, FPlane> function = (fPlane) -> {
             fPlane.getRefOrigin().getRefHead().setZ(1);
+
+            return fPlane;
+        };
+
+        setConfig(function);
+
+        return this;
+    }
+
+    @Override
+    public FPlaneProducer setPresetFixedPoint(FPos3D point) {
+        Function<FPlane, FPlane> function = (fPlane) -> {
+            fPlane.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
+            fPlane.getRefOrigin().moveBase(point);
 
             return fPlane;
         };

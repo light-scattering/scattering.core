@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
@@ -87,6 +88,20 @@ public class FLineProducerDef implements FLineProducer {
     public FLineProducer setPresetUnitZ() {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().setZ(1);
+
+            return fLine;
+        };
+
+        setConfig(function);
+
+        return this;
+    }
+
+    @Override
+    public FLineProducer setPresetFixedPoint(FPos3D point) {
+        Function<FLine, FLine> function = (fLine) -> {
+            fLine.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
+            fLine.getRefOrigin().moveBase(point);
 
             return fLine;
         };

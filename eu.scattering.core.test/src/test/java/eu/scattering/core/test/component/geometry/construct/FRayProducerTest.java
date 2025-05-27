@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,7 @@ import org.junit.jupiter.api.Timeout;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static eu.scattering.core.test.Config.factory;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FRayProducer")
@@ -139,6 +139,25 @@ public class FRayProducerTest {
         Assertions.assertAll("Validate FRay values",
                 () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 1),
                         "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset fixed point")
+    void presetFixedPoint() {
+        FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
+        FRayProducer producer = factory.getFRayProducer().setPresetFixedPoint(fPos3D);
+
+        FRay resultA = producer.produce();
+        FRay resultB = producer.produce();
+
+        Assertions.assertAll("Validate FRay values",
+                () -> assertTrue(resultA.isPartOf(factory.getFPoint(1, 2, 3)),
+                        "The point should be a part of the FRay"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Elements should have different values"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );

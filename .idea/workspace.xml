@@ -24,11 +24,19 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/line/FLineFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/line/FLineFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/plane/FPlaneFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/plane/FPlaneFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/ray/FRayFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/ray/FRayFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/segment/FSegmentFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/segment/FSegmentFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/vector/FVectorProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/vector/FVectorProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/line/FLineProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/line/FLineProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/plane/FPlaneProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/plane/FPlaneProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/ray/FRayProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/ray/FRayProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/segment/FSegmentProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/construct/segment/FSegmentProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FLineProducerDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FLineProducerDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FPlaneProducerDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FPlaneProducerDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FRayProducerDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FRayProducerDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FSegmentProducerDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FSegmentProducerDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FLineProducerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FLineProducerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FPlaneProducerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FPlaneProducerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FRayProducerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FRayProducerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FSegmentProducerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FSegmentProducerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,8 +172,8 @@
       <recent name="eu.scattering.core.test.mutables.geometry.construct.support" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
-    <configuration name="FComplexProducerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.FSegmentProducerTest.presetFixedPoint">
+    <configuration name="FLineProducerTest.presetFixedPoint" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -178,7 +186,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.number.FComplexProducerTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FLineProducerTest.presetFixedPoint&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -188,7 +196,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FLineProducerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSegmentProducerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -201,7 +209,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FLineProducerTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FSegmentProducerTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -211,7 +219,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FQuaternionProducerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSegmentProducerTest.presetFixedPoint" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -224,7 +232,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.number.FQuaternionProducerTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FSegmentProducerTest.presetFixedPoint&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -234,7 +242,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FVectorProducerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Tests in 'eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -247,7 +255,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.base.FVectorProducerTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.*&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -280,11 +288,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.FSegmentProducerTest.presetFixedPoint" />
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FLineProducerTest" />
-        <item itemvalue="Gradle.FVectorProducerTest" />
-        <item itemvalue="Gradle.FQuaternionProducerTest" />
-        <item itemvalue="Gradle.FComplexProducerTest" />
+        <item itemvalue="Gradle.FSegmentProducerTest" />
+        <item itemvalue="Gradle.FLineProducerTest.presetFixedPoint" />
+        <item itemvalue="Gradle.Tests in 'eu.scattering.core.test'" />
       </list>
     </recent_temporary>
   </component>
@@ -512,6 +520,11 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/storage/FPos4DTest.java</url>
           <line>124</line>
           <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/construct/FSegmentProducerTest.java</url>
+          <line>154</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

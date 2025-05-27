@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
@@ -87,6 +88,20 @@ public class FRayProducerDef implements FRayProducer {
     public FRayProducer setPresetUnitZ() {
         Function<FRay, FRay> function = (fRay) -> {
             fRay.getRefOrigin().getRefHead().setZ(1);
+
+            return fRay;
+        };
+
+        setConfig(function);
+
+        return this;
+    }
+
+    @Override
+    public FRayProducer setPresetFixedPoint(FPos3D point) {
+        Function<FRay, FRay> function = (fRay) -> {
+            fRay.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
+            fRay.getRefOrigin().moveBase(point);
 
             return fRay;
         };
