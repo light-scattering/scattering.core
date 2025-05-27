@@ -7,6 +7,10 @@ import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 public interface FLineFactory {
 
+    FLineProducer getFLineProducer();
+
+    //--------------------------------------------------
+
     FLine getFLine();
 
     @Modificator

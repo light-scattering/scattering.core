@@ -3,6 +3,11 @@ package eu.scattering.core.impl;
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
+import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
+import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
@@ -23,6 +28,8 @@ import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.impl.component.geometry.base.FPointProducerDef;
 import eu.scattering.core.impl.component.geometry.base.FVectorProducerDef;
+import eu.scattering.core.impl.component.geometry.construct.*;
+import eu.scattering.core.impl.component.geometry.shape.FSphereProducerDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
@@ -32,10 +39,6 @@ import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
-import eu.scattering.core.impl.component.geometry.construct.FLineDef;
-import eu.scattering.core.impl.component.geometry.construct.FPlaneDef;
-import eu.scattering.core.impl.component.geometry.construct.FRayDef;
-import eu.scattering.core.impl.component.geometry.construct.FSegmentDef;
 import eu.scattering.core.impl.component.geometry.base.FPointDef;
 import eu.scattering.core.impl.component.geometry.base.FVectorDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereDef;
@@ -155,6 +158,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
+    public FPlaneProducer getFPlaneProducer() {
+
+        return FPlaneProducerDef.create(this, this.fRandGenerator);
+    }
+
+    @Override
     public FPlane getFPlane() {
 
         return FPlaneDef.create(this, getFVector());
@@ -167,6 +176,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public FRayProducer getFRayProducer() {
+
+        return FRayProducerDef.create(this, this.fRandGenerator);
+    }
 
     @Override
     public FRay getFRay() {
@@ -183,6 +198,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
+    public FLineProducer getFLineProducer() {
+
+        return FLineProducerDef.create(this, this.fRandGenerator);
+    }
+
+    @Override
     public FLine getFLine() {
 
         return FLineDef.create(this, getFVector());
@@ -197,6 +218,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
+    public FSegmentProducer getFSegmentProducer() {
+
+        return FSegmentProducerDef.create(this, this.fRandGenerator);
+    }
+
+    @Override
     public FSegment getFSegment() {
 
         return FSegmentDef.create(this, getFVector());
@@ -209,6 +236,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public FSphereProducer getFSphereProducer() {
+
+        return FSphereProducerDef.create(this, this.fRandGenerator);
+    }
 
     @Override
     public FSphere getFSphere() {

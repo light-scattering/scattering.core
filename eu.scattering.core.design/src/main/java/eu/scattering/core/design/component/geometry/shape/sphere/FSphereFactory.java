@@ -5,6 +5,10 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 
 public interface FSphereFactory {
 
+    FSphereProducer getFSphereProducer();
+
+    //--------------------------------------------------
+
     FSphere getFSphere();
 
     @Modificator
