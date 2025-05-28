@@ -11,7 +11,8 @@ import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 import static eu.scattering.core.test.Config.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -955,10 +956,11 @@ public class FRayTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FRay fRay = factory.getFRay();
-            List<FPoint> disassembly = fRay.disassemble();
+            Collection<FPoint> disassembly = fRay.toFPoints();
+            Iterator<FPoint> iterator = disassembly.iterator();
 
-            disassembly.get(0).set(1, 2, 3);
-            disassembly.get(1).set(4, 5, 6);
+            iterator.next().set(1, 2, 3);
+            iterator.next().set(4, 5, 6);
 
             Assertions.assertAll("Validate FPoints",
                     () -> assertTrue(factory.getFPoint(1, 2, 3).isExact(fRay.getRefOrigin().getRefBase()),

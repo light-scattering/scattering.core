@@ -10,7 +10,8 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 import static eu.scattering.core.test.Config.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -6233,12 +6234,13 @@ public class FVectorTest {
         void getFPoints() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            List<FPoint> list = fVector.disassemble();
+            Collection<FPoint> list = fVector.toFPoints();
+            Iterator<FPoint> iterator = list.iterator();
 
             Assertions.assertAll("Validate FVector list",
                     () -> Assertions.assertEquals(2, list.size(), "The size of the list is incorrect"),
-                    () -> assertSame(fVector.getRefBase(), list.get(0), "The base FPoint is incorrect"),
-                    () -> assertSame(fVector.getRefHead(), list.get(1), "The head FPoint is incorrect")
+                    () -> assertSame(fVector.getRefBase(), iterator.next(), "The base FPoint is incorrect"),
+                    () -> assertSame(fVector.getRefHead(), iterator.next(), "The head FPoint is incorrect")
             );
         }
 
@@ -6247,7 +6249,7 @@ public class FVectorTest {
         void getFPointsValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(FVector::disassemble, fVector);
+            FVectorTestHelper.testValue(FVector::toFPoints, fVector);
         }
 
         @Test

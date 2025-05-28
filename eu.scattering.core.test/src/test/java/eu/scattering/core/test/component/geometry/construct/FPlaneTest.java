@@ -1,10 +1,10 @@
 package eu.scattering.core.test.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.component.geometry.construct.line.FLine;
-import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
+import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FPlaneTestHelper;
@@ -13,7 +13,8 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 
 import static eu.scattering.core.test.Config.*;
@@ -891,7 +892,7 @@ public class FPlaneTest {
             FPoint relocation = TestHelper.getRandFPoint();
 
             fPlane.getRefOrigin().addXYZ(relocation);
-            fGeometry.disassemble().get(0).addXYZ(relocation);
+            fGeometry.toFPoints().iterator().next().addXYZ(relocation);
 
             assertTrue(fPlane.isOnSide(fGeometry),"The half-space is erroneous");
         }
@@ -909,7 +910,7 @@ public class FPlaneTest {
             FPoint relocation = TestHelper.getRandFPoint();
 
             fPlane.getRefOrigin().addXYZ(relocation);
-            fGeometry.disassemble().get(0).addXYZ(relocation);
+            fGeometry.toFPoints().iterator().next().addXYZ(relocation);
 
             assertFalse(fPlane.isOnSide(fGeometry),"The half-space is erroneous");
         }
@@ -1140,10 +1141,11 @@ public class FPlaneTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FPlane fPlane = factory.getFPlane();
-            List<FPoint> disassembly = fPlane.disassemble();
+            Collection<FPoint> disassembly = fPlane.toFPoints();
+            Iterator<FPoint> iterator = disassembly.iterator();
 
-            disassembly.get(0).set(1, 2, 3);
-            disassembly.get(1).set(4, 5, 6);
+            iterator.next().set(1, 2, 3);
+            iterator.next().set(4, 5, 6);
 
             Assertions.assertAll("Validate FPoints",
                     () -> assertTrue(factory.getFPoint(1, 2, 3).isExact(fPlane.getRefOrigin().getRefBase()),
@@ -1152,6 +1154,5 @@ public class FPlaneTest {
                             "The FPoint head value is erroneous")
             );
         }
-
     }
 }

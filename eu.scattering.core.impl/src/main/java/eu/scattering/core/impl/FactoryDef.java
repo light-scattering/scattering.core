@@ -1,12 +1,14 @@
 package eu.scattering.core.impl;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
@@ -29,6 +31,7 @@ import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.impl.component.geometry.base.FPointProducerDef;
 import eu.scattering.core.impl.component.geometry.base.FVectorProducerDef;
 import eu.scattering.core.impl.component.geometry.construct.*;
+import eu.scattering.core.impl.component.geometry.container.FAssemblyDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereProducerDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
@@ -307,5 +310,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     public FRotGenerator getFRotGenerator() {
 
         return FRotProcessorDef.create();
+    }
+
+
+    @Override
+    public <T extends Geometry> FAssembly<T> getFAssembly() {
+
+        return FAssemblyDef.create(this);
     }
 }

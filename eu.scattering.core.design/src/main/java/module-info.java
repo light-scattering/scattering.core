@@ -24,4 +24,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component;
     exports eu.scattering.core.design.engine.prototype;
     exports eu.scattering.core.design.helper.statistics;
+    exports eu.scattering.core.design.component.geometry.container.assembly;
 }

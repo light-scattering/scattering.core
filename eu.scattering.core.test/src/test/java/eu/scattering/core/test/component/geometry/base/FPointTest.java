@@ -9,7 +9,7 @@ import eu.scattering.core.transfer.container.storage.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
-import java.util.List;
+import java.util.Collection;
 
 import static eu.scattering.core.test.Config.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -3179,13 +3179,15 @@ public class FPointTest {
         @Test
         @DisplayName("Get FPoint list")
         void getFPoints() {
-            List<FPoint> list = fPoint.disassemble();
+            Collection<FPoint> list = fPoint.toFPoints();
+
+            FPoint fPoint = list.iterator().next();
 
             Assertions.assertAll("Validate FPoint list",
                     () -> Assertions.assertEquals(1, list.size(), "The size of the list is incorrect"),
-                    () -> assertEquals(refX, list.get(0).getX(), "The X value is incorrect"),
-                    () -> assertEquals(refY, list.get(0).getY(), "The Y value is incorrect"),
-                    () -> assertEquals(refZ, list.get(0).getZ(), "The Z value is incorrect")
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
             );
         }
 

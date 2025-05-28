@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.geometry.construct.preset;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.construct.Construct;
 
-import java.util.List;
+import java.util.Collection;
 
 public abstract class ConstructPresetDef<T extends Construct<T>> implements Construct<T> {
 
@@ -11,7 +11,7 @@ public abstract class ConstructPresetDef<T extends Construct<T>> implements Cons
     public int hashCode() {
         int hashCode = 7;
 
-        for (FPoint fPoint : getRefOrigin().disassemble()) {
+        for (FPoint fPoint : getRefOrigin().toFPoints()) {
             hashCode = 31 * hashCode + (int) (fPoint.getX() * 100);
             hashCode = 31 * hashCode + (int) (fPoint.getY() * 100);
             hashCode = 31 * hashCode + (int) (fPoint.getZ() * 100);
@@ -33,9 +33,9 @@ public abstract class ConstructPresetDef<T extends Construct<T>> implements Cons
     }
 
     @Override
-    public List<FPoint> disassemble() {
+    public Collection<FPoint> toFPoints() {
 
-        return getRefOrigin().disassemble();
+        return getRefOrigin().toFPoints();
     }
 
 }

@@ -1,17 +1,18 @@
 package eu.scattering.core.test.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.component.geometry.construct.line.FLine;
-import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FSegmentTestHelper;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 import static eu.scattering.core.test.Config.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -809,10 +810,11 @@ public class FSegmentTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FSegment fSegment = factory.getFSegment();
-            List<FPoint> disassembly = fSegment.disassemble();
+            Collection<FPoint> disassembly = fSegment.toFPoints();
+            Iterator<FPoint> iterator = disassembly.iterator();
 
-            disassembly.get(0).set(1, 2, 3);
-            disassembly.get(1).set(4, 5, 6);
+            iterator.next().set(1, 2, 3);
+            iterator.next().set(4, 5, 6);
 
             Assertions.assertAll("Validate FPoints",
                     () -> assertTrue(factory.getFPoint(1, 2, 3).isExact(fSegment.getRefOrigin().getRefBase()),

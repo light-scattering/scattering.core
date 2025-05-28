@@ -579,7 +579,7 @@ public class FSphereDef implements FSphere {
 
 
     @Override
-    public List<FPoint> disassemble() {
+    public List<FPoint> toFPoints() {
         return null;
     }
 
