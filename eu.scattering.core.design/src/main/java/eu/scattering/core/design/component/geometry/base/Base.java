@@ -8,6 +8,12 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public interface Base<T> extends Geometry, Component<T> {
 
+    T applyStateTo(T in);
+    T applyStateFrom(T arg);
+
+    boolean isExact(T arg);
+    boolean isSimilar(T arg);
+
     T addXYZ(FPoint arg);
     T addXYZ(FPos3D arg);
     T addXYZ(double x, double y, double z);
@@ -41,7 +47,4 @@ public interface Base<T> extends Geometry, Component<T> {
     T divZ(double z);
 
     T mul(FMatrix3x3D arg);
-
-    T applyStateTo(T in);
-    T applyStateFrom(T arg);
 }

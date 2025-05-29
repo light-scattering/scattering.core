@@ -8,5 +8,8 @@ import java.util.Collection;
 public interface Geometry {
 
     @Fragment
-    Collection<FPoint> toFPoints();
+    Collection<FPoint> explode();
+
+    @Fragment
+    Geometry replicate();
 }

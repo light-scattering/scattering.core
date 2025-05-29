@@ -84,13 +84,13 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public FRay applyStateFrom(JSONObject json) {
+    public FRay set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FVector origin = supplyFVector().applyStateFrom(json.getJSONObject(JSON_VAL));
+        FVector origin = supplyFVector().set(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -111,6 +111,12 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
 
         return element;
+    }
+
+    @Override
+    public Geometry replicate() {
+
+        return copy();
     }
 
     @Override
@@ -184,7 +190,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(this::projectUnit);
     }
 
@@ -205,7 +211,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(this::reflectUnit);
     }
 
@@ -236,7 +242,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.toFPoints().stream()
+        return arg.explode().stream()
                 .allMatch(this::isUnitPartOf);
     }
 
@@ -247,7 +253,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.toFPoints().stream()
+        return arg.explode().stream()
                 .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
@@ -278,7 +284,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(p -> setUnitDistance(p, distance));
     }
 
@@ -299,7 +305,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(p -> shiftUnitForward(p, distance));
     }
 
@@ -320,7 +326,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(p -> shiftUnitBackward(p, distance));
     }
 

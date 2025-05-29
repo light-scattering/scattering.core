@@ -171,7 +171,7 @@ public class FSegmentTest {
 
             JSONObject json = fSegmentA.toJSON();
 
-            FSegment fSegmentB = factory.getFSegment().applyStateFrom(json);
+            FSegment fSegmentB = factory.getFSegment().set(json);
 
             Assertions.assertAll("Validate JSON parser",
                     () -> assertNotSame(fSegmentA, fSegmentB,
@@ -810,7 +810,7 @@ public class FSegmentTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FSegment fSegment = factory.getFSegment();
-            Collection<FPoint> disassembly = fSegment.toFPoints();
+            Collection<FPoint> disassembly = fSegment.explode();
             Iterator<FPoint> iterator = disassembly.iterator();
 
             iterator.next().set(1, 2, 3);

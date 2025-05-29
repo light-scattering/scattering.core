@@ -1186,7 +1186,7 @@ public class FQuaternionTest {
         void parseJSON() {
             JSONObject json = refFQuaternion.toJSON();
 
-            FQuaternion fQuaternionOp = factory.getFQuaternion().applyStateFrom(json);
+            FQuaternion fQuaternionOp = factory.getFQuaternion().set(json);
 
             Assertions.assertAll("Validate FQuaternion values",
                     () -> assertEquals(refRe, fQuaternionOp.getRe(),

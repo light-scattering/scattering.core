@@ -4,6 +4,12 @@ import eu.scattering.core.design.component.Component;
 
 public interface Number<T> extends Component<T> {
 
+    T applyStateTo(T in);
+    T applyStateFrom(T arg);
+
+    boolean isExact(T arg);
+    boolean isSimilar(T arg);
+
     T add(T arg);
     T sub(T arg);
     T mul(T arg);
@@ -29,7 +35,4 @@ public interface Number<T> extends Component<T> {
     T inverse();
     T conjugate();
     T normalize();
-
-    T applyStateTo(T arg);
-    T applyStateFrom(T arg);
 }

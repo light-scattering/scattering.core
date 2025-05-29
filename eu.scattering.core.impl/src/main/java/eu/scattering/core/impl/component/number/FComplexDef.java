@@ -90,7 +90,7 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex applyStateFrom(JSONObject json) {
+    public FComplex set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
@@ -104,9 +104,9 @@ public class FComplexDef implements FComplex {
     }
 
     @Override
-    public FComplex applyStateTo(FComplex arg) {
+    public FComplex applyStateTo(FComplex in) {
 
-        arg.applyStateFrom(this);
+        in.applyStateFrom(this);
 
         return this;
     }

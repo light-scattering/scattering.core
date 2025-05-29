@@ -36,7 +36,7 @@ public class FRotEngineDef implements FRotEngine {
         FMatrix3x3D matrix = qt.getMatrix();
         FPos3D offset = qt.getOffset();
 
-        Collection<FPoint> assembly = in.toFPoints();
+        Collection<FPoint> assembly = in.explode();
 
         for(FPoint point : assembly) {
             rot(point, offset, matrix);
@@ -869,7 +869,7 @@ public class FRotEngineDef implements FRotEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints().forEach(p -> rotRgAround(refOrigin, p, angle));
+        in.explode().forEach(p -> rotRgAround(refOrigin, p, angle));
     }
 
     @Override
@@ -881,7 +881,7 @@ public class FRotEngineDef implements FRotEngine {
 
         FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        for (FPoint p : in.toFPoints()) {
+        for (FPoint p : in.explode()) {
             if (ref.isProjectable(p)) {
                 rotQt(p, qt);
             }
@@ -896,7 +896,7 @@ public class FRotEngineDef implements FRotEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        for (FPoint p : in.toFPoints()) {
+        for (FPoint p : in.explode()) {
             if (ref.isProjectable(p)) {
                 rotRgAround(refOrigin, p, angle);
             }
@@ -912,7 +912,7 @@ public class FRotEngineDef implements FRotEngine {
 
         FRotQt qt = core.getRotQt(ref.getRefOrigin().toFPairPos3D(), angle);
 
-        for (FPoint p : in.toFPoints()) {
+        for (FPoint p : in.explode()) {
             if (ref.isProjectable(p)) {
                 rotQt(p, qt);
             }
@@ -927,7 +927,7 @@ public class FRotEngineDef implements FRotEngine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        for (FPoint p : in.toFPoints()) {
+        for (FPoint p : in.explode()) {
             if (ref.isProjectable(p)) {
                 rotRgAround(refOrigin, p, angle);
             }

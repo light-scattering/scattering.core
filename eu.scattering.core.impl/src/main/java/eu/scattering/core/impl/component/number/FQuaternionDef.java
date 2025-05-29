@@ -112,9 +112,9 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion applyStateTo(FQuaternion arg) {
+    public FQuaternion applyStateTo(FQuaternion in) {
 
-        arg.applyStateFrom(this);
+        in.applyStateFrom(this);
 
         return this;
     }
@@ -126,7 +126,7 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     @Override
-    public FQuaternion applyStateFrom(JSONObject json) {
+    public FQuaternion set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");

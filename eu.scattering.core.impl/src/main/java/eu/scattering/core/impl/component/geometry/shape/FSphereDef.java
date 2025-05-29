@@ -1,9 +1,9 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
 import eu.scattering.core.design.FactoryDesign;
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
@@ -106,13 +106,13 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
-    public FSphere applyStateFrom(JSONObject json) {
+    public FSphere set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FPoint center = factory.getFPoint().applyStateFrom(json.getJSONObject(JSON_CENTER));
+        FPoint center = factory.getFPoint().set(json.getJSONObject(JSON_CENTER));
         double radius = json.getDouble(JSON_RADIUS);
 
        setRefCenter(center);
@@ -122,10 +122,10 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
-    public FSphere applyStateTo(FSphere arg) {
+    public FSphere applyStateTo(FSphere in) {
 
-        arg.getRefCenter().applyStateFrom(this.getRefCenter());
-        arg.setRadius(getRadius());
+        in.getRefCenter().applyStateFrom(this.getRefCenter());
+        in.setRadius(getRadius());
 
         return this;
     }
@@ -158,6 +158,12 @@ public class FSphereDef implements FSphere {
     public FSphere copy() {
 
         return supplyFSphere().applyStateFrom(this);
+    }
+
+    @Override
+    public Geometry replicate() {
+
+        return copy();
     }
 
     @Override
@@ -579,9 +585,10 @@ public class FSphereDef implements FSphere {
 
 
     @Override
-    public List<FPoint> toFPoints() {
+    public List<FPoint> explode() {
         return null;
     }
+
 
 
 

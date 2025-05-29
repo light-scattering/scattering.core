@@ -33,7 +33,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public Collection<FPoint> toFPoints() {
+    public Collection<FPoint> explode() {
 
         return this.units;
     }
@@ -71,7 +71,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     private boolean registerFPoints(T candidate) {
         boolean hasFPoint = false;
 
-        for (FPoint fPoint : candidate.toFPoints()) {
+        for (FPoint fPoint : candidate.explode()) {
             if (register(this.units, fPoint)) {
                 hasFPoint = true;
             }
@@ -113,34 +113,30 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return this;
     }
 
-    @Override
-    public FAssembly<T> copy() {
 
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public FAssembly<T> copy() {
         FAssembly<T> copy = supplyFAssembly();
 
         for (T element : this.elements) {
-//            copy.register(element.co)
+            copy.register((T) element.replicate());
         }
 
+        return copy;
+    }
+
+    @Override
+    public Geometry replicate() {
+
+        return copy();
+    }
+
+    @Override
+    public FAssembly<T> set(JSONObject json) {
         return null;
     }
-
-
-    @Override
-    public FAssembly<T> applyStateFrom(JSONObject json) {
-        return null;
-    }
-
-    @Override
-    public boolean isSimilar(FAssembly<T> arg) {
-        return false;
-    }
-
-    @Override
-    public boolean isExact(FAssembly<T> arg) {
-        return false;
-    }
-
 
 
 
@@ -156,5 +152,4 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
         return factorySelf.getFAssembly();
     }
-
 }

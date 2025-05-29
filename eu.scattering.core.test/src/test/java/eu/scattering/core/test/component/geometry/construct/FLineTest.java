@@ -173,7 +173,7 @@ public class FLineTest {
 
             JSONObject json = fLineA.toJSON();
 
-            FLine fLineB = factory.getFLine().applyStateFrom(json);
+            FLine fLineB = factory.getFLine().set(json);
 
             Assertions.assertAll("Validate JSON parser",
                     () -> assertNotSame(fLineA, fLineB,
@@ -1329,7 +1329,7 @@ public class FLineTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FLine fLine = factory.getFLine();
-            Collection<FPoint> disassembly = fLine.toFPoints();
+            Collection<FPoint> disassembly = fLine.explode();
             Iterator<FPoint> iterator = disassembly.iterator();
 
             iterator.next().set(1, 2, 3);

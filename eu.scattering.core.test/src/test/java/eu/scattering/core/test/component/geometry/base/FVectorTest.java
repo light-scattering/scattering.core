@@ -5019,7 +5019,7 @@ public class FVectorTest {
 
             JSONObject json = fVector.toJSON();
 
-            FVector fVectorRef = factory.getFVector().applyStateFrom(json);
+            FVector fVectorRef = factory.getFVector().set(json);
 
             Assertions.assertAll("Validate JSON parser",
                     () -> assertNotSame(fVector, fVectorRef,
@@ -6234,7 +6234,7 @@ public class FVectorTest {
         void getFPoints() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            Collection<FPoint> list = fVector.toFPoints();
+            Collection<FPoint> list = fVector.explode();
             Iterator<FPoint> iterator = list.iterator();
 
             Assertions.assertAll("Validate FVector list",
@@ -6249,7 +6249,7 @@ public class FVectorTest {
         void getFPointsValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(FVector::toFPoints, fVector);
+            FVectorTestHelper.testValue(FVector::explode, fVector);
         }
 
         @Test

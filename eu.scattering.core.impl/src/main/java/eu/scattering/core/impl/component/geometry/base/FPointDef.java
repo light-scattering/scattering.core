@@ -1,5 +1,6 @@
 package eu.scattering.core.impl.component.geometry.base;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.transfer.TransferFactory;
@@ -106,7 +107,7 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public FPoint applyStateFrom(JSONObject json) {
+    public FPoint set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
@@ -187,6 +188,12 @@ public class FPointDef implements FPoint {
     public FPoint copy() {
 
         return supplyFPoint().applyStateFrom(this);
+    }
+
+    @Override
+    public Geometry replicate() {
+
+        return copy();
     }
 
     @Override
@@ -463,7 +470,7 @@ public class FPointDef implements FPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public List<FPoint> toFPoints() {
+    public List<FPoint> explode() {
         List<FPoint> fPointList = new ArrayList<>();
 
         fPointList.add(this);

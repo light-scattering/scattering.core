@@ -1165,7 +1165,7 @@ public class FSphereTest {
 
             JSONObject json = fSphere.toJSON();
 
-            FSphere fSphereRef = factory.getFSphere(1).applyStateFrom(json);
+            FSphere fSphereRef = factory.getFSphere(1).set(json);
 
             Assertions.assertAll("Validate JSON parser",
                     () -> assertNotSame(fSphere, fSphereRef,

@@ -2168,7 +2168,7 @@ public class FPointTest {
         @DisplayName("JSON parser")
         void parseJSON() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
-            FPoint fPointArg = factory.getFPoint().applyStateFrom(fPointRef.toJSON());
+            FPoint fPointArg = factory.getFPoint().set(fPointRef.toJSON());
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX, fPointArg.getX(), "The X value is incorrect"),
@@ -2215,7 +2215,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
-            FPointTestHelper.testValue(Component::isExact, fPointRef, fPointArg);
+            FPointTestHelper.testValue(Base::isExact, fPointRef, fPointArg);
         }
 
         @Test
@@ -2312,7 +2312,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
             FPoint fPointArg = factory.getFPoint(4, 5, 6);
 
-            FPointTestHelper.testValue(Component::isSimilar, fPointRef, fPointArg);
+            FPointTestHelper.testValue(Base::isSimilar, fPointRef, fPointArg);
         }
 
         @Test
@@ -3179,7 +3179,7 @@ public class FPointTest {
         @Test
         @DisplayName("Get FPoint list")
         void getFPoints() {
-            Collection<FPoint> list = fPoint.toFPoints();
+            Collection<FPoint> list = fPoint.explode();
 
             FPoint fPoint = list.iterator().next();
 

@@ -23,7 +23,7 @@ public class FAssemblyTest {
         FAssembly<FSphere> fAssembly = factory.getFAssembly();
 
         Assertions.assertAll("Validate FAssembly",
-                () -> assertEquals(0, fAssembly.toFPoints().size(),
+                () -> assertEquals(0, fAssembly.explode().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -48,7 +48,7 @@ public class FAssemblyTest {
                         "The addition of FVector B should be successful"),
                 () -> assertFalse(registerRedundant,
                         "The addition of FVector is redundant"),
-                () -> assertEquals(4, fAssembly.toFPoints().size(),
+                () -> assertEquals(4, fAssembly.explode().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -67,7 +67,7 @@ public class FAssemblyTest {
         fAssembly.register(fVectorB);
 
         Assertions.assertAll("Validate FAssembly",
-                () -> assertEquals(3, fAssembly.toFPoints().size(),
+                () -> assertEquals(3, fAssembly.explode().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -88,7 +88,7 @@ public class FAssemblyTest {
                         "The addition of FVector A should be successful"),
                 () -> assertTrue(registerB,
                         "The addition of FVector B should be successful"),
-                () -> assertEquals(3, fAssembly.toFPoints().size(),
+                () -> assertEquals(3, fAssembly.explode().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -109,10 +109,25 @@ public class FAssemblyTest {
         fAssembly.applyGeometry(e -> e.shiftForward(1));
 
         Assertions.assertAll("Validate FAssembly",
-                () -> assertEquals(6, fAssembly.toFPoints().size(),
+                () -> assertEquals(6, fAssembly.explode().size(),
                         "The number of FPoints is incorrect")
         );
     }
 
+    @Test
+    void something() {
+        FAssembly<FVector> fAssembly = factory.getFAssembly();
 
+        FVector fVectorX = factory.getFVector(1, 0, 0);
+        FVector fVectorY = factory.getFVector(0, 1, 0);
+        FVector fVectorZ = factory.getFVector(0, 0, 1);
+
+        fAssembly.register(fVectorX);
+        fAssembly.register(fVectorY);
+        fAssembly.register(fVectorZ);
+
+        FAssembly<FVector> fAssembly2 = fAssembly.copy();
+
+        int i = 5;
+    }
 }

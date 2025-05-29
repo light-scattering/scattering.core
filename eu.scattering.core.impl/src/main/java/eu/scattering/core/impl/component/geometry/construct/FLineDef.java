@@ -88,13 +88,13 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
-    public FLine applyStateFrom(JSONObject json) {
+    public FLine set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FVector origin = supplyFVector().applyStateFrom(json.getJSONObject(JSON_VAL));
+        FVector origin = supplyFVector().set(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -115,6 +115,12 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
 
         return element;
+    }
+
+    @Override
+    public Geometry replicate() {
+
+        return copy();
     }
 
     @Override
@@ -184,7 +190,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(this::projectUnit);
     }
 
@@ -205,7 +211,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(this::reflectUnit);
     }
 
@@ -236,7 +242,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.toFPoints().stream()
+        return arg.explode().stream()
                 .allMatch(this::isUnitPartOf);
     }
 
@@ -247,7 +253,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.toFPoints().stream()
+        return arg.explode().stream()
                 .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
@@ -279,7 +285,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(p -> setUnitDistance(p, distance));
     }
 

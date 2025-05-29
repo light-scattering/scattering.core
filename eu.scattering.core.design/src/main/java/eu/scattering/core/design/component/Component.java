@@ -1,17 +1,18 @@
 package eu.scattering.core.design.component;
 
+import eu.scattering.core.design.annotation.Fragment;
 import org.json.JSONObject;
 
 public interface Component<T> {
 
-    T applyStateFrom(JSONObject json);
-
-    boolean isSimilar(T arg);
-    boolean isExact(T arg);
-
-    T self();
-
     T copy();
 
+    T set(JSONObject json);
+
     JSONObject toJSON();
+
+    //--------------------------------------------------
+
+    @Fragment
+    T self();
 }

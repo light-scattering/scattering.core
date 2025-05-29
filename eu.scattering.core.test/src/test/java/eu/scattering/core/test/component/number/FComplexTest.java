@@ -757,7 +757,7 @@ public class FComplexTest {
         void parseJSON() {
             JSONObject json = refFComplex.toJSON();
 
-            FComplex fComplexOp = factory.getFComplex().applyStateFrom(json);
+            FComplex fComplexOp = factory.getFComplex().set(json);
 
             Assertions.assertAll("Validate FComplex values",
                     () -> assertEquals(refRe, fComplexOp.getRe(),

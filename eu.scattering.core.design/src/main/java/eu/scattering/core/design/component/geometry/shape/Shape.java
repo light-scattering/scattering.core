@@ -9,6 +9,12 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public interface Shape<T> extends Geometry, Component<T> {
 
+    T applyStateTo(T in);
+    T applyStateFrom(T arg);
+
+    boolean isExact(T arg);
+    boolean isSimilar(T arg);
+
     T setPosCenter(double x, double y, double z);
     T setPosCenter(FPoint fPoint);
     T setPosCenter(FPos3D fPos3D);
@@ -47,6 +53,5 @@ public interface Shape<T> extends Geometry, Component<T> {
     void getSurfaceStream(FStream3DI stream, double delta);
     void getSurfaceStream(FStream3D stream, double delta);
 
-    T applyStateTo(T arg);
-    T applyStateFrom(T arg);
+
 }

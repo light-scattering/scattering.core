@@ -171,7 +171,7 @@ public class FRayTest {
 
             JSONObject json = fRayA.toJSON();
 
-            FRay fRayB = factory.getFRay().applyStateFrom(json);
+            FRay fRayB = factory.getFRay().set(json);
 
             Assertions.assertAll("Validate JSON parser",
                     () -> assertNotSame(fRayA, fRayB,
@@ -956,7 +956,7 @@ public class FRayTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FRay fRay = factory.getFRay();
-            Collection<FPoint> disassembly = fRay.toFPoints();
+            Collection<FPoint> disassembly = fRay.explode();
             Iterator<FPoint> iterator = disassembly.iterator();
 
             iterator.next().set(1, 2, 3);

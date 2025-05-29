@@ -106,13 +106,13 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public FPlane applyStateFrom(JSONObject json) {
+    public FPlane set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FVector origin = supplyFVector().applyStateFrom(json.getJSONObject(JSON_VAL));
+        FVector origin = supplyFVector().set(json.getJSONObject(JSON_VAL));
 
         return setRefOrigin(origin);
     }
@@ -133,6 +133,12 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
 
         return element;
+    }
+
+    @Override
+    public Geometry replicate() {
+
+        return copy();
     }
 
     @Override
@@ -202,7 +208,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(this::projectUnitOnPlane);
     }
 
@@ -223,7 +229,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(this::reflectUnit);
     }
 
@@ -254,7 +260,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.toFPoints().stream()
+        return arg.explode().stream()
                 .allMatch(this::isUnitPartOf);
     }
 
@@ -265,7 +271,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.toFPoints().stream()
+        return arg.explode().stream()
                 .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
@@ -296,7 +302,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
+        in.explode()
                 .forEach(p -> setUnitDistance(p, distance));
     }
 
@@ -307,7 +313,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        List<Boolean> isInHalfSpace = arg.toFPoints().stream()
+        List<Boolean> isInHalfSpace = arg.explode().stream()
                 .map(this::isUnitInHalfSpace)
                 .collect(Collectors.toList());
 
@@ -334,7 +340,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.toFPoints().stream()
+        return arg.explode().stream()
                 .allMatch(this::isUnitInHalfSpace);
     }
 

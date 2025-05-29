@@ -1,5 +1,6 @@
 package eu.scattering.core.impl.component.geometry.base;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
@@ -267,15 +268,15 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector applyStateFrom(JSONObject json) {
+    public FVector set(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
         JSONArray structure = json.getJSONArray(JSON_VAL);
-        FPoint base = getRefBase().applyStateFrom(structure.getJSONObject(0));
-        FPoint head = getRefHead().applyStateFrom(structure.getJSONObject(1));
+        FPoint base = getRefBase().set(structure.getJSONObject(0));
+        FPoint head = getRefHead().set(structure.getJSONObject(1));
 
         return set(base, head);
     }
@@ -450,6 +451,12 @@ public class FVectorDef implements FVector {
     public FVector copy() {
 
         return supplyFVector().applyStateFrom(this);
+    }
+
+    @Override
+    public Geometry replicate() {
+
+        return copy();
     }
 
     @Override
@@ -916,7 +923,7 @@ public class FVectorDef implements FVector {
     //--------------------------------------------------
 
     @Override
-    public List<FPoint> toFPoints() {
+    public List<FPoint> explode() {
         List<FPoint> fPointList = new ArrayList<>();
 
         fPointList.add(getRefBase());
