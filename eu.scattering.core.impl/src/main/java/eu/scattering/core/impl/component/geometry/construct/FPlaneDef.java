@@ -42,6 +42,11 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         return new FPlaneDef(factory, origin);
     }
 
+    protected static boolean isParsable(String tag) {
+
+        return tag.equals(JSON_MAIN);
+    }
+
     @Override
     public FVector getRefOrigin() {
 

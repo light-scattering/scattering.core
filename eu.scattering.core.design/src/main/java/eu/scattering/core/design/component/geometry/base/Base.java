@@ -11,7 +11,6 @@ public interface Base<T> extends Geometry, Component<T> {
     T applyStateTo(T in);
     T applyStateFrom(T arg);
 
-    boolean isExact(T arg);
     boolean isSimilar(T arg);
 
     T addXYZ(FPoint arg);

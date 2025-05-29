@@ -38,6 +38,11 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return new FLineDef(factory, origin);
     }
 
+    protected static boolean isParsable(String tag) {
+
+        return tag.equals(JSON_MAIN);
+    }
+
     @Override
     public FVector getRefOrigin() {
 
@@ -55,8 +60,6 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         return this;
     }
-
-
 
     // -------------------------------------------------------------------------------------------------
     // The following fields do not have to modified while extending the class.

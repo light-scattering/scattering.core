@@ -3,8 +3,13 @@ package eu.scattering.core.test.component.geometry.container;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
+import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -113,6 +118,40 @@ public class FAssemblyTest {
                         "The number of FPoints is incorrect")
         );
     }
+
+//    @Test
+//    @DisplayName("JSON parser")
+//    void parseJSON() {
+//        FAssembly<Geometry> fAssembly = factory.getFAssembly();
+//
+//        FPoint fPoint = factory.getFPoint(1, 2, 3);
+//        FVector fVector = factory.getFVector(4, 5, 6, 7, 8, 9);
+//        FLine fLine = factory.getRefFLine(factory.getFVector(-1, -2, -3, -4, -5, -6));
+//        FPlane fPlane = factory.getRefFPlane(factory.getFVector(-6, -5, -4, -3, -2, -1));
+//        FRay fRay = factory.getRefFRay(factory.getFVector(1, -2, 3, -4, 5, -6));
+//        FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 2, -3, 4, -5, 6));
+//        FSphere fSphere = factory.getFSphere(2);
+//
+//        fAssembly.register(fPoint);
+//        fAssembly.register(fVector);
+//        fAssembly.register(fLine);
+//        fAssembly.register(fPlane);
+//        fAssembly.register(fRay);
+//        fAssembly.register(fSegment);
+//        fAssembly.register(fSphere);
+//
+//        JSONObject json = fAssembly.toJSON();
+//
+//        FAssembly<Geometry> fAssemblyCopy = factory.getFAssembly();
+//        fAssemblyCopy.set(json);
+//
+//        Assertions.assertAll("Validate FPoint values",
+//                () -> assertEquals(7, fAssembly.explode().size(),
+//                        "The number of elements is incorrect"),
+//                () -> assertEquals(fAssembly, fAssemblyCopy,
+//                        "FAssemblies should contain same values")
+//        );
+//    }
 
     @Test
     void something() {

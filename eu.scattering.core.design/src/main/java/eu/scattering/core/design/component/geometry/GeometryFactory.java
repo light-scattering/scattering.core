@@ -10,4 +10,6 @@ public interface GeometryFactory extends
         ConstructFactory,
         ContainerFactory,
         ShapeFactory {
+
+    GeometryParser getGeometryParser();
 }

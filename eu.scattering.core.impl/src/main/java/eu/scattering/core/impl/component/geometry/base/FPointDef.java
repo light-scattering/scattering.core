@@ -41,6 +41,11 @@ public class FPointDef implements FPoint {
         return new FPointDef(factorySelf);
     }
 
+    protected static boolean isParsable(String tag) {
+
+        return tag.equals(JSON_MAIN);
+    }
+
     @Override
     public double getX() {
 

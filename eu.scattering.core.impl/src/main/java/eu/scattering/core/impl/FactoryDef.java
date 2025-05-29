@@ -2,6 +2,7 @@ package eu.scattering.core.impl;
 
 import eu.scattering.core.design.FactoryDesignConcrete;
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
@@ -28,6 +29,7 @@ import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
+import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.FPointProducerDef;
 import eu.scattering.core.impl.component.geometry.base.FVectorProducerDef;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -317,5 +319,13 @@ public final class FactoryDef extends FactoryDesignConcrete {
     public <T extends Geometry> FAssembly<T> getFAssembly() {
 
         return FAssemblyDef.create(this);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public GeometryParser getGeometryParser() {
+
+        return GeometryParserDef.create(this);
     }
 }

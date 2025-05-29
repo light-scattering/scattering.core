@@ -58,6 +58,11 @@ public class FVectorDef implements FVector {
         return fVector;
     }
 
+    protected static boolean isParsable(String tag) {
+
+        return tag.equals(JSON_MAIN);
+    }
+
     @Override
     public FPoint getRefBase() {
 

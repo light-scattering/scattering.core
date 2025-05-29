@@ -12,7 +12,6 @@ public interface Shape<T> extends Geometry, Component<T> {
     T applyStateTo(T in);
     T applyStateFrom(T arg);
 
-    boolean isExact(T arg);
     boolean isSimilar(T arg);
 
     T setPosCenter(double x, double y, double z);

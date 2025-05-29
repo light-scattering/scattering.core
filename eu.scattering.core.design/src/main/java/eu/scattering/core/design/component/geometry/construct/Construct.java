@@ -18,7 +18,6 @@ public interface Construct<T> extends Geometry, Component<T> {
     T applyStateTo(Construct<?> in);
     T applyStateFrom(Construct<?> arg);
 
-    boolean isExact(T arg);
     boolean isSimilar(T arg);
 
     boolean isPartOf(FPoint arg);

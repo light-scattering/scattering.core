@@ -13,6 +13,7 @@ import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +54,11 @@ public class FSphereDef implements FSphere {
         fSphere.setRadius(DEF_RADIUS);
 
         return fSphere;
+    }
+
+    protected static boolean isParsable(String tag) {
+
+        return tag.equals(JSON_MAIN);
     }
 
     @Override
@@ -585,8 +591,12 @@ public class FSphereDef implements FSphere {
 
 
     @Override
-    public List<FPoint> explode() {
-        return null;
+    public Collection<FPoint> explode() {
+        Collection<FPoint> units = new ArrayList<>();
+
+        units.add(getRefCenter());
+
+        return units;
     }
 
 

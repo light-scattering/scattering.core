@@ -1,33 +1,34 @@
 package eu.scattering.core.impl.component.geometry.container;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.GeometryFactory;
+import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
-import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyFactory;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
+
 public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
-    private static final String JSON_MAIN = "asb";
+    private static final String JSON_MAIN = "assembly";
     private static final String JSON_VAL = "val";
 
-    private final FAssemblyFactory factorySelf;
+    private final GeometryFactory factorySelf;
 
     private final Collection<T> elements = new ArrayList<>();
     private final Collection<FPoint> units = new ArrayList<>();
 
-    private FAssemblyDef(FAssemblyFactory factorySelf) {
+    private FAssemblyDef(GeometryFactory factorySelf) {
 
         this.factorySelf = factorySelf;
     }
 
-    public static <T extends Geometry> FAssembly<T> create(FAssemblyFactory factorySelf) {
+    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf) {
 
         return new FAssemblyDef<T>(factorySelf);
     }
@@ -102,9 +103,6 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return false;
     }
 
-
-
-
 //------------------
 
     @Override
@@ -113,7 +111,17 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return this;
     }
 
+    @Override
+    public boolean isExact(FAssembly<T> arg) {
 
+        if (!(arg instanceof FAssembly<?>)) {
+            return false;
+        }
+
+//        return this.elements.equals(arg.g);
+
+        return false;
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -134,16 +142,40 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public FAssembly<T> set(JSONObject json) {
-        return null;
+
+        if (json.get(JSON_TYPE) != JSON_MAIN) {
+            throw new IllegalArgumentException("The object type is incorrect");
+        }
+
+        this.elements.clear();
+        this.units.clear();
+
+        GeometryParser parser = factorySelf.getGeometryParser();
+
+        JSONArray candidates = json.getJSONArray(JSON_VAL);
+
+        for (int i = 0 ; i < candidates.length() ; i++) {
+            JSONObject candidate = candidates.getJSONObject(i);
+            Geometry geometry = parser.parse(candidate);
+
+            register((T) geometry);
+        }
+
+        return this;
     }
-
-
 
 
     @Override
     public JSONObject toJSON() {
-        return null;
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+
+        this.elements.forEach(e -> json.append(JSON_VAL, e.toJSON()));
+
+        return json;
     }
 
     // -------------------------------------------------------------------------------------------------

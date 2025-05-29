@@ -36,6 +36,11 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         return new FSegmentDef(factory, origin);
     }
 
+    protected static boolean isParsable(String tag) {
+
+        return tag.equals(JSON_MAIN);
+    }
+
     @Override
     public FVector getRefOrigin() {
 
