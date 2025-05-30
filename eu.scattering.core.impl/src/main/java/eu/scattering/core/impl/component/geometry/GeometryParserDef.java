@@ -31,7 +31,7 @@ public class GeometryParserDef implements GeometryParser{
         this.init = fSphereParser;
     }
 
-    public static GeometryParser create(GeometryFactory factory) {
+    public static GeometryParser get(GeometryFactory factory) {
 
         if (GeometryParserDef.self == null) {
             GeometryParserDef.self = new GeometryParserDef(factory);

@@ -11,10 +11,15 @@ import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 public class FRotProcessorDef implements FRotGenerator {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static FRotProcessorDef self;
 
-    public static FRotGenerator create() {
+    public static FRotGenerator get() {
 
-        return new FRotProcessorDef();
+        if (FRotProcessorDef.self == null) {
+            FRotProcessorDef.self = new FRotProcessorDef();
+        }
+
+        return FRotProcessorDef.self;
     }
 
     // -------------------------------------------------------------------------------------------------

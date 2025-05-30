@@ -148,7 +148,7 @@ public class FRandProcessorDef implements FRandGenerator {
         while (true) {
             FPos2D rnd = nextDouble2D(range);
 
-            if (distP22D(posZero2D, rnd) < radiusP2) {
+            if (distP22D(rnd) < radiusP2) {
                 if (this.retryLimit > 0) {
                     if (retries > this.retryLimit) {
                         throw new ArithmeticException("The retry limit has been reached");
@@ -195,7 +195,7 @@ public class FRandProcessorDef implements FRandGenerator {
         while (true) {
             FPos3D rnd = nextDouble3D(range);
 
-            if (distP23D(posZero3D, rnd) < radiusP2) {
+            if (distP23D(rnd) < radiusP2) {
                 if (this.retryLimit > 0) {
                     if (retries > this.retryLimit) {
                         throw new ArithmeticException("The retry limit has been reached");
@@ -218,19 +218,19 @@ public class FRandProcessorDef implements FRandGenerator {
         return Math.pow(ref - val, 2);
     }
 
-    private double distP22D(FPos2D val, FPos2D ref) {
+    private double distP22D(FPos2D ref) {
 
-        var d0 = distP2(val.getD0(), ref.getD0());
-        var d1 = distP2(val.getD1(), ref.getD1());
+        var d0 = distP2(FRandProcessorDef.posZero2D.getD0(), ref.getD0());
+        var d1 = distP2(FRandProcessorDef.posZero2D.getD1(), ref.getD1());
 
         return d0 + d1;
     }
 
-    private double distP23D(FPos3D val, FPos3D ref) {
+    private double distP23D(FPos3D ref) {
 
-        var d0 = distP2(val.getD0(), ref.getD0());
-        var d1 = distP2(val.getD1(), ref.getD1());
-        var d2 = distP2(val.getD2(), ref.getD2());
+        var d0 = distP2(FRandProcessorDef.posZero3D.getD0(), ref.getD0());
+        var d1 = distP2(FRandProcessorDef.posZero3D.getD1(), ref.getD1());
+        var d2 = distP2(FRandProcessorDef.posZero3D.getD2(), ref.getD2());
 
         return d0 + d1 + d2;
     }

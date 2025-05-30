@@ -10,12 +10,17 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class FProtoEngineDef implements FProtoEngine {
+    private static FProtoEngine self;
 
     private FProtoEngineDef() {}
 
-    public static FProtoEngineDef create() {
+    public static FProtoEngine get() {
 
-        return new FProtoEngineDef();
+        if (FProtoEngineDef.self == null) {
+            FProtoEngineDef.self = new FProtoEngineDef();
+        }
+
+        return FProtoEngineDef.self;
     }
 
     //--------------------------------------------------
