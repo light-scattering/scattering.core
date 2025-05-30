@@ -400,6 +400,21 @@ public class FLineTest {
         }
 
         @Test
+        @DisplayName("Copy geometry")
+        void copyGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            FLine fLineA = factory.getRefFLine(fVector);
+            Geometry fLineB = fLineA.copyGeometry();
+
+            Assertions.assertAll("Validate copy",
+                    () -> assertNotSame(fLineA, fLineB,
+                            "FLines represent different objects"),
+                    () -> assertTrue(fLineA.isExact((FLine) fLineB),
+                            "FLines should have the same values")
+            );
+        }
+
+        @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
             FLine fLine = factory.getRefFLine(factory.getFVector());
@@ -1329,7 +1344,7 @@ public class FLineTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FLine fLine = factory.getFLine();
-            Collection<FPoint> disassembly = fLine.explode();
+            Collection<FPoint> disassembly = fLine.toFPoints();
             Iterator<FPoint> iterator = disassembly.iterator();
 
             iterator.next().set(1, 2, 3);

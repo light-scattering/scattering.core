@@ -119,7 +119,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
-    public Geometry replicate() {
+    public Geometry copyGeometry() {
 
         return copy();
     }
@@ -195,7 +195,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.explode()
+        in.toFPoints()
                 .forEach(this::projectUnit);
     }
 
@@ -216,7 +216,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.explode()
+        in.toFPoints()
                 .forEach(this::reflectUnit);
     }
 
@@ -247,7 +247,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.explode().stream()
+        return arg.toFPoints().stream()
                 .allMatch(this::isUnitPartOf);
     }
 
@@ -258,7 +258,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return arg.explode().stream()
+        return arg.toFPoints().stream()
                 .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
@@ -289,7 +289,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.explode()
+        in.toFPoints()
                 .forEach(p -> setUnitDistance(p, distance));
     }
 
@@ -310,7 +310,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.explode()
+        in.toFPoints()
                 .forEach(p -> shiftUnitForward(p, distance));
     }
 
@@ -331,7 +331,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.explode()
+        in.toFPoints()
                 .forEach(p -> shiftUnitBackward(p, distance));
     }
 

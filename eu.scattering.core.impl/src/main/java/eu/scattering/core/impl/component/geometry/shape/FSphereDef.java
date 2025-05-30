@@ -167,7 +167,7 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
-    public Geometry replicate() {
+    public Geometry copyGeometry() {
 
         return copy();
     }
@@ -591,7 +591,7 @@ public class FSphereDef implements FSphere {
 
 
     @Override
-    public Collection<FPoint> explode() {
+    public Collection<FPoint> toFPoints() {
         Collection<FPoint> units = new ArrayList<>();
 
         units.add(getRefCenter());

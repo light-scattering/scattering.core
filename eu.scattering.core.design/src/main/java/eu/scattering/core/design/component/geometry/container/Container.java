@@ -1,13 +1,20 @@
 package eu.scattering.core.design.component.geometry.container;
 
-import eu.scattering.core.design.component.Component;
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.Geometry;
+import org.json.JSONObject;
 
-public interface Container<T> extends Geometry, Component<T> {
+public interface Container<T> extends Geometry {
 
-    // Note, that the copy might not be equal to the original object.
-    // Reference points simultaneously used in multiple geometries will be replaced by new objects.
-    // Therefore, in some cases, the total number of points might increase.
+    T set(JSONObject json);
+
+    boolean isExact(T arg);
+    boolean isSimilar(T arg);
 
     T copy();
+
+    //--------------------------------------------------
+
+    @Fragment
+    T self();
 }

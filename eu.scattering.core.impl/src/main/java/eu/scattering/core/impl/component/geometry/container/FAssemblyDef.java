@@ -34,7 +34,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public Collection<FPoint> explode() {
+    public Collection<FPoint> toFPoints() {
 
         return this.units;
     }
@@ -72,7 +72,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     private boolean registerFPoints(T candidate) {
         boolean hasFPoint = false;
 
-        for (FPoint fPoint : candidate.explode()) {
+        for (FPoint fPoint : candidate.toFPoints()) {
             if (register(this.units, fPoint)) {
                 hasFPoint = true;
             }
@@ -124,19 +124,24 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public boolean isSimilar(FAssembly<T> arg) {
+        return false;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public FAssembly<T> copy() {
         FAssembly<T> copy = supplyFAssembly();
 
         for (T element : this.elements) {
-            copy.register((T) element.replicate());
+            copy.register((T) element.copyGeometry());
         }
 
         return copy;
     }
 
     @Override
-    public Geometry replicate() {
+    public Geometry copyGeometry() {
 
         return copy();
     }

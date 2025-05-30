@@ -1,12 +1,17 @@
 package eu.scattering.core.design.component.number;
 
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.Component;
+import org.json.JSONObject;
 
-public interface Number<T> extends Component<T> {
+public interface Number<T> extends Component {
+
+    T set(JSONObject json);
 
     T applyStateTo(T in);
     T applyStateFrom(T arg);
 
+    boolean isExact(T arg);
     boolean isSimilar(T arg);
 
     T add(T arg);
@@ -34,4 +39,11 @@ public interface Number<T> extends Component<T> {
     T inverse();
     T conjugate();
     T normalize();
+
+    T copy();
+
+    //--------------------------------------------------
+
+    @Fragment
+    T self();
 }

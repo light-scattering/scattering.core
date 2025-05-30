@@ -329,6 +329,21 @@ public class FSegmentTest {
         }
 
         @Test
+        @DisplayName("Copy geometry")
+        void copyGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            FSegment fSegmentA = factory.getRefFSegment(fVector);
+            Geometry fSegmentB = fSegmentA.copyGeometry();
+
+            Assertions.assertAll("Validate copy",
+                    () -> assertNotSame(fSegmentA, fSegmentB,
+                            "FSegments represent different objects"),
+                    () -> assertTrue(fSegmentA.isExact((FSegment) fSegmentB),
+                            "FSegments should have the same values")
+            );
+        }
+
+        @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector());
@@ -810,7 +825,7 @@ public class FSegmentTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FSegment fSegment = factory.getFSegment();
-            Collection<FPoint> disassembly = fSegment.explode();
+            Collection<FPoint> disassembly = fSegment.toFPoints();
             Iterator<FPoint> iterator = disassembly.iterator();
 
             iterator.next().set(1, 2, 3);

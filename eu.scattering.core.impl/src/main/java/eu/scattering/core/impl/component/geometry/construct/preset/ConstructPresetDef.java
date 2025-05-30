@@ -11,7 +11,7 @@ public abstract class ConstructPresetDef<T extends Construct<T>> implements Cons
     public int hashCode() {
         int hashCode = 7;
 
-        for (FPoint fPoint : getRefOrigin().explode()) {
+        for (FPoint fPoint : getRefOrigin().toFPoints()) {
             hashCode = 31 * hashCode + (int) (fPoint.getX() * 100);
             hashCode = 31 * hashCode + (int) (fPoint.getY() * 100);
             hashCode = 31 * hashCode + (int) (fPoint.getZ() * 100);
@@ -33,9 +33,9 @@ public abstract class ConstructPresetDef<T extends Construct<T>> implements Cons
     }
 
     @Override
-    public Collection<FPoint> explode() {
+    public Collection<FPoint> toFPoints() {
 
-        return getRefOrigin().explode();
+        return getRefOrigin().toFPoints();
     }
 
 }

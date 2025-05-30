@@ -16,7 +16,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T addXYZ(FPoint arg) {
 
-        explode().forEach(e -> e.addXYZ(arg.getX(), arg.getY(), arg.getZ()));
+        toFPoints().forEach(e -> e.addXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
@@ -24,7 +24,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T addXYZ(double x, double y, double z) {
 
-        explode().forEach(e -> e.addX(x).addY(y).addZ(z));
+        toFPoints().forEach(e -> e.addX(x).addY(y).addZ(z));
 
         return self();
     }
@@ -32,7 +32,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T addFactor(double factor) {
 
-        explode().forEach(e -> e.addXYZ(factor, factor, factor));
+        toFPoints().forEach(e -> e.addXYZ(factor, factor, factor));
 
         return self();
     }
@@ -40,7 +40,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T addX(double x) {
 
-        explode().forEach(e -> e.setX(e.getX() + x));
+        toFPoints().forEach(e -> e.setX(e.getX() + x));
 
         return self();
     }
@@ -48,7 +48,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T addY(double y) {
 
-        explode().forEach(e -> e.setY(e.getY() + y));
+        toFPoints().forEach(e -> e.setY(e.getY() + y));
 
         return self();
     }
@@ -56,7 +56,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T addZ(double z) {
 
-        explode().forEach(e -> e.setZ(e.getZ() + z));
+        toFPoints().forEach(e -> e.setZ(e.getZ() + z));
 
         return self();
     }
@@ -64,7 +64,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T subXYZ(FPoint arg) {
 
-        explode().forEach(e -> e.subXYZ(arg.getX(), arg.getY(), arg.getZ()));
+        toFPoints().forEach(e -> e.subXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
@@ -72,7 +72,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T subXYZ(double x, double y, double z) {
 
-        explode().forEach(e -> e.subX(x).subY(y).subZ(z));
+        toFPoints().forEach(e -> e.subX(x).subY(y).subZ(z));
 
         return self();
     }
@@ -80,7 +80,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T subFactor(double factor) {
 
-        explode().forEach(e -> e.subXYZ(factor, factor, factor));
+        toFPoints().forEach(e -> e.subXYZ(factor, factor, factor));
 
         return self();
     }
@@ -88,7 +88,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T subX(double x) {
 
-        explode().forEach(e -> e.setX(e.getX() - x));
+        toFPoints().forEach(e -> e.setX(e.getX() - x));
 
         return self();
     }
@@ -96,7 +96,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T subY(double y) {
 
-        explode().forEach(e -> e.setY(e.getY() - y));
+        toFPoints().forEach(e -> e.setY(e.getY() - y));
 
         return self();
     }
@@ -104,7 +104,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T subZ(double z) {
 
-        explode().forEach(e -> e.setZ(e.getZ() - z));
+        toFPoints().forEach(e -> e.setZ(e.getZ() - z));
 
         return self();
     }
@@ -112,7 +112,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T mulXYZ(FPoint arg) {
 
-        explode().forEach(e -> e.mulXYZ(arg.getX(), arg.getY(), arg.getZ()));
+        toFPoints().forEach(e -> e.mulXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
@@ -120,7 +120,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T mulXYZ(double x, double y, double z) {
 
-        explode().forEach(e -> e.mulX(x).mulY(y).mulZ(z));
+        toFPoints().forEach(e -> e.mulX(x).mulY(y).mulZ(z));
 
         return self();
     }
@@ -128,7 +128,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T mulFactor(double factor) {
 
-        explode().forEach(e -> e.mulXYZ(factor, factor, factor));
+        toFPoints().forEach(e -> e.mulXYZ(factor, factor, factor));
 
         return self();
     }
@@ -136,7 +136,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T mulX(double x) {
 
-        explode().forEach(e -> e.setX(e.getX() * x));
+        toFPoints().forEach(e -> e.setX(e.getX() * x));
 
         return self();
     }
@@ -144,7 +144,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T mulY(double y) {
 
-        explode().forEach(e -> e.setY(e.getY() * y));
+        toFPoints().forEach(e -> e.setY(e.getY() * y));
 
         return self();
     }
@@ -152,7 +152,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T mulZ(double z) {
 
-        explode().forEach(e -> e.setZ(e.getZ() * z));
+        toFPoints().forEach(e -> e.setZ(e.getZ() * z));
 
         return self();
     }
@@ -160,7 +160,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T divXYZ(FPoint arg) {
 
-        explode().forEach(e -> e.divXYZ(arg.getX(), arg.getY(), arg.getZ()));
+        toFPoints().forEach(e -> e.divXYZ(arg.getX(), arg.getY(), arg.getZ()));
 
         return self();
     }
@@ -168,7 +168,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T divXYZ(double x, double y, double z) {
 
-        explode().forEach(e -> e.divX(x).divY(y).divZ(z));
+        toFPoints().forEach(e -> e.divX(x).divY(y).divZ(z));
 
         return self();
     }
@@ -176,7 +176,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T divFactor(double factor) {
 
-        explode().forEach(e -> e.divXYZ(factor, factor, factor));
+        toFPoints().forEach(e -> e.divXYZ(factor, factor, factor));
 
         return self();
     }
@@ -184,7 +184,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T divX(double x) {
 
-        explode().forEach(e -> {
+        toFPoints().forEach(e -> {
 
             if (x == 0) {
                 throw new ArithmeticException("Division by zero");
@@ -199,7 +199,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T divY(double y) {
 
-        explode().forEach(e -> {
+        toFPoints().forEach(e -> {
 
             if (y == 0) {
                 throw new ArithmeticException("Division by zero");
@@ -214,7 +214,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T divZ(double z) {
 
-        explode().forEach(e -> {
+        toFPoints().forEach(e -> {
 
             if (z == 0) {
                 throw new ArithmeticException("Division by zero");

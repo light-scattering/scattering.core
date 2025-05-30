@@ -196,7 +196,7 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public Geometry replicate() {
+    public Geometry copyGeometry() {
 
         return copy();
     }
@@ -475,7 +475,7 @@ public class FPointDef implements FPoint {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public List<FPoint> explode() {
+    public List<FPoint> toFPoints() {
         List<FPoint> fPointList = new ArrayList<>();
 
         fPointList.add(this);

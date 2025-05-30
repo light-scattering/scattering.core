@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.base;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.test.TestHelper;
@@ -5443,6 +5444,24 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Copy geometry")
+        void copyGeometry() {
+            FVector fVectorA = TestHelper.getRandFVector();
+            Geometry fVectorB = fVectorA.copyGeometry();
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertNotSame(fVectorA, fVectorB,
+                            "FVectors represent different objects"),
+                    () -> assertTrue(fVectorA.isExact((FPairPos3D) fVectorB),
+                            "FVectors should have the same values"),
+                    () -> assertNotSame(fVectorA.getRefBase(), ((FVector) fVectorB).getRefBase(),
+                            "The base FPoints should be different"),
+                    () -> assertNotSame(fVectorA.getRefHead(), ((FVector) fVectorB).getRefHead(),
+                            "The head FPoints should be different")
+            );
+        }
+
+        @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
             FVector fVector = factory.getFVector(1, 2, 3);
@@ -6234,7 +6253,7 @@ public class FVectorTest {
         void getFPoints() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            Collection<FPoint> list = fVector.explode();
+            Collection<FPoint> list = fVector.toFPoints();
             Iterator<FPoint> iterator = list.iterator();
 
             Assertions.assertAll("Validate FVector list",
@@ -6249,7 +6268,7 @@ public class FVectorTest {
         void getFPointsValidate() {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5,6);
 
-            FVectorTestHelper.testValue(FVector::explode, fVector);
+            FVectorTestHelper.testValue(FVector::toFPoints, fVector);
         }
 
         @Test

@@ -1,16 +1,20 @@
 package eu.scattering.core.design.component.geometry.base;
 
-import eu.scattering.core.design.component.Component;
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.transfer.container.storage.FMatrix3x3D.FMatrix3x3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import org.json.JSONObject;
 
-public interface Base<T> extends Geometry, Component<T> {
+public interface Base<T> extends Geometry {
+
+    T set(JSONObject json);
 
     T applyStateTo(T in);
     T applyStateFrom(T arg);
 
+    boolean isExact(T arg);
     boolean isSimilar(T arg);
 
     T addXYZ(FPoint arg);
@@ -46,4 +50,11 @@ public interface Base<T> extends Geometry, Component<T> {
     T divZ(double z);
 
     T mul(FMatrix3x3D arg);
+
+    T copy();
+
+    //--------------------------------------------------
+
+    @Fragment
+    T self();
 }

@@ -508,6 +508,21 @@ public class FPlaneTest {
         }
 
         @Test
+        @DisplayName("Copy")
+        void copyGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            FPlane fPlaneA = factory.getRefFPlane(fVector);
+            Geometry fPlaneB = fPlaneA.copyGeometry();
+
+            Assertions.assertAll("Validate copy",
+                    () -> assertNotSame(fPlaneA, fPlaneB,
+                            "FPlanes represent different objects"),
+                    () -> assertTrue(fPlaneA.isExact((FPlane) fPlaneB),
+                            "FPlanes should have the same values")
+            );
+        }
+
+        @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector());
@@ -892,7 +907,7 @@ public class FPlaneTest {
             FPoint relocation = TestHelper.getRandFPoint();
 
             fPlane.getRefOrigin().addXYZ(relocation);
-            fGeometry.explode().iterator().next().addXYZ(relocation);
+            fGeometry.toFPoints().iterator().next().addXYZ(relocation);
 
             assertTrue(fPlane.isOnSide(fGeometry),"The half-space is erroneous");
         }
@@ -910,7 +925,7 @@ public class FPlaneTest {
             FPoint relocation = TestHelper.getRandFPoint();
 
             fPlane.getRefOrigin().addXYZ(relocation);
-            fGeometry.explode().iterator().next().addXYZ(relocation);
+            fGeometry.toFPoints().iterator().next().addXYZ(relocation);
 
             assertFalse(fPlane.isOnSide(fGeometry),"The half-space is erroneous");
         }
@@ -1141,7 +1156,7 @@ public class FPlaneTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FPlane fPlane = factory.getFPlane();
-            Collection<FPoint> disassembly = fPlane.explode();
+            Collection<FPoint> disassembly = fPlane.toFPoints();
             Iterator<FPoint> iterator = disassembly.iterator();
 
             iterator.next().set(1, 2, 3);

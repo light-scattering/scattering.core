@@ -3,13 +3,8 @@ package eu.scattering.core.test.component.geometry.container;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.line.FLine;
-import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
-import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +23,7 @@ public class FAssemblyTest {
         FAssembly<FSphere> fAssembly = factory.getFAssembly();
 
         Assertions.assertAll("Validate FAssembly",
-                () -> assertEquals(0, fAssembly.explode().size(),
+                () -> assertEquals(0, fAssembly.toFPoints().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -53,7 +48,7 @@ public class FAssemblyTest {
                         "The addition of FVector B should be successful"),
                 () -> assertFalse(registerRedundant,
                         "The addition of FVector is redundant"),
-                () -> assertEquals(4, fAssembly.explode().size(),
+                () -> assertEquals(4, fAssembly.toFPoints().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -72,7 +67,7 @@ public class FAssemblyTest {
         fAssembly.register(fVectorB);
 
         Assertions.assertAll("Validate FAssembly",
-                () -> assertEquals(3, fAssembly.explode().size(),
+                () -> assertEquals(3, fAssembly.toFPoints().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -93,7 +88,7 @@ public class FAssemblyTest {
                         "The addition of FVector A should be successful"),
                 () -> assertTrue(registerB,
                         "The addition of FVector B should be successful"),
-                () -> assertEquals(3, fAssembly.explode().size(),
+                () -> assertEquals(3, fAssembly.toFPoints().size(),
                         "The number of FPoints is incorrect")
         );
     }
@@ -114,7 +109,7 @@ public class FAssemblyTest {
         fAssembly.applyGeometry(e -> e.shiftForward(1));
 
         Assertions.assertAll("Validate FAssembly",
-                () -> assertEquals(6, fAssembly.explode().size(),
+                () -> assertEquals(6, fAssembly.toFPoints().size(),
                         "The number of FPoints is incorrect")
         );
     }

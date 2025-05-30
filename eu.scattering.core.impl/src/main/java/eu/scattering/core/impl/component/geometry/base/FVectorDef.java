@@ -459,7 +459,7 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public Geometry replicate() {
+    public Geometry copyGeometry() {
 
         return copy();
     }
@@ -928,7 +928,7 @@ public class FVectorDef implements FVector {
     //--------------------------------------------------
 
     @Override
-    public List<FPoint> explode() {
+    public List<FPoint> toFPoints() {
         List<FPoint> fPointList = new ArrayList<>();
 
         fPointList.add(getRefBase());

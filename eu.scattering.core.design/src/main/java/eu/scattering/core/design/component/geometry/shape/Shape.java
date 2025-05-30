@@ -1,17 +1,21 @@
 package eu.scattering.core.design.component.geometry.shape;
 
-import eu.scattering.core.design.component.Component;
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import org.json.JSONObject;
 
-public interface Shape<T> extends Geometry, Component<T> {
+public interface Shape<T> extends Geometry {
+
+    T set(JSONObject json);
 
     T applyStateTo(T in);
     T applyStateFrom(T arg);
 
+    boolean isExact(T arg);
     boolean isSimilar(T arg);
 
     T setPosCenter(double x, double y, double z);
@@ -52,5 +56,10 @@ public interface Shape<T> extends Geometry, Component<T> {
     void getSurfaceStream(FStream3DI stream, double delta);
     void getSurfaceStream(FStream3D stream, double delta);
 
+    T copy();
 
+    //--------------------------------------------------
+
+    @Fragment
+    T self();
 }

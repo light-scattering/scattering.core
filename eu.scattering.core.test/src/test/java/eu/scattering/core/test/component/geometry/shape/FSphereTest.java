@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.shape;
 
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.test.TestHelper;
@@ -1252,6 +1253,22 @@ public class FSphereTest {
                     () -> assertTrue(fSphereA.isExact(fSphereB),
                             "FSpheres should have the same values"),
                     () -> assertNotSame(fSphereA.getRefCenter(), fSphereB.getRefCenter(),
+                            "The center FPoints should be different")
+            );
+        }
+
+        @Test
+        @DisplayName("Copy geometry")
+        void copyGeometry() {
+            FSphere fSphereA = TestHelper.getRandFSphere();
+            Geometry fSphereB = fSphereA.copyGeometry();
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertNotSame(fSphereA, fSphereB,
+                            "FSpheres represent different objects"),
+                    () -> assertTrue(fSphereA.isExact((FSphere) fSphereB),
+                            "FSpheres should have the same values"),
+                    () -> assertNotSame(fSphereA.getRefCenter(), ((FSphere) fSphereB).getRefCenter(),
                             "The center FPoints should be different")
             );
         }

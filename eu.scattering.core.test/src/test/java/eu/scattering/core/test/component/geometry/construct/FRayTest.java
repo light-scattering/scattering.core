@@ -329,6 +329,21 @@ public class FRayTest {
         }
 
         @Test
+        @DisplayName("Copy geometry")
+        void copyGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            FRay fRayA = factory.getRefFRay(fVector);
+            Geometry fRayB = fRayA.copyGeometry();
+
+            Assertions.assertAll("Validate copy",
+                    () -> assertNotSame(fRayA, fRayB,
+                            "FRays represent different objects"),
+                    () -> assertTrue(fRayA.isExact((FRay) fRayB),
+                            "FRays should have the same values")
+            );
+        }
+
+        @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
             FRay fRay = factory.getRefFRay(factory.getFVector());
@@ -956,7 +971,7 @@ public class FRayTest {
         @DisplayName("Disassemble")
         void disassemble() {
             FRay fRay = factory.getFRay();
-            Collection<FPoint> disassembly = fRay.explode();
+            Collection<FPoint> disassembly = fRay.toFPoints();
             Iterator<FPoint> iterator = disassembly.iterator();
 
             iterator.next().set(1, 2, 3);

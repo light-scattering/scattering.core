@@ -1,6 +1,7 @@
 package eu.scattering.core.test.component.geometry.base;
 
 import eu.scattering.core.design.component.Component;
+import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.Base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.test.TestHelper;
@@ -2406,6 +2407,23 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Copy geometry")
+        void copyGeometry() {
+            FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
+            Geometry fPoint = fPointRef.copyGeometry();
+
+            Assertions.assertAll("Validate copy",
+                    () -> assertNotSame(fPointRef, fPoint,
+                            "FPoints represent different objects"),
+                    () -> assertTrue(fPointRef.isExact((FPoint) fPoint),
+                            "FPoints should have the same values"),
+                    () -> assertFalse(fPointRef.isExact(((FPoint) fPoint).add(fPointRef)),
+                            "FPoints should have different values")
+            );
+        }
+
+
+        @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
@@ -3179,7 +3197,7 @@ public class FPointTest {
         @Test
         @DisplayName("Get FPoint list")
         void getFPoints() {
-            Collection<FPoint> list = fPoint.explode();
+            Collection<FPoint> list = fPoint.toFPoints();
 
             FPoint fPoint = list.iterator().next();
 
