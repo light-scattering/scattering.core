@@ -4,6 +4,6 @@ import eu.scattering.core.design.component.geometry.Geometry;
 
 public interface FLineEngineRot {
 
-    void rotQtAround(FLine ref, Geometry in, double angle);
-    void rotRgAround(FLine ref, Geometry in, double angle);
+    void rotQtAround(Geometry in, FLine ref, double angle);
+    void rotRgAround(Geometry in, FLine ref, double angle);
 }

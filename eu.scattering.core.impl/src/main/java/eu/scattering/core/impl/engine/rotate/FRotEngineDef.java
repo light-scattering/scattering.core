@@ -57,7 +57,7 @@ public class FRotEngineDef implements FRotEngine {
     //--------------------------------------------------
 
     @Override
-    public FPoint setRgAngle(double x, double y, double z, FPoint in, double angle) {
+    public FPoint setRgAngle(FPoint in, double x, double y, double z, double angle) {
         if (in.isNearZero()) {
             throw new IllegalStateException("The input vector is non-directional");
         }
@@ -117,19 +117,19 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FPoint setRgAngle(FPoint ref, FPoint in, double angle) {
+    public FPoint setRgAngle(FPoint in, FPoint ref, double angle) {
 
-        return setRgAngle(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return setRgAngle(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FPoint setRgAngle(FPos3D ref, FPoint in, double angle) {
+    public FPoint setRgAngle(FPoint in, FPos3D ref, double angle) {
 
-        return setRgAngle(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return setRgAngle(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FPoint rotRgAround(double x, double y, double z, FPoint in, double angle) {
+    public FPoint rotRgAround(FPoint in, double x, double y, double z, double angle) {
 
         if (Math.abs(x) < EPSILON && Math.abs(y) < EPSILON && Math.abs(z) < EPSILON) {
             throw new IllegalArgumentException("The reference vector is non-directional");
@@ -174,19 +174,19 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FPoint rotRgAround(FPoint ref, FPoint in, double angle) {
+    public FPoint rotRgAround(FPoint in, FPoint ref, double angle) {
 
-        return rotRgAround(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return rotRgAround(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FPoint rotRgAround(FPos3D ref, FPoint in, double angle) {
+    public FPoint rotRgAround(FPoint in, FPos3D ref, double angle) {
 
-        return rotRgAround(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return rotRgAround(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FPoint setQtAngle(double x, double y, double z, FPoint in, double angle) {
+    public FPoint setQtAngle(FPoint in, double x, double y, double z, double angle) {
 
         if (in.isNearZero()) {
             throw new IllegalArgumentException("The input vector is non-directional");
@@ -212,33 +212,33 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FPoint setQtAngle(FPoint ref, FPoint in, double angle) {
+    public FPoint setQtAngle(FPoint in, FPoint ref, double angle) {
 
-        return setQtAngle(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return setQtAngle(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FPoint setQtAngle(FPos3D ref, FPoint in, double angle) {
+    public FPoint setQtAngle(FPoint in, FPos3D ref, double angle) {
 
-        return setQtAngle(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return setQtAngle(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FPoint rotQtAround(double x, double y, double z, FPoint in, double angle) {
+    public FPoint rotQtAround(FPoint in, double x, double y, double z, double angle) {
         FRotQt qt = core.getRotQt(x, y, z, angle);
 
         return rotQt(in, qt);
     }
 
     @Override
-    public FPoint rotQtAround(FPoint ref, FPoint in, double angle) {
+    public FPoint rotQtAround(FPoint in, FPoint ref, double angle) {
         FRotQt qt = core.getRotQt(ref.toFPos3D(), angle);
 
         return rotQt(in, qt);
     }
 
     @Override
-    public FPoint rotQtAround(FPos3D ref, FPoint in, double angle) {
+    public FPoint rotQtAround(FPoint in, FPos3D ref, double angle) {
         FRotQt qt = core.getRotQt(ref, angle);
 
         return rotQt(in, qt);
@@ -253,7 +253,7 @@ public class FRotEngineDef implements FRotEngine {
     //--------------------------------------------------
 
     @Override
-    public FVector setRgAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector setRgAngle(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         if (in.isNearZeroLength()) {
             throw new IllegalStateException("The direction of the FVector is not defined");
@@ -271,86 +271,86 @@ public class FRotEngineDef implements FRotEngine {
         double zeroAZ = hZ - bZ;
 
         in.moveBaseToCenter();
-        setRgAngle(zeroAX, zeroAY, zeroAZ, in.getRefHead(), angle);
+        setRgAngle(in.getRefHead(), zeroAX, zeroAY, zeroAZ, angle);
         in.moveBase(memoOBX, memoOBY, memoOBZ);
 
         return in;
     }
 
     @Override
-    public FVector setRgAngle(FVector ref, FVector in, double angle) {
+    public FVector setRgAngle(FVector in, FVector ref, double angle) {
 
         return setRgAngle(
-                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                 ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setRgAngle(FPairPos3D ref, FVector in, double angle) {
+    public FVector setRgAngle(FVector in, FPairPos3D ref, double angle) {
 
         return setRgAngle(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setRgAngleBaseCommon(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector setRgAngleBaseCommon(FVector in, double hX, double hY, double hZ, double angle) {
 
         return setRgAngle(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 hX, hY, hZ,
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setRgAngleBaseCommon(FPoint ref, FVector in, double angle) {
+    public FVector setRgAngleBaseCommon(FVector in, FPoint ref, double angle) {
 
         return setRgAngle(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getX(), ref.getY(), ref.getZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setRgAngleBaseCommon(FPos3D ref, FVector in, double angle) {
+    public FVector setRgAngleBaseCommon(FVector in, FPos3D ref, double angle) {
 
         return setRgAngle(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getD0(), ref.getD1(), ref.getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setRgAngleBaseZero(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector setRgAngleBaseZero(FVector in, double hX, double hY, double hZ, double angle) {
 
-        return setRgAngle(0, 0, 0, hX, hY, hZ, in, angle);
+        return setRgAngle(in, 0, 0, 0, hX, hY, hZ, angle);
     }
 
     @Override
-    public FVector setRgAngleBaseZero(FPoint ref, FVector in, double angle) {
+    public FVector setRgAngleBaseZero(FVector in, FPoint ref, double angle) {
 
-        return setRgAngleBaseZero(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return setRgAngleBaseZero(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FVector setRgAngleBaseZero(FPos3D ref, FVector in, double angle) {
+    public FVector setRgAngleBaseZero(FVector in, FPos3D ref, double angle) {
 
-        return setRgAngleBaseZero(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return setRgAngleBaseZero(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FPoint rotRgAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FPoint in, double angle) {
+    public FPoint rotRgAround(FPoint in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         in.subXYZ(bX, bY, bZ);
 
-        rotRgAround(hX - bX, hY - bY, hZ - bZ, in, angle);
+        rotRgAround(in, hX - bX, hY - bY, hZ - bZ, angle);
 
         in.addXYZ(bX, bY, bZ);
 
@@ -358,32 +358,32 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FPoint rotRgAround(FVector ref, FPoint in, double angle) {
+    public FPoint rotRgAround(FPoint in, FVector ref, double angle) {
 
         return rotRgAround(
-                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                 ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FPoint rotRgAround(FPairPos3D ref, FPoint in, double angle) {
+    public FPoint rotRgAround(FPoint in, FPairPos3D ref, double angle) {
 
         return rotRgAround(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotRgAround(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         in.subXYZ(bX, bY, bZ);
 
-        rotRgAround(hX - bX, hY - bY, hZ - bZ, in.getRefBase(), angle);
-        rotRgAround(hX - bX, hY - bY, hZ - bZ, in.getRefHead(), angle);
+        rotRgAround(in.getRefBase(), hX - bX, hY - bY, hZ - bZ, angle);
+        rotRgAround(in.getRefHead(), hX - bX, hY - bY, hZ - bZ, angle);
 
         in.addXYZ(bX, bY, bZ);
 
@@ -391,75 +391,75 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FVector rotRgAround(FVector ref, FVector in, double angle) {
+    public FVector rotRgAround(FVector in, FVector ref, double angle) {
 
         return rotRgAround(
-                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                 ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAround(FPairPos3D ref, FVector in, double angle) {
+    public FVector rotRgAround(FVector in, FPairPos3D ref, double angle) {
 
         return rotRgAround(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundBaseCommon(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotRgAroundBaseCommon(FVector in, double hX, double hY, double hZ, double angle) {
 
         return rotRgAround(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 hX, hY, hZ,
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundBaseCommon(FPoint ref, FVector in, double angle) {
+    public FVector rotRgAroundBaseCommon(FVector in, FPoint ref, double angle) {
 
         return rotRgAround(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getX(), ref.getY(), ref.getZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundBaseCommon(FPos3D ref, FVector in, double angle) {
+    public FVector rotRgAroundBaseCommon(FVector in, FPos3D ref, double angle) {
 
         return rotRgAround(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getD0(), ref.getD1(), ref.getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundBaseZero(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotRgAroundBaseZero(FVector in, double hX, double hY, double hZ, double angle) {
 
-        return rotRgAround(0, 0, 0, hX, hY, hX, in, angle);
+        return rotRgAround(in, 0, 0, 0, hX, hY, hX, angle);
     }
 
     @Override
-    public FVector rotRgAroundBaseZero(FPoint ref, FVector in, double angle) {
+    public FVector rotRgAroundBaseZero(FVector in, FPoint ref, double angle) {
 
-        return rotRgAroundBaseZero(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return rotRgAroundBaseZero(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FVector rotRgAroundBaseZero(FPos3D ref, FVector in, double angle) {
+    public FVector rotRgAroundBaseZero(FVector in, FPos3D ref, double angle) {
 
-        return rotRgAroundBaseZero(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return rotRgAroundBaseZero(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FVector rotRgAroundFixed(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotRgAroundFixed(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         if (in.isNearZeroLength()) {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
@@ -471,7 +471,7 @@ public class FRotEngineDef implements FRotEngine {
 
         in.moveBaseToCenter();
 
-        rotRgAround(hX - bX, hY - bY, hZ - bZ, in.getRefHead(), angle);
+        rotRgAround(in.getRefHead(), hX - bX, hY - bY, hZ - bZ, angle);
 
         in.moveBase(memoBX, memoBY, memoBZ);
 
@@ -479,74 +479,74 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FVector rotRgAroundFixed(FVector ref, FVector in, double angle) {
+    public FVector rotRgAroundFixed(FVector in, FVector ref, double angle) {
 
         return rotRgAroundFixed(
-                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                 ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundFixed(FPairPos3D ref, FVector in, double angle) {
+    public FVector rotRgAroundFixed(FVector in, FPairPos3D ref, double angle) {
 
         return rotRgAroundFixed(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundFixedBaseCommon(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotRgAroundFixedBaseCommon(FVector in, double hX, double hY, double hZ, double angle) {
 
         return rotRgAroundFixed(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 hX, hY, hZ,
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundFixedBaseCommon(FPoint ref, FVector in, double angle) {
+    public FVector rotRgAroundFixedBaseCommon(FVector in, FPoint ref, double angle) {
 
         return rotRgAroundFixed(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getX(), ref.getY(), ref.getZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundFixedBaseCommon(FPos3D ref, FVector in, double angle) {
+    public FVector rotRgAroundFixedBaseCommon(FVector in, FPos3D ref, double angle) {
 
         return rotRgAroundFixed(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getD0(), ref.getD1(), ref.getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotRgAroundFixedBaseZero(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotRgAroundFixedBaseZero(FVector in, double hX, double hY, double hZ, double angle) {
 
-        return rotRgAroundFixed(0, 0, 0, hX, hY, hZ, in, angle);
+        return rotRgAroundFixed(in, 0, 0, 0, hX, hY, hZ, angle);
     }
 
     @Override
-    public FVector rotRgAroundFixedBaseZero(FPoint ref, FVector in, double angle) {
-        return rotRgAroundFixedBaseZero(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+    public FVector rotRgAroundFixedBaseZero(FVector in, FPoint ref, double angle) {
+        return rotRgAroundFixedBaseZero(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FVector rotRgAroundFixedBaseZero(FPos3D ref, FVector in, double angle) {
+    public FVector rotRgAroundFixedBaseZero(FVector in, FPos3D ref, double angle) {
 
-        return rotRgAroundFixedBaseZero(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return rotRgAroundFixedBaseZero(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FVector setQtAngle(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector setQtAngle(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         if (in.isSimilar(bX, bY, bZ, hX, hY, hZ)) {
             throw new IllegalStateException("The two vectors are similar");
@@ -562,7 +562,7 @@ public class FRotEngineDef implements FRotEngine {
         double opY = hY - bY;
         double opZ = hZ - bZ;
 
-        setQtAngle(opX, opY, opZ, in.getRefHead(), angle);
+        setQtAngle(in.getRefHead(), opX, opY, opZ, angle);
 
         in.moveBase(memoBX, memoBY, memoBZ);
 
@@ -570,80 +570,80 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FVector setQtAngle(FVector ref, FVector in, double angle) {
+    public FVector setQtAngle(FVector in, FVector ref, double angle) {
 
        return setQtAngle(
-               ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+               in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-               in, angle
+               angle
        );
     }
 
     @Override
-    public FVector setQtAngle(FPairPos3D ref, FVector in, double angle) {
+    public FVector setQtAngle(FVector in, FPairPos3D ref, double angle) {
 
         return setQtAngle(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setQtAngleBaseCommon(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector setQtAngleBaseCommon(FVector in, double hX, double hY, double hZ, double angle) {
 
         return setQtAngle(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 hX, hY, hZ,
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setQtAngleBaseCommon(FPoint ref, FVector in, double angle) {
+    public FVector setQtAngleBaseCommon(FVector in, FPoint ref, double angle) {
 
         return setQtAngle(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getX(), ref.getY(), ref.getZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setQtAngleBaseCommon(FPos3D ref, FVector in, double angle) {
+    public FVector setQtAngleBaseCommon(FVector in, FPos3D ref, double angle) {
 
         return setQtAngle(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getD0(), ref.getD1(), ref.getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector setQtAngleBaseZero(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector setQtAngleBaseZero(FVector in, double hX, double hY, double hZ, double angle) {
 
-        return setQtAngle(0, 0, 0, hX, hY, hZ, in, angle);
+        return setQtAngle(in, 0, 0, 0, hX, hY, hZ, angle);
     }
 
     @Override
-    public FVector setQtAngleBaseZero(FPoint ref, FVector in, double angle) {
+    public FVector setQtAngleBaseZero(FVector in, FPoint ref, double angle) {
 
-        return setQtAngleBaseZero(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return setQtAngleBaseZero(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FVector setQtAngleBaseZero(FPos3D ref, FVector in, double angle) {
+    public FVector setQtAngleBaseZero(FVector in, FPos3D ref, double angle) {
 
-        return setQtAngleBaseZero(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return setQtAngleBaseZero(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FVector rotQtAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotQtAround(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         in.subXYZ(bX, bY, bZ);
 
-        rotQtAround(hX - bX, hY - bY, hZ - bZ, in.getRefBase(), angle);
-        rotQtAround(hX - bX, hY - bY, hZ - bZ, in.getRefHead(), angle);
+        rotQtAround(in.getRefBase(), hX - bX, hY - bY, hZ - bZ, angle);
+        rotQtAround(in.getRefHead(), hX - bX, hY - bY, hZ - bZ, angle);
 
         in.addXYZ(bX, bY, bZ);
 
@@ -651,79 +651,79 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FVector rotQtAround(FVector ref, FVector in, double angle) {
+    public FVector rotQtAround(FVector in, FVector ref, double angle) {
 
         return rotQtAround(
-                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                 ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAround(FPairPos3D ref, FVector in, double angle) {
+    public FVector rotQtAround(FVector in, FPairPos3D ref, double angle) {
 
         return rotQtAround(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundBaseCommon(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotQtAroundBaseCommon(FVector in, double hX, double hY, double hZ, double angle) {
 
         return rotQtAround(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 hX, hY, hZ,
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundBaseCommon(FPoint ref, FVector in, double angle) {
+    public FVector rotQtAroundBaseCommon(FVector in, FPoint ref, double angle) {
 
         return rotQtAround(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getX(), ref.getY(), ref.getZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundBaseCommon(FPos3D ref, FVector in, double angle) {
+    public FVector rotQtAroundBaseCommon(FVector in, FPos3D ref, double angle) {
 
         return rotQtAround(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getD0(), ref.getD1(), ref.getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundBaseZero(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotQtAroundBaseZero(FVector in, double hX, double hY, double hZ, double angle) {
 
-        return rotQtAround(0, 0, 0, hX, hY, hZ, in, angle);
+        return rotQtAround(in, 0, 0, 0, hX, hY, hZ, angle);
     }
 
     @Override
-    public FVector rotQtAroundBaseZero(FPoint ref, FVector in, double angle) {
+    public FVector rotQtAroundBaseZero(FVector in, FPoint ref, double angle) {
 
-        return rotQtAroundBaseZero(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return rotQtAroundBaseZero(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FVector rotQtAroundBaseZero(FPos3D ref, FVector in, double angle) {
+    public FVector rotQtAroundBaseZero(FVector in, FPos3D ref, double angle) {
 
-        return rotQtAroundBaseZero(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return rotQtAroundBaseZero(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
-    public FPoint rotQtAround(double bX, double bY, double bZ, double hX, double hY, double hZ, FPoint in, double angle) {
+    public FPoint rotQtAround(FPoint in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         in.subXYZ(bX, bY, bZ);
 
-        rotQtAround(hX - bX, hY - bY, hZ - bZ, in, angle);
+        rotQtAround(in, hX - bX, hY - bY, hZ - bZ, angle);
 
         in.addXYZ(bX, bY, bZ);
 
@@ -731,27 +731,27 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FPoint rotQtAround(FVector ref, FPoint in, double angle) {
+    public FPoint rotQtAround(FPoint in, FVector ref, double angle) {
 
         return rotQtAround(
-                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                 ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FPoint rotQtAround(FPairPos3D ref, FPoint in, double angle) {
+    public FPoint rotQtAround(FPoint in, FPairPos3D ref, double angle) {
 
         return rotQtAround(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundFixed(double bX, double bY, double bZ, double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotQtAroundFixed(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
         if (in.isNearZeroLength()) {
             throw new IllegalArgumentException("The direction of the provided FVector is not defined");
@@ -771,71 +771,71 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public FVector rotQtAroundFixed(FVector ref, FVector in, double angle) {
+    public FVector rotQtAroundFixed(FVector in, FVector ref, double angle) {
 
         return rotQtAroundFixed(
-                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                in, ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
                 ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundFixed(FPairPos3D ref, FVector in, double angle) {
+    public FVector rotQtAroundFixed(FVector in, FPairPos3D ref, double angle) {
 
         return rotQtAroundFixed(
-                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                in, ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
                 ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundFixedBaseCommon(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotQtAroundFixedBaseCommon(FVector in, double hX, double hY, double hZ, double angle) {
 
         return rotQtAroundFixed(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 hX, hY, hZ,
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundFixedBaseCommon(FPoint ref, FVector in, double angle) {
+    public FVector rotQtAroundFixedBaseCommon(FVector in, FPoint ref, double angle) {
 
         return rotQtAroundFixed(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getX(), ref.getY(), ref.getZ(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundFixedBaseCommon(FPos3D ref, FVector in, double angle) {
+    public FVector rotQtAroundFixedBaseCommon(FVector in, FPos3D ref, double angle) {
 
         return rotQtAroundFixed(
-                in.getBaseX(), in.getBaseY(), in.getBaseZ(),
+                in, in.getBaseX(), in.getBaseY(), in.getBaseZ(),
                 ref.getD0(), ref.getD1(), ref.getD2(),
-                in, angle
+                angle
         );
     }
 
     @Override
-    public FVector rotQtAroundFixedBaseZero(double hX, double hY, double hZ, FVector in, double angle) {
+    public FVector rotQtAroundFixedBaseZero(FVector in, double hX, double hY, double hZ, double angle) {
 
-        return rotQtAroundFixed(0, 0, 0, hX, hY, hZ, in, angle);
+        return rotQtAroundFixed(in, 0, 0, 0, hX, hY, hZ, angle);
     }
 
     @Override
-    public FVector rotQtAroundFixedBaseZero(FPoint ref, FVector in, double angle) {
+    public FVector rotQtAroundFixedBaseZero(FVector in, FPoint ref, double angle) {
 
-        return rotQtAroundFixedBaseZero(ref.getX(), ref.getY(), ref.getZ(), in, angle);
+        return rotQtAroundFixedBaseZero(in, ref.getX(), ref.getY(), ref.getZ(), angle);
     }
 
     @Override
-    public FVector rotQtAroundFixedBaseZero(FPos3D ref, FVector in, double angle) {
+    public FVector rotQtAroundFixedBaseZero(FVector in, FPos3D ref, double angle) {
 
-        return rotQtAroundFixedBaseZero(ref.getD0(), ref.getD1(), ref.getD2(), in, angle);
+        return rotQtAroundFixedBaseZero(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
     }
 
     @Override
@@ -850,7 +850,7 @@ public class FRotEngineDef implements FRotEngine {
     //--------------------------------------------------
 
     @Override
-    public void rotQtAround(FLine ref, Geometry in, double angle) {
+    public void rotQtAround(Geometry in, FLine ref, double angle) {
 
         if (ref.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -862,18 +862,18 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public void rotRgAround(FLine ref, Geometry in, double angle) {
+    public void rotRgAround(Geometry in, FLine ref, double angle) {
         FVector refOrigin = ref.getRefOrigin();
 
         if (refOrigin.isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints().forEach(p -> rotRgAround(refOrigin, p, angle));
+        in.toFPoints().forEach(p -> rotRgAround(p, refOrigin, angle));
     }
 
     @Override
-    public void rotQtAround(FRay ref, Geometry in, double angle) {
+    public void rotQtAround(Geometry in, FRay ref, double angle) {
 
         if (ref.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -889,7 +889,7 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public void rotRgAround(FRay ref, Geometry in, double angle) {
+    public void rotRgAround(Geometry in, FRay ref, double angle) {
         FVector refOrigin = ref.getRefOrigin();
 
         if (refOrigin.isNearZeroLength()) {
@@ -898,13 +898,13 @@ public class FRotEngineDef implements FRotEngine {
 
         for (FPoint p : in.toFPoints()) {
             if (ref.isProjectable(p)) {
-                rotRgAround(refOrigin, p, angle);
+                rotRgAround(p, refOrigin, angle);
             }
         }
     }
 
     @Override
-    public void rotQtAround(FSegment ref, Geometry in, double angle) {
+    public void rotQtAround(Geometry in, FSegment ref, double angle) {
 
         if (ref.getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -920,7 +920,7 @@ public class FRotEngineDef implements FRotEngine {
     }
 
     @Override
-    public void rotRgAround(FSegment ref, Geometry in, double angle) {
+    public void rotRgAround(Geometry in, FSegment ref, double angle) {
         FVector refOrigin = ref.getRefOrigin();
 
         if (refOrigin.isNearZeroLength()) {
@@ -929,7 +929,7 @@ public class FRotEngineDef implements FRotEngine {
 
         for (FPoint p : in.toFPoints()) {
             if (ref.isProjectable(p)) {
-                rotRgAround(refOrigin, p, angle);
+                rotRgAround(p, refOrigin, angle);
             }
         }
     }

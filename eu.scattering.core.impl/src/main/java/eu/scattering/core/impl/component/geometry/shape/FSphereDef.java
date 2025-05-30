@@ -598,7 +598,7 @@ public class FSphereDef implements FSphere {
         double dist = getRadius() + neighbour.getRadius();
         double ang = trigHelper.getAngle(sideRef, sideArg, dist);
 
-        rotEngine.setRgAngle(vecArg, vecRef, ang);
+        rotEngine.setRgAngle(vecRef, vecArg, ang);
 
         getRefCenter().applyStateFrom(vecRef.getRefHead());
     }
