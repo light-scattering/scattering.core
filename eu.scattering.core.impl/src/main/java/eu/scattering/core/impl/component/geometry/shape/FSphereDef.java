@@ -145,6 +145,16 @@ public class FSphereDef implements FSphere {
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FSphere) {
+            return isExact((FSphere) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isSimilar(FSphere arg) {
 
         if (Math.abs(getRadius() - arg.getRadius()) > EPSILON) {
@@ -152,6 +162,16 @@ public class FSphereDef implements FSphere {
         }
 
         return getRefCenter().isSimilar(arg.getRefCenter());
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FSphere) {
+            return isSimilar((FSphere) arg);
+        }
+
+        return false;
     }
 
     @Override
@@ -165,6 +185,8 @@ public class FSphereDef implements FSphere {
 
         return supplyFSphere().applyStateFrom(this);
     }
+
+
 
     @Override
     public Geometry copyGeometry() {

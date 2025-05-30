@@ -1195,6 +1195,33 @@ public class FSphereTest {
         }
 
         @Test
+        @DisplayName("Is exact (geometry)")
+        void isExactGeometry() {
+            Geometry fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            Geometry fSphereArg = factory.getFSphere(1, 2, 3, 4);
+
+            assertTrue((fSphereRef.isExact(fSphereArg)), "FSpheres should be exact");
+        }
+
+        @Test
+        @DisplayName("Is exact (geometry, fail) A")
+        void isExactGeometryFailA() {
+            Geometry fSphere = factory.getFSphere(1, 2, 3, 4);
+            FPoint fPoint = factory.getFPoint(5, 6, 7);
+
+            assertFalse((fSphere.isExact(fPoint)), "Geometries should not be exact");
+        }
+
+        @Test
+        @DisplayName("Is exact (geometry, fail) B")
+        void isExactGeometryFailB() {
+            Geometry fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            Geometry fSphereArg = factory.getFSphere(5, 6, 7, 8);
+
+            assertFalse((fSphereRef.isExact(fSphereArg)), "FSpheres should not be exact");
+        }
+
+        @Test
         @DisplayName("Is similar")
         void isSimilar() {
             FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
@@ -1204,7 +1231,7 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Is exact (fail) A")
+        @DisplayName("Is similar (fail) A")
         void isSimilarFailA() {
             FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
             FSphere fSphereArg = factory.getFSphere(1, 2, 3, 4 + (epsilon * 1.5));
@@ -1213,10 +1240,37 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Is exact (fail) B")
+        @DisplayName("Is similar (fail) B")
         void isSimilarFailB() {
             FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
             FSphere fSphereArg = factory.getFSphere(1, 2, 3 + (epsilon * 1.5), 4);
+
+            assertFalse((fSphereRef.isSimilar(fSphereArg)), "FSpheres should not be similar");
+        }
+
+        @Test
+        @DisplayName("Is similar (geometry)")
+        void isSimilarGeometry() {
+            Geometry fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            Geometry fSphereArg = factory.getFSphere(1, 2, 3 + (epsilon * 0.5), 4 + (epsilon * 0.5));
+
+            assertTrue((fSphereRef.isSimilar(fSphereArg)), "FSpheres should be similar");
+        }
+
+        @Test
+        @DisplayName("Is similar (geometry, fail) A")
+        void isSimilarGeometryFailA() {
+            Geometry fSphere = factory.getFSphere(1, 2, 3, 4);
+            Geometry fPoint = factory.getFPoint(1, 2, 3);
+
+            assertFalse((fSphere.isSimilar(fPoint)), "Geometries should not be similar");
+        }
+
+        @Test
+        @DisplayName("Is similar (geometry, fail) B")
+        void isSimilarGeometryFailB() {
+            Geometry fSphereRef = factory.getFSphere(1, 2, 3, 4);
+            Geometry fSphereArg = factory.getFSphere(1, 2, 3 + (epsilon * 1.5), 4);
 
             assertFalse((fSphereRef.isSimilar(fSphereArg)), "FSpheres should not be similar");
         }

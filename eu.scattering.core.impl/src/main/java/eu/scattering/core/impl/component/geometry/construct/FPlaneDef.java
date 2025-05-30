@@ -141,6 +141,26 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FPlane) {
+            return isExact((FPlane) arg);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FPlane) {
+            return isSimilar((FPlane) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public Geometry copyGeometry() {
 
         return copy();

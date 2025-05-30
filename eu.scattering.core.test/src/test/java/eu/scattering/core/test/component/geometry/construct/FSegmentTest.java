@@ -259,13 +259,52 @@ public class FSegmentTest {
         }
 
         @Test
+        @DisplayName("Exactness (geometry)")
+        void isExactGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fSegmentA = factory.getRefFSegment(fVector.copy());
+            Geometry fSegmentB = factory.getRefFSegment(fVector.copy());
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertTrue(fSegmentA.isExact(fSegmentB), "FSegments should be equal"),
+                    () -> assertTrue(fSegmentB.isExact(fSegmentB), "FSegments should be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) A")
+        void isExactGeometryFailA() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fSegment = factory.getRefFSegment(fVector.copy());
+            Geometry fLine = factory.getRefFLine(fVector.copy());
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertFalse(fSegment.isExact(fLine), "Geometries should not be equal"),
+                    () -> assertFalse(fLine.isExact(fSegment), "Geometries should not be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) B")
+        void isExactGeometryFailB() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fSegmentA = factory.getRefFSegment(fVector.copy());
+            Geometry fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * epsilon));
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertFalse(fSegmentA.isExact(fSegmentB), "FSegments should not be equal"),
+                    () -> assertFalse(fSegmentB.isExact(fSegmentA), "FSegments should not be equal")
+            );
+        }
+
+        @Test
         @DisplayName("Similarity")
         void isSimilar() {
             FVector fVector = TestHelper.getRandFVector();
             FSegment fSegmentA = factory.getRefFSegment(fVector.copy());
             FSegment fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * epsilon));
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fSegmentA.isSimilar(fSegmentB), "FSegments should be similar"),
                     () -> assertTrue(fSegmentB.isSimilar(fSegmentA), "FSegments should be similar")
             );
@@ -277,7 +316,44 @@ public class FSegmentTest {
             FSegment fSegmentA = factory.getRefFSegment(TestHelper.getRandFVector());
             FSegment fSegmentB = factory.getRefFSegment(TestHelper.getRandFVector(fSegmentA.getRefOrigin()));
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fSegmentA.isSimilar(fSegmentB), "FSegments should not be similar"),
+                    () -> assertFalse(fSegmentB.isSimilar(fSegmentA), "FSegments should not be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry)")
+        void isSimilarGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fSegmentA = factory.getRefFSegment(fVector.copy());
+            Geometry fSegmentB = factory.getRefFSegment(fVector.copy().addFactor(0.5 * epsilon));
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertTrue(fSegmentA.isSimilar(fSegmentB), "FSegments should be similar"),
+                    () -> assertTrue(fSegmentB.isSimilar(fSegmentA), "FSegments should be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) A")
+        void isSimilarGeometryFailA() {
+            Geometry fSegment = factory.getRefFSegment(TestHelper.getRandFVector());
+            Geometry fLine = factory.getRefFLine(TestHelper.getRandFVector());
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fSegment.isSimilar(fLine), "Geometries should not be similar"),
+                    () -> assertFalse(fLine.isSimilar(fSegment), "Geometries should not be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) B")
+        void isSimilarGeometryFailB() {
+            Geometry fSegmentA = factory.getRefFSegment(TestHelper.getRandFVector());
+            Geometry fSegmentB = factory.getRefFSegment(TestHelper.getRandFVector());
+
+            Assertions.assertAll("Validate similarity",
                     () -> assertFalse(fSegmentA.isSimilar(fSegmentB), "FSegments should not be similar"),
                     () -> assertFalse(fSegmentB.isSimilar(fSegmentA), "FSegments should not be similar")
             );

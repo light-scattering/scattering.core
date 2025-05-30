@@ -124,7 +124,27 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FAssembly) {
+            return isExact((FAssembly) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isSimilar(FAssembly<T> arg) {
+        return false;
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FAssembly) {
+            return isSimilar((FAssembly) arg);
+        }
+
         return false;
     }
 
@@ -139,6 +159,8 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
         return copy;
     }
+
+
 
     @Override
     public Geometry copyGeometry() {

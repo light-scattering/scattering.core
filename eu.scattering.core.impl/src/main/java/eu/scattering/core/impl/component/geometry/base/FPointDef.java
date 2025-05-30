@@ -159,6 +159,16 @@ public class FPointDef implements FPoint {
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FPoint) {
+            return isExact((FPoint) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isSimilar(double x, double y, double z) {
         double distanceX = Math.abs(getX() - x);
         double distanceY = Math.abs(getY() - y);
@@ -181,6 +191,16 @@ public class FPointDef implements FPoint {
     public boolean isSimilar(FPos3D arg) {
 
         return isSimilar(arg.getD0(), arg.getD1(), arg.getD2());
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FPoint) {
+            return isSimilar((FPoint) arg);
+        }
+
+        return false;
     }
 
     @Override

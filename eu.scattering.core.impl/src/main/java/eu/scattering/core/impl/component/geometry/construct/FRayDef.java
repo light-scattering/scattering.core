@@ -119,6 +119,26 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FRay) {
+            return isExact((FRay) arg);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FRay) {
+            return isSimilar((FRay) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public Geometry copyGeometry() {
 
         return copy();

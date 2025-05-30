@@ -5213,6 +5213,36 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Is exact (geometry)")
+        void isExactGeometry() {
+            Geometry fVectorRef = factory.getFVector(1, 2, 3, 4, 5, 6);
+            Geometry fVectorArg = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            assertTrue(fVectorRef.isExact(fVectorArg), "FVectors should be equal");
+        }
+
+        @Test
+        @DisplayName("Is exact (geometry, fail) A")
+        void isExactGeometryFailA() {
+            Geometry fVector = TestHelper.getRandFVector();
+            Geometry fPoint = TestHelper.getRandFPoint();
+
+            assertFalse(fVector.isExact(fPoint), "Geometries should not be equal");
+        }
+
+        @Test
+        @DisplayName("Is exact (geometry, fail) B")
+        void isExactGeometryFailB() {
+            FPoint fPointBase = TestHelper.getRandFPoint();
+            FPoint fPointHead = TestHelper.getRandFPoint();
+
+            Geometry fVectorRef = factory.getFVector(factory.getFPoint(), fPointHead);
+            Geometry fVectorArg = factory.getFVector(fPointBase, factory.getFPoint());
+
+            assertFalse(fVectorRef.isExact(fVectorArg), "FVectors should not be equal");
+        }
+
+        @Test
         @DisplayName("Is similar")
         void isSimilar() {
             FPoint fPointBase = TestHelper.getRandFPoint();
@@ -5392,6 +5422,39 @@ public class FVectorTest {
         }
 
         @Test
+        @DisplayName("Is similar (geometry)")
+        void isSimilarGeometry() {
+            FPoint fPointBase = TestHelper.getRandFPoint();
+            FPoint fPointHead = TestHelper.getRandFPoint();
+
+            Geometry fVectorRef = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            Geometry fVectorArg = factory.getFVector(fPointBase.addX(epsilon * 0.5), fPointHead);
+
+            assertTrue(fVectorRef.isSimilar(fVectorArg), "FVectors should be similar");
+        }
+
+        @Test
+        @DisplayName("Is similar (geometry, fail) A")
+        void isSimilarGeometryFailA() {
+            Geometry fVector = factory.getFVector();
+            Geometry fPoint = factory.getFPoint();
+
+            assertFalse(fVector.isSimilar(fPoint), "Geometries should not be similar");
+        }
+
+        @Test
+        @DisplayName("Is similar (geometry, fail) B")
+        void isSimilarGeometryFailB() {
+            FPoint fPointBase = TestHelper.getRandFPoint();
+            FPoint fPointHead = TestHelper.getRandFPoint();
+
+            Geometry fVectorRef = factory.getFVector(fPointBase.copy(), fPointHead.copy());
+            Geometry fVectorArg = factory.getFVector(fPointBase.addX(epsilon * 1.5), fPointHead);
+
+            assertFalse(fVectorRef.isSimilar(fVectorArg), "FVectors should not be similar");
+        }
+
+        @Test
         @DisplayName("Get hash code")
         void getHashCode() {
             FPoint fPointBase = TestHelper.getRandFPoint();
@@ -5452,7 +5515,7 @@ public class FVectorTest {
             Assertions.assertAll("Validate similarity",
                     () -> assertNotSame(fVectorA, fVectorB,
                             "FVectors represent different objects"),
-                    () -> assertTrue(fVectorA.isExact((FPairPos3D) fVectorB),
+                    () -> assertTrue(fVectorA.isExact((FVector) fVectorB),
                             "FVectors should have the same values"),
                     () -> assertNotSame(fVectorA.getRefBase(), ((FVector) fVectorB).getRefBase(),
                             "The base FPoints should be different"),

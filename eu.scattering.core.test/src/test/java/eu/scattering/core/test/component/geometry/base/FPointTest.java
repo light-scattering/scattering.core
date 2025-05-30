@@ -2262,6 +2262,42 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Exactness (geometry)")
+        void isExactGeometry() {
+            Geometry fPointRef = factory.getFPoint(refX, refY, refZ);
+            Geometry fPointArg = factory.getFPoint(refX, refY, refZ);
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertTrue(fPointRef.isExact(fPointArg), "FPoints should be equal"),
+                    () -> assertTrue(fPointArg.isExact(fPointRef), "FPoints should be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) A")
+        void isExactGeometryFailA() {
+            Geometry fPointRef = factory.getFPoint(refX, refY, refZ);
+            Geometry fVectorArg = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            Assertions.assertAll("Check combinations",
+                    () -> assertFalse(fPointRef.isExact(fVectorArg), "Geometries should not be equal"),
+                    () -> assertFalse(fVectorArg.isExact(fPointRef), "Geometries should not be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) B")
+        void isExactGeometryFailB() {
+            Geometry fPointRef = factory.getFPoint(refX, refY, refZ);
+            Geometry fPointArg = factory.getFPoint(refX, refY, refZ).addFactor(0.5 * epsilon);
+
+            Assertions.assertAll("Check combinations",
+                    () -> assertFalse(fPointRef.isExact(fPointArg), "FPoints should not be equal"),
+                    () -> assertFalse(fPointArg.isExact(fPointRef), "FPoints should not be equal")
+            );
+        }
+
+        @Test
         @DisplayName("Similarity")
         void isSimilar() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
@@ -2361,6 +2397,44 @@ public class FPointTest {
             FPos3D fPos3D = factory.getFPos3D(refX + 1.5 * epsilon, refY + 1.5 * epsilon, refZ + 1.5 * epsilon);
 
             assertFalse(fPoint.isSimilar(fPos3D), "Elements should not be similar");
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry)")
+        void isSimilarGeometry() {
+            double ref = epsilon * 0.5;
+            Geometry fPointRef = factory.getFPoint(refX, refY, refZ);
+            Geometry fPointArg = factory.getFPoint(refX + ref, refY, refZ);
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertTrue(fPointRef.isSimilar(fPointArg),
+                            "FPoints should be similar (same position)")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) A")
+        void isSimilarGeometryFailA() {
+            Geometry fPoint = factory.getFPoint();
+            Geometry fVector = factory.getFVector();
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fPoint.isSimilar(fVector),
+                            "Geometries should not be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) B")
+        void isSimilarGeometryFailB() {
+            double ref = epsilon * 2;
+            Geometry fPointRef = factory.getFPoint(refX, refY, refZ);
+            Geometry fPointArg = factory.getFPoint(refX + ref, refY, refZ);
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fPointRef.isSimilar(fPointArg),
+                            "FPoints should not be similar")
+            );
         }
 
         @Test

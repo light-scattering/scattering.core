@@ -259,13 +259,52 @@ public class FRayTest {
         }
 
         @Test
+        @DisplayName("Exactness (geometry)")
+        void isExactGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fRayA = factory.getRefFRay(fVector.copy());
+            Geometry fRayB = factory.getRefFRay(fVector.copy());
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertTrue(fRayA.isExact(fRayB), "FRays should be equal"),
+                    () -> assertTrue(fRayB.isExact(fRayB), "FRays should be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) A")
+        void isExactGeometryFailA() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fRay = factory.getRefFRay(fVector.copy());
+            Geometry fSegment = factory.getRefFSegment(fVector.copy());
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertFalse(fRay.isExact(fSegment), "Geometries should not be equal"),
+                    () -> assertFalse(fSegment.isExact(fRay), "Geometries should not be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) B")
+        void isExactGeometryFailB() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fRayA = factory.getRefFRay(fVector.copy());
+            Geometry fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * epsilon));
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertFalse(fRayA.isExact(fRayB), "FRays should not be equal"),
+                    () -> assertFalse(fRayB.isExact(fRayA), "FRays should not be equal")
+            );
+        }
+
+        @Test
         @DisplayName("Similarity")
         void isSimilar() {
             FVector fVector = TestHelper.getRandFVector();
             FRay fRayA = factory.getRefFRay(fVector.copy());
             FRay fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * epsilon));
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fRayA.isSimilar(fRayB), "FRays should be similar"),
                     () -> assertTrue(fRayB.isSimilar(fRayA), "FRays should be similar")
             );
@@ -277,7 +316,44 @@ public class FRayTest {
             FRay fRayA = factory.getRefFRay(TestHelper.getRandFVector());
             FRay fRayB = factory.getRefFRay(TestHelper.getRandFVector(fRayA.getRefOrigin()));
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fRayA.isSimilar(fRayB), "FRays should not be similar"),
+                    () -> assertFalse(fRayB.isSimilar(fRayA), "FRays should not be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry)")
+        void isSimilarGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fRayA = factory.getRefFRay(fVector.copy());
+            Geometry fRayB = factory.getRefFRay(fVector.copy().addFactor(0.5 * epsilon));
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertTrue(fRayA.isSimilar(fRayB), "FRays should be similar"),
+                    () -> assertTrue(fRayB.isSimilar(fRayA), "FRays should be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) A")
+        void isSimilarGeometryFailA() {
+            Geometry fRay = factory.getRefFRay(TestHelper.getRandFVector());
+            Geometry fSegment = factory.getRefFRay(TestHelper.getRandFVector());
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fRay.isSimilar(fSegment), "Geometries should not be similar"),
+                    () -> assertFalse(fSegment.isSimilar(fRay), "Geometries should not be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) B")
+        void isSimilarGeometryFailB() {
+            Geometry fRayA = factory.getRefFRay(TestHelper.getRandFVector());
+            Geometry fRayB = factory.getRefFRay(TestHelper.getRandFVector());
+
+            Assertions.assertAll("Validate similarity",
                     () -> assertFalse(fRayA.isSimilar(fRayB), "FRays should not be similar"),
                     () -> assertFalse(fRayB.isSimilar(fRayA), "FRays should not be similar")
             );

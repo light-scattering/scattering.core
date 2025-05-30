@@ -119,6 +119,26 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FSegment) {
+            return isExact((FSegment) arg);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FSegment) {
+            return isSimilar((FSegment) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public Geometry copyGeometry() {
 
         return copy();

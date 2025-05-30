@@ -8,8 +8,8 @@ import java.util.Collection;
 
 public interface Geometry extends Component {
 
-//    boolean isExact(Geometry arg);
-//    boolean isSimilar(Geometry arg);
+    boolean isExact(Geometry arg);
+    boolean isSimilar(Geometry arg);
 
     Geometry copyGeometry();
 

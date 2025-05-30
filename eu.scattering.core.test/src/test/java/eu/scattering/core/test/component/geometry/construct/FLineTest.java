@@ -261,13 +261,52 @@ public class FLineTest {
         }
 
         @Test
+        @DisplayName("Exactness (geometry)")
+        void isExactGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fLineA = factory.getRefFLine(fVector.copy());
+            Geometry fLineB = factory.getRefFLine(fVector.copy());
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertTrue(fLineA.isExact(fLineB), "FLines should be equal"),
+                    () -> assertTrue(fLineB.isExact(fLineB), "FLines should be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) A")
+        void isExactGeometryFailA() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fLine = factory.getRefFLine(fVector.copy());
+            Geometry fPlane = factory.getRefFPlane(fVector.copy());
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertFalse(fLine.isExact(fPlane), "Geometries should not be equal"),
+                    () -> assertFalse(fPlane.isExact(fLine), "Geometries should not be equal")
+            );
+        }
+
+        @Test
+        @DisplayName("Exactness (geometry, fail) B")
+        void isExactGeometryFailB() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fLineA = factory.getRefFLine(fVector.copy());
+            Geometry fLineB = factory.getRefFLine(fVector.copy().addFactor(0.5 * epsilon));
+
+            Assertions.assertAll("Validate exactness",
+                    () -> assertFalse(fLineA.isExact(fLineB), "FLines should not be equal"),
+                    () -> assertFalse(fLineB.isExact(fLineA), "FLines should not be equal")
+            );
+        }
+
+        @Test
         @DisplayName("Similarity")
         void isSimilar() {
             FVector fVector = TestHelper.getRandFVector();
             FLine fLineA = factory.getRefFLine(fVector.copy());
             FLine fLineB = factory.getRefFLine(fVector.copy().addFactor(0.5 * epsilon));
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
                     () -> assertTrue(fLineB.isSimilar(fLineA), "FLines should be similar")
             );
@@ -279,7 +318,7 @@ public class FLineTest {
             FLine fLineA = factory.getRefFLine(TestHelper.getRandFVector());
             FLine fLineB = factory.getRefFLine(TestHelper.getRandFVector(fLineA.getRefOrigin()));
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertFalse(fLineA.isSimilar(fLineB), "FLines should not be similar"),
                     () -> assertFalse(fLineB.isSimilar(fLineA), "FLines should not be similar")
             );
@@ -294,7 +333,7 @@ public class FLineTest {
 
             fLineB.getRefOrigin().shiftForward(10);
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
                     () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
@@ -309,7 +348,7 @@ public class FLineTest {
 
             fLineB.getRefOrigin().shiftForward(10).reflectHead();
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
                     () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
@@ -324,7 +363,7 @@ public class FLineTest {
 
             fLineB.getRefOrigin().shiftBackward(10);
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
                     () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
@@ -339,7 +378,7 @@ public class FLineTest {
 
             fLineB.getRefOrigin().shiftBackward(10).reflectHead();
 
-            Assertions.assertAll("Validate exactness",
+            Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fLineA.isSameLine(fLineB), "FLines should be similar"),
                     () -> assertTrue(fLineB.isSameLine(fLineA), "FLines should be similar")
             );
@@ -352,6 +391,43 @@ public class FLineTest {
             FLine fLineB = factory.getRefFLine(TestHelper.getRandFVector());
 
             FLineTestHelper.testValue(FLine::isSameLine, fLineA, fLineB);
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry)")
+        void isSimilarGeometry() {
+            FVector fVector = TestHelper.getRandFVector();
+            Geometry fLineA = factory.getRefFLine(fVector.copy());
+            Geometry fLineB = factory.getRefFLine(fVector.copy().addFactor(0.5 * epsilon));
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertTrue(fLineA.isSimilar(fLineB), "FLines should be similar"),
+                    () -> assertTrue(fLineB.isSimilar(fLineA), "FLines should be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) A")
+        void isSimilarGeometryFailA() {
+            Geometry fLine = factory.getRefFLine(TestHelper.getRandFVector());
+            Geometry fPlane = factory.getRefFPlane(TestHelper.getRandFVector());
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fLine.isSimilar(fPlane), "Geometries should not be similar"),
+                    () -> assertFalse(fPlane.isSimilar(fLine), "Geometries should not be similar")
+            );
+        }
+
+        @Test
+        @DisplayName("Similarity (geometry, fail) B")
+        void isSimilarGeometryFailB() {
+            Geometry fLineA = factory.getRefFLine(TestHelper.getRandFVector());
+            Geometry fLineB = factory.getRefFLine(TestHelper.getRandFVector());
+
+            Assertions.assertAll("Validate similarity",
+                    () -> assertFalse(fLineA.isSimilar(fLineB), "FLines should not be similar"),
+                    () -> assertFalse(fLineB.isSimilar(fLineA), "FLines should not be similar")
+            );
         }
 
         @Test

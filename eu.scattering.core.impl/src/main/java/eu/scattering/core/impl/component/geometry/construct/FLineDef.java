@@ -121,6 +121,26 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FLine) {
+            return isExact((FLine) arg);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FLine) {
+            return isSimilar((FLine) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public Geometry copyGeometry() {
 
         return copy();

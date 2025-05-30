@@ -333,6 +333,16 @@ public class FVectorDef implements FVector {
     }
 
     @Override
+    public boolean isExact(Geometry arg) {
+
+        if (arg instanceof FVector) {
+            return isExact((FVector) arg);
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isExactBaseCommon(double hX, double hY, double hZ) {
 
         return getRefHead().isExact(hX, hY, hZ);
@@ -408,6 +418,16 @@ public class FVectorDef implements FVector {
         boolean isHeadSimilar = getRefHead().isSimilar(arg.getPosB());
 
         return isBaseSimilar && isHeadSimilar;
+    }
+
+    @Override
+    public boolean isSimilar(Geometry arg) {
+
+        if (arg instanceof FVector) {
+            return isSimilar((FVector) arg);
+        }
+
+        return false;
     }
 
     @Override
