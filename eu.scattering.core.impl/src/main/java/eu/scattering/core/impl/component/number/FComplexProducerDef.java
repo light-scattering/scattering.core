@@ -23,7 +23,7 @@ public class FComplexProducerDef implements FComplexProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FComplexProducerDef create(FComplexFactory factory, FRandGenerator random) {
+    public static FComplexProducer create(FComplexFactory factory, FRandGenerator random) {
 
         return new FComplexProducerDef(factory, random);
     }

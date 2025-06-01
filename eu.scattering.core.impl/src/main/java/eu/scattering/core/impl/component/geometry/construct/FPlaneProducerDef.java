@@ -24,7 +24,7 @@ public class FPlaneProducerDef implements FPlaneProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FPlaneProducerDef create(ConstructFactory factory, FRandGenerator random) {
+    public static FPlaneProducer create(ConstructFactory factory, FRandGenerator random) {
 
         return new FPlaneProducerDef(factory, random);
     }

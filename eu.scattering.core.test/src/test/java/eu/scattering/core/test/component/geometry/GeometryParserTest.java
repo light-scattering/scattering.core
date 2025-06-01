@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
@@ -63,6 +64,28 @@ public class GeometryParserTest {
                 () -> assertEquals(fVector, fVectorParsed,
                         "Elements should be equal"),
                 () -> assertNotSame(fVector, fVectorParsed,
+                        "Elements should not be the same object")
+        );
+    }
+
+    @Test
+    @DisplayName("Parse FDraft")
+    void parseFDraft() {
+        GeometryParser parser = factory.getGeometryParser();
+
+        FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 2, 3, 4, 5, 6));
+        JSONObject fDraftJSON = fDraft.toJSON();
+
+        Geometry fDraftParsed = parser.parse(fDraftJSON);
+
+        Assertions.assertAll("Validate parser results",
+                () -> assertTrue(fDraftParsed instanceof FDraft,
+                        "The element type is erroneous"),
+                () -> assertFalse(fDraftParsed instanceof FPoint,
+                        "The element type is erroneous"),
+                () -> assertEquals(fDraft, fDraftParsed,
+                        "Elements should be equal"),
+                () -> assertNotSame(fDraft, fDraftParsed,
                         "Elements should not be the same object")
         );
     }

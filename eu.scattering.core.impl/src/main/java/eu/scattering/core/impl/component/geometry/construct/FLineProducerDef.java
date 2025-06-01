@@ -24,7 +24,7 @@ public class FLineProducerDef implements FLineProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FLineProducerDef create(ConstructFactory factory, FRandGenerator random) {
+    public static FLineProducer create(ConstructFactory factory, FRandGenerator random) {
 
         return new FLineProducerDef(factory, random);
     }

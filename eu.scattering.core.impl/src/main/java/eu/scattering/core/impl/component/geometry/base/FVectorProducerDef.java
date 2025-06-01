@@ -25,7 +25,7 @@ public class FVectorProducerDef implements FVectorProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FVectorProducerDef create(FVectorFactory factory, FRandGenerator random) {
+    public static FVectorProducer create(FVectorFactory factory, FRandGenerator random) {
 
         return new FVectorProducerDef(factory, random);
     }

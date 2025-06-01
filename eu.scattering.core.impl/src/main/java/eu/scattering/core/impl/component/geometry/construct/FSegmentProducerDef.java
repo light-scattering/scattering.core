@@ -24,7 +24,7 @@ public class FSegmentProducerDef implements FSegmentProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FSegmentProducerDef create(ConstructFactory factory, FRandGenerator random) {
+    public static FSegmentProducer create(ConstructFactory factory, FRandGenerator random) {
 
         return new FSegmentProducerDef(factory, random);
     }

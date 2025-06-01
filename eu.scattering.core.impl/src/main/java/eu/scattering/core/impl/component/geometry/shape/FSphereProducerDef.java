@@ -23,7 +23,7 @@ public class FSphereProducerDef implements FSphereProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FSphereProducerDef create(FSphereFactory factory, FRandGenerator random) {
+    public static FSphereProducer create(FSphereFactory factory, FRandGenerator random) {
 
         return new FSphereProducerDef(factory, random);
     }

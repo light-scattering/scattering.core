@@ -24,7 +24,7 @@ public class FRayProducerDef implements FRayProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FRayProducerDef create(ConstructFactory factory, FRandGenerator random) {
+    public static FRayProducer create(ConstructFactory factory, FRandGenerator random) {
 
         return new FRayProducerDef(factory, random);
     }

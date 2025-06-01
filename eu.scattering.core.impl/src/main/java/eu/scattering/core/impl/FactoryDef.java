@@ -5,6 +5,8 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
+import eu.scattering.core.design.component.geometry.construct.draft.FDraftProducer;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
@@ -146,6 +148,26 @@ public final class FactoryDef extends FactoryDesignConcrete {
     public FVector getFVector() {
 
         return FVectorDef.create(this, getFPoint(), getFPoint());
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FDraftProducer getFDraftProducer() {
+
+        return FDraftProducerDef.create(this, this.fRandGenerator);
+    }
+
+    @Override
+    public FDraft getRefFDraft(FVector refOrigin) {
+
+        return FDraftDef.create(this, refOrigin);
+    }
+
+    @Override
+    public FDraft getFDraft() {
+
+        return FDraftDef.create(this, getFVector());
     }
 
     //--------------------------------------------------

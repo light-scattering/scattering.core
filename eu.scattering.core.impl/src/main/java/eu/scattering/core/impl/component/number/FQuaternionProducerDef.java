@@ -23,7 +23,7 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FQuaternionProducerDef create(FQuaternionFactory factory, FRandGenerator random) {
+    public static FQuaternionProducer create(FQuaternionFactory factory, FRandGenerator random) {
 
         return new FQuaternionProducerDef(factory, random);
     }

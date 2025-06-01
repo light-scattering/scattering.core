@@ -37,5 +37,4 @@ public abstract class ConstructPresetDef<T extends Construct<T>> implements Cons
 
         return getRefOrigin().toFPoints();
     }
-
 }

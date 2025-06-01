@@ -24,7 +24,7 @@ public class FPointProducerDef implements FPointProducer {
         this.core = new ProducerCoreDef<>(this, this.random);
     }
 
-    public static FPointProducerDef create(FPointFactory factory, FRandGenerator random) {
+    public static FPointProducer create(FPointFactory factory, FRandGenerator random) {
 
         return new FPointProducerDef(factory, random);
     }
