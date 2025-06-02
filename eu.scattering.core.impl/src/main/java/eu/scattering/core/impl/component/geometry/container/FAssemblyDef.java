@@ -8,8 +8,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -20,8 +19,8 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     private final GeometryFactory factorySelf;
 
-    private final Collection<T> geometries = new ArrayList<>();
-    private final Collection<FPoint> fPoints = new ArrayList<>();
+    private final List<T> geometries = new ArrayList<>();
+    private final List<FPoint> fPoints = new ArrayList<>();
 
     private FAssemblyDef(GeometryFactory factorySelf) {
 
@@ -39,7 +38,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public Collection<T> getGeometries() {
+    public List<T> getGeometries() {
 
         return this.geometries;
     }
@@ -282,5 +281,30 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     private FAssembly<T> supplyFAssembly() {
 
         return factorySelf.getFAssembly();
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public Iterator<T> iterator() {
+
+        return new FAssemblyIteratorDef();
+    }
+
+    class FAssemblyIteratorDef implements Iterator<T> {
+        int index = 0;
+
+        public boolean hasNext() {
+            return index < FAssemblyDef.this.getGeometries().size();
+        }
+
+        public T next() {
+
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            return FAssemblyDef.this.getGeometries().get(index++);
+        }
     }
 }

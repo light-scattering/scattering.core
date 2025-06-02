@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.container.Container;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>> {
+public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, Iterable<T> {
 
     boolean register(T element);
 

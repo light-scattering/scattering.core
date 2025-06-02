@@ -68,7 +68,7 @@ public class FAssemblyTest {
         }
 
         @Test
-        @DisplayName("Get FPoint list")
+        @DisplayName("Get points")
         void getFPoints() {
             FAssembly<FVector> fAssembly = factory.getFAssembly();
 
@@ -650,6 +650,29 @@ public class FAssemblyTest {
             fAssembly.register(fPointB);
 
             fAssembly.applyGeometry((fPoint) -> fPoint.addXYZ(1, 2, 3));
+
+            Assertions.assertAll("Validate FPoints",
+                    () -> assertTrue(fPointA.isExact(2, 4, 6),
+                            "FPoint A is erroneous"),
+                    () -> assertTrue(fPointB.isExact(5, 7, 9),
+                            "FPoint B is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Use iterator")
+        void useIterator() {
+            FAssembly<FPoint> fAssembly = factory.getFAssembly();
+
+            FPoint fPointA = factory.getFPoint(1, 2, 3);
+            FPoint fPointB = factory.getFPoint(4, 5, 6);
+
+            fAssembly.register(fPointA);
+            fAssembly.register(fPointB);
+
+            for (FPoint fPoint : fAssembly) {
+                fPoint.addXYZ(1, 2, 3);
+            }
 
             Assertions.assertAll("Validate FPoints",
                     () -> assertTrue(fPointA.isExact(2, 4, 6),
