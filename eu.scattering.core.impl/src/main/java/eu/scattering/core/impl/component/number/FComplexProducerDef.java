@@ -21,6 +21,8 @@ public class FComplexProducerDef implements FComplexProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetDefault();
     }
 
     public static FComplexProducer create(FComplexFactory factory, FRandGenerator random) {
@@ -29,9 +31,9 @@ public class FComplexProducerDef implements FComplexProducer {
     }
 
     @Override
-    public FComplexProducer setConfig(Function<FComplex, FComplex> function) {
+    public FComplexProducer setConfig(Function<FComplex, FComplex> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class FComplexProducerDef implements FComplexProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FComplexProducer setPresetEmpty() {
+    public FComplexProducer setPresetDefault() {
         Function<FComplex, FComplex> function = (fComplex) -> fComplex;
 
         setConfig(function);

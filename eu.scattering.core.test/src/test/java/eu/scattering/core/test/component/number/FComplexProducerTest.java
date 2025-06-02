@@ -20,7 +20,7 @@ public class FComplexProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FComplexProducer producer = factory.getFComplexProducer().setPresetEmpty();
+        FComplexProducer producer = factory.getFComplexProducer();
 
         FComplex resultA = producer.produce();
         FComplex resultB = producer.produce();
@@ -68,7 +68,7 @@ public class FComplexProducerTest {
         FComplexProducer producer = factory.getFComplexProducer();
 
         producer
-                .addConfig((fComplex) -> fComplex.setRe(1), 0.25)
+                .setConfig((fComplex) -> fComplex.setRe(1), 0.25)
                 .addConfig((fComplex) -> fComplex.setRe(2), 0.75);
 
         int countA = 0;
@@ -89,6 +89,24 @@ public class FComplexProducerTest {
         Assertions.assertAll("Validate FComplex values",
                 () -> assertTrue(countFinalA < countFinalB,
                         "The distribution is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset default")
+    void presetDefault() {
+        FComplexProducer producer = factory.getFComplexProducer().setPresetDefault();
+
+        FComplex resultA = producer.produce();
+        FComplex resultB = producer.produce();
+
+        Assertions.assertAll("Validate FComplex values",
+                () -> assertTrue(resultA.isExact(0, 0),
+                        "The FComplex A value is erroneous"),
+                () -> assertTrue(resultB.isExact(0, 0),
+                        "The FComplex B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 }

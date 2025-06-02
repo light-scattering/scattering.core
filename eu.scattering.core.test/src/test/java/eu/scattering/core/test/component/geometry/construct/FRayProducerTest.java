@@ -20,15 +20,15 @@ public class FRayProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FRayProducer producer = factory.getFRayProducer().setPresetEmpty();
+        FRayProducer producer = factory.getFRayProducer();
 
         FRay resultA = producer.produce();
         FRay resultB = producer.produce();
 
         Assertions.assertAll("Validate FRay values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FRay A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FRay B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -71,7 +71,7 @@ public class FRayProducerTest {
         FRayProducer producer = factory.getFRayProducer();
 
         producer
-                .addConfig((fRay) -> fRay.set(
+                .setConfig((fRay) -> fRay.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fRay) -> fRay.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -99,7 +99,7 @@ public class FRayProducerTest {
     @Test
     @DisplayName("Preset unit X")
     void presetUnitX() {
-        FRayProducer producer = factory.getFRayProducer().setPresetUnitX();
+        FRayProducer producer = factory.getFRayProducer().setPresetOX();
 
         FRay resultA = producer.produce();
         FRay resultB = producer.produce();
@@ -115,7 +115,7 @@ public class FRayProducerTest {
     @Test
     @DisplayName("Preset unit Y")
     void presetUnitY() {
-        FRayProducer producer = factory.getFRayProducer().setPresetUnitY();
+        FRayProducer producer = factory.getFRayProducer().setPresetOY();
 
         FRay resultA = producer.produce();
         FRay resultB = producer.produce();
@@ -131,7 +131,7 @@ public class FRayProducerTest {
     @Test
     @DisplayName("Preset unit Z")
     void presetUnitZ() {
-        FRayProducer producer = factory.getFRayProducer().setPresetUnitZ();
+        FRayProducer producer = factory.getFRayProducer().setPresetOZ();
 
         FRay resultA = producer.produce();
         FRay resultB = producer.produce();

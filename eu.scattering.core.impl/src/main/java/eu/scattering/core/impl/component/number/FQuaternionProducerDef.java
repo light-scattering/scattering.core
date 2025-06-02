@@ -21,6 +21,8 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetDefault();
     }
 
     public static FQuaternionProducer create(FQuaternionFactory factory, FRandGenerator random) {
@@ -29,9 +31,9 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     }
 
     @Override
-    public FQuaternionProducer setConfig(Function<FQuaternion, FQuaternion> function) {
+    public FQuaternionProducer setConfig(Function<FQuaternion, FQuaternion> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FQuaternionProducer setPresetEmpty() {
+    public FQuaternionProducer setPresetDefault() {
         Function<FQuaternion, FQuaternion> function = (fQuaternion) -> fQuaternion;
 
         setConfig(function);

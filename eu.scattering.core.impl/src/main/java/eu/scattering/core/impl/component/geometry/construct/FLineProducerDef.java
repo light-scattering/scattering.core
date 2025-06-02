@@ -22,6 +22,8 @@ public class FLineProducerDef implements FLineProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetOX();
     }
 
     public static FLineProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -30,9 +32,9 @@ public class FLineProducerDef implements FLineProducer {
     }
 
     @Override
-    public FLineProducer setConfig(Function<FLine, FLine> function) {
+    public FLineProducer setConfig(Function<FLine, FLine> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -50,16 +52,7 @@ public class FLineProducerDef implements FLineProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FLineProducer setPresetEmpty() {
-        Function<FLine, FLine> function = (fLine) -> fLine;
-
-        setConfig(function);
-
-        return this;
-    }
-
-    @Override
-    public FLineProducer setPresetUnitX() {
+    public FLineProducer setPresetOX() {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().setX(1);
 
@@ -72,7 +65,7 @@ public class FLineProducerDef implements FLineProducer {
     }
 
     @Override
-    public FLineProducer setPresetUnitY() {
+    public FLineProducer setPresetOY() {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().setY(1);
 
@@ -85,7 +78,7 @@ public class FLineProducerDef implements FLineProducer {
     }
 
     @Override
-    public FLineProducer setPresetUnitZ() {
+    public FLineProducer setPresetOZ() {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().setZ(1);
 

@@ -21,9 +21,14 @@ public class ProducerCoreDef<P, E>  {
     }
 
     public P setConfig(Function<E, E> function) {
+
+        return setConfig(function, 1);
+    }
+
+    public P setConfig(Function<E, E> function, double probability) {
         config.clear();
 
-        config.add(new AbstractMap.SimpleEntry<>(1.0, function));
+        config.add(new AbstractMap.SimpleEntry<>(probability, function));
 
         return self;
     }

@@ -23,6 +23,8 @@ public class FVectorProducerDef implements FVectorProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetUnitX();
     }
 
     public static FVectorProducer create(FVectorFactory factory, FRandGenerator random) {
@@ -31,9 +33,9 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
-    public FVectorProducer setConfig(Function<FVector, FVector> function) {
+    public FVectorProducer setConfig(Function<FVector, FVector> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -49,15 +51,6 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public FVectorProducer setPresetEmpty() {
-        Function<FVector, FVector> function = (fVector) -> fVector;
-
-        setConfig(function);
-
-        return this;
-    }
 
     @Override
     public FVectorProducer setPresetUnitX() {

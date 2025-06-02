@@ -22,6 +22,8 @@ public class FPointProducerDef implements FPointProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetDefault();
     }
 
     public static FPointProducer create(FPointFactory factory, FRandGenerator random) {
@@ -30,9 +32,9 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer setConfig(Function<FPoint, FPoint> function) {
+    public FPointProducer setConfig(Function<FPoint, FPoint> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class FPointProducerDef implements FPointProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FPointProducer setPresetEmpty() {
+    public FPointProducer setPresetDefault() {
         Function<FPoint, FPoint> function = (fPoint) -> fPoint;
 
         setConfig(function);

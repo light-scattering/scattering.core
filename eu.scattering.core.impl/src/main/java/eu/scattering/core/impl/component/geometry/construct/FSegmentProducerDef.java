@@ -22,6 +22,8 @@ public class FSegmentProducerDef implements FSegmentProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetUnitOX();
     }
 
     public static FSegmentProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -30,9 +32,9 @@ public class FSegmentProducerDef implements FSegmentProducer {
     }
 
     @Override
-    public FSegmentProducer setConfig(Function<FSegment, FSegment> function) {
+    public FSegmentProducer setConfig(Function<FSegment, FSegment> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -50,16 +52,7 @@ public class FSegmentProducerDef implements FSegmentProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSegmentProducer setPresetEmpty() {
-        Function<FSegment, FSegment> function = (fSegment) -> fSegment;
-
-        setConfig(function);
-
-        return this;
-    }
-
-    @Override
-    public FSegmentProducer setPresetUnitX() {
+    public FSegmentProducer setPresetUnitOX() {
         Function<FSegment, FSegment> function = (fSegment) -> {
             fSegment.getRefOrigin().getRefHead().setX(1);
 
@@ -72,7 +65,7 @@ public class FSegmentProducerDef implements FSegmentProducer {
     }
 
     @Override
-    public FSegmentProducer setPresetUnitY() {
+    public FSegmentProducer setPresetUnitOY() {
         Function<FSegment, FSegment> function = (fSegment) -> {
             fSegment.getRefOrigin().getRefHead().setY(1);
 
@@ -85,7 +78,7 @@ public class FSegmentProducerDef implements FSegmentProducer {
     }
 
     @Override
-    public FSegmentProducer setPresetUnitZ() {
+    public FSegmentProducer setPresetUnitOZ() {
         Function<FSegment, FSegment> function = (fSegment) -> {
             fSegment.getRefOrigin().getRefHead().setZ(1);
 

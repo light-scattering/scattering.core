@@ -20,8 +20,8 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     private final GeometryFactory factorySelf;
 
-    private final Collection<T> elements = new ArrayList<>();
-    private final Collection<FPoint> units = new ArrayList<>();
+    private final Collection<T> geometries = new ArrayList<>();
+    private final Collection<FPoint> fPoints = new ArrayList<>();
 
     private FAssemblyDef(GeometryFactory factorySelf) {
 
@@ -30,13 +30,18 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf) {
 
-        return new FAssemblyDef<T>(factorySelf);
+        return new FAssemblyDef<>(factorySelf);
+    }
+
+    protected static boolean isParsable(String tag) {
+
+        return tag.equals(JSON_MAIN);
     }
 
     @Override
-    public Collection<FPoint> toFPoints() {
+    public Collection<T> getGeometries() {
 
-        return this.units;
+        return this.geometries;
     }
 
     @Override
@@ -49,9 +54,9 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public void applyUnit(Consumer<FPoint> consumer) {
+    public void applyFPoint(Consumer<FPoint> consumer) {
 
-        for (FPoint fPoint : this.units) {
+        for (FPoint fPoint : this.fPoints) {
             consumer.accept(fPoint);
         }
     }
@@ -59,21 +64,21 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     @Override
     public void applyGeometry(Consumer<T> consumer) {
 
-        for (T geometry : this.elements) {
+        for (T geometry : this.geometries) {
             consumer.accept(geometry);
         }
     }
 
     private boolean registerGeometry(T candidate) {
 
-        return register(this.elements, candidate);
+        return register(this.geometries, candidate);
     }
 
     private boolean registerFPoints(T candidate) {
         boolean hasFPoint = false;
 
         for (FPoint fPoint : candidate.toFPoints()) {
-            if (register(this.units, fPoint)) {
+            if (register(this.fPoints, fPoint)) {
                 hasFPoint = true;
             }
         }
@@ -103,27 +108,34 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return false;
     }
 
-//------------------
-
-    @Override
-    public FAssembly<T> self() {
-
-        return this;
-    }
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isExact(FAssembly<T> arg) {
 
-        if (!(arg instanceof FAssembly<?>)) {
+        if (getGeometries().size() != arg.getGeometries().size()) {
             return false;
         }
 
-//        return this.elements.equals(arg.g);
+        Collection<T> geoCopy = new ArrayList<>(arg.getGeometries());
 
-        return false;
+        main:
+        for (T geoL : getGeometries()) {
+            for (T geoE : geoCopy) {
+                if (geoL.isExact(geoE)) {
+                    geoCopy.remove(geoE);
+                    continue main;
+                }
+            }
+
+            return false;
+        }
+
+        return geoCopy.isEmpty();
     }
 
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public boolean isExact(Geometry arg) {
 
         if (arg instanceof FAssembly) {
@@ -135,10 +147,30 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public boolean isSimilar(FAssembly<T> arg) {
-        return false;
+
+        if (getGeometries().size() != arg.getGeometries().size()) {
+            return false;
+        }
+
+        Collection<T> geoCopy = new ArrayList<>(arg.getGeometries());
+
+        main:
+        for (T geoL : getGeometries()) {
+            for (T geoE : geoCopy) {
+                if (geoL.isSimilar(geoE)) {
+                    geoCopy.remove(geoE);
+                    continue main;
+                }
+            }
+
+            return false;
+        }
+
+        return geoCopy.isEmpty();
     }
 
     @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public boolean isSimilar(Geometry arg) {
 
         if (arg instanceof FAssembly) {
@@ -149,23 +181,75 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public FAssembly<T> self() {
+
+        return this;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public FAssembly<T> copy() {
         FAssembly<T> copy = supplyFAssembly();
 
-        for (T element : this.elements) {
+        for (T element : this.geometries) {
             copy.register((T) element.copyGeometry());
         }
 
         return copy;
     }
 
-
-
     @Override
     public Geometry copyGeometry() {
 
         return copy();
+    }
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+
+        this.geometries.forEach(e -> json.append(JSON_VAL, e.toJSON()));
+
+        return json;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public int hashCode() {
+        int code = 0;
+
+        for (Geometry geo : getGeometries()) {
+            code += geo.hashCode();
+        }
+
+        return code;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (!(object instanceof Geometry)) {
+            return false;
+        }
+
+        return isExact((Geometry) object);
+    }
+
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public Collection<FPoint> toFPoints() {
+
+        return this.fPoints;
     }
 
     @Override
@@ -176,8 +260,8 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        this.elements.clear();
-        this.units.clear();
+        this.geometries.clear();
+        this.fPoints.clear();
 
         GeometryParser parser = factorySelf.getGeometryParser();
 
@@ -191,18 +275,6 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         }
 
         return this;
-    }
-
-
-    @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-
-        json.put(JSON_TYPE, JSON_MAIN);
-
-        this.elements.forEach(e -> json.append(JSON_VAL, e.toJSON()));
-
-        return json;
     }
 
     // -------------------------------------------------------------------------------------------------

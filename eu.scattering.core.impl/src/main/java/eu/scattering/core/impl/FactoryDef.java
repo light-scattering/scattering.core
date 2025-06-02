@@ -12,6 +12,7 @@ import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProduc
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
@@ -36,6 +37,7 @@ import eu.scattering.core.impl.component.geometry.base.FPointProducerDef;
 import eu.scattering.core.impl.component.geometry.base.FVectorProducerDef;
 import eu.scattering.core.impl.component.geometry.construct.*;
 import eu.scattering.core.impl.component.geometry.container.FAssemblyDef;
+import eu.scattering.core.impl.component.geometry.container.FAssemblyProducerDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereProducerDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
@@ -271,6 +273,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public <T extends Geometry> FAssemblyProducer<T> getFAssemblyProducer() {
+
+        return FAssemblyProducerDef.create(this);
+    }
 
     @Override
     public <T extends Geometry> FAssembly<T> getFAssembly() {

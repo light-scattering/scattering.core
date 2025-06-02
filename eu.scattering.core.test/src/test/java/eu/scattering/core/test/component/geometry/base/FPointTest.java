@@ -2496,7 +2496,6 @@ public class FPointTest {
             );
         }
 
-
         @Test
         @DisplayName("Copy (validate)")
         void copyValidate() {

@@ -20,7 +20,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FSphereProducer producer = factory.getFSphereProducer().setPresetEmpty();
+        FSphereProducer producer = factory.getFSphereProducer();
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -76,7 +76,7 @@ public class FSphereProducerTest {
         FSphereProducer producer = factory.getFSphereProducer();
 
         producer
-                .addConfig((fSphere) -> fSphere.setRadius(1), 0.25)
+                .setConfig((fSphere) -> fSphere.setRadius(1), 0.25)
                 .addConfig((fSphere) -> fSphere.setRadius(2), 0.75);
 
         int countA = 0;
@@ -97,6 +97,28 @@ public class FSphereProducerTest {
         Assertions.assertAll("Validate FSphere values",
                 () -> assertTrue(countFinalA < countFinalB,
                         "The distribution is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset default")
+    void presetDefault() {
+        FSphereProducer producer = factory.getFSphereProducer().setPresetDefault();
+
+        FSphere resultA = producer.produce();
+        FSphere resultB = producer.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertTrue(resultA.getRefCenter().isExact(0, 0, 0),
+                        "The FSphere A center position is erroneous"),
+                () -> assertTrue(resultB.getRefCenter().isExact(0, 0, 0),
+                        "The FSphere B value is erroneous"),
+                () -> assertEquals(1, resultA.getRadius(),
+                        epsilon, "The Sphere A radius is erroneous"),
+                () -> assertEquals(1, resultB.getRadius(),
+                        epsilon, "The Sphere B radius is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 

@@ -20,15 +20,15 @@ public class FDraftProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FDraftProducer producer = factory.getFDraftProducer().setPresetEmpty();
+        FDraftProducer producer = factory.getFDraftProducer();
 
         FDraft resultA = producer.produce();
         FDraft resultB = producer.produce();
 
         Assertions.assertAll("Validate FDraft values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FDraft A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FDraft B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -71,7 +71,7 @@ public class FDraftProducerTest {
         FDraftProducer producer = factory.getFDraftProducer();
 
         producer
-                .addConfig((fDraft) -> fDraft.set(
+                .setConfig((fDraft) -> fDraft.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fDraft) -> fDraft.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);

@@ -21,15 +21,15 @@ public class FSegmentProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetEmpty();
+        FSegmentProducer producer = factory.getFSegmentProducer();
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();
 
         Assertions.assertAll("Validate FSegment values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FSegment A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FSegment B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -72,7 +72,7 @@ public class FSegmentProducerTest {
         FSegmentProducer producer = factory.getFSegmentProducer();
 
         producer
-                .addConfig((fSegment) -> fSegment.set(
+                .setConfig((fSegment) -> fSegment.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fSegment) -> fSegment.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -100,7 +100,7 @@ public class FSegmentProducerTest {
     @Test
     @DisplayName("Preset unit X")
     void presetUnitX() {
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitX();
+        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitOX();
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();
@@ -116,7 +116,7 @@ public class FSegmentProducerTest {
     @Test
     @DisplayName("Preset unit Y")
     void presetUnitY() {
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitY();
+        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitOY();
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();
@@ -132,7 +132,7 @@ public class FSegmentProducerTest {
     @Test
     @DisplayName("Preset unit Z")
     void presetUnitZ() {
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitZ();
+        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitOZ();
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();

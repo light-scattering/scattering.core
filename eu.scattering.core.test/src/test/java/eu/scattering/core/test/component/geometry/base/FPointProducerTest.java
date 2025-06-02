@@ -20,7 +20,7 @@ public class FPointProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FPointProducer producer = factory.getFPointProducer().setPresetEmpty();
+        FPointProducer producer = factory.getFPointProducer();
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -68,7 +68,7 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer();
 
         producer
-                .addConfig((fPoint) -> fPoint.setX(1), 0.25)
+                .setConfig((fPoint) -> fPoint.setX(1), 0.25)
                 .addConfig((fPoint) -> fPoint.setX(2), 0.75);
 
         int countA = 0;
@@ -89,6 +89,24 @@ public class FPointProducerTest {
         Assertions.assertAll("Validate FPoint values",
                 () -> assertTrue(countFinalA < countFinalB,
                         "The distribution is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset default")
+    void presetDefault() {
+        FPointProducer producer = factory.getFPointProducer().setPresetDefault();
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(resultA.isExact(0, 0, 0),
+                        "The FPoint A value is erroneous"),
+                () -> assertTrue(resultB.isExact(0, 0, 0),
+                        "The FPoint B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 

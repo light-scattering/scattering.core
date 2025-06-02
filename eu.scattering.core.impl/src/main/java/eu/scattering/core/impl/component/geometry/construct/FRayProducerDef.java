@@ -22,6 +22,8 @@ public class FRayProducerDef implements FRayProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetOX();
     }
 
     public static FRayProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -30,9 +32,9 @@ public class FRayProducerDef implements FRayProducer {
     }
 
     @Override
-    public FRayProducer setConfig(Function<FRay, FRay> function) {
+    public FRayProducer setConfig(Function<FRay, FRay> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -50,16 +52,7 @@ public class FRayProducerDef implements FRayProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FRayProducer setPresetEmpty() {
-        Function<FRay, FRay> function = (fRay) -> fRay;
-
-        setConfig(function);
-
-        return this;
-    }
-
-    @Override
-    public FRayProducer setPresetUnitX() {
+    public FRayProducer setPresetOX() {
         Function<FRay, FRay> function = (fRay) -> {
             fRay.getRefOrigin().getRefHead().setX(1);
 
@@ -72,7 +65,7 @@ public class FRayProducerDef implements FRayProducer {
     }
 
     @Override
-    public FRayProducer setPresetUnitY() {
+    public FRayProducer setPresetOY() {
         Function<FRay, FRay> function = (fRay) -> {
             fRay.getRefOrigin().getRefHead().setY(1);
 
@@ -85,7 +78,7 @@ public class FRayProducerDef implements FRayProducer {
     }
 
     @Override
-    public FRayProducer setPresetUnitZ() {
+    public FRayProducer setPresetOZ() {
         Function<FRay, FRay> function = (fRay) -> {
             fRay.getRefOrigin().getRefHead().setZ(1);
 

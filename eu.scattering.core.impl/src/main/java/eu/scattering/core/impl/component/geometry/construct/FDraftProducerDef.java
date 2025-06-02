@@ -21,6 +21,8 @@ public class FDraftProducerDef implements FDraftProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetUnitX();
     }
 
     public static FDraftProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -29,9 +31,9 @@ public class FDraftProducerDef implements FDraftProducer {
     }
 
     @Override
-    public FDraftProducer setConfig(Function<FDraft, FDraft> function) {
+    public FDraftProducer setConfig(Function<FDraft, FDraft> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -47,15 +49,6 @@ public class FDraftProducerDef implements FDraftProducer {
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public FDraftProducer setPresetEmpty() {
-        Function<FDraft, FDraft> function = (fDraft) -> fDraft;
-
-        setConfig(function);
-
-        return this;
-    }
 
     @Override
     public FDraftProducer setPresetUnitX() {

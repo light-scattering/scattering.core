@@ -9,6 +9,7 @@ import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import org.json.JSONObject;
@@ -201,13 +202,51 @@ public class GeometryParserTest {
     }
 
     @Test
+    @DisplayName("Parse FAssembly")
+    void parseFAssembly() {
+        GeometryParser parser = factory.getGeometryParser();
+
+        FAssembly<Geometry> fAssembly = factory.getFAssembly();
+
+        FPoint fPoint = factory.getFPoint(1, 2, 3);
+        FVector fVector = factory.getFVector(4, 5, 6, 7, 8, 9);
+        FDraft fDraft = factory.getFDraft();
+        FLine fLine = factory.getRefFLine(factory.getFVector(-1, -2, -3, -4, -5, -6));
+        FPlane fPlane = factory.getRefFPlane(factory.getFVector(-6, -5, -4, -3, -2, -1));
+        FRay fRay = factory.getRefFRay(factory.getFVector(1, -2, 3, -4, 5, -6));
+        FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 2, -3, 4, -5, 6));
+        FSphere fSphere = factory.getFSphere(2);
+
+        fAssembly.register(fPoint);
+        fAssembly.register(fVector);
+        fAssembly.register(fDraft);
+        fAssembly.register(fLine);
+        fAssembly.register(fPlane);
+        fAssembly.register(fRay);
+        fAssembly.register(fSegment);
+        fAssembly.register(fSphere);
+
+        JSONObject fAssemblyJSON = fAssembly.toJSON();
+
+        Geometry fAssemblyParsed = parser.parse(fAssemblyJSON);
+
+        Assertions.assertAll("Validate parser results",
+                () -> assertTrue(fAssemblyParsed instanceof FAssembly,
+                        "The element type is erroneous"),
+                () -> assertEquals(fAssembly, fAssemblyParsed,
+                        "Elements should be equal"),
+                () -> assertNotSame(fAssembly, fAssemblyParsed,
+                        "Elements should not be the same object")
+        );
+    }
+
+    @Test
     @DisplayName("Parse (exception)")
     void parseException() {
         GeometryParser parser = factory.getGeometryParser();
 
         FComplex fComplex = factory.getFComplex(1, 2);
         JSONObject fComplexJSON = fComplex.toJSON();
-
 
         assertThrows(IllegalArgumentException.class, () -> parser.parse(fComplexJSON),
                 "The element should not be parsable");

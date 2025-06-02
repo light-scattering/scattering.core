@@ -20,15 +20,15 @@ public class FLineProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FLineProducer producer = factory.getFLineProducer().setPresetEmpty();
+        FLineProducer producer = factory.getFLineProducer();
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();
 
         Assertions.assertAll("Validate FLine values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FLine A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FLine B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -71,7 +71,7 @@ public class FLineProducerTest {
         FLineProducer producer = factory.getFLineProducer();
 
         producer
-                .addConfig((fLine) -> fLine.set(
+                .setConfig((fLine) -> fLine.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fLine) -> fLine.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -96,10 +96,11 @@ public class FLineProducerTest {
                         "The distribution is erroneous")
         );
     }
+
     @Test
     @DisplayName("Preset unit X")
     void presetUnitX() {
-        FLineProducer producer = factory.getFLineProducer().setPresetUnitX();
+        FLineProducer producer = factory.getFLineProducer().setPresetOX();
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();
@@ -115,7 +116,7 @@ public class FLineProducerTest {
     @Test
     @DisplayName("Preset unit Y")
     void presetUnitY() {
-        FLineProducer producer = factory.getFLineProducer().setPresetUnitY();
+        FLineProducer producer = factory.getFLineProducer().setPresetOY();
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();
@@ -131,7 +132,7 @@ public class FLineProducerTest {
     @Test
     @DisplayName("Preset unit Z")
     void presetUnitZ() {
-        FLineProducer producer = factory.getFLineProducer().setPresetUnitZ();
+        FLineProducer producer = factory.getFLineProducer().setPresetOZ();
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();

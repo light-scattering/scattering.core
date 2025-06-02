@@ -7,14 +7,12 @@ import java.util.function.Function;
 
 public interface FVectorProducer {
 
-    FVectorProducer setConfig(Function<FVector, FVector> function);
+    FVectorProducer setConfig(Function<FVector, FVector> function, double probability);
     FVectorProducer addConfig(Function<FVector, FVector> function, double probability);
 
     FVector produce();
 
     // -------------------------------------------------------------------------------------------------
-
-    FVectorProducer setPresetEmpty();
 
     FVectorProducer setPresetUnitX();
     FVectorProducer setPresetUnitY();
@@ -24,4 +22,11 @@ public interface FVectorProducer {
 
     FVectorProducer setPresetInSphere(FPos3D base, double radius);
     FVectorProducer setPresetOnSphere(FPos3D base, double radius);
+
+    // -------------------------------------------------------------------------------------------------
+
+    default FVectorProducer setConfig(Function<FVector, FVector> function) {
+
+        return setConfig(function, 1);
+    }
 }

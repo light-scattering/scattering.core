@@ -22,6 +22,8 @@ public class FPlaneProducerDef implements FPlaneProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetDirX();
     }
 
     public static FPlaneProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -30,9 +32,9 @@ public class FPlaneProducerDef implements FPlaneProducer {
     }
 
     @Override
-    public FPlaneProducer setConfig(Function<FPlane, FPlane> function) {
+    public FPlaneProducer setConfig(Function<FPlane, FPlane> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -50,16 +52,7 @@ public class FPlaneProducerDef implements FPlaneProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FPlaneProducer setPresetEmpty() {
-        Function<FPlane, FPlane> function = (fPlane) -> fPlane;
-
-        setConfig(function);
-
-        return this;
-    }
-
-    @Override
-    public FPlaneProducer setPresetUnitX() {
+    public FPlaneProducer setPresetDirX() {
         Function<FPlane, FPlane> function = (fPlane) -> {
             fPlane.getRefOrigin().getRefHead().setX(1);
 
@@ -72,7 +65,7 @@ public class FPlaneProducerDef implements FPlaneProducer {
     }
 
     @Override
-    public FPlaneProducer setPresetUnitY() {
+    public FPlaneProducer setPresetDirY() {
         Function<FPlane, FPlane> function = (fPlane) -> {
             fPlane.getRefOrigin().getRefHead().setY(1);
 
@@ -85,7 +78,7 @@ public class FPlaneProducerDef implements FPlaneProducer {
     }
 
     @Override
-    public FPlaneProducer setPresetUnitZ() {
+    public FPlaneProducer setPresetDirZ() {
         Function<FPlane, FPlane> function = (fPlane) -> {
             fPlane.getRefOrigin().getRefHead().setZ(1);
 

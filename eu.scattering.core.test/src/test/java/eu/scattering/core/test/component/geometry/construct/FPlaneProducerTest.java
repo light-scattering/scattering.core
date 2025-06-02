@@ -20,15 +20,15 @@ public class FPlaneProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetEmpty();
+        FPlaneProducer producer = factory.getFPlaneProducer();
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();
 
         Assertions.assertAll("Validate FPlane values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FPlane A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
                         "The FPlane B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -71,7 +71,7 @@ public class FPlaneProducerTest {
         FPlaneProducer producer = factory.getFPlaneProducer();
 
         producer
-                .addConfig((fPlane) -> fPlane.set(
+                .setConfig((fPlane) -> fPlane.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fPlane) -> fPlane.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -99,7 +99,7 @@ public class FPlaneProducerTest {
     @Test
     @DisplayName("Preset unit X")
     void presetUnitX() {
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetUnitX();
+        FPlaneProducer producer = factory.getFPlaneProducer().setPresetDirX();
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();
@@ -115,7 +115,7 @@ public class FPlaneProducerTest {
     @Test
     @DisplayName("Preset unit Y")
     void presetUnitY() {
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetUnitY();
+        FPlaneProducer producer = factory.getFPlaneProducer().setPresetDirY();
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();
@@ -131,7 +131,7 @@ public class FPlaneProducerTest {
     @Test
     @DisplayName("Preset unit Z")
     void presetUnitZ() {
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetUnitZ();
+        FPlaneProducer producer = factory.getFPlaneProducer().setPresetDirZ();
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();

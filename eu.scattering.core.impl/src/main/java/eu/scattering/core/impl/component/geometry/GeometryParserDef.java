@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.impl.component.geometry.base.FPointParserDef;
 import eu.scattering.core.impl.component.geometry.base.FVectorParserDef;
 import eu.scattering.core.impl.component.geometry.construct.*;
+import eu.scattering.core.impl.component.geometry.container.FAssemblyParserDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereParserDef;
 import org.json.JSONObject;
 
@@ -25,8 +26,9 @@ public class GeometryParserDef implements GeometryParser{
         GeometryParser fSegmentParser = FSegmentParserDef.create(factory, fRayParser);
         GeometryParser fDraftParser = FDraftParserDef.create(factory, fSegmentParser);
         GeometryParser fSphereParser = FSphereParserDef.create(factory, fDraftParser);
+        GeometryParser fAssemblyParser = FAssemblyParserDef.create(factory, fSphereParser);
 
-        this.init = fSphereParser;
+        this.init = fAssemblyParser;
     }
 
     public static GeometryParser get(GeometryFactory factory) {

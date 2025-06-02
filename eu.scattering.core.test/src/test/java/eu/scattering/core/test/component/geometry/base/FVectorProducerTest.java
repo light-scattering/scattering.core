@@ -22,15 +22,15 @@ public class FVectorProducerTest {
     @Test
     @DisplayName("Produce empty")
     void produceEmpty() {
-        FVectorProducer producer = factory.getFVectorProducer().setPresetEmpty();
+        FVectorProducer producer = factory.getFVectorProducer();
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
 
         Assertions.assertAll("Validate FVector values",
-                () -> assertTrue(resultA.isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultA.isExact(0, 0, 0, 1, 0, 0),
                         "The FVector A value is erroneous"),
-                () -> assertTrue(resultB.isExact(0, 0, 0, 0, 0, 0),
+                () -> assertTrue(resultB.isExact(0, 0, 0, 1, 0, 0),
                         "The FVector B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -70,7 +70,7 @@ public class FVectorProducerTest {
         FVectorProducer producer = factory.getFVectorProducer();
 
         producer
-                .addConfig((fVector) -> fVector.setHeadX(1), 0.25)
+                .setConfig((fVector) -> fVector.setHeadX(1), 0.25)
                 .addConfig((fVector) -> fVector.setHeadX(2), 0.75);
 
         int countA = 0;

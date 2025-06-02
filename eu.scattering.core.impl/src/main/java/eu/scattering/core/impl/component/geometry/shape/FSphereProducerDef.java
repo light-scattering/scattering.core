@@ -21,6 +21,8 @@ public class FSphereProducerDef implements FSphereProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
+
+        setPresetDefault();
     }
 
     public static FSphereProducer create(FSphereFactory factory, FRandGenerator random) {
@@ -29,9 +31,9 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer setConfig(Function<FSphere, FSphere> function) {
+    public FSphereProducer setConfig(Function<FSphere, FSphere> function, double probability) {
 
-        return core.setConfig(function);
+        return core.setConfig(function, probability);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class FSphereProducerDef implements FSphereProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSphereProducer setPresetEmpty() {
+    public FSphereProducer setPresetDefault() {
         Function<FSphere, FSphere> function = (fSphere) -> fSphere;
 
         setConfig(function);
