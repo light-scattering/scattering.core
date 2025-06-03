@@ -20,6 +20,11 @@ public class ProducerCoreDef<P, E>  {
         this.config = new ArrayList<>();
     }
 
+    public int getSize() {
+
+        return this.config.size();
+    }
+
     public P setConfig(Function<E, E> function) {
 
         return setConfig(function, 1);

@@ -5,7 +5,6 @@ import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
@@ -22,8 +21,6 @@ public class FSegmentProducerDef implements FSegmentProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
-
-        setPresetUnitOX();
     }
 
     public static FSegmentProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -32,9 +29,9 @@ public class FSegmentProducerDef implements FSegmentProducer {
     }
 
     @Override
-    public FSegmentProducer setConfig(Function<FSegment, FSegment> function, double probability) {
+    public void setConfig(Function<FSegment, FSegment> function) {
 
-        return core.setConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -46,13 +43,17 @@ public class FSegmentProducerDef implements FSegmentProducer {
     @Override
     public FSegment produce() {
 
+        if (core.getSize() == 0) {
+            throw new IllegalStateException("The producer is not configured");
+        }
+
         return core.getFunction().apply(factory.getFSegment());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSegmentProducer setPresetUnitOX() {
+    public void setPresetUnitOX() {
         Function<FSegment, FSegment> function = (fSegment) -> {
             fSegment.getRefOrigin().getRefHead().setX(1);
 
@@ -60,12 +61,23 @@ public class FSegmentProducerDef implements FSegmentProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FSegmentProducer addPresetUnitOX(double probability) {
+        Function<FSegment, FSegment> function = (fSegment) -> {
+            fSegment.getRefOrigin().getRefHead().setX(1);
+
+            return fSegment;
+        };
+
+        addConfig(function, 1);
 
         return this;
     }
 
     @Override
-    public FSegmentProducer setPresetUnitOY() {
+    public void setPresetUnitOY() {
         Function<FSegment, FSegment> function = (fSegment) -> {
             fSegment.getRefOrigin().getRefHead().setY(1);
 
@@ -73,12 +85,23 @@ public class FSegmentProducerDef implements FSegmentProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FSegmentProducer addPresetUnitOY(double probability) {
+        Function<FSegment, FSegment> function = (fSegment) -> {
+            fSegment.getRefOrigin().getRefHead().setY(1);
+
+            return fSegment;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FSegmentProducer setPresetUnitOZ() {
+    public void setPresetUnitOZ() {
         Function<FSegment, FSegment> function = (fSegment) -> {
             fSegment.getRefOrigin().getRefHead().setZ(1);
 
@@ -86,21 +109,17 @@ public class FSegmentProducerDef implements FSegmentProducer {
         };
 
         setConfig(function);
-
-        return this;
     }
 
     @Override
-    public FSegmentProducer setPresetFixedPoint(FPos3D point, double length) {
-        Function<FSegment, FSegment> function = (fRay) -> {
-            fRay.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(length));
-            fRay.getRefOrigin().moveBase(point);
-            fRay.getRefOrigin().shiftBackward(random.nextDouble(0, length));
+    public FSegmentProducer addPresetUnitOZ(double probability) {
+        Function<FSegment, FSegment> function = (fSegment) -> {
+            fSegment.getRefOrigin().getRefHead().setZ(1);
 
-            return fRay;
+            return fSegment;
         };
 
-        setConfig(function);
+        addConfig(function, probability);
 
         return this;
     }

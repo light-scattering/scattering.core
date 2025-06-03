@@ -30,16 +30,9 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
         return new FQuaternionProducerDef(factory, random);
     }
 
-    @Override
-    public FQuaternionProducer setConfig(Function<FQuaternion, FQuaternion> function, double probability) {
+    private void setConfig(Function<FQuaternion, FQuaternion> function) {
 
-        return core.setConfig(function, probability);
-    }
-
-    @Override
-    public FQuaternionProducer addConfig(Function<FQuaternion, FQuaternion> function, double probability) {
-
-        return core.addConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -50,12 +43,9 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
 
     // -------------------------------------------------------------------------------------------------
 
-    @Override
-    public FQuaternionProducer setPresetDefault() {
+    private void setPresetDefault() {
         Function<FQuaternion, FQuaternion> function = (fQuaternion) -> fQuaternion;
 
         setConfig(function);
-
-        return this;
     }
 }

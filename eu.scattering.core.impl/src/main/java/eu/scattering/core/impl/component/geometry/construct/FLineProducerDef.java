@@ -22,8 +22,6 @@ public class FLineProducerDef implements FLineProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
-
-        setPresetOX();
     }
 
     public static FLineProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -32,9 +30,9 @@ public class FLineProducerDef implements FLineProducer {
     }
 
     @Override
-    public FLineProducer setConfig(Function<FLine, FLine> function, double probability) {
+    public void setConfig(Function<FLine, FLine> function) {
 
-        return core.setConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -46,13 +44,17 @@ public class FLineProducerDef implements FLineProducer {
     @Override
     public FLine produce() {
 
+        if (core.getSize() == 0) {
+            throw new IllegalStateException("The producer is not configured");
+        }
+
         return core.getFunction().apply(factory.getFLine());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FLineProducer setPresetOX() {
+    public void setPresetOX() {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().setX(1);
 
@@ -60,12 +62,23 @@ public class FLineProducerDef implements FLineProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FLineProducer addPresetOX(double probability) {
+        Function<FLine, FLine> function = (fLine) -> {
+            fLine.getRefOrigin().getRefHead().setX(1);
+
+            return fLine;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FLineProducer setPresetOY() {
+    public void setPresetOY() {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().setY(1);
 
@@ -73,12 +86,23 @@ public class FLineProducerDef implements FLineProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FLineProducer addPresetOY(double probability) {
+        Function<FLine, FLine> function = (fLine) -> {
+            fLine.getRefOrigin().getRefHead().setY(1);
+
+            return fLine;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FLineProducer setPresetOZ() {
+    public void setPresetOZ() {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().setZ(1);
 
@@ -86,12 +110,23 @@ public class FLineProducerDef implements FLineProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FLineProducer addPresetOZ(double probability) {
+        Function<FLine, FLine> function = (fLine) -> {
+            fLine.getRefOrigin().getRefHead().setZ(1);
+
+            return fLine;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FLineProducer setPresetFixedPoint(FPos3D point) {
+    public void setPresetFixedPoint(FPos3D point) {
         Function<FLine, FLine> function = (fLine) -> {
             fLine.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
             fLine.getRefOrigin().moveBase(point);
@@ -100,6 +135,18 @@ public class FLineProducerDef implements FLineProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FLineProducer addPresetFixedPoint(FPos3D point, double probability) {
+        Function<FLine, FLine> function = (fLine) -> {
+            fLine.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
+            fLine.getRefOrigin().moveBase(point);
+
+            return fLine;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }

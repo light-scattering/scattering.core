@@ -1,32 +1,33 @@
 package eu.scattering.core.design.component.geometry.base.vector;
 
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
 public interface FVectorProducer {
 
-    FVectorProducer setConfig(Function<FVector, FVector> function, double probability);
+    void setConfig(Function<FVector, FVector> function);
     FVectorProducer addConfig(Function<FVector, FVector> function, double probability);
 
     FVector produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FVectorProducer setPresetUnitX();
-    FVectorProducer setPresetUnitY();
-    FVectorProducer setPresetUnitZ();
+    void setPresetUnitX();
+    FVectorProducer addPresetUnitX(double probability);
 
-    FVectorProducer setPresetInRange(FPos3D base, FPairPos3D range);
+    void setPresetUnitY();
+    FVectorProducer addPresetUnitY(double probability);
 
-    FVectorProducer setPresetInSphere(FPos3D base, double radius);
-    FVectorProducer setPresetOnSphere(FPos3D base, double radius);
+    void setPresetUnitZ();
+    FVectorProducer addPresetUnitZ(double probability);
 
-    // -------------------------------------------------------------------------------------------------
+    void setPresetInSphere(double radius);
+    FVectorProducer addPresetInSphere(double radius, double probability);
 
-    default FVectorProducer setConfig(Function<FVector, FVector> function) {
+    void setPresetOnSphere(double radius);
+    FVectorProducer addPresetOnSphere(double radius, double probability);
 
-        return setConfig(function, 1);
-    }
+    void setPresetRange(FPairPos3D range);
+    FVectorProducer addPresetInRange(FPairPos3D range, double probability);
 }

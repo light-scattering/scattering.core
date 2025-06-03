@@ -2,7 +2,6 @@ package eu.scattering.core.test.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Timeout;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,17 +21,8 @@ public class FSegmentProducerTest {
     void produceEmpty() {
         FSegmentProducer producer = factory.getFSegmentProducer();
 
-        FSegment resultA = producer.produce();
-        FSegment resultB = producer.produce();
-
-        Assertions.assertAll("Validate FSegment values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FSegment A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FSegment B value is erroneous"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
+        assertThrows(IllegalStateException.class, producer::produce,
+                "The producer should not be configured");
     }
 
     @Test
@@ -72,7 +61,7 @@ public class FSegmentProducerTest {
         FSegmentProducer producer = factory.getFSegmentProducer();
 
         producer
-                .setConfig((fSegment) -> fSegment.set(
+                .addConfig((fSegment) -> fSegment.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fSegment) -> fSegment.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -98,9 +87,10 @@ public class FSegmentProducerTest {
         );
     }
     @Test
-    @DisplayName("Preset unit X")
-    void presetUnitX() {
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitOX();
+    @DisplayName("Preset set unit X")
+    void presetSetUnitX() {
+        FSegmentProducer producer = factory.getFSegmentProducer();
+        producer.setPresetUnitOX();
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();
@@ -114,9 +104,26 @@ public class FSegmentProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Y")
-    void presetUnitY() {
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitOY();
+    @DisplayName("Preset add unit X")
+    void presetAddUnitX() {
+        FSegmentProducer producer = factory.getFSegmentProducer().addPresetUnitOX(1);
+
+        FSegment resultA = producer.produce();
+        FSegment resultB = producer.produce();
+
+        Assertions.assertAll("Validate FSegment values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Y")
+    void presetSetUnitY() {
+        FSegmentProducer producer = factory.getFSegmentProducer();
+        producer.setPresetUnitOY();
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();
@@ -130,9 +137,26 @@ public class FSegmentProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Z")
-    void presetUnitZ() {
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetUnitOZ();
+    @DisplayName("Preset add unit Y")
+    void presetAddUnitY() {
+        FSegmentProducer producer = factory.getFSegmentProducer().addPresetUnitOY(1);
+
+        FSegment resultA = producer.produce();
+        FSegment resultB = producer.produce();
+
+        Assertions.assertAll("Validate FSegment values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 1, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Z")
+    void presetSetUnitZ() {
+        FSegmentProducer producer = factory.getFSegmentProducer();
+        producer.setPresetUnitOZ();
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();
@@ -146,21 +170,16 @@ public class FSegmentProducerTest {
     }
 
     @Test
-    @DisplayName("Preset fixed point")
-    void presetFixedPoint() {
-        FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
-        FSegmentProducer producer = factory.getFSegmentProducer().setPresetFixedPoint(fPos3D, 5);
+    @DisplayName("Preset add unit Z")
+    void presetAddUnitZ() {
+        FSegmentProducer producer = factory.getFSegmentProducer().addPresetUnitOZ(1);
 
         FSegment resultA = producer.produce();
         FSegment resultB = producer.produce();
 
         Assertions.assertAll("Validate FSegment values",
-                () -> assertTrue(resultA.isPartOf(factory.getFPoint(1, 2, 3)),
-                        "The point should be a part of the FSegment"),
-                () -> assertEquals(5, resultA.getRefOrigin().getMagnitude(),
-                        epsilon, "The length of the FSegment is erroneous"),
-                () -> assertFalse(resultA.getRefOrigin().getRefBase().isExact(resultB.getRefOrigin().getRefBase()),
-                        "Base should have different values"),
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 1),
+                        "The value is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );

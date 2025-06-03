@@ -21,8 +21,6 @@ public class FDraftProducerDef implements FDraftProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
-
-        setPresetUnitX();
     }
 
     public static FDraftProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -31,9 +29,9 @@ public class FDraftProducerDef implements FDraftProducer {
     }
 
     @Override
-    public FDraftProducer setConfig(Function<FDraft, FDraft> function, double probability) {
+    public void setConfig(Function<FDraft, FDraft> function) {
 
-        return core.setConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -45,13 +43,17 @@ public class FDraftProducerDef implements FDraftProducer {
     @Override
     public FDraft produce() {
 
+        if (core.getSize() == 0) {
+            throw new IllegalStateException("The producer is not configured");
+        }
+
         return core.getFunction().apply(factory.getFDraft());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FDraftProducer setPresetUnitX() {
+    public void setPresetUnitX() {
         Function<FDraft, FDraft> function = (fDraft) -> {
             fDraft.getRefOrigin().getRefHead().setX(1);
 
@@ -59,12 +61,23 @@ public class FDraftProducerDef implements FDraftProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FDraftProducer addPresetUnitX(double probability) {
+        Function<FDraft, FDraft> function = (fDraft) -> {
+            fDraft.getRefOrigin().getRefHead().setX(1);
+
+            return fDraft;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FDraftProducer setPresetUnitY() {
+    public void setPresetUnitY() {
         Function<FDraft, FDraft> function = (fDraft) -> {
             fDraft.getRefOrigin().getRefHead().setY(1);
 
@@ -72,12 +85,23 @@ public class FDraftProducerDef implements FDraftProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FDraftProducer addPresetUnitY(double probability) {
+        Function<FDraft, FDraft> function = (fDraft) -> {
+            fDraft.getRefOrigin().getRefHead().setY(1);
+
+            return fDraft;
+        };
+
+        addConfig(function, 1);
 
         return this;
     }
 
     @Override
-    public FDraftProducer setPresetUnitZ() {
+    public void setPresetUnitZ() {
         Function<FDraft, FDraft> function = (fDraft) -> {
             fDraft.getRefOrigin().getRefHead().setZ(1);
 
@@ -85,6 +109,17 @@ public class FDraftProducerDef implements FDraftProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FDraftProducer addPresetUnitZ(double probability) {
+        Function<FDraft, FDraft> function = (fDraft) -> {
+            fDraft.getRefOrigin().getRefHead().setZ(1);
+
+            return fDraft;
+        };
+
+        addConfig(function, 1);
 
         return this;
     }

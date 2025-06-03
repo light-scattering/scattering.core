@@ -22,8 +22,6 @@ public class FPointProducerDef implements FPointProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
-
-        setPresetDefault();
     }
 
     public static FPointProducer create(FPointFactory factory, FRandGenerator random) {
@@ -32,9 +30,9 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer setConfig(Function<FPoint, FPoint> function, double probability) {
+    public void setConfig(Function<FPoint, FPoint> function) {
 
-        return core.setConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -46,43 +44,76 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPoint produce() {
 
+        if (core.getSize() == 0) {
+            throw new IllegalStateException("The producer is not configured");
+        }
+
+
         return core.getFunction().apply(factory.getFPoint());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FPointProducer setPresetDefault() {
+    public void setPresetZero() {
         Function<FPoint, FPoint> function = (fPoint) -> fPoint;
 
         setConfig(function);
+    }
+
+    @Override
+    public FPointProducer addPresetZero(double probability) {
+        Function<FPoint, FPoint> function = (fPoint) -> fPoint;
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FPointProducer setPresetInRange(FPairPos3D range) {
+    public void setPresetRange(FPairPos3D range) {
         Function<FPoint, FPoint> function = (fPoint) -> fPoint.applyStateFrom(random.nextDouble3D(range));
 
         setConfig(function);
+    }
+
+    @Override
+    public FPointProducer addPresetInRange(FPairPos3D range, double probability) {
+        Function<FPoint, FPoint> function = (fPoint) -> fPoint.applyStateFrom(random.nextDouble3D(range));
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FPointProducer setPresetInSphere(double radius) {
+    public void setPresetInSphere(double radius) {
         Function<FPoint, FPoint> function = (fPoint) -> fPoint.applyStateFrom(random.nextDoubleInSphere(radius));
 
         setConfig(function);
+    }
+
+    @Override
+    public FPointProducer addPresetInSphere(double radius, double probability) {
+        Function<FPoint, FPoint> function = (fPoint) -> fPoint.applyStateFrom(random.nextDoubleInSphere(radius));
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FPointProducer setPresetOnSphere(double radius) {
+    public void setPresetOnSphere(double radius) {
         Function<FPoint, FPoint> function = (fPoint) -> fPoint.applyStateFrom(random.nextDoubleOnSphere(radius));
 
         setConfig(function);
+    }
+
+    @Override
+    public FPointProducer addPresetOnSphere(double radius, double probability) {
+        Function<FPoint, FPoint> function = (fPoint) -> fPoint.applyStateFrom(random.nextDoubleOnSphere(radius));
+
+        addConfig(function, probability);
 
         return this;
     }

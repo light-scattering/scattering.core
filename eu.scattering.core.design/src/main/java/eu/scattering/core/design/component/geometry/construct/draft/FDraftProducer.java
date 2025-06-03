@@ -4,21 +4,19 @@ import java.util.function.Function;
 
 public interface FDraftProducer {
 
-    FDraftProducer setConfig(Function<FDraft, FDraft> function, double probability);
+    void setConfig(Function<FDraft, FDraft> function);
     FDraftProducer addConfig(Function<FDraft, FDraft> function, double probability);
 
     FDraft produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FDraftProducer setPresetUnitX();
-    FDraftProducer setPresetUnitY();
-    FDraftProducer setPresetUnitZ();
+    void setPresetUnitX();
+    FDraftProducer addPresetUnitX(double probability);
 
-    // -------------------------------------------------------------------------------------------------
+    void setPresetUnitY();
+    FDraftProducer addPresetUnitY(double probability);
 
-    default FDraftProducer setConfig(Function<FDraft, FDraft> function) {
-
-        return setConfig(function, 1);
-    }
+    void setPresetUnitZ();
+    FDraftProducer addPresetUnitZ(double probability);
 }

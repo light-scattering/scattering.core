@@ -6,7 +6,6 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
@@ -24,7 +23,7 @@ public class FVectorProducerDef implements FVectorProducer {
 
         this.core = new ProducerCoreDef<>(this, this.random);
 
-        setPresetUnitX();
+
     }
 
     public static FVectorProducer create(FVectorFactory factory, FRandGenerator random) {
@@ -33,9 +32,9 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
-    public FVectorProducer setConfig(Function<FVector, FVector> function, double probability) {
+    public void setConfig(Function<FVector, FVector> function) {
 
-        return core.setConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -47,76 +46,131 @@ public class FVectorProducerDef implements FVectorProducer {
     @Override
     public FVector produce() {
 
+        if (core.getSize() == 0) {
+            throw new IllegalStateException("The producer is not configured");
+        }
+
         return core.getFunction().apply(factory.getFVector());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FVectorProducer setPresetUnitX() {
+    public void setPresetUnitX() {
         Function<FVector, FVector> function = (fVector) -> fVector.setHeadX(1);
 
         setConfig(function);
+    }
+
+    @Override
+    public FVectorProducer addPresetUnitX(double probability) {
+        Function<FVector, FVector> function = (fVector) -> fVector.setHeadX(1);
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FVectorProducer setPresetUnitY() {
+    public void setPresetUnitY() {
         Function<FVector, FVector> function = (fVector) -> fVector.setHeadY(1);
 
         setConfig(function);
+    }
+
+    @Override
+    public FVectorProducer addPresetUnitY(double probability) {
+        Function<FVector, FVector> function = (fVector) -> fVector.setHeadY(1);
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FVectorProducer setPresetUnitZ() {
+    public void setPresetUnitZ() {
         Function<FVector, FVector> function = (fVector) -> fVector.setHeadZ(1);
 
         setConfig(function);
+    }
+
+    @Override
+    public FVectorProducer addPresetUnitZ(double probability) {
+        Function<FVector, FVector> function = (fVector) -> fVector.setHeadZ(1);
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FVectorProducer setPresetInRange(FPos3D base, FPairPos3D range) {
+    public void setPresetRange(FPairPos3D range) {
         Function<FVector, FVector> function = (fVector) -> {
             fVector.getRefHead().applyStateFrom(random.nextDouble3D(range));
-            fVector.moveBase(base);
 
             return fVector;
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FVectorProducer addPresetInRange(FPairPos3D range, double probability) {
+        Function<FVector, FVector> function = (fVector) -> {
+            fVector.getRefHead().applyStateFrom(random.nextDouble3D(range));
+
+            return fVector;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FVectorProducer setPresetInSphere(FPos3D base, double radius) {
+    public void setPresetInSphere(double radius) {
         Function<FVector, FVector> function = (fVector) -> {
             fVector.getRefHead().applyStateFrom(random.nextDoubleInSphere(radius));
-            fVector.moveBase(base);
 
             return fVector;
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FVectorProducer addPresetInSphere(double radius, double probability) {
+        Function<FVector, FVector> function = (fVector) -> {
+            fVector.getRefHead().applyStateFrom(random.nextDoubleInSphere(radius));
+
+            return fVector;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FVectorProducer setPresetOnSphere(FPos3D base, double radius) {
+    public void setPresetOnSphere(double radius) {
         Function<FVector, FVector> function = (fVector) -> {
             fVector.getRefHead().applyStateFrom(random.nextDoubleOnSphere(radius));
-            fVector.moveBase(base);
 
             return fVector;
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FVectorProducer addPresetOnSphere(double radius, double probability) {
+        Function<FVector, FVector> function = (fVector) -> {
+            fVector.getRefHead().applyStateFrom(random.nextDoubleOnSphere(radius));
+
+            return fVector;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }

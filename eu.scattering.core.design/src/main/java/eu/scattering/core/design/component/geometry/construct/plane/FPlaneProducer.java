@@ -6,23 +6,19 @@ import java.util.function.Function;
 
 public interface FPlaneProducer {
 
-    FPlaneProducer setConfig(Function<FPlane, FPlane> function, double probability);
+    void setConfig(Function<FPlane, FPlane> function);
     FPlaneProducer addConfig(Function<FPlane, FPlane> function, double probability);
 
     FPlane produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FPlaneProducer setPresetDirX();
-    FPlaneProducer setPresetDirY();
-    FPlaneProducer setPresetDirZ();
+    void setPresetDirX();
+    FPlaneProducer addPresetDirX(double probability);
 
-    FPlaneProducer setPresetFixedPoint(FPos3D point);
+    void setPresetDirY();
+    FPlaneProducer addPresetDirY(double probability);
 
-    // -------------------------------------------------------------------------------------------------
-
-    default FPlaneProducer setConfig(Function<FPlane, FPlane> function) {
-
-        return setConfig(function, 1);
-    }
+    void setPresetDirZ();
+    FPlaneProducer addPresetDirZ(double probability);
 }

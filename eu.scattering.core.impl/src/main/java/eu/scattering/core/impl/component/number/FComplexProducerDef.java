@@ -30,16 +30,9 @@ public class FComplexProducerDef implements FComplexProducer {
         return new FComplexProducerDef(factory, random);
     }
 
-    @Override
-    public FComplexProducer setConfig(Function<FComplex, FComplex> function, double probability) {
+    private void setConfig(Function<FComplex, FComplex> function) {
 
-        return core.setConfig(function, probability);
-    }
-
-    @Override
-    public FComplexProducer addConfig(Function<FComplex, FComplex> function, double probability) {
-
-        return core.addConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -50,12 +43,9 @@ public class FComplexProducerDef implements FComplexProducer {
 
     // -------------------------------------------------------------------------------------------------
 
-    @Override
-    public FComplexProducer setPresetDefault() {
+    private void setPresetDefault() {
         Function<FComplex, FComplex> function = (fComplex) -> fComplex;
 
         setConfig(function);
-
-        return this;
     }
 }

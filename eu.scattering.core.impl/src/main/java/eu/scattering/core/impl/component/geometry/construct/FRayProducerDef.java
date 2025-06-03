@@ -5,7 +5,6 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
@@ -22,8 +21,6 @@ public class FRayProducerDef implements FRayProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
-
-        setPresetOX();
     }
 
     public static FRayProducer create(ConstructFactory factory, FRandGenerator random) {
@@ -32,9 +29,9 @@ public class FRayProducerDef implements FRayProducer {
     }
 
     @Override
-    public FRayProducer setConfig(Function<FRay, FRay> function, double probability) {
+    public void setConfig(Function<FRay, FRay> function) {
 
-        return core.setConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -46,13 +43,17 @@ public class FRayProducerDef implements FRayProducer {
     @Override
     public FRay produce() {
 
+        if (core.getSize() == 0) {
+            throw new IllegalStateException("The producer is not configured");
+        }
+
         return core.getFunction().apply(factory.getFRay());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FRayProducer setPresetOX() {
+    public void setPresetOX() {
         Function<FRay, FRay> function = (fRay) -> {
             fRay.getRefOrigin().getRefHead().setX(1);
 
@@ -60,12 +61,23 @@ public class FRayProducerDef implements FRayProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FRayProducer addPresetOX(double probability) {
+        Function<FRay, FRay> function = (fRay) -> {
+            fRay.getRefOrigin().getRefHead().setX(1);
+
+            return fRay;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FRayProducer setPresetOY() {
+    public void setPresetOY() {
         Function<FRay, FRay> function = (fRay) -> {
             fRay.getRefOrigin().getRefHead().setY(1);
 
@@ -73,12 +85,23 @@ public class FRayProducerDef implements FRayProducer {
         };
 
         setConfig(function);
+    }
+
+    @Override
+    public FRayProducer addPresetOY(double probability) {
+        Function<FRay, FRay> function = (fRay) -> {
+            fRay.getRefOrigin().getRefHead().setY(1);
+
+            return fRay;
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FRayProducer setPresetOZ() {
+    public void setPresetOZ() {
         Function<FRay, FRay> function = (fRay) -> {
             fRay.getRefOrigin().getRefHead().setZ(1);
 
@@ -86,20 +109,17 @@ public class FRayProducerDef implements FRayProducer {
         };
 
         setConfig(function);
-
-        return this;
     }
 
     @Override
-    public FRayProducer setPresetFixedPoint(FPos3D point) {
+    public FRayProducer addPresetOZ(double probability) {
         Function<FRay, FRay> function = (fRay) -> {
-            fRay.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
-            fRay.getRefOrigin().moveBase(point);
+            fRay.getRefOrigin().getRefHead().setZ(1);
 
             return fRay;
         };
 
-        setConfig(function);
+        addConfig(function, probability);
 
         return this;
     }

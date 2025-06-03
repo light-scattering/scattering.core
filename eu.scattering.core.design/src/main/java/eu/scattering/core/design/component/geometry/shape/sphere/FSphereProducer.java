@@ -4,21 +4,16 @@ import java.util.function.Function;
 
 public interface FSphereProducer {
 
-    FSphereProducer setConfig(Function<FSphere, FSphere> function, double probability);
+    void setConfig(Function<FSphere, FSphere> function);
     FSphereProducer addConfig(Function<FSphere, FSphere> function, double probability);
 
     FSphere produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FSphereProducer setPresetDefault();
+    void setPresetFixRadius(String tag, double radius);
+    FSphereProducer addPresetFixRadius(String tag, double radius, double probability);
 
-    FSphereProducer setPresetRndRadius(double min, double max);
-
-    // -------------------------------------------------------------------------------------------------
-
-    default FSphereProducer setConfig(Function<FSphere, FSphere> function) {
-
-        return setConfig(function, 1);
-    }
+    void setPresetRndRadius(String tag, double min, double max);
+    FSphereProducer addPresetRndRadius(String tag, double min, double max, double probability);
 }

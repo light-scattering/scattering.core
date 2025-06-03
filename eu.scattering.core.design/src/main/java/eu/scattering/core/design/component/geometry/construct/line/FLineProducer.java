@@ -6,23 +6,22 @@ import java.util.function.Function;
 
 public interface FLineProducer {
 
-    FLineProducer setConfig(Function<FLine, FLine> function, double probability);
+    void setConfig(Function<FLine, FLine> function);
     FLineProducer addConfig(Function<FLine, FLine> function, double probability);
 
     FLine produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FLineProducer setPresetOX();
-    FLineProducer setPresetOY();
-    FLineProducer setPresetOZ();
+    void setPresetOX();
+    FLineProducer addPresetOX(double probability);
 
-    FLineProducer setPresetFixedPoint(FPos3D point);
+    void setPresetOY();
+    FLineProducer addPresetOY(double probability);
 
-    // -------------------------------------------------------------------------------------------------
+    void setPresetOZ();
+    FLineProducer addPresetOZ(double probability);
 
-    default FLineProducer setConfig(Function<FLine, FLine> function) {
-
-        return setConfig(function, 1);
-    }
+    void setPresetFixedPoint(FPos3D point);
+    FLineProducer addPresetFixedPoint(FPos3D point, double probability);
 }

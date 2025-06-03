@@ -6,23 +6,19 @@ import java.util.function.Function;
 
 public interface FRayProducer {
 
-    FRayProducer setConfig(Function<FRay, FRay> function, double probability);
+    void setConfig(Function<FRay, FRay> function);
     FRayProducer addConfig(Function<FRay, FRay> function, double probability);
 
     FRay produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FRayProducer setPresetOX();
-    FRayProducer setPresetOY();
-    FRayProducer setPresetOZ();
+    void setPresetOX();
+    FRayProducer addPresetOX(double probability);
 
-    FRayProducer setPresetFixedPoint(FPos3D point);
+    void setPresetOY();
+    FRayProducer addPresetOY(double probability);
 
-    // -------------------------------------------------------------------------------------------------
-
-    default FRayProducer setConfig(Function<FRay, FRay> function) {
-
-        return setConfig(function, 1);
-    }
+    void setPresetOZ();
+    FRayProducer addPresetOZ(double probability);
 }

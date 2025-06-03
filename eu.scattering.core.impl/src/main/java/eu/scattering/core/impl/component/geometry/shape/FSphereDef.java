@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
@@ -21,10 +22,12 @@ import java.util.Objects;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
-public class FSphereDef implements FSphere {
+public class FSphereDef extends ShapePresetDef<FSphere> implements FSphere {
     private static final String JSON_MAIN = "sphere";
     private static final String JSON_RADIUS = "radius";
     private static final String JSON_CENTER = "center";
+    private static final String JSON_INDEX = "index";
+    private static final String JSON_TAG = "tag";
 
     private static final double DEF_RADIUS = 1;
 
@@ -107,6 +110,8 @@ public class FSphereDef implements FSphere {
 
         getRefCenter().applyStateFrom(arg.getRefCenter());
         setRadius(arg.getRadius());
+        setIndex(arg.getIndex());
+        setTag(arg.getTag());
 
         return this;
     }
@@ -120,9 +125,13 @@ public class FSphereDef implements FSphere {
 
         FPoint center = factory.getFPoint().set(json.getJSONObject(JSON_CENTER));
         double radius = json.getDouble(JSON_RADIUS);
+        int index = json.getInt(JSON_INDEX);
+        String tag = json.getString(JSON_TAG);
 
        setRefCenter(center);
        setRadius(radius);
+       setIndex(index);
+       setTag(tag);
 
         return this;
     }
@@ -132,6 +141,8 @@ public class FSphereDef implements FSphere {
 
         in.getRefCenter().applyStateFrom(this.getRefCenter());
         in.setRadius(getRadius());
+        in.setIndex(getIndex());
+        in.setTag(getTag());
 
         return this;
     }
@@ -141,7 +152,8 @@ public class FSphereDef implements FSphere {
     @Override
     public boolean isExact(FSphere arg) {
 
-        return getRefCenter().isExact(arg.getRefCenter()) && getRadius() == arg.getRadius();
+        return getRefCenter().isExact(arg.getRefCenter()) && getRadius() == arg.getRadius() &&
+                getIndex() == arg.getIndex() && getTag().equals(arg.getTag());
     }
 
     @Override
@@ -186,8 +198,6 @@ public class FSphereDef implements FSphere {
         return supplyFSphere().applyStateFrom(this);
     }
 
-
-
     @Override
     public Geometry copyGeometry() {
 
@@ -201,6 +211,8 @@ public class FSphereDef implements FSphere {
         json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_CENTER, getRefCenter().toJSON());
         json.put(JSON_RADIUS, radius);
+        json.put(JSON_INDEX, getIndex());
+        json.put(JSON_TAG, getTag());
 
         return json;
     }

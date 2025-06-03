@@ -6,23 +6,22 @@ import java.util.function.Function;
 
 public interface FPointProducer {
 
-    FPointProducer setConfig(Function<FPoint, FPoint> function, double probability);
+    void setConfig(Function<FPoint, FPoint> function);
     FPointProducer addConfig(Function<FPoint, FPoint> function, double probability);
 
     FPoint produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FPointProducer setPresetDefault();
+    void setPresetZero();
+    FPointProducer addPresetZero(double probability);
 
-    FPointProducer setPresetInRange(FPairPos3D range);
-    FPointProducer setPresetInSphere(double radius);
-    FPointProducer setPresetOnSphere(double radius);
+    void setPresetInSphere(double radius);
+    FPointProducer addPresetInSphere(double radius, double probability);
 
-    // -------------------------------------------------------------------------------------------------
+    void setPresetOnSphere(double radius);
+    FPointProducer addPresetOnSphere(double radius, double probability);
 
-    default FPointProducer setConfig(Function<FPoint, FPoint> function) {
-
-        return setConfig(function, 1);
-    }
+    void setPresetRange(FPairPos3D range);
+    FPointProducer addPresetInRange(FPairPos3D range, double probability);
 }

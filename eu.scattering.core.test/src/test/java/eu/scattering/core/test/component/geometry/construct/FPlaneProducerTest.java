@@ -2,7 +2,6 @@ package eu.scattering.core.test.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,17 +21,8 @@ public class FPlaneProducerTest {
     void produceEmpty() {
         FPlaneProducer producer = factory.getFPlaneProducer();
 
-        FPlane resultA = producer.produce();
-        FPlane resultB = producer.produce();
-
-        Assertions.assertAll("Validate FPlane values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FPlane A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FPlane B value is erroneous"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
+        assertThrows(IllegalStateException.class, producer::produce,
+                "The producer should not be configured");
     }
 
     @Test
@@ -71,7 +61,7 @@ public class FPlaneProducerTest {
         FPlaneProducer producer = factory.getFPlaneProducer();
 
         producer
-                .setConfig((fPlane) -> fPlane.set(
+                .addConfig((fPlane) -> fPlane.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fPlane) -> fPlane.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -96,10 +86,12 @@ public class FPlaneProducerTest {
                         "The distribution is erroneous")
         );
     }
+
     @Test
-    @DisplayName("Preset unit X")
-    void presetUnitX() {
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetDirX();
+    @DisplayName("Preset set unit X")
+    void presetSetUnitX() {
+        FPlaneProducer producer = factory.getFPlaneProducer();
+        producer.setPresetDirX();
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();
@@ -113,9 +105,26 @@ public class FPlaneProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Y")
-    void presetUnitY() {
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetDirY();
+    @DisplayName("Preset add unit X")
+    void presetAddUnitX() {
+        FPlaneProducer producer = factory.getFPlaneProducer().addPresetDirX(1);
+
+        FPlane resultA = producer.produce();
+        FPlane resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPlane values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Y")
+    void presetSetUnitY() {
+        FPlaneProducer producer = factory.getFPlaneProducer();
+        producer.setPresetDirY();
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();
@@ -129,9 +138,26 @@ public class FPlaneProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Z")
-    void presetUnitZ() {
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetDirZ();
+    @DisplayName("Preset add unit Y")
+    void presetAddUnitY() {
+        FPlaneProducer producer = factory.getFPlaneProducer().addPresetDirY(1);
+
+        FPlane resultA = producer.produce();
+        FPlane resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPlane values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 1, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Z")
+    void presetSetUnitZ() {
+        FPlaneProducer producer = factory.getFPlaneProducer();
+        producer.setPresetDirZ();
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();
@@ -145,19 +171,16 @@ public class FPlaneProducerTest {
     }
 
     @Test
-    @DisplayName("Preset fixed point")
-    void presetFixedPoint() {
-        FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
-        FPlaneProducer producer = factory.getFPlaneProducer().setPresetFixedPoint(fPos3D);
+    @DisplayName("Preset add unit Z")
+    void presetAddUnitZ() {
+        FPlaneProducer producer = factory.getFPlaneProducer().addPresetDirZ(1);
 
         FPlane resultA = producer.produce();
         FPlane resultB = producer.produce();
 
         Assertions.assertAll("Validate FPlane values",
-                () -> assertTrue(resultA.isPartOf(factory.getFPoint(1, 2, 3)),
-                        "The point should be a part of the FPlane"),
-                () -> assertFalse(resultA.isExact(resultB),
-                        "Elements should have different values"),
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 1),
+                        "The value is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );

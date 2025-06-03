@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public class FSphereProducerDef implements FSphereProducer {
@@ -21,8 +22,6 @@ public class FSphereProducerDef implements FSphereProducer {
         this.factory = factory;
 
         this.core = new ProducerCoreDef<>(this, this.random);
-
-        setPresetDefault();
     }
 
     public static FSphereProducer create(FSphereFactory factory, FRandGenerator random) {
@@ -31,9 +30,9 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer setConfig(Function<FSphere, FSphere> function, double probability) {
+    public void setConfig(Function<FSphere, FSphere> function) {
 
-        return core.setConfig(function, probability);
+        core.setConfig(function, 1);
     }
 
     @Override
@@ -45,25 +44,71 @@ public class FSphereProducerDef implements FSphereProducer {
     @Override
     public FSphere produce() {
 
+        if (core.getSize() == 0) {
+            throw new IllegalStateException("The producer is not configured");
+        }
+
         return core.getFunction().apply(factory.getFSphere());
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSphereProducer setPresetDefault() {
-        Function<FSphere, FSphere> function = (fSphere) -> fSphere;
+    public void setPresetFixRadius(String tag, double radius) {
+        AtomicInteger index = new AtomicInteger(0);
+
+        Function<FSphere, FSphere> function = (fSphere) -> {
+            fSphere.setIndex(index.getAndIncrement());
+            fSphere.setTag(tag);
+
+            return fSphere.setRadius(radius);
+        };
 
         setConfig(function);
+    }
+
+    @Override
+    public FSphereProducer addPresetFixRadius(String tag, double radius, double probability) {
+        AtomicInteger index = new AtomicInteger(0);
+
+        Function<FSphere, FSphere> function = (fSphere) -> {
+            fSphere.setIndex(index.getAndIncrement());
+            fSphere.setTag(tag);
+
+            return fSphere.setRadius(radius);
+        };
+
+        addConfig(function, probability);
 
         return this;
     }
 
     @Override
-    public FSphereProducer setPresetRndRadius(double min, double max) {
-        Function<FSphere, FSphere> function = (fSphere) -> fSphere.setRadius(random.nextDouble(min, max));
+    public void setPresetRndRadius(String tag, double min, double max) {
+        AtomicInteger index = new AtomicInteger(0);
+
+        Function<FSphere, FSphere> function = (fSphere) -> {
+            fSphere.setIndex(index.getAndIncrement());
+            fSphere.setTag(tag);
+
+            return fSphere.setRadius(random.nextDouble(min, max));
+        };
 
         setConfig(function);
+    }
+
+    @Override
+    public FSphereProducer addPresetRndRadius(String tag, double min, double max, double probability) {
+        AtomicInteger index = new AtomicInteger(0);
+
+        Function<FSphere, FSphere> function = (fSphere) -> {
+            fSphere.setIndex(index.getAndIncrement());
+            fSphere.setTag(tag);
+
+            return fSphere.setRadius(random.nextDouble(min, max));
+        };
+
+        addConfig(function, probability);
 
         return this;
     }

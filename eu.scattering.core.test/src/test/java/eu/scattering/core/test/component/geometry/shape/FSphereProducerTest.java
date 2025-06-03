@@ -22,21 +22,8 @@ public class FSphereProducerTest {
     void produceEmpty() {
         FSphereProducer producer = factory.getFSphereProducer();
 
-        FSphere resultA = producer.produce();
-        FSphere resultB = producer.produce();
-
-        Assertions.assertAll("Validate FSphere values",
-                () -> assertTrue(resultA.getRefCenter().isExact(0, 0, 0),
-                        "The FSphere A center position is erroneous"),
-                () -> assertTrue(resultB.getRefCenter().isExact(0, 0, 0),
-                        "The FSphere B value is erroneous"),
-                () -> assertEquals(1, resultA.getRadius(),
-                        epsilon, "The Sphere A radius is erroneous"),
-                () -> assertEquals(1, resultB.getRadius(),
-                        epsilon, "The Sphere B radius is erroneous"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
+        assertThrows(IllegalStateException.class, producer::produce,
+                "The producer should not be configured");
     }
 
     @Test
@@ -76,7 +63,7 @@ public class FSphereProducerTest {
         FSphereProducer producer = factory.getFSphereProducer();
 
         producer
-                .setConfig((fSphere) -> fSphere.setRadius(1), 0.25)
+                .addConfig((fSphere) -> fSphere.setRadius(1), 0.25)
                 .addConfig((fSphere) -> fSphere.setRadius(2), 0.75);
 
         int countA = 0;
@@ -101,9 +88,10 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Preset default")
-    void presetDefault() {
-        FSphereProducer producer = factory.getFSphereProducer().setPresetDefault();
+    @DisplayName("Preset set fixed radius")
+    void presetSetFixRadius() {
+        FSphereProducer producer = factory.getFSphereProducer();
+        producer.setPresetFixRadius("TiO2", 5);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -113,19 +101,59 @@ public class FSphereProducerTest {
                         "The FSphere A center position is erroneous"),
                 () -> assertTrue(resultB.getRefCenter().isExact(0, 0, 0),
                         "The FSphere B value is erroneous"),
-                () -> assertEquals(1, resultA.getRadius(),
+                () -> assertEquals(5, resultA.getRadius(),
                         epsilon, "The Sphere A radius is erroneous"),
-                () -> assertEquals(1, resultB.getRadius(),
+                () -> assertEquals(5, resultB.getRadius(),
                         epsilon, "The Sphere B radius is erroneous"),
+                () -> assertEquals(0, resultA.getIndex(),
+                        "Index A is incorrect"),
+                () -> assertEquals(1, resultB.getIndex(),
+                        "Index B is incorrect"),
+                () -> assertEquals("TiO2", resultA.getTag(),
+                        "Tag A is incorrect"),
+                () -> assertEquals("TiO2", resultB.getTag(),
+                        "Tag B is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );
     }
 
     @Test
-    @DisplayName("Preset radius")
-    void presetInRange() {
-        FSphereProducer producer = factory.getFSphereProducer().setPresetRndRadius(epsilon, 0.001);
+    @DisplayName("Preset add fixed radius")
+    void presetAddFixRadius() {
+        FSphereProducer producer = factory.getFSphereProducer()
+                .addPresetFixRadius("TiO2", 5, 1);
+
+        FSphere resultA = producer.produce();
+        FSphere resultB = producer.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertTrue(resultA.getRefCenter().isExact(0, 0, 0),
+                        "The FSphere A center position is erroneous"),
+                () -> assertTrue(resultB.getRefCenter().isExact(0, 0, 0),
+                        "The FSphere B value is erroneous"),
+                () -> assertEquals(5, resultA.getRadius(),
+                        epsilon, "The Sphere A radius is erroneous"),
+                () -> assertEquals(5, resultB.getRadius(),
+                        epsilon, "The Sphere B radius is erroneous"),
+                () -> assertEquals(0, resultA.getIndex(),
+                        "Index A is incorrect"),
+                () -> assertEquals(1, resultB.getIndex(),
+                        "Index B is incorrect"),
+                () -> assertEquals("TiO2", resultA.getTag(),
+                        "Tag A is incorrect"),
+                () -> assertEquals("TiO2", resultB.getTag(),
+                        "Tag B is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set random radius")
+    void presetSetRndRadius() {
+        FSphereProducer producer = factory.getFSphereProducer();
+        producer.setPresetRndRadius("TiO2", epsilon, 0.001);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -135,6 +163,41 @@ public class FSphereProducerTest {
                         "Radius A is incorrect"),
                 () -> assertTrue(Math.abs(resultB.getRadius()) < 0.01,
                         "Radius B is incorrect"),
+                () -> assertEquals(0, resultA.getIndex(),
+                        "Index A is incorrect"),
+                () -> assertEquals(1, resultB.getIndex(),
+                        "Index B is incorrect"),
+                () -> assertEquals("TiO2", resultA.getTag(),
+                        "Tag A is incorrect"),
+                () -> assertEquals("TiO2", resultB.getTag(),
+                        "Tag B is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset add random radius")
+    void presetAddRndRadius() {
+        FSphereProducer producer = factory.getFSphereProducer()
+                .addPresetRndRadius("TiO2", epsilon, 0.001, 1);
+
+        FSphere resultA = producer.produce();
+        FSphere resultB = producer.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertTrue(Math.abs(resultA.getRadius()) < 0.01,
+                        "Radius A is incorrect"),
+                () -> assertTrue(Math.abs(resultB.getRadius()) < 0.01,
+                        "Radius B is incorrect"),
+                () -> assertEquals(0, resultA.getIndex(),
+                        "Index A is incorrect"),
+                () -> assertEquals(1, resultB.getIndex(),
+                        "Index B is incorrect"),
+                () -> assertEquals("TiO2", resultA.getTag(),
+                        "Tag A is incorrect"),
+                () -> assertEquals("TiO2", resultB.getTag(),
+                        "Tag B is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
         );

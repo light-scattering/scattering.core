@@ -1,28 +1,22 @@
 package eu.scattering.core.design.component.geometry.construct.segment;
 
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
-
 import java.util.function.Function;
 
 public interface FSegmentProducer {
 
-    FSegmentProducer setConfig(Function<FSegment, FSegment> function, double probability);
+    void setConfig(Function<FSegment, FSegment> function);
     FSegmentProducer addConfig(Function<FSegment, FSegment> function, double probability);
 
     FSegment produce();
 
     // -------------------------------------------------------------------------------------------------
 
-    FSegmentProducer setPresetUnitOX();
-    FSegmentProducer setPresetUnitOY();
-    FSegmentProducer setPresetUnitOZ();
+    void setPresetUnitOX();
+    FSegmentProducer addPresetUnitOX(double probability);
 
-    FSegmentProducer setPresetFixedPoint(FPos3D point, double length);
+    void setPresetUnitOY();
+    FSegmentProducer addPresetUnitOY(double probability);
 
-    // -------------------------------------------------------------------------------------------------
-
-    default FSegmentProducer setConfig(Function<FSegment, FSegment> function) {
-
-        return setConfig(function, 1);
-    }
+    void setPresetUnitOZ();
+    FSegmentProducer addPresetUnitOZ(double probability);
 }

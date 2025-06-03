@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Timeout;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static eu.scattering.core.test.Config.factory;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FDraftProducer")
@@ -22,17 +21,8 @@ public class FDraftProducerTest {
     void produceEmpty() {
         FDraftProducer producer = factory.getFDraftProducer();
 
-        FDraft resultA = producer.produce();
-        FDraft resultB = producer.produce();
-
-        Assertions.assertAll("Validate FDraft values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FDraft A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FDraft B value is erroneous"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
+        assertThrows(IllegalStateException.class, producer::produce,
+                "The producer should not be configured");
     }
 
     @Test
@@ -71,7 +61,7 @@ public class FDraftProducerTest {
         FDraftProducer producer = factory.getFDraftProducer();
 
         producer
-                .setConfig((fDraft) -> fDraft.set(
+                .addConfig((fDraft) -> fDraft.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fDraft) -> fDraft.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -96,10 +86,12 @@ public class FDraftProducerTest {
                         "The distribution is erroneous")
         );
     }
+
     @Test
-    @DisplayName("Preset unit X")
-    void presetUnitX() {
-        FDraftProducer producer = factory.getFDraftProducer().setPresetUnitX();
+    @DisplayName("Preset set unit X")
+    void presetSetUnitX() {
+        FDraftProducer producer = factory.getFDraftProducer();
+        producer.setPresetUnitX();
 
         FDraft resultA = producer.produce();
         FDraft resultB = producer.produce();
@@ -113,9 +105,26 @@ public class FDraftProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Y")
-    void presetUnitY() {
-        FDraftProducer producer = factory.getFDraftProducer().setPresetUnitY();
+    @DisplayName("Preset add unit X")
+    void presetAddUnitX() {
+        FDraftProducer producer = factory.getFDraftProducer().addPresetUnitX(1);
+
+        FDraft resultA = producer.produce();
+        FDraft resultB = producer.produce();
+
+        Assertions.assertAll("Validate FDraft values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Y")
+    void presetSetUnitY() {
+        FDraftProducer producer = factory.getFDraftProducer();
+        producer.setPresetUnitY();
 
         FDraft resultA = producer.produce();
         FDraft resultB = producer.produce();
@@ -129,9 +138,42 @@ public class FDraftProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Z")
-    void presetUnitZ() {
-        FDraftProducer producer = factory.getFDraftProducer().setPresetUnitZ();
+    @DisplayName("Preset add unit Y")
+    void presetAddUnitY() {
+        FDraftProducer producer = factory.getFDraftProducer().addPresetUnitY(1);
+
+        FDraft resultA = producer.produce();
+        FDraft resultB = producer.produce();
+
+        Assertions.assertAll("Validate FDraft values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 1, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Z")
+    void presetSetUnitZ() {
+        FDraftProducer producer = factory.getFDraftProducer();
+        producer.setPresetUnitZ();
+
+        FDraft resultA = producer.produce();
+        FDraft resultB = producer.produce();
+
+        Assertions.assertAll("Validate FDraft values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 1),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset add unit Z")
+    void presetAddUnitZ() {
+        FDraftProducer producer = factory.getFDraftProducer().addPresetUnitZ(1);
 
         FDraft resultA = producer.produce();
         FDraft resultB = producer.produce();

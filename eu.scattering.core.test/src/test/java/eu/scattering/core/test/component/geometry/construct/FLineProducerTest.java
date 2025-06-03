@@ -22,17 +22,8 @@ public class FLineProducerTest {
     void produceEmpty() {
         FLineProducer producer = factory.getFLineProducer();
 
-        FLine resultA = producer.produce();
-        FLine resultB = producer.produce();
-
-        Assertions.assertAll("Validate FLine values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FLine A value is erroneous"),
-                () -> assertTrue(resultB.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The FLine B value is erroneous"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
+        assertThrows(IllegalStateException.class, producer::produce,
+                "The producer should not be configured");
     }
 
     @Test
@@ -71,7 +62,7 @@ public class FLineProducerTest {
         FLineProducer producer = factory.getFLineProducer();
 
         producer
-                .setConfig((fLine) -> fLine.set(
+                .addConfig((fLine) -> fLine.set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
                 .addConfig((fLine) -> fLine.set(
                         factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
@@ -98,9 +89,10 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit X")
-    void presetUnitX() {
-        FLineProducer producer = factory.getFLineProducer().setPresetOX();
+    @DisplayName("Preset set unit X")
+    void presetSetUnitX() {
+        FLineProducer producer = factory.getFLineProducer();
+        producer.setPresetOX();
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();
@@ -114,9 +106,26 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Y")
-    void presetUnitY() {
-        FLineProducer producer = factory.getFLineProducer().setPresetOY();
+    @DisplayName("Preset add unit X")
+    void presetAddUnitX() {
+        FLineProducer producer = factory.getFLineProducer().addPresetOX(1);
+
+        FLine resultA = producer.produce();
+        FLine resultB = producer.produce();
+
+        Assertions.assertAll("Validate FLine values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Y")
+    void presetSetUnitY() {
+        FLineProducer producer = factory.getFLineProducer();
+        producer.setPresetOY();
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();
@@ -130,9 +139,26 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Z")
-    void presetUnitZ() {
-        FLineProducer producer = factory.getFLineProducer().setPresetOZ();
+    @DisplayName("Preset add unit Y")
+    void presetAddUnitY() {
+        FLineProducer producer = factory.getFLineProducer().addPresetOY(1);
+
+        FLine resultA = producer.produce();
+        FLine resultB = producer.produce();
+
+        Assertions.assertAll("Validate FLine values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 1, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set unit Z")
+    void presetSetUnitZ() {
+        FLineProducer producer = factory.getFLineProducer();
+        producer.setPresetOZ();
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();
@@ -146,10 +172,46 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Preset fixed point")
-    void presetFixedPoint() {
+    @DisplayName("Preset add unit Z")
+    void presetAddUnitZ() {
+        FLineProducer producer = factory.getFLineProducer().addPresetOZ(1);
+
+        FLine resultA = producer.produce();
+        FLine resultB = producer.produce();
+
+        Assertions.assertAll("Validate FLine values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 1),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset set fixed point")
+    void presetSetFixedPoint() {
         FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
-        FLineProducer producer = factory.getFLineProducer().setPresetFixedPoint(fPos3D);
+        FLineProducer producer = factory.getFLineProducer();
+        producer.setPresetFixedPoint(fPos3D);
+
+        FLine resultA = producer.produce();
+        FLine resultB = producer.produce();
+
+        Assertions.assertAll("Validate FLine values",
+                () -> assertTrue(resultA.isPartOf(factory.getFPoint(1, 2, 3)),
+                        "The point should be a part of the FLine"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset add fixed point")
+    void presetAddFixedPoint() {
+        FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
+        FLineProducer producer = factory.getFLineProducer().addPresetFixedPoint(fPos3D, 1);
 
         FLine resultA = producer.produce();
         FLine resultB = producer.produce();
