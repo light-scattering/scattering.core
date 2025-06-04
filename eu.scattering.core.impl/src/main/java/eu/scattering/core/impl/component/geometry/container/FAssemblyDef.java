@@ -292,12 +292,15 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     class FAssemblyIteratorDef implements Iterator<T> {
-        int index = 0;
+        private int index = 0;
 
+        @Override
         public boolean hasNext() {
+
             return index < FAssemblyDef.this.getGeometries().size();
         }
 
+        @Override
         public T next() {
 
             if (!hasNext()) {

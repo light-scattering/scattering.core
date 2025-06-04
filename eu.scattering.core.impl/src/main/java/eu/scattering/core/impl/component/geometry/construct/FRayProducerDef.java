@@ -4,13 +4,13 @@ import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 
 import java.util.function.Function;
 
 public class FRayProducerDef implements FRayProducer {
 
-    private final ProducerCoreDef<FRayProducer, FRay> core;
+    private final ProducerCoreBasicDef<FRayProducer, FRay> core;
 
     private final FRandGenerator random;
     private final ConstructFactory factory;
@@ -20,7 +20,7 @@ public class FRayProducerDef implements FRayProducer {
         this.random = random;
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, this.random);
+        this.core = new ProducerCoreBasicDef<>(this, this.random);
     }
 
     public static FRayProducer create(ConstructFactory factory, FRandGenerator random) {

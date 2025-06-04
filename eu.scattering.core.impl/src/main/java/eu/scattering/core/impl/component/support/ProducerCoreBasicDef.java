@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class ProducerCoreDef<P, E>  {
+public class ProducerCoreBasicDef<P, E>  {
 
     private final P self;
     private final FRandGenerator random;
     private final List<AbstractMap.SimpleEntry<Double, Function<E, E>>> config;
 
-    public ProducerCoreDef(P self, FRandGenerator random) {
+    public ProducerCoreBasicDef(P self, FRandGenerator random) {
 
         this.self = self;
         this.random = random;

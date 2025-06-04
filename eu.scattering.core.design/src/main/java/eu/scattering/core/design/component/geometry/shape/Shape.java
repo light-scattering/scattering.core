@@ -58,11 +58,13 @@ public interface Shape<T> extends Geometry {
 
     T copy();
 
-    boolean setIndex(int index);
-    int getIndex();
+    //--------------------------------------------------
 
-    boolean setTag(String tag);
     String getTag();
+    boolean setTag(String tag);
+
+    int getIndex();
+    boolean setIndex(int index);
 
     //--------------------------------------------------
 

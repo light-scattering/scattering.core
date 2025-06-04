@@ -1,19 +1,17 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-public interface FSphereProducer {
-
-    void setConfig(Function<FSphere, FSphere> function);
-    FSphereProducer addConfig(Function<FSphere, FSphere> function, double probability);
+public interface FSphereProducer extends Iterable<FSphere> {
 
     FSphere produce();
+    Stream<FSphere> stream();
 
     // -------------------------------------------------------------------------------------------------
 
-    void setPresetFixRadius(String tag, double radius);
-    FSphereProducer addPresetFixRadius(String tag, double radius, double probability);
+    FSphereProducer withCustomRule(Function<FSphere, FSphere> function, int probability);
 
-    void setPresetRndRadius(String tag, double min, double max);
-    FSphereProducer addPresetRndRadius(String tag, double min, double max, double probability);
+    FSphereProducer withFixedRadius(String tag, double radius, int probability);
+    FSphereProducer withRandomRadius(String tag, double min, double max, int probability);
 }

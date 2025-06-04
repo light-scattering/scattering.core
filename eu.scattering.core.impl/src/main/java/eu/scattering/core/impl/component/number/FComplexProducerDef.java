@@ -4,13 +4,13 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexFactory;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 
 import java.util.function.Function;
 
 public class FComplexProducerDef implements FComplexProducer {
 
-    private final ProducerCoreDef<FComplexProducer, FComplex> core;
+    private final ProducerCoreBasicDef<FComplexProducer, FComplex> core;
 
     private final FRandGenerator random;
     private final FComplexFactory factory;
@@ -20,7 +20,7 @@ public class FComplexProducerDef implements FComplexProducer {
         this.random = random;
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, this.random);
+        this.core = new ProducerCoreBasicDef<>(this, this.random);
 
         setPresetDefault();
     }

@@ -4,13 +4,13 @@ import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 
 import java.util.function.Function;
 
 public class FSegmentProducerDef implements FSegmentProducer {
 
-    private final ProducerCoreDef<FSegmentProducer, FSegment> core;
+    private final ProducerCoreBasicDef<FSegmentProducer, FSegment> core;
 
     private final FRandGenerator random;
     private final ConstructFactory factory;
@@ -20,7 +20,7 @@ public class FSegmentProducerDef implements FSegmentProducer {
         this.random = random;
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, this.random);
+        this.core = new ProducerCoreBasicDef<>(this, this.random);
     }
 
     public static FSegmentProducer create(ConstructFactory factory, FRandGenerator random) {

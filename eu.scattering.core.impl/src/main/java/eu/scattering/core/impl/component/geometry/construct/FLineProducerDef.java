@@ -4,14 +4,14 @@ import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.Function;
 
 public class FLineProducerDef implements FLineProducer {
 
-    private final ProducerCoreDef<FLineProducer, FLine> core;
+    private final ProducerCoreBasicDef<FLineProducer, FLine> core;
 
     private final FRandGenerator random;
     private final ConstructFactory factory;
@@ -21,7 +21,7 @@ public class FLineProducerDef implements FLineProducer {
         this.random = random;
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, this.random);
+        this.core = new ProducerCoreBasicDef<>(this, this.random);
     }
 
     public static FLineProducer create(ConstructFactory factory, FRandGenerator random) {

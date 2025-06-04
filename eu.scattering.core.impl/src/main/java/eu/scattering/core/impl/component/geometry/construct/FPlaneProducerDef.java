@@ -4,13 +4,13 @@ import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 
 import java.util.function.Function;
 
 public class FPlaneProducerDef implements FPlaneProducer {
 
-    private final ProducerCoreDef<FPlaneProducer, FPlane> core;
+    private final ProducerCoreBasicDef<FPlaneProducer, FPlane> core;
 
     private final FRandGenerator random;
     private final ConstructFactory factory;
@@ -20,7 +20,7 @@ public class FPlaneProducerDef implements FPlaneProducer {
         this.random = random;
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, this.random);
+        this.core = new ProducerCoreBasicDef<>(this, this.random);
     }
 
     public static FPlaneProducer create(ConstructFactory factory, FRandGenerator random) {

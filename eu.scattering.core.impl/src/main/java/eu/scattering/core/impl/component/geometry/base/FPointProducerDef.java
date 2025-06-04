@@ -4,14 +4,14 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.function.Function;
 
 public class FPointProducerDef implements FPointProducer {
 
-    private final ProducerCoreDef<FPointProducer, FPoint> core;
+    private final ProducerCoreBasicDef<FPointProducer, FPoint> core;
 
     private final FRandGenerator random;
     private final FPointFactory factory;
@@ -21,7 +21,7 @@ public class FPointProducerDef implements FPointProducer {
         this.random = random;
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, this.random);
+        this.core = new ProducerCoreBasicDef<>(this, this.random);
     }
 
     public static FPointProducer create(FPointFactory factory, FRandGenerator random) {

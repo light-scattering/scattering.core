@@ -257,7 +257,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FSphereProducer getFSphereProducer() {
 
-        return FSphereProducerDef.create(this, this.fRandGenerator);
+        return FSphereProducerDef.create(this::getFSphere, this.fRandGenerator);
     }
 
     @Override

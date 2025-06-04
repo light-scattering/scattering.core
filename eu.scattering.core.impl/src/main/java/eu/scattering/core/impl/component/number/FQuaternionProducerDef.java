@@ -4,13 +4,13 @@ import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 
 import java.util.function.Function;
 
 public class FQuaternionProducerDef implements FQuaternionProducer {
 
-    private final ProducerCoreDef<FQuaternionProducer, FQuaternion> core;
+    private final ProducerCoreBasicDef<FQuaternionProducer, FQuaternion> core;
 
     private final FRandGenerator random;
     private final FQuaternionFactory factory;
@@ -20,7 +20,7 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
         this.random = random;
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, this.random);
+        this.core = new ProducerCoreBasicDef<>(this, this.random);
 
         setPresetDefault();
     }

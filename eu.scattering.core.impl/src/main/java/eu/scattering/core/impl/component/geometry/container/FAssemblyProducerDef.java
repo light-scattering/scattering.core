@@ -4,12 +4,12 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.container.ContainerFactory;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
-import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
 
 import java.util.function.Function;
 
 public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProducer<T> {
-    private final ProducerCoreDef<FAssemblyProducer<T>, FAssembly<T>> core;
+    private final ProducerCoreBasicDef<FAssemblyProducer<T>, FAssembly<T>> core;
 
     private final ContainerFactory factory;
 
@@ -17,7 +17,7 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
 
         this.factory = factory;
 
-        this.core = new ProducerCoreDef<>(this, null);
+        this.core = new ProducerCoreBasicDef<>(this, null);
 
         setPresetDefault();
     }
