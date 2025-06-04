@@ -14,4 +14,21 @@ public interface FSphereProducer extends Iterable<FSphere> {
 
     FSphereProducer withFixedRadius(String tag, double radius, int probability);
     FSphereProducer withRandomRadius(String tag, double min, double max, int probability);
+
+    // -------------------------------------------------------------------------------------------------
+
+    default FSphereProducer withCustomRule(Function<FSphere, FSphere> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FSphereProducer withFixedRadius(String tag, double radius) {
+
+        return withFixedRadius(tag, radius, 1);
+    }
+
+    default FSphereProducer withRandomRadius(String tag, double min, double max) {
+
+        return withRandomRadius(tag, min, max, 1);
+    }
 }

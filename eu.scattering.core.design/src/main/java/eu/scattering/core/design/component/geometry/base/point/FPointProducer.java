@@ -3,25 +3,46 @@ package eu.scattering.core.design.component.geometry.base.point;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-public interface FPointProducer {
-
-    void setConfig(Function<FPoint, FPoint> function);
-    FPointProducer addConfig(Function<FPoint, FPoint> function, double probability);
+public interface FPointProducer extends Iterable<FPoint> {
 
     FPoint produce();
+    Stream<FPoint> stream();
 
     // -------------------------------------------------------------------------------------------------
 
-    void setPresetZero();
-    FPointProducer addPresetZero(double probability);
+    FPointProducer withCustomRule(Function<FPoint, FPoint> function, int probability);
 
-    void setPresetInSphere(double radius);
-    FPointProducer addPresetInSphere(double radius, double probability);
+    FPointProducer withZero(int probability);
+    FPointProducer withInsideSphere(double radius, int probability);
+    FPointProducer withOnSphere(double radius, int probability);
+    FPointProducer withInRange(FPairPos3D range, int probability);
 
-    void setPresetOnSphere(double radius);
-    FPointProducer addPresetOnSphere(double radius, double probability);
+    // -------------------------------------------------------------------------------------------------
 
-    void setPresetRange(FPairPos3D range);
-    FPointProducer addPresetInRange(FPairPos3D range, double probability);
+    default FPointProducer withCustomRule(Function<FPoint, FPoint> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FPointProducer withZero() {
+
+        return withZero(1);
+    }
+
+    default FPointProducer withInsideSphere(double radius) {
+
+        return withInsideSphere(radius, 1);
+    }
+
+    default FPointProducer withOnSphere(double radius) {
+
+        return withOnSphere(radius, 1);
+    }
+
+    default FPointProducer withInRange(FPairPos3D range) {
+
+        return withInRange(range, 1);
+    }
 }

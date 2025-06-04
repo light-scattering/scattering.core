@@ -117,7 +117,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FPointProducer getFPointProducer() {
 
-        return FPointProducerDef.create(this, this.fRandGenerator);
+        return FPointProducerDef.create(this::getFPoint, this.fRandGenerator);
     }
 
     @Override
@@ -131,7 +131,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FVectorProducer getFVectorProducer() {
 
-        return FVectorProducerDef.create(this, this.fRandGenerator);
+        return FVectorProducerDef.create(this::getFVector, this.fRandGenerator);
     }
 
     @Override

@@ -1,177 +1,125 @@
 package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
+import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
+import java.util.Iterator;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class FVectorProducerDef implements FVectorProducer {
 
-    private final ProducerCoreBasicDef<FVectorProducer, FVector> core;
+    private final ProducerCoreAdvancedDef<FVector> processor;
+    private final FRandGenerator randomizer;
 
-    private final FRandGenerator random;
-    private final FVectorFactory factory;
+    private FVectorProducerDef(Supplier<FVector> supplier, FRandGenerator randomizer) {
 
-    private FVectorProducerDef(FVectorFactory factory, FRandGenerator random) {
-
-        this.random = random;
-        this.factory = factory;
-
-        this.core = new ProducerCoreBasicDef<>(this, this.random);
-
-
+        this.randomizer = randomizer;
+        this.processor = new ProducerCoreAdvancedDef<>(supplier, this.randomizer);
     }
 
-    public static FVectorProducer create(FVectorFactory factory, FRandGenerator random) {
+    public static FVectorProducer create(Supplier<FVector> supplier, FRandGenerator randomizer) {
 
-        return new FVectorProducerDef(factory, random);
+        return new FVectorProducerDef(supplier, randomizer);
     }
 
     @Override
-    public void setConfig(Function<FVector, FVector> function) {
+    public FVectorProducer withCustomRule(Function<FVector, FVector> function, int probability) {
 
-        core.setConfig(function, 1);
-    }
+        this.processor.addConfig(function, probability);
 
-    @Override
-    public FVectorProducer addConfig(Function<FVector, FVector> function, double probability) {
-
-        return core.addConfig(function, probability);
+        return this;
     }
 
     @Override
     public FVector produce() {
 
-        if (core.getSize() == 0) {
-            throw new IllegalStateException("The producer is not configured");
-        }
-
-        return core.getFunction().apply(factory.getFVector());
+        return processor.produce();
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public void setPresetUnitX() {
+    public FVectorProducer withUnitX(int probability) {
         Function<FVector, FVector> function = (fVector) -> fVector.setHeadX(1);
 
-        setConfig(function);
-    }
-
-    @Override
-    public FVectorProducer addPresetUnitX(double probability) {
-        Function<FVector, FVector> function = (fVector) -> fVector.setHeadX(1);
-
-        addConfig(function, probability);
+        withCustomRule(function, probability);
 
         return this;
     }
 
     @Override
-    public void setPresetUnitY() {
+    public FVectorProducer withUnitY(int probability) {
         Function<FVector, FVector> function = (fVector) -> fVector.setHeadY(1);
 
-        setConfig(function);
-    }
-
-    @Override
-    public FVectorProducer addPresetUnitY(double probability) {
-        Function<FVector, FVector> function = (fVector) -> fVector.setHeadY(1);
-
-        addConfig(function, probability);
+        withCustomRule(function, probability);
 
         return this;
     }
 
     @Override
-    public void setPresetUnitZ() {
+    public FVectorProducer withUnitZ(int probability) {
         Function<FVector, FVector> function = (fVector) -> fVector.setHeadZ(1);
 
-        setConfig(function);
-    }
-
-    @Override
-    public FVectorProducer addPresetUnitZ(double probability) {
-        Function<FVector, FVector> function = (fVector) -> fVector.setHeadZ(1);
-
-        addConfig(function, probability);
+        withCustomRule(function, probability);
 
         return this;
     }
 
     @Override
-    public void setPresetRange(FPairPos3D range) {
+    public FVectorProducer withInRange(FPairPos3D range, int probability) {
         Function<FVector, FVector> function = (fVector) -> {
-            fVector.getRefHead().applyStateFrom(random.nextDouble3D(range));
+            fVector.getRefHead().applyStateFrom(randomizer.nextDouble3D(range));
 
             return fVector;
         };
 
-        setConfig(function);
-    }
-
-    @Override
-    public FVectorProducer addPresetInRange(FPairPos3D range, double probability) {
-        Function<FVector, FVector> function = (fVector) -> {
-            fVector.getRefHead().applyStateFrom(random.nextDouble3D(range));
-
-            return fVector;
-        };
-
-        addConfig(function, probability);
+        withCustomRule(function, probability);
 
         return this;
     }
 
     @Override
-    public void setPresetInSphere(double radius) {
+    public FVectorProducer withInsideSphere(double radius, int probability) {
         Function<FVector, FVector> function = (fVector) -> {
-            fVector.getRefHead().applyStateFrom(random.nextDoubleInSphere(radius));
+            fVector.getRefHead().applyStateFrom(randomizer.nextDoubleInSphere(radius));
 
             return fVector;
         };
 
-        setConfig(function);
-    }
-
-    @Override
-    public FVectorProducer addPresetInSphere(double radius, double probability) {
-        Function<FVector, FVector> function = (fVector) -> {
-            fVector.getRefHead().applyStateFrom(random.nextDoubleInSphere(radius));
-
-            return fVector;
-        };
-
-        addConfig(function, probability);
+        withCustomRule(function, probability);
 
         return this;
     }
 
     @Override
-    public void setPresetOnSphere(double radius) {
+    public FVectorProducer withOnSphere(double radius, int probability) {
         Function<FVector, FVector> function = (fVector) -> {
-            fVector.getRefHead().applyStateFrom(random.nextDoubleOnSphere(radius));
+            fVector.getRefHead().applyStateFrom(randomizer.nextDoubleOnSphere(radius));
 
             return fVector;
         };
 
-        setConfig(function);
+        withCustomRule(function, probability);
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public Stream<FVector> stream() {
+
+        return this.processor.stream();
     }
 
     @Override
-    public FVectorProducer addPresetOnSphere(double radius, double probability) {
-        Function<FVector, FVector> function = (fVector) -> {
-            fVector.getRefHead().applyStateFrom(random.nextDoubleOnSphere(radius));
+    public Iterator<FVector> iterator() {
 
-            return fVector;
-        };
-
-        addConfig(function, probability);
-
-        return this;
+        return this.processor.getIterator();
     }
 }
