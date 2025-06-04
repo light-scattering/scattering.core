@@ -17,8 +17,8 @@ public interface FSphereProducer extends Iterable<FSphere> {
     FSphereProducer withFixedRadius(String tag, double radius, int probability);
     FSphereProducer withRandomRadius(String tag, double min, double max, int probability);
 
-    FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer producer, double radius, int probability);
-    FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer producer, double min, double max, int probability);
+    FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius, int probability);
+    FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer pCenter, double min, double max, int probability);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -37,13 +37,13 @@ public interface FSphereProducer extends Iterable<FSphere> {
         return withRandomRadius(tag, min, max, 1);
     }
 
-    default FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer producer, double radius) {
+    default FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius) {
 
-        return withCenterAndFixedRadius(tag, producer, radius, 1);
+        return withCenterAndFixedRadius(tag, pCenter, radius, 1);
     }
 
-    default FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer producer, double min, double max) {
+    default FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer pCenter, double min, double max) {
 
-        return withCenterAndRandomRadius(tag, producer, min, max, 1);
+        return withCenterAndRandomRadius(tag, pCenter, min, max, 1);
     }
 }

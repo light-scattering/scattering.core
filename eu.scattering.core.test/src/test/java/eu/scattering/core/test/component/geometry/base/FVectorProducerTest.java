@@ -1,8 +1,8 @@
 package eu.scattering.core.test.component.geometry.base;
 
+import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,14 +32,37 @@ public class FVectorProducerTest {
     @Test
     @DisplayName("Produce custom")
     void produceCustom() {
-        FVectorProducer producer = factory.getFVectorProducer();
-
         AtomicInteger length = new AtomicInteger(1);
-        producer.withCustomRule((factory) -> {
+
+        FVectorProducer producer = factory.getFVectorProducer().withCustomRule((factory) -> {
             int lengthCurrent = length.getAndIncrement();
 
             return factory.getFVector(-lengthCurrent, -lengthCurrent, -lengthCurrent, lengthCurrent, lengthCurrent, lengthCurrent);
         }, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(-1, -1, -1, 1, 1, 1),
+                        "The FVector A value is erroneous"),
+                () -> assertTrue(resultB.isExact(-2, -2, -2, 2, 2, 2),
+                        "The FVector B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce custom (simple)")
+    void produceCustomSimple() {
+        AtomicInteger length = new AtomicInteger(1);
+
+        FVectorProducer producer = factory.getFVectorProducer().withCustomRule((factory) -> {
+            int lengthCurrent = length.getAndIncrement();
+
+            return factory.getFVector(-lengthCurrent, -lengthCurrent, -lengthCurrent, lengthCurrent, lengthCurrent, lengthCurrent);
+        });
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -136,16 +159,16 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit X")
-    void presetUnitX() {
+    @DisplayName("Preset dir X")
+    void presetDirX() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withUnitX(1);
+                .withDirOX(3, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
 
         Assertions.assertAll("Validate FVector values",
-                () -> assertTrue(resultA.isExact(0, 0, 0, 1, 0, 0),
+                () -> assertTrue(resultA.isExact(0, 0, 0, 3, 0, 0),
                         "The value is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -153,16 +176,16 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Preset unit Y")
-    void presetUnitY() {
+    @DisplayName("Preset dir X (simple)")
+    void presetDirXSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withUnitY(1);
+                .withDirOX(3);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
 
         Assertions.assertAll("Validate FVector values",
-                () -> assertTrue(resultA.isExact(0, 0, 0, 0, 1, 0),
+                () -> assertTrue(resultA.isExact(0, 0, 0, 3, 0, 0),
                         "The value is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -170,10 +193,44 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Preset  unit Z")
-    void presetAddUnitZ() {
+    @DisplayName("Preset dir Y")
+    void presetDirY() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withUnitZ(1);
+                .withDirOY(3, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(0, 0, 0, 0, 3, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset dir Y (simple)")
+    void presetDirYSimple() {
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withDirOY(3);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(0, 0, 0, 0, 3, 0),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset dir Z")
+    void presetDirZ() {
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withDirOZ(1, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -187,32 +244,147 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Preset in range")
-    void presetInRange() {
-        FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
+    @DisplayName("Preset dir Z (simple)")
+    void presetDirZSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withInRange(range, 1);
+                .withDirOZ(1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
 
         Assertions.assertAll("Validate FVector values",
-                () -> assertTrue(resultA.getHeadX() < 0.01,
-                        "Value X is incorrect"),
-                () -> assertTrue(resultA.getHeadY() < 0.01,
-                        "Value Y is incorrect"),
-                () -> assertTrue(resultA.getHeadZ() < 0.01,
-                        "Value Z is incorrect"),
-                () -> assertFalse(resultA.isExact(resultB),
-                        "Values should be different")
+                () -> assertTrue(resultA.isExact(0, 0, 0, 0, 0, 1),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 
     @Test
-    @DisplayName("Preset in sphere")
-    void presetInSphere() {
+    @DisplayName("Preset base dir X")
+    void presetBaseDirX() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
         FVectorProducer producer = factory.getFVectorProducer()
-                .withInsideSphere(0.01, 1);
+                .withBaseAndDirOX(pBase, 3, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(1, 2, 3, 4, 2, 3),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base dir X (simple)")
+    void presetBaseDirXSimple() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndDirOX(pBase, 3);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(1, 2, 3, 4, 2, 3),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base dir Y")
+    void presetBaseDirY() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndDirOY(pBase, 3, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(1, 2, 3, 1, 5, 3),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base dir Y (simple)")
+    void presetBaseDirYSimple() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndDirOY(pBase, 3);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(1, 2, 3, 1, 5, 3),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base dir Z")
+    void presetBaseDirZ() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndDirOZ(pBase, 3, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(1, 2, 3, 1, 2, 6),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base dir Z (simple)")
+    void presetBaseDirZSimple() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndDirOZ(pBase, 3);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.isExact(1, 2, 3, 1, 2, 6),
+                        "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset in radius")
+    void presetInRadius() {
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withInRadius(0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -228,10 +400,29 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Preset on sphere")
-    void presetOnSphere() {
+    @DisplayName("Preset in radius (simple)")
+    void presetInRadiusSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withOnSphere(0.01, 1);
+                .withInRadius(0.01);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getMagnitude() < 0.01,
+                        "Position is incorrect"),
+                () -> assertTrue(resultA.getRefBase().isExact(0, 0, 0),
+                        "Value is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset on radius")
+    void presetOnRadius() {
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withOnRadius(0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -243,6 +434,251 @@ public class FVectorProducerTest {
                         "The value is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset on radius (simple)")
+    void presetOnRadiusSimple() {
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withOnRadius(0.01);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertEquals(resultA.getMagnitude(), 0.01,
+                        epsilon, "The position is incorrect"),
+                () -> assertTrue(resultA.getRefBase().isExact(0, 0, 0),
+                        "The value is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base in radius")
+    void presetBaseInRadius() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndInRadius(pBase, 0.01, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getMagnitude() < 0.01,
+                        "Position is incorrect"),
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "Value is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base in radius (simple)")
+    void presetBaseInRadiusSimple() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndInRadius(pBase, 0.01);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getMagnitude() < 0.01,
+                        "Position is incorrect"),
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "Value is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base on radius")
+    void presetBaseOnRadius() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndOnRadius(pBase, 0.01, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertEquals(resultA.getMagnitude(), 0.01,
+                        epsilon, "The position is incorrect"),
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "The value is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base on radius (simple)")
+    void presetBaseOnRadiusSimple() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndOnRadius(pBase, 0.01);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertEquals(resultA.getMagnitude(), 0.01,
+                        epsilon, "The position is incorrect"),
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "The value is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base")
+    void presetBase() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBase(pBase, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "Base position is incorrect"),
+                () -> assertTrue(resultA.getRefHead().isExact(0, 0, 0),
+                        "Head position is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "References should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base (simple)")
+    void presetBaseSimple() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBase(pBase);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "Base position is incorrect"),
+                () -> assertTrue(resultA.getRefHead().isExact(0, 0, 0),
+                        "Head position is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "References should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset head")
+    void presetHead() {
+        FPointProducer pHead = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withHead(pHead, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getRefBase().isExact(0, 0, 0),
+                        "Base position is incorrect"),
+                () -> assertTrue(resultA.getRefHead().isExact(1, 2, 3),
+                        "Head position is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "References should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset head (simple)")
+    void presetHeadSimple() {
+        FPointProducer pHead = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withHead(pHead);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getRefBase().isExact(0, 0, 0),
+                        "Base position is incorrect"),
+                () -> assertTrue(resultA.getRefHead().isExact(1, 2, 3),
+                        "Head position is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "References should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base and head")
+    void presetBaseAndHead() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FPointProducer pHead = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(4, 5, 6));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndHead(pBase, pHead, 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "Base position is incorrect"),
+                () -> assertTrue(resultA.getRefHead().isExact(4, 5, 6),
+                        "Head position is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "References should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset base and head (simple)")
+    void presetBaseAndHeadSimple() {
+        FPointProducer pBase = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
+
+        FPointProducer pHead = factory.getFPointProducer()
+                .withCustomRule((factory) -> factory.getFPoint(4, 5, 6));
+
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withBaseAndHead(pBase, pHead);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertTrue(resultA.getRefBase().isExact(1, 2, 3),
+                        "Base position is incorrect"),
+                () -> assertTrue(resultA.getRefHead().isExact(4, 5, 6),
+                        "Head position is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "References should be different")
         );
     }
 }

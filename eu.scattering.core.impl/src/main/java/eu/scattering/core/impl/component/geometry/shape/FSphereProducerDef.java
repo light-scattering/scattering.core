@@ -92,10 +92,10 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer producer, double radius, int probability) {
+    public FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius, int probability) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
-            FPoint fPoint = producer.produce();
+            FPoint fPoint = pCenter.produce();
             FSphere fSphere = factory.getRefFSphere(fPoint);
 
             fSphere.setTag(tag);
@@ -110,10 +110,10 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer producer, double min, double max, int probability) {
+    public FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer pCenter, double min, double max, int probability) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
-            FPoint fPoint = producer.produce();
+            FPoint fPoint = pCenter.produce();
             FSphere fSphere = factory.getRefFSphere(fPoint);
 
             fSphere.setTag(tag);

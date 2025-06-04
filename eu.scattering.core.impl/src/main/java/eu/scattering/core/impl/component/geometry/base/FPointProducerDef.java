@@ -65,7 +65,7 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer withInsideSphere(double radius, int probability) {
+    public FPointProducer withInRadius(double radius, int probability) {
         Function<FPointFactory, FPoint> function = (factory) ->
                 factory.getFPoint().applyStateFrom(randomizer.nextDoubleInSphere(radius));
 
@@ -75,7 +75,7 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer withOnSphere(double radius, int probability) {
+    public FPointProducer withOnRadius(double radius, int probability) {
         Function<FPointFactory, FPoint> function = (factory) ->
                 factory.getFPoint().applyStateFrom(randomizer.nextDoubleOnSphere(radius));
 

@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.base.vector;
 
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -14,13 +14,23 @@ public interface FVectorProducer extends Iterable<FVector> {
 
     FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int probability);
 
-    FVectorProducer withUnitX(int probability);
-    FVectorProducer withUnitY(int probability);
-    FVectorProducer withUnitZ(int probability);
+    FVectorProducer withDirOX(double length, int probability);
+    FVectorProducer withDirOY(double length, int probability);
+    FVectorProducer withDirOZ(double length, int probability);
 
-    FVectorProducer withInsideSphere(double radius, int probability);
-    FVectorProducer withOnSphere(double radius, int probability);
-    FVectorProducer withInRange(FPairPos3D range, int probability);
+    FVectorProducer withBaseAndDirOX(FPointProducer pBase, double length, int probability);
+    FVectorProducer withBaseAndDirOY(FPointProducer pBase, double length, int probability);
+    FVectorProducer withBaseAndDirOZ(FPointProducer pBase, double length, int probability);
+
+    FVectorProducer withInRadius(double radius, int probability);
+    FVectorProducer withOnRadius(double radius, int probability);
+
+    FVectorProducer withBaseAndInRadius(FPointProducer pBase, double radius, int probability);
+    FVectorProducer withBaseAndOnRadius(FPointProducer pBase, double radius, int probability);
+
+    FVectorProducer withBase(FPointProducer pBase, int probability);
+    FVectorProducer withHead(FPointProducer pHead, int probability);
+    FVectorProducer withBaseAndHead(FPointProducer pBase, FPointProducer pHead, int probability);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -29,33 +39,68 @@ public interface FVectorProducer extends Iterable<FVector> {
         return withCustomRule(function, 1);
     }
 
-    default FVectorProducer withUnitX() {
+    default FVectorProducer withDirOX(double length) {
 
-        return withUnitX(1);
+        return withDirOX(length, 1);
     }
 
-    default FVectorProducer withUnitY() {
+    default FVectorProducer withDirOY(double length) {
 
-        return withUnitY(1);
+        return withDirOY(length, 1);
     }
 
-    default FVectorProducer withUnitZ() {
+    default FVectorProducer withDirOZ(double length) {
 
-        return withUnitZ(1);
+        return withDirOZ(length, 1);
     }
 
-    default FVectorProducer withInsideSphere(double radius) {
+    default FVectorProducer withBaseAndDirOX(FPointProducer pBase, double length) {
 
-        return withInsideSphere(radius, 1);
+        return withBaseAndDirOX(pBase, length, 1);
     }
 
-    default FVectorProducer withOnSphere(double radius) {
+    default FVectorProducer withBaseAndDirOY(FPointProducer pBase, double length) {
 
-        return withOnSphere(radius, 1);
+        return withBaseAndDirOY(pBase, length, 1);
     }
 
-    default FVectorProducer withInRange(FPairPos3D range) {
+    default FVectorProducer withBaseAndDirOZ(FPointProducer pBase, double length) {
 
-        return withInRange(range, 1);
+        return withBaseAndDirOZ(pBase, length, 1);
+    }
+
+    default FVectorProducer withInRadius(double radius) {
+
+        return withInRadius(radius, 1);
+    }
+
+    default FVectorProducer withOnRadius(double radius) {
+
+        return withOnRadius(radius, 1);
+    }
+
+    default FVectorProducer withBaseAndInRadius(FPointProducer pBase, double radius) {
+
+        return withBaseAndInRadius(pBase, radius, 1);
+    }
+
+    default FVectorProducer withBaseAndOnRadius(FPointProducer pBase, double radius) {
+
+        return withBaseAndOnRadius(pBase, radius, 1);
+    }
+
+    default FVectorProducer withBase(FPointProducer pBase) {
+
+        return withBase(pBase, 1);
+    }
+
+    default FVectorProducer withHead(FPointProducer pHead) {
+
+        return withHead(pHead, 1);
+    }
+
+    default FVectorProducer withBaseAndHead(FPointProducer pBase, FPointProducer pHead) {
+
+        return withBaseAndHead(pBase, pHead, 1);
     }
 }

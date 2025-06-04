@@ -32,14 +32,37 @@ public class FPointProducerTest {
     @Test
     @DisplayName("Produce custom")
     void produceCustom() {
-        FPointProducer producer = factory.getFPointProducer();
-
         AtomicInteger length = new AtomicInteger(1);
-        producer.withCustomRule((factory) -> {
+
+        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory) -> {
             int lengthCurrent = length.getAndIncrement();
 
             return factory.getFPoint(lengthCurrent, lengthCurrent, lengthCurrent);
         }, 1);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(resultA.isExact(1, 1, 1),
+                        "The FPoint A value is erroneous"),
+                () -> assertTrue(resultB.isExact(2, 2, 2),
+                        "The FPoint B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce custom (simple)")
+    void produceCustomSimple() {
+        AtomicInteger length = new AtomicInteger(1);
+
+        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory) -> {
+            int lengthCurrent = length.getAndIncrement();
+
+            return factory.getFPoint(lengthCurrent, lengthCurrent, lengthCurrent);
+        });
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -155,6 +178,25 @@ public class FPointProducerTest {
     }
 
     @Test
+    @DisplayName("Preset zero (simple)")
+    void presetZeroSimple() {
+        FPointProducer producer = factory.getFPointProducer()
+                .withZero();
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(resultA.isExact(0, 0, 0),
+                        "The FPoint A value is erroneous"),
+                () -> assertTrue(resultB.isExact(0, 0, 0),
+                        "The FPoint B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
     @DisplayName("Preset in range")
     void presetInRange() {
         FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
@@ -177,10 +219,49 @@ public class FPointProducerTest {
     }
 
     @Test
+    @DisplayName("Preset in range (simple)")
+    void presetInRangeSimple() {
+        FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
+        FPointProducer producer = factory.getFPointProducer()
+                .withInRange(range);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(Math.abs(resultA.getX()) < 0.01,
+                        "Value X is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getY()) < 0.01,
+                        "Value Y is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getZ()) < 0.01,
+                        "Value Z is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
     @DisplayName("Preset in sphere")
     void presetInSphere() {
         FPointProducer producer = factory.getFPointProducer()
-                .withInsideSphere(0.01, 1);
+                .withInRadius(0.01, 1);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(resultA.getMagnitude() < 0.01,
+                        "Position is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset in sphere (simple)")
+    void presetInSphereSimple() {
+        FPointProducer producer = factory.getFPointProducer()
+                .withInRadius(0.01);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -197,7 +278,24 @@ public class FPointProducerTest {
     @DisplayName("Preset on sphere")
     void presetOnSphere() {
         FPointProducer producer = factory.getFPointProducer()
-                .withOnSphere(0.01, 1);
+                .withOnRadius(0.01, 1);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertEquals(resultA.getMagnitude(), 0.01,
+                        epsilon, "Position is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset on sphere (simple)")
+    void presetOnSphereSimple() {
+        FPointProducer producer = factory.getFPointProducer()
+                .withOnRadius(0.01);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
