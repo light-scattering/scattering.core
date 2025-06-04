@@ -12,7 +12,7 @@ public interface FPointProducer extends Iterable<FPoint> {
 
     // -------------------------------------------------------------------------------------------------
 
-    FPointProducer withCustomRule(Function<FPoint, FPoint> function, int probability);
+    FPointProducer withCustomRule(Function<FPointFactory, FPoint> function, int probability);
 
     FPointProducer withZero(int probability);
     FPointProducer withInsideSphere(double radius, int probability);
@@ -21,7 +21,7 @@ public interface FPointProducer extends Iterable<FPoint> {
 
     // -------------------------------------------------------------------------------------------------
 
-    default FPointProducer withCustomRule(Function<FPoint, FPoint> function) {
+    default FPointProducer withCustomRule(Function<FPointFactory, FPoint> function) {
 
         return withCustomRule(function, 1);
     }

@@ -12,7 +12,7 @@ public interface FVectorProducer extends Iterable<FVector> {
 
     // -------------------------------------------------------------------------------------------------
 
-    FVectorProducer withCustomRule(Function<FVector, FVector> function, int probability);
+    FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int probability);
 
     FVectorProducer withUnitX(int probability);
     FVectorProducer withUnitY(int probability);
@@ -24,7 +24,7 @@ public interface FVectorProducer extends Iterable<FVector> {
 
     // -------------------------------------------------------------------------------------------------
 
-    default FVectorProducer withCustomRule(Function<FVector, FVector> function) {
+    default FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function) {
 
         return withCustomRule(function, 1);
     }

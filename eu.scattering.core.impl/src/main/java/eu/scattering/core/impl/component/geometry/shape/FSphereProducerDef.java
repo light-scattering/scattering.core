@@ -1,6 +1,9 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
@@ -9,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class FSphereProducerDef implements FSphereProducer {
@@ -23,24 +25,26 @@ public class FSphereProducerDef implements FSphereProducer {
         };
     }
 
+    private final FSphereFactory factory;
     private final ProducerCoreAdvancedDef<FSphere> processor;
     private final FRandGenerator randomizer;
 
-    private FSphereProducerDef(Supplier<FSphere> supplier, FRandGenerator randomizer) {
+    private FSphereProducerDef(FSphereFactory factory, FRandGenerator randomizer) {
 
+        this.factory = factory;
         this.randomizer = randomizer;
-        this.processor = new ProducerCoreAdvancedDef<>(supplier, this.randomizer);
+        this.processor = new ProducerCoreAdvancedDef<>(this.randomizer);
     }
 
-    public static FSphereProducer create(Supplier<FSphere> supplier, FRandGenerator randomizer) {
+    public static FSphereProducer create(FSphereFactory factory, FRandGenerator randomizer) {
 
-        return new FSphereProducerDef(supplier, randomizer);
+        return new FSphereProducerDef(factory, randomizer);
     }
 
     @Override
-    public FSphereProducer withCustomRule(Function<FSphere, FSphere> function, int probability) {
+    public FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int probability) {
 
-        this.processor.addConfig(function, probability);
+        this.processor.addConfig(() -> function.apply(factory), probability);
 
         return this;
     }
@@ -56,10 +60,13 @@ public class FSphereProducerDef implements FSphereProducer {
     @Override
     public FSphereProducer withFixedRadius(String tag, double radius, int probability) {
 
-        Function<FSphere, FSphere> function = (fSphere) -> {
-            fSphere.setTag(tag);
+        Function<FSphereFactory, FSphere> function = (factory) -> {
+            FSphere fSphere = factory.getFSphere();
 
-            return fSphere.setRadius(radius);
+            fSphere.setTag(tag);
+            fSphere.setRadius(radius);
+
+            return fSphere;
         };
 
         withCustomRule(function, probability);
@@ -70,10 +77,49 @@ public class FSphereProducerDef implements FSphereProducer {
     @Override
     public FSphereProducer withRandomRadius(String tag, double min, double max, int probability) {
 
-        Function<FSphere, FSphere> function = (fSphere) -> {
-            fSphere.setTag(tag);
+        Function<FSphereFactory, FSphere> function = (factory) -> {
+            FSphere fSphere = factory.getFSphere();
 
-            return fSphere.setRadius(randomizer.nextDouble(min, max));
+            fSphere.setTag(tag);
+            fSphere.setRadius(randomizer.nextDouble(min, max));
+
+            return fSphere;
+        };
+
+        withCustomRule(function, probability);
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer producer, double radius, int probability) {
+
+        Function<FSphereFactory, FSphere> function = (factory) -> {
+            FPoint fPoint = producer.produce();
+            FSphere fSphere = factory.getRefFSphere(fPoint);
+
+            fSphere.setTag(tag);
+            fSphere.setRadius(radius);
+
+            return fSphere;
+        };
+
+        withCustomRule(function, probability);
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer producer, double min, double max, int probability) {
+
+        Function<FSphereFactory, FSphere> function = (factory) -> {
+            FPoint fPoint = producer.produce();
+            FSphere fSphere = factory.getRefFSphere(fPoint);
+
+            fSphere.setTag(tag);
+            fSphere.setRadius(randomizer.nextDouble(min, max));
+
+            return fSphere;
         };
 
         withCustomRule(function, probability);

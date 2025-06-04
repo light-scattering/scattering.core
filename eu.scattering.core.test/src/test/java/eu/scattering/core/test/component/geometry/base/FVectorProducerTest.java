@@ -35,12 +35,10 @@ public class FVectorProducerTest {
         FVectorProducer producer = factory.getFVectorProducer();
 
         AtomicInteger length = new AtomicInteger(1);
-        producer.withCustomRule((fVector) -> {
+        producer.withCustomRule((factory) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            fVector.set(-lengthCurrent, -lengthCurrent, -lengthCurrent, lengthCurrent, lengthCurrent, lengthCurrent);
-
-            return fVector;
+            return factory.getFVector(-lengthCurrent, -lengthCurrent, -lengthCurrent, lengthCurrent, lengthCurrent, lengthCurrent);
         }, 1);
 
         FVector resultA = producer.produce();
@@ -62,8 +60,8 @@ public class FVectorProducerTest {
         FVectorProducer producer = factory.getFVectorProducer();
 
         producer
-                .withCustomRule((fVector) -> fVector.setHeadX(1), 1)
-                .withCustomRule((fVector) -> fVector.setHeadX(2), 3);
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(1), 1)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(2), 3);
 
         int countA = 0;
         int countB = 0;
@@ -92,9 +90,9 @@ public class FVectorProducerTest {
         FVectorProducer producer = factory.getFVectorProducer();
 
         producer
-                .withCustomRule((fVector) -> fVector.setHeadX(1), 5)
-                .withCustomRule((fVector) -> fVector.setHeadX(2), 10)
-                .withCustomRule((fVector) -> fVector.setHeadX(3), 15);
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(1), 5)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(2), 10)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(3), 15);
 
         int qLength1 = 0;
         int qLength2 = 0;
@@ -124,8 +122,8 @@ public class FVectorProducerTest {
         FVectorProducer producer = factory.getFVectorProducer();
 
         producer
-                .withCustomRule((fVector) -> fVector.setHeadX(1), 1)
-                .withCustomRule((fVector) -> fVector.setHeadX(2), 1);
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(1), 1)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(2), 1);
 
         List<FVector> list = producer.stream().limit(100).collect(Collectors.toList());
 

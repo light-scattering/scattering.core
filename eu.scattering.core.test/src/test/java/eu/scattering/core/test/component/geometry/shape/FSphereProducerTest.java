@@ -34,13 +34,7 @@ public class FSphereProducerTest {
         FSphereProducer producer = factory.getFSphereProducer();
 
         AtomicInteger radius = new AtomicInteger(1);
-        producer.withCustomRule((fSphere) -> {
-            int radiusCurrent = radius.getAndIncrement();
-
-            fSphere.setRadius(radiusCurrent);
-
-            return fSphere;
-        }, 1);
+        producer.withCustomRule((factory) -> factory.getFSphere(radius.getAndIncrement()), 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -65,8 +59,8 @@ public class FSphereProducerTest {
         FSphereProducer producer = factory.getFSphereProducer();
 
         producer
-                .withCustomRule((fSphere) -> fSphere.setRadius(1), 1)
-                .withCustomRule((fSphere) -> fSphere.setRadius(2), 3);
+                .withCustomRule((factory) -> factory.getFSphere(1), 1)
+                .withCustomRule((factory) -> factory.getFSphere(2), 3);
 
         int countA = 0;
         int countB = 0;
@@ -95,9 +89,9 @@ public class FSphereProducerTest {
         FSphereProducer producer = factory.getFSphereProducer();
 
         producer
-                .withCustomRule((fSphere) -> fSphere.setRadius(1), 5)
-                .withCustomRule((fSphere) -> fSphere.setRadius(2), 10)
-                .withCustomRule((fSphere) -> fSphere.setRadius(3), 15);
+                .withCustomRule((fSphere) -> factory.getFSphere(1), 5)
+                .withCustomRule((fSphere) -> factory.getFSphere(2), 10)
+                .withCustomRule((fSphere) -> factory.getFSphere(3), 15);
 
         int qRadius1 = 0;
         int qRadius2 = 0;
@@ -132,8 +126,8 @@ public class FSphereProducerTest {
         FSphereProducer producer = factory.getFSphereProducer();
 
         producer
-                .withCustomRule((fSphere) -> fSphere.setRadius(1), 1)
-                .withCustomRule((fSphere) -> fSphere.setRadius(2), 1);
+                .withCustomRule((fSphere) -> factory.getFSphere(1), 1)
+                .withCustomRule((fSphere) -> factory.getFSphere(2), 1);
 
         List<FSphere> list = producer.stream().limit(100).collect(Collectors.toList());
 

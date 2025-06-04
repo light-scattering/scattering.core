@@ -4,30 +4,27 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class ProducerCoreAdvancedDef<E>{
-    private final List<AbstractMap.SimpleEntry<Integer, Function<E, E>>> config = new ArrayList<>();
+public class ProducerCoreAdvancedDef<E> {
+    private final List<AbstractMap.SimpleEntry<Integer, Supplier<E>>> config = new ArrayList<>();
 
-    private final Supplier<E> supplier;
     private final FRandGenerator randomizer;
 
-    public ProducerCoreAdvancedDef(Supplier<E> supplier, FRandGenerator randomizer) {
+    public ProducerCoreAdvancedDef(FRandGenerator randomizer) {
 
-        this.supplier = supplier;
         this.randomizer = randomizer;
     }
 
-    public void addConfig(Function<E, E> function) {
+    public void addConfig(Supplier<E> supplier) {
 
-        this.addConfig(function, 1);
+        this.addConfig(supplier, 1);
     }
 
-    public void addConfig(Function<E, E> function, int probability) {
+    public void addConfig(Supplier<E> supplier, int probability) {
 
-        this.config.add(new AbstractMap.SimpleEntry<>(probability, function));
+        this.config.add(new AbstractMap.SimpleEntry<>(probability, supplier));
     }
 
     public E produce() {
@@ -36,30 +33,30 @@ public class ProducerCoreAdvancedDef<E>{
             throw new IllegalStateException("The producer is not configured");
         }
 
-        return getFunction().apply(this.supplier.get());
+        return getSupplier().get();
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private Function<E, E> getFunction() {
+    private Supplier<E> getSupplier() {
 
         if (this.config.isEmpty()) {
             throw new IllegalStateException("The provider has not been configured");
         }
 
         if (this.config.size() == 1) {
-            return this.getFunctionFixed();
+            return this.getSupplierFixed();
         }
 
-        return this.getFunctionRandomized();
+        return this.getSupplierRandomized();
     }
 
-    private Function<E, E> getFunctionFixed() {
+    private Supplier<E> getSupplierFixed() {
 
         return this.config.get(0).getValue();
     }
 
-    private Function<E, E> getFunctionRandomized() {
+    private Supplier<E> getSupplierRandomized() {
         double valueMax = this.config.stream().map(AbstractMap.SimpleEntry::getKey).reduce(0, Integer::sum);
         double valueRandom = this.randomizer.nextDouble(0, valueMax);
 
@@ -97,7 +94,7 @@ public class ProducerCoreAdvancedDef<E>{
 
         this.config.forEach(e -> {
             for (int i = 0 ; i < e.getKey() ; i++) {
-                list.add(e.getValue().apply(this.supplier.get()));
+                list.add(e.getValue().get());
             }
         });
 

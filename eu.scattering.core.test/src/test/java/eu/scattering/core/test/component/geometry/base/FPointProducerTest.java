@@ -35,12 +35,10 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer();
 
         AtomicInteger length = new AtomicInteger(1);
-        producer.withCustomRule((fPoint) -> {
+        producer.withCustomRule((factory) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            fPoint.set(lengthCurrent, lengthCurrent, lengthCurrent);
-
-            return fPoint;
+            return factory.getFPoint(lengthCurrent, lengthCurrent, lengthCurrent);
         }, 1);
 
         FPoint resultA = producer.produce();
@@ -62,8 +60,8 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer();
 
         producer
-                .withCustomRule((fPoint) -> fPoint.setX(1), 1)
-                .withCustomRule((fPoint) -> fPoint.setX(2), 2);
+                .withCustomRule((factory) -> factory.getFPoint().setX(1), 1)
+                .withCustomRule((factory) -> factory.getFPoint().setX(2), 2);
 
         int countA = 0;
         int countB = 0;
@@ -92,9 +90,9 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer();
 
         producer
-                .withCustomRule((fPoint) -> fPoint.setX(1), 5)
-                .withCustomRule((fPoint) -> fPoint.setX(2), 10)
-                .withCustomRule((fPoint) -> fPoint.setX(3), 15);
+                .withCustomRule((factory) -> factory.getFPoint().setX(1), 5)
+                .withCustomRule((factory) -> factory.getFPoint().setX(2), 10)
+                .withCustomRule((factory) -> factory.getFPoint().setX(3), 15);
 
         int qLength1 = 0;
         int qLength2 = 0;
@@ -124,8 +122,8 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer();
 
         producer
-                .withCustomRule((fPoint) -> fPoint.setX(1), 1)
-                .withCustomRule((fPoint) -> fPoint.setX(2), 1);
+                .withCustomRule((factory) -> factory.getFPoint().setX(1), 1)
+                .withCustomRule((factory) -> factory.getFPoint().setX(2), 1);
 
         List<FPoint> list = producer.stream().limit(100).collect(Collectors.toList());
 
