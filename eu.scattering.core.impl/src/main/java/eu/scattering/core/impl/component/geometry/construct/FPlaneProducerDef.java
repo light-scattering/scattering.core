@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneFactory;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.Iterator;
 import java.util.function.Function;
@@ -14,12 +14,12 @@ import java.util.stream.Stream;
 public class FPlaneProducerDef implements FPlaneProducer {
 
     private final FPlaneFactory factory;
-    private final ProducerCoreAdvancedDef<FPlane> processor;
+    private final ProducerCoreDef<FPlane> processor;
 
     private FPlaneProducerDef(FPlaneFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
-        this.processor = new ProducerCoreAdvancedDef<>(randomizer);
+        this.processor = new ProducerCoreDef<>(randomizer);
     }
 
     public static FPlaneProducer create(FPlaneFactory factory, FRandGenerator randomizer) {

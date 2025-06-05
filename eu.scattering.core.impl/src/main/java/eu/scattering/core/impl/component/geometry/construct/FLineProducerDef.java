@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.line.FLineFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.Iterator;
 import java.util.function.Function;
@@ -14,12 +14,12 @@ import java.util.stream.Stream;
 public class FLineProducerDef implements FLineProducer {
 
     private final FLineFactory factory;
-    private final ProducerCoreAdvancedDef<FLine> processor;
+    private final ProducerCoreDef<FLine> processor;
 
     private FLineProducerDef(FLineFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
-        this.processor = new ProducerCoreAdvancedDef<>(randomizer);
+        this.processor = new ProducerCoreDef<>(randomizer);
     }
 
     public static FLineProducer create(FLineFactory factory, FRandGenerator randomizer) {

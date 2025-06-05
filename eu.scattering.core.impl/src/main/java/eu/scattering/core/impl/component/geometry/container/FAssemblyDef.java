@@ -44,7 +44,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public boolean register(T element) {
+    public boolean registerWithCheck(T element) {
 
         boolean newGeometry = registerGeometry(element);
         boolean newFPoint = registerFPoints(element);
@@ -52,20 +52,33 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return newGeometry || newFPoint;
     }
 
+
     @Override
-    public void applyFPoint(Consumer<FPoint> consumer) {
+    public FAssembly<T> register(T element) {
+
+        registerWithCheck(element);
+
+        return this;
+    }
+
+    @Override
+    public FAssembly<T> applyFPoint(Consumer<FPoint> consumer) {
 
         for (FPoint fPoint : this.fPoints) {
             consumer.accept(fPoint);
         }
+
+        return this;
     }
 
     @Override
-    public void applyGeometry(Consumer<T> consumer) {
+    public FAssembly<T> applyGeometry(Consumer<T> consumer) {
 
         for (T geometry : this.geometries) {
             consumer.accept(geometry);
         }
+
+        return this;
     }
 
     private boolean registerGeometry(T candidate) {
@@ -191,7 +204,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         FAssembly<T> copy = supplyFAssembly();
 
         for (T element : this.geometries) {
-            copy.register((T) element.copyGeometry());
+            copy.registerWithCheck((T) element.copyGeometry());
         }
 
         return copy;
@@ -270,7 +283,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
             JSONObject candidate = candidates.getJSONObject(i);
             Geometry geometry = parser.parse(candidate);
 
-            register((T) geometry);
+            registerWithCheck((T) geometry);
         }
 
         return this;

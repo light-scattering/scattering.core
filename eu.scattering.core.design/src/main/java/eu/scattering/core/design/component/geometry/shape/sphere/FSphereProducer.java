@@ -12,13 +12,13 @@ public interface FSphereProducer extends Iterable<FSphere> {
 
     // -------------------------------------------------------------------------------------------------
 
-    FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int probability);
+    FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int weight);
 
-    FSphereProducer withFixedRadius(String tag, double radius, int probability);
-    FSphereProducer withRandomRadius(String tag, double min, double max, int probability);
+    FSphereProducer withFixedRadius(String tag, double radius, int weight);
+    FSphereProducer withRandomRadius(String tag, double min, double max, int weight);
 
-    FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius, int probability);
-    FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer pCenter, double min, double max, int probability);
+    FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius, int weight);
+    FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer pCenter, double min, double max, int weight);
 
     // -------------------------------------------------------------------------------------------------
 

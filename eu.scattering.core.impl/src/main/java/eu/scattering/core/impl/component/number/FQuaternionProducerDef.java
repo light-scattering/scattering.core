@@ -4,48 +4,64 @@ import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
+import java.util.Iterator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class FQuaternionProducerDef implements FQuaternionProducer {
 
-    private final ProducerCoreBasicDef<FQuaternionProducer, FQuaternion> core;
-
-    private final FRandGenerator random;
     private final FQuaternionFactory factory;
+    private final ProducerCoreDef<FQuaternion> processor;
 
-    private FQuaternionProducerDef(FQuaternionFactory factory, FRandGenerator random) {
+    private FQuaternionProducerDef(FQuaternionFactory factory, FRandGenerator randomizer) {
 
-        this.random = random;
         this.factory = factory;
-
-        this.core = new ProducerCoreBasicDef<>(this, this.random);
-
-        setPresetDefault();
+        this.processor = new ProducerCoreDef<>(randomizer);
     }
 
-    public static FQuaternionProducer create(FQuaternionFactory factory, FRandGenerator random) {
+    public static FQuaternionProducer create(FQuaternionFactory factory, FRandGenerator randomizer) {
 
-        return new FQuaternionProducerDef(factory, random);
+        return new FQuaternionProducerDef(factory, randomizer);
     }
 
-    private void setConfig(Function<FQuaternion, FQuaternion> function) {
+    @Override
+    public FQuaternionProducer withCustomRule(Function<FQuaternionFactory, FQuaternion> function, int weight) {
 
-        core.setConfig(function, 1);
+        this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
     }
 
     @Override
     public FQuaternion produce() {
 
-        return core.getFunction().apply(factory.getFQuaternion());
+        return processor.produce();
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private void setPresetDefault() {
-        Function<FQuaternion, FQuaternion> function = (fQuaternion) -> fQuaternion;
+    @Override
+    public FQuaternionProducer withZero(int weight) {
+        Function<FQuaternionFactory, FQuaternion> function = FQuaternionFactory::getFQuaternion;
 
-        setConfig(function);
+        withCustomRule(function, weight);
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public Stream<FQuaternion> stream() {
+
+        return this.processor.stream();
+    }
+
+    @Override
+    public Iterator<FQuaternion> iterator() {
+
+        return this.processor.getIterator();
     }
 }

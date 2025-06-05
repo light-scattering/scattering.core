@@ -217,14 +217,14 @@ public class GeometryParserTest {
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 2, -3, 4, -5, 6));
         FSphere fSphere = factory.getFSphere(2);
 
-        fAssembly.register(fPoint);
-        fAssembly.register(fVector);
-        fAssembly.register(fDraft);
-        fAssembly.register(fLine);
-        fAssembly.register(fPlane);
-        fAssembly.register(fRay);
-        fAssembly.register(fSegment);
-        fAssembly.register(fSphere);
+        fAssembly.registerWithCheck(fPoint);
+        fAssembly.registerWithCheck(fVector);
+        fAssembly.registerWithCheck(fDraft);
+        fAssembly.registerWithCheck(fLine);
+        fAssembly.registerWithCheck(fPlane);
+        fAssembly.registerWithCheck(fRay);
+        fAssembly.registerWithCheck(fSegment);
+        fAssembly.registerWithCheck(fSphere);
 
         JSONObject fAssemblyJSON = fAssembly.toJSON();
 

@@ -10,10 +10,12 @@ import java.util.function.Consumer;
 
 public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, Iterable<T> {
 
-    boolean register(T element);
+    boolean registerWithCheck(T element);
 
-    void applyFPoint(Consumer<FPoint> consumer);
-    void applyGeometry(Consumer<T> consumer);
+    FAssembly<T> register(T element);
+
+    FAssembly<T> applyFPoint(Consumer<FPoint> consumer);
+    FAssembly<T> applyGeometry(Consumer<T> consumer);
 
     //--------------------------------------------------
 

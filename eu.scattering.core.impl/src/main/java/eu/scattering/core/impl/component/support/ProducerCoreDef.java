@@ -7,12 +7,12 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class ProducerCoreAdvancedDef<E> {
+public class ProducerCoreDef<E> {
     private final List<AbstractMap.SimpleEntry<Integer, Supplier<E>>> config = new ArrayList<>();
 
     private final FRandGenerator randomizer;
 
-    public ProducerCoreAdvancedDef(FRandGenerator randomizer) {
+    public ProducerCoreDef(FRandGenerator randomizer) {
 
         this.randomizer = randomizer;
     }
@@ -104,7 +104,7 @@ public class ProducerCoreAdvancedDef<E> {
     }
 
     class ProducerIterator implements Iterator<E> {
-        private final List<E> list = ProducerCoreAdvancedDef.this.produceList();
+        private final List<E> list = ProducerCoreDef.this.produceList();
         private int index = 0;
 
         public ProducerIterator(Consumer<List<E>> processor) {

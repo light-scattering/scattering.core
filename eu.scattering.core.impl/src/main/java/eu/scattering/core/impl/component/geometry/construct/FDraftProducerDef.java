@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraftFactory;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraftProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.Iterator;
 import java.util.function.Function;
@@ -14,12 +14,12 @@ import java.util.stream.Stream;
 public class FDraftProducerDef implements FDraftProducer {
 
     private final FDraftFactory factory;
-    private final ProducerCoreAdvancedDef<FDraft> processor;
+    private final ProducerCoreDef<FDraft> processor;
 
     private FDraftProducerDef(FDraftFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
-        this.processor = new ProducerCoreAdvancedDef<>(randomizer);
+        this.processor = new ProducerCoreDef<>(randomizer);
     }
 
     public static FDraftProducer create(FDraftFactory factory, FRandGenerator randomizer) {

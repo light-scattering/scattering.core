@@ -277,7 +277,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public <T extends Geometry> FAssemblyProducer<T> getFAssemblyProducer() {
 
-        return FAssemblyProducerDef.create(this);
+        return FAssemblyProducerDef.create(this, this.fRandGenerator);
     }
 
     @Override

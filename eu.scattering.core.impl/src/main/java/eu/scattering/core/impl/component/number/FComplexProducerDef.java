@@ -4,48 +4,64 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexFactory;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
+import java.util.Iterator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class FComplexProducerDef implements FComplexProducer {
 
-    private final ProducerCoreBasicDef<FComplexProducer, FComplex> core;
-
-    private final FRandGenerator random;
     private final FComplexFactory factory;
+    private final ProducerCoreDef<FComplex> processor;
 
-    private FComplexProducerDef(FComplexFactory factory, FRandGenerator random) {
+    private FComplexProducerDef(FComplexFactory factory, FRandGenerator randomizer) {
 
-        this.random = random;
         this.factory = factory;
-
-        this.core = new ProducerCoreBasicDef<>(this, this.random);
-
-        setPresetDefault();
+        this.processor = new ProducerCoreDef<>(randomizer);
     }
 
-    public static FComplexProducer create(FComplexFactory factory, FRandGenerator random) {
+    public static FComplexProducer create(FComplexFactory factory, FRandGenerator randomizer) {
 
-        return new FComplexProducerDef(factory, random);
+        return new FComplexProducerDef(factory, randomizer);
     }
 
-    private void setConfig(Function<FComplex, FComplex> function) {
+    @Override
+    public FComplexProducer withCustomRule(Function<FComplexFactory, FComplex> function, int weight) {
 
-        core.setConfig(function, 1);
+        this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
     }
 
     @Override
     public FComplex produce() {
 
-        return core.getFunction().apply(factory.getFComplex());
+        return processor.produce();
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private void setPresetDefault() {
-        Function<FComplex, FComplex> function = (fComplex) -> fComplex;
+    @Override
+    public FComplexProducer withZero(int weight) {
+        Function<FComplexFactory, FComplex> function = FComplexFactory::getFComplex;
 
-        setConfig(function);
+        withCustomRule(function, weight);
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public Stream<FComplex> stream() {
+
+        return this.processor.stream();
+    }
+
+    @Override
+    public Iterator<FComplex> iterator() {
+
+        return this.processor.getIterator();
     }
 }

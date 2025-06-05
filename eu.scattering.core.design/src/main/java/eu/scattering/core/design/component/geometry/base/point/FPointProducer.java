@@ -12,14 +12,14 @@ public interface FPointProducer extends Iterable<FPoint> {
 
     // -------------------------------------------------------------------------------------------------
 
-    FPointProducer withCustomRule(Function<FPointFactory, FPoint> function, int probability);
+    FPointProducer withCustomRule(Function<FPointFactory, FPoint> function, int weight);
 
-    FPointProducer withZero(int probability);
+    FPointProducer withZero(int weight);
 
-    FPointProducer withInSphere(double radius, int probability);
-    FPointProducer withRadius(double radius, int probability);
+    FPointProducer withInSphere(double radius, int weight);
+    FPointProducer withRadius(double radius, int weight);
 
-    FPointProducer withInRange(FPairPos3D range, int probability);
+    FPointProducer withInRange(FPairPos3D range, int weight);
 
     // -------------------------------------------------------------------------------------------------
 

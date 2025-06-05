@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.Iterator;
 import java.util.List;
@@ -26,14 +26,14 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     private final FSphereFactory factory;
-    private final ProducerCoreAdvancedDef<FSphere> processor;
+    private final ProducerCoreDef<FSphere> processor;
     private final FRandGenerator randomizer;
 
     private FSphereProducerDef(FSphereFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
         this.randomizer = randomizer;
-        this.processor = new ProducerCoreAdvancedDef<>(this.randomizer);
+        this.processor = new ProducerCoreDef<>(this.randomizer);
     }
 
     public static FSphereProducer create(FSphereFactory factory, FRandGenerator randomizer) {
@@ -42,9 +42,9 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int probability) {
+    public FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory), probability);
+        this.processor.addConfig(() -> function.apply(factory), weight);
 
         return this;
     }
@@ -58,7 +58,7 @@ public class FSphereProducerDef implements FSphereProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSphereProducer withFixedRadius(String tag, double radius, int probability) {
+    public FSphereProducer withFixedRadius(String tag, double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FSphere fSphere = factory.getFSphere();
@@ -69,13 +69,13 @@ public class FSphereProducerDef implements FSphereProducer {
             return fSphere;
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FSphereProducer withRandomRadius(String tag, double min, double max, int probability) {
+    public FSphereProducer withRandomRadius(String tag, double min, double max, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FSphere fSphere = factory.getFSphere();
@@ -86,13 +86,13 @@ public class FSphereProducerDef implements FSphereProducer {
             return fSphere;
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius, int probability) {
+    public FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FPoint fPoint = pCenter.produce();
@@ -104,13 +104,13 @@ public class FSphereProducerDef implements FSphereProducer {
             return fSphere;
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer pCenter, double min, double max, int probability) {
+    public FSphereProducer withCenterAndRandomRadius(String tag, FPointProducer pCenter, double min, double max, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FPoint fPoint = pCenter.produce();
@@ -122,7 +122,7 @@ public class FSphereProducerDef implements FSphereProducer {
             return fSphere;
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }

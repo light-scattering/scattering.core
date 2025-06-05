@@ -49,9 +49,9 @@ public class FAssemblyTest {
             FVector fVectorY = factory.getFVector(0, 1, 0);
             FVector fVectorZ = factory.getFVector(0, 0, 1);
 
-            fAssembly.register(fVectorX);
-            fAssembly.register(fVectorY);
-            fAssembly.register(fVectorZ);
+            fAssembly.registerWithCheck(fVectorX);
+            fAssembly.registerWithCheck(fVectorY);
+            fAssembly.registerWithCheck(fVectorZ);
 
             Collection<FVector> geometries = fAssembly.getGeometries();
 
@@ -76,9 +76,9 @@ public class FAssemblyTest {
             FVector fVectorY = factory.getFVector(0, 1, 0);
             FVector fVectorZ = factory.getFVector(0, 0, 1);
 
-            fAssembly.register(fVectorX);
-            fAssembly.register(fVectorY);
-            fAssembly.register(fVectorZ);
+            fAssembly.registerWithCheck(fVectorX);
+            fAssembly.registerWithCheck(fVectorY);
+            fAssembly.registerWithCheck(fVectorZ);
 
             Collection<FPoint> list = fAssembly.toFPoints();
 
@@ -108,14 +108,14 @@ public class FAssemblyTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 2, -3, 4, -5, 6));
             FSphere fSphere = factory.getFSphere(2);
 
-            fAssembly.register(fPoint);
-            fAssembly.register(fVector);
-            fAssembly.register(fDraft);
-            fAssembly.register(fLine);
-            fAssembly.register(fPlane);
-            fAssembly.register(fRay);
-            fAssembly.register(fSegment);
-            fAssembly.register(fSphere);
+            fAssembly.registerWithCheck(fPoint);
+            fAssembly.registerWithCheck(fVector);
+            fAssembly.registerWithCheck(fDraft);
+            fAssembly.registerWithCheck(fLine);
+            fAssembly.registerWithCheck(fPlane);
+            fAssembly.registerWithCheck(fRay);
+            fAssembly.registerWithCheck(fSegment);
+            fAssembly.registerWithCheck(fSphere);
 
             JSONObject json = fAssembly.toJSON();
 
@@ -156,21 +156,21 @@ public class FAssemblyTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 2, -3, 4, -5, 6));
             FSphere fSphere = factory.getFSphere(2);
 
-            fAssemblyA.register(fPoint);
-            fAssemblyA.register(fVector);
+            fAssemblyA.registerWithCheck(fPoint);
+            fAssemblyA.registerWithCheck(fVector);
 
-            fAssemblyB.register(fDraft);
-            fAssemblyB.register(fLine);
+            fAssemblyB.registerWithCheck(fDraft);
+            fAssemblyB.registerWithCheck(fLine);
 
-            fAssemblyC.register(fPlane);
-            fAssemblyC.register(fRay);
+            fAssemblyC.registerWithCheck(fPlane);
+            fAssemblyC.registerWithCheck(fRay);
 
-            fAssemblyD.register(fSegment);
-            fAssemblyD.register(fSphere);
+            fAssemblyD.registerWithCheck(fSegment);
+            fAssemblyD.registerWithCheck(fSphere);
 
-            fAssemblyA.register(fAssemblyB);
-            fAssemblyB.register(fAssemblyC);
-            fAssemblyC.register(fAssemblyD);
+            fAssemblyA.registerWithCheck(fAssemblyB);
+            fAssemblyB.registerWithCheck(fAssemblyC);
+            fAssemblyC.registerWithCheck(fAssemblyD);
 
             JSONObject json = fAssemblyA.toJSON();
 
@@ -195,16 +195,16 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(1, 2, 3);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
@@ -222,16 +222,16 @@ public class FAssemblyTest {
             FPoint fPointA1 = factory.getFPoint(1, 2, 3);
             FPoint fPointA2 = factory.getFPoint(1, 2, 3);
 
-            fAssemblyA.register(fPointA1);
-            fAssemblyA.register(fPointA2);
+            fAssemblyA.registerWithCheck(fPointA1);
+            fAssemblyA.registerWithCheck(fPointA2);
 
             FAssembly<FPoint> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB1 = factory.getFPoint(1, 2, 3);
             FPoint fPointB2 = factory.getFPoint(1, 2, 3);
 
-            fAssemblyB.register(fPointB2);
-            fAssemblyB.register(fPointB1);
+            fAssemblyB.registerWithCheck(fPointB2);
+            fAssemblyB.registerWithCheck(fPointB1);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
@@ -249,16 +249,16 @@ public class FAssemblyTest {
             Geometry fPointA = factory.getFPoint(1, 2, 3);
             Geometry fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             Geometry fPointB = factory.getFPoint(1, 2, 3);
             Geometry fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
@@ -276,18 +276,18 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(3, 2, 1);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
-            fAssemblyB.register(fVectorA);
-            fAssemblyB.register(fPointA);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
+            fAssemblyB.registerWithCheck(fVectorA);
+            fAssemblyB.registerWithCheck(fPointA);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fAssemblyA.isExact(fAssemblyB),
@@ -305,18 +305,18 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(1, 2, 3);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
-            fAssemblyB.register(fVectorA);
-            fAssemblyB.register(fPointA);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
+            fAssemblyB.registerWithCheck(fVectorA);
+            fAssemblyB.registerWithCheck(fPointA);
 
             Assertions.assertAll("Validate exactness",
                     () -> assertFalse(fAssemblyA.isExact(fAssemblyB),
@@ -334,16 +334,16 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(1 + (0.5 * epsilon), 2, 3);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
 
             Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fAssemblyA.isSimilar(fAssemblyB),
@@ -361,16 +361,16 @@ public class FAssemblyTest {
             FPoint fPointA1 = factory.getFPoint(1, 2, 3);
             FPoint fPointA2 = factory.getFPoint(1, 2, 3);
 
-            fAssemblyA.register(fPointA1);
-            fAssemblyA.register(fPointA2);
+            fAssemblyA.registerWithCheck(fPointA1);
+            fAssemblyA.registerWithCheck(fPointA2);
 
             FAssembly<FPoint> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB1 = factory.getFPoint(1 + (0.5 * epsilon), 2, 3);
             FPoint fPointB2 = factory.getFPoint(1, 2 - (0.5 * epsilon), 3);
 
-            fAssemblyB.register(fPointB2);
-            fAssemblyB.register(fPointB1);
+            fAssemblyB.registerWithCheck(fPointB2);
+            fAssemblyB.registerWithCheck(fPointB1);
 
             Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fAssemblyA.isSimilar(fAssemblyB),
@@ -388,16 +388,16 @@ public class FAssemblyTest {
             Geometry fPointA = factory.getFPoint(1, 2, 3);
             Geometry fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             Geometry fPointB = factory.getFPoint(1, 2 + (0.5 * epsilon), 3);
             Geometry fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
 
             Assertions.assertAll("Validate similarity",
                     () -> assertTrue(fAssemblyA.isSimilar(fAssemblyB),
@@ -415,18 +415,18 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(1, 2 + (2 * epsilon), 3);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
-            fAssemblyB.register(fVectorA);
-            fAssemblyB.register(fPointA);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
+            fAssemblyB.registerWithCheck(fVectorA);
+            fAssemblyB.registerWithCheck(fPointA);
 
             Assertions.assertAll("Validate similarity",
                     () -> assertFalse(fAssemblyA.isSimilar(fAssemblyB),
@@ -444,18 +444,18 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(1, 2, 3);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
-            fAssemblyB.register(fVectorA);
-            fAssemblyB.register(fPointA);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
+            fAssemblyB.registerWithCheck(fVectorA);
+            fAssemblyB.registerWithCheck(fPointA);
 
             Assertions.assertAll("Validate similarity",
                     () -> assertFalse(fAssemblyA.isSimilar(fAssemblyB),
@@ -473,16 +473,16 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(1, 2, 3);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
 
             assertEquals(fAssemblyA.hashCode(), fAssemblyB.hashCode(),
                     "Two identical FAssemblies should have the same hash code");
@@ -496,16 +496,16 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyA.register(fPointA);
-            fAssemblyA.register(fVectorA);
+            fAssemblyA.registerWithCheck(fPointA);
+            fAssemblyA.registerWithCheck(fVectorA);
 
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
 
             FPoint fPointB = factory.getFPoint(3, 2, 1);
             FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
 
-            fAssemblyB.register(fVectorB);
-            fAssemblyB.register(fPointB);
+            fAssemblyB.registerWithCheck(fVectorB);
+            fAssemblyB.registerWithCheck(fPointB);
 
             assertNotEquals(fAssemblyA.hashCode(), fAssemblyB.hashCode(),
                     "Two different FAssemblies should not have the same hash code");
@@ -531,21 +531,21 @@ public class FAssemblyTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 2, -3, 4, -5, 6));
             FSphere fSphere = factory.getFSphere(2);
 
-            fAssemblyA.register(fPoint);
-            fAssemblyA.register(fVector);
+            fAssemblyA.registerWithCheck(fPoint);
+            fAssemblyA.registerWithCheck(fVector);
 
-            fAssemblyB.register(fDraft);
-            fAssemblyB.register(fLine);
+            fAssemblyB.registerWithCheck(fDraft);
+            fAssemblyB.registerWithCheck(fLine);
 
-            fAssemblyC.register(fPlane);
-            fAssemblyC.register(fRay);
+            fAssemblyC.registerWithCheck(fPlane);
+            fAssemblyC.registerWithCheck(fRay);
 
-            fAssemblyD.register(fSegment);
-            fAssemblyD.register(fSphere);
+            fAssemblyD.registerWithCheck(fSegment);
+            fAssemblyD.registerWithCheck(fSphere);
 
-            fAssemblyA.register(fAssemblyB);
-            fAssemblyB.register(fAssemblyC);
-            fAssemblyC.register(fAssemblyD);
+            fAssemblyA.registerWithCheck(fAssemblyB);
+            fAssemblyB.registerWithCheck(fAssemblyC);
+            fAssemblyC.registerWithCheck(fAssemblyD);
 
             FAssembly<Geometry> fAssemblyCopy = fAssemblyA.copy();
 
@@ -581,21 +581,21 @@ public class FAssemblyTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 2, -3, 4, -5, 6));
             FSphere fSphere = factory.getFSphere(2);
 
-            fAssemblyA.register(fPoint);
-            fAssemblyA.register(fVector);
+            fAssemblyA.registerWithCheck(fPoint);
+            fAssemblyA.registerWithCheck(fVector);
 
-            fAssemblyB.register(fDraft);
-            fAssemblyB.register(fLine);
+            fAssemblyB.registerWithCheck(fDraft);
+            fAssemblyB.registerWithCheck(fLine);
 
-            fAssemblyC.register(fPlane);
-            fAssemblyC.register(fRay);
+            fAssemblyC.registerWithCheck(fPlane);
+            fAssemblyC.registerWithCheck(fRay);
 
-            fAssemblyD.register(fSegment);
-            fAssemblyD.register(fSphere);
+            fAssemblyD.registerWithCheck(fSegment);
+            fAssemblyD.registerWithCheck(fSphere);
 
-            fAssemblyA.register(fAssemblyB);
-            fAssemblyB.register(fAssemblyC);
-            fAssemblyC.register(fAssemblyD);
+            fAssemblyA.registerWithCheck(fAssemblyB);
+            fAssemblyB.registerWithCheck(fAssemblyC);
+            fAssemblyC.registerWithCheck(fAssemblyD);
 
             Geometry fAssemblyCopy = fAssemblyA.copyGeometry();
 
@@ -625,16 +625,18 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FPoint fPointB = factory.getFPoint(4, 5, 6);
 
-            fAssembly.register(fPointA);
-            fAssembly.register(fPointB);
+            fAssembly.registerWithCheck(fPointA);
+            fAssembly.registerWithCheck(fPointB);
 
-            fAssembly.applyFPoint((fPoint) -> fPoint.addXYZ(1, 2, 3));
+            FAssembly<FPoint> results = fAssembly.applyFPoint((fPoint) -> fPoint.addXYZ(1, 2, 3));
 
             Assertions.assertAll("Validate FPoints",
                     () -> assertTrue(fPointA.isExact(2, 4, 6),
                             "FPoint A is erroneous"),
                     () -> assertTrue(fPointB.isExact(5, 7, 9),
-                            "FPoint B is erroneous")
+                            "FPoint B is erroneous"),
+                    () -> assertSame(results, fAssembly,
+                            "The reference should not change")
             );
         }
 
@@ -646,16 +648,18 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FPoint fPointB = factory.getFPoint(4, 5, 6);
 
-            fAssembly.register(fPointA);
-            fAssembly.register(fPointB);
+            fAssembly.registerWithCheck(fPointA);
+            fAssembly.registerWithCheck(fPointB);
 
-            fAssembly.applyGeometry((fPoint) -> fPoint.addXYZ(1, 2, 3));
+            FAssembly<FPoint> results = fAssembly.applyGeometry((fPoint) -> fPoint.addXYZ(1, 2, 3));
 
             Assertions.assertAll("Validate FPoints",
                     () -> assertTrue(fPointA.isExact(2, 4, 6),
                             "FPoint A is erroneous"),
                     () -> assertTrue(fPointB.isExact(5, 7, 9),
-                            "FPoint B is erroneous")
+                            "FPoint B is erroneous"),
+                    () -> assertSame(results, fAssembly,
+                            "The reference should not change")
             );
         }
 
@@ -667,8 +671,8 @@ public class FAssemblyTest {
             FPoint fPointA = factory.getFPoint(1, 2, 3);
             FPoint fPointB = factory.getFPoint(4, 5, 6);
 
-            fAssembly.register(fPointA);
-            fAssembly.register(fPointB);
+            fAssembly.registerWithCheck(fPointA);
+            fAssembly.registerWithCheck(fPointB);
 
             for (FPoint fPoint : fAssembly) {
                 fPoint.addXYZ(1, 2, 3);
@@ -690,10 +694,10 @@ public class FAssemblyTest {
             FVector fVectorA = factory.getFVector(-1, -2, -3, 4, 5, 6);
             FVector fVectorB = factory.getFVector(-6, -5, -4, 3, 2, 1);
 
-            var registerA = fAssembly.register(fVectorA);
-            var registerB = fAssembly.register(fVectorB);
+            var registerA = fAssembly.registerWithCheck(fVectorA);
+            var registerB = fAssembly.registerWithCheck(fVectorB);
 
-            var registerRedundant = fAssembly.register(fVectorA);
+            var registerRedundant = fAssembly.registerWithCheck(fVectorA);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertTrue(registerA,
@@ -702,6 +706,31 @@ public class FAssemblyTest {
                             "The addition of FVector B should be successful"),
                     () -> assertFalse(registerRedundant,
                             "The addition of FVector is redundant"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Register elements (chain)")
+        void registerElementsChain() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FVector fVectorA = factory.getFVector(-1, -2, -3, 4, 5, 6);
+            FVector fVectorB = factory.getFVector(-6, -5, -4, 3, 2, 1);
+
+            var registerA = fAssembly.register(fVectorA);
+            var registerB = fAssembly.register(fVectorB);
+
+            var registerRedundant = fAssembly.register(fVectorA);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertSame(fAssembly, registerA,
+                            "The reference should not change"),
+                    () -> assertSame(fAssembly, registerB,
+                            "The reference should not change"),
+                    () -> assertSame(fAssembly, registerRedundant,
+                            "The reference should not change"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect")
             );
@@ -717,8 +746,8 @@ public class FAssemblyTest {
             FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
             FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(6, 5, 4));
 
-            fAssembly.register(fVectorA);
-            fAssembly.register(fVectorB);
+            fAssembly.registerWithCheck(fVectorA);
+            fAssembly.registerWithCheck(fVectorB);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertEquals(3, fAssembly.toFPoints().size(),
@@ -734,8 +763,8 @@ public class FAssemblyTest {
             FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
             FPoint fPoint = factory.getFPoint(7, 8, 9);
 
-            var registerA = fAssembly.register(fVector);
-            var registerB = fAssembly.register(fPoint);
+            var registerA = fAssembly.registerWithCheck(fVector);
+            var registerB = fAssembly.registerWithCheck(fPoint);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertTrue(registerA,
@@ -756,9 +785,9 @@ public class FAssemblyTest {
             FVector fVectorY = factory.getFVector(0, 1, 0);
             FVector fVectorZ = factory.getFVector(0, 0, 1);
 
-            fAssembly.register(fVectorX);
-            fAssembly.register(fVectorY);
-            fAssembly.register(fVectorZ);
+            fAssembly.registerWithCheck(fVectorX);
+            fAssembly.registerWithCheck(fVectorY);
+            fAssembly.registerWithCheck(fVectorZ);
 
             fAssembly.applyGeometry(e -> e.shiftForward(1));
 

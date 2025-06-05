@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.Iterator;
@@ -14,14 +14,14 @@ import java.util.stream.Stream;
 public class FPointProducerDef implements FPointProducer {
 
     private final FPointFactory factory;
-    private final ProducerCoreAdvancedDef<FPoint> processor;
+    private final ProducerCoreDef<FPoint> processor;
     private final FRandGenerator randomizer;
 
     private FPointProducerDef(FPointFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
         this.randomizer = randomizer;
-        this.processor = new ProducerCoreAdvancedDef<>(this.randomizer);
+        this.processor = new ProducerCoreDef<>(this.randomizer);
     }
 
     public static FPointProducer create(FPointFactory factory, FRandGenerator randomizer) {
@@ -30,9 +30,9 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer withCustomRule(Function<FPointFactory, FPoint> function, int probability) {
+    public FPointProducer withCustomRule(Function<FPointFactory, FPoint> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory), probability);
+        this.processor.addConfig(() -> function.apply(factory), weight);
 
         return this;
     }
@@ -46,40 +46,40 @@ public class FPointProducerDef implements FPointProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FPointProducer withZero(int probability) {
+    public FPointProducer withZero(int weight) {
         Function<FPointFactory, FPoint> function = FPointFactory::getFPoint;
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FPointProducer withInRange(FPairPos3D range, int probability) {
+    public FPointProducer withInRange(FPairPos3D range, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
                 factory.getFPoint().applyStateFrom(randomizer.nextDouble3D(range));
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FPointProducer withInSphere(double radius, int probability) {
+    public FPointProducer withInSphere(double radius, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
                 factory.getFPoint().applyStateFrom(randomizer.nextDoubleInSphere(radius));
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FPointProducer withRadius(double radius, int probability) {
+    public FPointProducer withRadius(double radius, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
                 factory.getFPoint().applyStateFrom(randomizer.nextDoubleOnSphere(radius));
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }

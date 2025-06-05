@@ -1,48 +1,57 @@
 package eu.scattering.core.impl.component.geometry.container;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.component.geometry.container.ContainerFactory;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyFactory;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
-import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
+import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
+import java.util.Iterator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProducer<T> {
-    private final ProducerCoreBasicDef<FAssemblyProducer<T>, FAssembly<T>> core;
 
-    private final ContainerFactory factory;
+    private final FAssemblyFactory factory;
+    private final ProducerCoreDef<FAssembly<T>> processor;
 
-    private FAssemblyProducerDef(ContainerFactory factory) {
+    private FAssemblyProducerDef(FAssemblyFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
-
-        this.core = new ProducerCoreBasicDef<>(this, null);
-
-        setPresetDefault();
+        this.processor = new ProducerCoreDef<>(randomizer);
     }
 
-    public static <U extends Geometry> FAssemblyProducer<U> create(ContainerFactory factory) {
+    public static <U extends Geometry> FAssemblyProducer<U> create(FAssemblyFactory factory, FRandGenerator randomizer) {
 
-        return new FAssemblyProducerDef<>(factory);
+        return new FAssemblyProducerDef<>(factory, randomizer);
+    }
+
+    @Override
+    public FAssemblyProducer<T> withCustomRule(Function<FAssemblyFactory, FAssembly<T>> function, int weight) {
+
+        this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
     }
 
     @Override
     public FAssembly<T> produce() {
 
-        return core.getFunction().apply(factory.getFAssembly());
+        return processor.produce();
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private void setConfig(Function<FAssembly<T>, FAssembly<T>> function) {
+    @Override
+    public Stream<FAssembly<T>> stream() {
 
-        core.setConfig(function, 1);
+        return this.processor.stream();
     }
 
-    private void setPresetDefault() {
-        Function<FAssembly<T>, FAssembly<T>> function = (fAssembly) -> fAssembly;
+    @Override
+    public Iterator<FAssembly<T>> iterator() {
 
-        setConfig(function);
+        return this.processor.getIterator();
     }
 }

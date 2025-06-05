@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayFactory;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
+import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.Iterator;
 import java.util.function.Function;
@@ -14,12 +14,12 @@ import java.util.stream.Stream;
 public class FRayProducerDef implements FRayProducer {
 
     private final FRayFactory factory;
-    private final ProducerCoreAdvancedDef<FRay> processor;
+    private final ProducerCoreDef<FRay> processor;
 
     private FRayProducerDef(FRayFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
-        this.processor = new ProducerCoreAdvancedDef<>(randomizer);
+        this.processor = new ProducerCoreDef<>(randomizer);
     }
 
     public static FRayProducer create(FRayFactory factory, FRandGenerator randomizer) {
