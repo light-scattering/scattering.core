@@ -22,9 +22,9 @@ public class ProducerCoreAdvancedDef<E> {
         this.addConfig(supplier, 1);
     }
 
-    public void addConfig(Supplier<E> supplier, int probability) {
+    public void addConfig(Supplier<E> supplier, int weight) {
 
-        this.config.add(new AbstractMap.SimpleEntry<>(probability, supplier));
+        this.config.add(new AbstractMap.SimpleEntry<>(weight, supplier));
     }
 
     public E produce() {

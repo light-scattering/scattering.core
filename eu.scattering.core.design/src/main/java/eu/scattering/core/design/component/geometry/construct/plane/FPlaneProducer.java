@@ -1,24 +1,30 @@
 package eu.scattering.core.design.component.geometry.construct.plane;
 
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-public interface FPlaneProducer {
-
-    void setConfig(Function<FPlane, FPlane> function);
-    FPlaneProducer addConfig(Function<FPlane, FPlane> function, double probability);
+public interface FPlaneProducer extends Iterable<FPlane> {
 
     FPlane produce();
+    Stream<FPlane> stream();
 
     // -------------------------------------------------------------------------------------------------
 
-    void setPresetDirX();
-    FPlaneProducer addPresetDirX(double probability);
+    FPlaneProducer withCustomRule(Function<FPlaneFactory, FPlane> function, int weight);
 
-    void setPresetDirY();
-    FPlaneProducer addPresetDirY(double probability);
+    FPlaneProducer withFVector(FVectorProducer origin, int weight);
 
-    void setPresetDirZ();
-    FPlaneProducer addPresetDirZ(double probability);
+    // -------------------------------------------------------------------------------------------------
+
+    default FPlaneProducer withCustomRule(Function<FPlaneFactory, FPlane> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FPlaneProducer withFVector(FVectorProducer origin) {
+
+        return withFVector(origin, 1);
+    }
 }

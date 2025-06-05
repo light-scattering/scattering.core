@@ -115,9 +115,9 @@ public class FSphereProducerTest {
         FSphereProducer producer = factory.getFSphereProducer();
 
         producer
-                .withCustomRule((fSphere) -> factory.getFSphere(1), 5)
-                .withCustomRule((fSphere) -> factory.getFSphere(2), 10)
-                .withCustomRule((fSphere) -> factory.getFSphere(3), 15);
+                .withCustomRule((factory) -> factory.getFSphere(1), 5)
+                .withCustomRule((factory) -> factory.getFSphere(2), 10)
+                .withCustomRule((factory) -> factory.getFSphere(3), 15);
 
         int qRadius1 = 0;
         int qRadius2 = 0;

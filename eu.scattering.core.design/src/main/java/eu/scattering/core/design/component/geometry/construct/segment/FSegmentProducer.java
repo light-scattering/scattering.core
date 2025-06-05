@@ -1,22 +1,30 @@
 package eu.scattering.core.design.component.geometry.construct.segment;
 
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-public interface FSegmentProducer {
-
-    void setConfig(Function<FSegment, FSegment> function);
-    FSegmentProducer addConfig(Function<FSegment, FSegment> function, double probability);
+public interface FSegmentProducer extends Iterable<FSegment> {
 
     FSegment produce();
+    Stream<FSegment> stream();
 
     // -------------------------------------------------------------------------------------------------
 
-    void setPresetUnitOX();
-    FSegmentProducer addPresetUnitOX(double probability);
+    FSegmentProducer withCustomRule(Function<FSegmentFactory, FSegment> function, int weight);
 
-    void setPresetUnitOY();
-    FSegmentProducer addPresetUnitOY(double probability);
+    FSegmentProducer withFVector(FVectorProducer origin, int weight);
 
-    void setPresetUnitOZ();
-    FSegmentProducer addPresetUnitOZ(double probability);
+    // -------------------------------------------------------------------------------------------------
+
+    default FSegmentProducer withCustomRule(Function<FSegmentFactory, FSegment> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FSegmentProducer withFVector(FVectorProducer origin) {
+
+        return withFVector(origin, 1);
+    }
 }

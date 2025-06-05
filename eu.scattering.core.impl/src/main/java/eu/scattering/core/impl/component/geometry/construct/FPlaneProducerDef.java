@@ -1,126 +1,69 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
-import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.component.geometry.construct.plane.FPlaneFactory;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
+import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
 
+import java.util.Iterator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class FPlaneProducerDef implements FPlaneProducer {
 
-    private final ProducerCoreBasicDef<FPlaneProducer, FPlane> core;
+    private final FPlaneFactory factory;
+    private final ProducerCoreAdvancedDef<FPlane> processor;
 
-    private final FRandGenerator random;
-    private final ConstructFactory factory;
+    private FPlaneProducerDef(FPlaneFactory factory, FRandGenerator randomizer) {
 
-    private FPlaneProducerDef(ConstructFactory factory, FRandGenerator random) {
-
-        this.random = random;
         this.factory = factory;
-
-        this.core = new ProducerCoreBasicDef<>(this, this.random);
+        this.processor = new ProducerCoreAdvancedDef<>(randomizer);
     }
 
-    public static FPlaneProducer create(ConstructFactory factory, FRandGenerator random) {
+    public static FPlaneProducer create(FPlaneFactory factory, FRandGenerator randomizer) {
 
-        return new FPlaneProducerDef(factory, random);
-    }
-
-    @Override
-    public void setConfig(Function<FPlane, FPlane> function) {
-
-        core.setConfig(function, 1);
+        return new FPlaneProducerDef(factory, randomizer);
     }
 
     @Override
-    public FPlaneProducer addConfig(Function<FPlane, FPlane> function, double probability) {
+    public FPlaneProducer withCustomRule(Function<FPlaneFactory, FPlane> function, int weight) {
 
-        return core.addConfig(function, probability);
+        this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
     }
 
     @Override
     public FPlane produce() {
 
-        if (core.getSize() == 0) {
-            throw new IllegalStateException("The producer is not configured");
-        }
-
-        return core.getFunction().apply(factory.getFPlane());
+        return processor.produce();
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public void setPresetDirX() {
-        Function<FPlane, FPlane> function = (fPlane) -> {
-            fPlane.getRefOrigin().getRefHead().setX(1);
+    public FPlaneProducer withFVector(FVectorProducer origin, int weight) {
+        Function<FPlaneFactory, FPlane> function = (factory) ->
+                factory.getRefFPlane(origin.produce());
 
-            return fPlane;
-        };
-
-        setConfig(function);
-    }
-
-    @Override
-    public FPlaneProducer addPresetDirX(double probability) {
-        Function<FPlane, FPlane> function = (fPlane) -> {
-            fPlane.getRefOrigin().getRefHead().setX(1);
-
-            return fPlane;
-        };
-
-        addConfig(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
-    public void setPresetDirY() {
-        Function<FPlane, FPlane> function = (fPlane) -> {
-            fPlane.getRefOrigin().getRefHead().setY(1);
+    public Stream<FPlane> stream() {
 
-            return fPlane;
-        };
-
-        setConfig(function);
+        return this.processor.stream();
     }
 
     @Override
-    public FPlaneProducer addPresetDirY(double probability) {
-        Function<FPlane, FPlane> function = (fPlane) -> {
-            fPlane.getRefOrigin().getRefHead().setY(1);
+    public Iterator<FPlane> iterator() {
 
-            return fPlane;
-        };
-
-        addConfig(function, probability);
-
-        return this;
-    }
-
-    @Override
-    public void setPresetDirZ() {
-        Function<FPlane, FPlane> function = (fPlane) -> {
-            fPlane.getRefOrigin().getRefHead().setZ(1);
-
-            return fPlane;
-        };
-
-        setConfig(function);
-    }
-
-    @Override
-    public FPlaneProducer addPresetDirZ(double probability) {
-        Function<FPlane, FPlane> function = (fPlane) -> {
-            fPlane.getRefOrigin().getRefHead().setZ(1);
-
-            return fPlane;
-        };
-
-        addConfig(function, probability);
-
-        return this;
+        return this.processor.getIterator();
     }
 }

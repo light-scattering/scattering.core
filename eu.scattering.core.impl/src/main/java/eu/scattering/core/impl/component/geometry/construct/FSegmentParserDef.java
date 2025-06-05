@@ -2,7 +2,7 @@ package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
-import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegmentFactory;
 import org.json.JSONObject;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -11,16 +11,16 @@ public class FSegmentParserDef implements GeometryParser {
 
     private static GeometryParser self;
 
-    private final ConstructFactory factory;
+    private final FSegmentFactory factory;
     private final GeometryParser chain;
 
-    private FSegmentParserDef(ConstructFactory factory, GeometryParser chain) {
+    private FSegmentParserDef(FSegmentFactory factory, GeometryParser chain) {
 
         this.factory = factory;
         this.chain = chain;
     }
 
-    public static GeometryParser create(ConstructFactory factorySelf, GeometryParser chain) {
+    public static GeometryParser create(FSegmentFactory factorySelf, GeometryParser chain) {
 
         if (FSegmentParserDef.self == null) {
             FSegmentParserDef.self = new FSegmentParserDef(factorySelf, chain);

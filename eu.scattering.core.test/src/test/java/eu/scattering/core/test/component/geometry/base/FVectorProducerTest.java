@@ -384,7 +384,7 @@ public class FVectorProducerTest {
     @DisplayName("Preset in radius")
     void presetInRadius() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withInRadius(0.01, 1);
+                .withInSphere(0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -403,7 +403,7 @@ public class FVectorProducerTest {
     @DisplayName("Preset in radius (simple)")
     void presetInRadiusSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withInRadius(0.01);
+                .withInSphere(0.01);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -422,7 +422,7 @@ public class FVectorProducerTest {
     @DisplayName("Preset on radius")
     void presetOnRadius() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withOnRadius(0.01, 1);
+                .withRadius(0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -441,7 +441,7 @@ public class FVectorProducerTest {
     @DisplayName("Preset on radius (simple)")
     void presetOnRadiusSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withOnRadius(0.01);
+                .withRadius(0.01);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -463,7 +463,7 @@ public class FVectorProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FVectorProducer producer = factory.getFVectorProducer()
-                .withBaseAndInRadius(pBase, 0.01, 1);
+                .withBaseAndInSphere(pBase, 0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -485,7 +485,7 @@ public class FVectorProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FVectorProducer producer = factory.getFVectorProducer()
-                .withBaseAndInRadius(pBase, 0.01);
+                .withBaseAndInSphere(pBase, 0.01);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -507,7 +507,7 @@ public class FVectorProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FVectorProducer producer = factory.getFVectorProducer()
-                .withBaseAndOnRadius(pBase, 0.01, 1);
+                .withBaseAndRadius(pBase, 0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -529,7 +529,7 @@ public class FVectorProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FVectorProducer producer = factory.getFVectorProducer()
-                .withBaseAndOnRadius(pBase, 0.01);
+                .withBaseAndRadius(pBase, 0.01);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();

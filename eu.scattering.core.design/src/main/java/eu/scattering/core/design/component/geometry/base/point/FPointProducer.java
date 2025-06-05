@@ -16,8 +16,8 @@ public interface FPointProducer extends Iterable<FPoint> {
 
     FPointProducer withZero(int probability);
 
-    FPointProducer withInRadius(double radius, int probability);
-    FPointProducer withOnRadius(double radius, int probability);
+    FPointProducer withInSphere(double radius, int probability);
+    FPointProducer withRadius(double radius, int probability);
 
     FPointProducer withInRange(FPairPos3D range, int probability);
 
@@ -33,14 +33,14 @@ public interface FPointProducer extends Iterable<FPoint> {
         return withZero(1);
     }
 
-    default FPointProducer withInRadius(double radius) {
+    default FPointProducer withInSphere(double radius) {
 
-        return withInRadius(radius, 1);
+        return withInSphere(radius, 1);
     }
 
-    default FPointProducer withOnRadius(double radius) {
+    default FPointProducer withRadius(double radius) {
 
-        return withOnRadius(radius, 1);
+        return withRadius(radius, 1);
     }
 
     default FPointProducer withInRange(FPairPos3D range) {

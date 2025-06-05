@@ -12,25 +12,25 @@ public interface FVectorProducer extends Iterable<FVector> {
 
     // -------------------------------------------------------------------------------------------------
 
-    FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int probability);
+    FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int weight);
 
-    FVectorProducer withDirOX(double length, int probability);
-    FVectorProducer withDirOY(double length, int probability);
-    FVectorProducer withDirOZ(double length, int probability);
+    FVectorProducer withDirOX(double length, int weight);
+    FVectorProducer withDirOY(double length, int weight);
+    FVectorProducer withDirOZ(double length, int weight);
 
-    FVectorProducer withBaseAndDirOX(FPointProducer pBase, double length, int probability);
-    FVectorProducer withBaseAndDirOY(FPointProducer pBase, double length, int probability);
-    FVectorProducer withBaseAndDirOZ(FPointProducer pBase, double length, int probability);
+    FVectorProducer withBaseAndDirOX(FPointProducer pBase, double length, int weight);
+    FVectorProducer withBaseAndDirOY(FPointProducer pBase, double length, int weight);
+    FVectorProducer withBaseAndDirOZ(FPointProducer pBase, double length, int weight);
 
-    FVectorProducer withInRadius(double radius, int probability);
-    FVectorProducer withOnRadius(double radius, int probability);
+    FVectorProducer withInSphere(double radius, int weight);
+    FVectorProducer withRadius(double radius, int weight);
 
-    FVectorProducer withBaseAndInRadius(FPointProducer pBase, double radius, int probability);
-    FVectorProducer withBaseAndOnRadius(FPointProducer pBase, double radius, int probability);
+    FVectorProducer withBaseAndInSphere(FPointProducer pBase, double radius, int weight);
+    FVectorProducer withBaseAndRadius(FPointProducer pBase, double radius, int weight);
 
-    FVectorProducer withBase(FPointProducer pBase, int probability);
-    FVectorProducer withHead(FPointProducer pHead, int probability);
-    FVectorProducer withBaseAndHead(FPointProducer pBase, FPointProducer pHead, int probability);
+    FVectorProducer withBase(FPointProducer pBase, int weight);
+    FVectorProducer withHead(FPointProducer pHead, int weight);
+    FVectorProducer withBaseAndHead(FPointProducer pBase, FPointProducer pHead, int weight);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -69,24 +69,24 @@ public interface FVectorProducer extends Iterable<FVector> {
         return withBaseAndDirOZ(pBase, length, 1);
     }
 
-    default FVectorProducer withInRadius(double radius) {
+    default FVectorProducer withInSphere(double radius) {
 
-        return withInRadius(radius, 1);
+        return withInSphere(radius, 1);
     }
 
-    default FVectorProducer withOnRadius(double radius) {
+    default FVectorProducer withRadius(double radius) {
 
-        return withOnRadius(radius, 1);
+        return withRadius(radius, 1);
     }
 
-    default FVectorProducer withBaseAndInRadius(FPointProducer pBase, double radius) {
+    default FVectorProducer withBaseAndInSphere(FPointProducer pBase, double radius) {
 
-        return withBaseAndInRadius(pBase, radius, 1);
+        return withBaseAndInSphere(pBase, radius, 1);
     }
 
-    default FVectorProducer withBaseAndOnRadius(FPointProducer pBase, double radius) {
+    default FVectorProducer withBaseAndRadius(FPointProducer pBase, double radius) {
 
-        return withBaseAndOnRadius(pBase, radius, 1);
+        return withBaseAndRadius(pBase, radius, 1);
     }
 
     default FVectorProducer withBase(FPointProducer pBase) {

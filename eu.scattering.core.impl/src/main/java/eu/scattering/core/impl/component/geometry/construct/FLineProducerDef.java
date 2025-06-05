@@ -1,153 +1,69 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
-import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
+import eu.scattering.core.design.component.geometry.construct.line.FLineFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.impl.component.support.ProducerCoreBasicDef;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.impl.component.support.ProducerCoreAdvancedDef;
 
+import java.util.Iterator;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class FLineProducerDef implements FLineProducer {
 
-    private final ProducerCoreBasicDef<FLineProducer, FLine> core;
+    private final FLineFactory factory;
+    private final ProducerCoreAdvancedDef<FLine> processor;
 
-    private final FRandGenerator random;
-    private final ConstructFactory factory;
+    private FLineProducerDef(FLineFactory factory, FRandGenerator randomizer) {
 
-    private FLineProducerDef(ConstructFactory factory, FRandGenerator random) {
-
-        this.random = random;
         this.factory = factory;
-
-        this.core = new ProducerCoreBasicDef<>(this, this.random);
+        this.processor = new ProducerCoreAdvancedDef<>(randomizer);
     }
 
-    public static FLineProducer create(ConstructFactory factory, FRandGenerator random) {
+    public static FLineProducer create(FLineFactory factory, FRandGenerator randomizer) {
 
-        return new FLineProducerDef(factory, random);
-    }
-
-    @Override
-    public void setConfig(Function<FLine, FLine> function) {
-
-        core.setConfig(function, 1);
+        return new FLineProducerDef(factory, randomizer);
     }
 
     @Override
-    public FLineProducer addConfig(Function<FLine, FLine> function, double probability) {
+    public FLineProducer withCustomRule(Function<FLineFactory, FLine> function, int weight) {
 
-        return core.addConfig(function, probability);
+        this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
     }
 
     @Override
     public FLine produce() {
 
-        if (core.getSize() == 0) {
-            throw new IllegalStateException("The producer is not configured");
-        }
-
-        return core.getFunction().apply(factory.getFLine());
+        return processor.produce();
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public void setPresetOX() {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().setX(1);
+    public FLineProducer withFVector(FVectorProducer origin, int weight) {
+        Function<FLineFactory, FLine> function = (factory) ->
+                factory.getRefFLine(origin.produce());
 
-            return fLine;
-        };
-
-        setConfig(function);
-    }
-
-    @Override
-    public FLineProducer addPresetOX(double probability) {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().setX(1);
-
-            return fLine;
-        };
-
-        addConfig(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
-    public void setPresetOY() {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().setY(1);
+    public Stream<FLine> stream() {
 
-            return fLine;
-        };
-
-        setConfig(function);
+        return this.processor.stream();
     }
 
     @Override
-    public FLineProducer addPresetOY(double probability) {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().setY(1);
+    public Iterator<FLine> iterator() {
 
-            return fLine;
-        };
-
-        addConfig(function, probability);
-
-        return this;
-    }
-
-    @Override
-    public void setPresetOZ() {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().setZ(1);
-
-            return fLine;
-        };
-
-        setConfig(function);
-    }
-
-    @Override
-    public FLineProducer addPresetOZ(double probability) {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().setZ(1);
-
-            return fLine;
-        };
-
-        addConfig(function, probability);
-
-        return this;
-    }
-
-    @Override
-    public void setPresetFixedPoint(FPos3D point) {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
-            fLine.getRefOrigin().moveBase(point);
-
-            return fLine;
-        };
-
-        setConfig(function);
-    }
-
-    @Override
-    public FLineProducer addPresetFixedPoint(FPos3D point, double probability) {
-        Function<FLine, FLine> function = (fLine) -> {
-            fLine.getRefOrigin().getRefHead().applyStateFrom(random.nextDoubleOnSphere(1));
-            fLine.getRefOrigin().moveBase(point);
-
-            return fLine;
-        };
-
-        addConfig(function, probability);
-
-        return this;
+        return this.processor.getIterator();
     }
 }

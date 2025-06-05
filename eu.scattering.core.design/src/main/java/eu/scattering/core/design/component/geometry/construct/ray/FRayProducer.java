@@ -1,24 +1,30 @@
 package eu.scattering.core.design.component.geometry.construct.ray;
 
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-public interface FRayProducer {
-
-    void setConfig(Function<FRay, FRay> function);
-    FRayProducer addConfig(Function<FRay, FRay> function, double probability);
+public interface FRayProducer extends Iterable<FRay> {
 
     FRay produce();
+    Stream<FRay> stream();
 
     // -------------------------------------------------------------------------------------------------
 
-    void setPresetOX();
-    FRayProducer addPresetOX(double probability);
+    FRayProducer withCustomRule(Function<FRayFactory, FRay> function, int weight);
 
-    void setPresetOY();
-    FRayProducer addPresetOY(double probability);
+    FRayProducer withFVector(FVectorProducer origin, int weight);
 
-    void setPresetOZ();
-    FRayProducer addPresetOZ(double probability);
+    // -------------------------------------------------------------------------------------------------
+
+    default FRayProducer withCustomRule(Function<FRayFactory, FRay> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FRayProducer withFVector(FVectorProducer origin) {
+
+        return withFVector(origin, 1);
+    }
 }

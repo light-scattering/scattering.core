@@ -31,9 +31,9 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
-    public FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int probability) {
+    public FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory), probability);
+        this.processor.addConfig(() -> function.apply(factory), weight);
 
         return this;
     }
@@ -47,37 +47,37 @@ public class FVectorProducerDef implements FVectorProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FVectorProducer withDirOX(double length, int probability) {
+    public FVectorProducer withDirOX(double length, int weight) {
         Function<FVectorFactory, FVector> function = (factory) ->
                 factory.getFVector().setHeadX(length);
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withDirOY(double length, int probability) {
+    public FVectorProducer withDirOY(double length, int weight) {
         Function<FVectorFactory, FVector> function = (factory) ->
                 factory.getFVector().setHeadY(length);
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withDirOZ(double length, int probability) {
+    public FVectorProducer withDirOZ(double length, int weight) {
         Function<FVectorFactory, FVector> function = (factory) ->
                 factory.getFVector().setHeadZ(length);
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withBaseAndDirOX(FPointProducer pBase, double length, int probability) {
+    public FVectorProducer withBaseAndDirOX(FPointProducer pBase, double length, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = base.copy().addX(length);
@@ -85,13 +85,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withBaseAndDirOY(FPointProducer pBase, double length, int probability) {
+    public FVectorProducer withBaseAndDirOY(FPointProducer pBase, double length, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = base.copy().addY(length);
@@ -99,13 +99,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withBaseAndDirOZ(FPointProducer pBase, double length, int probability) {
+    public FVectorProducer withBaseAndDirOZ(FPointProducer pBase, double length, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = base.copy().addZ(length);
@@ -113,13 +113,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withInRadius(double radius, int probability) {
+    public FVectorProducer withInSphere(double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FVector fVector = factory.getFVector();
 
@@ -128,13 +128,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return fVector;
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withOnRadius(double radius, int probability) {
+    public FVectorProducer withRadius(double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FVector fVector = factory.getFVector();
 
@@ -143,13 +143,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return fVector;
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withBaseAndInRadius(FPointProducer pBase, double radius, int probability) {
+    public FVectorProducer withBaseAndInSphere(FPointProducer pBase, double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = base.copy().add(randomizer.nextDoubleInSphere(radius));
@@ -157,13 +157,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withBaseAndOnRadius(FPointProducer pBase, double radius, int probability) {
+    public FVectorProducer withBaseAndRadius(FPointProducer pBase, double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = base.copy().add(randomizer.nextDoubleOnSphere(radius));
@@ -171,13 +171,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withBase(FPointProducer pBase, int probability) {
+    public FVectorProducer withBase(FPointProducer pBase, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = base.copy().set(0, 0, 0);
@@ -185,13 +185,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withHead(FPointProducer pHead, int probability) {
+    public FVectorProducer withHead(FPointProducer pHead, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint head = pHead.produce();
             FPoint base = head.copy().set(0, 0, 0);
@@ -199,13 +199,13 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }
 
     @Override
-    public FVectorProducer withBaseAndHead(FPointProducer pBase, FPointProducer pHead, int probability) {
+    public FVectorProducer withBaseAndHead(FPointProducer pBase, FPointProducer pHead, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = pHead.produce();
@@ -213,7 +213,7 @@ public class FVectorProducerDef implements FVectorProducer {
             return factory.getRefFVector(base, head);
         };
 
-        withCustomRule(function, probability);
+        withCustomRule(function, weight);
 
         return this;
     }

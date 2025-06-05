@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.construct;
 
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,11 +31,43 @@ public class FRayProducerTest {
     @Test
     @DisplayName("Produce custom")
     void produceCustom() {
-        FRayProducer producer = factory.getFRayProducer();
-
         AtomicInteger length = new AtomicInteger(1);
-        producer.setConfig((fRay) -> {
+
+        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory) -> {
             int lengthCurrent = length.getAndIncrement();
+
+            FRay fRay = factory.getFRay();
+
+            fRay.getRefOrigin().set(
+                    lengthCurrent, lengthCurrent, lengthCurrent,
+                    lengthCurrent, lengthCurrent, lengthCurrent
+            );
+
+            return fRay;
+        }, 1);
+
+        FRay resultA = producer.produce();
+        FRay resultB = producer.produce();
+
+        Assertions.assertAll("Validate FRay values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(1, 1, 1, 1, 1, 1),
+                        "The FRay A value is erroneous"),
+                () -> assertTrue(resultB.getRefOrigin().isExact(2, 2, 2, 2, 2, 2),
+                        "The FRay B value is erroneous"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce custom (simple)")
+    void produceCustomSimple() {
+        AtomicInteger length = new AtomicInteger(1);
+
+        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory) -> {
+            int lengthCurrent = length.getAndIncrement();
+
+            FRay fRay = factory.getFRay();
 
             fRay.getRefOrigin().set(
                     lengthCurrent, lengthCurrent, lengthCurrent,
@@ -61,10 +96,10 @@ public class FRayProducerTest {
         FRayProducer producer = factory.getFRayProducer();
 
         producer
-                .addConfig((fRay) -> fRay.set(
-                        factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 0.25)
-                .addConfig((fRay) -> fRay.set(
-                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 0.75);
+                .withCustomRule((factoryInternal) -> factoryInternal.getFRay().set(
+                        factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 1)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFRay().set(
+                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 3);
 
         int countA = 0;
         int countB = 0;
@@ -88,49 +123,75 @@ public class FRayProducerTest {
     }
 
     @Test
-    @DisplayName("Preset set unit X")
-    void presetSetUnitX() {
+    @DisplayName("Iterate")
+    void iterate() {
         FRayProducer producer = factory.getFRayProducer();
-        producer.setPresetOX();
 
-        FRay resultA = producer.produce();
-        FRay resultB = producer.produce();
+        producer
+                .withCustomRule((factoryInternal) -> factoryInternal.getFRay().set(
+                        factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 5)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFRay().set(
+                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 10)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFRay().set(
+                        factory.getFPairPos3D(0, 0, 0, 3, 0, 0)), 15);
 
-        Assertions.assertAll("Validate FRay values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The value is incorrect"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
+        int qValue1 = 0;
+        int qValue2 = 0;
+        int qValue3 = 0;
+
+        for (FRay construct : producer) {
+
+            if (construct.getRefOrigin().getHeadX() == 1) {
+                qValue1++;
+            } else if (construct.getRefOrigin().getHeadX() == 2) {
+                qValue2++;
+            } else if (construct.getRefOrigin().getHeadX() == 3) {
+                qValue3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals( 5, qValue1, "Distribution 1 is erroneous");
+        assertEquals(10, qValue2, "Distribution 2 is erroneous");
+        assertEquals(15, qValue3, "Distribution 3 is erroneous");
     }
 
     @Test
-    @DisplayName("Preset add unit X")
-    void presetAddUnitX() {
-        FRayProducer producer = factory.getFRayProducer().addPresetOX(1);
-
-        FRay resultA = producer.produce();
-        FRay resultB = producer.produce();
-
-        Assertions.assertAll("Validate FRay values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 1, 0, 0),
-                        "The value is incorrect"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
-    }
-
-    @Test
-    @DisplayName("Preset set unit Y")
-    void presetSetUnitY() {
+    @DisplayName("Stream")
+    void stream() {
         FRayProducer producer = factory.getFRayProducer();
-        producer.setPresetOY();
+
+        producer
+                .withCustomRule((factoryInternal) -> factoryInternal.getFRay().set(
+                        factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 1)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFRay().set(
+                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 5);
+
+        List<FRay> list = producer.stream().limit(100).collect(Collectors.toList());
+
+        Assertions.assertAll("Validate values",
+                () -> assertTrue(list.stream().anyMatch(e -> e.getRefOrigin().getHeadX() == 1),
+                        "The distribution is erroneous"),
+                () -> assertTrue(list.stream().anyMatch(e -> e.getRefOrigin().getHeadX() == 2),
+                        "The distribution is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset FVector")
+    void presetFVector() {
+        FVectorProducer origin = factory.getFVectorProducer()
+                .withDirOX(5);
+
+        FRayProducer producer = factory.getFRayProducer()
+                .withFVector(origin, 1);
 
         FRay resultA = producer.produce();
         FRay resultB = producer.produce();
 
-        Assertions.assertAll("Validate FRay values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 1, 0),
+        Assertions.assertAll("Validate values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 5, 0, 0),
                         "The value is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -138,48 +199,19 @@ public class FRayProducerTest {
     }
 
     @Test
-    @DisplayName("Preset add unit Y")
-    void presetAddUnitY() {
-        FRayProducer producer = factory.getFRayProducer().addPresetOY(1);
+    @DisplayName("Preset FVector (simple)")
+    void presetFVectorSimple() {
+        FVectorProducer origin = factory.getFVectorProducer()
+                .withDirOX(5);
+
+        FRayProducer producer = factory.getFRayProducer()
+                .withFVector(origin);
 
         FRay resultA = producer.produce();
         FRay resultB = producer.produce();
 
-        Assertions.assertAll("Validate FRay values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 1, 0),
-                        "The value is incorrect"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
-    }
-
-    @Test
-    @DisplayName("Preset set unit Z")
-    void presetSetUnitZ() {
-        FRayProducer producer = factory.getFRayProducer();
-        producer.setPresetOZ();
-
-        FRay resultA = producer.produce();
-        FRay resultB = producer.produce();
-
-        Assertions.assertAll("Validate FRay values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 1),
-                        "The value is incorrect"),
-                () -> assertNotSame(resultA, resultB,
-                        "Elements should not be the same")
-        );
-    }
-
-    @Test
-    @DisplayName("Preset add unit Z")
-    void presetAddUnitZ() {
-        FRayProducer producer = factory.getFRayProducer().addPresetOZ(1);
-
-        FRay resultA = producer.produce();
-        FRay resultB = producer.produce();
-
-        Assertions.assertAll("Validate FRay values",
-                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 0, 0, 1),
+        Assertions.assertAll("Validate values",
+                () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 5, 0, 0),
                         "The value is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")

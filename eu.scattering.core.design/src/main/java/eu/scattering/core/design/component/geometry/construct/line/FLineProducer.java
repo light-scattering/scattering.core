@@ -1,27 +1,30 @@
 package eu.scattering.core.design.component.geometry.construct.line;
 
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
-public interface FLineProducer {
-
-    void setConfig(Function<FLine, FLine> function);
-    FLineProducer addConfig(Function<FLine, FLine> function, double probability);
+public interface FLineProducer extends Iterable<FLine> {
 
     FLine produce();
+    Stream<FLine> stream();
 
     // -------------------------------------------------------------------------------------------------
 
-    void setPresetOX();
-    FLineProducer addPresetOX(double probability);
+    FLineProducer withCustomRule(Function<FLineFactory, FLine> function, int weight);
 
-    void setPresetOY();
-    FLineProducer addPresetOY(double probability);
+    FLineProducer withFVector(FVectorProducer origin, int weight);
 
-    void setPresetOZ();
-    FLineProducer addPresetOZ(double probability);
+    // -------------------------------------------------------------------------------------------------
 
-    void setPresetFixedPoint(FPos3D point);
-    FLineProducer addPresetFixedPoint(FPos3D point, double probability);
+    default FLineProducer withCustomRule(Function<FLineFactory, FLine> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FLineProducer withFVector(FVectorProducer origin) {
+
+        return withFVector(origin, 1);
+    }
 }

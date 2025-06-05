@@ -244,7 +244,7 @@ public class FPointProducerTest {
     @DisplayName("Preset in sphere")
     void presetInSphere() {
         FPointProducer producer = factory.getFPointProducer()
-                .withInRadius(0.01, 1);
+                .withInSphere(0.01, 1);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -261,7 +261,7 @@ public class FPointProducerTest {
     @DisplayName("Preset in sphere (simple)")
     void presetInSphereSimple() {
         FPointProducer producer = factory.getFPointProducer()
-                .withInRadius(0.01);
+                .withInSphere(0.01);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -278,7 +278,7 @@ public class FPointProducerTest {
     @DisplayName("Preset on sphere")
     void presetOnSphere() {
         FPointProducer producer = factory.getFPointProducer()
-                .withOnRadius(0.01, 1);
+                .withRadius(0.01, 1);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -295,7 +295,7 @@ public class FPointProducerTest {
     @DisplayName("Preset on sphere (simple)")
     void presetOnSphereSimple() {
         FPointProducer producer = factory.getFPointProducer()
-                .withOnRadius(0.01);
+                .withRadius(0.01);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
