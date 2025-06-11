@@ -1,12 +1,18 @@
 package eu.scattering.core.design.component.number.quaternion;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FQuaternionProducer extends Iterable<FQuaternion> {
+public interface FQuaternionProducer {
 
     FQuaternion produce();
+
     Stream<FQuaternion> stream();
+
+    List<FQuaternion> getListAuto();
+    List<FQuaternion> getListRandomized(int quantity);
+    List<FQuaternion> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 

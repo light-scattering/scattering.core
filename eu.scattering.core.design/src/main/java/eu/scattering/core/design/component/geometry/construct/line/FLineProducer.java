@@ -2,13 +2,19 @@ package eu.scattering.core.design.component.geometry.construct.line;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FLineProducer extends Iterable<FLine> {
+public interface FLineProducer{
 
     FLine produce();
+
     Stream<FLine> stream();
+
+    List<FLine> getListAuto();
+    List<FLine> getListRandomized(int quantity);
+    List<FLine> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 

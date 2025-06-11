@@ -2,13 +2,19 @@ package eu.scattering.core.design.component.geometry.base.vector;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FVectorProducer extends Iterable<FVector> {
+public interface FVectorProducer {
 
     FVector produce();
+
     Stream<FVector> stream();
+
+    List<FVector> getListAuto();
+    List<FVector> getListRandomized(int quantity);
+    List<FVector> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 

@@ -2,13 +2,19 @@ package eu.scattering.core.design.component.geometry.base.point;
 
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FPointProducer extends Iterable<FPoint> {
+public interface FPointProducer {
 
     FPoint produce();
+
     Stream<FPoint> stream();
+
+    List<FPoint> getListAuto();
+    List<FPoint> getListRandomized(int quantity);
+    List<FPoint> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 

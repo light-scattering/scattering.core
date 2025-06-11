@@ -108,8 +108,8 @@ public class FPointProducerTest {
     }
 
     @Test
-    @DisplayName("Iterate")
-    void iterate() {
+    @DisplayName("Iterate, auto")
+    void iterateAuto() {
         FPointProducer producer = factory.getFPointProducer();
 
         producer
@@ -121,7 +121,7 @@ public class FPointProducerTest {
         int qLength2 = 0;
         int qLength3 = 0;
 
-        for (FPoint fPoint : producer) {
+        for (FPoint fPoint : producer.getListAuto()) {
 
             if (fPoint.getX() == 1) {
                 qLength1++;
@@ -140,22 +140,84 @@ public class FPointProducerTest {
     }
 
     @Test
+    @DisplayName("Iterate, fixed")
+    void iterateFixed() {
+        FPointProducer producer = factory.getFPointProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFPoint().setX(1), 1)
+                .withCustomRule((factory) -> factory.getFPoint().setX(2), 1)
+                .withCustomRule((factory) -> factory.getFPoint().setX(3), 1);
+
+        int qLength1 = 0;
+        int qLength2 = 0;
+        int qLength3 = 0;
+
+        for (FPoint fPoint : producer.getListFixed(8)) {
+
+            if (fPoint.getX() == 1) {
+                qLength1++;
+            } else if (fPoint.getX() == 2) {
+                qLength2++;
+            } else if (fPoint.getX() == 3) {
+                qLength3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(8, qLength1 + qLength2 + qLength3, "The number of elements is incorrect");
+        assertEquals(3, qLength1, 1, "Distribution 1 is erroneous");
+        assertEquals(3, qLength2, 1, "Distribution 2 is erroneous");
+        assertEquals(3, qLength3, 1, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, random")
+    void iterateRandom() {
+        FPointProducer producer = factory.getFPointProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFPoint().setX(1), 20)
+                .withCustomRule((factory) -> factory.getFPoint().setX(2), 20)
+                .withCustomRule((factory) -> factory.getFPoint().setX(3), 20);
+
+        List<FPoint> results = producer.getListRandomized(60);
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getX() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
     @DisplayName("Stream")
     void stream() {
         FPointProducer producer = factory.getFPointProducer();
 
         producer
-                .withCustomRule((factory) -> factory.getFPoint().setX(1), 1)
-                .withCustomRule((factory) -> factory.getFPoint().setX(2), 1);
+                .withCustomRule((factory) -> factory.getFPoint().setX(1), 20)
+                .withCustomRule((factory) -> factory.getFPoint().setX(2), 20)
+                .withCustomRule((factory) -> factory.getFPoint().setX(3), 20);
 
-        List<FPoint> list = producer.stream().limit(100).collect(Collectors.toList());
+        List<FPoint> results = producer.stream().limit(60).collect(Collectors.toList());
 
-        Assertions.assertAll("Validate values",
-                () -> assertTrue(list.stream().anyMatch(e -> e.getX() == 1),
-                        "The distribution is erroneous"),
-                () -> assertTrue(list.stream().anyMatch(e -> e.getX() == 2),
-                        "The distribution is erroneous")
-        );
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getX() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
     }
 
     @Test

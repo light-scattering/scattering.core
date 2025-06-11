@@ -108,8 +108,8 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Iterate")
-    void iterate() {
+    @DisplayName("Iterate, auto")
+    void iterateAuto() {
         FVectorProducer producer = factory.getFVectorProducer();
 
         producer
@@ -121,7 +121,7 @@ public class FVectorProducerTest {
         int qLength2 = 0;
         int qLength3 = 0;
 
-        for (FVector fVector : producer) {
+        for (FVector fVector : producer.getListAuto()) {
 
             if (fVector.getHeadX() == 1) {
                 qLength1++;
@@ -140,22 +140,84 @@ public class FVectorProducerTest {
     }
 
     @Test
+    @DisplayName("Iterate, fixed")
+    void iterateFixed() {
+        FVectorProducer producer = factory.getFVectorProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(1), 1)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(2), 1)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(3), 1);
+
+        int qLength1 = 0;
+        int qLength2 = 0;
+        int qLength3 = 0;
+
+        for (FVector fVector : producer.getListFixed(8)) {
+
+            if (fVector.getHeadX() == 1) {
+                qLength1++;
+            } else if (fVector.getHeadX() == 2) {
+                qLength2++;
+            } else if (fVector.getHeadX() == 3) {
+                qLength3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(8, qLength1 + qLength2 + qLength3, "The number of elements is incorrect");
+        assertEquals(3, qLength1, 1, "Distribution 1 is erroneous");
+        assertEquals(3, qLength2, 1, "Distribution 2 is erroneous");
+        assertEquals(3, qLength3, 1, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, random")
+    void iterateRandom() {
+        FVectorProducer producer = factory.getFVectorProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(1), 20)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(2), 20)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(3), 20);
+
+        List<FVector> results = producer.getListRandomized(60);
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getHeadX() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
     @DisplayName("Stream")
     void stream() {
         FVectorProducer producer = factory.getFVectorProducer();
 
         producer
-                .withCustomRule((factory) -> factory.getFVector().setHeadX(1), 1)
-                .withCustomRule((factory) -> factory.getFVector().setHeadX(2), 1);
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(1), 20)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(2), 20)
+                .withCustomRule((factory) -> factory.getFVector().setHeadX(3), 20);
 
-        List<FVector> list = producer.stream().limit(100).collect(Collectors.toList());
+        List<FVector> results = producer.stream().limit(60).collect(Collectors.toList());
 
-        Assertions.assertAll("Validate values",
-                () -> assertTrue(list.stream().anyMatch(e -> e.getHeadX() == 1),
-                        "The distribution is erroneous"),
-                () -> assertTrue(list.stream().anyMatch(e -> e.getHeadX() == 2),
-                        "The distribution is erroneous")
-        );
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getHeadX() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
     }
 
     @Test

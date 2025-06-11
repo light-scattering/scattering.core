@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -227,8 +227,20 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
-    public Iterator<FVector> iterator() {
+    public List<FVector> getListAuto() {
 
-        return this.processor.getIterator();
+        return this.processor.getListAdopted(null);
+    }
+
+    @Override
+    public List<FVector> getListRandomized(int quantity) {
+
+        return this.processor.getListRandomized(quantity, null);
+    }
+
+    @Override
+    public List<FVector> getListFixed(int quantity) {
+
+        return this.processor.getListFixed(quantity, null);
     }
 }

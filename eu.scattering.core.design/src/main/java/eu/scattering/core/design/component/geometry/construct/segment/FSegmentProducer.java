@@ -2,13 +2,19 @@ package eu.scattering.core.design.component.geometry.construct.segment;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FSegmentProducer extends Iterable<FSegment> {
+public interface FSegmentProducer{
 
     FSegment produce();
+
     Stream<FSegment> stream();
+
+    List<FSegment> getListAuto();
+    List<FSegment> getListRandomized(int quantity);
+    List<FSegment> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 

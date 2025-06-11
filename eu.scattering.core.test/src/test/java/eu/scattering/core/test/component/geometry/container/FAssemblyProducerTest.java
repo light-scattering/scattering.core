@@ -127,8 +127,8 @@ public class FAssemblyProducerTest {
     }
 
     @Test
-    @DisplayName("Iterate")
-    void iterate() {
+    @DisplayName("Iterate, auto")
+    void iterateAuto() {
         FAssemblyProducer<FSphere> producer = factory.getFAssemblyProducer();
 
         producer
@@ -148,31 +148,31 @@ public class FAssemblyProducerTest {
                     return fAssembly;
                 }, 15);
 
-        int qValue1 = 0;
-        int qValue2 = 0;
-        int qValue3 = 0;
+        int qCountA = 0;
+        int aCountB = 0;
+        int qCountC = 0;
 
-        for (FAssembly<FSphere> fAssembly : producer) {
+        for (FAssembly<FSphere> fAssembly : producer.getListAuto()) {
 
             if (fAssembly.getGeometries().get(0).getRadius() == 1) {
-                qValue1++;
+                qCountA++;
             } else if (fAssembly.getGeometries().get(0).getRadius() == 2) {
-                qValue2++;
+                aCountB++;
             } else if (fAssembly.getGeometries().get(0).getRadius() == 3) {
-                qValue3++;
+                qCountC++;
             } else {
                 throw new IllegalStateException("The produced element is erroneous");
             }
         }
 
-        assertEquals( 5, qValue1, "Distribution 1 is erroneous");
-        assertEquals(10, qValue2, "Distribution 2 is erroneous");
-        assertEquals(15, qValue3, "Distribution 3 is erroneous");
+        assertEquals( 5, qCountA, "Distribution 1 is erroneous");
+        assertEquals(10, aCountB, "Distribution 2 is erroneous");
+        assertEquals(15, qCountC, "Distribution 3 is erroneous");
     }
 
     @Test
-    @DisplayName("Stream")
-    void stream() {
+    @DisplayName("Iterate, fixed")
+    void iterateFixed() {
         FAssemblyProducer<FSphere> producer = factory.getFAssemblyProducer();
 
         producer
@@ -185,15 +185,105 @@ public class FAssemblyProducerTest {
                     FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
                     fAssembly.register(factory.getFSphere(2));
                     return fAssembly;
-                }, 5);
+                }, 1)
+                .withCustomRule((factoryLocal) -> {
+                    FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
+                    fAssembly.register(factory.getFSphere(3));
+                    return fAssembly;
+                }, 1);
 
-        List<FAssembly<FSphere>> list = producer.stream().limit(100).collect(Collectors.toList());
+        int qCountA = 0;
+        int qCountB = 0;
+        int qCountC = 0;
 
-        Assertions.assertAll("Validate values",
-                () -> assertTrue(list.stream().anyMatch(e -> e.getGeometries().get(0).getRadius() == 1),
-                        "The distribution is erroneous"),
-                () -> assertTrue(list.stream().anyMatch(e -> e.getGeometries().get(0).getRadius() == 2),
-                        "The distribution is erroneous")
-        );
+        for (FAssembly<FSphere> fAssembly : producer.getListFixed(8)) {
+
+            if (fAssembly.getGeometries().get(0).getRadius() == 1) {
+                qCountA++;
+            } else if (fAssembly.getGeometries().get(0).getRadius() == 2) {
+                qCountB++;
+            } else if (fAssembly.getGeometries().get(0).getRadius() == 3) {
+                qCountC++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(8, qCountA + qCountB + qCountC, "The number of elements is incorrect");
+        assertEquals(3, qCountA, 1, "Distribution 1 is erroneous");
+        assertEquals(3, qCountB, 1, "Distribution 2 is erroneous");
+        assertEquals(3, qCountC, 1, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, random")
+    void iterateRandom() {
+        FAssemblyProducer<FSphere> producer = factory.getFAssemblyProducer();
+
+        producer
+                .withCustomRule((factoryLocal) -> {
+                    FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
+                    fAssembly.register(factory.getFSphere(1));
+                    return fAssembly;
+                }, 20)
+                .withCustomRule((factoryLocal) -> {
+                    FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
+                    fAssembly.register(factory.getFSphere(2));
+                    return fAssembly;
+                }, 20)
+                .withCustomRule((factoryLocal) -> {
+                    FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
+                    fAssembly.register(factory.getFSphere(3));
+                    return fAssembly;
+                }, 20);
+
+        List<FAssembly<FSphere>> results = producer.getListRandomized(60);
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getGeometries().get(0).getRadius() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
+    @DisplayName("Stream")
+    void stream() {
+        FAssemblyProducer<FSphere> producer = factory.getFAssemblyProducer();
+
+        producer
+                .withCustomRule((factoryLocal) -> {
+                    FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
+                    fAssembly.register(factory.getFSphere(1));
+                    return fAssembly;
+                }, 20)
+                .withCustomRule((factoryLocal) -> {
+                    FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
+                    fAssembly.register(factory.getFSphere(2));
+                    return fAssembly;
+                }, 20)
+                .withCustomRule((factoryLocal) -> {
+                    FAssembly<FSphere> fAssembly = factoryLocal.getFAssembly();
+                    fAssembly.register(factory.getFSphere(3));
+                    return fAssembly;
+                }, 20);
+
+        List<FAssembly<FSphere>> results = producer.stream().limit(60).collect(Collectors.toList());
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getGeometries().get(0).getRadius() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
     }
 }

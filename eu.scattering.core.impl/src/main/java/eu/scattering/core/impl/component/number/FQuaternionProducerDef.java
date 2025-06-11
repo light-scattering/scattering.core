@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -60,8 +60,20 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     }
 
     @Override
-    public Iterator<FQuaternion> iterator() {
+    public List<FQuaternion> getListAuto() {
 
-        return this.processor.getIterator();
+        return this.processor.getListAdopted(null);
+    }
+
+    @Override
+    public List<FQuaternion> getListRandomized(int quantity) {
+
+        return this.processor.getListRandomized(quantity, null);
+    }
+
+    @Override
+    public List<FQuaternion> getListFixed(int quantity) {
+
+        return this.processor.getListFixed(quantity, null);
     }
 }

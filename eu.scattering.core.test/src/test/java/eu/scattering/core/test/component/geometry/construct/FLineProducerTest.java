@@ -123,8 +123,8 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Iterate")
-    void iterate() {
+    @DisplayName("Iterate, auto")
+    void iterateAuto() {
         FLineProducer producer = factory.getFLineProducer();
 
         producer
@@ -139,7 +139,7 @@ public class FLineProducerTest {
         int qValue2 = 0;
         int qValue3 = 0;
 
-        for (FLine construct : producer) {
+        for (FLine construct : producer.getListAuto()) {
 
             if (construct.getRefOrigin().getHeadX() == 1) {
                 qValue1++;
@@ -158,24 +158,93 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Stream")
-    void stream() {
+    @DisplayName("Iterate, fixed")
+    void iterateFixed() {
         FLineProducer producer = factory.getFLineProducer();
 
         producer
                 .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
                         factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 1)
                 .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
-                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 5);
+                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 1)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
+                        factory.getFPairPos3D(0, 0, 0, 3, 0, 0)), 1);
 
-        List<FLine> list = producer.stream().limit(100).collect(Collectors.toList());
+        int qValue1 = 0;
+        int qValue2 = 0;
+        int qValue3 = 0;
 
-        Assertions.assertAll("Validate values",
-                () -> assertTrue(list.stream().anyMatch(e -> e.getRefOrigin().getHeadX() == 1),
-                        "The distribution is erroneous"),
-                () -> assertTrue(list.stream().anyMatch(e -> e.getRefOrigin().getHeadX() == 2),
-                        "The distribution is erroneous")
-        );
+        for (FLine construct : producer.getListFixed(8)) {
+
+            if (construct.getRefOrigin().getHeadX() == 1) {
+                qValue1++;
+            } else if (construct.getRefOrigin().getHeadX() == 2) {
+                qValue2++;
+            } else if (construct.getRefOrigin().getHeadX() == 3) {
+                qValue3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(8, qValue1 + qValue2 + qValue3, "The number of elements is incorrect");
+        assertEquals(3, qValue1, 1, "Distribution 1 is erroneous");
+        assertEquals(3, qValue2, 1, "Distribution 2 is erroneous");
+        assertEquals(3, qValue3, 1, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, random")
+    void iterateRandom() {
+        FLineProducer producer = factory.getFLineProducer();
+
+        producer
+                .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
+                        factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 20)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
+                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 20)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
+                        factory.getFPairPos3D(0, 0, 0, 3, 0, 0)), 20);
+
+        List<FLine> results = producer.getListRandomized(60);
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getRefOrigin().getHeadX() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
+    @DisplayName("Stream")
+    void stream() {
+        FLineProducer producer = factory.getFLineProducer();
+
+        producer
+                .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
+                        factory.getFPairPos3D(0, 0, 0, 1, 0, 0)), 20)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
+                        factory.getFPairPos3D(0, 0, 0, 2, 0, 0)), 20)
+                .withCustomRule((factoryInternal) -> factoryInternal.getFLine().set(
+                        factory.getFPairPos3D(0, 0, 0, 3, 0, 0)), 20);
+
+        List<FLine> results = producer.stream().limit(60).collect(Collectors.toList());
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getRefOrigin().getHeadX() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
     }
 
     @Test

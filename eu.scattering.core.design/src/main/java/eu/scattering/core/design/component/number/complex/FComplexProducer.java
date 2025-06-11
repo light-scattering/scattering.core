@@ -1,12 +1,18 @@
 package eu.scattering.core.design.component.number.complex;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FComplexProducer extends Iterable<FComplex> {
+public interface FComplexProducer {
 
     FComplex produce();
+
     Stream<FComplex> stream();
+
+    List<FComplex> getListAuto();
+    List<FComplex> getListRandomized(int quantity);
+    List<FComplex> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 

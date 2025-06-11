@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -50,8 +50,20 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
     }
 
     @Override
-    public Iterator<FAssembly<T>> iterator() {
+    public List<FAssembly<T>> getListAuto() {
 
-        return this.processor.getIterator();
+        return this.processor.getListAdopted(null);
+    }
+
+    @Override
+    public List<FAssembly<T>> getListRandomized(int quantity) {
+
+        return this.processor.getListRandomized(quantity, null);
+    }
+
+    @Override
+    public List<FAssembly<T>> getListFixed(int quantity) {
+
+        return this.processor.getListFixed(quantity, null);
     }
 }

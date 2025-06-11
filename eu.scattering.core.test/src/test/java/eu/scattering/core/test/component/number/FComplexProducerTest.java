@@ -106,20 +106,20 @@ public class FComplexProducerTest {
     }
 
     @Test
-    @DisplayName("Iterate")
-    void iterate() {
+    @DisplayName("Iterate, auto")
+    void iterateAuto() {
         FComplexProducer producer = factory.getFComplexProducer();
 
         producer
-                .withCustomRule((factory) -> factory.getFComplex(1, 1), 5)
-                .withCustomRule((factory) -> factory.getFComplex(2, 2), 10)
-                .withCustomRule((factory) -> factory.getFComplex(3, 3), 15);
+                .withCustomRule((factory) -> factory.getFComplex().setRe(1), 5)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(2), 10)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(3), 15);
 
         int qRe1 = 0;
         int qRe2 = 0;
         int qRe3 = 0;
 
-        for (FComplex fComplex : producer) {
+        for (FComplex fComplex : producer.getListAuto()) {
 
             if (fComplex.getRe() == 1) {
                 qRe1++;
@@ -138,22 +138,84 @@ public class FComplexProducerTest {
     }
 
     @Test
+    @DisplayName("Iterate, fixed")
+    void iterateFixed() {
+        FComplexProducer producer = factory.getFComplexProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFComplex().setRe(1), 1)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(2), 1)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(3), 1);
+
+        int qRe1 = 0;
+        int qRe2 = 0;
+        int qRe3 = 0;
+
+        for (FComplex fComplex : producer.getListFixed(8)) {
+
+            if (fComplex.getRe() == 1) {
+                qRe1++;
+            } else if (fComplex.getRe() == 2) {
+                qRe2++;
+            } else if (fComplex.getRe() == 3) {
+                qRe3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(8, qRe1 + qRe2 + qRe3, "The number of elements is incorrect");
+        assertEquals(3, qRe1, 1, "Distribution 1 is erroneous");
+        assertEquals(3, qRe2, 1, "Distribution 2 is erroneous");
+        assertEquals(3, qRe3, 1, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, random")
+    void iterateRandom() {
+        FComplexProducer producer = factory.getFComplexProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFComplex().setRe(1), 20)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(2), 20)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(3), 20);
+
+        List<FComplex> results = producer.getListRandomized(60);
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getRe() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
     @DisplayName("Stream")
     void stream() {
         FComplexProducer producer = factory.getFComplexProducer();
 
         producer
-                .withCustomRule((factory) -> factory.getFComplex(1, 1), 1)
-                .withCustomRule((factory) -> factory.getFComplex(2, 2), 1);
+                .withCustomRule((factory) -> factory.getFComplex().setRe(1), 20)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(2), 20)
+                .withCustomRule((factory) -> factory.getFComplex().setRe(3), 20);
 
-        List<FComplex> list = producer.stream().limit(100).collect(Collectors.toList());
+        List<FComplex> results = producer.stream().limit(60).collect(Collectors.toList());
 
-        Assertions.assertAll("Validate values",
-                () -> assertTrue(list.stream().anyMatch(e -> e.getRe() == 1),
-                        "The distribution is erroneous"),
-                () -> assertTrue(list.stream().anyMatch(e -> e.getRe() == 2),
-                        "The distribution is erroneous")
-        );
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getRe() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
     }
 
     @Test

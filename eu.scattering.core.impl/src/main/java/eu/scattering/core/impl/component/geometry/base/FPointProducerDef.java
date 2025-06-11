@@ -7,7 +7,7 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -93,8 +93,20 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public Iterator<FPoint> iterator() {
+    public List<FPoint> getListAuto() {
 
-        return this.processor.getIterator();
+        return this.processor.getListAdopted(null);
+    }
+
+    @Override
+    public List<FPoint> getListRandomized(int quantity) {
+
+        return this.processor.getListRandomized(quantity, null);
+    }
+
+    @Override
+    public List<FPoint> getListFixed(int quantity) {
+
+        return this.processor.getListFixed(quantity, null);
     }
 }

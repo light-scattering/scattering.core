@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProduc
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -62,8 +62,20 @@ public class FPlaneProducerDef implements FPlaneProducer {
     }
 
     @Override
-    public Iterator<FPlane> iterator() {
+    public List<FPlane> getListAuto() {
 
-        return this.processor.getIterator();
+        return this.processor.getListAdopted(null);
+    }
+
+    @Override
+    public List<FPlane> getListRandomized(int quantity) {
+
+        return this.processor.getListRandomized(quantity, null);
+    }
+
+    @Override
+    public List<FPlane> getListFixed(int quantity) {
+
+        return this.processor.getListFixed(quantity, null);
     }
 }

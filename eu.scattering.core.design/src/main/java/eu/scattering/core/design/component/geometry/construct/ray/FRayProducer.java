@@ -2,13 +2,19 @@ package eu.scattering.core.design.component.geometry.construct.ray;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FRayProducer extends Iterable<FRay> {
+public interface FRayProducer {
 
     FRay produce();
+
     Stream<FRay> stream();
+
+    List<FRay> getListAuto();
+    List<FRay> getListRandomized(int quantity);
+    List<FRay> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 
