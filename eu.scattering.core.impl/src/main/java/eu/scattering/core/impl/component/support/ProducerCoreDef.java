@@ -77,21 +77,11 @@ public class ProducerCoreDef<E> {
         return Stream.generate(this::produce);
     }
 
-    public Iterator<E> getIterator() {
-
-        return new ProducerIterator(null);
-    }
-
-    public Iterator<E> getIterator(Consumer<List<E>> processor) {
-
-        return new ProducerIterator(processor);
-    }
-
     public List<E> getListAdopted(Consumer<List<E>> consumer) {
 
         validateState();
 
-        List<E> results = getEmptyList(getWeight());
+        List<E> results = getInitialList(getWeight());
 
         getListAuto(results);
 
@@ -108,7 +98,7 @@ public class ProducerCoreDef<E> {
             throw new IllegalArgumentException("The quantity must be at least zero");
         }
 
-        List<E> results = getEmptyList(quantity);
+        List<E> results = getInitialList(quantity);
 
         for (int i = 0 ; i < quantity ; i++) {
             results.add(produce());
@@ -123,7 +113,7 @@ public class ProducerCoreDef<E> {
 
         validateState();
 
-        List<E> results = getEmptyList(quantity);
+        List<E> results = getInitialList(quantity);
 
         if (quantity < 0) {
             throw new IllegalArgumentException("The quantity must be at least zero");
@@ -246,7 +236,7 @@ public class ProducerCoreDef<E> {
         return weight;
     }
 
-    private List<E> getEmptyList(int quantity) {
+    private List<E> getInitialList(int quantity) {
 
         return new ArrayList<>(Math.max(quantity, 0));
     }
@@ -259,52 +249,4 @@ public class ProducerCoreDef<E> {
             consumer.accept(results);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    class ProducerIterator implements Iterator<E> {
-        private final List<E> list;
-        private int index = 0;
-
-        public ProducerIterator(Consumer<List<E>> processor) {
-            list = new ArrayList<>();
-            ProducerCoreDef.this.getListAuto(list);
-            Collections.shuffle(list);
-
-            if (processor != null) {
-                processor.accept(this.list);
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-
-            return this.index < this.list.size();
-        }
-
-        @Override
-        public E next() {
-
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-
-            return this.list.get(this.index++);
-        }
-    }
-
 }
