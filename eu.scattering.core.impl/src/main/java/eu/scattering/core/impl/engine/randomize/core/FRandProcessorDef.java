@@ -1,7 +1,7 @@
-package eu.scattering.core.impl.engine.randomize;
+package eu.scattering.core.impl.engine.randomize.core;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.randomize.generator.core.FRandProcessorCore;
+import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
@@ -19,7 +19,7 @@ public class FRandProcessorDef implements FRandGenerator {
     private static final FPos2D posZero2D = factory.getFPos2D(0, 0);
     private static final FPos3D posZero3D = factory.getFPos3D(0, 0, 0);
 
-    private final FRandProcessorCore core;
+    private final FRandCore core;
 
     private int retryLimit = -1;
 

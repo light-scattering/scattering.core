@@ -43,7 +43,7 @@ import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
-import eu.scattering.core.impl.engine.randomize.FRandProcessorDef;
+import eu.scattering.core.impl.engine.randomize.core.FRandProcessorDef;
 import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FStatHelperDef;

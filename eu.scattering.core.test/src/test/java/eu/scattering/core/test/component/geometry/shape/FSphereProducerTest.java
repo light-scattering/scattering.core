@@ -110,8 +110,8 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Iterate")
-    void iterate() {
+    @DisplayName("Iterate, auto")
+    void iterateAuto() {
         FSphereProducer producer = factory.getFSphereProducer();
 
         producer
@@ -124,7 +124,7 @@ public class FSphereProducerTest {
         int qRadius3 = 0;
 
         int i = 0;
-        for (FSphere fSphere : producer) {
+        for (FSphere fSphere : producer.getListAuto()) {
 
             if (fSphere.getIndex() != i++) {
                 throw new IllegalStateException("The index is erroneous");
@@ -147,6 +147,289 @@ public class FSphereProducerTest {
     }
 
     @Test
+    @DisplayName("Iterate, auto (exception)")
+    void iterateAutoException() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        assertThrows(IllegalStateException.class, producer::getListAuto,
+                "The producer should not be configured");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (single)")
+    void iterateFixedSingle() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 5)
+                .withCustomRule((factory) -> factory.getFSphere(2), 10)
+                .withCustomRule((factory) -> factory.getFSphere(3), 15);
+
+        int qRadius1 = 0;
+        int qRadius2 = 0;
+        int qRadius3 = 0;
+
+        int i = 0;
+        for (FSphere fSphere : producer.getListFixed(30)) {
+
+            if (fSphere.getIndex() != i++) {
+                throw new IllegalStateException("The index is erroneous");
+            }
+
+            if (fSphere.getRadius() == 1) {
+                qRadius1++;
+            } else if (fSphere.getRadius() == 2) {
+                qRadius2++;
+            } else if (fSphere.getRadius() == 3) {
+                qRadius3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals( 5, qRadius1, "Distribution 1 is erroneous");
+        assertEquals(10, qRadius2, "Distribution 2 is erroneous");
+        assertEquals(15, qRadius3, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (multiple)")
+    void iterateFixedMultiple() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 5)
+                .withCustomRule((factory) -> factory.getFSphere(2), 10)
+                .withCustomRule((factory) -> factory.getFSphere(3), 15);
+
+        int qRadius1 = 0;
+        int qRadius2 = 0;
+        int qRadius3 = 0;
+
+        int i = 0;
+        for (FSphere fSphere : producer.getListFixed(60)) {
+
+            if (fSphere.getIndex() != i++) {
+                throw new IllegalStateException("The index is erroneous");
+            }
+
+            if (fSphere.getRadius() == 1) {
+                qRadius1++;
+            } else if (fSphere.getRadius() == 2) {
+                qRadius2++;
+            } else if (fSphere.getRadius() == 3) {
+                qRadius3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(10, qRadius1, "Distribution 1 is erroneous");
+        assertEquals(20, qRadius2, "Distribution 2 is erroneous");
+        assertEquals(30, qRadius3, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (below)")
+    void iterateFixedBelow() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 1)
+                .withCustomRule((factory) -> factory.getFSphere(2), 1)
+                .withCustomRule((factory) -> factory.getFSphere(3), 1);
+
+        int qRadius1 = 0;
+        int qRadius2 = 0;
+        int qRadius3 = 0;
+
+        int i = 0;
+        for (FSphere fSphere : producer.getListFixed(8)) {
+
+            if (fSphere.getIndex() != i++) {
+                throw new IllegalStateException("The index is erroneous");
+            }
+
+            if (fSphere.getRadius() == 1) {
+                qRadius1++;
+            } else if (fSphere.getRadius() == 2) {
+                qRadius2++;
+            } else if (fSphere.getRadius() == 3) {
+                qRadius3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(8, qRadius1 + qRadius2 + qRadius3, "The number of elements is incorrect");
+        assertEquals(3, qRadius1, 1, "Distribution 1 is erroneous");
+        assertEquals(3, qRadius2, 1, "Distribution 2 is erroneous");
+        assertEquals(3, qRadius3, 1, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (above)")
+    void iterateFixedAbove() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 1)
+                .withCustomRule((factory) -> factory.getFSphere(2), 1)
+                .withCustomRule((factory) -> factory.getFSphere(3), 1);
+
+        int qRadius1 = 0;
+        int qRadius2 = 0;
+        int qRadius3 = 0;
+
+        int i = 0;
+        for (FSphere fSphere : producer.getListFixed(10)) {
+
+            if (fSphere.getIndex() != i++) {
+                throw new IllegalStateException("The index is erroneous");
+            }
+
+            if (fSphere.getRadius() == 1) {
+                qRadius1++;
+            } else if (fSphere.getRadius() == 2) {
+                qRadius2++;
+            } else if (fSphere.getRadius() == 3) {
+                qRadius3++;
+            } else {
+                throw new IllegalStateException("The produced element is erroneous");
+            }
+        }
+
+        assertEquals(10, qRadius1 + qRadius2 + qRadius3, "The number of elements is incorrect");
+        assertEquals(3, qRadius1, 1, "Distribution 1 is erroneous");
+        assertEquals(3, qRadius2, 1, "Distribution 2 is erroneous");
+        assertEquals(3, qRadius3, 1, "Distribution 3 is erroneous");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (random)")
+    void iterateFixedRandom() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 20)
+                .withCustomRule((factory) -> factory.getFSphere(2), 20)
+                .withCustomRule((factory) -> factory.getFSphere(3), 20);
+
+        List<FSphere> results = producer.getListFixed(60);
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getRadius() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (zero)")
+    void iterateFixedZero() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 5)
+                .withCustomRule((factory) -> factory.getFSphere(2), 10)
+                .withCustomRule((factory) -> factory.getFSphere(3), 15);
+
+        List<FSphere> results = producer.getListFixed(0);
+
+        assertEquals( 0, results.size(), "The number of elements is incorrect");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (state exception)")
+    void iterateFixedStateException() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        assertThrows(IllegalStateException.class, () -> producer.getListFixed(1),
+                "The producer should not be configured");
+    }
+
+    @Test
+    @DisplayName("Iterate, fixed (argument exception)")
+    void iterateFixedArgumentException() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 1)
+                .withCustomRule((factory) -> factory.getFSphere(2), 1)
+                .withCustomRule((factory) -> factory.getFSphere(3), 1);
+
+        assertThrows(IllegalArgumentException.class, () -> producer.getListFixed(-1),
+                "The argument should be at least zero");
+    }
+
+    @Test
+    @DisplayName("Iterate, random")
+    void iterateRandom() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 20)
+                .withCustomRule((factory) -> factory.getFSphere(2), 20)
+                .withCustomRule((factory) -> factory.getFSphere(3), 20);
+
+        List<FSphere> results = producer.getListRandomized(60);
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getRadius() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
+    @DisplayName("Iterate, random (zero)")
+    void iterateRandomZero() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 5)
+                .withCustomRule((factory) -> factory.getFSphere(2), 10)
+                .withCustomRule((factory) -> factory.getFSphere(3), 15);
+
+        List<FSphere> results = producer.getListRandomized(0);
+
+        assertEquals( 0, results.size(), "The number of elements is incorrect");
+    }
+
+    @Test
+    @DisplayName("Iterate, random (state exception)")
+    void iterateRandomStateException() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        assertThrows(IllegalStateException.class, () -> producer.getListRandomized(1),
+                "The producer should not be configured");
+    }
+
+    @Test
+    @DisplayName("Iterate, random (argument exception)")
+    void iterateRandomArgumentException() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 1)
+                .withCustomRule((factory) -> factory.getFSphere(2), 1)
+                .withCustomRule((factory) -> factory.getFSphere(3), 1);
+
+        assertThrows(IllegalArgumentException.class, () -> producer.getListRandomized(-1),
+                "The argument should be at least zero");
+    }
+
+    @Test
     @DisplayName("Stream")
     void stream() {
         FSphereProducer producer = factory.getFSphereProducer();
@@ -163,6 +446,39 @@ public class FSphereProducerTest {
                 () -> assertTrue(list.stream().anyMatch(e -> e.getRadius() == 2),
                         "The distribution is erroneous")
         );
+    }
+
+    @Test
+    @DisplayName("Stream, random")
+    void streamRandom() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        producer
+                .withCustomRule((factory) -> factory.getFSphere(1), 20)
+                .withCustomRule((factory) -> factory.getFSphere(2), 20)
+                .withCustomRule((factory) -> factory.getFSphere(3), 20);
+
+        List<FSphere> results = producer.stream().limit(60).collect(Collectors.toList());
+
+        boolean sequence = true;
+        for (int i = 0 ; i < 20 ; i++) {
+            if (results.get(i).getRadius() != 1) {
+                sequence = false;
+                break;
+            }
+        }
+
+        assertEquals(60, results.size(), "The number of elements is incorrect");
+        assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
+    @DisplayName("Stream (state exception)")
+    void streamStateException() {
+        FSphereProducer producer = factory.getFSphereProducer();
+
+        assertThrows(IllegalStateException.class, producer::stream,
+                "The producer should not be configured");
     }
 
     @Test

@@ -2,7 +2,7 @@ package eu.scattering.core.design.engine.randomize.generator.core;
 
 import java.util.Optional;
 
-public interface FRandProcessorCore {
+public interface FRandCore {
 
     Optional<Long> getSeed();
 

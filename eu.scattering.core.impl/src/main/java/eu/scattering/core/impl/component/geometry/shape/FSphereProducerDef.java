@@ -8,7 +8,6 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -129,6 +128,7 @@ public class FSphereProducerDef implements FSphereProducer {
 
     // -------------------------------------------------------------------------------------------------
 
+
     @Override
     public Stream<FSphere> stream() {
 
@@ -136,9 +136,21 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public Iterator<FSphere> iterator() {
+    public List<FSphere> getListAuto() {
 
-       return this.processor.getIterator(ITERATOR_PROCESSOR);
+        return this.processor.getListAdopted(ITERATOR_PROCESSOR);
+    }
+
+    @Override
+    public List<FSphere> getListRandomized(int quantity) {
+
+        return this.processor.getListRandomized(quantity, ITERATOR_PROCESSOR);
+    }
+
+    @Override
+    public List<FSphere> getListFixed(int quantity) {
+
+        return this.processor.getListFixed(quantity, ITERATOR_PROCESSOR);
     }
 }
 

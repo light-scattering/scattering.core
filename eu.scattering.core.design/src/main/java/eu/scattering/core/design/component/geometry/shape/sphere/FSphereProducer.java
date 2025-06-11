@@ -2,13 +2,19 @@ package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FSphereProducer extends Iterable<FSphere> {
+public interface FSphereProducer {
 
     FSphere produce();
+
     Stream<FSphere> stream();
+
+    List<FSphere> getListAuto();
+    List<FSphere> getListRandomized(int quantity);
+    List<FSphere> getListFixed(int quantity);
 
     // -------------------------------------------------------------------------------------------------
 

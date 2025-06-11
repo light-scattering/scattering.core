@@ -1,11 +1,11 @@
-package eu.scattering.core.impl.engine.randomize;
+package eu.scattering.core.impl.engine.randomize.core;
 
-import eu.scattering.core.design.engine.randomize.generator.core.FRandProcessorCore;
+import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
 
 import java.util.Optional;
 import java.util.Random;
 
-public class FRandCoreSimpleDef implements FRandProcessorCore {
+public class FRandCoreSimpleDef implements FRandCore {
     private final long seed;
     private final Random random;
 
@@ -15,7 +15,7 @@ public class FRandCoreSimpleDef implements FRandProcessorCore {
         this.random = new Random(this.seed);
     }
 
-    protected static FRandProcessorCore create(long seed) {
+    protected static FRandCore create(long seed) {
 
         return new FRandCoreSimpleDef(seed);
     }

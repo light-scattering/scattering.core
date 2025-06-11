@@ -1,15 +1,15 @@
-package eu.scattering.core.impl.engine.randomize;
+package eu.scattering.core.impl.engine.randomize.core;
 
-import eu.scattering.core.design.engine.randomize.generator.core.FRandProcessorCore;
+import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class FRandCoreOptimizedDef implements FRandProcessorCore {
+public class FRandCoreOptimizedDef implements FRandCore {
 
     private FRandCoreOptimizedDef() {}
 
-    protected static FRandProcessorCore create() {
+    protected static FRandCore create() {
 
         return new FRandCoreOptimizedDef();
     }
