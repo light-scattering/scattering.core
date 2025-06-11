@@ -15,7 +15,7 @@ public class FRandCoreSimpleDef implements FRandCore {
         this.random = new Random(this.seed);
     }
 
-    protected static FRandCore create(long seed) {
+    public static FRandCore create(long seed) {
 
         return new FRandCoreSimpleDef(seed);
     }

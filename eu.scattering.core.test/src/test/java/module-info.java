@@ -17,4 +17,6 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.component.geometry.shape;
     opens eu.scattering.core.test.component.geometry.container;
     opens eu.scattering.core.test.component.geometry;
+    opens eu.scattering.core.test.engine.randomize;
+    opens eu.scattering.core.test.engine.randomize.module;
 }

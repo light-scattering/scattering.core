@@ -9,7 +9,7 @@ public class FRandCoreOptimizedDef implements FRandCore {
 
     private FRandCoreOptimizedDef() {}
 
-    protected static FRandCore create() {
+    public static FRandCore create() {
 
         return new FRandCoreOptimizedDef();
     }

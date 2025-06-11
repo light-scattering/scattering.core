@@ -43,7 +43,7 @@ import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
-import eu.scattering.core.impl.engine.randomize.core.FRandProcessorDef;
+import eu.scattering.core.impl.engine.randomize.FRandGeneratorDef;
 import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FStatHelperDef;
@@ -57,21 +57,45 @@ import eu.scattering.core.impl.component.number.FQuaternionDef;
 public final class FactoryDef extends FactoryDesignConcrete {
     private final FRandGenerator fRandGenerator;
 
+    private final FProtoEngine fProtoEngine;
     private final FRandEngine fRandEngine;
     private final FRotEngine fRotEngine;
 
+    private final FRotGenerator fRotGenerator;
+
+    private final FTrigHelper fTrigHelper;
+    private final FStatHelper fStatHelper;
+
+    private final GeometryParser fGeometryParser;
+
     private FactoryDef() {
-        this.fRandGenerator = FRandProcessorDef.create();
+        this.fRandGenerator = FRandGeneratorDef.create();
 
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
+        this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
+
+        this.fRotGenerator = FRotProcessorDef.get();
+
+        this.fTrigHelper = FTrigHelperDef.get();
+        this.fStatHelper = FStatHelperDef.get();
+
+        this.fGeometryParser = GeometryParserDef.get(this);
     }
 
     private FactoryDef(long seed) {
-        this.fRandGenerator = FRandProcessorDef.create(seed);
+        this.fRandGenerator = FRandGeneratorDef.create(seed);
 
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
+        this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
+
+        this.fRotGenerator = FRotProcessorDef.get();
+
+        this.fTrigHelper = FTrigHelperDef.get();
+        this.fStatHelper = FStatHelperDef.get();
+
+        this.fGeometryParser = GeometryParserDef.get(this);
     }
 
     public static FactoryDesignConcrete create() {
@@ -291,19 +315,19 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FProtoEngine getFProtoEngine() {
 
-        return FProtoEngineDef.get();
+        return this.fProtoEngine;
     }
 
     @Override
     public FRandEngine getFRandEngine() {
 
-        return fRandEngine;
+        return this.fRandEngine;
     }
 
     @Override
     public FRotEngine getFRotEngine() {
 
-        return fRotEngine;
+        return this.fRotEngine;
     }
 
     //--------------------------------------------------
@@ -311,13 +335,13 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FTrigHelper getFTrigHelper() {
 
-        return FTrigHelperDef.get();
+        return this.fTrigHelper;
     }
 
     @Override
     public FStatHelper getFStatHelper() {
 
-        return FStatHelperDef.get();
+        return this.fStatHelper;
     }
 
     //--------------------------------------------------
@@ -325,19 +349,19 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FRotGenerator getFRotGenerator() {
 
-        return FRotProcessorDef.get();
+        return this.fRotGenerator;
     }
 
     @Override
     public FRandGenerator getFRandGenerator() {
 
-        return FRandProcessorDef.create();
+        return this.fRandGenerator;
     }
 
     @Override
-    public FRandGenerator getFRandGenerator(long seed) {
+    public FRandGenerator spawnFRandGenerator(long seed) {
 
-        return FRandProcessorDef.create(seed);
+        return FRandGeneratorDef.create(seed);
     }
 
     //--------------------------------------------------
@@ -345,6 +369,6 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public GeometryParser getGeometryParser() {
 
-        return GeometryParserDef.get(this);
+        return this.fGeometryParser;
     }
 }
