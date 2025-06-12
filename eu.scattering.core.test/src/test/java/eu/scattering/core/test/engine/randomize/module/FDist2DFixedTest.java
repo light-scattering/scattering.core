@@ -1,7 +1,7 @@
 package eu.scattering.core.test.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.engine.randomize.generator.module.dist2d.FDist2D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -11,17 +11,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Timeout(5)
-@DisplayName("FDist1DFixedTest")
-public class FDist1DFixedTest {
+@DisplayName("FDist2DFixedTest")
+public class FDist2DFixedTest {
 
     @Test
     @DisplayName("Produce value primitive")
     void produceValuePrimitive() {
         FRandGenerator random = factory.getFRandGenShared();
-        FDist1D dist = random.getFDist1DFixed(5);
+        FDist2D dist = random.getFDist2DFixed(1, 2);
 
         for (int i = 0 ; i < 10 ; i++) {
-            assertEquals(5, dist.produce(),
+            assertEquals(factory.getFPos2D(1, 2), dist.produce(),
+                    "The value is erroneous");
+        }
+    }
+
+    @Test
+    @DisplayName("Produce value with FPos2D")
+    void produceValueFPos2D() {
+        FRandGenerator random = factory.getFRandGenShared();
+        FDist2D dist = random.getFDist2DFixed(factory.getFPos2D(1, 2));
+
+        for (int i = 0 ; i < 10 ; i++) {
+            assertEquals(factory.getFPos2D(1, 2), dist.produce(),
                     "The value is erroneous");
         }
     }
@@ -30,13 +42,15 @@ public class FDist1DFixedTest {
     @DisplayName("Produce value array")
     void produceValueArray() {
         FRandGenerator random = factory.getFRandGenShared();
-        FDist1D dist = random.getFDist1DFixed(5);
+        FDist2D dist = random.getFDist2DFixed(factory.getFPos2D(1, 2));
 
-        double[] arr = new double[1];
+        double[] arr = new double[2];
         for (int i = 0 ; i < 10 ; i++) {
             dist.produce(arr);
-            assertEquals(5, arr[0],
-                    "The value is erroneous");
+            assertEquals(1, arr[0],
+                    "The value X is erroneous");
+            assertEquals(2, arr[1],
+                    "The value Y is erroneous");
         }
     }
 
@@ -44,9 +58,9 @@ public class FDist1DFixedTest {
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
         FRandGenerator random = factory.getFRandGenShared();
-        FDist1D dist = random.getFDist1DFixed(5);
+        FDist2D dist = random.getFDist2DFixed(factory.getFPos2D(1, 2));
 
-        double[] arr = new double[0];
+        double[] arr = new double[1];
 
         assertThrows(IllegalArgumentException.class, () -> dist.produce(arr),
                 "The array size is erroneous");

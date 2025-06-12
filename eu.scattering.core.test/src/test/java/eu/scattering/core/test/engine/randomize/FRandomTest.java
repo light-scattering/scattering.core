@@ -29,7 +29,7 @@ public class FRandomTest {
         void getSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom = factory.spawnFRandGenerator(seed);
+            FRandGenerator fRandom = factory.getFRandGen(seed);
 
             Assertions.assertAll("Validate return value",
                     () -> assertEquals(Optional.of(seed), fRandom.getSeed()));
@@ -38,7 +38,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get seed - Disabled")
         void getSeedDisabled() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
+            FRandGenerator fRandom = factory.getFRandGenShared();
 
             Assertions.assertAll("Validate return value",
                     () -> assertEquals(Optional.empty(), fRandom.getSeed()));
@@ -49,7 +49,7 @@ public class FRandomTest {
         void validateRandomizationSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom1 = factory.spawnFRandGenerator(seed);
+            FRandGenerator fRandom1 = factory.getFRandGen(seed);
 
             double val1A = fRandom1.nextDouble();
             double val1B = fRandom1.nextDouble();
@@ -57,7 +57,7 @@ public class FRandomTest {
             double val1D = fRandom1.nextDouble();
             double val1E = fRandom1.nextDouble();
 
-            FRandGenerator fRandom2 = factory.spawnFRandGenerator(seed);
+            FRandGenerator fRandom2 = factory.getFRandGen(seed);
 
             double val2A = fRandom2.nextDouble();
             double val2B = fRandom2.nextDouble();
@@ -76,11 +76,11 @@ public class FRandomTest {
         @Test
         @DisplayName("Validate randomization - Seed disabled")
         void validateRandomizationSeedDisabled() {
-            FRandGenerator fRandom1 = factory.getFRandGenerator();
+            FRandGenerator fRandom1 = factory.getFRandGenShared();
 
             double val1A = fRandom1.nextDouble();
 
-            FRandGenerator fRandom2 = factory.getFRandGenerator();
+            FRandGenerator fRandom2 = factory.getFRandGenShared();
 
             double val2A = fRandom2.nextDouble();
 
@@ -91,7 +91,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random with range")
         void nextDouble1DRange() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
+            FRandGenerator fRandom = factory.getFRandGenShared();
 
             double min = 0;
             double max = 0.00001;
@@ -107,7 +107,7 @@ public class FRandomTest {
         void nextDoubleWithReversedRangeSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom = factory.spawnFRandGenerator(seed);
+            FRandGenerator fRandom = factory.getFRandGen(seed);
 
             double min = 0;
             double max = 0.00001;
@@ -121,7 +121,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random with reversed range - Seed disabled")
         void nextDoubleWithReversedRangeSeedDisabled() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
+            FRandGenerator fRandom = factory.getFRandGenShared();
 
             double min = 0;
             double max = 0.00001;
@@ -137,7 +137,7 @@ public class FRandomTest {
         void nextDoubleWithZeroRangeSeedEnabled() {
             long seed = 12345;
 
-            FRandGenerator fRandom = factory.spawnFRandGenerator(seed);
+            FRandGenerator fRandom = factory.getFRandGen(seed);
 
             double min = 0;
             double max = 0;
@@ -149,7 +149,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random with zero range - Seed disabled")
         void nextDoubleWithZeroRangeSeedDisabled() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
+            FRandGenerator fRandom = factory.getFRandGenShared();
 
             double min = 0;
             double max = 0;
@@ -167,7 +167,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random 2D with range")
         void nextDouble2DRange() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
+            FRandGenerator fRandom = factory.getFRandGenShared();
 
             double range = 0.00001;
 
@@ -185,7 +185,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random 3D with range")
         void nextDouble3DRange() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
+            FRandGenerator fRandom = factory.getFRandGenShared();
 
             double range = 0.00001;
 
@@ -204,7 +204,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random 4D with range")
         void nextDouble4DRange() {
-            FRandGenerator fRandom = factory.getFRandGenerator();
+            FRandGenerator fRandom = factory.getFRandGenShared();
 
             double range = 0.00001;
 
@@ -228,11 +228,11 @@ public class FRandomTest {
             double radius = 5;
             double jitter = 1E-8;
 
-            FRandGenerator randomA = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomA = factory.getFRandGen(seed);
             FPos3D posA = randomA.nextDoubleOnSphere(radius);
             FPoint pointA = factory.getFPoint(posA);
 
-            FRandGenerator randomB = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomB = factory.getFRandGen(seed);
             FPos3D posB = randomB.nextDoubleOnSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
@@ -252,11 +252,11 @@ public class FRandomTest {
             double radius = 5;
             double jitter = 1E-8;
 
-            FRandGenerator randomA = factory.getFRandGenerator();
+            FRandGenerator randomA = factory.getFRandGenShared();
             FPos3D posA = randomA.nextDoubleOnSphere(radius);
             FPoint pointA = factory.getFPoint(posA);
 
-            FRandGenerator randomB = factory.getFRandGenerator();
+            FRandGenerator randomB = factory.getFRandGenShared();
             FPos3D posB = randomB.nextDoubleOnSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
@@ -276,11 +276,11 @@ public class FRandomTest {
             long seed = 12345;
             double radius = 5;
 
-            FRandGenerator randomA = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomA = factory.getFRandGen(seed);
             FPos3D posA = randomA.nextDoubleInSphere(radius);
             FPoint pointA = factory.getFPoint(posA);
 
-            FRandGenerator randomB = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomB = factory.getFRandGen(seed);
             FPos3D posB = randomB.nextDoubleInSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
@@ -299,11 +299,11 @@ public class FRandomTest {
         void getPositionInSphereWithoutSeed() {
             double radius = 5;
 
-            FRandGenerator randomA = factory.getFRandGenerator();
+            FRandGenerator randomA = factory.getFRandGenShared();
             FPos3D posA = randomA.nextDoubleInSphere(radius);
             FPoint pointA = factory.getFPoint(posA);
 
-            FRandGenerator randomB = factory.getFRandGenerator();
+            FRandGenerator randomB = factory.getFRandGenShared();
             FPos3D posB = randomB.nextDoubleInSphere(radius);
             FPoint pointB = factory.getFPoint(posB);
 
@@ -324,11 +324,11 @@ public class FRandomTest {
             double radius = 5;
             double jitter = 1E-8;
 
-            FRandGenerator randomA = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomA = factory.getFRandGen(seed);
             FPos2D posA = randomA.nextDoubleOnCircle(radius);
             FPoint pointA = factory.getFPoint(factory.getFPos3D(posA, 0));
 
-            FRandGenerator randomB = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomB = factory.getFRandGen(seed);
             FPos2D posB = randomB.nextDoubleOnCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
@@ -348,11 +348,11 @@ public class FRandomTest {
             double radius = 5;
             double jitter = 1E-8;
 
-            FRandGenerator randomA = factory.getFRandGenerator();
+            FRandGenerator randomA = factory.getFRandGenShared();
             FPos2D posA = randomA.nextDoubleOnCircle(radius);
             FPoint pointA = factory.getFPoint(factory.getFPos3D(posA, 0));
 
-            FRandGenerator randomB = factory.getFRandGenerator();
+            FRandGenerator randomB = factory.getFRandGenShared();
             FPos2D posB = randomB.nextDoubleOnCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
@@ -372,11 +372,11 @@ public class FRandomTest {
             long seed = 12345;
             double radius = 5;
 
-            FRandGenerator randomA = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomA = factory.getFRandGen(seed);
             FPos2D posA = randomA.nextDoubleInCircle(radius);
             FPoint pointA = factory.getFPoint(factory.getFPos3D(posA, 0));
 
-            FRandGenerator randomB = factory.spawnFRandGenerator(seed);
+            FRandGenerator randomB = factory.getFRandGen(seed);
             FPos2D posB = randomB.nextDoubleInCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 
@@ -395,11 +395,11 @@ public class FRandomTest {
         void getPositionInCircleWithoutSeed() {
             double radius = 5;
 
-            FRandGenerator randomA = factory.getFRandGenerator();
+            FRandGenerator randomA = factory.getFRandGenShared();
             FPos2D posA = randomA.nextDoubleInCircle(radius);
             FPoint pointA = factory.getFPoint(factory.getFPos3D(posA, 0));
 
-            FRandGenerator randomB = factory.getFRandGenerator();
+            FRandGenerator randomB = factory.getFRandGenShared();
             FPos2D posB = randomB.nextDoubleInCircle(radius);
             FPoint pointB = factory.getFPoint(factory.getFPos3D(posB, 0));
 

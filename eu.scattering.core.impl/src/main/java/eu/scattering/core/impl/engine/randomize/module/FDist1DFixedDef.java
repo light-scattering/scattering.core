@@ -1,21 +1,18 @@
 package eu.scattering.core.impl.engine.randomize.module;
 
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.fixed.FDist1DFixed;
 
 public class FDist1DFixedDef implements FDist1DFixed {
-    private final FRandGenerator random;
     private final double x;
 
-    private FDist1DFixedDef(FRandGenerator random, double x) {
+    private FDist1DFixedDef(double x) {
 
-        this.random = random;
         this.x = x;
     }
 
-    public static FDist1DFixed get(FRandGenerator random, double x) {
+    public static FDist1DFixed get(double x) {
 
-        return new FDist1DFixedDef(random, x);
+        return new FDist1DFixedDef(x);
     }
 
     @Override

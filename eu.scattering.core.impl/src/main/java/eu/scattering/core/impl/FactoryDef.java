@@ -55,18 +55,17 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 
 public final class FactoryDef extends FactoryDesignConcrete {
+    private final GeometryParser fGeometryParser;
+
     private final FRandGenerator fRandGenerator;
+    private final FRotGenerator fRotGenerator;
 
     private final FProtoEngine fProtoEngine;
     private final FRandEngine fRandEngine;
     private final FRotEngine fRotEngine;
 
-    private final FRotGenerator fRotGenerator;
-
     private final FTrigHelper fTrigHelper;
     private final FStatHelper fStatHelper;
-
-    private final GeometryParser fGeometryParser;
 
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
@@ -313,53 +312,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
-    public FProtoEngine getFProtoEngine() {
-
-        return this.fProtoEngine;
-    }
-
-    @Override
-    public FRandEngine getFRandEngine() {
-
-        return this.fRandEngine;
-    }
-
-    @Override
-    public FRotEngine getFRotEngine() {
-
-        return this.fRotEngine;
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FTrigHelper getFTrigHelper() {
-
-        return this.fTrigHelper;
-    }
-
-    @Override
-    public FStatHelper getFStatHelper() {
-
-        return this.fStatHelper;
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FRotGenerator getFRotGenerator() {
-
-        return this.fRotGenerator;
-    }
-
-    @Override
-    public FRandGenerator getFRandGenerator() {
-
-        return this.fRandGenerator;
-    }
-
-    @Override
-    public FRandGenerator spawnFRandGenerator(long seed) {
+    public FRandGenerator getFRandGen(long seed) {
 
         return FRandGeneratorDef.create(seed);
     }
@@ -367,7 +320,56 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
-    public GeometryParser getGeometryParser() {
+    public FRandGenerator getFRandGenShared() {
+
+        return this.fRandGenerator;
+    }
+
+    @Override
+    public FRotGenerator getFRotGenShared() {
+
+        return this.fRotGenerator;
+    }
+
+
+    //--------------------------------------------------
+
+    @Override
+    public FProtoEngine getFProtoEngShared() {
+
+        return this.fProtoEngine;
+    }
+
+    @Override
+    public FRandEngine getFRandEngShared() {
+
+        return this.fRandEngine;
+    }
+
+    @Override
+    public FRotEngine getFRotEngShared() {
+
+        return this.fRotEngine;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FStatHelper getFStatHelperShared() {
+
+        return this.fStatHelper;
+    }
+
+    @Override
+    public FTrigHelper getFTrigHelperShared() {
+
+        return this.fTrigHelper;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public GeometryParser getGeometryParserShared() {
 
         return this.fGeometryParser;
     }

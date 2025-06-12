@@ -24,7 +24,7 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fRayDir, radius);
 
@@ -47,7 +47,7 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fRayDir, radius);
 
@@ -68,7 +68,7 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fRayDir, radius);
 
@@ -91,7 +91,7 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fRayDir, radius);
 

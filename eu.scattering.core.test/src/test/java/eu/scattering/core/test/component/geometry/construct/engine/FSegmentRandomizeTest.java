@@ -24,7 +24,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fSegmentDir, radius);
 
@@ -47,7 +47,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fSegmentDir, radius);
 
@@ -68,7 +68,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fSegmentDir, radius);
 
@@ -91,7 +91,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fSegmentDir, radius);
 
@@ -112,7 +112,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadInCircle(fPointIn, fSegmentDir, radius);
 
@@ -135,7 +135,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadInCircle(fPointIn, fSegmentDir, radius);
 
@@ -156,7 +156,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadOnCircle(fPointIn, fSegmentDir, radius);
 
@@ -179,7 +179,7 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadOnCircle(fPointIn, fSegmentDir, radius);
 
@@ -199,7 +199,7 @@ public class FSegmentRandomizeTest {
         FPoint fPointIn = factory.getFPoint(1, -2, 3);
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(0.001, 0.001, 0.001, 0.002, 0.002, 0.002));
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosOnSegment(fPointIn, fSegmentDir);
 
@@ -217,7 +217,7 @@ public class FSegmentRandomizeTest {
         FPoint fPointIn = factory.getFPoint();
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosOnSegment(fPointIn, fSegmentDir);
 

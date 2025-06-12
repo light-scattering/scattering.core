@@ -275,7 +275,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         this.geometries.clear();
         this.fPoints.clear();
 
-        GeometryParser parser = factorySelf.getGeometryParser();
+        GeometryParser parser = factorySelf.getGeometryParserShared();
 
         JSONArray candidates = json.getJSONArray(JSON_VAL);
 

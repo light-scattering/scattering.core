@@ -8,14 +8,12 @@ import eu.scattering.core.impl.FactoryDef;
 
 public final class Config {
 
-    private Config() {
-    }
+    private Config() {}
 
     public static final double epsilon = 1E-8;
 
     public static final FactoryDesignConcrete factory = FactoryDef.create();
-    public static final FProtoEngine proto = factory.getFProtoEngine();
-    public static final FRandGenerator rand = factory.getFRandGenerator();
-    public static final FRotEngine rot = factory.getFRotEngine();
-
+    public static final FProtoEngine proto = factory.getFProtoEngShared();
+    public static final FRandGenerator rand = factory.getFRandGenShared();
+    public static final FRotEngine rot = factory.getFRotEngShared();
 }

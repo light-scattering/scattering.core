@@ -531,7 +531,7 @@ public class FSphereDef extends ShapePresetDef<FSphere> implements FSphere {
 
         if (getRefCenter().isSimilar(target.getRefCenter())) {
             // TODO remove random
-            factory.getFRandEngine().rndPosOnSphere(getRefCenter(), target.getRadius() * 0.5);
+            factory.getFRandEngShared().rndPosOnSphere(getRefCenter(), target.getRadius() * 0.5);
         }
 
         getRefCenter().setDistance(target.getRefCenter(), radius + target.getRadius());
@@ -592,8 +592,8 @@ public class FSphereDef extends ShapePresetDef<FSphere> implements FSphere {
         // TODO point cannot be on the same line
 
 
-        FTrigHelper trigHelper = factory.getFTrigHelper();
-        FRotEngine rotEngine = factory.getFRotEngine();
+        FTrigHelper trigHelper = factory.getFTrigHelperShared();
+        FRotEngine rotEngine = factory.getFRotEngShared();
 
         FVector vecRef = cache.get("bVec1", FVector.class,
                 (core) -> core.get(FactoryDesign.class).getFVector());

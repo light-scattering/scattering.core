@@ -25,7 +25,7 @@ public class FVectorRandomizeTest {
         FPoint fPointHead = factory.getFPoint(2, 1, 0);
         FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-        factory.getFRandEngine().varyAngle(fPointHead);
+        factory.getFRandEngShared().varyAngle(fPointHead);
 
         Assertions.assertAll("Validate FPoint values",
                 () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
@@ -39,7 +39,7 @@ public class FVectorRandomizeTest {
     @DisplayName("Set random angle (validate)")
     void setRandomAngleValidate() {
         FVector fVector = TestHelper.getRandFVector();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FVectorTestHelper.testReference(random::varyAngle, fVector);
     }
@@ -48,7 +48,7 @@ public class FVectorRandomizeTest {
     @DisplayName("Set random position")
     void setRandomPosition() {
         FVector fVector = factory.getFVector();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FVector results = random.rndPos(fVector, factory.getFPairPos3D(
                 0.01, 0.01, 0.01, 0.02, 0.02, 0.02));
@@ -74,7 +74,7 @@ public class FVectorRandomizeTest {
     @DisplayName("Set random position in sphere")
     void setRandomPositionInSphere() {
         FVector fVector = factory.getFVector();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FVector results = random.rndPosInSphere(fVector, 0.01);
 
@@ -91,7 +91,7 @@ public class FVectorRandomizeTest {
     @DisplayName("Set random position on sphere")
     void setRandomPositionOnSphere() {
         FVector fVector = factory.getFVector();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FVector results = random.rndPosOnSphere(fVector, 0.01);
 
@@ -111,7 +111,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fVectorDir, radius);
 
@@ -134,7 +134,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fVectorDir, radius);
 
@@ -155,7 +155,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fVectorDir, radius);
 
@@ -178,7 +178,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fVectorDir, radius);
 
@@ -199,7 +199,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadInCircle(fPointIn, fVectorDir, radius);
 
@@ -222,7 +222,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadInCircle(fPointIn, fVectorDir, radius);
 
@@ -243,7 +243,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadOnCircle(fPointIn, fVectorDir, radius);
 
@@ -266,7 +266,7 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadOnCircle(fPointIn, fVectorDir, radius);
 
@@ -286,7 +286,7 @@ public class FVectorRandomizeTest {
         FPoint fPointIn = factory.getFPoint(1, -2, 3);
         FVector fVectorDir = factory.getFVector(0.001, 0.001, 0.001, 0.002, 0.002, 0.002);
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosOnAxis(fPointIn, fVectorDir);
 
@@ -307,7 +307,7 @@ public class FVectorRandomizeTest {
         FPoint fPointIn = factory.getFPoint();
         FVector fVectorDir = TestHelper.getRandFVector();
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosOnAxis(fPointIn, fVectorDir);
 

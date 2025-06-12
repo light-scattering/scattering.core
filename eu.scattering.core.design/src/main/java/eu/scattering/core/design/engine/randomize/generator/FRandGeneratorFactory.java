@@ -2,7 +2,7 @@ package eu.scattering.core.design.engine.randomize.generator;
 
 public interface FRandGeneratorFactory {
 
-    FRandGenerator getFRandGenerator();
+    FRandGenerator getFRandGenShared();
 
-    FRandGenerator spawnFRandGenerator(long seed);
+    FRandGenerator getFRandGen(long seed);
 }

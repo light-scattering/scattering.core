@@ -10,7 +10,7 @@ import eu.scattering.core.design.engine.randomize.generator.module.dist3d.fixed.
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.uniform.FDist3DUniform;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreOptimizedDef;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreSimpleDef;
-import eu.scattering.core.impl.engine.randomize.module.FDist1DFixedDef;
+import eu.scattering.core.impl.engine.randomize.module.*;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
@@ -223,51 +223,60 @@ public class FRandGeneratorDef implements FRandGenerator {
     @Override
     public FDist1DFixed getFDist1DFixed(double x) {
 
-        return FDist1DFixedDef.get(this, x);
+        return FDist1DFixedDef.get(x);
     }
 
     @Override
     public FDist1DUniform getFDist1DUniform(double x1, double x2) {
-        return null;
+
+        return FDist1DUniformDef.get(this, x1, x2);
     }
 
     @Override
     public FDist2DFixed getFDist2DFixed(double x, double y) {
-        return null;
+
+        return FDist2DFixedDef.get(x, y);
     }
 
     @Override
     public FDist2DFixed getFDist2DFixed(FPos2D val) {
-        return null;
+
+        return FDist2DFixedDef.get(val);
     }
 
     @Override
     public FDist2DUniform getFDist2DUniform(double x1, double x2, double y1, double y2) {
-        return null;
+
+        return FDist2DUniformDef.get(this, x1, x2, y1, y2);
     }
 
     @Override
     public FDist2DUniform getFDist2DUniform(FPairPos2D range) {
-        return null;
+
+        return FDist2DUniformDef.get(this, range);
     }
 
     @Override
     public FDist3DFixed getFDist3DFixed(double x, double y, double z) {
-        return null;
+
+        return FDist3DFixedDef.get(x, y, z);
     }
 
     @Override
     public FDist3DFixed getFDist3DFixed(FPos3D val) {
-        return null;
+
+        return FDist3DFixedDef.get(val);
     }
 
     @Override
     public FDist3DUniform getFDist3DUniform(double x1, double x2, double y1, double y2, double z1, double z2) {
-        return null;
+
+        return FDist3DUniformDef.get(this, x1, x2, y1, y2, z1, z2);
     }
 
     @Override
     public FDist3DUniform getFDist3DUniform(FPairPos3D range) {
-        return null;
+
+        return FDist3DUniformDef.get(this, range);
     }
 }

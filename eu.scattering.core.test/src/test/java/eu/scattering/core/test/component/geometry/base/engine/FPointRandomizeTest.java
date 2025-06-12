@@ -23,7 +23,7 @@ public class FPointRandomizeTest {
     void setRandomAngleValidateMagnitude() {
         double radius = Math.abs(rand.nextDouble());
 
-        FPoint fPoint = factory.getFRandEngine().varyAngle(factory.getFPoint(radius));
+        FPoint fPoint = factory.getFRandEngShared().varyAngle(factory.getFPoint(radius));
 
         assertEquals(radius, fPoint.getMagnitude(),
                 epsilon, "The radius is invalid");
@@ -35,14 +35,14 @@ public class FPointRandomizeTest {
         double radius = Math.abs(rand.nextDouble());
         FPoint fPoint = factory.getFPoint(radius);
 
-        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.getFRandEngine().varyAngle(fPoint));
+        Assertions.assertTimeoutPreemptively(Duration.ofSeconds(1), () -> factory.getFRandEngShared().varyAngle(fPoint));
     }
 
     @Test
     @DisplayName("Set random angle (validate)")
     void setRandomAngleValidate() {
         FPoint fPoint = TestHelper.getRandFPoint();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPointTestHelper.testReference(random::varyAngle, fPoint);
     }
@@ -51,7 +51,7 @@ public class FPointRandomizeTest {
     @DisplayName("Set random position")
     void setRandomPosition() {
         FPoint fPoint = factory.getFPoint();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosInRange(fPoint, factory.getFPairPos3D(
                 0.01, 0.01, 0.01, 0.02, 0.02, 0.02));
@@ -71,7 +71,7 @@ public class FPointRandomizeTest {
     @DisplayName("Set random position in sphere")
     void setRandomPositionInSphere() {
         FPoint fPoint = factory.getFPoint();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosInSphere(fPoint, 0.01);
 
@@ -85,7 +85,7 @@ public class FPointRandomizeTest {
     @DisplayName("Set random position on sphere")
     void setRandomPositionOnSphere() {
         FPoint fPoint = factory.getFPoint();
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosOnSphere(fPoint, 0.01);
 
@@ -102,7 +102,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fPointDir, radius);
 
@@ -125,7 +125,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseInCircle(fPointIn, fPointDir, radius);
 
@@ -146,7 +146,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fPointDir, radius);
 
@@ -169,7 +169,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosBaseOnCircle(fPointIn, fPointDir, radius);
 
@@ -190,7 +190,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadInCircle(fPointIn, fPointDir, radius);
 
@@ -213,7 +213,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadInCircle(fPointIn, fPointDir, radius);
 
@@ -234,7 +234,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = factory.getFPoint(0, 0, 1);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadOnCircle(fPointIn, fPointDir, radius);
 
@@ -257,7 +257,7 @@ public class FPointRandomizeTest {
         FPoint fPointDir = TestHelper.getRandFPoint();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosHeadOnCircle(fPointIn, fPointDir, radius);
 
@@ -277,7 +277,7 @@ public class FPointRandomizeTest {
         FPoint fPointIn = factory.getFPoint(1, -2, 3);
         FPoint fPointDir = factory.getFPoint(0.001, 0.001, 0.001);
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosOnAxis(fPointIn, fPointDir);
 
@@ -297,7 +297,7 @@ public class FPointRandomizeTest {
         FPoint fPointIn = factory.getFPoint();
         FPoint fPointDir = TestHelper.getRandFPoint();
 
-        FRandEngine random = factory.getFRandEngine();
+        FRandEngine random = factory.getFRandEngShared();
 
         FPoint results = random.rndPosOnAxis(fPointIn, fPointDir);
 

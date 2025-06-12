@@ -20,7 +20,7 @@ public class FComplexRandomizeTest {
         FComplex fComplex = factory.getFComplex();
         FPairPos2D range = factory.getFPairPos2D(0.1, 0.1, 0.2, 0.2);
 
-        FComplex results = factory.getFRandEngine().rndPos(fComplex, range);
+        FComplex results = factory.getFRandEngShared().rndPos(fComplex, range);
 
         assertAll("Validate FComplex position",
                 () -> assertTrue(fComplex.getRe() > 0.1 && fComplex.getRe() < 0.2,
@@ -37,7 +37,7 @@ public class FComplexRandomizeTest {
     void setRandomPositionInCircle() {
         FComplex fComplex = factory.getFComplex();
 
-        FComplex results = factory.getFRandEngine().rndPosInCircle(fComplex, 0.1);
+        FComplex results = factory.getFRandEngShared().rndPosInCircle(fComplex, 0.1);
 
         assertAll("Validate FComplex position",
                 () -> assertTrue(fComplex.getDistance(0, 0) < 0.1,
@@ -52,7 +52,7 @@ public class FComplexRandomizeTest {
     void setRandomPositionOnCircle() {
         FComplex fComplex = factory.getFComplex();
 
-        FComplex results = factory.getFRandEngine().rndPosOnCircle(fComplex, 0.1);
+        FComplex results = factory.getFRandEngShared().rndPosOnCircle(fComplex, 0.1);
 
         assertAll("Validate FComplex position",
                 () -> assertEquals(0.1, fComplex.getDistance(0, 0),

@@ -17,7 +17,7 @@ public class FStatHelperTest {
     @Test
     @DisplayName("Get absolute error")
     void getAbsErr() {
-        var helper = factory.getFStatHelper();
+        var helper = factory.getFStatHelperShared();
 
         double arg1 = 1.5;
         double arg2 = 2;
@@ -31,7 +31,7 @@ public class FStatHelperTest {
     @Test
     @DisplayName("Validate absolute error")
     void valAbsErr() {
-        var helper = factory.getFStatHelper();
+        var helper = factory.getFStatHelperShared();
 
         double arg1 = 1.5;
         double arg2 = 2;
@@ -47,7 +47,7 @@ public class FStatHelperTest {
     @Test
     @DisplayName("Get relative error")
     void getRelErr() {
-        var helper = factory.getFStatHelper();
+        var helper = factory.getFStatHelperShared();
 
         double arg1 = 2;
         double arg2 = 4;
@@ -61,7 +61,7 @@ public class FStatHelperTest {
     @Test
     @DisplayName("Validate relative error")
     void valRelErr() {
-        var helper = factory.getFStatHelper();
+        var helper = factory.getFStatHelperShared();
 
         double arg1 = 2;
         double arg2 = 4;

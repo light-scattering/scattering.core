@@ -1213,7 +1213,7 @@ public class FVectorRotateTest {
     @Test
     @DisplayName("Rotate with FRotQt")
     void rotateWithFRotQt() {
-        FRotGenerator fRot = factory.getFRotGenerator();
+        FRotGenerator fRot = factory.getFRotGenShared();
 
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
