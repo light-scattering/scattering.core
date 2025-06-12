@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class FDist1DFixedTest {
 
     @Test
-    @DisplayName("Produce value primitive")
-    void produceValuePrimitive() {
+    @DisplayName("Construct")
+    void construct() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist1D dist = random.getFDist1DFixed(5);
 

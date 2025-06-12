@@ -2,10 +2,13 @@ package eu.scattering.core.impl.engine.randomize;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
+import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.fixed.FDist1DFixed;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.uniform.FDist1DUniform;
+import eu.scattering.core.design.engine.randomize.generator.module.dist2d.composite.FDist2DComposite;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.fixed.FDist2DFixed;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.uniform.FDist2DUniform;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.composite.FDist3DComposite;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.fixed.FDist3DFixed;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.uniform.FDist3DUniform;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreOptimizedDef;
@@ -233,6 +236,12 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
+    public FDist2DComposite getFDist2DComposite(FDist1D dX, FDist1D dY) {
+
+        return FDist2DCompositeDef.get(dX, dY);
+    }
+
+    @Override
     public FDist2DFixed getFDist2DFixed(double x, double y) {
 
         return FDist2DFixedDef.get(x, y);
@@ -254,6 +263,12 @@ public class FRandGeneratorDef implements FRandGenerator {
     public FDist2DUniform getFDist2DUniform(FPairPos2D range) {
 
         return FDist2DUniformDef.get(this, range);
+    }
+
+    @Override
+    public FDist3DComposite getFDist3DComposite(FDist1D dX, FDist1D dY, FDist1D dZ) {
+
+        return FDist3DCompositeDef.get(dX, dY, dZ);
     }
 
     @Override

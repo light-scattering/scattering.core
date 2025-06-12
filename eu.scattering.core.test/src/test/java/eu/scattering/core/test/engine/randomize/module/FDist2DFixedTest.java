@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class FDist2DFixedTest {
 
     @Test
-    @DisplayName("Produce value primitive")
-    void produceValuePrimitive() {
+    @DisplayName("Construct with primitives")
+    void constructWithPrimitives() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist2D dist = random.getFDist2DFixed(1, 2);
 
@@ -27,8 +27,8 @@ public class FDist2DFixedTest {
     }
 
     @Test
-    @DisplayName("Produce value with FPos2D")
-    void produceValueFPos2D() {
+    @DisplayName("Construct with FPos2D")
+    void constructWithFPos2D() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist2D dist = random.getFDist2DFixed(factory.getFPos2D(1, 2));
 

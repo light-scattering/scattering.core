@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FDist3DUniformTest {
 
     @Test
-    @DisplayName("Produce value primitive")
-    void produceValuePrimitive() {
+    @DisplayName("Construct with primitives")
+    void constructWithPrimitives() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist3D dist = random.getFDist3DUniform(1.1, 1.2, 3.1, 3.2, 5.1, 5.2);
 
@@ -40,8 +40,8 @@ public class FDist3DUniformTest {
     }
 
     @Test
-    @DisplayName("Produce value with FPairPos3D")
-    void produceValueFPairPos3D() {
+    @DisplayName("Construct with FPairPos3D")
+    void constructWithFPairPos3D() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist3D dist = random.getFDist3DUniform(
                 factory.getFPairPos3D(1.1, 1.2, 3.1, 3.2, 5.1, 5.2));

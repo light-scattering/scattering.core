@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FDist1DUniformTest {
 
     @Test
-    @DisplayName("Produce value primitive A")
-    void produceValuePrimitiveA() {
+    @DisplayName("Construct with primitives A")
+    void constructWithPrimitivesA() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist1D dist = random.getFDist1DUniform(1.1, 1.2);
 
@@ -30,8 +30,8 @@ public class FDist1DUniformTest {
     }
 
     @Test
-    @DisplayName("Produce value primitive B")
-    void produceValuePrimitiveB() {
+    @DisplayName("Construct with primitives B")
+    void constructWithPrimitivesB() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist1D dist = random.getFDist1DUniform(1.2, 1.1);
 
