@@ -1,25 +1,25 @@
 package eu.scattering.core.impl.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.composite.FDist3DComposite;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.joint.FDist3DJoint;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
-public class FDist3DCompositeDef implements FDist3DComposite {
+public class FDist3DJointDef implements FDist3DJoint {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private final FDist1D dX, dY, dZ;
 
-    private FDist3DCompositeDef(FDist1D dX, FDist1D dY, FDist1D dZ) {
+    private FDist3DJointDef(FDist1D dX, FDist1D dY, FDist1D dZ) {
 
         this.dX = dX;
         this.dY = dY;
         this.dZ = dZ;
     }
 
-    public static FDist3DComposite get(FDist1D dX, FDist1D dY, FDist1D dZ) {
+    public static FDist3DJoint get(FDist1D dX, FDist1D dY, FDist1D dZ) {
 
-        return new FDist3DCompositeDef(dX, dY, dZ);
+        return new FDist3DJointDef(dX, dY, dZ);
     }
 
     @Override

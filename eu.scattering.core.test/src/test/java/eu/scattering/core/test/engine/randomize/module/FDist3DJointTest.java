@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Timeout(5)
 @DisplayName("FDist3DCompositeTest")
-public class FDist3DCompositeTest {
+public class FDist3DJointTest {
 
     @Test
     @DisplayName("Construct")
@@ -23,7 +23,7 @@ public class FDist3DCompositeTest {
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
-        FDist3D dist = random.getFDist3DComposite(dX, dY, dZ);
+        FDist3D dist = random.getFDist3DJoint(dX, dY, dZ);
 
         for (int i = 0 ; i < 10 ; i++) {
             FPos3D res = dist.produce();
@@ -43,7 +43,7 @@ public class FDist3DCompositeTest {
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
-        FDist3D dist = random.getFDist3DComposite(dX, dY, dZ);
+        FDist3D dist = random.getFDist3DJoint(dX, dY, dZ);
 
         double[] arr = new double[3];
         for (int i = 0 ; i < 10 ; i++) {
@@ -64,7 +64,7 @@ public class FDist3DCompositeTest {
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
-        FDist3D dist = random.getFDist3DComposite(dX, dY, dZ);
+        FDist3D dist = random.getFDist3DJoint(dX, dY, dZ);
 
         double[] arr = new double[1];
 

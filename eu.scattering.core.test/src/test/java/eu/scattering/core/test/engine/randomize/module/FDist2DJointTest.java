@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FDist2DCompositeTest")
-public class FDist2DCompositeTest {
+public class FDist2DJointTest {
 
     @Test
     @DisplayName("Construct")
@@ -21,7 +21,7 @@ public class FDist2DCompositeTest {
         FRandGenerator random = factory.getFRandGenShared();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist2D dist = random.getFDist2DComposite(dX, dY);
+        FDist2D dist = random.getFDist2DJoint(dX, dY);
 
         for (int i = 0 ; i < 10 ; i++) {
             FPos2D res = dist.produce();
@@ -38,7 +38,7 @@ public class FDist2DCompositeTest {
         FRandGenerator random = factory.getFRandGenShared();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist2D dist = random.getFDist2DComposite(dX, dY);
+        FDist2D dist = random.getFDist2DJoint(dX, dY);
 
         double[] arr = new double[2];
         for (int i = 0 ; i < 10 ; i++) {
@@ -56,7 +56,7 @@ public class FDist2DCompositeTest {
         FRandGenerator random = factory.getFRandGenShared();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
-        FDist2D dist = random.getFDist2DComposite(dX, dY);
+        FDist2D dist = random.getFDist2DJoint(dX, dY);
 
         double[] arr = new double[1];
 

@@ -1,24 +1,24 @@
 package eu.scattering.core.impl.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.engine.randomize.generator.module.dist2d.composite.FDist2DComposite;
+import eu.scattering.core.design.engine.randomize.generator.module.dist2d.joint.FDist2DJoint;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 
-public class FDist2DCompositeDef implements FDist2DComposite {
+public class FDist2DJointDef implements FDist2DJoint {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private final FDist1D dX, dY;
 
-    private FDist2DCompositeDef(FDist1D dX, FDist1D dY) {
+    private FDist2DJointDef(FDist1D dX, FDist1D dY) {
 
         this.dX = dX;
         this.dY = dY;
     }
 
-    public static FDist2DComposite get(FDist1D dX, FDist1D dY) {
+    public static FDist2DJoint get(FDist1D dX, FDist1D dY) {
 
-        return new FDist2DCompositeDef(dX, dY);
+        return new FDist2DJointDef(dX, dY);
     }
 
     @Override

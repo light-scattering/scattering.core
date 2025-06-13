@@ -3,13 +3,16 @@ package eu.scattering.core.impl.engine.randomize;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.engine.randomize.generator.module.dist1d.manual.FDist1DManual;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.fixed.FDist1DFixed;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.uniform.FDist1DUniform;
-import eu.scattering.core.design.engine.randomize.generator.module.dist2d.composite.FDist2DComposite;
+import eu.scattering.core.design.engine.randomize.generator.module.dist2d.joint.FDist2DJoint;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.fixed.FDist2DFixed;
+import eu.scattering.core.design.engine.randomize.generator.module.dist2d.manual.FDist2DManual;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.uniform.FDist2DUniform;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.composite.FDist3DComposite;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.joint.FDist3DJoint;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.fixed.FDist3DFixed;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.manual.FDist3DManual;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.uniform.FDist3DUniform;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreOptimizedDef;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreSimpleDef;
@@ -24,6 +27,7 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public class FRandGeneratorDef implements FRandGenerator {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
@@ -223,6 +227,13 @@ public class FRandGeneratorDef implements FRandGenerator {
 
     //--------------------------------------------------
 
+
+    @Override
+    public FDist1DManual getFDist1DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
+
+        return FDist1DManualDef.get(this, consumer);
+    }
+
     @Override
     public FDist1DFixed getFDist1DFixed(double x) {
 
@@ -236,9 +247,15 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist2DComposite getFDist2DComposite(FDist1D dX, FDist1D dY) {
+    public FDist2DManual getFDist2DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
-        return FDist2DCompositeDef.get(dX, dY);
+        return FDist2DManualDef.get(this, consumer);
+    }
+
+    @Override
+    public FDist2DJoint getFDist2DJoint(FDist1D dX, FDist1D dY) {
+
+        return FDist2DJointDef.get(dX, dY);
     }
 
     @Override
@@ -266,9 +283,15 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist3DComposite getFDist3DComposite(FDist1D dX, FDist1D dY, FDist1D dZ) {
+    public FDist3DManual getFDist3DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
-        return FDist3DCompositeDef.get(dX, dY, dZ);
+        return FDist3DManualDef.get(this, consumer);
+    }
+
+    @Override
+    public FDist3DJoint getFDist3DJoint(FDist1D dX, FDist1D dY, FDist1D dZ) {
+
+        return FDist3DJointDef.get(dX, dY, dZ);
     }
 
     @Override
