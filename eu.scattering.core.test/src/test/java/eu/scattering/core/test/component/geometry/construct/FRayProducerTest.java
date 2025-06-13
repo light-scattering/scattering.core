@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -282,6 +283,68 @@ public class FRayProducerTest {
         Assertions.assertAll("Validate values",
                 () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 5, 0, 0),
                         "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine")
+    void produceWithEngine() {
+        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory, engine) -> {
+            FRay fRay = factory.getFRay();
+
+            fRay.getRefOrigin().set(
+                    1, 2, 3,
+                    2, 2, 3
+            );
+
+            engine.varyAngle(fRay.getRefOrigin());
+
+            return fRay;
+        }, 1);
+
+        FRay resultA = producer.produce();
+        FRay resultB = producer.produce();
+
+        Assertions.assertAll("Validate FRay values",
+                () -> assertEquals(1, resultA.getRefOrigin().getMagnitude(),
+                        epsilon, "The FRay A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getRefOrigin().getMagnitude(),
+                        epsilon, "The FRay B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine (simple)")
+    void produceWithEngineSimple() {
+        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory, engine) -> {
+            FRay fRay = factory.getFRay();
+
+            fRay.getRefOrigin().set(
+                    1, 2, 3,
+                    2, 2, 3
+            );
+
+            engine.varyAngle(fRay.getRefOrigin());
+
+            return fRay;
+        });
+
+        FRay resultA = producer.produce();
+        FRay resultB = producer.produce();
+
+        Assertions.assertAll("Validate FRay values",
+                () -> assertEquals(1, resultA.getRefOrigin().getMagnitude(),
+                        epsilon, "The FRay A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getRefOrigin().getMagnitude(),
+                        epsilon, "The FRay B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );

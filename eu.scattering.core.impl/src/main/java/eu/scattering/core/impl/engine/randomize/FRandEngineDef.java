@@ -30,6 +30,12 @@ public class FRandEngineDef implements FRandEngine {
     //--------------------------------------------------
 
     @Override
+    public FRandGenerator getFRand() {
+
+        return this.core;
+    }
+
+    @Override
     public FComplex rndPos(FComplex in, FPairPos2D range) {
 
         in.applyStateFrom(core.nextDouble2D(range));

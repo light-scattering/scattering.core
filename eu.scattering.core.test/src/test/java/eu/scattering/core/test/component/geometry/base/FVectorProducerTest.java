@@ -743,4 +743,48 @@ public class FVectorProducerTest {
                         "References should be different")
         );
     }
+
+    @Test
+    @DisplayName("Produce with engine")
+    void produceWithEngine() {
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withCustomRule((factory, engine) ->
+                        engine.varyAngle(factory.getFVector(1, 2, 3, 2, 2, 3)), 1);
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertEquals(1, resultA.getMagnitude(),
+                        epsilon, "The FVector A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getMagnitude(),
+                        epsilon, "The FVector B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine (simple)")
+    void produceWithEngineSimple() {
+        FVectorProducer producer = factory.getFVectorProducer()
+                .withCustomRule((factory, engine) ->
+                        engine.varyAngle(factory.getFVector(1, 2, 3, 2, 2, 3)));
+
+        FVector resultA = producer.produce();
+        FVector resultB = producer.produce();
+
+        Assertions.assertAll("Validate FVector values",
+                () -> assertEquals(1, resultA.getMagnitude(),
+                        epsilon, "The FVector A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getMagnitude(),
+                        epsilon, "The FVector B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
 }

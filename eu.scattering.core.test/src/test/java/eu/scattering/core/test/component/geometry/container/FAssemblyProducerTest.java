@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.container;
 
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -285,5 +287,69 @@ public class FAssemblyProducerTest {
 
         assertEquals(60, results.size(), "The number of elements is incorrect");
         assertFalse(sequence, "The elements are not randomized");
+    }
+
+    @Test
+    @DisplayName("Produce with engine")
+    void produceWithEngine() {
+        FAssemblyProducer<FPoint> producer = factory.getFAssemblyProducer();
+
+        producer.withCustomRule((factoryLocal, engine) -> {
+            FAssembly<FPoint> fAssembly = factoryLocal.getFAssembly();
+
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            engine.varyAngle(fPoint);
+
+            fAssembly.register(fPoint);
+
+            return fAssembly;
+        }, 1);
+
+        FAssembly<FPoint> resultA = producer.produce();
+        FAssembly<FPoint> resultB = producer.produce();
+
+        Assertions.assertAll("Validate FAssembly values",
+                () -> assertEquals(1, resultA.getGeometries().get(0).getMagnitude(),
+                        epsilon, "The FPoint A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getGeometries().get(0).getMagnitude(),
+                        epsilon, "The FPoint B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine (simple)")
+    void produceWithEngineSimple() {
+        FAssemblyProducer<FPoint> producer = factory.getFAssemblyProducer();
+
+        producer.withCustomRule((factoryLocal, engine) -> {
+            FAssembly<FPoint> fAssembly = factoryLocal.getFAssembly();
+
+            FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+            engine.varyAngle(fPoint);
+
+            fAssembly.register(fPoint);
+
+            return fAssembly;
+        });
+
+        FAssembly<FPoint> resultA = producer.produce();
+        FAssembly<FPoint> resultB = producer.produce();
+
+        Assertions.assertAll("Validate FAssembly values",
+                () -> assertEquals(1, resultA.getGeometries().get(0).getMagnitude(),
+                        epsilon, "The FPoint A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getGeometries().get(0).getMagnitude(),
+                        epsilon, "The FPoint B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
     }
 }

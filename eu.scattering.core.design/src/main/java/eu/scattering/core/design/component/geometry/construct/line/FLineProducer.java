@@ -1,8 +1,10 @@
 package eu.scattering.core.design.component.geometry.construct.line;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -19,12 +21,18 @@ public interface FLineProducer{
     // -------------------------------------------------------------------------------------------------
 
     FLineProducer withCustomRule(Function<FLineFactory, FLine> function, int weight);
+    FLineProducer withCustomRule(BiFunction<FLineFactory, FRandEngine, FLine> function, int weight);
 
     FLineProducer withFVector(FVectorProducer origin, int weight);
 
     // -------------------------------------------------------------------------------------------------
 
     default FLineProducer withCustomRule(Function<FLineFactory, FLine> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FLineProducer withCustomRule(BiFunction<FLineFactory, FRandEngine, FLine> function) {
 
         return withCustomRule(function, 1);
     }

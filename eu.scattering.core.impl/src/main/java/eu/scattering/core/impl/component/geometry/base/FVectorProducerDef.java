@@ -5,10 +5,12 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -16,16 +18,18 @@ public class FVectorProducerDef implements FVectorProducer {
 
     private final FVectorFactory factory;
     private final ProducerCoreDef<FVector> processor;
-    private final FRandGenerator randomizer;
+    private final FRandGenerator rndGenerator;
+    private final FRandEngine rndEngine;
 
-    private FVectorProducerDef(FVectorFactory factory, FRandGenerator randomizer) {
+    private FVectorProducerDef(FVectorFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
-        this.randomizer = randomizer;
-        this.processor = new ProducerCoreDef<>(this.randomizer);
+        this.rndEngine = randomizer;
+        this.rndGenerator = randomizer.getFRand();
+        this.processor = new ProducerCoreDef<>(this.rndGenerator);
     }
 
-    public static FVectorProducer create(FVectorFactory factory, FRandGenerator randomizer) {
+    public static FVectorProducer create(FVectorFactory factory, FRandEngine randomizer) {
 
         return new FVectorProducerDef(factory, randomizer);
     }
@@ -34,6 +38,14 @@ public class FVectorProducerDef implements FVectorProducer {
     public FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int weight) {
 
         this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
+    }
+
+    @Override
+    public FVectorProducer withCustomRule(BiFunction<FVectorFactory, FRandEngine, FVector> function, int weight) {
+
+        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
 
         return this;
     }
@@ -123,7 +135,7 @@ public class FVectorProducerDef implements FVectorProducer {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FVector fVector = factory.getFVector();
 
-            fVector.getRefHead().applyStateFrom(randomizer.nextDoubleInSphere(radius));
+            fVector.getRefHead().applyStateFrom(rndGenerator.nextDoubleInSphere(radius));
 
             return fVector;
         };
@@ -138,7 +150,7 @@ public class FVectorProducerDef implements FVectorProducer {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FVector fVector = factory.getFVector();
 
-            fVector.getRefHead().applyStateFrom(randomizer.nextDoubleOnSphere(radius));
+            fVector.getRefHead().applyStateFrom(rndGenerator.nextDoubleOnSphere(radius));
 
             return fVector;
         };
@@ -152,7 +164,7 @@ public class FVectorProducerDef implements FVectorProducer {
     public FVectorProducer withBaseAndInSphere(FPointProducer pBase, double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
-            FPoint head = base.copy().add(randomizer.nextDoubleInSphere(radius));
+            FPoint head = base.copy().add(rndGenerator.nextDoubleInSphere(radius));
 
             return factory.getRefFVector(base, head);
         };
@@ -166,7 +178,7 @@ public class FVectorProducerDef implements FVectorProducer {
     public FVectorProducer withBaseAndRadius(FPointProducer pBase, double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
-            FPoint head = base.copy().add(randomizer.nextDoubleOnSphere(radius));
+            FPoint head = base.copy().add(rndGenerator.nextDoubleOnSphere(radius));
 
             return factory.getRefFVector(base, head);
         };

@@ -29,8 +29,8 @@ public class FDist2DUniformDef implements FDist2DUniform {
     public static FDist2DUniform get(FRandGenerator random, FPairPos2D range) {
 
         return new FDist2DUniformDef(random,
-                range.getPosA().getD0(), range.getPosA().getD1(),
-                range.getPosB().getD0(), range.getPosB().getD1()
+                range.getPosA().getD0(), range.getPosB().getD0(),
+                range.getPosA().getD1(), range.getPosB().getD1()
         );
     }
 

@@ -7,6 +7,7 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -14,10 +15,12 @@ public class FComplexProducerDef implements FComplexProducer {
 
     private final FComplexFactory factory;
     private final ProducerCoreDef<FComplex> processor;
+    private final FRandGenerator randomizer;
 
     private FComplexProducerDef(FComplexFactory factory, FRandGenerator randomizer) {
 
         this.factory = factory;
+        this.randomizer = randomizer;
         this.processor = new ProducerCoreDef<>(randomizer);
     }
 
@@ -30,6 +33,14 @@ public class FComplexProducerDef implements FComplexProducer {
     public FComplexProducer withCustomRule(Function<FComplexFactory, FComplex> function, int weight) {
 
         this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
+    }
+
+    @Override
+    public FComplexProducer withCustomRule(BiFunction<FComplexFactory, FRandGenerator, FComplex> function, int weight) {
+
+        this.processor.addConfig(() -> function.apply(factory, randomizer), weight);
 
         return this;
     }

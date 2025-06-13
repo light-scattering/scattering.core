@@ -1,8 +1,10 @@
 package eu.scattering.core.design.component.geometry.construct.segment;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -19,12 +21,18 @@ public interface FSegmentProducer{
     // -------------------------------------------------------------------------------------------------
 
     FSegmentProducer withCustomRule(Function<FSegmentFactory, FSegment> function, int weight);
+    FSegmentProducer withCustomRule(BiFunction<FSegmentFactory, FRandEngine, FSegment> function, int weight);
 
     FSegmentProducer withFVector(FVectorProducer origin, int weight);
 
     // -------------------------------------------------------------------------------------------------
 
     default FSegmentProducer withCustomRule(Function<FSegmentFactory, FSegment> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FSegmentProducer withCustomRule(BiFunction<FSegmentFactory, FRandEngine, FSegment> function) {
 
         return withCustomRule(function, 1);
     }

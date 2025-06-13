@@ -31,8 +31,9 @@ public class FDist3DUniformDef implements FDist3DUniform {
     public static FDist3DUniform get(FRandGenerator random, FPairPos3D range) {
 
         return new FDist3DUniformDef(random,
-                range.getPosA().getD0(), range.getPosA().getD1(), range.getPosA().getD2(),
-                range.getPosB().getD0(), range.getPosB().getD1(), range.getPosB().getD2()
+                range.getPosA().getD0(), range.getPosB().getD0(),
+                range.getPosA().getD1(), range.getPosB().getD1(),
+                range.getPosA().getD2(), range.getPosB().getD2()
         );
     }
 

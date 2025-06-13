@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -282,6 +283,68 @@ public class FDraftProducerTest {
         Assertions.assertAll("Validate values",
                 () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 5, 0, 0),
                         "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine")
+    void produceWithEngine() {
+        FDraftProducer producer = factory.getFDraftProducer().withCustomRule((factory, engine) -> {
+            FDraft fDraft = factory.getFDraft();
+
+            fDraft.getRefOrigin().set(
+                    1, 2, 3,
+                    2, 2, 3
+            );
+
+            engine.varyAngle(fDraft.getRefOrigin());
+
+            return fDraft;
+        }, 1);
+
+        FDraft resultA = producer.produce();
+        FDraft resultB = producer.produce();
+
+        Assertions.assertAll("Validate FDraft values",
+                () -> assertEquals(1, resultA.getRefOrigin().getMagnitude(),
+                        epsilon, "The FDraft A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getRefOrigin().getMagnitude(),
+                        epsilon, "The FDraft B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine (simple)")
+    void produceWithEngineSimple() {
+        FDraftProducer producer = factory.getFDraftProducer().withCustomRule((factory, engine) -> {
+            FDraft fDraft = factory.getFDraft();
+
+            fDraft.getRefOrigin().set(
+                    1, 2, 3,
+                    2, 2, 3
+            );
+
+            engine.varyAngle(fDraft.getRefOrigin());
+
+            return fDraft;
+        });
+
+        FDraft resultA = producer.produce();
+        FDraft resultB = producer.produce();
+
+        Assertions.assertAll("Validate FDraft values",
+                () -> assertEquals(1, resultA.getRefOrigin().getMagnitude(),
+                        epsilon, "The FDraft A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getRefOrigin().getMagnitude(),
+                        epsilon, "The FDraft B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );

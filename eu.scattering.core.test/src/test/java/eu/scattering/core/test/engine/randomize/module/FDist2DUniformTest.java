@@ -39,7 +39,7 @@ public class FDist2DUniformTest {
     @DisplayName("Construct with FPairPos2D")
     void constructWithFPairPos2D() {
         FRandGenerator random = factory.getFRandGenShared();
-        FDist2D dist = random.getFDist2DUniform(factory.getFPairPos2D(1.1, 1.2, 5.1, 5.2));
+        FDist2D dist = random.getFDist2DUniform(factory.getFPairPos2D(1.1, 5.1, 1.2, 5.2));
 
         double sumX = 0;
         double sumY = 0;
@@ -59,7 +59,7 @@ public class FDist2DUniformTest {
     @DisplayName("Produce value array")
     void produceValueArray() {
         FRandGenerator random = factory.getFRandGenShared();
-        FDist2D dist = random.getFDist2DUniform(factory.getFPairPos2D(1.1, 1.2, 5.1, 5.2));
+        FDist2D dist = random.getFDist2DUniform(factory.getFPairPos2D(1.1, 5.1, 1.2, 5.2));
 
         double sumX = 0;
         double sumY = 0;
@@ -80,7 +80,7 @@ public class FDist2DUniformTest {
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
         FRandGenerator random = factory.getFRandGenShared();
-        FDist2D dist = random.getFDist2DUniform(factory.getFPairPos2D(1.1, 1.2, 5.1, 5.2));
+        FDist2D dist = random.getFDist2DUniform(factory.getFPairPos2D(1.1, 5.1, 1.2, 5.2));
 
         double[] arr = new double[1];
 

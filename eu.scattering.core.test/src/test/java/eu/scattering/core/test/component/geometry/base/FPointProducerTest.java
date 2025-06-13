@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -367,6 +368,104 @@ public class FPointProducerTest {
                         epsilon, "Position is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset distribution")
+    void presetDistribution() {
+        FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
+        FDist3D dist = factory.getFRandGenShared().getFDist3DUniform(range);
+        FPointProducer producer = factory.getFPointProducer()
+                .withDist(dist, 1);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(Math.abs(resultA.getX()) < 0.01,
+                        "Value X is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getY()) < 0.01,
+                        "Value Y is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getZ()) < 0.01,
+                        "Value Z is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset distribution (simple)")
+    void presetDistributionSimple() {
+        FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
+        FDist3D dist = factory.getFRandGenShared().getFDist3DUniform(range);
+        FPointProducer producer = factory.getFPointProducer()
+                .withDist(dist);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(Math.abs(resultA.getX()) < 0.01,
+                        "Value X is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getY()) < 0.01,
+                        "Value Y is incorrect"),
+                () -> assertTrue(Math.abs(resultA.getZ()) < 0.01,
+                        "Value Z is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine")
+    void produceWithEngine() {
+        AtomicInteger length = new AtomicInteger(1);
+
+        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, engine) -> {
+            int lengthCurrent = length.getAndIncrement();
+
+            return engine.varyAngle(factory.getFPoint(lengthCurrent));
+        }, 1);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertEquals(1, resultA.getMagnitude(),
+                        epsilon, "The FPoint A magnitude is erroneous"),
+                () -> assertEquals(2, resultB.getMagnitude(),
+                        epsilon, "The FPoint B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine (simple)")
+    void produceWithEngineSimple() {
+        AtomicInteger length = new AtomicInteger(1);
+
+        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, engine) -> {
+            int lengthCurrent = length.getAndIncrement();
+
+            return engine.varyAngle(factory.getFPoint(lengthCurrent));
+        });
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertEquals(1, resultA.getMagnitude(),
+                        epsilon, "The FPoint A magnitude is erroneous"),
+                () -> assertEquals(2, resultB.getMagnitude(),
+                        epsilon, "The FPoint B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 }

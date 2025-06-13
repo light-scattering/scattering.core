@@ -1,8 +1,10 @@
 package eu.scattering.core.design.component.geometry.base.vector;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -19,6 +21,7 @@ public interface FVectorProducer {
     // -------------------------------------------------------------------------------------------------
 
     FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function, int weight);
+    FVectorProducer withCustomRule(BiFunction<FVectorFactory, FRandEngine, FVector> function, int weight);
 
     FVectorProducer withDirOX(double length, int weight);
     FVectorProducer withDirOY(double length, int weight);
@@ -36,11 +39,17 @@ public interface FVectorProducer {
 
     FVectorProducer withBase(FPointProducer pBase, int weight);
     FVectorProducer withHead(FPointProducer pHead, int weight);
+
     FVectorProducer withBaseAndHead(FPointProducer pBase, FPointProducer pHead, int weight);
 
     // -------------------------------------------------------------------------------------------------
 
     default FVectorProducer withCustomRule(Function<FVectorFactory, FVector> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FVectorProducer withCustomRule(BiFunction<FVectorFactory, FRandEngine, FVector> function) {
 
         return withCustomRule(function, 1);
     }

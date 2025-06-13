@@ -255,4 +255,82 @@ public class FQuaternionProducerTest {
                         "Elements should not be the same")
         );
     }
+
+    @Test
+    @DisplayName("Produce with randomizer")
+    void produceWithRandomizer() {
+        FQuaternionProducer producer = factory.getFQuaternionProducer().withCustomRule((factory, random) -> {
+            double re = random.nextDouble(0.01, 0.02);
+            double i = random.nextDouble(0.03, 0.04);
+            double j = random.nextDouble(0.05, 0.06);
+            double k = random.nextDouble(0.07, 0.08);
+
+            return factory.getFQuaternion(re, i, j, k);
+        }, 1);
+
+        FQuaternion resultA = producer.produce();
+        FQuaternion resultB = producer.produce();
+
+        Assertions.assertAll("Validate FQuaternion values",
+                () -> assertTrue(resultA.getRe() >= 0.01 && resultA.getRe() < 0.02,
+                        "The FQuaternion A Re value is erroneous"),
+                () -> assertTrue(resultA.getI() >= 0.03 && resultA.getI() < 0.04,
+                        "The FQuaternion A I value is erroneous"),
+                () -> assertTrue(resultA.getJ() >= 0.05 && resultA.getJ() < 0.06,
+                        "The FQuaternion A J value is erroneous"),
+                () -> assertTrue(resultA.getK() >= 0.07 && resultA.getK() < 0.08,
+                        "The FQuaternion A K value is erroneous"),
+                () -> assertTrue(resultB.getRe() >= 0.01 && resultB.getRe() < 0.02,
+                        "The FQuaternion B Re value is erroneous"),
+                () -> assertTrue(resultB.getI() >= 0.03 && resultB.getI() < 0.04,
+                        "The FQuaternion B I value is erroneous"),
+                () -> assertTrue(resultB.getJ() >= 0.05 && resultB.getJ() < 0.06,
+                        "The FQuaternion B J value is erroneous"),
+                () -> assertTrue(resultB.getK() >= 0.07 && resultB.getK() < 0.08,
+                        "The FQuaternion B K value is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with randomizer (simple)")
+    void produceWithRandomizerSimple() {
+        FQuaternionProducer producer = factory.getFQuaternionProducer().withCustomRule((factory, random) -> {
+            double re = random.nextDouble(0.01, 0.02);
+            double i = random.nextDouble(0.03, 0.04);
+            double j = random.nextDouble(0.05, 0.06);
+            double k = random.nextDouble(0.07, 0.08);
+
+            return factory.getFQuaternion(re, i, j, k);
+        });
+
+        FQuaternion resultA = producer.produce();
+        FQuaternion resultB = producer.produce();
+
+        Assertions.assertAll("Validate FQuaternion values",
+                () -> assertTrue(resultA.getRe() >= 0.01 && resultA.getRe() < 0.02,
+                        "The FQuaternion A Re value is erroneous"),
+                () -> assertTrue(resultA.getI() >= 0.03 && resultA.getI() < 0.04,
+                        "The FQuaternion A I value is erroneous"),
+                () -> assertTrue(resultA.getJ() >= 0.05 && resultA.getJ() < 0.06,
+                        "The FQuaternion A J value is erroneous"),
+                () -> assertTrue(resultA.getK() >= 0.07 && resultA.getK() < 0.08,
+                        "The FQuaternion A K value is erroneous"),
+                () -> assertTrue(resultB.getRe() >= 0.01 && resultB.getRe() < 0.02,
+                        "The FQuaternion B Re value is erroneous"),
+                () -> assertTrue(resultB.getI() >= 0.03 && resultB.getI() < 0.04,
+                        "The FQuaternion B I value is erroneous"),
+                () -> assertTrue(resultB.getJ() >= 0.05 && resultB.getJ() < 0.06,
+                        "The FQuaternion B J value is erroneous"),
+                () -> assertTrue(resultB.getK() >= 0.07 && resultB.getK() < 0.08,
+                        "The FQuaternion B K value is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
 }

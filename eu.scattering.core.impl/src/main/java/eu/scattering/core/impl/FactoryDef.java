@@ -140,7 +140,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FPointProducer getFPointProducer() {
 
-        return FPointProducerDef.create(this, this.fRandGenerator);
+        return FPointProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -154,7 +154,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FVectorProducer getFVectorProducer() {
 
-        return FVectorProducerDef.create(this, this.fRandGenerator);
+        return FVectorProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -180,7 +180,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FDraftProducer getFDraftProducer() {
 
-        return FDraftProducerDef.create(this, this.fRandGenerator);
+        return FDraftProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -200,7 +200,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FPlaneProducer getFPlaneProducer() {
 
-        return FPlaneProducerDef.create(this, this.fRandGenerator);
+        return FPlaneProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -220,7 +220,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FRayProducer getFRayProducer() {
 
-        return FRayProducerDef.create(this, this.fRandGenerator);
+        return FRayProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -240,7 +240,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FLineProducer getFLineProducer() {
 
-        return FLineProducerDef.create(this, this.fRandGenerator);
+        return FLineProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -260,7 +260,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FSegmentProducer getFSegmentProducer() {
 
-        return FSegmentProducerDef.create(this, this.fRandGenerator);
+        return FSegmentProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -280,7 +280,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public FSphereProducer getFSphereProducer() {
 
-        return FSphereProducerDef.create(this, this.fRandGenerator);
+        return FSphereProducerDef.create(this, this.fRandEngine);
     }
 
     @Override
@@ -300,7 +300,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     @Override
     public <T extends Geometry> FAssemblyProducer<T> getFAssemblyProducer() {
 
-        return FAssemblyProducerDef.create(this, this.fRandGenerator);
+        return FAssemblyProducerDef.create(this, this.fRandEngine);
     }
 
     @Override

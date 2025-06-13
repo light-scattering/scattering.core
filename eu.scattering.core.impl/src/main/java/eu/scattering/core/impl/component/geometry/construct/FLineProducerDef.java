@@ -4,10 +4,11 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.line.FLineFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -15,14 +16,16 @@ public class FLineProducerDef implements FLineProducer {
 
     private final FLineFactory factory;
     private final ProducerCoreDef<FLine> processor;
+    private final FRandEngine rndEngine;
 
-    private FLineProducerDef(FLineFactory factory, FRandGenerator randomizer) {
+    private FLineProducerDef(FLineFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
-        this.processor = new ProducerCoreDef<>(randomizer);
+        this.rndEngine = randomizer;
+        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
     }
 
-    public static FLineProducer create(FLineFactory factory, FRandGenerator randomizer) {
+    public static FLineProducer create(FLineFactory factory, FRandEngine randomizer) {
 
         return new FLineProducerDef(factory, randomizer);
     }
@@ -31,6 +34,14 @@ public class FLineProducerDef implements FLineProducer {
     public FLineProducer withCustomRule(Function<FLineFactory, FLine> function, int weight) {
 
         this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
+    }
+
+    @Override
+    public FLineProducer withCustomRule(BiFunction<FLineFactory, FRandEngine, FLine> function, int weight) {
+
+        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
 
         return this;
     }

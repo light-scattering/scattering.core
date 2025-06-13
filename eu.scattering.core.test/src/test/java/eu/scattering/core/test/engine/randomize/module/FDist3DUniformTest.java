@@ -44,7 +44,7 @@ public class FDist3DUniformTest {
     void constructWithFPairPos3D() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist3D dist = random.getFDist3DUniform(
-                factory.getFPairPos3D(1.1, 1.2, 3.1, 3.2, 5.1, 5.2));
+                factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
         double sumX = 0;
         double sumY = 0;
@@ -69,7 +69,7 @@ public class FDist3DUniformTest {
     void produceValueArray() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist3D dist = random.getFDist3DUniform(
-                factory.getFPairPos3D(1.1, 1.2, 3.1, 3.2, 5.1, 5.2));
+                factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
         double sumX = 0;
         double sumY = 0;
@@ -95,7 +95,7 @@ public class FDist3DUniformTest {
     void produceValueArrayNullPointerException() {
         FRandGenerator random = factory.getFRandGenShared();
         FDist3D dist = random.getFDist3DUniform(
-                factory.getFPairPos3D(1.1, 1.2, 3.1, 3.2, 5.1, 5.2));
+                factory.getFPairPos3D(1.1, 3.1, 5.1, 1.2, 3.2, 5.2));
 
         double[] arr = new double[2];
 

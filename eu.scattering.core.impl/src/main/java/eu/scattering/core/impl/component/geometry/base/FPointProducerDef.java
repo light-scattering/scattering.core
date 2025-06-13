@@ -3,11 +3,14 @@ package eu.scattering.core.impl.component.geometry.base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -15,16 +18,18 @@ public class FPointProducerDef implements FPointProducer {
 
     private final FPointFactory factory;
     private final ProducerCoreDef<FPoint> processor;
-    private final FRandGenerator randomizer;
+    private final FRandGenerator rndGenerator;
+    private final FRandEngine rndEngine;
 
-    private FPointProducerDef(FPointFactory factory, FRandGenerator randomizer) {
+    private FPointProducerDef(FPointFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
-        this.randomizer = randomizer;
-        this.processor = new ProducerCoreDef<>(this.randomizer);
+        this.rndEngine = randomizer;
+        this.rndGenerator = randomizer.getFRand();
+        this.processor = new ProducerCoreDef<>(this.rndGenerator);
     }
 
-    public static FPointProducer create(FPointFactory factory, FRandGenerator randomizer) {
+    public static FPointProducer create(FPointFactory factory, FRandEngine randomizer) {
 
         return new FPointProducerDef(factory, randomizer);
     }
@@ -33,6 +38,14 @@ public class FPointProducerDef implements FPointProducer {
     public FPointProducer withCustomRule(Function<FPointFactory, FPoint> function, int weight) {
 
         this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
+    }
+
+    @Override
+    public FPointProducer withCustomRule(BiFunction<FPointFactory, FRandEngine, FPoint> function, int weight) {
+
+        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
 
         return this;
     }
@@ -57,7 +70,7 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withInRange(FPairPos3D range, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(randomizer.nextDouble3D(range));
+                factory.getFPoint().applyStateFrom(rndGenerator.nextDouble3D(range));
 
         withCustomRule(function, weight);
 
@@ -67,7 +80,7 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withInSphere(double radius, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(randomizer.nextDoubleInSphere(radius));
+                factory.getFPoint().applyStateFrom(rndGenerator.nextDoubleInSphere(radius));
 
         withCustomRule(function, weight);
 
@@ -77,7 +90,17 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withRadius(double radius, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(randomizer.nextDoubleOnSphere(radius));
+                factory.getFPoint().applyStateFrom(rndGenerator.nextDoubleOnSphere(radius));
+
+        withCustomRule(function, weight);
+
+        return this;
+    }
+
+    @Override
+    public FPointProducer withDist(FDist3D dist, int weight) {
+        Function<FPointFactory, FPoint> function = (factory) ->
+                factory.getFPoint().applyStateFrom(dist.produce());
 
         withCustomRule(function, weight);
 

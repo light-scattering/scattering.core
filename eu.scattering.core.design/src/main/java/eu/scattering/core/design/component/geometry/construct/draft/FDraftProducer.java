@@ -1,8 +1,10 @@
 package eu.scattering.core.design.component.geometry.construct.draft;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -19,12 +21,18 @@ public interface FDraftProducer {
     // -------------------------------------------------------------------------------------------------
 
     FDraftProducer withCustomRule(Function<FDraftFactory, FDraft> function, int weight);
+    FDraftProducer withCustomRule(BiFunction<FDraftFactory, FRandEngine, FDraft> function, int weight);
 
     FDraftProducer withFVector(FVectorProducer origin, int weight);
 
     // -------------------------------------------------------------------------------------------------
 
     default FDraftProducer withCustomRule(Function<FDraftFactory, FDraft> function) {
+
+        return withCustomRule(function, 1);
+    }
+
+    default FDraftProducer withCustomRule(BiFunction<FDraftFactory, FRandEngine, FDraft> function) {
 
         return withCustomRule(function, 1);
     }

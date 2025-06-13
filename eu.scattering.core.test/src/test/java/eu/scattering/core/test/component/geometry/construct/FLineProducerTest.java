@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -282,6 +283,68 @@ public class FLineProducerTest {
         Assertions.assertAll("Validate values",
                 () -> assertTrue(resultA.getRefOrigin().isExact(0, 0, 0, 5, 0, 0),
                         "The value is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine")
+    void produceWithEngine() {
+        FLineProducer producer = factory.getFLineProducer().withCustomRule((factory, engine) -> {
+            FLine fLine = factory.getFLine();
+
+            fLine.getRefOrigin().set(
+                    1, 2, 3,
+                    2, 2, 3
+            );
+
+            engine.varyAngle(fLine.getRefOrigin());
+
+            return fLine;
+        }, 1);
+
+        FLine resultA = producer.produce();
+        FLine resultB = producer.produce();
+
+        Assertions.assertAll("Validate FLine values",
+                () -> assertEquals(1, resultA.getRefOrigin().getMagnitude(),
+                        epsilon, "The FLine A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getRefOrigin().getMagnitude(),
+                        epsilon, "The FLine B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine (simple)")
+    void produceWithEngineSimple() {
+        FLineProducer producer = factory.getFLineProducer().withCustomRule((factory, engine) -> {
+            FLine fLine = factory.getFLine();
+
+            fLine.getRefOrigin().set(
+                    1, 2, 3,
+                    2, 2, 3
+            );
+
+            engine.varyAngle(fLine.getRefOrigin());
+
+            return fLine;
+        });
+
+        FLine resultA = producer.produce();
+        FLine resultB = producer.produce();
+
+        Assertions.assertAll("Validate FLine values",
+                () -> assertEquals(1, resultA.getRefOrigin().getMagnitude(),
+                        epsilon, "The FLine A magnitude is erroneous"),
+                () -> assertEquals(1, resultB.getRefOrigin().getMagnitude(),
+                        epsilon, "The FLine B magnitude is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );

@@ -1,8 +1,10 @@
 package eu.scattering.core.test.component.geometry.shape;
 
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
+import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -544,10 +546,13 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Preset random radius")
-    void presetRandomRadius() {
+    @DisplayName("Preset dist radius")
+    void presetDistRadius() {
+        FDist1D radius = factory.getFRandGenShared()
+                .getFDist1DUniform(epsilon, 0.001);
+
         FSphereProducer producer = factory.getFSphereProducer()
-                .withRandomRadius("TiO2", epsilon, 0.001, 1);
+                .withDistRadius("TiO2", radius, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -571,10 +576,13 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Preset random radius (simple)")
-    void presetRandomRadiusSimple() {
+    @DisplayName("Preset dist radius (simple)")
+    void presetDistRadiusSimple() {
+        FDist1D radius = factory.getFRandGenShared()
+                .getFDist1DUniform(epsilon, 0.001);
+
         FSphereProducer producer = factory.getFSphereProducer()
-                .withRandomRadius("TiO2", epsilon, 0.001);
+                .withDistRadius("TiO2", radius);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -666,13 +674,16 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Preset center and random radius")
-    void presetCenterAndRandomRadius() {
+    @DisplayName("Preset center and dist radius")
+    void presetCenterAndDistRadius() {
+        FDist1D radius = factory.getFRandGenShared()
+                .getFDist1DUniform(epsilon, 0.001);
+
         FPointProducer pCenter = factory.getFPointProducer()
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndRandomRadius("TiO2", pCenter, epsilon, 0.001, 1);
+                .withCenterAndDistRadius("TiO2", pCenter, radius, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -700,13 +711,16 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Preset center and random radius (simple)")
-    void presetCenterAndRandomRadiusSimple() {
+    @DisplayName("Preset center and dist radius (simple)")
+    void presetCenterAndDistRadiusSimple() {
+        FDist1D radius = factory.getFRandGenShared()
+                .getFDist1DUniform(epsilon, 0.001);
+
         FPointProducer pCenter = factory.getFPointProducer()
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndRandomRadius("TiO2", pCenter, epsilon, 0.001);
+                .withCenterAndDistRadius("TiO2", pCenter, radius);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -730,6 +744,60 @@ public class FSphereProducerTest {
                         "Tag B is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine")
+    void produceWithEngine() {
+        FSphereProducer producer = factory.getFSphereProducer()
+                .withCustomRule((factoryLocal, engine) -> {
+                    FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+                    engine.varyAngle(fPoint);
+
+                    return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
+                }, 1);
+
+        FSphere resultA = producer.produce();
+        FSphere resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertEquals(1, resultA.getRadius(),
+                        epsilon, "The Sphere A radius is erroneous"),
+                () -> assertEquals(1, resultB.getRadius(),
+                        epsilon, "The Sphere B radius is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with engine (simple)")
+    void produceWithEngineSimple() {
+        FSphereProducer producer = factory.getFSphereProducer()
+                .withCustomRule((factoryLocal, engine) -> {
+                    FPoint fPoint = factory.getFPoint(1, 0, 0);
+
+                    engine.varyAngle(fPoint);
+
+                    return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
+                });
+
+        FSphere resultA = producer.produce();
+        FSphere resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertEquals(1, resultA.getRadius(),
+                        epsilon, "The Sphere A radius is erroneous"),
+                () -> assertEquals(1, resultB.getRadius(),
+                        epsilon, "The Sphere B radius is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
         );
     }
 }

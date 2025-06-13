@@ -4,10 +4,11 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentFactory;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -15,14 +16,16 @@ public class FSegmentProducerDef implements FSegmentProducer {
 
     private final FSegmentFactory factory;
     private final ProducerCoreDef<FSegment> processor;
+    private final FRandEngine rndEngine;
 
-    private FSegmentProducerDef(FSegmentFactory factory, FRandGenerator randomizer) {
+    private FSegmentProducerDef(FSegmentFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
-        this.processor = new ProducerCoreDef<>(randomizer);
+        this.rndEngine = randomizer;
+        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
     }
 
-    public static FSegmentProducer create(FSegmentFactory factory, FRandGenerator randomizer) {
+    public static FSegmentProducer create(FSegmentFactory factory, FRandEngine randomizer) {
 
         return new FSegmentProducerDef(factory, randomizer);
     }
@@ -31,6 +34,14 @@ public class FSegmentProducerDef implements FSegmentProducer {
     public FSegmentProducer withCustomRule(Function<FSegmentFactory, FSegment> function, int weight) {
 
         this.processor.addConfig(() -> function.apply(factory), weight);
+
+        return this;
+    }
+
+    @Override
+    public FSegmentProducer withCustomRule(BiFunction<FSegmentFactory, FRandEngine, FSegment> function, int weight) {
+
+        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
 
         return this;
     }

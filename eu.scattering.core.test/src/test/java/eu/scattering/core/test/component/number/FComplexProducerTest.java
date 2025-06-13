@@ -255,4 +255,62 @@ public class FComplexProducerTest {
                         "Elements should not be the same")
         );
     }
+
+    @Test
+    @DisplayName("Produce with randomizer")
+    void produceWithRandomizer() {
+        FComplexProducer producer = factory.getFComplexProducer().withCustomRule((factory, random) -> {
+            double re = random.nextDouble(0.01, 0.02);
+            double im = random.nextDouble(0.03, 0.04);
+
+            return factory.getFComplex(re, im);
+        }, 1);
+
+        FComplex resultA = producer.produce();
+        FComplex resultB = producer.produce();
+
+        Assertions.assertAll("Validate FComplex values",
+                () -> assertTrue(resultA.getRe() >= 0.01 && resultA.getRe() < 0.02,
+                        "The FComplex A Re value is erroneous"),
+                () -> assertTrue(resultA.getIm() >= 0.03 && resultA.getIm() < 0.04,
+                        "The FComplex A Im value is erroneous"),
+                () -> assertTrue(resultB.getRe() >= 0.01 && resultB.getRe() < 0.02,
+                        "The FComplex B Re value is erroneous"),
+                () -> assertTrue(resultB.getIm() >= 0.03 && resultB.getIm() < 0.04,
+                        "The FComplex B Im value is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Produce with randomizer (simple)")
+    void produceWithRandomizerSimple() {
+        FComplexProducer producer = factory.getFComplexProducer().withCustomRule((factory, random) -> {
+            double re = random.nextDouble(0.01, 0.02);
+            double im = random.nextDouble(0.03, 0.04);
+
+            return factory.getFComplex(re, im);
+        });
+
+        FComplex resultA = producer.produce();
+        FComplex resultB = producer.produce();
+
+        Assertions.assertAll("Validate FComplex values",
+                () -> assertTrue(resultA.getRe() >= 0.01 && resultA.getRe() < 0.02,
+                        "The FComplex A Re value is erroneous"),
+                () -> assertTrue(resultA.getIm() >= 0.03 && resultA.getIm() < 0.04,
+                        "The FComplex A Im value is erroneous"),
+                () -> assertTrue(resultB.getRe() >= 0.01 && resultB.getRe() < 0.02,
+                        "The FComplex B Re value is erroneous"),
+                () -> assertTrue(resultB.getIm() >= 0.03 && resultB.getIm() < 0.04,
+                        "The FComplex B Im value is erroneous"),
+                () -> assertNotEquals(resultA, resultB,
+                        "Elements should have different values"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
 }
