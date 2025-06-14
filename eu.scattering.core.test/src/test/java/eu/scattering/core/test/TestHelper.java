@@ -23,7 +23,7 @@ public class TestHelper {
 
         main:
         while (true) {
-            var candidate =  factory.getFRandEngShared().rndPosInRange(factory.getFPoint(), range3D);
+            var candidate =  factory.getFRandEngine().inRange(factory.getFPoint(), range3D);
 
             for (FPoint fPoint : exc) {
                 if (candidate.isSimilar(fPoint)) {
@@ -57,7 +57,7 @@ public class TestHelper {
 
         main:
         while (true) {
-            var candidate =  factory.getFRandEngShared().rndPos(factory.getFComplex(), range2D);
+            var candidate =  factory.getFRandEngine().inRange(factory.getFComplex(), range2D);
 
             for (FComplex fComplex : exc) {
                 if (candidate.isSimilar(fComplex)) {
@@ -73,7 +73,7 @@ public class TestHelper {
 
         main:
         while (true) {
-            var candidate =  factory.getFRandEngShared().rndPos(factory.getFQuaternion(), range4D);
+            var candidate =  factory.getFRandEngine().inRange(factory.getFQuaternion(), range4D);
 
             for (FQuaternion fQuaternion : exc) {
                 if (candidate.isSimilar(fQuaternion)) {
@@ -91,7 +91,7 @@ public class TestHelper {
         while (true) {
             var candidate =  factory.getRefFSphere(
                     getRandFPoint(),
-                    factory.getFRandGenShared().nextDouble(EPSILON, range)
+                    factory.getFRand().nextDouble(EPSILON, range)
             );
 
             for (FSphere fSphere : exc) {

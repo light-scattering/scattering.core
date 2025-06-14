@@ -17,7 +17,7 @@ public class FDist1DFixedTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DFixed(5);
 
         for (int i = 0 ; i < 10 ; i++) {
@@ -29,7 +29,7 @@ public class FDist1DFixedTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DFixed(5);
 
         double[] arr = new double[1];
@@ -43,7 +43,7 @@ public class FDist1DFixedTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DFixed(5);
 
         double[] arr = new double[0];

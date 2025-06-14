@@ -299,7 +299,7 @@ public class FDraftProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fDraft.getRefOrigin());
+            engine.onSphere(fDraft.getRefOrigin());
 
             return fDraft;
         }, 1);
@@ -330,7 +330,7 @@ public class FDraftProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fDraft.getRefOrigin());
+            engine.onSphere(fDraft.getRefOrigin());
 
             return fDraft;
         });

@@ -667,7 +667,7 @@ public class FPointRotateTest {
     @Test
     @DisplayName("Rotate Qt")
     void rotateQt() {
-        FRotGenerator fRot = factory.getFRotGenShared();
+        FRotGenerator fRot = factory.getFRot();
 
         FPoint fPoint = factory.getFPoint(1, 1, 0);
 

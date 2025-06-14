@@ -749,7 +749,7 @@ public class FVectorProducerTest {
     void produceWithEngine() {
         FVectorProducer producer = factory.getFVectorProducer()
                 .withCustomRule((factory, engine) ->
-                        engine.varyAngle(factory.getFVector(1, 2, 3, 2, 2, 3)), 1);
+                        engine.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)), 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -771,7 +771,7 @@ public class FVectorProducerTest {
     void produceWithEngineSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
                 .withCustomRule((factory, engine) ->
-                        engine.varyAngle(factory.getFVector(1, 2, 3, 2, 2, 3)));
+                        engine.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)));
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();

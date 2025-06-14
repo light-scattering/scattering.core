@@ -19,7 +19,7 @@ public class FDist3DJointTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
@@ -39,7 +39,7 @@ public class FDist3DJointTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);
@@ -60,7 +60,7 @@ public class FDist3DJointTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist1D dZ = random.getFDist1DUniform(-0.1, 0.1);

@@ -411,7 +411,7 @@ public class FVectorRotateTest {
         FVector fVectorIn = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FVector fVectorArg = factory.getFVector(0, 1, 0);
 
-        FVector results = rot.rotRgAroundFixed(fVectorIn, fVectorArg, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxis(fVectorIn, fVectorArg, Math.PI * 0.5);
 
         assertTrue(fVectorIn.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -425,7 +425,7 @@ public class FVectorRotateTest {
         FVector fVectorIn = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FVector fVectorArg = factory.getFVector(0, 1, 0);
 
-        FVector results = rot.rotRgAroundFixed(fVectorIn, fVectorArg, -(Math.PI * 0.5));
+        FVector results = rot.rotRgAroundAxis(fVectorIn, fVectorArg, -(Math.PI * 0.5));
 
         assertTrue(fVectorIn.isSimilar(-1, 1, 0, -1, 2, 1),
                 "The position of the rotated FVector is erroneous");
@@ -441,7 +441,7 @@ public class FVectorRotateTest {
         double angle = Math.abs(rand.nextDouble() % Math.PI);
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.rotRgAroundFixed(fVectorIn, fVectorArg, angle),
+                () -> rot.rotRgAroundAxis(fVectorIn, fVectorArg, angle),
                 "The direction of the provided FVector is not defined");
     }
 
@@ -452,7 +452,7 @@ public class FVectorRotateTest {
         FVector fVectorArg = TestHelper.getRandFVector();
 
         FVectorTestHelper.testReference(
-                (a, b) -> rot.rotRgAroundFixed(a, b, Math.PI), fVectorIn, fVectorArg);
+                (a, b) -> rot.rotRgAroundAxis(a, b, Math.PI), fVectorIn, fVectorArg);
     }
 
     @Test
@@ -461,7 +461,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseZero(fVector, fPoint, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxisBaseZero(fVector, fPoint, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -475,7 +475,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseZero(fVector, fPoint, -(Math.PI * 0.5));
+        FVector results = rot.rotRgAroundAxisBaseZero(fVector, fPoint, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, 1),
                 "The position of the rotated FVector is erroneous");
@@ -489,7 +489,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(-1, 2, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseCommon(fVector, fPoint, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxisBaseCommon(fVector, fPoint, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -503,7 +503,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(-1, 2, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseCommon(fVector, fPoint, -(Math.PI * 0.5));
+        FVector results = rot.rotRgAroundAxisBaseCommon(fVector, fPoint, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, 1),
                 "The position of the rotated FVector is erroneous");
@@ -518,7 +518,7 @@ public class FVectorRotateTest {
         FPoint fPoint = TestHelper.getRandFPoint();
 
         FVectorTestHelper.testReference(
-                (a, b) -> rot.rotRgAroundFixedBaseZero(a, b, Math.PI), fVector, fPoint);
+                (a, b) -> rot.rotRgAroundAxisBaseZero(a, b, Math.PI), fVector, fPoint);
     }
 
     @Test
@@ -526,7 +526,7 @@ public class FVectorRotateTest {
     void rotateRgAxisWithPrimitives() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FVector results = rot.rotRgAroundFixed(fVector, 0, 0, 0, 0, 5, 0, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxis(fVector, 0, 0, 0, 0, 5, 0, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -539,7 +539,7 @@ public class FVectorRotateTest {
     void rotateRgAxisZeroWithPrimitives() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseZero(fVector, 0, 5, 0, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxisBaseZero(fVector, 0, 5, 0, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -552,7 +552,7 @@ public class FVectorRotateTest {
     void rotateRgAxisCommonWithPrimitives() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseCommon(fVector, -1, 5, 0, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxisBaseCommon(fVector, -1, 5, 0, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -566,7 +566,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPairPos3D fPairPos3D = factory.getFVector(0, 1, 0).toFPairPos3D();
 
-        FVector results = rot.rotRgAroundFixed(fVector, fPairPos3D, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxis(fVector, fPairPos3D, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -580,7 +580,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPos3D fPos3D = factory.getFPos3D(0, 1, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseZero(fVector, fPos3D, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxisBaseZero(fVector, fPos3D, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -594,7 +594,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPos3D fPos3D = factory.getFPos3D(0, 1, 0);
 
-        FVector results = rot.rotRgAroundFixedBaseCommon(fVector, fPos3D, Math.PI * 0.5);
+        FVector results = rot.rotRgAroundAxisBaseCommon(fVector, fPos3D, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -2, 1, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1019,7 +1019,7 @@ public class FVectorRotateTest {
         FVector fVectorIn = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FVector fVectorArg = factory.getFVector(0, 1, 0);
 
-        FVector results = rot.rotQtAroundFixed(fVectorIn, fVectorArg, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxis(fVectorIn, fVectorArg, Math.PI * 0.5);
 
         assertTrue(fVectorIn.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1033,7 +1033,7 @@ public class FVectorRotateTest {
         FVector fVectorIn = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FVector fVectorArg = factory.getFVector(0, 1, 0);
 
-        FVector results = rot.rotQtAroundFixed(fVectorIn, fVectorArg, -(Math.PI * 0.5));
+        FVector results = rot.rotQtAroundAxis(fVectorIn, fVectorArg, -(Math.PI * 0.5));
 
         assertTrue(fVectorIn.isSimilar(-1, 1, 0, -1, 2, 1),
                 "The position of the rotated FVector is erroneous");
@@ -1049,7 +1049,7 @@ public class FVectorRotateTest {
         double angle = Math.abs(rand.nextDouble() % Math.PI);
 
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> rot.rotQtAroundFixed(fVectorIn, fVectorArg, angle),
+                () -> rot.rotQtAroundAxis(fVectorIn, fVectorArg, angle),
                 "The direction of the provided FVector is not defined");
     }
 
@@ -1060,7 +1060,7 @@ public class FVectorRotateTest {
         FVector fVectorArg = TestHelper.getRandFVector();
 
         FVectorTestHelper.testReference(
-                (a, b) -> rot.rotQtAroundFixed(a, b, Math.PI), fVectorIn, fVectorArg);
+                (a, b) -> rot.rotQtAroundAxis(a, b, Math.PI), fVectorIn, fVectorArg);
     }
 
     @Test
@@ -1069,7 +1069,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseZero(fVector, fPoint, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxisBaseZero(fVector, fPoint, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1083,7 +1083,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(0, 2, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseZero(fVector, fPoint, -(Math.PI * 0.5));
+        FVector results = rot.rotQtAroundAxisBaseZero(fVector, fPoint, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, 1),
                 "The position of the rotated FVector is erroneous");
@@ -1097,7 +1097,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(-1, 2, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseCommon(fVector, fPoint, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxisBaseCommon(fVector, fPoint, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1111,7 +1111,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPoint fPoint = factory.getFPoint(-1, 2, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseCommon(fVector, fPoint, -(Math.PI * 0.5));
+        FVector results = rot.rotQtAroundAxisBaseCommon(fVector, fPoint, -(Math.PI * 0.5));
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, 1),
                 "The position of the rotated FVector is erroneous");
@@ -1126,7 +1126,7 @@ public class FVectorRotateTest {
         FPoint fPoint = TestHelper.getRandFPoint();
 
         FVectorTestHelper.testReference(
-                (a, b) -> rot.rotQtAroundFixedBaseZero(a, b, Math.PI), fVector, fPoint);
+                (a, b) -> rot.rotQtAroundAxisBaseZero(a, b, Math.PI), fVector, fPoint);
     }
 
     @Test
@@ -1134,7 +1134,7 @@ public class FVectorRotateTest {
     void rotateQtAxisWithPrimitives() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FVector results = rot.rotQtAroundFixed(fVector, 0, 0, 0, 0, 5, 0, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxis(fVector, 0, 0, 0, 0, 5, 0, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1147,7 +1147,7 @@ public class FVectorRotateTest {
     void rotateQtAxisZeroWithPrimitives() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseZero(fVector, 0, 5, 0, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxisBaseZero(fVector, 0, 5, 0, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1160,7 +1160,7 @@ public class FVectorRotateTest {
     void rotateQtAxisCommonWithPrimitives() {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseCommon(fVector, -1, 5, 0, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxisBaseCommon(fVector, -1, 5, 0, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1174,7 +1174,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPairPos3D fPairPos3D = factory.getFVector(0, 1, 0).toFPairPos3D();
 
-        FVector results = rot.rotQtAroundFixed(fVector, fPairPos3D, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxis(fVector, fPairPos3D, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1188,7 +1188,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPos3D fPos3D = factory.getFPos3D(0, 1, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseZero(fVector, fPos3D, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxisBaseZero(fVector, fPos3D, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -1, 2, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1202,7 +1202,7 @@ public class FVectorRotateTest {
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
         FPos3D fPos3D = factory.getFPos3D(0, 1, 0);
 
-        FVector results = rot.rotQtAroundFixedBaseCommon(fVector, fPos3D, Math.PI * 0.5);
+        FVector results = rot.rotQtAroundAxisBaseCommon(fVector, fPos3D, Math.PI * 0.5);
 
         assertTrue(fVector.isSimilar(-1, 1, 0, -2, 1, -1),
                 "The position of the rotated FVector is erroneous");
@@ -1213,7 +1213,7 @@ public class FVectorRotateTest {
     @Test
     @DisplayName("Rotate with FRotQt")
     void rotateWithFRotQt() {
-        FRotGenerator fRot = factory.getFRotGenShared();
+        FRotGenerator fRot = factory.getFRot();
 
         FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
 

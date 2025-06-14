@@ -7,9 +7,6 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public interface FVectorEngineRot {
 
-    // Methods utilizing the Rodrigues rotation formula.
-    // Optimized for rotating a single element using only primitive operations.
-
     FVector setRgAngle(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
     FVector setRgAngle(FVector in, FVector ref, double angle);
     FVector setRgAngle(FVector in, FPairPos3D ref, double angle);
@@ -34,19 +31,15 @@ public interface FVectorEngineRot {
     FVector rotRgAroundBaseZero(FVector in, FPoint ref, double angle);
     FVector rotRgAroundBaseZero(FVector in, FPos3D ref, double angle);
 
-    FVector rotRgAroundFixed(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
-    FVector rotRgAroundFixed(FVector in, FVector ref, double angle);
-    FVector rotRgAroundFixed(FVector in, FPairPos3D ref, double angle);
-    FVector rotRgAroundFixedBaseCommon(FVector in, double hX, double hY, double hZ, double angle);
-    FVector rotRgAroundFixedBaseCommon(FVector in, FPoint ref, double angle);
-    FVector rotRgAroundFixedBaseCommon(FVector in, FPos3D ref, double angle);
-    FVector rotRgAroundFixedBaseZero(FVector in, double hX, double hY, double hZ, double angle);
-    FVector rotRgAroundFixedBaseZero(FVector in, FPoint ref, double angle);
-    FVector rotRgAroundFixedBaseZero(FVector in, FPos3D ref, double angle);
-
-    // Methods utilizing the quaternion rotation formula.
-    // Included for consistency but offer no advantages over 'Rg' methods.
-    // Each method internally creates a new FRotQt object.
+    FVector rotRgAroundAxis(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundAxis(FVector in, FVector ref, double angle);
+    FVector rotRgAroundAxis(FVector in, FPairPos3D ref, double angle);
+    FVector rotRgAroundAxisBaseCommon(FVector in, double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundAxisBaseCommon(FVector in, FPoint ref, double angle);
+    FVector rotRgAroundAxisBaseCommon(FVector in, FPos3D ref, double angle);
+    FVector rotRgAroundAxisBaseZero(FVector in, double hX, double hY, double hZ, double angle);
+    FVector rotRgAroundAxisBaseZero(FVector in, FPoint ref, double angle);
+    FVector rotRgAroundAxisBaseZero(FVector in, FPos3D ref, double angle);
 
     FVector setQtAngle(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
     FVector setQtAngle(FVector in, FVector ref, double angle);
@@ -72,17 +65,15 @@ public interface FVectorEngineRot {
     FVector rotQtAroundBaseZero(FVector in, FPoint ref, double angle);
     FVector rotQtAroundBaseZero(FVector in, FPos3D ref, double angle);
 
-    FVector rotQtAroundFixed(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
-    FVector rotQtAroundFixed(FVector in, FVector ref, double angle);
-    FVector rotQtAroundFixed(FVector in, FPairPos3D ref, double angle);
-    FVector rotQtAroundFixedBaseCommon(FVector in, double hX, double hY, double hZ, double angle);
-    FVector rotQtAroundFixedBaseCommon(FVector in, FPoint ref, double angle);
-    FVector rotQtAroundFixedBaseCommon(FVector in, FPos3D ref, double angle);
-    FVector rotQtAroundFixedBaseZero(FVector in, double hX, double hY, double hZ, double angle);
-    FVector rotQtAroundFixedBaseZero(FVector in, FPoint ref, double angle);
-    FVector rotQtAroundFixedBaseZero(FVector in, FPos3D ref, double angle);
-
-    // Preferred when an FRotQt object is already available.
+    FVector rotQtAroundAxis(FVector in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle);
+    FVector rotQtAroundAxis(FVector in, FVector ref, double angle);
+    FVector rotQtAroundAxis(FVector in, FPairPos3D ref, double angle);
+    FVector rotQtAroundAxisBaseCommon(FVector in, double hX, double hY, double hZ, double angle);
+    FVector rotQtAroundAxisBaseCommon(FVector in, FPoint ref, double angle);
+    FVector rotQtAroundAxisBaseCommon(FVector in, FPos3D ref, double angle);
+    FVector rotQtAroundAxisBaseZero(FVector in, double hX, double hY, double hZ, double angle);
+    FVector rotQtAroundAxisBaseZero(FVector in, FPoint ref, double angle);
+    FVector rotQtAroundAxisBaseZero(FVector in, FPos3D ref, double angle);
 
     FVector rotQt(FVector in, FRotQt qt);
 }

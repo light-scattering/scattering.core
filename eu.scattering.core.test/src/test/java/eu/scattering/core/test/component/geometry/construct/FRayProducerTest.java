@@ -299,7 +299,7 @@ public class FRayProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fRay.getRefOrigin());
+            engine.onSphere(fRay.getRefOrigin());
 
             return fRay;
         }, 1);
@@ -330,7 +330,7 @@ public class FRayProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fRay.getRefOrigin());
+            engine.onSphere(fRay.getRefOrigin());
 
             return fRay;
         });

@@ -4,13 +4,11 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 
 public interface FSegmentEngineRand {
 
-    // Reset the current state (the value of the input element is meaningless).
+    FPoint onSegment(FPoint in, FSegment ref);
 
-    FPoint rndPosOnSegment(FPoint in, FSegment dir);
+    FPoint ortToPosAInCircle(FPoint in, FSegment ref, double radius);
+    FPoint ortToPosAOnCircle(FPoint in, FSegment ref, double radius);
 
-    FPoint rndPosBaseInCircle(FPoint in, FSegment dir, double radius);
-    FPoint rndPosBaseOnCircle(FPoint in, FSegment dir, double radius);
-
-    FPoint rndPosHeadInCircle(FPoint in, FSegment dir, double radius);
-    FPoint rndPosHeadOnCircle(FPoint in, FSegment dir, double radius);
+    FPoint ortToPosBInCircle(FPoint in, FSegment ref, double radius);
+    FPoint ortToPosBOnCircle(FPoint in, FSegment ref, double radius);
 }

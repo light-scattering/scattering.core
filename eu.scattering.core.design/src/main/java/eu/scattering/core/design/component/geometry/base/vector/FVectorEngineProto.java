@@ -8,11 +8,11 @@ import java.util.function.Function;
 public interface FVectorEngineProto {
 
     @Facade
-    FVector applyWithFixedState(FVector in, Consumer<FVector> action);
+    FVector withFixedState(FVector in, Consumer<FVector> action);
     @Facade
-    FVector applyWithFixedMagnitude(FVector in, Consumer<FVector> action);
+    FVector withFixedMagnitude(FVector in, Consumer<FVector> action);
     @Facade
-    FVector applyWithCenteredPosition(FVector in, Consumer<FVector> action);
+    FVector withCenteredPosition(FVector in, Consumer<FVector> action);
 
     @Facade
     double toDoubleWithFixedState(FVector in, Function<FVector, Double> action);

@@ -104,7 +104,7 @@ public class FProtoEngineDef implements FProtoEngine {
     //--------------------------------------------------
 
     @Override
-    public FPoint applyWithFixedState(FPoint in, Consumer<FPoint> action) {
+    public FPoint withFixedState(FPoint in, Consumer<FPoint> action) {
         double memoX = in.getX();
         double memoY = in.getY();
         double memoZ = in.getZ();
@@ -115,7 +115,7 @@ public class FProtoEngineDef implements FProtoEngine {
     }
 
     @Override
-    public FPoint applyWithFixedMagnitude(FPoint in, Consumer<FPoint> action) {
+    public FPoint withFixedMagnitude(FPoint in, Consumer<FPoint> action) {
         double memoMag = in.getMagnitude();
 
         action.accept(in);
@@ -152,7 +152,7 @@ public class FProtoEngineDef implements FProtoEngine {
     //--------------------------------------------------
 
     @Override
-    public FVector applyWithFixedState(FVector in, Consumer<FVector> action) {
+    public FVector withFixedState(FVector in, Consumer<FVector> action) {
         double memoBX = in.getBaseX();
         double memoBY = in.getBaseY();
         double memoBZ = in.getBaseZ();
@@ -166,7 +166,7 @@ public class FProtoEngineDef implements FProtoEngine {
     }
 
     @Override
-    public FVector applyWithFixedMagnitude(FVector in, Consumer<FVector> action) {
+    public FVector withFixedMagnitude(FVector in, Consumer<FVector> action) {
         double magnitude = in.getMagnitude();
 
         action.accept(in);
@@ -175,7 +175,7 @@ public class FProtoEngineDef implements FProtoEngine {
     }
 
     @Override
-    public FVector applyWithCenteredPosition(FVector in, Consumer<FVector> action) {
+    public FVector withCenteredPosition(FVector in, Consumer<FVector> action) {
         double memoBX = in.getBaseX();
         double memoBY = in.getBaseY();
         double memoBZ = in.getBaseZ();

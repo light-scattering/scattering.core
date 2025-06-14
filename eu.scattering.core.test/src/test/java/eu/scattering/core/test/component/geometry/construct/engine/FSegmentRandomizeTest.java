@@ -24,9 +24,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseInCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosAInCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 1,
@@ -47,9 +47,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseInCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosAInCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertSame(fPointIn, results,
@@ -68,9 +68,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseOnCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosAOnCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 1,
@@ -91,9 +91,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseOnCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosAOnCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertSame(fPointIn, results,
@@ -112,9 +112,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadInCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosBInCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 2,
@@ -135,9 +135,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadInCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosBInCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertSame(fPointIn, results,
@@ -156,9 +156,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadOnCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosBOnCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 2,
@@ -179,9 +179,9 @@ public class FSegmentRandomizeTest {
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadOnCircle(fPointIn, fSegmentDir, radius);
+        FPoint results = random.ortToPosBOnCircle(fPointIn, fSegmentDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertSame(fPointIn, results,
@@ -199,9 +199,9 @@ public class FSegmentRandomizeTest {
         FPoint fPointIn = factory.getFPoint(1, -2, 3);
         FSegment fSegmentDir = factory.getRefFSegment(factory.getFVector(0.001, 0.001, 0.001, 0.002, 0.002, 0.002));
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosOnSegment(fPointIn, fSegmentDir);
+        FPoint results = random.onSegment(fPointIn, fSegmentDir);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fSegmentDir.isPartOf(fPointIn),
@@ -217,9 +217,9 @@ public class FSegmentRandomizeTest {
         FPoint fPointIn = factory.getFPoint();
         FSegment fSegmentDir = factory.getRefFSegment(TestHelper.getRandFVector());
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosOnSegment(fPointIn, fSegmentDir);
+        FPoint results = random.onSegment(fPointIn, fSegmentDir);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fSegmentDir.isPartOf(fPointIn),

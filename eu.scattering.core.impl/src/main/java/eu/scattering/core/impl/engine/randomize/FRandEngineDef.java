@@ -36,7 +36,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FComplex rndPos(FComplex in, FPairPos2D range) {
+    public FComplex inRange(FComplex in, FPairPos2D range) {
 
         in.applyStateFrom(core.nextDouble2D(range));
 
@@ -44,7 +44,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FComplex rndPosInCircle(FComplex in, double radius) {
+    public FComplex inCircle(FComplex in, double radius) {
 
         in.applyStateFrom(core.nextDoubleInCircle(radius));
 
@@ -52,7 +52,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FComplex rndPosOnCircle(FComplex in, double radius) {
+    public FComplex onCircle(FComplex in, double radius) {
 
         in.applyStateFrom(core.nextDoubleOnCircle(radius));
 
@@ -60,7 +60,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FQuaternion rndPos(FQuaternion in, FPairPos4D range) {
+    public FQuaternion inRange(FQuaternion in, FPairPos4D range) {
 
         in.applyStateFrom(core.nextDouble4D(range));
 
@@ -70,7 +70,7 @@ public class FRandEngineDef implements FRandEngine {
     //--------------------------------------------------
 
     @Override
-    public FPoint varyAngle(FPoint in) {
+    public FPoint onSphere(FPoint in) {
         double radius = in.getMagnitude();
 
         in.applyStateFrom(core.nextDoubleOnSphere(radius));
@@ -79,7 +79,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosInRange(FPoint in, FPairPos3D range) {
+    public FPoint inRange(FPoint in, FPairPos3D range) {
 
         in.applyStateFrom(core.nextDouble3D(range));
 
@@ -87,7 +87,8 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosInSphere(FPoint in, double radius) {
+    public FPoint inSphere(FPoint in) {
+        double radius = in.getMagnitude();
 
         in.applyStateFrom(core.nextDoubleInSphere(radius));
 
@@ -95,7 +96,15 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosOnSphere(FPoint in, double radius) {
+    public FPoint inSphere(FPoint in, double radius) {
+
+        in.applyStateFrom(core.nextDoubleInSphere(radius));
+
+        return in;
+    }
+
+    @Override
+    public FPoint onSphere(FPoint in, double radius) {
 
         in.applyStateFrom(core.nextDoubleOnSphere(radius));
 
@@ -103,16 +112,24 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosOnAxis(FPoint in, FPoint dir) {
+    public FPoint onAxis(FPoint in) {
 
-        in.applyStateFrom(dir);
-        in.setMagnitude(core.nextDouble(EPSILON, dir.getMagnitude()));
+        in.setMagnitude(core.nextDouble(EPSILON, in.getMagnitude()));
 
         return in;
     }
 
     @Override
-    public FPoint rndPosBaseInCircle(FPoint in, FPoint dir, double radius) {
+    public FPoint onAxis(FPoint in, FPoint axis) {
+
+        in.applyStateFrom(axis);
+        in.setMagnitude(core.nextDouble(EPSILON, axis.getMagnitude()));
+
+        return in;
+    }
+
+    @Override
+    public FPoint ortToBaseInCircle(FPoint in, FPoint dir, double radius) {
 
         in.applyStateFrom(core.nextDoubleInSphere(radius));
         in.setOrthogonal(dir);
@@ -121,7 +138,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosBaseOnCircle(FPoint in, FPoint dir, double radius) {
+    public FPoint ortToBaseOnCircle(FPoint in, FPoint dir, double radius) {
 
         in.applyStateFrom(core.nextDoubleOnSphere(radius));
         in.setOrthogonal(dir);
@@ -130,19 +147,9 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosHeadInCircle(FPoint in, FPoint dir, double radius) {
+    public FPoint ortToHeadInCircle(FPoint in, FPoint dir, double radius) {
 
-        rndPosBaseInCircle(in, dir, radius);
-
-        in.add(dir);
-
-        return in;
-    }
-
-    @Override
-    public FPoint rndPosHeadOnCircle(FPoint in, FPoint dir, double radius) {
-
-        rndPosBaseOnCircle(in, dir, radius);
+        ortToBaseInCircle(in, dir, radius);
 
         in.add(dir);
 
@@ -150,58 +157,54 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FVector varyAngle(FVector in) {
+    public FPoint ortToHeadOnCircle(FPoint in, FPoint dir, double radius) {
+
+        ortToBaseOnCircle(in, dir, radius);
+
+        in.add(dir);
+
+        return in;
+    }
+
+    @Override
+    public FVector onSphere(FVector in) {
         double memoOBX = in.getBaseX();
         double memoOBY = in.getBaseY();
         double memoOBZ = in.getBaseZ();
 
         in.moveBaseToCenter();
-        varyAngle(in.getRefHead());
+        onSphere(in.getRefHead());
         in.moveBase(memoOBX, memoOBY, memoOBZ);
 
         return in;
     }
 
     @Override
-    public FVector rndPos(FVector in, FPairPos3D range) {
+    public FVector inSphere(FVector in) {
+        double memoOBX = in.getBaseX();
+        double memoOBY = in.getBaseY();
+        double memoOBZ = in.getBaseZ();
 
-        rndPosInRange(in.getRefBase(), range);
-        rndPosInRange(in.getRefHead(), range);
-
-        return in;
-    }
-
-    @Override
-    public FVector rndPosInSphere(FVector in, double radius) {
-
-        rndPosInSphere(in.getRefBase(), radius);
-        rndPosInSphere(in.getRefHead(), radius);
+        in.moveBaseToCenter();
+        inSphere(in.getRefHead());
+        in.moveBase(memoOBX, memoOBY, memoOBZ);
 
         return in;
     }
 
     @Override
-    public FVector rndPosOnSphere(FVector in, double radius) {
+    public FPoint onAxis(FPoint in, FVector axis) {
 
-        rndPosOnSphere(in.getRefBase(), radius);
-        rndPosOnSphere(in.getRefHead(), radius);
-
-        return in;
-    }
-
-    @Override
-    public FPoint rndPosOnAxis(FPoint in, FVector dir) {
-
-        in.applyStateFrom(dir.getRefHead());
-        in.sub(dir.getRefBase());
+        in.applyStateFrom(axis.getRefHead());
+        in.sub(axis.getRefBase());
         in.setMagnitude(core.nextDouble(EPSILON, in.getMagnitude()));
-        in.add(dir.getRefBase());
+        in.add(axis.getRefBase());
 
         return in;
     }
 
     @Override
-    public FPoint rndPosBaseInCircle(FPoint in, FVector dir, double radius) {
+    public FPoint ortToBaseInCircle(FPoint in, FVector dir, double radius) {
 
         in.applyStateFrom(core.nextDoubleInSphere(radius));
 
@@ -217,7 +220,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosBaseOnCircle(FPoint in, FVector dir, double radius) {
+    public FPoint ortToBaseOnCircle(FPoint in, FVector dir, double radius) {
 
         in.applyStateFrom(core.nextDoubleOnSphere(radius));
 
@@ -233,7 +236,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosHeadInCircle(FPoint in, FVector dir, double radius) {
+    public FPoint ortToHeadInCircle(FPoint in, FVector dir, double radius) {
 
         in.applyStateFrom(core.nextDoubleInSphere(radius));
 
@@ -249,7 +252,7 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public FPoint rndPosHeadOnCircle(FPoint in, FVector dir, double radius) {
+    public FPoint ortToHeadOnCircle(FPoint in, FVector dir, double radius) {
 
         in.applyStateFrom(core.nextDoubleOnSphere(radius));
 
@@ -267,44 +270,44 @@ public class FRandEngineDef implements FRandEngine {
     //--------------------------------------------------
 
     @Override
-    public FPoint rndPosBaseInCircle(FPoint in, FRay dir, double radius) {
+    public FPoint ortToBaseInCircle(FPoint in, FRay dir, double radius) {
 
-        return rndPosBaseInCircle(in, dir.getRefOrigin(), radius);
+        return ortToBaseInCircle(in, dir.getRefOrigin(), radius);
     }
 
     @Override
-    public FPoint rndPosBaseOnCircle(FPoint in, FRay dir, double radius) {
+    public FPoint ortToBaseOnCircle(FPoint in, FRay dir, double radius) {
 
-        return rndPosBaseOnCircle(in, dir.getRefOrigin(), radius);
+        return ortToBaseOnCircle(in, dir.getRefOrigin(), radius);
     }
 
     @Override
-    public FPoint rndPosOnSegment(FPoint in, FSegment dir) {
+    public FPoint onSegment(FPoint in, FSegment ref) {
 
-        return rndPosOnAxis(in, dir.getRefOrigin());
+        return onAxis(in, ref.getRefOrigin());
     }
 
     @Override
-    public FPoint rndPosBaseInCircle(FPoint in, FSegment dir, double radius) {
+    public FPoint ortToPosAInCircle(FPoint in, FSegment ref, double radius) {
 
-        return rndPosBaseInCircle(in, dir.getRefOrigin(), radius);
+        return ortToBaseInCircle(in, ref.getRefOrigin(), radius);
     }
 
     @Override
-    public FPoint rndPosBaseOnCircle(FPoint in, FSegment dir, double radius) {
+    public FPoint ortToPosAOnCircle(FPoint in, FSegment ref, double radius) {
 
-        return rndPosBaseOnCircle(in, dir.getRefOrigin(), radius);
+        return ortToBaseOnCircle(in, ref.getRefOrigin(), radius);
     }
 
     @Override
-    public FPoint rndPosHeadInCircle(FPoint in, FSegment dir, double radius) {
+    public FPoint ortToPosBInCircle(FPoint in, FSegment ref, double radius) {
 
-        return rndPosHeadInCircle(in, dir.getRefOrigin(), radius);
+        return ortToHeadInCircle(in, ref.getRefOrigin(), radius);
     }
 
     @Override
-    public FPoint rndPosHeadOnCircle(FPoint in, FSegment dir, double radius) {
+    public FPoint ortToPosBOnCircle(FPoint in, FSegment ref, double radius) {
 
-        return rndPosHeadOnCircle(in, dir.getRefOrigin(), radius);
+        return ortToHeadOnCircle(in, ref.getRefOrigin(), radius);
     }
 }

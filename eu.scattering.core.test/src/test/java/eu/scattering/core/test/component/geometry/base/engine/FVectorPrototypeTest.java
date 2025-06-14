@@ -22,7 +22,7 @@ public class FVectorPrototypeTest {
 
         List<Double> intermediate = new ArrayList<>();
 
-        FVector fVectorRes = proto.applyWithFixedState(fVector,
+        FVector fVectorRes = proto.withFixedState(fVector,
                 p -> intermediate.add(p.set(1, 2, 3, 4, 5, 6).getMagnitudeP2()));
 
         Assertions.assertAll("Validate FPoint values",
@@ -43,7 +43,7 @@ public class FVectorPrototypeTest {
     void applyWithFixedLength() {
         FVector fVector = factory.getFVector(1, 0, 0);
 
-        FVector fVectorRes = proto.applyWithFixedMagnitude(fVector,
+        FVector fVectorRes = proto.withFixedMagnitude(fVector,
                 p -> p.setHead(-10, 0, 0));
 
         Assertions.assertAll("Validate FPoint values",
@@ -62,7 +62,7 @@ public class FVectorPrototypeTest {
     void applyWithCenteredPosition() {
         FVector fVector = factory.getFVector(5, 0, 0, 9, 0, 0);
 
-        FVector fVectorRes = proto.applyWithCenteredPosition(fVector,
+        FVector fVectorRes = proto.withCenteredPosition(fVector,
                 p -> p.getRefHead().reflect(factory.getFPoint(9, 0, 0)));
 
         Assertions.assertAll("Validate FPoint values",

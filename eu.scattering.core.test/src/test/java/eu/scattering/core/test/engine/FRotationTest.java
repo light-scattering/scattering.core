@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Timeout(5)
 @DisplayName("FRotation")
 public class FRotationTest {
-    private final FRotGenerator fRot = factory.getFRotGenShared();
-    private final FRotEngine fRotHelper = factory.getFRotEngShared();
+    private final FRotGenerator fRot = factory.getFRot();
+    private final FRotEngine fRotHelper = factory.getFRotEngine();
 
     @Test
     @DisplayName("Create with FPoint (positive angle)")

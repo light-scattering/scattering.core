@@ -299,7 +299,7 @@ public class FLineProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fLine.getRefOrigin());
+            engine.onSphere(fLine.getRefOrigin());
 
             return fLine;
         }, 1);
@@ -330,7 +330,7 @@ public class FLineProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fLine.getRefOrigin());
+            engine.onSphere(fLine.getRefOrigin());
 
             return fLine;
         });

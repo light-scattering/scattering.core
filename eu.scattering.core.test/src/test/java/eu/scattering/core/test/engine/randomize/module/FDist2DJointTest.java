@@ -18,7 +18,7 @@ public class FDist2DJointTest {
     @Test
     @DisplayName("Construct")
     void construct() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist2D dist = random.getFDist2DJoint(dX, dY);
@@ -35,7 +35,7 @@ public class FDist2DJointTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist2D dist = random.getFDist2DJoint(dX, dY);
@@ -53,7 +53,7 @@ public class FDist2DJointTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dX = random.getFDist1DUniform(1.1, 1.2);
         FDist1D dY = random.getFDist1DUniform(-1.1, -1.2);
         FDist2D dist = random.getFDist2DJoint(dX, dY);

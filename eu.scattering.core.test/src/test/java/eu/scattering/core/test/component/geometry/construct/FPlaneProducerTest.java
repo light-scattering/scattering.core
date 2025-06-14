@@ -299,7 +299,7 @@ public class FPlaneProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fPlane.getRefOrigin());
+            engine.onSphere(fPlane.getRefOrigin());
 
             return fPlane;
         }, 1);
@@ -330,7 +330,7 @@ public class FPlaneProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fPlane.getRefOrigin());
+            engine.onSphere(fPlane.getRefOrigin());
 
             return fPlane;
         });

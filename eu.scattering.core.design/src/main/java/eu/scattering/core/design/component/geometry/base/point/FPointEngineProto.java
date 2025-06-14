@@ -8,9 +8,9 @@ import java.util.function.Function;
 public interface FPointEngineProto {
 
     @Facade
-    FPoint applyWithFixedState(FPoint in, Consumer<FPoint> action);
+    FPoint withFixedState(FPoint in, Consumer<FPoint> action);
     @Facade
-    FPoint applyWithFixedMagnitude(FPoint in, Consumer<FPoint> action);
+    FPoint withFixedMagnitude(FPoint in, Consumer<FPoint> action);
 
     @Facade
     double toDoubleWithFixedState(FPoint in, Function<FPoint, Double> action);

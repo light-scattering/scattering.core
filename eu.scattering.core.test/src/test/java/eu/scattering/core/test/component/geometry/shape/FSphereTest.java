@@ -418,7 +418,7 @@ public class FSphereTest {
                             "The FSphere position is incorrect"),
                     () -> assertEquals(radius, fSphere.getRadius(),
                             epsilon, "The radius is incorrect"),
-                    () -> assertTrue(factory.getFStatHelperShared().valRelErr(vol, fSphere.getVolume(), 0.0001),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(vol, fSphere.getVolume(), 0.0001),
                             "The volume is incorrect"),
                     () -> assertSame(fSphere, results,
                             "The FSphere reference should not change")
@@ -452,7 +452,7 @@ public class FSphereTest {
                             "The FSphere position is incorrect"),
                     () -> assertEquals(radius, fSphere.getRadius(),
                             epsilon, "The radius is incorrect"),
-                    () -> assertTrue(factory.getFStatHelperShared().valRelErr(sur, fSphere.getSurface(), 0.0001),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(sur, fSphere.getSurface(), 0.0001),
                             "The surface is incorrect"),
                     () -> assertSame(fSphere, results,
                             "The FSphere reference should not change")
@@ -932,7 +932,7 @@ public class FSphereTest {
             Assertions.assertAll("Validate stream",
                     () -> assertTrue(elements > 0,
                             "The number of elements should be greater than zero"),
-                    () -> assertTrue(factory.getFStatHelperShared().valRelErr(volCalc, volStream, 0.01),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(volCalc, volStream, 0.01),
                             "The volume relative error is erroneous")
             );
         }
@@ -960,7 +960,7 @@ public class FSphereTest {
             Assertions.assertAll("Validate stream",
                     () -> assertTrue(elements > 0,
                             "The number of elements should be greater than zero"),
-                    () -> assertTrue(factory.getFStatHelperShared().valRelErr(volCalc, volStream, 0.01),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(volCalc, volStream, 0.01),
                             "The volume relative error is erroneous")
             );
         }
@@ -971,7 +971,7 @@ public class FSphereTest {
             FSphere fSphereRef = factory.getFSphere(1);
             FSphere fSphereArg = TestHelper.getRandFSphere();
 
-            factory.getFRandEngShared().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
+            factory.getFRandEngine().inSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
 
             assertTrue(fSphereRef.overlaps(fSphereArg, 0), "Spheres should overlap");
 
@@ -991,7 +991,7 @@ public class FSphereTest {
             FSphere fSphereRef = factory.getFSphere(1);
             FSphere fSphereArg = TestHelper.getRandFSphere().setRadius(1);
 
-            factory.getFRandEngShared().rndPosOnSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 3);
+            factory.getFRandEngine().onSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 3);
 
             assertFalse(fSphereRef.overlaps(fSphereArg, 0), "Spheres should not overlap");
 
@@ -1047,7 +1047,7 @@ public class FSphereTest {
 
             Collection<FSphere> fSphereField = new HashSet<>();
 
-            factory.getFRandEngShared().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
+            factory.getFRandEngine().inSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
 
             int isRepositioned = fSphereRef.attach(fSphereArg, epsilon, fSphereField, 0);
 
@@ -1069,7 +1069,7 @@ public class FSphereTest {
             fSphereField.add(fSphereRef);
             fSphereField.add(fSphereArg);
 
-            factory.getFRandEngShared().rndPosInSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
+            factory.getFRandEngine().inSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
 
             int repositions = fSphereRef.attach(fSphereArg, epsilon, fSphereField, 0);
 

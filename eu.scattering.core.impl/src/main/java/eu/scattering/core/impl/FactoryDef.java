@@ -312,42 +312,33 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
-    public FRandGenerator getFRandGen(long seed) {
-
-        return FRandGeneratorDef.create(seed);
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public FRandGenerator getFRandGenShared() {
+    public FRandGenerator getFRand() {
 
         return this.fRandGenerator;
     }
 
     @Override
-    public FRotGenerator getFRotGenShared() {
+    public FRotGenerator getFRot() {
 
         return this.fRotGenerator;
     }
 
-
     //--------------------------------------------------
 
     @Override
-    public FProtoEngine getFProtoEngShared() {
+    public FProtoEngine getFProtoEngine() {
 
         return this.fProtoEngine;
     }
 
     @Override
-    public FRandEngine getFRandEngShared() {
+    public FRandEngine getFRandEngine() {
 
         return this.fRandEngine;
     }
 
     @Override
-    public FRotEngine getFRotEngShared() {
+    public FRotEngine getFRotEngine() {
 
         return this.fRotEngine;
     }
@@ -355,13 +346,13 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
-    public FStatHelper getFStatHelperShared() {
+    public FStatHelper getFStatHelper() {
 
         return this.fStatHelper;
     }
 
     @Override
-    public FTrigHelper getFTrigHelperShared() {
+    public FTrigHelper getFTrigHelper() {
 
         return this.fTrigHelper;
     }
@@ -369,7 +360,7 @@ public final class FactoryDef extends FactoryDesignConcrete {
     //--------------------------------------------------
 
     @Override
-    public GeometryParser getGeometryParserShared() {
+    public GeometryParser getGeometryParser() {
 
         return this.fGeometryParser;
     }

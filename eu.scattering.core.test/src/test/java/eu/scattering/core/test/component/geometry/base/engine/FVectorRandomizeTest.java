@@ -19,89 +19,64 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FVectorRandomizeTest {
 
     @Test
-    @DisplayName("Set random angle")
-    void setRandomAngle() {
+    @DisplayName("Set on sphere")
+    void setOnSphere() {
         FPoint fPointBase = factory.getFPoint(1, 1, 0);
         FPoint fPointHead = factory.getFPoint(2, 1, 0);
         FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-        factory.getFRandEngShared().varyAngle(fPointHead);
+        double magnitude = fVector.getMagnitude();
+
+        factory.getFRandEngine().onSphere(fVector);
 
         Assertions.assertAll("Validate FPoint values",
                 () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
                         "The base FPoint is erroneous"),
                 () -> assertFalse(factory.getFPoint(2, 1, 0).isExact(fVector.getRefHead()),
-                        "The head FPoint has not been randomized")
+                        "The head FPoint has not been randomized"),
+                () -> assertEquals(magnitude, fVector.getMagnitude(),
+                        epsilon, "The magnitude is incorrect")
         );
     }
 
+
     @Test
-    @DisplayName("Set random angle (validate)")
-    void setRandomAngleValidate() {
+    @DisplayName("Set on sphere (validate)")
+    void setOnSphereValidate() {
         FVector fVector = TestHelper.getRandFVector();
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FVectorTestHelper.testReference(random::varyAngle, fVector);
+        FVectorTestHelper.testReference(random::onSphere, fVector);
     }
 
     @Test
-    @DisplayName("Set random position")
-    void setRandomPosition() {
-        FVector fVector = factory.getFVector();
-        FRandEngine random = factory.getFRandEngShared();
+    @DisplayName("Set in sphere")
+    void setInSphere() {
+        FPoint fPointBase = factory.getFPoint(1, 1, 0);
+        FPoint fPointHead = factory.getFPoint(2, 1, 0);
+        FVector fVector = factory.getRefFVector(fPointBase, fPointHead);
 
-        FVector results = random.rndPos(fVector, factory.getFPairPos3D(
-                0.01, 0.01, 0.01, 0.02, 0.02, 0.02));
+        double magnitude = fVector.getMagnitude();
 
-        Assertions.assertAll("Validate position",
-                () -> assertTrue(fVector.getBaseX() > 0.01 && fVector.getBaseX() < 0.02,
-                        "The base X value is incorrect"),
-                () -> assertTrue(fVector.getBaseY() > 0.01 && fVector.getBaseY() < 0.02,
-                        "The base Y value is incorrect"),
-                () -> assertTrue(fVector.getBaseZ() > 0.01 && fVector.getBaseZ() < 0.02,
-                        "The base Z value is incorrect"),
-                () -> assertTrue(fVector.getHeadX() > 0.01 && fVector.getHeadX() < 0.02,
-                        "The head X value is incorrect"),
-                () -> assertTrue(fVector.getHeadY() > 0.01 && fVector.getHeadY() < 0.02,
-                        "The head Y value is incorrect"),
-                () -> assertTrue(fVector.getHeadZ() > 0.01 && fVector.getHeadZ() < 0.02,
-                        "The Head Z value is incorrect"),
-                () -> assertSame(fVector, results, "The reference is erroneous")
+        factory.getFRandEngine().inSphere(fVector);
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(factory.getFPoint(1, 1, 0).isExact(fVector.getRefBase()),
+                        "The base FPoint is erroneous"),
+                () -> assertFalse(factory.getFPoint(2, 1, 0).isExact(fVector.getRefHead()),
+                        "The head FPoint has not been randomized"),
+                () -> assertTrue(fVector.getMagnitude() < magnitude,
+                        "The magnitude is incorrect")
         );
     }
 
     @Test
-    @DisplayName("Set random position in sphere")
-    void setRandomPositionInSphere() {
-        FVector fVector = factory.getFVector();
-        FRandEngine random = factory.getFRandEngShared();
+    @DisplayName("Set in sphere (validate)")
+    void setInSphereValidate() {
+        FVector fVector = TestHelper.getRandFVector();
+        FRandEngine random = factory.getFRandEngine();
 
-        FVector results = random.rndPosInSphere(fVector, 0.01);
-
-        Assertions.assertAll("Validate position",
-                () -> assertTrue(fVector.getRefBase().getMagnitude() < 0.01,
-                        "The base position is incorrect"),
-                () -> assertTrue(fVector.getRefHead().getMagnitude() < 0.01,
-                        "The head position is incorrect"),
-                () -> assertSame(fVector, results, "The reference is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Set random position on sphere")
-    void setRandomPositionOnSphere() {
-        FVector fVector = factory.getFVector();
-        FRandEngine random = factory.getFRandEngShared();
-
-        FVector results = random.rndPosOnSphere(fVector, 0.01);
-
-        Assertions.assertAll("Validate position",
-                () -> assertEquals(0.01, fVector.getRefBase().getMagnitude(),
-                        epsilon, "The base position is incorrect"),
-                () -> assertEquals(0.01, fVector.getRefHead().getMagnitude(),
-                        epsilon, "The head position is incorrect"),
-                () -> assertSame(fVector, results, "The reference is erroneous")
-        );
+        FVectorTestHelper.testReference(random::inSphere, fVector);
     }
 
     @Test
@@ -111,9 +86,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseInCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToBaseInCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 1,
@@ -134,9 +109,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseInCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToBaseInCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fVectorDir.isOrthogonalBaseCommon(fPointIn),
@@ -155,9 +130,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseOnCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToBaseOnCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 1,
@@ -178,9 +153,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseOnCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToBaseOnCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fVectorDir.isOrthogonalBaseCommon(fPointIn),
@@ -199,9 +174,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadInCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToHeadInCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 2,
@@ -222,9 +197,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadInCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToHeadInCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fVectorDir.isOrthogonal(fVectorDir.getRefHead(), fPointIn),
@@ -243,9 +218,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = factory.getFVector(1, 1, 1, 1, 1, 2);
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadOnCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToHeadOnCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 2,
@@ -266,9 +241,9 @@ public class FVectorRandomizeTest {
         FVector fVectorDir = TestHelper.getRandFVector();
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosHeadOnCircle(fPointIn, fVectorDir, radius);
+        FPoint results = random.ortToHeadOnCircle(fPointIn, fVectorDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertTrue(fVectorDir.isOrthogonal(fVectorDir.getRefHead(), fPointIn),
@@ -286,9 +261,9 @@ public class FVectorRandomizeTest {
         FPoint fPointIn = factory.getFPoint(1, -2, 3);
         FVector fVectorDir = factory.getFVector(0.001, 0.001, 0.001, 0.002, 0.002, 0.002);
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosOnAxis(fPointIn, fVectorDir);
+        FPoint results = random.onAxis(fPointIn, fVectorDir);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fVectorDir.getMagnitude(),
@@ -307,9 +282,9 @@ public class FVectorRandomizeTest {
         FPoint fPointIn = factory.getFPoint();
         FVector fVectorDir = TestHelper.getRandFVector();
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosOnAxis(fPointIn, fVectorDir);
+        FPoint results = random.onAxis(fPointIn, fVectorDir);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fVectorDir.getMagnitude(),

@@ -24,9 +24,9 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseInCircle(fPointIn, fRayDir, radius);
+        FPoint results = random.ortToBaseInCircle(fPointIn, fRayDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 1,
@@ -47,9 +47,9 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseInCircle(fPointIn, fRayDir, radius);
+        FPoint results = random.ortToBaseInCircle(fPointIn, fRayDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertSame(fPointIn, results,
@@ -68,9 +68,9 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(factory.getFVector(1, 1, 1, 1, 1, 2));
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseOnCircle(fPointIn, fRayDir, radius);
+        FPoint results = random.ortToBaseOnCircle(fPointIn, fRayDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertEquals(fPointIn.getZ(), 1,
@@ -91,9 +91,9 @@ public class FRayRandomizeTest {
         FRay fRayDir = factory.getRefFRay(TestHelper.getRandFVector());
         double radius = 0.05;
 
-        FRandEngine random = factory.getFRandEngShared();
+        FRandEngine random = factory.getFRandEngine();
 
-        FPoint results = random.rndPosBaseOnCircle(fPointIn, fRayDir, radius);
+        FPoint results = random.ortToBaseOnCircle(fPointIn, fRayDir, radius);
 
         Assertions.assertAll("Validate position",
                 () -> assertSame(fPointIn, results,

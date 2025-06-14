@@ -299,7 +299,7 @@ public class FSegmentProducerTest {
                     2, 2, 3
             );
 
-            engine.varyAngle(fSegment.getRefOrigin());
+            engine.onSphere(fSegment.getRefOrigin());
 
             return fSegment;
         });

@@ -548,7 +548,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist radius")
     void presetDistRadius() {
-        FDist1D radius = factory.getFRandGenShared()
+        FDist1D radius = factory.getFRand()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
@@ -578,7 +578,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset dist radius (simple)")
     void presetDistRadiusSimple() {
-        FDist1D radius = factory.getFRandGenShared()
+        FDist1D radius = factory.getFRand()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
@@ -676,7 +676,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset center and dist radius")
     void presetCenterAndDistRadius() {
-        FDist1D radius = factory.getFRandGenShared()
+        FDist1D radius = factory.getFRand()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FPointProducer pCenter = factory.getFPointProducer()
@@ -713,7 +713,7 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Preset center and dist radius (simple)")
     void presetCenterAndDistRadiusSimple() {
-        FDist1D radius = factory.getFRandGenShared()
+        FDist1D radius = factory.getFRand()
                 .getFDist1DUniform(epsilon, 0.001);
 
         FPointProducer pCenter = factory.getFPointProducer()
@@ -754,7 +754,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factoryLocal, engine) -> {
                     FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-                    engine.varyAngle(fPoint);
+                    engine.onSphere(fPoint);
 
                     return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
                 }, 1);
@@ -781,7 +781,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factoryLocal, engine) -> {
                     FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-                    engine.varyAngle(fPoint);
+                    engine.onSphere(fPoint);
 
                     return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
                 });

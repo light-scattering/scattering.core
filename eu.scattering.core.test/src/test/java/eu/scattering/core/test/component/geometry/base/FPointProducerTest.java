@@ -375,7 +375,7 @@ public class FPointProducerTest {
     @DisplayName("Preset distribution")
     void presetDistribution() {
         FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
-        FDist3D dist = factory.getFRandGenShared().getFDist3DUniform(range);
+        FDist3D dist = factory.getFRand().getFDist3DUniform(range);
         FPointProducer producer = factory.getFPointProducer()
                 .withDist(dist, 1);
 
@@ -398,7 +398,7 @@ public class FPointProducerTest {
     @DisplayName("Preset distribution (simple)")
     void presetDistributionSimple() {
         FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
-        FDist3D dist = factory.getFRandGenShared().getFDist3DUniform(range);
+        FDist3D dist = factory.getFRand().getFDist3DUniform(range);
         FPointProducer producer = factory.getFPointProducer()
                 .withDist(dist);
 
@@ -425,7 +425,7 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, engine) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            return engine.varyAngle(factory.getFPoint(lengthCurrent));
+            return engine.onSphere(factory.getFPoint(lengthCurrent));
         }, 1);
 
         FPoint resultA = producer.produce();
@@ -451,7 +451,7 @@ public class FPointProducerTest {
         FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, engine) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            return engine.varyAngle(factory.getFPoint(lengthCurrent));
+            return engine.onSphere(factory.getFPoint(lengthCurrent));
         });
 
         FPoint resultA = producer.produce();

@@ -11,5 +11,5 @@ public interface GeometryFactory extends
         ContainerFactory,
         ShapeFactory {
 
-    GeometryParser getGeometryParserShared();
+    GeometryParser getGeometryParser();
 }

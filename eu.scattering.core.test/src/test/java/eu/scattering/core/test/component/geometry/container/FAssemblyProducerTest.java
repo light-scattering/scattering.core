@@ -299,7 +299,7 @@ public class FAssemblyProducerTest {
 
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            engine.varyAngle(fPoint);
+            engine.onSphere(fPoint);
 
             fAssembly.register(fPoint);
 
@@ -331,7 +331,7 @@ public class FAssemblyProducerTest {
 
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            engine.varyAngle(fPoint);
+            engine.onSphere(fPoint);
 
             fAssembly.register(fPoint);
 

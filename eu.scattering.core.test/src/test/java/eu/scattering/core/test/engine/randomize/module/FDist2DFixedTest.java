@@ -17,7 +17,7 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Construct with primitives")
     void constructWithPrimitives() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist2D dist = random.getFDist2DFixed(1, 2);
 
         for (int i = 0 ; i < 10 ; i++) {
@@ -29,7 +29,7 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Construct with FPos2D")
     void constructWithFPos2D() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist2D dist = random.getFDist2DFixed(factory.getFPos2D(1, 2));
 
         for (int i = 0 ; i < 10 ; i++) {
@@ -41,7 +41,7 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist2D dist = random.getFDist2DFixed(factory.getFPos2D(1, 2));
 
         double[] arr = new double[2];
@@ -57,7 +57,7 @@ public class FDist2DFixedTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist2D dist = random.getFDist2DFixed(factory.getFPos2D(1, 2));
 
         double[] arr = new double[1];

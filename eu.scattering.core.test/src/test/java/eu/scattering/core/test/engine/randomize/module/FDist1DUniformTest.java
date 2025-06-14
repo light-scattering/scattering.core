@@ -17,7 +17,7 @@ public class FDist1DUniformTest {
     @Test
     @DisplayName("Construct with primitives A")
     void constructWithPrimitivesA() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DUniform(1.1, 1.2);
 
         double sum = 0;
@@ -32,7 +32,7 @@ public class FDist1DUniformTest {
     @Test
     @DisplayName("Construct with primitives B")
     void constructWithPrimitivesB() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DUniform(1.2, 1.1);
 
         double sum = 0;
@@ -47,7 +47,7 @@ public class FDist1DUniformTest {
     @Test
     @DisplayName("Produce value array")
     void produceValueArray() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DUniform(1.1, 1.2);
 
         double sum = 0;
@@ -64,7 +64,7 @@ public class FDist1DUniformTest {
     @Test
     @DisplayName("Produce value array, IllegalArgumentException")
     void produceValueArrayNullPointerException() {
-        FRandGenerator random = factory.getFRandGenShared();
+        FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DUniform(1.1, 1.2);
 
         double[] arr = new double[0];

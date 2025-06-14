@@ -28,7 +28,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FPoint")
     void parseFPoint() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FPoint fPoint = factory.getFPoint(1, 2, 3);
         JSONObject fPointJSON = fPoint.toJSON();
@@ -50,7 +50,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FVector")
     void parseFVector() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
         JSONObject fPointJSON = fVector.toJSON();
@@ -72,7 +72,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FDraft")
     void parseFDraft() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 2, 3, 4, 5, 6));
         JSONObject fDraftJSON = fDraft.toJSON();
@@ -94,7 +94,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FLine")
     void parseFLine() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FLine fLine = factory.getRefFLine(factory.getFVector(1, 2, 3, 4, 5, 6));
         JSONObject fLineJSON = fLine.toJSON();
@@ -116,7 +116,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FPlane")
     void parseFPlane() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 2, 3, 4, 5, 6));
         JSONObject fPlaneJSON = fPlane.toJSON();
@@ -138,7 +138,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FRay")
     void parseFRay() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FRay fRay = factory.getRefFRay(factory.getFVector(1, 2, 3, 4, 5, 6));
         JSONObject fRayJSON = fRay.toJSON();
@@ -160,7 +160,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FSegment")
     void parseFSegment() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FSegment fSegment = factory.getRefFSegment(factory.getFVector(1, 2, 3, 4, 5, 6));
         JSONObject fSegmentJSON = fSegment.toJSON();
@@ -182,7 +182,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FSphere")
     void parseFSphere() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FSphere fSphere = factory.getFSphere(1);
         JSONObject fSphereJSON = fSphere.toJSON();
@@ -204,7 +204,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse FAssembly")
     void parseFAssembly() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FAssembly<Geometry> fAssembly = factory.getFAssembly();
 
@@ -243,7 +243,7 @@ public class GeometryParserTest {
     @Test
     @DisplayName("Parse (exception)")
     void parseException() {
-        GeometryParser parser = factory.getGeometryParserShared();
+        GeometryParser parser = factory.getGeometryParser();
 
         FComplex fComplex = factory.getFComplex(1, 2);
         JSONObject fComplexJSON = fComplex.toJSON();

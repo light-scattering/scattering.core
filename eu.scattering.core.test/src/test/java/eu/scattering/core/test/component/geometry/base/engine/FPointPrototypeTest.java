@@ -23,7 +23,7 @@ public class FPointPrototypeTest {
 
         List<Double> intermediate = new ArrayList<>();
 
-        FPoint fPointRes = proto.applyWithFixedState(fPoint,
+        FPoint fPointRes = proto.withFixedState(fPoint,
                 p -> intermediate.add(p.set(1, 2, 3).getMagnitudeP2()));
 
         Assertions.assertAll("Validate FPoint values",
@@ -41,7 +41,7 @@ public class FPointPrototypeTest {
     void applyWithFixedLength() {
         FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-        FPoint fPointRes = proto.applyWithFixedMagnitude(fPoint,
+        FPoint fPointRes = proto.withFixedMagnitude(fPoint,
                 p -> p.set(-10, 0, 0));
 
         Assertions.assertAll("Validate FPoint values",

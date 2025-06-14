@@ -17,7 +17,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Parse radian to Degree")
     void parseRadianToDegree() {
-        var helper = factory.getFTrigHelperShared();
+        var helper = factory.getFTrigHelper();
 
         assertAll("Values",
                 () -> assertEquals(360, helper.convertRadToDeg(2 * Math.PI)),
@@ -29,7 +29,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Parse degree to radian")
     void parseDegreeToRadian() {
-        var helper = factory.getFTrigHelperShared();
+        var helper = factory.getFTrigHelper();
 
         assertAll("Values",
                 () -> assertEquals(2 * Math.PI, helper.convertDegToRad(360)),
@@ -41,7 +41,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Get angle - A")
     void getAngleBetweenVectorsA() {
-        var helper = factory.getFTrigHelperShared();
+        var helper = factory.getFTrigHelper();
 
         var base = factory.getFPos3D(0, 0, 0);
         var headA = factory.getFPos3D(1, 0, 0);
@@ -55,7 +55,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Get angle - B")
     void getAngleBetweenVectorsB() {
-        var helper = factory.getFTrigHelperShared();
+        var helper = factory.getFTrigHelper();
 
         var base = factory.getFPos3D(0, 0, 0);
         var headA = factory.getFPos3D(1, 0, 0);
@@ -69,7 +69,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Get angle - C")
     void getAngleBetweenVectorsC() {
-        var helper = factory.getFTrigHelperShared();
+        var helper = factory.getFTrigHelper();
 
         var base = factory.getFPos3D(0, 0, 0);
         var headA = factory.getFPos3D(1, 0, 0);
@@ -83,7 +83,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Get angle - D")
     void getAngleBetweenVectorsD() {
-        var helper = factory.getFTrigHelperShared();
+        var helper = factory.getFTrigHelper();
 
         var base = factory.getFPos3D(0, 0, 0);
         var headA = factory.getFPos3D(1, 0, 1);
@@ -97,7 +97,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Get angle - offset")
     void getAngleBetweenVectorsOffset() {
-        var helper = factory.getFTrigHelperShared();
+        var helper = factory.getFTrigHelper();
 
         var base = factory.getFPos3D(1, 2, 3);
         var headA = factory.getFPos3D(2, 2, 4);
@@ -111,7 +111,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Get angle SSS - A")
     void getAngleSSSA() {
-        FTrigHelper helper = factory.getFTrigHelperShared();
+        FTrigHelper helper = factory.getFTrigHelper();
 
         double angle = helper.getAngle(3, 4, 5);
 
@@ -121,7 +121,7 @@ public class FTrigHelperTest {
     @Test
     @DisplayName("Get angle SSS - B")
     void getAngleSSSB() {
-        FTrigHelper helper = factory.getFTrigHelperShared();
+        FTrigHelper helper = factory.getFTrigHelper();
 
         double resA = helper.getAngle(2, 2, 2 * Math.sqrt(2));
         double resB = helper.getAngle(2 * Math.sqrt(2), 2, 2);

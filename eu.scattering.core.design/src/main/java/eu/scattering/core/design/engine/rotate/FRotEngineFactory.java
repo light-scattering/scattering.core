@@ -2,5 +2,5 @@ package eu.scattering.core.design.engine.rotate;
 
 public interface FRotEngineFactory {
 
-    FRotEngine getFRotEngShared();
+    FRotEngine getFRotEngine();
 }

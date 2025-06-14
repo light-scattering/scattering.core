@@ -602,7 +602,7 @@ public class FLineTest {
 
             assertTrue(factory.getFPoint(-3, -3, -3).isSimilar(fPoint));
 
-            var angle = factory.getFTrigHelperShared().getAngleBetweenVectors(
+            var angle = factory.getFTrigHelper().getAngleBetweenVectors(
                     factory.getFPos3D(-3, -3, -3),
                     factory.getFPos3D(0, 0, 0),
                     factory.getFPos3D(0, -9, 0)
@@ -622,7 +622,7 @@ public class FLineTest {
 
             assertTrue(factory.getFPoint(3, 3, 3).isSimilar(fPoint));
 
-            var angle = factory.getFTrigHelperShared().getAngleBetweenVectors(
+            var angle = factory.getFTrigHelper().getAngleBetweenVectors(
                     factory.getFPos3D(3, 3, 3),
                     factory.getFPos3D(0, 0, 0),
                     factory.getFPos3D(0, 9, 0)
