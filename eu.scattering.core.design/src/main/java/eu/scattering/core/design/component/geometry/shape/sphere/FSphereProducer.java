@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
+import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 
@@ -9,8 +10,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FSphereProducer {
+public interface FSphereProducer extends Producer<FSphere> {
 
+    @Override
     FSphere produce();
 
     Stream<FSphere> stream();

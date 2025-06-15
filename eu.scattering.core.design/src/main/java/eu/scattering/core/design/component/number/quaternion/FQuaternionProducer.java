@@ -1,16 +1,18 @@
 package eu.scattering.core.design.component.number.quaternion;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.util.support.Producer;
 
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FQuaternionProducer {
+public interface FQuaternionProducer extends Producer<FQuaternion> {
 
+    @Override
     FQuaternion produce();
-
+    @Override
     Stream<FQuaternion> stream();
 
     List<FQuaternion> getListAuto();

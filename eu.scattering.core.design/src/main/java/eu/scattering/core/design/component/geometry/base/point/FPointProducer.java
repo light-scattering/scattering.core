@@ -2,6 +2,7 @@ package eu.scattering.core.design.component.geometry.base.point;
 
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.List;
@@ -9,10 +10,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FPointProducer {
+public interface FPointProducer extends Producer<FPoint> {
 
+    @Override
     FPoint produce();
-
+    @Override
     Stream<FPoint> stream();
 
     List<FPoint> getListAuto();

@@ -2,16 +2,18 @@ package eu.scattering.core.design.component.geometry.base.vector;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.util.support.Producer;
 
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FVectorProducer {
+public interface FVectorProducer extends Producer<FVector> {
 
+    @Override
     FVector produce();
-
+    @Override
     Stream<FVector> stream();
 
     List<FVector> getListAuto();

@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 
 public interface FSphereFactory {

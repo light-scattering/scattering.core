@@ -2,7 +2,7 @@ package eu.scattering.core.impl.component.geometry.shape.preset;
 
 import eu.scattering.core.design.component.geometry.shape.Shape;
 
-public abstract class ShapePresetDef<T> implements Shape<T> {
+public abstract class ShapePresetDef implements Shape {
 
     private int index = -1;
     private String tag = "";

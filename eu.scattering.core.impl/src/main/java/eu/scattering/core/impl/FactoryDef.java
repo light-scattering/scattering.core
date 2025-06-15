@@ -1,6 +1,6 @@
 package eu.scattering.core.impl;
 
-import eu.scattering.core.design.FactoryDesignConcrete;
+import eu.scattering.core.design.ScatFactoryConcrete;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
@@ -13,6 +13,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
+import eu.scattering.core.design.component.geometry.shape.ShapeProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
@@ -39,6 +40,7 @@ import eu.scattering.core.impl.component.geometry.construct.*;
 import eu.scattering.core.impl.component.geometry.container.FAssemblyDef;
 import eu.scattering.core.impl.component.geometry.container.FAssemblyProducerDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereProducerDef;
+import eu.scattering.core.impl.component.geometry.shape.ShapeProducerDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
@@ -54,7 +56,7 @@ import eu.scattering.core.impl.component.geometry.shape.FSphereDef;
 import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 
-public final class FactoryDef extends FactoryDesignConcrete {
+public final class FactoryDef extends ScatFactoryConcrete {
     private final GeometryParser fGeometryParser;
 
     private final FRandGenerator fRandGenerator;
@@ -97,12 +99,12 @@ public final class FactoryDef extends FactoryDesignConcrete {
         this.fGeometryParser = GeometryParserDef.get(this);
     }
 
-    public static FactoryDesignConcrete create() {
+    public static ScatFactoryConcrete create() {
 
         return new FactoryDef();
     }
 
-    public static FactoryDesignConcrete create(long seed) {
+    public static ScatFactoryConcrete create(long seed) {
 
         return new FactoryDef(seed);
     }
@@ -273,6 +275,14 @@ public final class FactoryDef extends FactoryDesignConcrete {
     public FSegment getFSegment() {
 
         return FSegmentDef.create(this, getFVector());
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public ShapeProducer getShapeProducer() {
+
+        return ShapeProducerDef.create(this.fRandGenerator);
     }
 
     //--------------------------------------------------

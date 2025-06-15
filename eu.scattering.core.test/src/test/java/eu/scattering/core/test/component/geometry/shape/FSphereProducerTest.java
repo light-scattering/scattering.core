@@ -42,7 +42,7 @@ public class FSphereProducerTest {
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
 
-        Assertions.assertAll("Validate FPoint values",
+        Assertions.assertAll("Validate FSphere values",
                 () -> assertTrue(resultA.getRefCenter().isExact(0, 0, 0),
                         "The FSphere A center position is erroneous"),
                 () -> assertTrue(resultB.getRefCenter().isExact(0, 0, 0),
@@ -67,7 +67,7 @@ public class FSphereProducerTest {
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
 
-        Assertions.assertAll("Validate FPoint values",
+        Assertions.assertAll("Validate FSphere values",
                 () -> assertTrue(resultA.getRefCenter().isExact(0, 0, 0),
                         "The FSphere A center position is erroneous"),
                 () -> assertTrue(resultB.getRefCenter().isExact(0, 0, 0),
@@ -106,7 +106,7 @@ public class FSphereProducerTest {
         int countFinalB = countB;
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertTrue(countFinalA < countFinalB,
+                () -> assertTrue(countFinalA * 1.5 < countFinalB,
                         "The distribution is erroneous")
         );
     }
@@ -762,7 +762,7 @@ public class FSphereProducerTest {
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
 
-        Assertions.assertAll("Validate FPoint values",
+        Assertions.assertAll("Validate FSphere values",
                 () -> assertEquals(1, resultA.getRadius(),
                         epsilon, "The Sphere A radius is erroneous"),
                 () -> assertEquals(1, resultB.getRadius(),
@@ -789,7 +789,7 @@ public class FSphereProducerTest {
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
 
-        Assertions.assertAll("Validate FPoint values",
+        Assertions.assertAll("Validate FSphere values",
                 () -> assertEquals(1, resultA.getRadius(),
                         epsilon, "The Sphere A radius is erroneous"),
                 () -> assertEquals(1, resultB.getRadius(),

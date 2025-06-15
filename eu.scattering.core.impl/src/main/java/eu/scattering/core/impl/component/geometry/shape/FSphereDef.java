@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
-import eu.scattering.core.design.FactoryDesign;
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -22,7 +22,7 @@ import java.util.Objects;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
-public class FSphereDef extends ShapePresetDef<FSphere> implements FSphere {
+public class FSphereDef extends ShapePresetDef implements FSphere {
     private static final String JSON_MAIN = "sphere";
     private static final String JSON_RADIUS = "radius";
     private static final String JSON_CENTER = "center";
@@ -35,21 +35,21 @@ public class FSphereDef extends ShapePresetDef<FSphere> implements FSphere {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
-    private final FactoryDesign factory;
+    private final ScatFactory factory;
     private final FCache cache;
 
     private FPoint center;
     private double radius;
 
-    private FSphereDef(FactoryDesign factory) {
+    private FSphereDef(ScatFactory factory) {
 
         this.factory = factory;
         this.cache = factory.getFCache();
 
-        this.cache.put(FactoryDesign.class, this.factory);
+        this.cache.put(ScatFactory.class, this.factory);
     }
 
-    public static FSphere create(FactoryDesign factory, FPoint refCenter) {
+    public static FSphere create(ScatFactory factory, FPoint refCenter) {
 
         var fSphere = new FSphereDef(factory);
 
@@ -596,10 +596,10 @@ public class FSphereDef extends ShapePresetDef<FSphere> implements FSphere {
         FRotEngine rotEngine = factory.getFRotEngine();
 
         FVector vecRef = cache.get("bVec1", FVector.class,
-                (core) -> core.get(FactoryDesign.class).getFVector());
+                (core) -> core.get(ScatFactory.class).getFVector());
 
         FVector vecArg = cache.get("bVec2", FVector.class,
-                (core) -> core.get(FactoryDesign.class).getFVector());
+                (core) -> core.get(ScatFactory.class).getFVector());
 
         vecRef.set(arg.getRefCenter(), this.getRefCenter());
         vecArg.set(arg.getRefCenter(), neighbour.getRefCenter());

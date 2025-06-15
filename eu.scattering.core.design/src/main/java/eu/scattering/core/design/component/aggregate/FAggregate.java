@@ -8,7 +8,7 @@ import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 public interface FAggregate extends Component {
 
-    FAssembly<Shape<?>> getCore();
+    FAssembly<Shape> getCore();
 
     //--------------------------------------------------
 

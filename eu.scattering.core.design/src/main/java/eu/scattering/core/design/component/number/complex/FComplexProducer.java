@@ -1,16 +1,18 @@
 package eu.scattering.core.design.component.number.complex;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.util.support.Producer;
 
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface FComplexProducer {
+public interface FComplexProducer extends Producer<FComplex> {
 
+    @Override
     FComplex produce();
-
+    @Override
     Stream<FComplex> stream();
 
     List<FComplex> getListAuto();

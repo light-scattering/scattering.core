@@ -1,13 +1,13 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
-import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.component.geometry.shape.ShapeCommon;
 
 import java.util.Collection;
 import java.util.List;
 
-public interface FSphere extends Shape<FSphere> {
+public interface FSphere extends ShapeCommon<FSphere> {
 
     double getRadius();
     FSphere setRadius(double radius);

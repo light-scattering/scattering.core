@@ -5,5 +5,5 @@ import eu.scattering.core.design.component.ComponentFactory;
 import eu.scattering.core.design.helper.HelperFactory;
 import eu.scattering.core.transfer.TransferFactory;
 
-public interface FactoryDesign extends TransferFactory, ComponentFactory, EngineFactory, HelperFactory {
+public interface ScatFactory extends TransferFactory, ComponentFactory, EngineFactory, HelperFactory {
 }

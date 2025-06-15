@@ -1,6 +1,6 @@
 package eu.scattering.core.test.engine.randomize;
 
-import eu.scattering.core.design.FactoryDesign;
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.FactoryDef;
@@ -168,7 +168,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random 2D with range")
         void nextDouble2DRange() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             FRandGenerator fRandom = factory.getFRand();
 
@@ -188,7 +188,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random 3D with range")
         void nextDouble3DRange() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             FRandGenerator fRandom = factory.getFRand();
 
@@ -209,7 +209,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get random 4D with range")
         void nextDouble4DRange() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             FRandGenerator fRandom = factory.getFRand();
 
@@ -231,7 +231,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position on sphere - Seed enabled")
         void getPositionOnSphereWithSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
@@ -258,7 +258,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position on sphere - Seed disabled")
         void getPositionOnSphereWithoutSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             double radius = 5;
             double jitter = 1E-8;
@@ -284,7 +284,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position in sphere - Seed enabled")
         void getPositionInSphereWithSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
@@ -310,7 +310,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position in sphere - Seed disabled")
         void getPositionInSphereWithoutSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             double radius = 5;
 
@@ -335,7 +335,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position on circle - Seed enabled")
         void getPositionOnCircleWithSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
@@ -362,7 +362,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position on circle - Seed disabled")
         void getPositionOnCircleWithoutSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             double radius = 5;
             double jitter = 1E-8;
@@ -388,7 +388,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position in circle - Seed enabled")
         void getPositionInCircleWithSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             long seed = 12345;
             double radius = 5;
@@ -414,7 +414,7 @@ public class FRandomTest {
         @Test
         @DisplayName("Get position in circle - Seed disabled")
         void getPositionInCircleWithoutSeed() {
-            FactoryDesign factory = FactoryDef.create();
+            ScatFactory factory = FactoryDef.create();
 
             double radius = 5;
 
