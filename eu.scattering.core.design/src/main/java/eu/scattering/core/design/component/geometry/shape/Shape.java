@@ -1,20 +1,68 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.transfer.container.buffer.FCache.FCache;
+import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
+import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+
+import java.util.List;
 
 public interface Shape extends Geometry {
 
-    String getTag();
-    boolean setTag(String tag);
+    boolean isExact(Shape arg);
+    boolean isSimilar(Shape arg);
 
-    int getIndex();
-    boolean setIndex(int index);
+    void getCenter(FPoint in);
+
+    Shape setCenter(double x, double y, double z);
+    Shape setCenter(FPoint fPoint);
+    Shape setCenter(FPos3D fPos3D);
+
+    boolean contains(double x, double y, double z);
+    boolean contains(FPoint fPoint);
+    boolean contains(FPos3D fPos3D);
+
+    boolean touches(Shape shape, double epsilon, double delta);
+    boolean overlaps(Shape shape, double epsilon, double delta);
+    boolean encloses(Shape shape, double epsilon, double delta);
+    boolean intersects(Shape shape, double epsilon, double delta);
 
     double getVolume();
+    void getVolumeBuffer(FStream3D stream, double delta);
+    void getVolumeBuffer(FStream3DI stream, double delta);
+
+    Shape setVolume(double volume);
 
     double getSurface();
+    void getSurfaceBuffer(FStream3D stream, double delta);
+    void getSurfaceBuffer(FStream3DI stream, double delta);
 
-    double getOuterRadius();
+    Shape setSurface(double surface);
 
-    double getInnerRadius();
+    double getRadius();
+    double getRadiusInner();
+
+    Shape setRadius(double radius);
+    Shape setRadiusInner(double radius);
+    Shape setRadiusMin(FAssembly<? extends Shape> field, double minCutoff);
+    Shape setRadiusMax(FAssembly<? extends Shape> field, double maxCutoff);
+
+    boolean attachLinear(Shape target, double epsilon);
+    boolean attachLinear(Shape target, double epsilon, FAssembly<? extends Shape> field, int maxBounce);
+
+    boolean project(FPoint aim, List<FSphere> field);
+
+    // -------------------------------------------------------------------------------------------------
+
+    void setFCache(FCache cache);
+
+    String getTag();
+    void setTag(String tag);
+
+    int getIndex();
+    void setIndex(int index);
 }

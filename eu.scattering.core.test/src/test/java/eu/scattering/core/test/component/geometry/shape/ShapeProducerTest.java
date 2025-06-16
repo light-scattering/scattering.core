@@ -47,9 +47,9 @@ public class ShapeProducerTest {
                         "The type of shape A is erroneous"),
                 () -> assertTrue(resultB instanceof FSphere,
                         "The type of shape B is erroneous"),
-                () -> assertEquals(3, resultA.getOuterRadius(),
+                () -> assertEquals(3, resultA.getRadius(),
                         epsilon, "The shape A radius is erroneous"),
-                () -> assertEquals(3, resultB.getOuterRadius(),
+                () -> assertEquals(3, resultB.getRadius(),
                         epsilon, "The shape B radius is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -73,9 +73,9 @@ public class ShapeProducerTest {
                         "The type of shape A is erroneous"),
                 () -> assertTrue(resultB instanceof FSphere,
                         "The type of shape B is erroneous"),
-                () -> assertEquals(3, resultA.getOuterRadius(),
+                () -> assertEquals(3, resultA.getRadius(),
                         epsilon, "The shape A radius is erroneous"),
-                () -> assertEquals(3, resultB.getOuterRadius(),
+                () -> assertEquals(3, resultB.getRadius(),
                         epsilon, "The shape B radius is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -99,7 +99,7 @@ public class ShapeProducerTest {
 
         for (int i = 0 ; i < 1000 ; i++) {
 
-            if (producer.produce().getOuterRadius() == 1) {
+            if (producer.produce().getRadius() == 1) {
                 countA++;
             } else {
                 countB++;
@@ -141,11 +141,11 @@ public class ShapeProducerTest {
                 throw new IllegalStateException("The index is erroneous");
             }
 
-            if (shape.getOuterRadius() == 1) {
+            if (shape.getRadius() == 1) {
                 qRadius1++;
-            } else if (shape.getOuterRadius() == 2) {
+            } else if (shape.getRadius() == 2) {
                 qRadius2++;
-            } else if (shape.getOuterRadius() == 3) {
+            } else if (shape.getRadius() == 3) {
                 qRadius3++;
             } else {
                 throw new IllegalStateException("The produced element is erroneous");
@@ -178,11 +178,11 @@ public class ShapeProducerTest {
 
         for (Shape shape : producer.getListFixed(8)) {
 
-            if (shape.getOuterRadius() == 1) {
+            if (shape.getRadius() == 1) {
                 qRadius1++;
-            } else if (shape.getOuterRadius() == 2) {
+            } else if (shape.getRadius() == 2) {
                 qRadius2++;
-            } else if (shape.getOuterRadius() == 3) {
+            } else if (shape.getRadius() == 3) {
                 qRadius3++;
             } else {
                 throw new IllegalStateException("The produced element is erroneous");
@@ -214,7 +214,7 @@ public class ShapeProducerTest {
 
         boolean sequence = true;
         for (int i = 0 ; i < 20 ; i++) {
-            if (results.get(i).getOuterRadius() != 1) {
+            if (results.get(i).getRadius() != 1) {
                 sequence = false;
                 break;
             }
@@ -243,7 +243,7 @@ public class ShapeProducerTest {
 
         boolean sequence = true;
         for (int i = 0 ; i < 20 ; i++) {
-            if (results.get(i).getOuterRadius() != 1) {
+            if (results.get(i).getRadius() != 1) {
                 sequence = false;
                 break;
             }

@@ -18,22 +18,22 @@ public interface FSphereFactory {
 
     default FSphere getFSphere(double radius) {
 
-        return getFSphere().setRadius(radius);
+        return (FSphere) getFSphere().setRadius(radius);
     }
 
     default FSphere getFSphere(double x, double y, double z) {
 
-        return getFSphere().setPosCenter(x, y, z);
+        return (FSphere) getFSphere().setCenter(x, y, z);
     }
 
     default FSphere getFSphere(double x, double y, double z, double radius) {
 
-        return getFSphere().setPosCenter(x, y, z).setRadius(radius);
+        return (FSphere) getFSphere().setCenter(x, y, z).setRadius(radius);
     }
 
     @Modificator
     default FSphere getRefFSphere(FPoint refCenter, double radius) {
 
-        return getRefFSphere(refCenter).setRadius(radius);
+        return (FSphere) getRefFSphere(refCenter).setRadius(radius);
     }
 }
