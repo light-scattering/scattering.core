@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.util.annotation.Fragment;
 import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
@@ -14,13 +15,31 @@ import java.util.List;
 public interface Shape extends Geometry {
 
     boolean isExact(Shape arg);
-    boolean isSimilar(Shape arg);
+    boolean isExactCenter(Shape arg);
 
-    void getCenter(FPoint in);
+    boolean isSimilar(Shape arg);
+    boolean isSimilarCenter(Shape arg);
+
+    FPos3D getCenter();
+    double getCenterX();
+    double getCenterY();
+    double getCenterZ();
 
     Shape setCenter(double x, double y, double z);
     Shape setCenter(FPoint fPoint);
     Shape setCenter(FPos3D fPos3D);
+    Shape setCenterX(double x);
+    Shape setCenterY(double y);
+    Shape setCenterZ(double z);
+
+    double getDistCenter(Shape shape);
+    Shape setDistCenter(Shape shape, double dist);
+
+    Shape translate(double x, double y, double z);
+    Shape translate(FPoint fPoint);
+    Shape translate(FPos3D fPos3D);
+
+    Shape scale(double factor);
 
     boolean contains(double x, double y, double z);
     boolean contains(FPoint fPoint);
@@ -51,18 +70,36 @@ public interface Shape extends Geometry {
     Shape setRadiusMin(FAssembly<? extends Shape> field, double minCutoff);
     Shape setRadiusMax(FAssembly<? extends Shape> field, double maxCutoff);
 
-    boolean attachLinear(Shape target, double epsilon);
-    boolean attachLinear(Shape target, double epsilon, FAssembly<? extends Shape> field, int maxBounce);
+    boolean attachLinear(Shape target, double epsilon, double delta);
+    boolean attachLinear(Shape target, double epsilon, double delta, FAssembly<? extends Shape> field, int corrections);
+
+    boolean attachSpherical(Shape target, Shape center, double epsilon);
 
     boolean project(FPoint aim, List<FSphere> field);
+
+    void getOverlappingShapes(List<Shape> in, List<? extends Shape> field, double epsilon, double delta);
+
+    void sortByDistance(List<? extends Shape> in);
 
     // -------------------------------------------------------------------------------------------------
 
     void setFCache(FCache cache);
 
-    String getTag();
-    void setTag(String tag);
+    double getEpsilon();
+    void setEpsilon(double epsilon);
+
+    double getDelta();
+    void setDelta(double delta);
 
     int getIndex();
     void setIndex(int index);
+
+    String getTag();
+    void setTag(String tag);
+
+    //--------------------------------------------------
+
+    @Fragment
+    double getDistCenterP2(Shape shape);
+
 }

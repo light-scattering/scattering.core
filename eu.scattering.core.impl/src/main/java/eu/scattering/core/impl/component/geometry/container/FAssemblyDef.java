@@ -38,7 +38,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public List<T> getGeometries() {
+    public List<T> getListGeometry() {
 
         return this.geometries;
     }
@@ -125,14 +125,14 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     @Override
     public boolean isExact(FAssembly<T> arg) {
 
-        if (getGeometries().size() != arg.getGeometries().size()) {
+        if (getListGeometry().size() != arg.getListGeometry().size()) {
             return false;
         }
 
-        Collection<T> geoCopy = new ArrayList<>(arg.getGeometries());
+        Collection<T> geoCopy = new ArrayList<>(arg.getListGeometry());
 
         main:
-        for (T geoL : getGeometries()) {
+        for (T geoL : getListGeometry()) {
             for (T geoE : geoCopy) {
                 if (geoL.isExact(geoE)) {
                     geoCopy.remove(geoE);
@@ -160,14 +160,14 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     @Override
     public boolean isSimilar(FAssembly<T> arg) {
 
-        if (getGeometries().size() != arg.getGeometries().size()) {
+        if (getListGeometry().size() != arg.getListGeometry().size()) {
             return false;
         }
 
-        Collection<T> geoCopy = new ArrayList<>(arg.getGeometries());
+        Collection<T> geoCopy = new ArrayList<>(arg.getListGeometry());
 
         main:
-        for (T geoL : getGeometries()) {
+        for (T geoL : getListGeometry()) {
             for (T geoE : geoCopy) {
                 if (geoL.isSimilar(geoE)) {
                     geoCopy.remove(geoE);
@@ -233,7 +233,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     public int hashCode() {
         int code = 0;
 
-        for (Geometry geo : getGeometries()) {
+        for (Geometry geo : getListGeometry()) {
             code += geo.hashCode();
         }
 
@@ -310,7 +310,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         @Override
         public boolean hasNext() {
 
-            return index < FAssemblyDef.this.getGeometries().size();
+            return index < FAssemblyDef.this.getListGeometry().size();
         }
 
         @Override
@@ -320,7 +320,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
                 throw new NoSuchElementException();
             }
 
-            return FAssemblyDef.this.getGeometries().get(index++);
+            return FAssemblyDef.this.getListGeometry().get(index++);
         }
     }
 }

@@ -19,4 +19,14 @@ public interface FPairPos3DFactory {
 
         return FPairPos3D.create(json);
     }
+
+    default FPairPos3D getFPairPos3D(double min, double max) {
+
+        return FPairPos3D.create(min, min, min, max, max, max);
+    }
+
+    default FPairPos3D getFPairPos3D(double range) {
+
+        return FPairPos3D.create(-range, -range, -range, range, range, range);
+    }
 }

@@ -20,5 +20,5 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     //--------------------------------------------------
 
     @Modificator
-    List<T> getGeometries();
+    List<T> getListGeometry();
 }

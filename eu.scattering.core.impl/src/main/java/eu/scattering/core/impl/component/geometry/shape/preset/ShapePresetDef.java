@@ -9,11 +9,20 @@ import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
+import java.util.Comparator;
+import java.util.List;
+
+import static eu.scattering.core.impl.ConfigDef.DELTA;
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
+
 public abstract class ShapePresetDef implements Shape {
     private final static double MESH_OFFSET = -0.5;
 
     private final ScatFactory factory;
     private FCache cache;
+
+    private double epsilon = EPSILON;
+    private double delta = DELTA;
 
     private int index = -1;
     private String tag = "";
@@ -27,7 +36,30 @@ public abstract class ShapePresetDef implements Shape {
     public void setFCache(FCache cache) {
 
         this.cache = cache;
-        this.cache.put(ScatFactory.class, this.factory);
+    }
+
+    @Override
+    public double getEpsilon() {
+
+        return this.epsilon;
+    }
+
+    @Override
+    public void setEpsilon(double epsilon) {
+
+        this.epsilon = epsilon;
+    }
+
+    @Override
+    public double getDelta() {
+
+        return this.delta;
+    }
+
+    @Override
+    public void setDelta(double delta) {
+
+        this.delta = delta;
     }
 
     @Override
@@ -55,6 +87,133 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean isExactCenter(Shape arg) {
+
+        if (getCenterX() != arg.getCenterX()) {
+            return false;
+        }
+
+        if (getCenterY() != arg.getCenterY()) {
+            return false;
+        }
+
+        if (getCenterZ() != arg.getCenterZ()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isSimilarCenter(Shape arg) {
+
+        double distanceX = Math.abs(getCenterX() - arg.getCenterX());
+        double distanceY = Math.abs(getCenterY() - arg.getCenterY());
+        double distanceZ = Math.abs(getCenterZ() - arg.getCenterZ());
+
+        return distanceX < EPSILON && distanceY < EPSILON && distanceZ < EPSILON;
+    }
+
+    @Override
+    public FPos3D getCenter() {
+
+        return factory.getFPos3D(getCenterX(), getCenterY(), getCenterZ());
+    }
+
+    @Override
+    public Shape setCenter(double x, double y, double z) {
+
+        return setCenterX(x).setCenterY(y).setCenterZ(z);
+    }
+
+    @Override
+    public Shape setCenter(FPoint fPoint) {
+
+        setCenter(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+
+        return this;
+    }
+
+    @Override
+    public Shape setCenter(FPos3D fPos3D) {
+
+        setCenter(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+
+        return this;
+    }
+
+    @Override
+    public Shape translate(double x, double y, double z) {
+
+        setCenter(
+                getCenterX() + x,
+                getCenterY() + y,
+                getCenterZ() + z
+        );
+
+        return this;
+    }
+
+    @Override
+    public Shape translate(FPoint fPoint) {
+
+        return translate(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
+
+    @Override
+    public Shape translate(FPos3D fPos3D) {
+
+        return translate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+    }
+
+    @Override
+    public Shape scale(double factor) {
+
+        setCenter(
+                getCenterX() * factor,
+                getCenterY() * factor,
+                getCenterZ() * factor
+        );
+
+        setRadius(getRadius() * factor);
+
+        return this;
+    }
+
+    @Override
+    public double getDistCenter(Shape shape) {
+        FVector fVector = getCacheFVector();
+
+        fVector.setBase(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+        fVector.setHead(getCenterX(), getCenterY(), getCenterZ());
+
+        return fVector.getMagnitude();
+    }
+
+    @Override
+    public double getDistCenterP2(Shape shape) {
+        double dimX = getCenterX() - shape.getCenterX();
+        double dimY = getCenterY() - shape.getCenterY();
+        double dimZ = getCenterZ() - shape.getCenterZ();
+
+        return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
+    }
+
+    @Override
+    public Shape setDistCenter(Shape shape, double dist) {
+        FVector fVector = getCacheFVector();
+
+        fVector.setBase(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+        fVector.setHead(getCenterX(), getCenterY(), getCenterZ());
+
+        fVector.setMagnitude(dist);
+
+        setCenter(fVector.getRefHead());
+
+        return this;
+    }
 
     @Override
     public boolean contains(FPoint fPoint) {
@@ -178,7 +337,7 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() - epsilon;
         double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
@@ -199,7 +358,7 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
         double reqDist = this.getRadius() - shape.getRadius() - epsilon;
         double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
@@ -221,10 +380,10 @@ public abstract class ShapePresetDef implements Shape {
             return false;
         }
 
-        double step = delta * MESH_OFFSET;
-        for (double x = range.getBaseX() + step ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + step ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + step ; z < range.getHeadZ() ; z += delta) {
+        double offset = delta * MESH_OFFSET;
+        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
+            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
+                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
                     if (shape.contains(x, y, z) && !this.contains(x, y, z)) {
                         return false;
                     }
@@ -236,7 +395,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected Relation touchesEpsilon(Shape shape, double epsilon) {
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() + epsilon;
         double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
@@ -252,7 +411,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected Relation touchesEpsilonSimplified(Shape shape, double epsilon) {
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
 
         double reqDistOuter = this.getRadius() + shape.getRadius() + epsilon;
         double reqDistOuterP2 = reqDistOuter < 0 ? 0 : reqDistOuter * reqDistOuter;
@@ -272,10 +431,10 @@ public abstract class ShapePresetDef implements Shape {
 
         boolean ruleTouch = false;
 
-        double step = delta * MESH_OFFSET;
-        for (double x = range.getBaseX() + step ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + step ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + step ; z < range.getHeadZ() ; z += delta) {
+        double offset = -delta + (delta * MESH_OFFSET);
+        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
+            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
+                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
                     boolean containsA = this.contains(x, y, z);
                     boolean containsB = shape.contains(x, y, z);
 
@@ -308,7 +467,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected Relation overlapsEpsilon(Shape shape, double epsilon) {
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() - epsilon;
         double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
@@ -324,7 +483,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected Relation overlapsEpsilonSimplified(Shape shape, double epsilon) {
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
 
         double reqDistNone = this.getRadius() + shape.getRadius() - epsilon;
         double reqDistNoneP2 = reqDistNone < 0 ? 0 : reqDistNone * reqDistNone;
@@ -335,10 +494,10 @@ public abstract class ShapePresetDef implements Shape {
     protected boolean overlapsDelta(Shape shape, double delta) {
         FVector range = getOperationRange(shape);
 
-        double step = delta * MESH_OFFSET;
-        for (double x = range.getBaseX() + step ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + step ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + step ; z < range.getHeadZ() ; z += delta) {
+        double offset = delta * MESH_OFFSET;
+        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
+            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
+                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
                     if (this.contains(x, y, z) && shape.contains(x, y, z)) {
                         return true;
                     }
@@ -350,7 +509,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected Relation intersectsEpsilon(Shape shape, double epsilon) {
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() - epsilon;
         double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
@@ -366,7 +525,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected Relation intersectsEpsilonSimplified(Shape shape, double epsilon) {
-        double distP2 = getDistanceP2(shape);
+        double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() - epsilon;
         double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
@@ -388,10 +547,10 @@ public abstract class ShapePresetDef implements Shape {
         boolean ruleShapeB = false;
         boolean ruleCommon = false;
 
-        double step = delta * MESH_OFFSET;
-        for (double x = range.getBaseX() + step ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + step ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + step ; z < range.getHeadZ() ; z += delta) {
+        double offset = delta * MESH_OFFSET;
+        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
+            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
+                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
                     boolean containsA = this.contains(x, y, z);
                     boolean containsB = shape.contains(x, y, z);
 
@@ -423,44 +582,62 @@ public abstract class ShapePresetDef implements Shape {
         return false;
     }
 
+    @Override
+    public void  getOverlappingShapes(List<Shape> in, List<? extends Shape> field, double epsilon, double delta) {
+        in.clear();
+
+        for (Shape shape : field) {
+
+            if (this == shape) {
+                continue;
+            }
+
+            if (overlaps(shape, epsilon, delta)) {
+                in.add(shape);
+            }
+        }
+    }
+
+    public void sortByDistance(List<? extends Shape> in) {
+        CmpDistRef cmp = getCacheCmpDistRef();
+
+        cmp.setRef(this);
+
+        in.sort(cmp);
+    }
+
     protected FVector getOperationRange(Shape shape) {
-        FPoint centerA = getCacheFPointA();
-        FPoint centerB = getCacheFPointB();
-
-        this.getCenter(centerA);
-        shape.getCenter(centerB);
-
-        FVector range = getCacheFVectorA();
+        FVector range = getCacheFVector();
 
         double opA, opB;
 
-        opA = centerA.getX() - this.getRadius();
-        opB = centerB.getX() - shape.getRadius();
+        opA = this.getCenterX() - this.getRadius();
+        opB = shape.getCenterX() - shape.getRadius();
 
         range.setBaseX(Math.max(opA, opB));
 
-        opA = centerA.getX() + this.getRadius();
-        opB = centerB.getX() + shape.getRadius();
+        opA = this.getCenterX() + this.getRadius();
+        opB = shape.getCenterX() + shape.getRadius();
 
         range.setHeadX(Math.min(opA, opB));
 
-        opA = centerA.getY() - this.getRadius();
-        opB = centerB.getY() - shape.getRadius();
+        opA = this.getCenterY() - this.getRadius();
+        opB = shape.getCenterY() - shape.getRadius();
 
         range.setBaseY(Math.max(opA, opB));
 
-        opA = centerA.getY() + this.getRadius();
-        opB = centerB.getY() + shape.getRadius();
+        opA = this.getCenterY() + this.getRadius();
+        opB = shape.getCenterY() + shape.getRadius();
 
         range.setHeadY(Math.min(opA, opB));
 
-        opA = centerA.getZ() - this.getRadius();
-        opB = centerB.getZ() - shape.getRadius();
+        opA = this.getCenterZ() - this.getRadius();
+        opB = shape.getCenterZ() - shape.getRadius();
 
         range.setBaseZ(Math.max(opA, opB));
 
-        opA = centerA.getZ() + this.getRadius();
-        opB = centerB.getZ() + shape.getRadius();
+        opA = this.getCenterZ() + this.getRadius();
+        opB = shape.getCenterZ() + shape.getRadius();
 
         range.setHeadZ(Math.min(opA, opB));
 
@@ -469,16 +646,12 @@ public abstract class ShapePresetDef implements Shape {
 
     @Override
     public void getVolumeBuffer(FStream3D stream, double delta) {
-        FPoint center = getCacheFPointA();
-
-        getCenter(center);
-
         double radiusParsed = getRadius() + delta;
         double radiusP2 = getRadius() * getRadius();
 
-        double cX = center.getX();
-        double cY = center.getY();
-        double cZ = center.getZ();
+        double cX = getCenterX();
+        double cY = getCenterY();
+        double cZ = getCenterZ();
 
         double minX = cX - radiusParsed;
         double maxX = cX + radiusParsed;
@@ -515,18 +688,14 @@ public abstract class ShapePresetDef implements Shape {
 
     @Override
     public void getVolumeBuffer(FStream3DI stream, double delta) {
-        FPoint center = getCacheFPointA();
-
-        getCenter(center);
-
         double factor = 1 / delta;
 
         double radiusParsed = factor * (getRadius() + delta);
         double radiusP2 = (factor * getRadius()) * (factor * getRadius());
 
-        double cX = factor * center.getX();
-        double cY = factor * center.getY();
-        double cZ = factor * center.getZ();
+        double cX = factor * getCenterX();
+        double cY = factor * getCenterY();
+        double cZ = factor * getCenterZ();
 
         int minX = (int) Math.floor(cX - radiusParsed);
         int maxX = (int) Math.ceil(cX + radiusParsed);
@@ -561,64 +730,79 @@ public abstract class ShapePresetDef implements Shape {
         }
     }
 
+    // -------------------------------------------------------------------------------------------------
 
+    protected FPoint getCacheFPoint() {
 
+        if (cache != null) {
+            return cache.get("fPoint", FPoint.class, (cache) -> supplyFPoint());
+        }
+
+        return supplyFPoint();
+    }
+
+    protected FVector getCacheFVector() {
+
+        if (cache != null) {
+            return cache.get("fVector", FVector.class, (cache) -> supplyFVector());
+        }
+
+        return supplyFVector();
+    }
+
+    protected CmpDistRef getCacheCmpDistRef() {
+
+        if (cache != null) {
+            return cache.get("cmpDistRef", CmpDistRef.class, (cache) -> supplyCmpDistRef());
+        }
+
+        return supplyCmpDistRef();
+    }
 
     // -------------------------------------------------------------------------------------------------
 
-    protected FPoint getCacheFPointA() {
-
-        if (cache != null) {
-            return cache.get("fPointA", FPoint.class,
-                    (core) -> core.get(ScatFactory.class).getFPoint());
-        }
+    protected FPoint supplyFPoint() {
 
         return factory.getFPoint();
     }
 
-    protected FPoint getCacheFPointB() {
-
-        if (cache != null) {
-            return cache.get("fPointB", FPoint.class,
-                    (core) -> core.get(ScatFactory.class).getFPoint());
-        }
-
-        return factory.getFPoint();
-    }
-
-    protected FVector getCacheFVectorA() {
-
-        if (cache != null) {
-            return cache.get("fVectorA", FVector.class,
-                    (core) -> core.get(ScatFactory.class).getFVector());
-        }
+    protected FVector supplyFVector() {
 
         return factory.getFVector();
     }
 
-    protected FVector getCacheFVectorB() {
+    protected CmpDistRef supplyCmpDistRef() {
 
-        if (cache != null) {
-            return cache.get("fVectorB", FVector.class,
-                    (core) -> core.get(ScatFactory.class).getFVector());
-        }
-
-        return factory.getFVector();
-    }
-
-    protected double getDistanceP2(Shape shape) {
-        FPoint centerA = getCacheFPointA();
-        FPoint centerB = getCacheFPointB();
-
-        this.getCenter(centerA);
-        shape.getCenter(centerB);
-
-        return centerA.getDistanceP2(centerB);
+        return CmpDistRef.create();
     }
 
     // -------------------------------------------------------------------------------------------------
 
     protected enum Relation {
         TRUE, FALSE, UNDEFINED
+    }
+}
+
+class CmpDistRef implements Comparator<Shape> {
+    private Shape ref;
+
+    private CmpDistRef() {}
+
+    public static CmpDistRef create() {
+
+        return new CmpDistRef();
+    }
+
+    public void setRef(Shape ref) {
+
+        this.ref = ref;
+    }
+
+    @Override
+    public int compare(Shape s1, Shape s2) {
+        double distS1 = this.ref.getDistCenterP2(s1);
+        double distS2 = this.ref.getDistCenterP2(s2);
+
+        return Double.compare(distS1, distS2);
     }
 }

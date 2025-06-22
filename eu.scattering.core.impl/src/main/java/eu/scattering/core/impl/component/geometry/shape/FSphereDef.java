@@ -7,13 +7,10 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.engine.rotate.FRotEngine;
-import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
 import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -48,9 +45,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         this.factory = factory;
         this.cache = factory.getFCache();
-
-        this.cache.put(ScatFactory.class, this.factory);
-
     }
 
     public static FSphere create(ScatFactory factory, FPoint refCenter) {
@@ -86,21 +80,70 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return this;
     }
 
+    @Override
+    public double getRadius() {
+
+        return this.radius;
+    }
+
+    @Override
+    public double getCenterX() {
+
+        return getRefCenter().getX();
+    }
+
+    @Override
+    public double getCenterY() {
+
+        return getRefCenter().getY();
+    }
+
+    @Override
+    public double getCenterZ() {
+
+        return getRefCenter().getZ();
+    }
+
+    @Override
+    public Shape setCenterX(double x) {
+
+        getRefCenter().setX(x);
+
+        return this;
+    }
+
+    @Override
+    public Shape setCenterY(double y) {
+
+        getRefCenter().setY(y);
+
+        return this;
+    }
+
+    @Override
+    public Shape setCenterZ(double z) {
+
+        getRefCenter().setZ(z);
+
+        return this;
+    }
+
+    @Override
+    public Shape setRadius(double radius) {
+
+        if (radius <= 0) {
+            throw new IllegalArgumentException("The radius must be greater than zero");
+        }
+
+        this.radius = radius;
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
     // The following fields do not have to modified while extending the class.
     // Their behaviour should be correct, however, it is not guaranteed that the current implementation is optimal.
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public FSphere applyStateFrom(FSphere arg) {
-
-        getRefCenter().applyStateFrom(arg.getRefCenter());
-        setRadius(arg.getRadius());
-        setIndex(arg.getIndex());
-        setTag(arg.getTag());
-
-        return this;
-    }
 
     @Override
     public FSphere set(JSONObject json) {
@@ -109,15 +152,19 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FPoint center = factory.getFPoint().set(json.getJSONObject(JSON_CENTER));
-        double radius = json.getDouble(JSON_RADIUS);
-        int index = json.getInt(JSON_INDEX);
-        String tag = json.getString(JSON_TAG);
+        getRefCenter().set(json.getJSONObject(JSON_CENTER));
+        setRadius(json.getDouble(JSON_RADIUS));
+        setIndex(json.getInt(JSON_INDEX));
+        setTag(json.getString(JSON_TAG));
 
-       setRefCenter(center);
-       setRadius(radius);
-       setIndex(index);
-       setTag(tag);
+        return this;
+    }
+
+    @Override
+    public FSphere applyStateFrom(FSphere arg) {
+
+        getRefCenter().applyStateFrom(arg.getRefCenter());
+        setRadius(arg.getRadius());
 
         return this;
     }
@@ -127,8 +174,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         in.getRefCenter().applyStateFrom(this.getRefCenter());
         in.setRadius(getRadius());
-        in.setIndex(getIndex());
-        in.setTag(getTag());
 
         return this;
     }
@@ -141,11 +186,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         if (arg instanceof FSphere) {
             FSphere fSphere = (FSphere) arg;
 
-            return getRefCenter()
-                    .isExact(fSphere.getRefCenter()) &&
-                    getRadius() == fSphere.getRadius() &&
-                    getIndex() == arg.getIndex() &&
-                    getTag().equals(arg.getTag());
+            return getRefCenter().isExact(fSphere.getRefCenter()) && getRadius() == fSphere.getRadius();
         }
 
        return false;
@@ -188,12 +229,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public FSphere self() {
-
-        return this;
-    }
-
-    @Override
     public FSphere copy() {
 
         return supplyFSphere().applyStateFrom(this);
@@ -218,12 +253,18 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return json;
     }
 
+    @Override
+    public FSphere self() {
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getRefCenter(), radius);
+        return Objects.hash(getRefCenter(), getRadius());
     }
 
     @Override
@@ -247,63 +288,15 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public double getRadius() {
-
-        return this.radius;
-    }
-
-    @Override
-    public FSphere setRadius(double radius) {
-
-        if (radius <= 0) {
-            throw new IllegalArgumentException("The radius must be greater than zero");
-        }
-
-        this.radius = radius;
-
-        return this;
-    }
-
-    @Override
     public double getRadiusInner() {
 
         return getRadius();
     }
 
     @Override
-    public FSphere setRadiusInner(double radius) {
+    public Shape setRadiusInner(double radius) {
 
         return setRadius(radius);
-    }
-
-    @Override
-    public FSphere setCenter(double x, double y, double z) {
-
-        center.set(x, y, z);
-
-        return this;
-    }
-
-    @Override
-    public FSphere setCenter(FPoint fPoint) {
-
-        center.applyStateFrom(fPoint);
-
-        return this;
-    }
-
-    @Override
-    public FSphere setCenter(FPos3D fPos3D) {
-
-        center.applyStateFrom(fPos3D);
-
-        return this;
-    }
-
-    @Override
-    public void getCenter(FPoint in) {
-
-        in.applyStateFrom(center);
     }
 
     @Override
@@ -397,113 +390,116 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
 
 
-
     @Override
-    public boolean attachLinear(Shape target, double epsilon) {
+    public boolean attachLinear(Shape target, double epsilon, double delta) {
 
         if (!(target instanceof FSphere)) {
-            throw new UnsupportedOperationException("The operation has not been implemented yet");
+            throw new UnsupportedOperationException("The operation is not implemented");
         }
 
-        FSphere fSphere  = (FSphere) target;
+        // The FSphere is already at a correct position.
+        if (super.touchesEpsilonSimplified(target, epsilon) == Relation.TRUE) {
+            return true;
+        }
 
-        boolean isTouching = touches(fSphere, epsilon, -1);
-// TODO should return int code 0 already positioned, -1 cannot reposition (same center)
-        if (isTouching) {
+        // The FSphere is at the same position as the target shape, and therefore, cannot be linearly positioned.
+        if (isSimilarCenter(target)) {
             return false;
         }
 
-        if (getRefCenter().isSimilar(fSphere.getRefCenter())) {
-            // TODO remove random
-            factory.getFRandEngine().onSphere(getRefCenter(), fSphere.getRadius() * 0.5);
-        }
-
-        getRefCenter().setDistance(fSphere.getRefCenter(), radius + fSphere.getRadius());
+        setDistCenter(target, getRadius() + target.getRadius());
 
         return true;
     }
 
     @Override
-    public boolean attachLinear(Shape target, double epsilon, FAssembly<? extends Shape> field, int maxBounce) {
+    public boolean attachLinear(Shape target, double epsilon, double delta, FAssembly<? extends Shape> field, int corrections) {
 
         if (!(target instanceof FSphere)) {
-            throw new UnsupportedOperationException("The operation has not been implemented yet");
+            throw new UnsupportedOperationException("The operation is not implemented");
         }
 
-        FSphere fSphere  = (FSphere) target;
-
-        // TODO 0 already positioned, -1 same center initial, -2 colinear point after bounce, -3 bounce limit
         int repositions = 1;
 
-        attachLinear(target, epsilon);
+        if (!attachLinear(target, epsilon, delta)) {
+            return false;
+        }
 
-        FSphere neighbour = getNeighbour(fSphere, epsilon, field);
+        Shape closestNeighbour = getClosestNeighbour(epsilon, field);
 
-        if (neighbour == null) {
+        if (closestNeighbour == null) {
             return true;
         }
 
-        while (neighbour != null && repositions++ < maxBounce + 1) {
-            bounceSpherical(fSphere, neighbour);
+        while (closestNeighbour != null && repositions++ < corrections + 1) {
 
-            neighbour = getNeighbour(fSphere, epsilon, field);
+            if (!attachSpherical(closestNeighbour, target, epsilon)) {
+                return false;
+            }
+
+            closestNeighbour = getClosestNeighbour(epsilon, field);
         }
 
-       return neighbour == null;
+        return closestNeighbour == null;
     }
 
-    private FSphere getNeighbour(FSphere arg, double epsilon, FAssembly<? extends Shape> field) {
-        double minDist = Double.MAX_VALUE;
-        FSphere neighbour = null;
+    @Override
+    public boolean attachSpherical(Shape target, Shape center, double epsilon) {
 
-        for (Shape fSphere : field) {
+        if (!(target instanceof FSphere)) {
+            throw new UnsupportedOperationException("The operation is not implemented");
+        }
 
-            if (fSphere == this || fSphere == arg) {
+        // The FSphere is already at a correct position.
+        if (super.touchesEpsilonSimplified(target, epsilon) == Relation.TRUE) {
+            return true;
+        }
+
+        FPoint fPointTarget = getCacheFPoint()
+                .set(target.getCenterX(), target.getCenterY(), target.getCenterZ());
+        FVector fVectorAxis = getCacheFVector()
+                .setBase(center.getCenterX(), center.getCenterY(), center.getCenterZ())
+                .setHead(this.getCenterX(), this.getCenterY(), this.getCenterZ());
+
+        // The FSphere is on the rotation axis, and therefore, cannot be linearly positioned.
+        if (fVectorAxis.isCollinearBaseCommon(fPointTarget)) {
+            return false;
+        }
+
+        double sideA = fVectorAxis.getMagnitude();
+        double sideB = fPointTarget.getDistance(fVectorAxis.getRefBase());
+        double sideC = this.getRadius() + target.getRadius();
+
+        double angle = factory.getFTrigHelper().getAngle(sideB, sideA, sideC);
+
+        factory.getFRotEngine().setRgAngleBaseCommon(fVectorAxis, fPointTarget, angle);
+
+        this.setCenter(fVectorAxis.getRefHead());
+
+        return true;
+    }
+
+    private Shape getClosestNeighbour(double epsilon, FAssembly<? extends Shape> field) {
+        double distCenterMin = Double.MAX_VALUE;
+        Shape candidate = null;
+
+        for (Shape element : field) {
+
+            if (element == this) {
                 continue;
             }
 
-            if (overlaps(fSphere, epsilon, -1)) {
-                double dist = getRefCenter().getDistanceP2(((FSphere) fSphere).getRefCenter());
+            if (overlaps(element, epsilon, -1)) {
+                double distCenter = getDistCenterP2(element);
 
-                if (dist < minDist) {
-                    neighbour = (FSphere) fSphere;
-                    minDist = dist;
+                if (distCenter < distCenterMin) {
+                    distCenterMin = distCenter;
+                    candidate = element;
                 }
             }
         }
 
-        return neighbour;
-    }
-
-    private void bounceLinear(FSphere arg, FSphere neighbour) {
-
-    }
-
-    private void bounceSpherical(FSphere arg, FSphere neighbour) {
-        // TODO point cannot be on the same line
-
-
-        FTrigHelper trigHelper = factory.getFTrigHelper();
-        FRotEngine rotEngine = factory.getFRotEngine();
-
-        FVector vecRef = cache.get("bVec1", FVector.class,
-                (core) -> core.get(ScatFactory.class).getFVector());
-
-        FVector vecArg = cache.get("bVec2", FVector.class,
-                (core) -> core.get(ScatFactory.class).getFVector());
-
-        vecRef.set(arg.getRefCenter(), this.getRefCenter());
-        vecArg.set(arg.getRefCenter(), neighbour.getRefCenter());
-
-        double sideRef = vecRef.getMagnitude();
-        double sideArg = vecArg.getMagnitude();
-
-        double dist = getRadius() + neighbour.getRadius();
-        double ang = trigHelper.getAngle(sideRef, sideArg, dist);
-
-        rotEngine.setRgAngle(vecRef, vecArg, ang);
-
-        getRefCenter().applyStateFrom(vecRef.getRefHead());
+        return candidate;
     }
 
     @Override

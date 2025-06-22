@@ -51,9 +51,9 @@ public class FAssemblyProducerTest {
         FAssembly<FSphere> resultB = producer.produce();
 
         Assertions.assertAll("Validate FAssembly values",
-                () -> assertTrue(resultA.getGeometries().get(0).getRefCenter().isExact(1, 1, 1),
+                () -> assertTrue(resultA.getListGeometry().get(0).getRefCenter().isExact(1, 1, 1),
                         "The FAssembly A value is erroneous"),
-                () -> assertTrue(resultB.getGeometries().get(0).getRefCenter().isExact(2, 2, 2),
+                () -> assertTrue(resultB.getListGeometry().get(0).getRefCenter().isExact(2, 2, 2),
                         "The FAssembly B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -81,9 +81,9 @@ public class FAssemblyProducerTest {
         FAssembly<FSphere> resultB = producer.produce();
 
         Assertions.assertAll("Validate FAssembly values",
-                () -> assertTrue(resultA.getGeometries().get(0).getRefCenter().isExact(1, 1, 1),
+                () -> assertTrue(resultA.getListGeometry().get(0).getRefCenter().isExact(1, 1, 1),
                         "The FAssembly A value is erroneous"),
-                () -> assertTrue(resultB.getGeometries().get(0).getRefCenter().isExact(2, 2, 2),
+                () -> assertTrue(resultB.getListGeometry().get(0).getRefCenter().isExact(2, 2, 2),
                         "The FAssembly B value is erroneous"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
@@ -112,7 +112,7 @@ public class FAssemblyProducerTest {
 
         for (int i = 0 ; i < 1000 ; i++) {
 
-            if (producer.produce().getGeometries().get(0).getRadius() == 1) {
+            if (producer.produce().getListGeometry().get(0).getRadius() == 1) {
                 countA++;
             } else {
                 countB++;
@@ -156,11 +156,11 @@ public class FAssemblyProducerTest {
 
         for (FAssembly<FSphere> fAssembly : producer.getListAuto()) {
 
-            if (fAssembly.getGeometries().get(0).getRadius() == 1) {
+            if (fAssembly.getListGeometry().get(0).getRadius() == 1) {
                 qCountA++;
-            } else if (fAssembly.getGeometries().get(0).getRadius() == 2) {
+            } else if (fAssembly.getListGeometry().get(0).getRadius() == 2) {
                 aCountB++;
-            } else if (fAssembly.getGeometries().get(0).getRadius() == 3) {
+            } else if (fAssembly.getListGeometry().get(0).getRadius() == 3) {
                 qCountC++;
             } else {
                 throw new IllegalStateException("The produced element is erroneous");
@@ -200,11 +200,11 @@ public class FAssemblyProducerTest {
 
         for (FAssembly<FSphere> fAssembly : producer.getListFixed(8)) {
 
-            if (fAssembly.getGeometries().get(0).getRadius() == 1) {
+            if (fAssembly.getListGeometry().get(0).getRadius() == 1) {
                 qCountA++;
-            } else if (fAssembly.getGeometries().get(0).getRadius() == 2) {
+            } else if (fAssembly.getListGeometry().get(0).getRadius() == 2) {
                 qCountB++;
-            } else if (fAssembly.getGeometries().get(0).getRadius() == 3) {
+            } else if (fAssembly.getListGeometry().get(0).getRadius() == 3) {
                 qCountC++;
             } else {
                 throw new IllegalStateException("The produced element is erroneous");
@@ -243,7 +243,7 @@ public class FAssemblyProducerTest {
 
         boolean sequence = true;
         for (int i = 0 ; i < 20 ; i++) {
-            if (results.get(i).getGeometries().get(0).getRadius() != 1) {
+            if (results.get(i).getListGeometry().get(0).getRadius() != 1) {
                 sequence = false;
                 break;
             }
@@ -279,7 +279,7 @@ public class FAssemblyProducerTest {
 
         boolean sequence = true;
         for (int i = 0 ; i < 20 ; i++) {
-            if (results.get(i).getGeometries().get(0).getRadius() != 1) {
+            if (results.get(i).getListGeometry().get(0).getRadius() != 1) {
                 sequence = false;
                 break;
             }
@@ -310,9 +310,9 @@ public class FAssemblyProducerTest {
         FAssembly<FPoint> resultB = producer.produce();
 
         Assertions.assertAll("Validate FAssembly values",
-                () -> assertEquals(1, resultA.getGeometries().get(0).getMagnitude(),
+                () -> assertEquals(1, resultA.getListGeometry().get(0).getMagnitude(),
                         epsilon, "The FPoint A magnitude is erroneous"),
-                () -> assertEquals(1, resultB.getGeometries().get(0).getMagnitude(),
+                () -> assertEquals(1, resultB.getListGeometry().get(0).getMagnitude(),
                         epsilon, "The FPoint B magnitude is erroneous"),
                 () -> assertNotEquals(resultA, resultB,
                         "Elements should have different values"),
@@ -342,9 +342,9 @@ public class FAssemblyProducerTest {
         FAssembly<FPoint> resultB = producer.produce();
 
         Assertions.assertAll("Validate FAssembly values",
-                () -> assertEquals(1, resultA.getGeometries().get(0).getMagnitude(),
+                () -> assertEquals(1, resultA.getListGeometry().get(0).getMagnitude(),
                         epsilon, "The FPoint A magnitude is erroneous"),
-                () -> assertEquals(1, resultB.getGeometries().get(0).getMagnitude(),
+                () -> assertEquals(1, resultB.getListGeometry().get(0).getMagnitude(),
                         epsilon, "The FPoint B magnitude is erroneous"),
                 () -> assertNotEquals(resultA, resultB,
                         "Elements should have different values"),

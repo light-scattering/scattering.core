@@ -53,7 +53,7 @@ public class FAssemblyTest {
             fAssembly.registerWithCheck(fVectorY);
             fAssembly.registerWithCheck(fVectorZ);
 
-            Collection<FVector> geometries = fAssembly.getGeometries();
+            Collection<FVector> geometries = fAssembly.getListGeometry();
 
             Assertions.assertAll("Validate geometries",
                     () -> assertEquals(3, geometries.size(),
@@ -123,7 +123,7 @@ public class FAssemblyTest {
             fAssemblyCopy.set(json);
 
             Assertions.assertAll("Validate FAssembly values",
-                    () -> assertEquals(8, fAssembly.getGeometries().size(),
+                    () -> assertEquals(8, fAssembly.getListGeometry().size(),
                             "The number of geometries is incorrect"),
                     () -> assertEquals(14, fAssembly.toFPoints().size(),
                             "The number of elements is incorrect"),

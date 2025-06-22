@@ -17,6 +17,37 @@ public class FPairPos3DTest {
     class FPairPos3DBasicTest {
 
         @Test
+        @DisplayName("Construct with min/max")
+        void constructWithMinMax() {
+            double min = -1;
+            double max = 2;
+
+            var dto = factory.getFPairPos3D(min, max);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(dto.getPosA(), factory.getFPos3D(min, min, min),
+                            "Position A is incorrect"),
+                    () -> assertEquals(dto.getPosB(), factory.getFPos3D(max, max, max),
+                            "Position B is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with range")
+        void constructWithRange() {
+            double range = 5;
+
+            var dto = factory.getFPairPos3D(range);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(dto.getPosA(), factory.getFPos3D(-range, -range, -range),
+                            "Position A is incorrect"),
+                    () -> assertEquals(dto.getPosB(), factory.getFPos3D(range, range, range),
+                            "Position B is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Values")
         void getValuesTest() {
             var dtoPosA = factory.getFPos3D(1, 2, 3);
