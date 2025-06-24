@@ -34,7 +34,7 @@ public class ShapeProducerTest {
     @DisplayName("Produce")
     void produceWithProvider() {
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                .withFixedRadius("TiO2", 3);
+                .withFixedRadius(3);
 
         Producer<Shape> producer = factory.getShapeProducer()
                 .withProducer(fSphereProducer, 1);
@@ -60,7 +60,7 @@ public class ShapeProducerTest {
     @DisplayName("Produce (simple)")
     void produceWithProviderSimple() {
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                .withFixedRadius("TiO2", 3);
+                .withFixedRadius(3);
 
         Producer<Shape> producer = factory.getShapeProducer()
                 .withProducer(fSphereProducer);

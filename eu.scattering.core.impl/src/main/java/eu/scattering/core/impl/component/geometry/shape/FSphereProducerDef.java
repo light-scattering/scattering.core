@@ -30,6 +30,10 @@ public class FSphereProducerDef implements FSphereProducer {
     private final ProducerCoreDef<FSphere> processor;
     private final FRandEngine rndEngine;
 
+    private String tag = null;
+    private Double delta = null;
+    private Double epsilon = null;
+
     private FSphereProducerDef(FSphereFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
@@ -60,19 +64,31 @@ public class FSphereProducerDef implements FSphereProducer {
 
     @Override
     public FSphere produce() {
+        FSphere fSphere = processor.produce();
 
-        return processor.produce();
+        if (this.tag != null) {
+            fSphere.setTag(this.tag);
+        }
+
+        if (this.delta != null) {
+            fSphere.setDelta(this.delta);
+        }
+
+        if (this.epsilon != null) {
+            fSphere.setEpsilon(this.epsilon);
+        }
+
+        return fSphere;
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSphereProducer withFixedRadius(String tag, double radius, int weight) {
+    public FSphereProducer withFixedRadius(double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FSphere fSphere = factory.getFSphere();
 
-            fSphere.setTag(tag);
             fSphere.setRadius(radius);
 
             return fSphere;
@@ -84,12 +100,11 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withDistRadius(String tag, FDist1D radius, int weight) {
+    public FSphereProducer withDistRadius(FDist1D radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FSphere fSphere = factory.getFSphere();
 
-            fSphere.setTag(tag);
             fSphere.setRadius(radius.produce());
 
             return fSphere;
@@ -101,13 +116,12 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndFixedRadius(String tag, FPointProducer pCenter, double radius, int weight) {
+    public FSphereProducer withCenterAndFixedRadius(FPointProducer pCenter, double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FPoint fPoint = pCenter.produce();
             FSphere fSphere = factory.getRefFSphere(fPoint);
 
-            fSphere.setTag(tag);
             fSphere.setRadius(radius);
 
             return fSphere;
@@ -119,13 +133,12 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndDistRadius(String tag, FPointProducer pCenter, FDist1D radius, int weight) {
+    public FSphereProducer withCenterAndDistRadius(FPointProducer pCenter, FDist1D radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FPoint fPoint = pCenter.produce();
             FSphere fSphere = factory.getRefFSphere(fPoint);
 
-            fSphere.setTag(tag);
             fSphere.setRadius(radius.produce());
 
             return fSphere;
@@ -138,6 +151,28 @@ public class FSphereProducerDef implements FSphereProducer {
 
     // -------------------------------------------------------------------------------------------------
 
+    @Override
+    public FSphereProducer setTag(String tag) {
+        this.tag = tag;
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer setDelta(double delta) {
+        this.delta = delta;
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer setEpsilon(double epsilon) {
+        this.epsilon = epsilon;
+
+        return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public Stream<FSphere> stream() {

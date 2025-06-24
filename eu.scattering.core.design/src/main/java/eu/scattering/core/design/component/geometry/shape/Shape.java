@@ -102,5 +102,4 @@ public interface Shape extends Geometry {
 
     @Fragment
     double getDistCenterP2(Shape shape);
-
 }

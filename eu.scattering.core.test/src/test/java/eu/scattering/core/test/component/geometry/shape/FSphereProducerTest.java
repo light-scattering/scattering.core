@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.impl.ConfigDef.SHAPE_DELTA;
+import static eu.scattering.core.impl.ConfigDef.SHAPE_EPSILON;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -487,7 +489,7 @@ public class FSphereProducerTest {
     @DisplayName("Preset fixed radius")
     void presetFixedRadius() {
         FSphereProducer producer = factory.getFSphereProducer()
-                .withFixedRadius("TiO2", 5, 1);
+                .withFixedRadius(5, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -505,10 +507,6 @@ public class FSphereProducerTest {
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
                         "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
-                        "Tag B is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );
@@ -518,7 +516,7 @@ public class FSphereProducerTest {
     @DisplayName("Preset fixed radius (simple)")
     void presetFixedRadiusSimple() {
         FSphereProducer producer = factory.getFSphereProducer()
-                .withFixedRadius("TiO2", 5);
+                .withFixedRadius(5);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -536,10 +534,6 @@ public class FSphereProducerTest {
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
                         "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
-                        "Tag B is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );
@@ -552,7 +546,7 @@ public class FSphereProducerTest {
                 .getFDist1DUniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withDistRadius("TiO2", radius, 1);
+                .withDistRadius(radius, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -565,10 +559,6 @@ public class FSphereProducerTest {
                 () -> assertEquals(-1, resultA.getIndex(),
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
-                        "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
                         "Tag B is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
@@ -582,7 +572,7 @@ public class FSphereProducerTest {
                 .getFDist1DUniform(epsilon, 0.001);
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withDistRadius("TiO2", radius);
+                .withDistRadius(radius);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -596,10 +586,6 @@ public class FSphereProducerTest {
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
                         "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
-                        "Tag B is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
         );
@@ -612,7 +598,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndFixedRadius("TiO2", pCenter, 5, 1);
+                .withCenterAndFixedRadius(pCenter, 5, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -630,10 +616,6 @@ public class FSphereProducerTest {
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
                         "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
-                        "Tag B is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );
@@ -646,7 +628,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndFixedRadius("TiO2", pCenter, 5);
+                .withCenterAndFixedRadius(pCenter, 5);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -664,10 +646,6 @@ public class FSphereProducerTest {
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
                         "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
-                        "Tag B is incorrect"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );
@@ -683,7 +661,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndDistRadius("TiO2", pCenter, radius, 1);
+                .withCenterAndDistRadius(pCenter, radius, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -701,10 +679,6 @@ public class FSphereProducerTest {
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
                         "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
-                        "Tag B is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
         );
@@ -720,7 +694,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndDistRadius("TiO2", pCenter, radius);
+                .withCenterAndDistRadius(pCenter, radius);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -738,10 +712,6 @@ public class FSphereProducerTest {
                         "Index A is incorrect"),
                 () -> assertEquals(-1, resultB.getIndex(),
                         "Index B is incorrect"),
-                () -> assertEquals("TiO2", resultA.getTag(),
-                        "Tag A is incorrect"),
-                () -> assertEquals("TiO2", resultB.getTag(),
-                        "Tag B is incorrect"),
                 () -> assertFalse(resultA.isExact(resultB),
                         "Values should be different")
         );
@@ -798,6 +768,43 @@ public class FSphereProducerTest {
                         "Elements should have different values"),
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Setters")
+    void setters() {
+
+        FSphereProducer producerA = factory.getFSphereProducer()
+                .withFixedRadius(1);
+
+        FSphere resultA = producerA.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertEquals("", resultA.getTag(),
+                        "The default tag is erroneous"),
+                () -> assertEquals(SHAPE_EPSILON, resultA.getEpsilon(),
+                        "The default epsilon value is erroneous"),
+                () -> assertEquals(SHAPE_DELTA, resultA.getDelta(),
+                        "The default delta value is erroneous")
+        );
+
+        FSphereProducer producerB = producerA
+                .setTag("123")
+                .setEpsilon(1)
+                .setDelta(2);
+
+        FSphere resultB = producerB.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertEquals("123", resultB.getTag(),
+                        "The tag is erroneous"),
+                () -> assertEquals(1, resultB.getEpsilon(),
+                        "The epsilon value is erroneous"),
+                () -> assertEquals(2, resultB.getDelta(),
+                        "The delta value is erroneous"),
+                () -> assertSame(producerA, producerB,
+                        "The reference should not change")
         );
     }
 }
