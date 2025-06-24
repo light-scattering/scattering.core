@@ -12,8 +12,7 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import java.util.Comparator;
 import java.util.List;
 
-import static eu.scattering.core.impl.ConfigDef.DELTA;
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
+import static eu.scattering.core.impl.ConfigDef.*;
 
 public abstract class ShapePresetDef implements Shape {
     private final static double MESH_OFFSET = -0.5;
@@ -21,8 +20,8 @@ public abstract class ShapePresetDef implements Shape {
     private final ScatFactory factory;
     private FCache cache;
 
-    private double epsilon = EPSILON;
-    private double delta = DELTA;
+    private double epsilon = SHAPE_EPSILON;
+    private double delta = SHAPE_DELTA;
 
     private int index = -1;
     private String tag = "";
@@ -30,6 +29,12 @@ public abstract class ShapePresetDef implements Shape {
     public ShapePresetDef(ScatFactory factory) {
 
         this.factory = factory;
+    }
+
+    @Override
+    public FCache getFCache() {
+
+        return this.cache;
     }
 
     @Override
@@ -45,9 +50,11 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void setEpsilon(double epsilon) {
+    public Shape setEpsilon(double epsilon) {
 
         this.epsilon = epsilon;
+
+        return this;
     }
 
     @Override
@@ -57,9 +64,11 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void setDelta(double delta) {
+    public Shape setDelta(double delta) {
 
         this.delta = delta;
+
+        return this;
     }
 
     @Override
@@ -228,7 +237,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public boolean touches(Shape shape, double epsilon, double delta) {
+    public boolean touches(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
             throw new IllegalArgumentException("At least one precision parameter must be defined");
@@ -254,14 +263,14 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public boolean overlaps(Shape shape, double epsilon, double delta) {
+    public boolean overlaps(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
             throw new IllegalArgumentException("At least one precision parameter must be defined");
         }
 
         if (epsilon > 0) {
-            Relation relation = overlapsEpsilon(shape, epsilon);
+            Relation relation = overlapsEpsilon(shape);
 
             if (relation == Relation.TRUE) {
                 return true;
@@ -273,21 +282,21 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         if (delta > 0) {
-            return overlapsDelta(shape, delta);
+            return overlapsDelta(shape);
         }
 
         throw new IllegalStateException("The problem cannot be solved with direct equations");
     }
 
     @Override
-    public boolean encloses(Shape shape, double epsilon, double delta) {
+    public boolean encloses(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
             throw new IllegalArgumentException("At least one precision parameter must be defined");
         }
 
         if (epsilon > 0) {
-            Relation relation = enclosesEpsilon(shape, epsilon);
+            Relation relation = enclosesEpsilon(shape);
 
             if (relation == Relation.TRUE) {
                 return true;
@@ -299,14 +308,14 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         if (delta > 0) {
-            return enclosesDelta(shape, delta);
+            return enclosesDelta(shape);
         }
 
         throw new IllegalStateException("The problem cannot be solved with direct equations");
     }
 
     @Override
-    public boolean intersects(Shape shape, double epsilon, double delta) {
+    public boolean intersects(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
             throw new IllegalArgumentException("At least one precision parameter must be defined");
@@ -331,7 +340,7 @@ public abstract class ShapePresetDef implements Shape {
         throw new IllegalStateException("The problem cannot be solved with direct equations");
     }
 
-    protected Relation enclosesEpsilon(Shape shape, double epsilon) {
+    protected Relation enclosesEpsilon(Shape shape) {
 
         if (this.getRadius() < shape.getRadius()) {
             return Relation.FALSE;
@@ -349,23 +358,14 @@ public abstract class ShapePresetDef implements Shape {
         reqDist = this.getRadiusInner() - shape.getRadiusInner() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
-        return distP2 < reqDistP2 ? Relation.TRUE : Relation.UNDEFINED;
-    }
-
-    protected Relation enclosesEpsilonSimplified(Shape shape, double epsilon) {
-
-        if (this.getRadius() < shape.getRadius()) {
-            return Relation.FALSE;
+        if (distP2 < reqDistP2) {
+            return Relation.TRUE;
         }
 
-        double distP2 = getDistCenterP2(shape);
-        double reqDist = this.getRadius() - shape.getRadius() - epsilon;
-        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        return distP2 < reqDistP2 ? Relation.TRUE : Relation.FALSE;
+        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
-    protected boolean enclosesDelta(Shape shape, double delta) {
+    protected boolean enclosesDelta(Shape shape) {
         FVector range = getOperationRange(shape);
 
         if (range.getBaseX() == range.getHeadX()) {
@@ -407,23 +407,11 @@ public abstract class ShapePresetDef implements Shape {
         reqDist = this.getRadiusInner() + shape.getRadiusInner() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
-        return distP2 < reqDistP2 ? Relation.FALSE: Relation.UNDEFINED;
-    }
-
-    protected Relation touchesEpsilonSimplified(Shape shape, double epsilon) {
-        double distP2 = getDistCenterP2(shape);
-
-        double reqDistOuter = this.getRadius() + shape.getRadius() + epsilon;
-        double reqDistOuterP2 = reqDistOuter < 0 ? 0 : reqDistOuter * reqDistOuter;
-
-        if (distP2 > reqDistOuterP2) {
+        if (distP2 < reqDistP2) {
             return Relation.FALSE;
         }
 
-        double reqDistInner = this.getRadius() + shape.getRadius() - epsilon;
-        double reqDistInnerP2 = reqDistInner < 0 ? 0 : reqDistInner * reqDistInner;
-
-        return distP2 < reqDistInnerP2 ? Relation.FALSE: Relation.TRUE;
+        return this.getRadius() == this.getRadiusInner() ? Relation.TRUE : Relation.UNDEFINED;
     }
 
     protected boolean touchesDelta(Shape shape, double delta) {
@@ -466,7 +454,7 @@ public abstract class ShapePresetDef implements Shape {
         return ruleTouch;
     }
 
-    protected Relation overlapsEpsilon(Shape shape, double epsilon) {
+    protected Relation overlapsEpsilon(Shape shape) {
         double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() - epsilon;
@@ -479,19 +467,14 @@ public abstract class ShapePresetDef implements Shape {
         reqDist = this.getRadiusInner() + shape.getRadiusInner() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
-        return distP2 < reqDistP2 ? Relation.TRUE: Relation.UNDEFINED;
+        if (distP2 < reqDistP2) {
+            return Relation.TRUE;
+        }
+
+        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
-    protected Relation overlapsEpsilonSimplified(Shape shape, double epsilon) {
-        double distP2 = getDistCenterP2(shape);
-
-        double reqDistNone = this.getRadius() + shape.getRadius() - epsilon;
-        double reqDistNoneP2 = reqDistNone < 0 ? 0 : reqDistNone * reqDistNone;
-
-        return distP2 < reqDistNoneP2 ? Relation.TRUE : Relation.FALSE;
-    }
-
-    protected boolean overlapsDelta(Shape shape, double delta) {
+    protected boolean overlapsDelta(Shape shape) {
         FVector range = getOperationRange(shape);
 
         double offset = delta * MESH_OFFSET;
@@ -521,23 +504,11 @@ public abstract class ShapePresetDef implements Shape {
         reqDist = Math.abs(this.getRadiusInner() - shape.getRadiusInner()) - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
-        return distP2 > reqDistP2 ? Relation.TRUE : Relation.UNDEFINED;
-    }
-
-    protected Relation intersectsEpsilonSimplified(Shape shape, double epsilon) {
-        double distP2 = getDistCenterP2(shape);
-
-        double reqDist = this.getRadius() + shape.getRadius() - epsilon;
-        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
         if (distP2 > reqDistP2) {
-            return Relation.FALSE;
+            return Relation.TRUE;
         }
 
-        reqDist = Math.abs(this.getRadius() - shape.getRadius()) - epsilon;
-        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        return distP2 > reqDistP2 ? Relation.TRUE : Relation.FALSE;
+        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean intersectsDelta(Shape shape, double delta) {
@@ -583,7 +554,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void  getOverlappingShapes(List<Shape> in, List<? extends Shape> field, double epsilon, double delta) {
+    public void  getOverlappingShapes(List<Shape> in, List<? extends Shape> field) {
         in.clear();
 
         for (Shape shape : field) {
@@ -592,7 +563,7 @@ public abstract class ShapePresetDef implements Shape {
                 continue;
             }
 
-            if (overlaps(shape, epsilon, delta)) {
+            if (overlaps(shape)) {
                 in.add(shape);
             }
         }

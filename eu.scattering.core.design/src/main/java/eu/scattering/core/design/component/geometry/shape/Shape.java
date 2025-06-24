@@ -45,10 +45,10 @@ public interface Shape extends Geometry {
     boolean contains(FPoint fPoint);
     boolean contains(FPos3D fPos3D);
 
-    boolean touches(Shape shape, double epsilon, double delta);
-    boolean overlaps(Shape shape, double epsilon, double delta);
-    boolean encloses(Shape shape, double epsilon, double delta);
-    boolean intersects(Shape shape, double epsilon, double delta);
+    boolean touches(Shape shape);
+    boolean overlaps(Shape shape);
+    boolean encloses(Shape shape);
+    boolean intersects(Shape shape);
 
     double getVolume();
     void getVolumeBuffer(FStream3D stream, double delta);
@@ -70,32 +70,33 @@ public interface Shape extends Geometry {
     Shape setRadiusMin(FAssembly<? extends Shape> field, double minCutoff);
     Shape setRadiusMax(FAssembly<? extends Shape> field, double maxCutoff);
 
-    boolean attachLinear(Shape target, double epsilon, double delta);
-    boolean attachLinear(Shape target, double epsilon, double delta, FAssembly<? extends Shape> field, int corrections);
+    boolean attachLinear(Shape target);
+    boolean attachLinear(Shape target, FAssembly<? extends Shape> field, int corrections);
 
-    boolean attachSpherical(Shape target, Shape center, double epsilon);
+    boolean attachSpherical(Shape target, Shape center);
 
     boolean project(FPoint aim, List<FSphere> field);
 
-    void getOverlappingShapes(List<Shape> in, List<? extends Shape> field, double epsilon, double delta);
+    void getOverlappingShapes(List<Shape> in, List<? extends Shape> field);
 
     void sortByDistance(List<? extends Shape> in);
 
     // -------------------------------------------------------------------------------------------------
 
+    FCache getFCache();
     void setFCache(FCache cache);
-
-    double getEpsilon();
-    void setEpsilon(double epsilon);
-
-    double getDelta();
-    void setDelta(double delta);
-
-    int getIndex();
-    void setIndex(int index);
 
     String getTag();
     void setTag(String tag);
+
+    double getEpsilon();
+    Shape setEpsilon(double epsilon);
+
+    double getDelta();
+    Shape setDelta(double delta);
+
+    int getIndex();
+    void setIndex(int index);
 
     //--------------------------------------------------
 

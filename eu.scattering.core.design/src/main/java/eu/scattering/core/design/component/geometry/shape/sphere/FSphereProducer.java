@@ -23,6 +23,12 @@ public interface FSphereProducer extends Producer<FSphere> {
 
     // -------------------------------------------------------------------------------------------------
 
+//    FSphereProducer setTag(String tag);
+//    FSphereProducer setDelta(double delta);
+//    FSphereProducer setEpsilon(double epsilon);
+
+    // -------------------------------------------------------------------------------------------------
+
     FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int weight);
     FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandEngine, FSphere> function, int weight);
 

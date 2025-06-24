@@ -13,6 +13,7 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     boolean registerWithCheck(T element);
 
     FAssembly<T> register(T element);
+//  FAssembly<T> deregister(T element);
 
     FAssembly<T> applyFPoint(Consumer<FPoint> consumer);
     FAssembly<T> applyGeometry(Consumer<T> consumer);

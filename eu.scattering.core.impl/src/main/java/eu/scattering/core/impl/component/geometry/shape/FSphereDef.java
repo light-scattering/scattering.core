@@ -341,45 +341,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return distP2 < radP2 + EPSILON;
     }
 
-    @Override
-    public boolean touches(Shape shape, double epsilon, double delta) {
-
-        if (epsilon >= 0) {
-            return super.touchesEpsilonSimplified(shape, epsilon) == Relation.TRUE;
-        }
-
-        return super.touches(shape, epsilon, delta);
-    }
-
-    @Override
-    public boolean overlaps(Shape shape, double epsilon, double delta) {
-
-        if (epsilon >= 0) {
-            return super.overlapsEpsilonSimplified(shape, epsilon) == Relation.TRUE;
-        }
-
-        return super.overlaps(shape, epsilon, delta);
-    }
-
-    @Override
-    public boolean encloses(Shape shape, double epsilon, double delta) {
-
-        if (epsilon >= 0) {
-            return super.enclosesEpsilonSimplified(shape, epsilon) == Relation.TRUE;
-        }
-
-        return super.encloses(shape, epsilon, delta);
-    }
-
-    @Override
-    public boolean intersects(Shape shape, double epsilon, double delta) {
-
-        if (epsilon >= 0) {
-            return super.intersectsEpsilonSimplified(shape, epsilon) == Relation.TRUE;
-        }
-
-        return super.intersects(shape, epsilon, delta);
-    }
 
 
 
@@ -391,14 +352,14 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
 
     @Override
-    public boolean attachLinear(Shape target, double epsilon, double delta) {
+    public boolean attachLinear(Shape target) {
 
         if (!(target instanceof FSphere)) {
             throw new UnsupportedOperationException("The operation is not implemented");
         }
 
         // The FSphere is already at a correct position.
-        if (super.touchesEpsilonSimplified(target, epsilon) == Relation.TRUE) {
+        if (super.touches(target)) {
             return true;
         }
 
@@ -413,7 +374,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean attachLinear(Shape target, double epsilon, double delta, FAssembly<? extends Shape> field, int corrections) {
+    public boolean attachLinear(Shape target, FAssembly<? extends Shape> field, int corrections) {
 
         if (!(target instanceof FSphere)) {
             throw new UnsupportedOperationException("The operation is not implemented");
@@ -421,11 +382,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         int repositions = 1;
 
-        if (!attachLinear(target, epsilon, delta)) {
+        if (!attachLinear(target)) {
             return false;
         }
 
-        Shape closestNeighbour = getClosestNeighbour(epsilon, field);
+        Shape closestNeighbour = getClosestNeighbour(field);
 
         if (closestNeighbour == null) {
             return true;
@@ -433,25 +394,25 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         while (closestNeighbour != null && repositions++ < corrections + 1) {
 
-            if (!attachSpherical(closestNeighbour, target, epsilon)) {
+            if (!attachSpherical(closestNeighbour, target)) {
                 return false;
             }
 
-            closestNeighbour = getClosestNeighbour(epsilon, field);
+            closestNeighbour = getClosestNeighbour(field);
         }
 
         return closestNeighbour == null;
     }
 
     @Override
-    public boolean attachSpherical(Shape target, Shape center, double epsilon) {
+    public boolean attachSpherical(Shape target, Shape center) {
 
         if (!(target instanceof FSphere)) {
             throw new UnsupportedOperationException("The operation is not implemented");
         }
 
         // The FSphere is already at a correct position.
-        if (super.touchesEpsilonSimplified(target, epsilon) == Relation.TRUE) {
+        if (super.touches(target)) {
             return true;
         }
 
@@ -479,7 +440,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return true;
     }
 
-    private Shape getClosestNeighbour(double epsilon, FAssembly<? extends Shape> field) {
+    private Shape getClosestNeighbour(FAssembly<? extends Shape> field) {
         double distCenterMin = Double.MAX_VALUE;
         Shape candidate = null;
 
@@ -489,7 +450,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                 continue;
             }
 
-            if (overlaps(element, epsilon, -1)) {
+            if (overlaps(element)) {
                 double distCenter = getDistCenterP2(element);
 
                 if (distCenter < distCenterMin) {
