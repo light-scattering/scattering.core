@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -786,13 +787,18 @@ public class FSphereProducerTest {
                 () -> assertEquals(SHAPE_EPSILON, resultA.getEpsilon(),
                         "The default epsilon value is erroneous"),
                 () -> assertEquals(SHAPE_DELTA, resultA.getDelta(),
-                        "The default delta value is erroneous")
+                        "The default delta value is erroneous"),
+                () -> assertNull(resultA.getCache(),
+                        "The default cache should be null")
         );
+
+        FCache cache = factory.getFCache();
 
         FSphereProducer producerB = producerA
                 .setTag("123")
                 .setEpsilon(1)
-                .setDelta(2);
+                .setDelta(2)
+                .setCache(cache);
 
         FSphere resultB = producerB.produce();
 
@@ -803,7 +809,23 @@ public class FSphereProducerTest {
                         "The epsilon value is erroneous"),
                 () -> assertEquals(2, resultB.getDelta(),
                         "The delta value is erroneous"),
+                () -> assertSame(cache, resultB.getCache(),
+                        "The cache value is erroneous"),
                 () -> assertSame(producerA, producerB,
+                        "The reference should not change")
+        );
+
+        FSphereProducer producerC = producerB
+                .createCache();
+
+        FSphere resultC = producerC.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertNotNull(resultC.getCache(),
+                        "The cache value should not be null"),
+                () -> assertNotSame(cache, resultC.getCache(),
+                        "The cache value is erroneous"),
+                () -> assertSame(producerB, producerC,
                         "The reference should not change")
         );
     }

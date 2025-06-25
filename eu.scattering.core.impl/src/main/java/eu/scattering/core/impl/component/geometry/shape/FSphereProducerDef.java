@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -31,8 +32,11 @@ public class FSphereProducerDef implements FSphereProducer {
     private final FRandEngine rndEngine;
 
     private String tag = null;
+    private FCache cache = null;
     private Double delta = null;
     private Double epsilon = null;
+
+    private boolean createCache = false;
 
     private FSphereProducerDef(FSphereFactory factory, FRandEngine randomizer) {
 
@@ -76,6 +80,14 @@ public class FSphereProducerDef implements FSphereProducer {
 
         if (this.epsilon != null) {
             fSphere.setEpsilon(this.epsilon);
+        }
+
+        if (this.cache != null) {
+            fSphere.setCache(this.cache);
+        }
+
+        if (this.createCache) {
+            fSphere.createCache();
         }
 
         return fSphere;
@@ -168,6 +180,22 @@ public class FSphereProducerDef implements FSphereProducer {
     @Override
     public FSphereProducer setEpsilon(double epsilon) {
         this.epsilon = epsilon;
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer setCache(FCache cache) {
+        this.createCache = false;
+        this.cache = cache;
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer createCache() {
+        this.createCache = true;
+        this.cache = null;
 
         return this;
     }

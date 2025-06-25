@@ -83,20 +83,21 @@ public interface Shape extends Geometry {
 
     // -------------------------------------------------------------------------------------------------
 
-    FCache getFCache();
-    void setFCache(FCache cache);
+    Shape createCache();
+    Shape setCache(FCache cache);
+    FCache getCache();
 
+    Shape setTag(String tag);
     String getTag();
-    void setTag(String tag);
 
-    double getEpsilon();
-    Shape setEpsilon(double epsilon);
-
-    double getDelta();
-    Shape setDelta(double delta);
-
+    Shape setIndex(int index);
     int getIndex();
-    void setIndex(int index);
+
+    Shape setEpsilon(double epsilon);
+    double getEpsilon();
+
+    Shape setDelta(double delta);
+    double getDelta();
 
     //--------------------------------------------------
 

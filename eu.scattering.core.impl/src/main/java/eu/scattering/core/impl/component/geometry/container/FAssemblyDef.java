@@ -52,11 +52,24 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return newGeometry || newFPoint;
     }
 
-
     @Override
     public FAssembly<T> register(T element) {
 
         registerWithCheck(element);
+
+        return this;
+    }
+
+    @Override
+    public FAssembly<T> deregister(T element) {
+
+        boolean updated = this.geometries.remove(element);
+
+        if (updated) {
+            this.fPoints.clear();
+
+            this.geometries.forEach(this::registerFPoints);
+        }
 
         return this;
     }

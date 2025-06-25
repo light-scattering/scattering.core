@@ -32,15 +32,25 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public FCache getFCache() {
+    public Shape createCache() {
+
+        this.cache = supplyFCache();
+
+        return this;
+    }
+
+    @Override
+    public FCache getCache() {
 
         return this.cache;
     }
 
     @Override
-    public void setFCache(FCache cache) {
+    public Shape setCache(FCache cache) {
 
         this.cache = cache;
+
+        return this;
     }
 
     @Override
@@ -72,9 +82,11 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void setIndex(int index) {
+    public Shape setIndex(int index) {
 
         this.index = index;
+
+        return this;
     }
 
     @Override
@@ -84,9 +96,11 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void setTag(String tag) {
+    public Shape setTag(String tag) {
 
         this.tag = tag;
+
+        return this;
     }
 
     @Override
@@ -731,6 +745,11 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    protected FCache supplyFCache() {
+
+        return factory.getFCache();
+    }
 
     protected FPoint supplyFPoint() {
 

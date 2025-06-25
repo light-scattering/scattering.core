@@ -777,6 +777,57 @@ public class FAssemblyTest {
         }
 
         @Test
+        @DisplayName("Deregister elements")
+        void deregisterElements() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FVector fVectorA = factory.getFVector(-1, -2, -3, 4, 5, 6);
+            FVector fVectorB = factory.getFVector(-6, -5, -4, 3, 2, 1);
+
+            var results = fAssembly
+                    .register(fVectorA)
+                    .register(fVectorB)
+                    .register(fVectorA)
+                    .deregister(fVectorA);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(1, results.getListGeometry().size(),
+                            "The number of geometries is incorrect"),
+                    () -> assertEquals(2, results.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Deregister elements (duplicate points)")
+        void deregisterElementsDuplicatePoints() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            var results = fAssembly
+                    .register(fVectorA)
+                    .register(fVectorB)
+                    .register(fVectorC)
+                    .deregister(fVectorA);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(2, results.getListGeometry().size(),
+                            "The number of geometries is incorrect"),
+                    () -> assertEquals(3, results.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Apply element")
         void applyElement() {
             FAssembly<FVector> fAssembly = factory.getFAssembly();

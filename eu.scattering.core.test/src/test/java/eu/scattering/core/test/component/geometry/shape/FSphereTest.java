@@ -476,10 +476,12 @@ public class FSphereTest {
             assertEquals(SHAPE_EPSILON, fSphere.getEpsilon(),
                     "The default epsilon value is incorrect");
 
-            fSphere.setEpsilon(123);
+            Shape results = fSphere.setEpsilon(123);
 
             assertEquals(123, fSphere.getEpsilon(),
                     "The epsilon value is incorrect");
+            assertSame(results, fSphere,
+                    "The reference should not change");
         }
 
         @Test
@@ -490,10 +492,12 @@ public class FSphereTest {
             assertEquals(SHAPE_DELTA, fSphere.getDelta(),
                     "The default delta value is incorrect");
 
-            fSphere.setDelta(123);
+            Shape results = fSphere.setDelta(123);
 
             assertEquals(123, fSphere.getDelta(),
                     "The delta value is incorrect");
+            assertSame(results, fSphere,
+                    "The reference should not change");
         }
 
         @Test
@@ -504,10 +508,12 @@ public class FSphereTest {
             assertEquals(-1, fSphere.getIndex(),
                     "The default index value is incorrect");
 
-            fSphere.setIndex(123);
+            Shape results = fSphere.setIndex(123);
 
             assertEquals(123, fSphere.getIndex(),
                     "The index value is incorrect");
+            assertSame(results, fSphere,
+                    "The reference should not change");
         }
 
         @Test
@@ -518,25 +524,45 @@ public class FSphereTest {
             assertEquals("", fSphere.getTag(),
                     "The default tag value is incorrect");
 
-            fSphere.setTag("123");
+            Shape results = fSphere.setTag("123");
 
             assertEquals("123", fSphere.getTag(),
                     "The tag value is incorrect");
+            assertSame(results, fSphere,
+                    "The reference should not change");
         }
 
         @Test
-        @DisplayName("Cache")
+        @DisplayName("Cache (set)")
         void setFCache() {
             Shape fSphere = factory.getFSphere();
 
-            assertNull(fSphere.getFCache(),
+            assertNull(fSphere.getCache(),
                     "The cache value should be null");
 
             FCache cache = factory.getFCache();
-            fSphere.setFCache(cache);
+            Shape results = fSphere.setCache(cache);
 
-            assertSame(cache, fSphere.getFCache(),
+            assertSame(cache, fSphere.getCache(),
                     "The cache instance is incorrect");
+            assertSame(results, fSphere,
+                    "The reference should not change");
+        }
+
+        @Test
+        @DisplayName("Cache (create)")
+        void createFCache() {
+            Shape fSphere = factory.getFSphere();
+
+            assertNull(fSphere.getCache(),
+                    "The cache value should be null");
+
+            Shape results = fSphere.createCache();
+
+            assertNotNull(fSphere.getCache(),
+                    "The cache instance should not be null");
+            assertSame(results, fSphere,
+                    "The reference should not change");
         }
     }
 
