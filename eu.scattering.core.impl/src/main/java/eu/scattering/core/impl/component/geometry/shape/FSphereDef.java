@@ -394,7 +394,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         while (closestNeighbour != null && repositions++ < corrections + 1) {
 
-            if (!attachSpherical(closestNeighbour, target)) {
+            if (!attachSpherical(closestNeighbour, target.getCenterX(), target.getCenterY(), target.getCenterZ())) {
                 return false;
             }
 
@@ -405,7 +405,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean attachSpherical(Shape target, Shape center) {
+    public boolean attachSpherical(Shape target, double x, double y, double z) {
 
         if (!(target instanceof FSphere)) {
             throw new UnsupportedOperationException("The operation is not implemented");
@@ -419,7 +419,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         FPoint fPointTarget = getCacheFPoint()
                 .set(target.getCenterX(), target.getCenterY(), target.getCenterZ());
         FVector fVectorAxis = getCacheFVector()
-                .setBase(center.getCenterX(), center.getCenterY(), center.getCenterZ())
+                .setBase(x, y, z)
                 .setHead(this.getCenterX(), this.getCenterY(), this.getCenterZ());
 
         // The FSphere is on the rotation axis, and therefore, cannot be linearly positioned.

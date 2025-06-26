@@ -71,9 +71,9 @@ public interface Shape extends Geometry {
     Shape setRadiusMax(FAssembly<? extends Shape> field, double maxCutoff);
 
     boolean attachLinear(Shape target);
-    boolean attachLinear(Shape target, FAssembly<? extends Shape> field, int corrections);
+    boolean attachSpherical(Shape target, double x, double y, double z);
 
-    boolean attachSpherical(Shape target, Shape center);
+    boolean attachLinear(Shape target, FAssembly<? extends Shape> field, int corrections);
 
     boolean project(FPoint aim, List<FSphere> field);
 

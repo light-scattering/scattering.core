@@ -2,10 +2,13 @@ package eu.scattering.core.test.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.FCache.FCache;
 import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
@@ -2279,80 +2282,118 @@ public class FSphereTest {
             );
         }
 
-//        @Test
-//        @DisplayName("Attach")
-//        void attach() {
-//            FSphere fSphereRef = factory.getFSphere(1);
-//            FSphere fSphereArg = TestHelper.getRandFSphere();
-//
-//            factory.getFRandEngine().inSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
-//
-//            assertTrue(fSphereRef.overlaps(fSphereArg, 0, -1), "Spheres should overlap");
-//
-//            boolean isRepositioned = fSphereRef.attachLinear(fSphereArg, 0, -1);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertTrue(isRepositioned,
-//                            "The reference sphere should be repositioned"),
-//                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon, -1),
-//                            "Spheres should be in point contact")
-//            );
-//        }
-//
-//        @Test
-//        @DisplayName("Attach - distant")
-//        void attachDistant() {
-//            FSphere fSphereRef = factory.getFSphere(1);
-//            FSphere fSphereArg = (FSphere) TestHelper.getRandFSphere().setRadius(1);
-//
-//            factory.getFRandEngine().onSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 3);
-//
-//            assertFalse(fSphereRef.overlaps(fSphereArg, 0, -1), "Spheres should not overlap");
-//
-//            boolean isRepositioned = fSphereRef.attachLinear(fSphereArg, 0, -1);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertTrue(isRepositioned,
-//                            "The reference sphere should be repositioned"),
-//                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon, -1),
-//                            "Spheres should be in point contact")
-//            );
-//        }
-//
-//        @Test
-//        @DisplayName("Attach - same position")
-//        void attachSamePosition() {
-//            FSphere fSphereRef = TestHelper.getRandFSphere();
-//            FSphere fSphereArg = (FSphere) fSphereRef.copy().setRadius(1);
-//
-//            assertTrue(fSphereRef.overlaps(fSphereArg, 0, -1), "Spheres should overlap");
-//
-//            boolean isPositioned = fSphereRef.attachLinear(fSphereArg, 0, -1);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertFalse(isPositioned,
-//                            "The reference sphere should not be repositioned"),
-//                    () -> assertFalse(fSphereRef.touches(fSphereArg, epsilon, -1),
-//                            "Spheres should not be in point contact")
-//            );
-//        }
-//
-//        @Test
-//        @DisplayName("Attach - point contact")
-//        void attachPointContact() {
-//            FSphere fSphereRef = factory.getFSphere(0, 0, 0, 1);
-//            FSphere fSphereArg = factory.getFSphere(2, 0, 0, 1);
-//
-//            boolean isPositioned = fSphereRef.attachLinear(fSphereArg, 0, -1);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertTrue(isPositioned,
-//                            "Spheres should be in point contact"),
-//                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon, -1),
-//                            "Spheres should be in point contact")
-//            );
-//        }
-//
+        @Test
+        @DisplayName("Attach linear enclosed")
+        void attachLinearEnclosed() {
+            Shape fSphereRef = factory.getFSphere(10);
+
+            Producer<FPoint> fPointProducer = factory.getFPointProducer()
+                    .withInSphere(8.9);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            Shape fSphereArg = fSphereProducer.produce();
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            assertTrue(fSphereRef.encloses(fSphereArg),
+                    "The argument sphere should be enclosed");
+
+            boolean isPositioned = fSphereRef.attachLinear(fSphereArg);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach linear distant")
+        void attachLinearDistant() {
+            Shape fSphereRef = factory.getFSphere(1);
+
+            Producer<FPoint> fPointProducer = factory.getFPointProducer()
+                    .withRadius(10);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            Shape fSphereArg = fSphereProducer.produce();
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            assertFalse(fSphereRef.overlaps(fSphereArg),
+                    "The argument sphere should be not overlap");
+
+            boolean isPositioned = fSphereRef.attachLinear(fSphereArg);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be repositioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach linear touching")
+        void attachLinearTouching() {
+            Shape fSphereRef = factory.getFSphere(1);
+
+            Producer<FPoint> fPointProducer = factory.getFPointProducer()
+                    .withRadius(2);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            Shape fSphereArg = fSphereProducer.produce();
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            assertTrue(fSphereRef.touches(fSphereArg),
+                    "The argument sphere should be in point contact");
+
+            boolean isPositioned = fSphereRef.attachLinear(fSphereArg);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be repositioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach linear fail, zero")
+        void attachLinearFailZero() {
+            Shape fSphereRef = factory.getFSphere(1);
+            Shape fSphereArg = factory.getFSphere(5);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachLinear(fSphereArg);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertFalse(isPositioned,
+                            "The reference sphere should be repositioned")
+            );
+        }
+
+
+
+
 //        @Test
 //        @DisplayName("Attach (field) - empty")
 //        void attachFieldEmpty() {
