@@ -10,7 +10,10 @@ import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -1077,6 +1080,205 @@ public class FAssemblyTest {
                             "The FVector B is erroneous"),
                     () -> assertTrue(fVectorC.isExact(2, 4, 6, 14, 16, 18),
                             "The FVector C is erroneous"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 1x FPoint")
+        void getSpatialDimension1xFPoint() {
+            FPoint fPoint = factory.getFPoint(1,2, 3);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPoint));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(1, 2, 3, 1, 2, 3), range,
+                            "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 2x FPoint")
+        void getSpatialDimension2xFPoint() {
+            FPoint fPointA = factory.getFPoint(2,-5, 1);
+            FPoint fPointB = factory.getFPoint(-3,-1, 5);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPointA, fPointB));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(-3, -5, 1, 2, -1, 5), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 3x FPoint")
+        void getSpatialDimension3xFPoint() {
+            FPoint fPointA = factory.getFPoint(2,-5, 1);
+            FPoint fPointB = factory.getFPoint(-3,-1, 5);
+            FPoint fPointC = factory.getFPoint(0,-3, 3);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPointA, fPointB, fPointC));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(-3, -5, 1, 2, -1, 5), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 1x FVector")
+        void getSpatialDimension1xFVector() {
+            FVector fVector = factory.getFVector(-1, -3, -5, 5, 4, 3);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fVector));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(-1, -3, -5, 5, 4, 3), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 1x FSphere")
+        void getSpatialDimension1xFSphere() {
+            FSphere fSphere = factory.getFSphere(1, 2, 3, 2);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fSphere));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(-1, 0, 1, 3, 4, 5), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 2x FSphere, close")
+        void getSpatialDimension2xFSphereClose() {
+            FSphere fSphereA = factory.getFSphere(1, 2, 3, 5);
+            FSphere fSphereB = factory.getFSphere(-1, -2, -3, 4);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(-5, -6, -7, 6, 7, 8), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 2x FSphere, distant")
+        void getSpatialDimension2xFSphereDistant() {
+            FSphere fSphereA = factory.getFSphere(1, 2, 3, 1);
+            FSphere fSphereB = factory.getFSphere(-1, -2, -3, 1);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(-2, -3, -4, 2, 3, 4), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, illegal construct")
+        void getSpatialDimensionIllegalConstruct() {
+            FPoint fPoint = factory.getFPoint(1,2, 3);
+            FVector fVector = factory.getFVector(-1, -2, -3, 3, 2, 1);
+
+            FAssembly<Geometry> fAssembly;
+
+            fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFDraft(fVector)));
+
+            assertThrows(IllegalStateException.class, fAssembly::getRange,
+                    "The FAssembly cannot contain FDraft");
+
+            fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFLine(fVector)));
+
+            assertThrows(IllegalStateException.class, fAssembly::getRange,
+                    "The FAssembly cannot contain FLine");
+
+            fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFPlane(fVector)));
+
+            assertThrows(IllegalStateException.class, fAssembly::getRange,
+                    "The FAssembly cannot contain FPlane");
+
+            fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFRay(fVector)));
+
+            assertThrows(IllegalStateException.class, fAssembly::getRange,
+                    "The FAssembly cannot contain FRay");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 1x FSegment")
+        void getSpatialDimension1xFSegment() {
+            FVector fVector = factory.getFVector(-1, -3, -5, 5, 4, 3);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(factory.getRefFSegment(fVector)));
+
+            FPairPos3D range = fAssembly.getRange();
+
+            assertEquals(factory.getFPairPos3D(-1, -3, -5, 5, 4, 3), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial dimension, 1x FAssembly")
+        void getSpatialDimension1xFAssembly() {
+            FPoint fPointA = factory.getFPoint(2,-5, 1);
+            FPoint fPointB = factory.getFPoint(-3,-1, 5);
+            FPoint fPointC = factory.getFPoint(0,-3, 3);
+
+            FAssembly<Geometry> fAssemblyA = factory.getFAssembly(List.of(fPointA, fPointB, fPointC));
+            FAssembly<Geometry> fAssemblyB = factory.getFAssembly(List.of(fAssemblyA));
+
+            FPairPos3D range = fAssemblyB.getRange();
+
+            assertEquals(factory.getFPairPos3D(-3, -5, 1, 2, -1, 5), range,
+                    "The dimension is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get spatial center")
+        void getSpatialCenter() {
+            FSphere fSphereA = factory.getFSphere(1, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(-1, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FPos3D centerA = fAssembly.getSpatialCenter();
+
+            assertTrue(factory.getFPoint(centerA).isSimilar(0, 0, 0),
+                    "The range center is erroneous");
+
+            FPos3D offset = factory.getFPos3D(1, 2, 3);
+
+            fAssembly.translate(offset);
+
+            FPos3D center = fAssembly.getSpatialCenter();
+
+            assertTrue(factory.getFPoint(center).isSimilar(1, 2, 3),
+                    "The range center is erroneous");
+        }
+
+        @Test
+        @DisplayName("Zero spatial center")
+        void zeroSpatialCenter() {
+            FSphere fSphereA = factory.getFSphere(1, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(-1, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            fAssembly.translate(factory.getFRand().nextDoubleInSphere(100));
+
+            FAssembly<Shape> results = fAssembly.zeroSpatialCenter();
+
+            FPos3D center = fAssembly.getSpatialCenter();
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(factory.getFPoint(center).isNearZero(),
+                            "The range center is erroneous"),
                     () -> assertSame(fAssembly, results,
                             "The reference should not change")
             );

@@ -122,11 +122,7 @@ public abstract class ShapePresetDef implements Shape {
             return false;
         }
 
-        if (getCenterZ() != arg.getCenterZ()) {
-            return false;
-        }
-
-        return true;
+        return getCenterZ() == arg.getCenterZ();
     }
 
     @Override

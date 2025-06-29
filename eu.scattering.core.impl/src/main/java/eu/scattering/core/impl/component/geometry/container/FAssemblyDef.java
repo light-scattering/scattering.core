@@ -4,8 +4,14 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryFactory;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
+import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONArray;
@@ -16,6 +22,7 @@ import java.util.*;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "assembly";
     private static final String JSON_VAL = "val";
 
@@ -383,31 +390,100 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FPos3D getGeometricCenter() {
+    public FPos3D getSpatialCenter() {
+        FPairPos3D dimension = getRange();
 
+        double x = (dimension.getPosA().getD0() + dimension.getPosB().getD0()) * 0.5;
+        double y = (dimension.getPosA().getD1() + dimension.getPosB().getD1()) * 0.5;
+        double z = (dimension.getPosA().getD2() + dimension.getPosB().getD2()) * 0.5;
 
-
-        return null;
+        return factory.getFPos3D(x, y, z);
     }
 
     @Override
-    public FPairPos3D getDimension() {
+    public FAssembly<T> zeroSpatialCenter() {
+        FPos3D center = getSpatialCenter();
+
+        translate(-center.getD0(), -center.getD1(), -center.getD2());
+
+        return this;
+    }
+
+    @Override
+    public FPairPos3D getRange() {
         double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
+        double maxX = -Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
-        double maxY = Double.MIN_VALUE;
+        double maxY = -Double.MAX_VALUE;
         double minZ = Double.MAX_VALUE;
-        double maxZ = Double.MIN_VALUE;
+        double maxZ = -Double.MAX_VALUE;
 
-        for (T element : this.elements) {
-            if (element instanceof Shape) {
+        for (T element : asList()) {
 
+            if (element instanceof FDraft) {
+                throw new IllegalStateException("The dimension of FDraft is undefined");
+            }
+
+            if (element instanceof FLine) {
+                throw new IllegalStateException("The dimension of FLine is undefined");
+            }
+
+            if (element instanceof FPlane) {
+                throw new IllegalStateException("The dimension of FPlane is undefined");
+            }
+
+            if (element instanceof FRay) {
+                throw new IllegalStateException("The dimension of FRay is undefined");
+            }
+
+            if (element instanceof Shape shape) {
+                if (shape.getCenterX() - shape.getRadius() < minX) {
+                    minX = shape.getCenterX() - shape.getRadius();
+                }
+                if (shape.getCenterX() + shape.getRadius() > maxX) {
+                    maxX = shape.getCenterX() + shape.getRadius();
+                }
+
+                if (shape.getCenterY() - shape.getRadius() < minY) {
+                    minY = shape.getCenterY() - shape.getRadius();
+                }
+                if (shape.getCenterY() + shape.getRadius() > maxY) {
+                    maxY = shape.getCenterY() + shape.getRadius();
+                }
+
+                if (shape.getCenterZ() - shape.getRadius() < minZ) {
+                    minZ = shape.getCenterZ() - shape.getRadius();
+                }
+                if (shape.getCenterZ() + shape.getRadius() > maxZ) {
+                    maxZ = shape.getCenterZ() + shape.getRadius();
+                }
             } else {
+                for (FPoint point : element.toFPoints()) {
+                    if (point.getX() < minX) {
+                        minX = point.getX();
+                    }
+                    if (point.getX() > maxX) {
+                        maxX = point.getX();
+                    }
 
+                    if (point.getY() < minY) {
+                        minY = point.getY();
+                    }
+                    if (point.getY() > maxY) {
+                        maxY = point.getY();
+                    }
+
+                    if (point.getZ() < minZ) {
+                        minZ = point.getZ();
+                    }
+                    if (point.getZ() > maxZ) {
+                        maxZ = point.getZ();
+                    }
+                }
             }
         }
 
-        return null;
+        return factory.getFPairPos3D(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     // -------------------------------------------------------------------------------------------------

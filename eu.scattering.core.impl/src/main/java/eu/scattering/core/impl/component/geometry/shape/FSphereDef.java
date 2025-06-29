@@ -183,8 +183,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public boolean isExact(Shape arg) {
 
-        if (arg instanceof FSphere) {
-            FSphere fSphere = (FSphere) arg;
+        if (arg instanceof FSphere fSphere) {
 
             return getRefCenter().isExact(fSphere.getRefCenter()) && getRadius() == fSphere.getRadius();
         }
@@ -205,8 +204,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public boolean isSimilar(Shape arg) {
 
-        if (arg instanceof FSphere) {
-            FSphere fSphere = (FSphere) arg;
+        if (arg instanceof FSphere fSphere) {
 
             if (Math.abs(getRadius() - fSphere.getRadius()) > EPSILON) {
                 return false;
@@ -270,8 +268,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FSphere) {
-            FSphere ref = (FSphere) object;
+        if (object instanceof FSphere ref) {
 
             return isExact(ref);
         }
