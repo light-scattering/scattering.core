@@ -25,17 +25,8 @@ public interface FAggregate extends Component {
 
     //--------------------------------------------------
 
-    double getVolume();
-    double getSurface();
-
-    void getCenterGeometric(FPoint in);
-    void resetCenterGeometric();
-
     void getCenterMass(FPoint in);
     void resetCenterMass();
 
-    double getDiameter();
     double getRadiusOfGyration();
-
-    FPairPos3D getDimension();
 }

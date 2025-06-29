@@ -5,11 +5,13 @@ import eu.scattering.core.design.component.geometry.GeometryFactory;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
+import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
@@ -19,27 +21,22 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     private final GeometryFactory factorySelf;
 
-    private final List<T> geometries = new ArrayList<>();
+    private final List<T> elements;
     private final List<FPoint> fPoints = new ArrayList<>();
 
-    private FAssemblyDef(GeometryFactory factorySelf) {
+    private FAssemblyDef(GeometryFactory factorySelf, List<T> elements) {
 
         this.factorySelf = factorySelf;
-    }
+        this.elements = elements;
 
-    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf) {
-
-        return new FAssemblyDef<>(factorySelf);
-    }
-
-    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf, T[] elements) {
-        FAssemblyDef<T> fAssembly = new FAssemblyDef<>(factorySelf);
-
-        for (T element : elements) {
-            fAssembly.register(element);
+        for (T geometry : elements) {
+            registerFPoints(geometry);
         }
+    }
 
-        return fAssembly;
+    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf, List<T> elements) {
+
+        return new FAssemblyDef<>(factorySelf, elements);
     }
 
     protected static boolean isParsable(String tag) {
@@ -48,9 +45,9 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public List<T> getListGeometry() {
+    public List<T> asList() {
 
-        return this.geometries;
+        return this.elements;
     }
 
     @Override
@@ -93,12 +90,12 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public boolean deregisterWithCheck(T element) {
-        boolean updated = this.geometries.remove(element);
+        boolean updated = this.elements.remove(element);
 
         if (updated) {
             this.fPoints.clear();
 
-            this.geometries.forEach(this::registerFPoints);
+            this.elements.forEach(this::registerFPoints);
         }
 
         return updated;
@@ -109,7 +106,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         boolean updated = false;
 
         for (T element : elements) {
-            if (this.geometries.remove(element)) {
+            if (this.elements.remove(element)) {
                 updated = true;
             }
         }
@@ -117,7 +114,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         if (updated) {
             this.fPoints.clear();
 
-            this.geometries.forEach(this::registerFPoints);
+            this.elements.forEach(this::registerFPoints);
         }
 
         return updated;
@@ -125,12 +122,12 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public FAssembly<T> deregister(T element) {
-        boolean updated = this.geometries.remove(element);
+        boolean updated = this.elements.remove(element);
 
         if (updated) {
             this.fPoints.clear();
 
-            this.geometries.forEach(this::registerFPoints);
+            this.elements.forEach(this::registerFPoints);
         }
 
         return this;
@@ -141,7 +138,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         boolean updated = false;
 
         for (T element : elements) {
-            if (this.geometries.remove(element)) {
+            if (this.elements.remove(element)) {
                 updated = true;
             }
         }
@@ -149,27 +146,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         if (updated) {
             this.fPoints.clear();
 
-            this.geometries.forEach(this::registerFPoints);
-        }
-
-        return this;
-    }
-
-    @Override
-    public FAssembly<T> applyFPoint(Consumer<FPoint> consumer) {
-
-        for (FPoint fPoint : this.fPoints) {
-            consumer.accept(fPoint);
-        }
-
-        return this;
-    }
-
-    @Override
-    public FAssembly<T> applyGeometry(Consumer<T> consumer) {
-
-        for (T geometry : this.geometries) {
-            consumer.accept(geometry);
+            this.elements.forEach(this::registerFPoints);
         }
 
         return this;
@@ -177,7 +154,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     private boolean registerGeometry(T candidate) {
 
-        return register(this.geometries, candidate);
+        return register(this.elements, candidate);
     }
 
     private boolean registerFPoints(T candidate) {
@@ -219,14 +196,14 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     @Override
     public boolean isExact(FAssembly<T> arg) {
 
-        if (getListGeometry().size() != arg.getListGeometry().size()) {
+        if (asList().size() != arg.asList().size()) {
             return false;
         }
 
-        Collection<T> geoCopy = new ArrayList<>(arg.getListGeometry());
+        Collection<T> geoCopy = new ArrayList<>(arg.asList());
 
         main:
-        for (T geoL : getListGeometry()) {
+        for (T geoL : asList()) {
             for (T geoE : geoCopy) {
                 if (geoL.isExact(geoE)) {
                     geoCopy.remove(geoE);
@@ -254,14 +231,14 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     @Override
     public boolean isSimilar(FAssembly<T> arg) {
 
-        if (getListGeometry().size() != arg.getListGeometry().size()) {
+        if (asList().size() != arg.asList().size()) {
             return false;
         }
 
-        Collection<T> geoCopy = new ArrayList<>(arg.getListGeometry());
+        Collection<T> geoCopy = new ArrayList<>(arg.asList());
 
         main:
-        for (T geoL : getListGeometry()) {
+        for (T geoL : asList()) {
             for (T geoE : geoCopy) {
                 if (geoL.isSimilar(geoE)) {
                     geoCopy.remove(geoE);
@@ -297,7 +274,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     public FAssembly<T> copy() {
         FAssembly<T> copy = supplyFAssembly();
 
-        for (T element : this.geometries) {
+        for (T element : this.elements) {
             copy.registerWithCheck((T) element.copyGeometry());
         }
 
@@ -316,7 +293,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
         json.put(JSON_TYPE, JSON_MAIN);
 
-        this.geometries.forEach(e -> json.append(JSON_VAL, e.toJSON()));
+        this.elements.forEach(e -> json.append(JSON_VAL, e.toJSON()));
 
         return json;
     }
@@ -327,7 +304,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     public int hashCode() {
         int code = 0;
 
-        for (Geometry geo : getListGeometry()) {
+        for (Geometry geo : asList()) {
             code += geo.hashCode();
         }
 
@@ -366,7 +343,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        this.geometries.clear();
+        this.elements.clear();
         this.fPoints.clear();
 
         GeometryParser parser = factorySelf.getGeometryParser();
@@ -381,6 +358,56 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         }
 
         return this;
+    }
+
+    @Override
+    public FAssembly<T> translate(double x, double y, double z) {
+
+        this.fPoints.forEach(e -> e.add(x, y, z));
+
+        return this;
+    }
+
+    @Override
+    public FAssembly<T> translate(FPos3D offset) {
+
+        return translate(offset.getD0(), offset.getD1(), offset.getD2());
+    }
+
+    @Override
+    public FAssembly<T> scale(double factor) {
+
+        this.fPoints.forEach(e -> e.mulFactor(factor));
+
+        return this;
+    }
+
+    @Override
+    public FPos3D getGeometricCenter() {
+
+
+
+        return null;
+    }
+
+    @Override
+    public FPairPos3D getDimension() {
+        double minX = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = Double.MIN_VALUE;
+        double minZ = Double.MAX_VALUE;
+        double maxZ = Double.MIN_VALUE;
+
+        for (T element : this.elements) {
+            if (element instanceof Shape) {
+
+            } else {
+
+            }
+        }
+
+        return null;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -404,7 +431,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         @Override
         public boolean hasNext() {
 
-            return index < FAssemblyDef.this.getListGeometry().size();
+            return index < FAssemblyDef.this.asList().size();
         }
 
         @Override
@@ -414,7 +441,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
                 throw new NoSuchElementException();
             }
 
-            return FAssemblyDef.this.getListGeometry().get(index++);
+            return FAssemblyDef.this.asList().get(index++);
         }
     }
 }

@@ -3,45 +3,50 @@ package eu.scattering.core.impl;
 import eu.scattering.core.design.ScatFactoryConcrete;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraftProducer;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.line.FLineProducer;
+import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
+import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
 import eu.scattering.core.design.component.geometry.shape.ShapeProducer;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
+import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
+import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
-import eu.scattering.core.design.helper.statistics.FStatHelper;
-import eu.scattering.core.design.component.geometry.construct.line.FLine;
-import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
-import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
-import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
-import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
+import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
+import eu.scattering.core.design.helper.statistics.FStatHelper;
+import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
+import eu.scattering.core.impl.component.geometry.base.FPointDef;
 import eu.scattering.core.impl.component.geometry.base.FPointProducerDef;
+import eu.scattering.core.impl.component.geometry.base.FVectorDef;
 import eu.scattering.core.impl.component.geometry.base.FVectorProducerDef;
 import eu.scattering.core.impl.component.geometry.construct.*;
 import eu.scattering.core.impl.component.geometry.container.FAssemblyDef;
 import eu.scattering.core.impl.component.geometry.container.FAssemblyProducerDef;
+import eu.scattering.core.impl.component.geometry.shape.FSphereDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereProducerDef;
 import eu.scattering.core.impl.component.geometry.shape.ShapeProducerDef;
+import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
+import eu.scattering.core.impl.component.number.FQuaternionDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
@@ -50,11 +55,9 @@ import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
-import eu.scattering.core.impl.component.geometry.base.FPointDef;
-import eu.scattering.core.impl.component.geometry.base.FVectorDef;
-import eu.scattering.core.impl.component.geometry.shape.FSphereDef;
-import eu.scattering.core.impl.component.number.FComplexDef;
-import eu.scattering.core.impl.component.number.FQuaternionDef;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class FactoryDef extends ScatFactoryConcrete {
     private final GeometryParser fGeometryParser;
@@ -314,16 +317,15 @@ public final class FactoryDef extends ScatFactoryConcrete {
     }
 
     @Override
-    public <T extends Geometry> FAssembly<T> getFAssembly() {
-
-        return FAssemblyDef.create(this);
-    }
-
-    @SafeVarargs
-    @Override
-    public final <T extends Geometry> FAssembly<T> getFAssembly(T... elements) {
+    public <T extends Geometry> FAssembly<T> getFAssembly(List<T> elements) {
 
         return FAssemblyDef.create(this, elements);
+    }
+
+    @Override
+    public <T extends Geometry> FAssembly<T> getFAssembly() {
+
+        return FAssemblyDef.create(this, new ArrayList<>());
     }
 
     //--------------------------------------------------

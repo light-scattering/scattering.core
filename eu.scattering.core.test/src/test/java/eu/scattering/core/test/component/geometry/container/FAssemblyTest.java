@@ -16,6 +16,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
@@ -50,10 +51,10 @@ public class FAssemblyTest {
             FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
             FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
 
-            FAssembly<FVector> fAssembly = factory.getFAssembly(fVectorA, fVectorB, fVectorC);
+            FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(3, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(3, fAssembly.size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect")
@@ -73,7 +74,7 @@ public class FAssemblyTest {
             fAssembly.registerWithCheck(fVectorY);
             fAssembly.registerWithCheck(fVectorZ);
 
-            Collection<FVector> geometries = fAssembly.getListGeometry();
+            Collection<FVector> geometries = fAssembly.asList();
 
             Assertions.assertAll("Validate geometries",
                     () -> assertEquals(3, geometries.size(),
@@ -143,7 +144,7 @@ public class FAssemblyTest {
             fAssemblyCopy.set(json);
 
             Assertions.assertAll("Validate FAssembly values",
-                    () -> assertEquals(8, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(8, fAssembly.size(),
                             "The number of geometries is incorrect"),
                     () -> assertEquals(14, fAssembly.toFPoints().size(),
                             "The number of elements is incorrect"),
@@ -638,52 +639,6 @@ public class FAssemblyTest {
     class FPointAdvancedTest {
 
         @Test
-        @DisplayName("Apply FPoint")
-        void applyFPoint() {
-            FAssembly<FPoint> fAssembly = factory.getFAssembly();
-
-            FPoint fPointA = factory.getFPoint(1, 2, 3);
-            FPoint fPointB = factory.getFPoint(4, 5, 6);
-
-            fAssembly.registerWithCheck(fPointA);
-            fAssembly.registerWithCheck(fPointB);
-
-            FAssembly<FPoint> results = fAssembly.applyFPoint((fPoint) -> fPoint.addXYZ(1, 2, 3));
-
-            Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fPointA.isExact(2, 4, 6),
-                            "FPoint A is erroneous"),
-                    () -> assertTrue(fPointB.isExact(5, 7, 9),
-                            "FPoint B is erroneous"),
-                    () -> assertSame(results, fAssembly,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Apply geometry")
-        void applyGeometry() {
-            FAssembly<FPoint> fAssembly = factory.getFAssembly();
-
-            FPoint fPointA = factory.getFPoint(1, 2, 3);
-            FPoint fPointB = factory.getFPoint(4, 5, 6);
-
-            fAssembly.registerWithCheck(fPointA);
-            fAssembly.registerWithCheck(fPointB);
-
-            FAssembly<FPoint> results = fAssembly.applyGeometry((fPoint) -> fPoint.addXYZ(1, 2, 3));
-
-            Assertions.assertAll("Validate FPoints",
-                    () -> assertTrue(fPointA.isExact(2, 4, 6),
-                            "FPoint A is erroneous"),
-                    () -> assertTrue(fPointB.isExact(5, 7, 9),
-                            "FPoint B is erroneous"),
-                    () -> assertSame(results, fAssembly,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
         @DisplayName("Use iterator")
         void useIterator() {
             FAssembly<FPoint> fAssembly = factory.getFAssembly();
@@ -745,7 +700,7 @@ public class FAssemblyTest {
             FAssembly<FVector> results = fAssembly.register(fVectorB);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(2, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(2, fAssembly.size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -779,7 +734,7 @@ public class FAssemblyTest {
             boolean isDuplicatedB = fAssembly.registerWithCheck(collectionB);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(3, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(3, fAssembly.size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -811,7 +766,7 @@ public class FAssemblyTest {
             FAssembly<FVector> results = fAssembly.register(collection);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(3, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(3, fAssembly.size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -901,7 +856,7 @@ public class FAssemblyTest {
             var isDuplicatedB = fAssembly.deregisterWithCheck(fVectorA);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(1, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(1, fAssembly.size(),
                             "The number of geometries is incorrect"),
                     () -> assertEquals(2, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -927,7 +882,7 @@ public class FAssemblyTest {
                     .deregister(fVectorA);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(1, results.getListGeometry().size(),
+                    () -> assertEquals(1, results.size(),
                             "The number of geometries is incorrect"),
                     () -> assertEquals(2, results.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -962,7 +917,7 @@ public class FAssemblyTest {
             var isDuplicatedB = fAssembly.deregisterWithCheck(collectionB);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(1, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(1, fAssembly.size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(2, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -998,7 +953,7 @@ public class FAssemblyTest {
             var results = fAssembly.deregister(collectionB);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(1, fAssembly.getListGeometry().size(),
+                    () -> assertEquals(1, fAssembly.asList().size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(2, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -1025,7 +980,7 @@ public class FAssemblyTest {
                     .deregister(fVectorA);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(2, results.getListGeometry().size(),
+                    () -> assertEquals(2, results.asList().size(),
                             "The number of geometries is incorrect"),
                     () -> assertEquals(3, results.toFPoints().size(),
                             "The number of FPoints is incorrect"),
@@ -1035,23 +990,95 @@ public class FAssemblyTest {
         }
 
         @Test
-        @DisplayName("Apply element")
-        void applyElement() {
-            FAssembly<FVector> fAssembly = factory.getFAssembly();
+        @DisplayName("Translate with primitives")
+        void translateWithPrimitives() {
+            FPoint base = factory.getFPoint(1,2, 3);
 
-            FVector fVectorX = factory.getFVector(1, 0, 0);
-            FVector fVectorY = factory.getFVector(0, 1, 0);
-            FVector fVectorZ = factory.getFVector(0, 0, 1);
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
 
-            fAssembly.registerWithCheck(fVectorX);
-            fAssembly.registerWithCheck(fVectorY);
-            fAssembly.registerWithCheck(fVectorZ);
+            FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
 
-            fAssembly.applyGeometry(e -> e.shiftForward(1));
+            FAssembly<FVector> results = fAssembly.translate(1, 2, 3);
 
             Assertions.assertAll("Validate FAssembly",
-                    () -> assertEquals(6, fAssembly.toFPoints().size(),
-                            "The number of FPoints is incorrect")
+                    () -> assertEquals(3, fAssembly.size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(base.isExact(2, 4, 6),
+                            "The base FPoint is erroneous"),
+                    () -> assertTrue(fVectorA.isExact(2, 4, 6, 2, 4, 6),
+                            "The FVector A is erroneous"),
+                    () -> assertTrue(fVectorB.isExact(2, 4, 6, 5, 7, 9),
+                            "The FVector B is erroneous"),
+                    () -> assertTrue(fVectorC.isExact(2, 4, 6, 8, 10, 12),
+                            "The FVector C is erroneous"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Translate with FPos3D")
+        void translateWithFPos3D() {
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
+
+            FAssembly<FVector> results = fAssembly.translate(factory.getFPos3D(1, 2, 3));
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fAssembly.size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(base.isExact(2, 4, 6),
+                            "The base FPoint is erroneous"),
+                    () -> assertTrue(fVectorA.isExact(2, 4, 6, 2, 4, 6),
+                            "The FVector A is erroneous"),
+                    () -> assertTrue(fVectorB.isExact(2, 4, 6, 5, 7, 9),
+                            "The FVector B is erroneous"),
+                    () -> assertTrue(fVectorC.isExact(2, 4, 6, 8, 10, 12),
+                            "The FVector C is erroneous"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Scale")
+        void scale() {
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
+
+            FAssembly<FVector> results = fAssembly.scale(2);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fAssembly.size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(base.isExact(2, 4, 6),
+                            "The base FPoint is erroneous"),
+                    () -> assertTrue(fVectorA.isExact(2, 4, 6, 2, 4, 6),
+                            "The FVector A is erroneous"),
+                    () -> assertTrue(fVectorB.isExact(2, 4, 6, 8, 10, 12),
+                            "The FVector B is erroneous"),
+                    () -> assertTrue(fVectorC.isExact(2, 4, 6, 14, 16, 18),
+                            "The FVector C is erroneous"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
             );
         }
     }

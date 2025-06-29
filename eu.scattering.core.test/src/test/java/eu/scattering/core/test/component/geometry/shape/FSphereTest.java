@@ -789,8 +789,8 @@ public class FSphereTest {
             fAssembly.register(fSphereB);
             fAssembly.register(fSphereC);
 
-            fSphereRef.getOverlappingShapes(in, fAssembly.getListGeometry());
-            fSphereRef.getOverlappingShapes(in, fAssembly.getListGeometry());
+            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
+            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
 
             Assertions.assertAll("Validate positions",
                     () -> assertEquals(2, in.size(),
@@ -823,8 +823,8 @@ public class FSphereTest {
             fAssembly.register(fSphereB);
             fAssembly.register(fSphereC);
 
-            fSphereRef.getOverlappingShapes(in, fAssembly.getListGeometry());
-            fSphereRef.getOverlappingShapes(in, fAssembly.getListGeometry());
+            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
+            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
 
             Assertions.assertAll("Validate positions",
                     () -> assertEquals(2, in.size(),

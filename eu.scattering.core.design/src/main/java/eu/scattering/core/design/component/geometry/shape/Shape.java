@@ -115,6 +115,6 @@ public interface Shape extends Geometry {
 
     default boolean attach(Shape target, FAssembly<? extends Shape> field, int corrections) {
 
-        return attach(target, field.getListGeometry(), corrections);
+        return attach(target, field.asList(), corrections);
     }
 }
