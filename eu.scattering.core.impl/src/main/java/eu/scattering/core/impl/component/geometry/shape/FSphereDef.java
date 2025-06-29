@@ -374,37 +374,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean attachLinear(Shape target, FAssembly<? extends Shape> field, int corrections) {
-
-        if (!(target instanceof FSphere)) {
-            throw new UnsupportedOperationException("The operation is not implemented");
-        }
-
-        int repositions = 1;
-
-        if (!attachLinear(target)) {
-            return false;
-        }
-
-        Shape closestNeighbour = getClosestNeighbour(field);
-
-        if (closestNeighbour == null) {
-            return true;
-        }
-
-        while (closestNeighbour != null && repositions++ < corrections + 1) {
-
-            if (!attachSpherical(closestNeighbour, target.getCenterX(), target.getCenterY(), target.getCenterZ())) {
-                return false;
-            }
-
-            closestNeighbour = getClosestNeighbour(field);
-        }
-
-        return closestNeighbour == null;
-    }
-
-    @Override
     public boolean attachSpherical(Shape target, double x, double y, double z) {
 
         if (!(target instanceof FSphere)) {
@@ -431,6 +400,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double sideB = fPointTarget.getDistance(fVectorAxis.getRefBase());
         double sideC = this.getRadius() + target.getRadius();
 
+        // The FSphere cannot be positioned.
+        if (!factory.getFTrigHelper().isValid(sideA, sideB, sideC)) {
+            return false;
+        }
+
         double angle = factory.getFTrigHelper().getAngle(sideB, sideA, sideC);
 
         factory.getFRotEngine().setRgAngleBaseCommon(fVectorAxis, fPointTarget, angle);
@@ -440,28 +414,51 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return true;
     }
 
-    private Shape getClosestNeighbour(FAssembly<? extends Shape> field) {
-        double distCenterMin = Double.MAX_VALUE;
-        Shape candidate = null;
+    @Override
+    public boolean attach(Shape target, List<? extends Shape> field, int corrections) {
 
-        for (Shape element : field) {
-
-            if (element == this) {
-                continue;
-            }
-
-            if (overlaps(element)) {
-                double distCenter = getDistCenterP2(element);
-
-                if (distCenter < distCenterMin) {
-                    distCenterMin = distCenter;
-                    candidate = element;
-                }
-            }
+        if (!(target instanceof FSphere)) {
+            throw new UnsupportedOperationException("The operation is not implemented");
         }
 
-        return candidate;
+        int repositions = 1;
+
+        // The FSphere cannot be positioned.
+        if (!attachLinear(target)) {
+            return false;
+        }
+
+        List<Shape> neighbours = new ArrayList<>();
+
+        Shape closestNeighbour = getClosestNeighbour(neighbours, field);
+
+        if (closestNeighbour == null) {
+            return true;
+        }
+
+        while (closestNeighbour != null && repositions++ < corrections + 1) {
+
+            if (!attachSpherical(closestNeighbour, target.getCenterX(), target.getCenterY(), target.getCenterZ())) {
+                return false;
+            }
+
+            closestNeighbour = getClosestNeighbour(neighbours, field);
+        }
+
+        return closestNeighbour == null;
     }
+
+    private Shape getClosestNeighbour(List<Shape> neighbours, List<? extends Shape> field) {
+        getOverlappingShapes(neighbours, field);
+        sortByDistance(neighbours);
+
+        return neighbours.size() > 0 ? neighbours.get(0) : null;
+    }
+
+
+
+
+
 
     @Override
     public Collection<FPoint> toFPoints() {

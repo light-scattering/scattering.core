@@ -49,6 +49,12 @@ public class FTrigHelperDef implements FTrigHelper {
         return Math.acos(((adjA * adjA) + (adjB * adjB) - (oppC * oppC)) / (2 * adjA * adjB));
     }
 
+    @Override
+    public boolean isValid(double sideA, double sideB, double sideC) {
+
+        return !(sideA + sideB < sideC) && !(sideA + sideC < sideB) && !(sideB + sideC < sideA);
+    }
+
     //--------------------------------------------------
 
     private FPos3D sub(FPos3D origin, FPos3D ref) {

@@ -10,8 +10,6 @@ public interface ShapeCommon<T> extends Shape {
     T applyStateTo(T in);
     T applyStateFrom(T arg);
 
-    T copy();
-
     //--------------------------------------------------
 
     @Fragment

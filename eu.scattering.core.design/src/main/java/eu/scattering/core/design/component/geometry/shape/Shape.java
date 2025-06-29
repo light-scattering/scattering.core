@@ -73,7 +73,7 @@ public interface Shape extends Geometry {
     boolean attachLinear(Shape target);
     boolean attachSpherical(Shape target, double x, double y, double z);
 
-    boolean attachLinear(Shape target, FAssembly<? extends Shape> field, int corrections);
+    boolean attach(Shape target, List<? extends Shape> field, int corrections);
 
     boolean project(FPoint aim, List<FSphere> field);
 
@@ -101,6 +101,20 @@ public interface Shape extends Geometry {
 
     //--------------------------------------------------
 
+    Shape copy();
+
     @Fragment
     double getDistCenterP2(Shape shape);
+
+    //--------------------------------------------------
+
+    default boolean attachSpherical(Shape target, FPos3D center) {
+
+        return attachSpherical(target, center.getD0(), center.getD1(), center.getD2());
+    }
+
+    default boolean attach(Shape target, FAssembly<? extends Shape> field, int corrections) {
+
+        return attach(target, field.getListGeometry(), corrections);
+    }
 }

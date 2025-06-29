@@ -14,6 +14,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import static eu.scattering.core.test.Config.epsilon;
@@ -36,6 +37,25 @@ public class FAssemblyTest {
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertEquals(0, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with varargs")
+        void constructWithVarArgs() {
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            FAssembly<FVector> fAssembly = factory.getFAssembly(fVectorA, fVectorB, fVectorC);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fAssembly.getListGeometry().size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect")
             );
         }
@@ -687,8 +707,8 @@ public class FAssemblyTest {
         }
 
         @Test
-        @DisplayName("Register elements")
-        void registerElements() {
+        @DisplayName("Register elements with check")
+        void registerElementsWithCheck() {
             FAssembly<FVector> fAssembly = factory.getFAssembly();
 
             FVector fVectorA = factory.getFVector(-1, -2, -3, 4, 5, 6);
@@ -697,7 +717,7 @@ public class FAssemblyTest {
             var registerA = fAssembly.registerWithCheck(fVectorA);
             var registerB = fAssembly.registerWithCheck(fVectorB);
 
-            var registerRedundant = fAssembly.registerWithCheck(fVectorA);
+            var registerRedundant = fAssembly.registerWithCheck(fVectorB);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertTrue(registerA,
@@ -708,6 +728,95 @@ public class FAssemblyTest {
                             "The addition of FVector is redundant"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Register elements")
+        void registerElements() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FVector fVectorA = factory.getFVector(-1, -2, -3, 4, 5, 6);
+            FVector fVectorB = factory.getFVector(-6, -5, -4, 3, 2, 1);
+
+            fAssembly.register(fVectorA);
+            fAssembly.register(fVectorB);
+
+            FAssembly<FVector> results = fAssembly.register(fVectorB);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(2, fAssembly.getListGeometry().size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Register elements with check (collection)")
+        void registerElementsWithCheckCollection() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            Collection<FVector> collectionA = new ArrayList<>();
+            collectionA.add(fVectorA);
+            collectionA.add(fVectorB);
+            collectionA.add(fVectorC);
+
+            boolean isDuplicatedA = fAssembly.registerWithCheck(collectionA);
+
+            Collection<FVector> collectionB = new ArrayList<>();
+            collectionB.add(fVectorA);
+            collectionB.add(fVectorB);
+
+            boolean isDuplicatedB = fAssembly.registerWithCheck(collectionB);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fAssembly.getListGeometry().size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(isDuplicatedA,
+                            "The structure should be updated"),
+                    () -> assertFalse(isDuplicatedB,
+                            "The structure should not be updated")
+            );
+        }
+
+        @Test
+        @DisplayName("Register elements (collection)")
+        void registerElementsCollection() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            Collection<FVector> collection = new ArrayList<>();
+            collection.add(fVectorA);
+            collection.add(fVectorB);
+            collection.add(fVectorC);
+
+            collection.add(fVectorC);
+
+            FAssembly<FVector> results = fAssembly.register(collection);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fAssembly.getListGeometry().size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
             );
         }
 
@@ -777,6 +886,33 @@ public class FAssemblyTest {
         }
 
         @Test
+        @DisplayName("Deregister elements with check")
+        void deregisterElementsWithCheck() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FVector fVectorA = factory.getFVector(-1, -2, -3, 4, 5, 6);
+            FVector fVectorB = factory.getFVector(-6, -5, -4, 3, 2, 1);
+
+            fAssembly
+                    .register(fVectorA)
+                    .register(fVectorB);
+
+            var isDuplicatedA = fAssembly.deregisterWithCheck(fVectorA);
+            var isDuplicatedB = fAssembly.deregisterWithCheck(fVectorA);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(1, fAssembly.getListGeometry().size(),
+                            "The number of geometries is incorrect"),
+                    () -> assertEquals(2, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(isDuplicatedA,
+                            "The element should be removed"),
+                    () -> assertFalse(isDuplicatedB,
+                            "The element should be removed")
+            );
+        }
+
+        @Test
         @DisplayName("Deregister elements")
         void deregisterElements() {
             FAssembly<FVector> fAssembly = factory.getFAssembly();
@@ -794,6 +930,77 @@ public class FAssemblyTest {
                     () -> assertEquals(1, results.getListGeometry().size(),
                             "The number of geometries is incorrect"),
                     () -> assertEquals(2, results.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Deregister elements with check (collection)")
+        void deregisterElementsWithCheckCollection() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            Collection<FVector> collectionA = new ArrayList<>();
+            collectionA.add(fVectorA);
+            collectionA.add(fVectorB);
+            collectionA.add(fVectorC);
+
+            fAssembly.registerWithCheck(collectionA);
+
+            Collection<FVector> collectionB = new ArrayList<>();
+            collectionB.add(fVectorA);
+            collectionB.add(fVectorB);
+
+            var isDuplicatedA = fAssembly.deregisterWithCheck(collectionB);
+            var isDuplicatedB = fAssembly.deregisterWithCheck(collectionB);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(1, fAssembly.getListGeometry().size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(2, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(isDuplicatedA,
+                            "The elements should be removed"),
+                    () -> assertFalse(isDuplicatedB,
+                            "The elements should not be removed")
+            );
+        }
+
+        @Test
+        @DisplayName("Deregister elements (collection)")
+        void deregisterElementsCollection() {
+            FAssembly<FVector> fAssembly = factory.getFAssembly();
+
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            Collection<FVector> collectionA = new ArrayList<>();
+            collectionA.add(fVectorA);
+            collectionA.add(fVectorB);
+            collectionA.add(fVectorC);
+
+            fAssembly.registerWithCheck(collectionA);
+
+            Collection<FVector> collectionB = new ArrayList<>();
+            collectionB.add(fVectorA);
+            collectionB.add(fVectorB);
+
+            var results = fAssembly.deregister(collectionB);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(1, fAssembly.getListGeometry().size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(2, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
                     () -> assertSame(fAssembly, results,
                             "The reference should not change")

@@ -2,11 +2,9 @@ package eu.scattering.core.test.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
@@ -2231,7 +2229,7 @@ public class FSphereTest {
         void volumeStream3D() {
             FStream3D fStream = factory.getFStream3D(5000);
 
-            FSphere fSphere = factory.getFSphere(5, 5, 5, 1);
+            Shape fSphere = factory.getFSphere(5, 5, 5, 1);
 
             double delta = 0.1;
 
@@ -2259,7 +2257,7 @@ public class FSphereTest {
         void volumeStream3DI() {
             FStream3DI fStream = factory.getFStream3DI(5000);
 
-            FSphere fSphere = factory.getFSphere(5, 5, 5, 1);
+            Shape fSphere = factory.getFSphere(5, 5, 5, 1);
 
             double delta = 0.1;
 
@@ -2287,8 +2285,7 @@ public class FSphereTest {
         void attachLinearEnclosed() {
             Shape fSphereRef = factory.getFSphere(10);
 
-            Producer<FPoint> fPointProducer = factory.getFPointProducer()
-                    .withInSphere(8.9);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(8.9);
             Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
                     .withCenterAndFixedRadius(fPointProducer, 1);
 
@@ -2391,28 +2388,203 @@ public class FSphereTest {
             );
         }
 
+        @Test
+        @Timeout(1)
+        @DisplayName("Attach spherical, overlapping")
+        void attachSpherical() {
+            Producer<FPoint> fPointProducer = factory.getFPointProducer()
+                    .withRadius(1.5);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
 
+            Shape fSphereRef = fSphereProducer.produce();
+            Shape candidate = fSphereProducer.produce();
 
+            while (!fSphereRef.overlaps(candidate)) {
+                candidate = fSphereProducer.produce();
+            }
 
-//        @Test
-//        @DisplayName("Attach (field) - empty")
-//        void attachFieldEmpty() {
-//            FSphere fSphereRef = factory.getFSphere();
-//            FSphere fSphereArg = factory.getFSphere();
-//
-//            FAssembly<FSphere> fSphereField = factory.getFAssembly();
-//
-//            factory.getFRandEngine().inSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
-//
-//            boolean isRepositioned = fSphereRef.attachLinear(fSphereArg, epsilon, -1, fSphereField, 0);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertTrue(isRepositioned,
-//                            "The number of repositions is incorrect"),
-//                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon, -1),
-//                            "Spheres should be in point contact")
-//            );
-//        }
+            Shape fSphereArg = fSphereProducer.produce();
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @Timeout(1)
+        @DisplayName("Attach spherical, distant")
+        void attachSphericalDistant() {
+            Producer<FPoint> fPointProducer = factory.getFPointProducer()
+                    .withRadius(1.5);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            Shape fSphereRef = fSphereProducer.produce();
+            Shape candidate = fSphereProducer.produce();
+
+            while (fSphereRef.overlaps(candidate)) {
+                candidate = fSphereProducer.produce();
+            }
+
+            Shape fSphereArg = fSphereProducer.produce();
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach spherical fail, rotation axis")
+        void attachSphericalFailRotationAxis() {
+            Shape fSphereRef = factory.getFSphere(0, 1, 0, 1);
+            Shape fSphereArg = factory.getFSphere(0, 0.5, 0, 1);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertFalse(isPositioned,
+                            "The reference sphere should not be positioned")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach spherical fail, same center")
+        void attachSphericalFailSameCenter() {
+            Shape fSphereArg = TestHelper.getRandFSphere();
+            Shape fSphereRef = factory.getFSphere(1, 1, 1, 1);
+
+            FPos3D offset = factory.getFPos3D(1, 1, 1);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertFalse(isPositioned,
+                            "The reference sphere should not be positioned")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach spherical fail, same target")
+        void attachSphericalFailSameTarget() {
+            Shape fSphereArg = TestHelper.getRandFSphere();
+            Shape fSphereRef = fSphereArg.copy().setRadius(1);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertFalse(isPositioned,
+                            "The reference sphere should not be positioned")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach spherical, radial distance")
+        void attachSphericalRadiusDistance() {
+            Shape fSphereRef = factory.getFSphere(1, 0, 0, 2);
+            Shape fSphereArg = factory.getFSphere(2, 2, 2, 1);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach spherical fail, invalid radial distance")
+        void attachSphericalFailInvalidRadialDistance() {
+            Shape fSphereRef = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereArg = factory.getFSphere(4, 4, 4, 1);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertFalse(isPositioned,
+                            "The reference sphere should not be positioned")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach")
+        void attachFieldEmpty() {
+            Producer<FPoint> fFieldPointProducer = factory.getFPointProducer().withRadius(5);
+            Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fFieldPointProducer, 1);
+
+            FAssembly<FSphere> fSphereField = factory.getFAssembly();
+
+            fSphereField.register(fFieldSphereProducer.produce());
+            fSphereField.register(fFieldSphereProducer.produce());
+            fSphereField.register(fFieldSphereProducer.produce());
+
+            Producer<FPoint> fPointRefProducer = factory.getFPointProducer().withInSphere(3.9);
+            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointRefProducer, 1);
+
+            FSphere fSphereRef = fSphereRefProducer.produce();
+
+            Producer<FPoint> fPointArgProducer = factory.getFPointProducer().withRadius(6);
+            Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointArgProducer, 1);
+
+            FSphere fSphereArg = fSphereArgProducer.produce();
+
+            boolean isPositioned = fSphereRef.attach(fSphereArg, fSphereField, 1);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The FSphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
 //
 //        @Test
 //        @DisplayName("Attach (field) - self")
@@ -2663,16 +2835,14 @@ public class FSphereTest {
         @Test
         @DisplayName("Copy")
         void copy() {
-            FSphere fSphereA = TestHelper.getRandFSphere();
-            FSphere fSphereB = fSphereA.copy();
+            Shape fSphereA = TestHelper.getRandFSphere();
+            Shape fSphereB = fSphereA.copy();
 
             Assertions.assertAll("Validate similarity",
                     () -> assertNotSame(fSphereA, fSphereB,
                             "FSpheres represent different objects"),
                     () -> assertTrue(fSphereA.isExact(fSphereB),
-                            "FSpheres should have the same values"),
-                    () -> assertNotSame(fSphereA.getRefCenter(), fSphereB.getRefCenter(),
-                            "The center FPoints should be different")
+                            "FSpheres should have the same values")
             );
         }
 

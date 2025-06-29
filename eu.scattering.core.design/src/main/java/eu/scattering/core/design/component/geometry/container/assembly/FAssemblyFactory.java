@@ -7,4 +7,5 @@ public interface FAssemblyFactory {
     <T extends Geometry> FAssemblyProducer<T> getFAssemblyProducer();
 
     <T extends Geometry> FAssembly<T> getFAssembly();
+    <T extends Geometry> FAssembly<T> getFAssembly(T... elements);
 }

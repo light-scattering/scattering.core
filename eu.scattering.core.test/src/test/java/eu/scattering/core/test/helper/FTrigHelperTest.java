@@ -134,8 +134,27 @@ public class FTrigHelperTest {
                         "Result B is incorrect"),
                 () -> assertEquals(Math.PI * 0.25, resC, epsilon,
                         "Result C is incorrect")
+        );
+    }
 
+    @Test
+    @DisplayName("Is valid")
+    void isValidA() {
+        FTrigHelper helper = factory.getFTrigHelper();
 
+        Assertions.assertAll("Validate triangle",
+                () -> assertTrue(helper.isValid(3, 4, 5),
+                        "The triangle should be valid"),
+                () -> assertTrue(helper.isValid(3, 5, 4),
+                        "The triangle should be valid"),
+                () -> assertTrue(helper.isValid(4, 5, 3),
+                        "The triangle should be valid"),
+                () -> assertFalse(helper.isValid(1, 2, 5),
+                        "The triangle should not be valid"),
+                () -> assertFalse(helper.isValid(1, 5, 2),
+                        "The triangle should not be valid"),
+                () -> assertFalse(helper.isValid(2, 5, 1),
+                        "The triangle should not be valid")
         );
     }
 }

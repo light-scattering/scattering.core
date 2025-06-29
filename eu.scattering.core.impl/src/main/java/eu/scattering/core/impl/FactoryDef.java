@@ -319,6 +319,13 @@ public final class FactoryDef extends ScatFactoryConcrete {
         return FAssemblyDef.create(this);
     }
 
+    @SafeVarargs
+    @Override
+    public final <T extends Geometry> FAssembly<T> getFAssembly(T... elements) {
+
+        return FAssemblyDef.create(this, elements);
+    }
+
     //--------------------------------------------------
 
     @Override

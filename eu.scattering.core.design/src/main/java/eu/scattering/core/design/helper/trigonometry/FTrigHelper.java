@@ -10,4 +10,6 @@ public interface FTrigHelper {
     double getAngleBetweenVectors(FPos3D origin, FPos3D headA, FPos3D headB);
 
     double getAngle(double adjA, double adjB, double oppC);
+
+    boolean isValid(double sideA, double sideB, double sideC);
 }

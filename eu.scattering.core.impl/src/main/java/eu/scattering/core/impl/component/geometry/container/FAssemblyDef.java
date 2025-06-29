@@ -32,6 +32,16 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return new FAssemblyDef<>(factorySelf);
     }
 
+    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf, T[] elements) {
+        FAssemblyDef<T> fAssembly = new FAssemblyDef<>(factorySelf);
+
+        for (T element : elements) {
+            fAssembly.register(element);
+        }
+
+        return fAssembly;
+    }
+
     protected static boolean isParsable(String tag) {
 
         return tag.equals(JSON_MAIN);
@@ -53,6 +63,19 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public boolean registerWithCheck(Collection<T> elements) {
+        boolean updated = false;
+
+        for (T element : elements) {
+            if (registerWithCheck(element)) {
+                updated = true;
+            }
+        }
+
+        return updated;
+    }
+
+    @Override
     public FAssembly<T> register(T element) {
 
         registerWithCheck(element);
@@ -61,9 +84,67 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FAssembly<T> deregister(T element) {
+    public FAssembly<T> register(Collection<T> elements) {
 
+        elements.forEach(this::registerWithCheck);
+
+        return this;
+    }
+
+    @Override
+    public boolean deregisterWithCheck(T element) {
         boolean updated = this.geometries.remove(element);
+
+        if (updated) {
+            this.fPoints.clear();
+
+            this.geometries.forEach(this::registerFPoints);
+        }
+
+        return updated;
+    }
+
+    @Override
+    public boolean deregisterWithCheck(Collection<T> elements) {
+        boolean updated = false;
+
+        for (T element : elements) {
+            if (this.geometries.remove(element)) {
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            this.fPoints.clear();
+
+            this.geometries.forEach(this::registerFPoints);
+        }
+
+        return updated;
+    }
+
+    @Override
+    public FAssembly<T> deregister(T element) {
+        boolean updated = this.geometries.remove(element);
+
+        if (updated) {
+            this.fPoints.clear();
+
+            this.geometries.forEach(this::registerFPoints);
+        }
+
+        return this;
+    }
+
+    @Override
+    public FAssembly<T> deregister(Collection<T> elements) {
+        boolean updated = false;
+
+        for (T element : elements) {
+            if (this.geometries.remove(element)) {
+                updated = true;
+            }
+        }
 
         if (updated) {
             this.fPoints.clear();
