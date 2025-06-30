@@ -412,7 +412,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean attach(Shape target, List<? extends Shape> field, int corrections) {
+    public boolean attach(Shape target, Iterable<? extends Shape> field, int corrections) {
 
         if (!(target instanceof FSphere)) {
             throw new UnsupportedOperationException("The operation is not implemented");
@@ -445,8 +445,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return closestNeighbour == null;
     }
 
-    private Shape getClosestNeighbour(List<Shape> neighbours, List<? extends Shape> field) {
-        getOverlappingShapes(neighbours, field);
+    private Shape getClosestNeighbour(List<Shape> neighbours, Iterable<? extends Shape> field) {
+        overlaps(field, neighbours);
         sortByDistance(neighbours);
 
         return neighbours.size() > 0 ? neighbours.get(0) : null;

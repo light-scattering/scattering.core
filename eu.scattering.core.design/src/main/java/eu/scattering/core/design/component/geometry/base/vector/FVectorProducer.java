@@ -14,11 +14,13 @@ public interface FVectorProducer extends Producer<FVector> {
     @Override
     FVector produce();
     @Override
-    Stream<FVector> stream();
-
     List<FVector> getListAuto();
+    @Override
     List<FVector> getListRandomized(int quantity);
+    @Override
     List<FVector> getListFixed(int quantity);
+    @Override
+    Stream<FVector> stream();
 
     // -------------------------------------------------------------------------------------------------
 

@@ -16,11 +16,13 @@ public interface FSphereProducer extends Producer<FSphere> {
     @Override
     FSphere produce();
     @Override
-    Stream<FSphere> stream();
-
     List<FSphere> getListAuto();
+    @Override
     List<FSphere> getListRandomized(int quantity);
+    @Override
     List<FSphere> getListFixed(int quantity);
+    @Override
+    Stream<FSphere> stream();
 
     // -------------------------------------------------------------------------------------------------
 

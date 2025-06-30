@@ -14,11 +14,13 @@ public interface FPlaneProducer extends Producer<FPlane> {
     @Override
     FPlane produce();
     @Override
-    Stream<FPlane> stream();
-
     List<FPlane> getListAuto();
+    @Override
     List<FPlane> getListRandomized(int quantity);
+    @Override
     List<FPlane> getListFixed(int quantity);
+    @Override
+    Stream<FPlane> stream();
 
     // -------------------------------------------------------------------------------------------------
 

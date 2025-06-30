@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Timeout;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static eu.scattering.core.impl.ConfigDef.SHAPE_DELTA;
 import static eu.scattering.core.impl.ConfigDef.SHAPE_EPSILON;
@@ -443,7 +442,7 @@ public class FSphereProducerTest {
                 .withCustomRule((fSphere) -> factory.getFSphere(1), 1)
                 .withCustomRule((fSphere) -> factory.getFSphere(2), 1);
 
-        List<FSphere> list = producer.stream().limit(100).collect(Collectors.toList());
+        List<FSphere> list = producer.stream().limit(100).toList();
 
         Assertions.assertAll("Validate values",
                 () -> assertTrue(list.stream().anyMatch(e -> e.getRadius() == 1),
@@ -463,7 +462,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFSphere(2), 20)
                 .withCustomRule((factory) -> factory.getFSphere(3), 20);
 
-        List<FSphere> results = producer.stream().limit(60).collect(Collectors.toList());
+        List<FSphere> results = producer.stream().limit(60).toList();
 
         boolean sequence = true;
         for (int i = 0 ; i < 20 ; i++) {

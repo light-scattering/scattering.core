@@ -2,7 +2,7 @@ package eu.scattering.core.transfer.container.buffer;
 
 import eu.scattering.core.transfer.container.ContainerFactory;
 import eu.scattering.core.transfer.container.ContainerFactoryConcrete;
-import eu.scattering.core.transfer.container.buffer.FLayer.FLayer;
+import eu.scattering.core.transfer.container.buffer.FLayer.FLayerDef;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -19,9 +19,9 @@ public class FLayerTest {
     class FLayerBasicTest {
 
         @Test
-        @DisplayName("Creation")
-        void creationTest() {
-            FLayer fLayer = factory.getFLayer();
+        @DisplayName("Construct")
+        void construct() {
+            FLayerDef fLayer = factory.getFLayer();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fLayer.get(),
@@ -30,23 +30,24 @@ public class FLayerTest {
                             "Layer 0 value is incorrect (indirect)"),
                     () -> assertEquals(0, fLayer.get(1),
                             "Layer 1 value is incorrect"),
-                    () -> assertEquals(0, fLayer.getNumberOfLayers(),
+                    () -> assertEquals(1, fLayer.size(),
                             "The number of layers is incorrect"),
-                    () -> assertEquals(0, fLayer.getSum(),
+                    () -> assertEquals(0, fLayer.addSelf(),
                             "The sum is incorrect")
             );
         }
 
         @Test
         @DisplayName("Single layer incrementation")
-        void singleLayerIncTest() {
-            FLayer fLayer = factory.getFLayer();
+        void singleLayerInc() {
+            FLayerDef fLayer = factory.getFLayer();
 
             fLayer.inc();
             fLayer.inc();
             fLayer.inc();
             fLayer.inc();
-            fLayer.inc();
+
+            int addedLayers = fLayer.inc();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(5, fLayer.get(),
@@ -55,23 +56,26 @@ public class FLayerTest {
                             "Layer 0 value is incorrect (indirect)"),
                     () -> assertEquals(0, fLayer.get(1),
                             "Layer 1 value is incorrect"),
-                    () -> assertEquals(0, fLayer.getNumberOfLayers(),
+                    () -> assertEquals(1, fLayer.size(),
                             "The number of layers is incorrect"),
-                    () -> assertEquals(5, fLayer.getSum(),
-                            "The sum is incorrect")
+                    () -> assertEquals(5, fLayer.addSelf(),
+                            "The sum is incorrect"),
+                    () -> assertEquals(0, addedLayers,
+                            "The number of added layers is incorrect")
             );
         }
 
         @Test
-        @DisplayName("Single layer incrementation (indirect)")
-        void singleLayerIncIndirectTest() {
-            FLayer fLayer = factory.getFLayer();
+        @DisplayName("Single layer incrementation (index)")
+        void singleLayerIncIndex() {
+            FLayerDef fLayer = factory.getFLayer();
 
             fLayer.inc(0);
             fLayer.inc(0);
             fLayer.inc(0);
             fLayer.inc(0);
-            fLayer.inc(0);
+
+            int addedLayers = fLayer.inc(0);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(5, fLayer.get(),
@@ -80,20 +84,23 @@ public class FLayerTest {
                             "Layer 0 value is incorrect (indirect)"),
                     () -> assertEquals(0, fLayer.get(1),
                             "Layer 1 value is incorrect"),
-                    () -> assertEquals(0, fLayer.getNumberOfLayers(),
+                    () -> assertEquals(1, fLayer.size(),
                             "The number of layers is incorrect"),
-                    () -> assertEquals(5, fLayer.getSum(),
-                            "The sum is incorrect")
+                    () -> assertEquals(5, fLayer.addSelf(),
+                            "The sum is incorrect"),
+                    () -> assertEquals(0, addedLayers,
+                            "The number of added layers is incorrect")
             );
         }
 
         @Test
         @DisplayName("Multi layer incrementation")
-        void multiLayerIncTest() {
-            FLayer fLayer = factory.getFLayer();
+        void multiLayerInc() {
+            FLayerDef fLayer = factory.getFLayer();
 
-            fLayer.inc(1);
-            fLayer.inc(2);
+            int addedLayersA = fLayer.inc(1);
+            int addedLayersB = fLayer.inc(2);
+
             fLayer.inc(2);
             fLayer.inc(3);
             fLayer.inc(3);
@@ -110,20 +117,24 @@ public class FLayerTest {
                             "Layer 3 value is incorrect"),
                     () -> assertEquals(0, fLayer.get(4),
                             "Layer 4 value is incorrect"),
-                    () -> assertEquals(3, fLayer.getNumberOfLayers(),
+                    () -> assertEquals(4, fLayer.size(),
                             "The number of layers is incorrect"),
-                    () -> assertEquals(6, fLayer.getSum(),
-                            "The sum is incorrect")
+                    () -> assertEquals(6, fLayer.addSelf(),
+                            "The sum is incorrect"),
+                    () -> assertEquals(1, addedLayersA,
+                            "The number of added layers is incorrect"),
+                    () -> assertEquals(1, addedLayersB,
+                            "The number of added layers is incorrect")
             );
         }
 
         @Test
         @DisplayName("Multi layer incrementation (distant)")
-        void multiLayerIncDistantTest() {
-            FLayer fLayer = factory.getFLayer();
+        void multiLayerIncDistant() {
+            FLayerDef fLayer = factory.getFLayer();
 
-            fLayer.inc(5);
-            fLayer.inc(5);
+            int addedLayersA = fLayer.inc(5);
+            int addedLayersB = fLayer.inc(5);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fLayer.get(0),
@@ -135,20 +146,82 @@ public class FLayerTest {
                     () -> assertEquals(0, fLayer.get(3),
                             "Layer 3 value is incorrect"),
                     () -> assertEquals(0, fLayer.get(4),
-                            "Layer 3 value is incorrect"),
+                            "Layer 4 value is incorrect"),
                     () -> assertEquals(2, fLayer.get(5),
-                            "Layer 3 value is incorrect"),
-                    () -> assertEquals(5, fLayer.getNumberOfLayers(),
+                            "Layer 5 value is incorrect"),
+                    () -> assertEquals(6, fLayer.size(),
                             "The number of layers is incorrect"),
-                    () -> assertEquals(2, fLayer.getSum(),
-                            "The sum is incorrect")
+                    () -> assertEquals(2, fLayer.addSelf(),
+                            "The sum is incorrect"),
+                    () -> assertEquals(5, addedLayersA,
+                            "The number of added layers is incorrect"),
+                    () -> assertEquals(0, addedLayersB,
+                            "The number of added layers is incorrect")
             );
         }
 
         @Test
-        @DisplayName("Multi layer incrementation (reset)")
-        void multiLayerIncRstTest() {
-            FLayer fLayer = factory.getFLayer();
+        @DisplayName("Single layer setter")
+        void singleLayerSet() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(2);
+            fLayer.set(4);
+
+            int addedLayers = fLayer.set(6);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(6, fLayer.get(),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(6, fLayer.get(0),
+                            "Layer 0 value is incorrect (indirect)"),
+                    () -> assertEquals(0, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(1, fLayer.size(),
+                            "The number of layers is incorrect"),
+                    () -> assertEquals(6, fLayer.addSelf(),
+                            "The sum is incorrect"),
+                    () -> assertEquals(0, addedLayers,
+                            "The number of added layers is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Multi layer setter")
+        void multiLayerSet() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            int addedLayersA = fLayer.set(5, 2);
+            int addedLayersB = fLayer.set(5, 5);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, fLayer.get(0),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(2),
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(3),
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(4),
+                            "Layer 4 value is incorrect"),
+                    () -> assertEquals(5, fLayer.get(5),
+                            "Layer 5 value is incorrect"),
+                    () -> assertEquals(6, fLayer.size(),
+                            "The number of layers is incorrect"),
+                    () -> assertEquals(5, fLayer.addSelf(),
+                            "The sum is incorrect"),
+                    () -> assertEquals(5, addedLayersA,
+                            "The number of added layers is incorrect"),
+                    () -> assertEquals(0, addedLayersB,
+                            "The number of added layers is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Reset")
+        void reset() {
+            FLayerDef fLayer = factory.getFLayer();
 
             fLayer.inc(1);
             fLayer.inc(2);
@@ -172,17 +245,17 @@ public class FLayerTest {
                             "Layer 2 value is incorrect"),
                     () -> assertEquals(0, fLayer.get(3),
                             "Layer 3 value is incorrect"),
-                    () -> assertEquals(2, fLayer.getNumberOfLayers(),
+                    () -> assertEquals(3, fLayer.size(),
                             "The number of layers is incorrect"),
-                    () -> assertEquals(3, fLayer.getSum(),
+                    () -> assertEquals(3, fLayer.addSelf(),
                             "The sum is incorrect")
             );
         }
 
         @Test
         @DisplayName("Illegal layer exception - increment")
-        void wrongLayerIncExceptionTest() {
-            FLayer fLayer = factory.getFLayer();
+        void wrongLayerIncException() {
+            FLayerDef fLayer = factory.getFLayer();
 
             assertThrows(IllegalArgumentException.class, () -> fLayer.inc(-1),
                     "Accessing an incorrect layer should throw an exception");
@@ -190,11 +263,29 @@ public class FLayerTest {
 
         @Test
         @DisplayName("Illegal layer exception - get")
-        void wrongLayerGetExceptionTest() {
-            FLayer fLayer = factory.getFLayer();
+        void wrongLayerGetException() {
+            FLayerDef fLayer = factory.getFLayer();
 
             assertThrows(IllegalArgumentException.class, () -> fLayer.get(-1),
                     "Accessing an incorrect layer should throw an exception");
+        }
+
+        @Test
+        @DisplayName("Illegal layer exception - set")
+        void wrongLayerSetException() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            assertThrows(IllegalArgumentException.class, () -> fLayer.set(-1),
+                    "Accessing an incorrect layer should throw an exception");
+        }
+
+        @Test
+        @DisplayName("Illegal layer exception - set, value")
+        void wrongLayerSetValueException() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            assertThrows(IllegalArgumentException.class, () -> fLayer.set(0, -1),
+                    "Setting an incorrect value should throw an exception");
         }
     }
 
@@ -205,9 +296,9 @@ public class FLayerTest {
 
         @Test
         @DisplayName("Equals")
-        void equalsTest() {
-            FLayer fLayer1 = factory.getFLayer();
-            FLayer fLayer2 = factory.getFLayer();
+        void equals() {
+            FLayerDef fLayer1 = factory.getFLayer();
+            FLayerDef fLayer2 = factory.getFLayer();
 
             fLayer1.inc(0);
             fLayer1.inc(1);
@@ -235,9 +326,9 @@ public class FLayerTest {
 
         @Test
         @DisplayName("Equals (fail)")
-        void equalsFailTest() {
-            FLayer fLayer1 = factory.getFLayer();
-            FLayer fLayer2 = factory.getFLayer();
+        void equalsFail() {
+            FLayerDef fLayer1 = factory.getFLayer();
+            FLayerDef fLayer2 = factory.getFLayer();
 
             fLayer1.inc(0);
             fLayer1.inc(1);
@@ -263,8 +354,8 @@ public class FLayerTest {
 
         @Test
         @DisplayName("JSON")
-        void parseJSONTest() {
-            FLayer dtoOrigin = factory.getFLayer();
+        void parseJSON() {
+            FLayerDef dtoOrigin = factory.getFLayer();
 
             dtoOrigin.inc(0);
             dtoOrigin.inc(1);
@@ -285,37 +376,291 @@ public class FLayerTest {
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
-            FLayer dtoCopy = factory.getFLayer(jsonOrigin);
+            FLayerDef dtoCopy = factory.getFLayer(jsonOrigin);
 
             assertEquals(dtoOrigin, dtoCopy,
                     "The parsed JSON object is erroneous");
         }
 
         @Test
-        @DisplayName("Iteration")
-        void iterationTest() {
-            FLayer fLayer = factory.getFLayer();
+        @DisplayName("Add zero")
+        void addZero() {
+            FLayerDef fLayer = factory.getFLayer();
 
-            fLayer.inc(1);
-            fLayer.inc(2);
-            fLayer.inc(2);
-            fLayer.inc(3);
-            fLayer.inc(3);
-            fLayer.inc(3);
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
 
-            double[] values = new double[fLayer.getNumberOfLayers() + 1];
-
-            fLayer.iterate((index, value) -> values[index] = fLayer.get(index));
+            fLayer.add();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(0, values[0],
-                            "Layer 0 value is erroneous"),
-                    () -> assertEquals(1, values[1],
-                            "Layer 1 value is erroneous"),
-                    () -> assertEquals(2, values[2],
-                            "Layer 2 value is erroneous"),
-                    () -> assertEquals(3, values[3],
-                            "Layer 3" + "value is erroneous")
+                    () -> assertEquals(2, fLayer.get(0),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(4, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(2),
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(3),
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(6, fLayer.get(4),
+                            "Layer 4 value is incorrect"),
+                    () -> assertEquals(5, fLayer.size(),
+                            "The size is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Add multiple")
+        void addMultiple() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            FLayerDef fLayerA = factory.getFLayer();
+
+            fLayerA.set(1, 2);
+            fLayerA.set(3, 1);
+            fLayerA.set(4, 1);
+
+            FLayerDef fLayerB = factory.getFLayer();
+
+            fLayerB.set(4, 2);
+            fLayerB.set(5, 1);
+
+            fLayer.add(fLayerA, fLayerB);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fLayer.get(0),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(6, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(2),
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(1, fLayer.get(3),
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(9, fLayer.get(4),
+                            "Layer 4 value is incorrect"),
+                    () -> assertEquals(1, fLayer.get(5),
+                            "Layer 5 value is incorrect"),
+                    () -> assertEquals(6, fLayer.size(),
+                            "The size is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Average zero")
+        void averageZero() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            fLayer.average();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fLayer.get(0),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(4, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(2),
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(3),
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(6, fLayer.get(4),
+                            "Layer 4 value is incorrect"),
+                    () -> assertEquals(5, fLayer.size(),
+                            "The size is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Average multiple")
+        void averageMultiple() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            FLayerDef fLayerA = factory.getFLayer();
+
+            fLayerA.set(1, 2);
+            fLayerA.set(3, 1);
+            fLayerA.set(4, 1);
+
+            FLayerDef fLayerB = factory.getFLayer();
+
+            fLayerB.set(4, 2);
+            fLayerB.set(5, 1);
+
+            fLayer.average(fLayerA, fLayerB);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(1, fLayer.get(0),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(2, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(2),
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(3),
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(3, fLayer.get(4),
+                            "Layer 4 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(5),
+                            "Layer 5 value is incorrect"),
+                    () -> assertEquals(6, fLayer.size(),
+                            "The size is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Max zero")
+        void maxZero() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            fLayer.max();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fLayer.get(0),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(4, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(2),
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(3),
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(6, fLayer.get(4),
+                            "Layer 4 value is incorrect"),
+                    () -> assertEquals(5, fLayer.size(),
+                            "The size is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Max multiple")
+        void maxMultiple() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            FLayerDef fLayerA = factory.getFLayer();
+
+            fLayerA.set(1, 2);
+            fLayerA.set(3, 1);
+            fLayerA.set(4, 1);
+
+            FLayerDef fLayerB = factory.getFLayer();
+
+            fLayerB.set(4, 2);
+            fLayerB.set(5, 1);
+
+            fLayer.max(fLayerA, fLayerB);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fLayer.get(0),
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(4, fLayer.get(1),
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, fLayer.get(2),
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(1, fLayer.get(3),
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(6, fLayer.get(4),
+                            "Layer 4 value is incorrect"),
+                    () -> assertEquals(1, fLayer.get(5),
+                            "Layer 5 value is incorrect"),
+                    () -> assertEquals(6, fLayer.size(),
+                            "The size is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Add self")
+        void addSelf() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            double results = fLayer.addSelf();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(12, results,
+                            1E-6, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Average self")
+        void averageSelf() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            double results = fLayer.averageSelf();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals((double) 12 / 5, results,
+                            1E-6, "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Max self")
+        void maxSelf() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            double results = fLayer.maxSelf();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(6, results,
+                            "The value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Iterate")
+        void iterate() {
+            FLayerDef fLayer = factory.getFLayer();
+
+            fLayer.set(0, 2);
+            fLayer.set(1, 4);
+            fLayer.set(4, 6);
+
+            int[] results = new int[5];
+
+            int index = 0;
+            for (Integer value : fLayer) {
+                results[index++] = value;
+            }
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, results[0],
+                            "Layer 0 value is incorrect"),
+                    () -> assertEquals(4, results[1],
+                            "Layer 1 value is incorrect"),
+                    () -> assertEquals(0, results[2],
+                            "Layer 2 value is incorrect"),
+                    () -> assertEquals(0, results[3],
+                            "Layer 3 value is incorrect"),
+                    () -> assertEquals(6, results[4],
+                            "Layer 4 value is incorrect")
             );
         }
     }

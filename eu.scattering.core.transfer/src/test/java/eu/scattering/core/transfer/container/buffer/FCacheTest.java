@@ -22,20 +22,31 @@ public class FCacheTest {
     class FCacheBasicTest {
 
         @Test
-        @DisplayName("Creation")
-        void creationTest() {
+        @DisplayName("Construct")
+        void construct() {
             FCache fCache = factory.getFCache();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(0, fCache.getSize(),
+                    () -> assertEquals(0, fCache.size(),
+                            "The number of elements is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct (thread)")
+        void constructThread() {
+            FCache fCache = factory.getFCacheThread();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, fCache.size(),
                             "The number of elements is incorrect")
             );
         }
 
         @Test
         @DisplayName("Put with key")
-        void putWithKeyTest() {
-            FCache fCache = factory.getFCache();
+        void putWithKey() {
+            FCache fCache = factory.getFCacheThread();
 
             FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
 
@@ -45,7 +56,7 @@ public class FCacheTest {
             Storage<?> resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getSize(),
+                    () -> assertEquals(1, fCache.size(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
@@ -58,8 +69,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Put with key - replace")
-        void putWithKeyReplaceTest() {
-            FCache fCache = factory.getFCache();
+        void putWithKeyReplace() {
+            FCache fCache = factory.getFCacheThread();
 
             FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
 
@@ -70,7 +81,7 @@ public class FCacheTest {
             Storage<?> resultSuper = fCache.getOptional("data", Storage.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getSize(),
+                    () -> assertEquals(1, fCache.size(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
@@ -83,8 +94,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Put with class")
-        void putWithClassTest() {
-            FCache fCache = factory.getFCache();
+        void putWithClass() {
+            FCache fCache = factory.getFCacheThread();
 
             FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
 
@@ -93,7 +104,7 @@ public class FCacheTest {
             FPos3D result = fCache.getOptional(FPos3D.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getSize(),
+                    () -> assertEquals(1, fCache.size(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
@@ -104,8 +115,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Put with class - replace")
-        void putWithClassReplaceTest() {
-            FCache fCache = factory.getFCache();
+        void putWithClassReplace() {
+            FCache fCache = factory.getFCacheThread();
 
             FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
 
@@ -115,7 +126,7 @@ public class FCacheTest {
             FPos3D result = fCache.getOptional(FPos3D.class).orElseThrow();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fCache.getSize(),
+                    () -> assertEquals(1, fCache.size(),
                             "The number of elements is incorrect"),
                     () -> assertSame(fPos3D, result,
                             "The object should be the same"),
@@ -126,8 +137,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Get with key - Non-existent")
-        void getWithKeyEmptyTest() {
-            FCache fCache = factory.getFCache();
+        void getWithKeyEmpty() {
+            FCache fCache = factory.getFCacheThread();
 
             assertThrows(IllegalArgumentException.class, () -> fCache.get("data", FPos3D.class),
                     "The element should not exist");
@@ -135,8 +146,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Get with class - Non-existent")
-        void getWithClassEmptyTest() {
-            FCache fCache = factory.getFCache();
+        void getWithClassEmpty() {
+            FCache fCache = factory.getFCacheThread();
 
             assertThrows(IllegalArgumentException.class, () -> fCache.get(FPos3D.class),
                     "The element should not exist");
@@ -144,8 +155,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Get optional with key - Non-existent")
-        void getOptionalWithKeyEmptyTest() {
-            FCache fCache = factory.getFCache();
+        void getOptionalWithKeyEmpty() {
+            FCache fCache = factory.getFCacheThread();
 
             assertTrue(fCache.getOptional("data", FPos3D.class).isEmpty(),
                     "The element should not exist");
@@ -153,8 +164,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Get optional with class - Non-existent")
-        void getOptionalWithClassEmptyTest() {
-            FCache fCache = factory.getFCache();
+        void getOptionalWithClassEmpty() {
+            FCache fCache = factory.getFCacheThread();
 
             assertTrue(fCache.getOptional(FPos3D.class).isEmpty(),
                     "The element should not exist");
@@ -162,8 +173,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Get with key (fail) - Cast error")
-        void getWithKeyFailCastTest() {
-            FCache fCache = factory.getFCache();
+        void getWithKeyFailCast() {
+            FCache fCache = factory.getFCacheThread();
 
             FPos3D data = factory.getFPos3D(1, 2, 3);
 
@@ -176,8 +187,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Get with key and supplier")
-        void getWithKeyAndSupplierTest() {
-            FCache fCache = factory.getFCache();
+        void getWithKeyAndSupplier() {
+            FCache fCache = factory.getFCacheThread();
             fCache.put(ContainerFactory.class, factory);
 
             FPos3D resultA = fCache.get("data", FPos3D.class,
@@ -185,7 +196,7 @@ public class FCacheTest {
             FPos3D resultB = fCache.get("data", FPos3D.class);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(2, fCache.getSize(),
+                    () -> assertEquals(2, fCache.size(),
                             "The number of elements is incorrect"),
                     () -> assertEquals(factory.getFPos3D(1, 2, 3), resultA,
                             "The object should be equal"),
@@ -196,8 +207,8 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Get with class and supplier")
-        void getWithClassAndSupplierTest() {
-            FCache fCache = factory.getFCache();
+        void getWithClassAndSupplier() {
+            FCache fCache = factory.getFCacheThread();
             fCache.put(ContainerFactory.class, factory);
 
             FPos3D resultA = fCache.get(FPos3D.class,
@@ -205,7 +216,7 @@ public class FCacheTest {
             FPos3D resultB = fCache.get(FPos3D.class);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(2, fCache.getSize(),
+                    () -> assertEquals(2, fCache.size(),
                             "The number of elements is incorrect"),
                     () -> assertEquals(factory.getFPos3D(1, 2, 3), resultA,
                             "The object should be equal"),
@@ -216,20 +227,20 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Delete with key")
-        void deleteWithKeyTest() {
-            FCache fCache = factory.getFCache();
+        void deleteWithKey() {
+            FCache fCache = factory.getFCacheThread();
 
             fCache.put("val1", factory.getFPos3D(1, 2, 3));
             fCache.put("val2", factory.getFPos3D(4, 5, 6));
             fCache.put(FPos3D.class, factory.getFPos3D(7, 8, 9));
 
-            assertEquals(3, fCache.getSize(), "The size is incorrect");
+            assertEquals(3, fCache.size(), "The size is incorrect");
 
             boolean isDeletedA = fCache.delete("val2");
             boolean isDeletedB = fCache.delete("val2");
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(2, fCache.getSize(),
+                    () -> assertEquals(2, fCache.size(),
                             "The size is incorrect"),
                     () -> assertFalse(fCache.getOptional("val2", FPos3D.class).isPresent(),
                             "The object should not be available"),
@@ -242,20 +253,20 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Delete with class")
-        void deleteWithClassTest() {
-            FCache fCache = factory.getFCache();
+        void deleteWithClass() {
+            FCache fCache = factory.getFCacheThread();
 
             fCache.put("val1", factory.getFPos3D(1, 2, 3));
             fCache.put("val2", factory.getFPos3D(4, 5, 6));
             fCache.put(FPos3D.class, factory.getFPos3D(7, 8, 9));
 
-            assertEquals(3, fCache.getSize(), "The size is incorrect");
+            assertEquals(3, fCache.size(), "The size is incorrect");
 
             boolean isDeletedA = fCache.delete(FPos3D.class);
             boolean isDeletedB = fCache.delete(FPos3D.class);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(2, fCache.getSize(),
+                    () -> assertEquals(2, fCache.size(),
                             "The size is incorrect"),
                     () -> assertFalse(fCache.getOptional(FPos3D.class).isPresent(),
                             "The object should not be available"),
@@ -268,19 +279,19 @@ public class FCacheTest {
 
         @Test
         @DisplayName("Reset")
-        void resetTest() {
-            FCache fCache = factory.getFCache();
+        void reset() {
+            FCache fCache = factory.getFCacheThread();
 
             fCache.put("val1", factory.getFPos3D(1, 2, 3));
             fCache.put("val2", factory.getFPos3D(4, 5, 6));
             fCache.put(FPos3D.class, factory.getFPos3D(7, 8, 9));
 
-            assertEquals(3, fCache.getSize(), "The size is incorrect");
+            assertEquals(3, fCache.size(), "The size is incorrect");
 
             int size = fCache.reset();
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(0, fCache.getSize(),
+                    () -> assertEquals(0, fCache.size(),
                             "The size is incorrect"),
                     () -> assertEquals(3, size,
                             "The number of deleted elements is incorrect")
@@ -295,7 +306,7 @@ public class FCacheTest {
 
         @Test
         @DisplayName("JSON")
-        void parseJSONTest() {
+        void parseJSON() {
             FCache dtoOrigin = factory.getFCache();
 
             dtoOrigin.put("val1", factory.getFPos3D(1, 2, 3));
@@ -306,7 +317,24 @@ public class FCacheTest {
 
             FCache dtoCopy = factory.getFCache(jsonOrigin);
 
-            assertEquals(0, dtoCopy.getSize(),
+            assertEquals(0, dtoCopy.size(),
+                    "The parsed JSON object should be empty");
+        }
+
+        @Test
+        @DisplayName("JSON (thread)")
+        void parseJSONThread() {
+            FCache dtoOrigin = factory.getFCacheThread();
+
+            dtoOrigin.put("val1", factory.getFPos3D(1, 2, 3));
+            dtoOrigin.put("val2", factory.getFPos3D(4, 5, 6));
+            dtoOrigin.put(FPos4D.class, factory.getFPos4D(7, 8, 9, 0));
+
+            JSONObject jsonOrigin = dtoOrigin.toJSON();
+
+            FCache dtoCopy = factory.getFCacheThread(jsonOrigin);
+
+            assertEquals(0, dtoCopy.size(),
                     "The parsed JSON object should be empty");
         }
     }

@@ -46,9 +46,20 @@ public interface Shape extends Geometry {
     boolean contains(FPos3D fPos3D);
 
     boolean touches(Shape shape);
+    int touches(Iterable<? extends Shape> shapes);
+    int touches(Iterable<? extends Shape> shapes, List<Shape> in);
+
     boolean overlaps(Shape shape);
+    int overlaps(Iterable<? extends Shape> shapes);
+    int overlaps(Iterable<? extends Shape> shapes, List<Shape> in);
+
     boolean encloses(Shape shape);
+    int encloses(Iterable<? extends Shape> shapes);
+    int encloses(Iterable<? extends Shape> shapes, List<Shape> in);
+
     boolean intersects(Shape shape);
+    int intersects(Iterable<? extends Shape> shapes);
+    int intersects(Iterable<? extends Shape> shapes, List<Shape> in);
 
     double getVolume();
     void getVolumeBuffer(FStream3D stream, double delta);
@@ -73,11 +84,9 @@ public interface Shape extends Geometry {
     boolean attachLinear(Shape target);
     boolean attachSpherical(Shape target, double x, double y, double z);
 
-    boolean attach(Shape target, List<? extends Shape> field, int corrections);
+    boolean attach(Shape target, Iterable<? extends Shape> field, int corrections);
 
     boolean project(FPoint aim, List<FSphere> field);
-
-    void getOverlappingShapes(List<Shape> in, List<? extends Shape> field);
 
     void sortByDistance(List<? extends Shape> in);
 
@@ -111,10 +120,5 @@ public interface Shape extends Geometry {
     default boolean attachSpherical(Shape target, FPos3D center) {
 
         return attachSpherical(target, center.getD0(), center.getD1(), center.getD2());
-    }
-
-    default boolean attach(Shape target, FAssembly<? extends Shape> field, int corrections) {
-
-        return attach(target, field.asList(), corrections);
     }
 }

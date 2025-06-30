@@ -14,11 +14,13 @@ public interface FDraftProducer extends Producer<FDraft> {
     @Override
     FDraft produce();
     @Override
-    Stream<FDraft> stream();
-
     List<FDraft> getListAuto();
+    @Override
     List<FDraft> getListRandomized(int quantity);
+    @Override
     List<FDraft> getListFixed(int quantity);
+    @Override
+    Stream<FDraft> stream();
 
     // -------------------------------------------------------------------------------------------------
 

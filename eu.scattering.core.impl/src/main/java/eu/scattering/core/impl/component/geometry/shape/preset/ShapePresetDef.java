@@ -273,6 +273,40 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
+    public int touches(Iterable<? extends Shape> shapes) {
+        int count = 0;
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (touches(shape)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @Override
+    public int touches(Iterable<? extends Shape> shapes, List<Shape> in) {
+        in.clear();
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (touches(shape)) {
+                in.add(shape);
+            }
+        }
+
+        return in.size();
+    }
+
+    @Override
     public boolean overlaps(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
@@ -296,6 +330,40 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         throw new IllegalStateException("The problem cannot be solved with direct equations");
+    }
+
+    @Override
+    public int overlaps(Iterable<? extends Shape> shapes) {
+        int count = 0;
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (overlaps(shape)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @Override
+    public int overlaps(Iterable<? extends Shape> shapes, List<Shape> in) {
+        in.clear();
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (overlaps(shape)) {
+                in.add(shape);
+            }
+        }
+
+        return in.size();
     }
 
     @Override
@@ -325,6 +393,40 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
+    public int encloses(Iterable<? extends Shape> shapes) {
+        int count = 0;
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (encloses(shape)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @Override
+    public int encloses(Iterable<? extends Shape> shapes, List<Shape> in) {
+        in.clear();
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (encloses(shape)) {
+                in.add(shape);
+            }
+        }
+
+        return in.size();
+    }
+
+    @Override
     public boolean intersects(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
@@ -348,6 +450,40 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         throw new IllegalStateException("The problem cannot be solved with direct equations");
+    }
+
+    @Override
+    public int intersects(Iterable<? extends Shape> shapes) {
+        int count = 0;
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (intersects(shape)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @Override
+    public int intersects(Iterable<? extends Shape> shapes, List<Shape> in) {
+        in.clear();
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (intersects(shape)) {
+                in.add(shape);
+            }
+        }
+
+        return in.size();
     }
 
     protected Relation enclosesEpsilon(Shape shape) {
@@ -561,22 +697,6 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         return false;
-    }
-
-    @Override
-    public void  getOverlappingShapes(List<Shape> in, List<? extends Shape> field) {
-        in.clear();
-
-        for (Shape shape : field) {
-
-            if (this == shape) {
-                continue;
-            }
-
-            if (overlaps(shape)) {
-                in.add(shape);
-            }
-        }
     }
 
     public void sortByDistance(List<? extends Shape> in) {

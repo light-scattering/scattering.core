@@ -15,11 +15,13 @@ public interface FPointProducer extends Producer<FPoint> {
     @Override
     FPoint produce();
     @Override
-    Stream<FPoint> stream();
-
     List<FPoint> getListAuto();
+    @Override
     List<FPoint> getListRandomized(int quantity);
+    @Override
     List<FPoint> getListFixed(int quantity);
+    @Override
+    Stream<FPoint> stream();
 
     // -------------------------------------------------------------------------------------------------
 

@@ -4,13 +4,13 @@ import org.json.JSONObject;
 
 public interface FLayerFactory {
 
-    default FLayer getFLayer() {
+    default FLayerDef getFLayer() {
 
-        return FLayer.create();
+        return FLayerDef.create();
     }
 
-    default FLayer getFLayer(JSONObject json) {
+    default FLayerDef getFLayer(JSONObject json) {
 
-        return FLayer.create(json);
+        return FLayerDef.create(json);
     }
 }

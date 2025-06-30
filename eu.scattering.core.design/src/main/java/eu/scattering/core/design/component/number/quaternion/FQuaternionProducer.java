@@ -13,11 +13,13 @@ public interface FQuaternionProducer extends Producer<FQuaternion> {
     @Override
     FQuaternion produce();
     @Override
-    Stream<FQuaternion> stream();
-
     List<FQuaternion> getListAuto();
+    @Override
     List<FQuaternion> getListRandomized(int quantity);
+    @Override
     List<FQuaternion> getListFixed(int quantity);
+    @Override
+    Stream<FQuaternion> stream();
 
     // -------------------------------------------------------------------------------------------------
 

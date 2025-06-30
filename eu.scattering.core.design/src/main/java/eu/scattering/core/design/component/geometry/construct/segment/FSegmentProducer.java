@@ -14,11 +14,13 @@ public interface FSegmentProducer extends Producer<FSegment> {
     @Override
     FSegment produce();
     @Override
-    Stream<FSegment> stream();
-
     List<FSegment> getListAuto();
+    @Override
     List<FSegment> getListRandomized(int quantity);
+    @Override
     List<FSegment> getListFixed(int quantity);
+    @Override
+    Stream<FSegment> stream();
 
     // -------------------------------------------------------------------------------------------------
 

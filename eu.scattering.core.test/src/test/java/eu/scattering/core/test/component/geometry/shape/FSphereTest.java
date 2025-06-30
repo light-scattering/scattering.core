@@ -769,74 +769,6 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Overlapping shapes (epsilon)")
-        void getOverlappingShapesEpsilon() {
-            List<Shape> in = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(5, 0, 0, 1)
-                    .setDelta(-1);
-            Shape fSphereC = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(-1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-            fAssembly.register(fSphereRef);
-            fAssembly.register(fSphereA);
-            fAssembly.register(fSphereB);
-            fAssembly.register(fSphereC);
-
-            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
-            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertEquals(2, in.size(),
-                            "The size of the list is incorrect"),
-                    () -> assertTrue(in.contains(fSphereA),
-                            "The list should contain shape A"),
-                    () -> assertTrue(in.contains(fSphereB),
-                            "The list should contain shape B")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlapping shapes (delta)")
-        void getOverlappingShapesDelta() {
-            List<Shape> in = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1);
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1);
-            Shape fSphereB = factory.getFSphere(5, 0, 0, 1)
-                    .setEpsilon(-1);
-            Shape fSphereC = factory.getFSphere(5, 5, 5, 1)
-                    .setEpsilon(-1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-            fAssembly.register(fSphereRef);
-            fAssembly.register(fSphereA);
-            fAssembly.register(fSphereB);
-            fAssembly.register(fSphereC);
-
-            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
-            fSphereRef.getOverlappingShapes(in, fAssembly.asList());
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertEquals(2, in.size(),
-                            "The size of the list is incorrect"),
-                    () -> assertTrue(in.contains(fSphereA),
-                            "The list should contain shape A"),
-                    () -> assertTrue(in.contains(fSphereB),
-                            "The list should contain shape B")
-            );
-        }
-
-        @Test
         @DisplayName("SortByDistance")
         void sortByDistance() {
             List<Shape> in = new ArrayList<>();
@@ -1097,6 +1029,54 @@ public class FSphereTest {
                             "The sphere should not be enclosed"),
                     () -> assertFalse(fSphereB.encloses(fSphereA),
                             "The sphere should not be enclosed")
+            );
+        }
+
+        @Test
+        @DisplayName("Encloses, field")
+        void enclosesField() {
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 5);
+
+            Shape fSphereCopy = fSphereRef.copy().setRadius(4.9);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.encloses(fAssembly);
+
+            Assertions.assertAll("Validate enclosure",
+                    () -> assertEquals(2, count,
+                            "The number of enclosed spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Encloses, field, list")
+        void enclosesFieldList() {
+            List<Shape> elements = new ArrayList<>();
+
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 5);
+
+            Shape fSphereCopy = fSphereRef.copy().setRadius(4.9);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.encloses(fAssembly, elements);
+
+            Assertions.assertAll("Validate enclosure",
+                    () -> assertEquals(2, count,
+                            "The number of enclosed spheres is incorrect"),
+                    () -> assertEquals(2, elements.size(),
+                            "The number of enclosed spheres is incorrect")
             );
         }
 
@@ -1453,6 +1433,54 @@ public class FSphereTest {
                             "The spheres should not intersect"),
                     () -> assertFalse(fSphereB.intersects(fSphereA),
                             "The spheres should not intersect")
+            );
+        }
+
+        @Test
+        @DisplayName("Intersects, field")
+        void intersectsField() {
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.intersects(fAssembly);
+
+            Assertions.assertAll("Validate intersections",
+                    () -> assertEquals(2, count,
+                            "The number of intersecting spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Intersects, field, list")
+        void intersectsFieldList() {
+            List<Shape> elements = new ArrayList<>();
+
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.intersects(fAssembly, elements);
+
+            Assertions.assertAll("Validate intersections",
+                    () -> assertEquals(2, count,
+                            "The number of intersecting spheres is incorrect"),
+                    () -> assertEquals(2, elements.size(),
+                            "The number of intersecting spheres is incorrect")
             );
         }
 
@@ -1859,6 +1887,54 @@ public class FSphereTest {
         }
 
         @Test
+        @DisplayName("Touches, field")
+        void touchesField() {
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(0, 2, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.touches(fAssembly);
+
+            Assertions.assertAll("Validate touch",
+                    () -> assertEquals(2, count,
+                            "The number of touching spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Touches, field, delta")
+        void touchesFieldDelta() {
+            List<Shape> elements = new ArrayList<>();
+
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(0, 2, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.touches(fAssembly, elements);
+
+            Assertions.assertAll("Validate touch",
+                    () -> assertEquals(2, count,
+                            "The number of touching spheres is incorrect"),
+                    () -> assertEquals(2, elements.size(),
+                            "The number of touching spheres is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Overlaps (epsilon) - same position")
         void overlapsEpsilonSamePosition() {
             Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
@@ -2225,6 +2301,54 @@ public class FSphereTest {
         }
 
         @Test
+        @DisplayName("Overlaps, field")
+        void overlapsField() {
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.overlaps(fAssembly);
+
+            Assertions.assertAll("Validate overlap",
+                    () -> assertEquals(3, count,
+                            "The number of overlapping spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Overlaps, field, list")
+        void overlapsFieldList() {
+            List<Shape> elements = new ArrayList<>();
+
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.overlaps(fAssembly, elements);
+
+            Assertions.assertAll("Validate overlap",
+                    () -> assertEquals(3, count,
+                            "The number of overlapping spheres is incorrect"),
+                    () -> assertEquals(3, elements.size(),
+                            "The number of overlapping spheres is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Volume stream 3D")
         void volumeStream3D() {
             FStream3D fStream = factory.getFStream3D(5000);
@@ -2552,17 +2676,13 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Attach")
-        void attachFieldEmpty() {
+        @DisplayName("Attach monodisperse, single")
+        void attachMonodisperseSingle() {
             Producer<FPoint> fFieldPointProducer = factory.getFPointProducer().withRadius(5);
             Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer()
                     .withCenterAndFixedRadius(fFieldPointProducer, 1);
 
-            FAssembly<FSphere> fSphereField = factory.getFAssembly();
-
-            fSphereField.register(fFieldSphereProducer.produce());
-            fSphereField.register(fFieldSphereProducer.produce());
-            fSphereField.register(fFieldSphereProducer.produce());
+            FAssembly<FSphere> fSphereField = factory.getFAssembly(fFieldSphereProducer.getListFixed(10));
 
             Producer<FPoint> fPointRefProducer = factory.getFPointProducer().withInSphere(3.9);
             Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer()
@@ -2585,74 +2705,76 @@ public class FSphereTest {
                             "Spheres should be in point contact")
             );
         }
-//
-//        @Test
-//        @DisplayName("Attach (field) - self")
-//        void attachFieldOrigin() {
-//            FSphere fSphereRef = factory.getFSphere();
-//            FSphere fSphereArg = factory.getFSphere();
-//
-//            FAssembly<FSphere> fSphereField = factory.getFAssembly();
-//            fSphereField.register(fSphereRef);
-//            fSphereField.register(fSphereArg);
-//
-//            factory.getFRandEngine().inSphere(fSphereArg.getRefCenter(), fSphereArg.getRadius() * 0.75);
-//
-//            boolean repositions = fSphereRef.attachLinear(fSphereArg, epsilon, -1 ,fSphereField, 0);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertTrue(repositions,
-//                            "The number of repositions is incorrect"),
-//                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon, -1),
-//                            "Spheres should be in point contact")
-//            );
-//        }
-//
-//        @Test
-//        @DisplayName("Attach (field) - bounce 1")
-//        void attachFieldBounce1() {
-//            FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
-//            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
-//            FSphere fSphereField1 = factory.getFSphere(-0.25, 3, 0, 1);
-//
-//            FAssembly<FSphere> fSphereField = factory.getFAssembly();
-//            fSphereField.register(fSphereRef);
-//            fSphereField.register(fSphereArg);
-//            fSphereField.register(fSphereField1);
-//
-//            boolean repositions = fSphereRef.attachLinear(fSphereArg, epsilon, -1, fSphereField, 5);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertTrue(repositions,
-//                            "The number of repositions is incorrect"),
-//                    () -> assertTrue(fSphereRef.touches(fSphereArg, epsilon, -1),
-//                            "Spheres should be in point contact (arg)"),
-//                    () -> assertTrue(fSphereRef.touches(fSphereField1, epsilon, -1),
-//                            "Spheres should be in point contact (neighbour)")
-//            );
-//        }
 
-//        @Test
-//        @DisplayName("Push (field, error) - incorrect bounce")
-//        void pushFieldErrorBounce1() {
-//            FSphere fSphereRef = factory.getFSphere(0, 1, 0, 1);
-//            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 2);
-//            FSphere fSphereField1 = factory.getFSphere(-0.25, 3, 0, 1);
-//
-//            FAssembly<FSphere> fSphereField = factory.getFAssembly();
-//            fSphereField.register(fSphereRef);
-//            fSphereField.register(fSphereArg);
-//            fSphereField.register(fSphereField1);
-//
-//            boolean repositions = fSphereRef.attachLinear(fSphereArg, epsilon, -1, fSphereField, 0);
-//
-//            Assertions.assertAll("Validate results",
-//                    () -> assertFalse(repositions,
-//                            "The number of repositions is incorrect"),
-//                    () -> assertFalse(fSphereRef.touches(fSphereField1, epsilon, -1),
-//                            "The spheres should not touch (neighbour)")
-//            );
-//        }
+        @Test
+        @DisplayName("Attach monodisperse, field")
+        void attachMonodisperseField() {
+            Producer<FPoint> fPointProducer = factory.getFPointProducer().withRadius(2);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            FAssembly<FSphere> fSphereField = factory.getFAssembly(fSphereProducer.getListFixed(3));
+
+            Producer<FPoint> fPointRefProducer = factory.getFPointProducer().withInSphere(4);
+            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointRefProducer, 1);
+
+            FSphere fSphereRef = fSphereRefProducer.produce();
+
+            FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
+
+            boolean isPositioned = fSphereRef.attach(fSphereArg, fSphereField, 100);
+
+            fSphereField.register(fSphereRef);
+            fSphereField.register(fSphereArg);
+
+            int countOverlaps = fSphereRef.overlaps(fSphereField);
+            int countTouches = fSphereRef.touches(fSphereField);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The FSphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact"),
+                    () -> assertEquals(0, countOverlaps,
+                            "FSpheres should not overlap"),
+                    () -> assertTrue(countTouches >= 1,
+                            "The positioned FSphere should be in point contact with at least one FSphere")
+            );
+        }
+
+        @Test
+        @DisplayName("Attach polydisperse, single")
+        void attachPolydisperseSingle() {
+            Producer<FPoint> fFieldPointProducer = factory.getFPointProducer().withRadius(5);
+            Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fFieldPointProducer, 1);
+
+            FAssembly<FSphere> fSphereField = factory.getFAssembly(fFieldSphereProducer.getListFixed(10));
+
+            Producer<FPoint> fPointRefProducer = factory.getFPointProducer().withInSphere(3.9);
+            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointRefProducer, 1);
+
+            FSphere fSphereRef = fSphereRefProducer.produce();
+
+            Producer<FPoint> fPointArgProducer = factory.getFPointProducer().withRadius(6);
+            Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointArgProducer, 1);
+
+            FSphere fSphereArg = fSphereArgProducer.produce();
+
+            boolean isPositioned = fSphereRef.attach(fSphereArg, fSphereField, 100);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The FSphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+
     }
 
     @Nested

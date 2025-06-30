@@ -14,11 +14,13 @@ public interface FAssemblyProducer<T extends Geometry> extends Producer<FAssembl
     @Override
     FAssembly<T> produce();
     @Override
-    Stream<FAssembly<T>> stream();
-
     List<FAssembly<T>> getListAuto();
+    @Override
     List<FAssembly<T>> getListRandomized(int quantity);
+    @Override
     List<FAssembly<T>> getListFixed(int quantity);
+    @Override
+    Stream<FAssembly<T>> stream();
 
     // -------------------------------------------------------------------------------------------------
 

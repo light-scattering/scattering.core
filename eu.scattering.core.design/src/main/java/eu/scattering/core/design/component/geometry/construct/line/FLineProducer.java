@@ -14,11 +14,13 @@ public interface FLineProducer extends Producer<FLine> {
     @Override
     FLine produce();
     @Override
-    Stream<FLine> stream();
-
     List<FLine> getListAuto();
+    @Override
     List<FLine> getListRandomized(int quantity);
+    @Override
     List<FLine> getListFixed(int quantity);
+    @Override
+    Stream<FLine> stream();
 
     // -------------------------------------------------------------------------------------------------
 

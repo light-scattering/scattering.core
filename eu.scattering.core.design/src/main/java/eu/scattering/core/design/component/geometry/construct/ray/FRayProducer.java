@@ -14,11 +14,13 @@ public interface FRayProducer extends Producer<FRay> {
     @Override
     FRay produce();
     @Override
-    Stream<FRay> stream();
-
     List<FRay> getListAuto();
+    @Override
     List<FRay> getListRandomized(int quantity);
+    @Override
     List<FRay> getListFixed(int quantity);
+    @Override
+    Stream<FRay> stream();
 
     // -------------------------------------------------------------------------------------------------
 

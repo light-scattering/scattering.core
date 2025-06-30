@@ -6,11 +6,21 @@ public interface FCacheFactory {
 
     default FCache getFCache() {
 
-        return FCache.create();
+        return FCacheDef.create();
     }
 
     default FCache getFCache(JSONObject json) {
 
-        return FCache.create(json);
+        return FCacheDef.create(json);
+    }
+
+    default FCache getFCacheThread() {
+
+        return FCacheThreadDef.create();
+    }
+
+    default FCache getFCacheThread(JSONObject json) {
+
+        return FCacheThreadDef.create(json);
     }
 }
