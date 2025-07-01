@@ -1,5 +1,7 @@
-package eu.scattering.core.transfer.container.buffer.FCache;
+package eu.scattering.core.transfer.container.buffer.cache.concrete;
 
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
+import eu.scattering.core.transfer.container.buffer.cache.FCacheThread;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -9,19 +11,21 @@ import java.util.function.Function;
 
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
-public class FCacheThreadDef implements FCache{
-    private static final String JSON_MAIN = "cache";
+public class FCacheThreadDef implements FCacheThread {
+    private static final String JSON_MAIN = "cacheThread";
+    private static final String JSON_THREAD = "threads";
+    private static final String JSON_SIZE = "size";
 
     private final Map<Thread, FCache> cache = new HashMap<>();
 
     private FCacheThreadDef() {}
 
-    protected static FCacheThreadDef create() {
+    public static FCacheThread create() {
 
         return new FCacheThreadDef();
     }
 
-    protected static FCacheThreadDef create(JSONObject json) {
+    public static FCacheThread create(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
@@ -104,12 +108,25 @@ public class FCacheThreadDef implements FCache{
         return getFCache().reset();
     }
 
+    @Override
+    public int getNumberOfThreads() {
+
+        return this.cache.size();
+    }
+
     //--------------------------------------------------
 
     @Override
     public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
 
-        return getFCache().toJSON();
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_THREAD, this.cache.size());
+        json.put(JSON_SIZE, this.cache.values().stream()
+                .map(FCache::size)
+                .reduce(0, Integer::sum));
+
+        return json;
     }
 
     //--------------------------------------------------

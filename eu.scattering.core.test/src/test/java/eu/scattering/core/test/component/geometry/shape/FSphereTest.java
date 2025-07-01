@@ -8,9 +8,9 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.transfer.container.buffer.FCache.FCache;
-import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
-import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
+import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -2351,7 +2351,7 @@ public class FSphereTest {
         @Test
         @DisplayName("Volume stream 3D")
         void volumeStream3D() {
-            FStream3D fStream = factory.getFStream3D(5000);
+            FArray fStream = factory.getFArray(5000);
 
             Shape fSphere = factory.getFSphere(5, 5, 5, 1);
 
@@ -2359,7 +2359,7 @@ public class FSphereTest {
 
             fSphere.getVolumeBuffer(fStream, delta);
 
-            int elements = fStream.getNumberOfElements();
+            int elements = fStream.size();
 
             fStream.iterate((index, d0, d1, d2, value) ->
                     assertTrue(fSphere.contains(d0, d1, d2)));
@@ -2379,7 +2379,7 @@ public class FSphereTest {
         @Test
         @DisplayName("Volume stream 3DI")
         void volumeStream3DI() {
-            FStream3DI fStream = factory.getFStream3DI(5000);
+            FArrayMesh fStream = factory.getFArrayMesh(5000);
 
             Shape fSphere = factory.getFSphere(5, 5, 5, 1);
 
@@ -2387,7 +2387,7 @@ public class FSphereTest {
 
             fSphere.getVolumeBuffer(fStream, delta);
 
-            int elements = fStream.getNumberOfElements();
+            int elements = fStream.size();
 
             fStream.iterate((index, d0, d1, d2, value) ->
                     assertTrue(fSphere.contains(d0 * delta, d1 * delta, d2 * delta)));
@@ -2773,8 +2773,6 @@ public class FSphereTest {
                             "Spheres should be in point contact")
             );
         }
-
-
     }
 
     @Nested

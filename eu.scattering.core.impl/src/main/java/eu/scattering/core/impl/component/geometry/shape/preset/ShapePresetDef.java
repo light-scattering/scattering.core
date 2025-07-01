@@ -4,9 +4,9 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.transfer.container.buffer.FCache.FCache;
-import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
-import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
+import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.Comparator;
@@ -746,7 +746,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void getVolumeBuffer(FStream3D stream, double delta) {
+    public void getVolumeBuffer(FArray stream, double delta) {
         double radiusParsed = getRadius() + delta;
         double radiusP2 = getRadius() * getRadius();
 
@@ -788,7 +788,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void getVolumeBuffer(FStream3DI stream, double delta) {
+    public void getVolumeBuffer(FArrayMesh stream, double delta) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * (getRadius() + delta);

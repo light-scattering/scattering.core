@@ -8,9 +8,9 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
-import eu.scattering.core.transfer.container.buffer.FCache.FCache;
-import eu.scattering.core.transfer.container.buffer.FStream3D.FStream3D;
-import eu.scattering.core.transfer.container.buffer.FStream3DI.FStream3DI;
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
+import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayDef;
+import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayMeshDef;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -467,12 +467,12 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void getSurfaceBuffer(FStream3DI stream, double delta) {
+    public void getSurfaceBuffer(FArrayMeshDef stream, double delta) {
 
     }
 
     @Override
-    public void getSurfaceBuffer(FStream3D stream, double delta) {
+    public void getSurfaceBuffer(FArrayDef stream, double delta) {
 
     }
 

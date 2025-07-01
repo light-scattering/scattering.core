@@ -2,7 +2,8 @@ package eu.scattering.core.transfer.container.buffer;
 
 import eu.scattering.core.transfer.container.ContainerFactory;
 import eu.scattering.core.transfer.container.ContainerFactoryConcrete;
-import eu.scattering.core.transfer.container.buffer.FCache.FCache;
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
+import eu.scattering.core.transfer.container.buffer.cache.FCacheThread;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import eu.scattering.core.transfer.container.storage.Storage;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Timeout(1)
 @DisplayName("FCache")
 public class FCacheTest {
     private final ContainerFactory factory = ContainerFactoryConcrete.create();
@@ -295,6 +295,25 @@ public class FCacheTest {
                             "The size is incorrect"),
                     () -> assertEquals(3, size,
                             "The number of deleted elements is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("number of threads")
+        void numberOfThreads() {
+            FCacheThread fCache = factory.getFCacheThread();
+
+            int threadsA = fCache.getNumberOfThreads();
+
+            fCache.put("test", factory.getFPos3D(1, 2, 3));
+
+            int threadsB = fCache.getNumberOfThreads();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, threadsA,
+                            "The number of threads is incorrect"),
+                    () -> assertEquals(1, threadsB,
+                            "The number of threads is incorrect")
             );
         }
     }

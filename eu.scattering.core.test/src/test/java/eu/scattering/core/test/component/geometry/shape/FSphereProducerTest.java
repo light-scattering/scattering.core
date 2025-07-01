@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.transfer.container.buffer.FCache.FCache;
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

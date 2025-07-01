@@ -1,5 +1,6 @@
-package eu.scattering.core.transfer.container.buffer.FCache;
+package eu.scattering.core.transfer.container.buffer.cache.concrete;
 
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -22,12 +23,12 @@ public class FCacheDef implements FCache {
         this.mapClass = new HashMap<>();
     }
 
-    protected static FCacheDef create() {
+    public static FCacheDef create() {
 
         return new FCacheDef();
     }
 
-    protected static FCacheDef create(JSONObject json) {
+    public static FCacheDef create(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");

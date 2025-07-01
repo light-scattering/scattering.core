@@ -1,6 +1,6 @@
-package eu.scattering.core.transfer.container.buffer.FLayer;
+package eu.scattering.core.transfer.container.buffer.layer.concrete;
 
-import org.json.JSONArray;
+import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FLayerDef implements FLayer {
     private static final String JSON_MAIN = "layer";
-    private static final String JSON_VAL = "val";
+    private static final String JSON_SIZE = "size";
 
     private final List<FLayerUnit> layers;
 
@@ -25,32 +25,22 @@ public class FLayerDef implements FLayer {
         this.layers.add(FLayerUnit.create());
     }
 
-    private FLayerDef(List<FLayerUnit> layers) {
-        this.index = layers.size() - 1;
-
-        this.layers = layers;
-    }
-
-    protected static FLayerDef create() {
+    public static FLayer create() {
 
         return new FLayerDef();
     }
 
-    protected static FLayerDef create(JSONObject json) {
+    public static FLayer create(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        List<FLayerUnit> layers = new ArrayList<>();
+        FLayer fLayer = new FLayerDef();
 
-        JSONArray structure = json.getJSONArray(JSON_VAL);
+        fLayer.set(json.getInt(JSON_SIZE) - 1, 0);
 
-        for (int i = 0 ; i < structure.length() ; i++) {
-            layers.add(new FLayerUnit(structure.getInt(i)));
-        }
-
-        return new FLayerDef(layers);
+        return fLayer;
     }
 
     @Override
@@ -122,10 +112,10 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public void add(FLayerDef... fLayers) {
+    public void add(FLayer... fLayers) {
         int index = size();
 
-        for (FLayerDef fLayer : fLayers) {
+        for (FLayer fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -134,7 +124,7 @@ public class FLayerDef implements FLayer {
         for (int i = 0 ; i < index ; i++) {
             int sum = get(i);
 
-            for (FLayerDef fLayer : fLayers) {
+            for (FLayer fLayer : fLayers) {
                 sum += fLayer.get(i);
             }
 
@@ -143,10 +133,10 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public void average(FLayerDef... fLayers) {
+    public void average(FLayer... fLayers) {
         int index = size();
 
-        for (FLayerDef fLayer : fLayers) {
+        for (FLayer fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -155,7 +145,7 @@ public class FLayerDef implements FLayer {
         for (int i = 0 ; i < index ; i++) {
             int sum = get(i);
 
-            for (FLayerDef fLayer : fLayers) {
+            for (FLayer fLayer : fLayers) {
                 sum += fLayer.get(i);
             }
 
@@ -164,10 +154,10 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public void max(FLayerDef... fLayers) {
+    public void max(FLayer... fLayers) {
         int index = size();
 
-        for (FLayerDef fLayer : fLayers) {
+        for (FLayer fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -176,7 +166,7 @@ public class FLayerDef implements FLayer {
         for (int i = 0 ; i < index ; i++) {
             int max = get(i);
 
-            for (FLayerDef fLayer : fLayers) {
+            for (FLayer fLayer : fLayers) {
                 if (fLayer.get(i) > max) {
                     max = fLayer.get(i);
                 }
@@ -215,7 +205,7 @@ public class FLayerDef implements FLayer {
         for (int i = 0 ; i <= index ; i++) {
             if (layers.get(i).get() > max) {
                 max = layers.get(i).get();
-            };
+            }
         }
 
         return max;
@@ -241,10 +231,7 @@ public class FLayerDef implements FLayer {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
-
-        for (int i = 0 ; i <= index ; i++) {
-            json.append(JSON_VAL, get(i));
-        }
+        json.put(JSON_SIZE, size());
 
         return json;
     }

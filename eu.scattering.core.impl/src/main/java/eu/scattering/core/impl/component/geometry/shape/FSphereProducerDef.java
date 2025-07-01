@@ -8,7 +8,7 @@ import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
-import eu.scattering.core.transfer.container.buffer.FCache.FCache;
+import eu.scattering.core.transfer.container.buffer.cache.FCache;
 
 import java.util.List;
 import java.util.function.BiFunction;

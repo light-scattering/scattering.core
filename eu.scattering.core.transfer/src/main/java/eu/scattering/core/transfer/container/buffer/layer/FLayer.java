@@ -1,4 +1,4 @@
-package eu.scattering.core.transfer.container.buffer.FLayer;
+package eu.scattering.core.transfer.container.buffer.layer;
 
 import eu.scattering.core.transfer.container.buffer.Buffer;
 
@@ -8,9 +8,9 @@ public interface FLayer extends Buffer<FLayer>, Iterable<Integer> {
     int inc(int layer);
     int set(int layer, int value);
 
-    void add(FLayerDef... fLayer);
-    void average(FLayerDef... fLayer);
-    void max(FLayerDef... fLayer);
+    void add(FLayer... fLayer);
+    void average(FLayer... fLayer);
+    void max(FLayer... fLayer);
 
     double addSelf();
     double averageSelf();

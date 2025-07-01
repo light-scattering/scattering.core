@@ -1,4 +1,4 @@
-package eu.scattering.core.transfer.container.buffer.FCache;
+package eu.scattering.core.transfer.container.buffer.cache;
 
 import eu.scattering.core.transfer.container.buffer.Buffer;
 
