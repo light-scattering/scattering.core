@@ -22,4 +22,5 @@ module eu.scattering.core.transfer {
     exports eu.scattering.core.transfer.container.buffer.array.utils;
     exports eu.scattering.core.transfer.container.buffer.array.concrete;
     exports eu.scattering.core.transfer.container.buffer.cache.concrete;
+    exports eu.scattering.core.transfer.container.buffer.layer;
 }

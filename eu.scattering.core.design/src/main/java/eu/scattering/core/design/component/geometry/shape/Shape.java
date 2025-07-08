@@ -5,11 +5,10 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.util.annotation.Fragment;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayDef;
 import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayMeshDef;
+import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.List;
@@ -64,16 +63,21 @@ public interface Shape extends Geometry {
     int intersects(Iterable<? extends Shape> shapes, List<Shape> in);
 
     double getVolume();
-    void getVolumeBuffer(FArray stream, double delta);
-    void getVolumeBuffer(FArrayMesh stream, double delta);
-
     Shape setVolume(double volume);
 
-    double getSurface();
-    void getSurfaceBuffer(FArrayDef stream, double delta);
-    void getSurfaceBuffer(FArrayMeshDef stream, double delta);
+    void addVolume(FLayer in);
+    void addVolume(FLayer in, Iterable<? extends Shape> shapes);
+//    void getVolumeArray(FArray buffer, double delta);
+//    void getVolumeArray(FArray buffer, Iterable<? extends Shape> shapes, double delta);
+    void addVolumeArray(FArrayMesh in, double delta);
+    void addVolumeArray(FArrayMesh in, Iterable<? extends Shape> shapes, double delta);
 
+    double getSurface();
     Shape setSurface(double surface);
+
+    void getSurfaceMesh(FArrayMeshDef buffer, double delta);
+
+
 
     double getRadius();
     double getRadiusInner();

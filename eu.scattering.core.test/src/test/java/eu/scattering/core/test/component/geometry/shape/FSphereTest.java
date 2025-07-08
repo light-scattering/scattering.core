@@ -8,9 +8,9 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
+import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -661,12 +661,6 @@ public class FSphereTest {
                     () -> assertTrue(fSphere.contains(x, y - mid, z)),
                     () -> assertTrue(fSphere.contains(x, y, z + mid)),
                     () -> assertTrue(fSphere.contains(x, y, z - mid)),
-                    () -> assertTrue(fSphere.contains(x + max, y, z)),
-                    () -> assertTrue(fSphere.contains(x - max, y, z)),
-                    () -> assertTrue(fSphere.contains(x, y + max, z)),
-                    () -> assertTrue(fSphere.contains(x, y - max, z)),
-                    () -> assertTrue(fSphere.contains(x, y, z + max)),
-                    () -> assertTrue(fSphere.contains(x, y, z - max)),
                     () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
                     () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
             );
@@ -693,12 +687,6 @@ public class FSphereTest {
                     () -> assertTrue(fSphere.contains(x, y - mid, z)),
                     () -> assertTrue(fSphere.contains(x, y, z + mid)),
                     () -> assertTrue(fSphere.contains(x, y, z - mid)),
-                    () -> assertTrue(fSphere.contains(x + max, y, z)),
-                    () -> assertTrue(fSphere.contains(x - max, y, z)),
-                    () -> assertTrue(fSphere.contains(x, y + max, z)),
-                    () -> assertTrue(fSphere.contains(x, y - max, z)),
-                    () -> assertTrue(fSphere.contains(x, y, z + max)),
-                    () -> assertTrue(fSphere.contains(x, y, z - max)),
                     () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
                     () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
             );
@@ -725,12 +713,6 @@ public class FSphereTest {
                     () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - mid, z))),
                     () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + mid))),
                     () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - mid))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x + max, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x - max, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + max, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - max, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + max))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - max))),
                     () -> assertFalse(fSphere.contains(factory.getFPoint(x + max, y + max, z + max))),
                     () -> assertFalse(fSphere.contains(factory.getFPoint(x - max, y - max, z - max)))
             );
@@ -757,12 +739,6 @@ public class FSphereTest {
                     () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - mid, z))),
                     () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + mid))),
                     () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - mid))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x + max, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x - max, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + max, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - max, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + max))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - max))),
                     () -> assertFalse(fSphere.contains(factory.getFPos3D(x + max, y + max, z + max))),
                     () -> assertFalse(fSphere.contains(factory.getFPos3D(x - max, y - max, z - max)))
             );
@@ -2294,9 +2270,9 @@ public class FSphereTest {
 
             Assertions.assertAll("Validate overlap",
                     () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
+                            "The spheres should not overlap"),
                     () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
+                            "The spheres should not overlap")
             );
         }
 
@@ -2349,57 +2325,241 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Volume stream 3D")
-        void volumeStream3D() {
-            FArray fStream = factory.getFArray(5000);
+        @DisplayName("Volume data")
+        void volumeData() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
+                            .setDelta(delta);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphere.translate(offset);
+
+            fSphere.addVolume(fLayer);
+
+            int elements = fLayer.get();
+
+            double volUnit = delta * delta * delta;
+            double volTotal = fSphere.getVolume();
+            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(volRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Volume data double, distant")
+        void volumeDataDoubleDistant() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addVolume(fLayer, fAssembly);
+
+            int elements = fLayer.get();
+
+            double volUnit = delta * delta * delta;
+            double volTotal = fSphereRef.getVolume();
+            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(volRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Volume data double, close")
+        void volumeDataDoubleClose() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addVolume(fLayer, fAssembly);
+
+            int elementsTotal = (int) fLayer.addSelf();
+            int elementsCommon = fLayer.get(1);
+
+            double volUnit = delta * delta * delta;
+            double volTotal = fSphereRef.getVolume();
+            double volCommon = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volRelErrTotal = factory.getFStatHelper().getRelErr(volTotal, elementsTotal * volUnit) * 100;
+            double volRelErrCommon = factory.getFStatHelper().getRelErr(volCommon, elementsCommon * volUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elementsTotal > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(volRelErrTotal < 0.5,
+                            "The total relative error is erroneous"),
+                    () -> assertTrue(volRelErrCommon < 0.5,
+                            "The common relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Volume data multiple, close")
+        void volumeDataMultipleClose() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(2, 2, 2, 3)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addVolume(fLayer, fAssembly);
+
+            int elements = (int) fLayer.addSelf();
+
+            double volUnit = delta * delta * delta;
+            double volTotal = fSphereRef.getVolume();
+            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(volRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Volume mesh")
+        void volumeMesh() {
+            FArrayMesh fMesh = factory.getFArrayMesh(50000);
 
             Shape fSphere = factory.getFSphere(5, 5, 5, 1);
 
-            double delta = 0.1;
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
 
-            fSphere.getVolumeBuffer(fStream, delta);
+            fSphere.translate(offset);
 
-            int elements = fStream.size();
+            double delta = 0.05;
 
-            fStream.iterate((index, d0, d1, d2, value) ->
-                    assertTrue(fSphere.contains(d0, d1, d2)));
+            fSphere.addVolumeArray(fMesh, delta);
+
+            int elements = fMesh.size();
+
+            fMesh.iterate((index, d0, d1, d2, value) ->
+                    assertTrue(fSphere.contains(d0 * delta, d1 * delta, d2 * delta)));
 
             double volUnit = delta * delta * delta;
-            double volStream = elements * volUnit;
-            double volCalc = fSphere.getVolume();
+            double volTotal = fSphere.getVolume();
 
-            Assertions.assertAll("Validate stream",
+            Assertions.assertAll("Validate buffer",
                     () -> assertTrue(elements > 0,
                             "The number of elements should be greater than zero"),
-                    () -> assertTrue(factory.getFStatHelper().valRelErr(volCalc, volStream, 0.01),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(volTotal, elements * volUnit, 0.005),
                             "The volume relative error is erroneous")
             );
         }
 
         @Test
-        @DisplayName("Volume stream 3DI")
-        void volumeStream3DI() {
-            FArrayMesh fStream = factory.getFArrayMesh(5000);
+        @DisplayName("Volume mesh double, distant")
+        void volumeMeshDoubleDistant() {
+            FArrayMesh fMesh = factory.getFArrayMesh(50000);
 
-            Shape fSphere = factory.getFSphere(5, 5, 5, 1);
+            Shape fSphereRef = factory.getFSphere( 1);
+            Shape fSphereA = factory.getFSphere(5, 5, 5, 1);
 
-            double delta = 0.1;
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
 
-            fSphere.getVolumeBuffer(fStream, delta);
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
 
-            int elements = fStream.size();
+            fAssembly.translate(offset);
 
-            fStream.iterate((index, d0, d1, d2, value) ->
-                    assertTrue(fSphere.contains(d0 * delta, d1 * delta, d2 * delta)));
+            double delta = 0.05;
+
+            fSphereRef.addVolumeArray(fMesh, fAssembly, delta);
+
+            int elements = fMesh.size();
+
+            fMesh.iterate((index, d0, d1, d2, value) ->
+                    assertTrue(fSphereRef.contains(d0 * delta, d1 * delta, d2 * delta)));
 
             double volUnit = delta * delta * delta;
-            double volStream = elements * volUnit;
-            double volCalc = fSphere.getVolume();
+            double volTotal = fSphereRef.getVolume();
 
-            Assertions.assertAll("Validate stream",
+            Assertions.assertAll("Validate buffer",
                     () -> assertTrue(elements > 0,
                             "The number of elements should be greater than zero"),
-                    () -> assertTrue(factory.getFStatHelper().valRelErr(volCalc, volStream, 0.01),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(volTotal, elements * volUnit, 0.005),
+                            "The volume relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Volume mesh double, close")
+        void volumeMeshDoubleClose() {
+            FArrayMesh fMesh = factory.getFArrayMesh(50000);
+
+            Shape fSphereRef = factory.getFSphere( 1);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            double delta = 0.05;
+
+            fSphereRef.addVolumeArray(fMesh, fAssembly, delta);
+
+            int elements = fMesh.size();
+
+            fMesh.iterate((index, d0, d1, d2, value) ->
+                    assertTrue(fSphereRef.contains(d0 * delta, d1 * delta, d2 * delta)));
+
+            double volUnit = delta * delta * delta;
+            double volTotal = fSphereRef.getVolume() - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(factory.getFStatHelper().valRelErr(volTotal, elements * volUnit, 0.005),
                             "The volume relative error is erroneous")
             );
         }

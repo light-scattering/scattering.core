@@ -11,6 +11,7 @@ import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayDef;
 import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayMeshDef;
+import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -335,9 +336,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double radP2 = radius * radius;
         double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
 
-        return distP2 < radP2 + EPSILON;
+        return distP2 < radP2;
     }
-
 
 
 
@@ -467,12 +467,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void getSurfaceBuffer(FArrayMeshDef stream, double delta) {
-
-    }
-
-    @Override
-    public void getSurfaceBuffer(FArrayDef stream, double delta) {
+    public void getSurfaceMesh(FArrayMeshDef buffer, double delta) {
 
     }
 

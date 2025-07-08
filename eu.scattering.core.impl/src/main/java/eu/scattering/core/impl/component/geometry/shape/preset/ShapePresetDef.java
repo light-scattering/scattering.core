@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
+import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.Comparator;
@@ -15,7 +16,7 @@ import java.util.List;
 import static eu.scattering.core.impl.ConfigDef.*;
 
 public abstract class ShapePresetDef implements Shape {
-    private final static double MESH_OFFSET = -0.5;
+    private final static double SHIFT_OFFSET = -0.25;
 
     private final ScatFactory factory;
     private FCache cache;
@@ -25,6 +26,7 @@ public abstract class ShapePresetDef implements Shape {
 
     private int index = -1;
     private String tag = "";
+    private boolean shift = true;
 
     public ShapePresetDef(ScatFactory factory) {
 
@@ -526,7 +528,7 @@ public abstract class ShapePresetDef implements Shape {
             return false;
         }
 
-        double offset = delta * MESH_OFFSET;
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
             for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
                 for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
@@ -565,7 +567,7 @@ public abstract class ShapePresetDef implements Shape {
 
         boolean ruleTouch = false;
 
-        double offset = -delta + (delta * MESH_OFFSET);
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
             for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
                 for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
@@ -623,7 +625,7 @@ public abstract class ShapePresetDef implements Shape {
     protected boolean overlapsDelta(Shape shape) {
         FVector range = getOperationRange(shape);
 
-        double offset = delta * MESH_OFFSET;
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
             for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
                 for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
@@ -664,7 +666,7 @@ public abstract class ShapePresetDef implements Shape {
         boolean ruleShapeB = false;
         boolean ruleCommon = false;
 
-        double offset = delta * MESH_OFFSET;
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
             for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
                 for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
@@ -746,41 +748,27 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void getVolumeBuffer(FArray stream, double delta) {
-        double radiusParsed = getRadius() + delta;
-        double radiusP2 = getRadius() * getRadius();
+    public void addVolume(FLayer in) {
+        double factor = 1 / delta;
 
-        double cX = getCenterX();
-        double cY = getCenterY();
-        double cZ = getCenterZ();
+        double radiusParsed = factor * getRadius();
 
-        double minX = cX - radiusParsed;
-        double maxX = cX + radiusParsed;
-        double minY = cY - radiusParsed;
-        double maxY = cY + radiusParsed;
-        double minZ = cZ - radiusParsed;
-        double maxZ = cZ + radiusParsed;
+        double cX = factor * getCenterX();
+        double cY = factor * getCenterY();
+        double cZ = factor * getCenterZ();
 
-        double tX, tXP2;
-        double tY, tYP2;
-        double tZ, tZP2;
+        double minX = Math.floor(cX - radiusParsed) * delta;
+        double maxX = getCenterX() + getRadius();
+        double minY = Math.floor(cY - radiusParsed) * delta;
+        double maxY = getCenterY() + getRadius();
+        double minZ = Math.floor(cZ - radiusParsed) * delta;
+        double maxZ = getCenterZ() + getRadius();
 
-        stream.reset();
-
-        for (double x = minX ; x <= maxX ; x += delta) {
-            tX = x - cX;
-            tXP2 = tX * tX;
-
-            for (double y = minY ; y <= maxY ; y += delta) {
-                tY = y - cY;
-                tYP2 = tY * tY;
-
-                for (double z = minZ ; z <= maxZ ; z += delta) {
-                    tZ = z - cZ;
-                    tZP2 = tZ * tZ;
-
-                    if (tXP2 + tYP2 + tZP2 <= radiusP2) {
-                        stream.add(x, y, z);
+        for (double x = minX ; x < maxX ; x += delta) {
+            for (double y = minY ; y < maxY ; y += delta) {
+                for (double z = minZ ; z < maxZ ; z += delta) {
+                    if (contains(x, y, z)) {
+                        in.inc();
                     }
                 }
             }
@@ -788,11 +776,51 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void getVolumeBuffer(FArrayMesh stream, double delta) {
+    public void addVolume(FLayer in, Iterable<? extends Shape> shapes) {
         double factor = 1 / delta;
 
-        double radiusParsed = factor * (getRadius() + delta);
-        double radiusP2 = (factor * getRadius()) * (factor * getRadius());
+        double radiusParsed = factor * getRadius();
+
+        double cX = factor * getCenterX();
+        double cY = factor * getCenterY();
+        double cZ = factor * getCenterZ();
+
+        double minX = Math.floor(cX - radiusParsed) * delta;
+        double maxX = getCenterX() + getRadius();
+        double minY = Math.floor(cY - radiusParsed) * delta;
+        double maxY = getCenterY() + getRadius();
+        double minZ = Math.floor(cZ - radiusParsed) * delta;
+        double maxZ = getCenterZ() + getRadius();
+
+        int layers;
+        for (double x = minX ; x < maxX ; x += delta) {
+            for (double y = minY ; y < maxY ; y += delta) {
+                for (double z = minZ ; z < maxZ ; z += delta) {
+                    if (contains(x, y, z)) {
+                        layers = 0;
+
+                        for (Shape shape : shapes) {
+                            if (this == shape) {
+                                continue;
+                            }
+
+                            if (shape.contains(x, y, z)) {
+                                layers++;
+                            }
+                        }
+
+                        in.inc(layers);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void addVolumeArray(FArrayMesh in, double delta) {
+        double factor = 1 / delta;
+
+        double radiusParsed = factor * getRadius();
 
         double cX = factor * getCenterX();
         double cY = factor * getCenterY();
@@ -805,26 +833,58 @@ public abstract class ShapePresetDef implements Shape {
         int minZ = (int) Math.floor(cZ - radiusParsed);
         int maxZ = (int) Math.ceil(cZ + radiusParsed);
 
-        int tX, tXP2;
-        int tY, tYP2;
-        int tZ, tZP2;
-
-        stream.reset();
+        in.reset();
 
         for (int x = minX ; x <= maxX ; x++) {
-            tX = (int) (x - cX);
-            tXP2 = tX * tX;
-
             for (int y = minY ; y <= maxY ; y++) {
-                tY = (int) (y - cY);
-                tYP2 = tY * tY;
-
                 for (int z = minZ ; z <= maxZ ; z++) {
-                    tZ = (int) (z - cZ);
-                    tZP2 = tZ * tZ;
+                    if (contains(x * delta, y * delta, z * delta)) {
+                        in.add(x, y, z);
+                    }
+                }
+            }
+        }
+    }
 
-                    if (tXP2 + tYP2 + tZP2 <= radiusP2) {
-                        stream.add(x, y, z);
+    @Override
+    public void addVolumeArray(FArrayMesh in, Iterable<? extends Shape> shapes, double delta) {
+        double factor = 1 / delta;
+
+        double radiusParsed = factor * getRadius();
+
+        double cX = factor * getCenterX();
+        double cY = factor * getCenterY();
+        double cZ = factor * getCenterZ();
+
+        int minX = (int) Math.floor(cX - radiusParsed);
+        int maxX = (int) Math.ceil(cX + radiusParsed);
+        int minY = (int) Math.floor(cY - radiusParsed);
+        int maxY = (int) Math.ceil(cY + radiusParsed);
+        int minZ = (int) Math.floor(cZ - radiusParsed);
+        int maxZ = (int) Math.ceil(cZ + radiusParsed);
+
+        in.reset();
+
+        int elements;
+        for (int x = minX ; x <= maxX ; x++) {
+            for (int y = minY ; y <= maxY ; y++) {
+
+                local:
+                for (int z = minZ ; z <= maxZ ; z++) {
+                    if (contains(x * delta, y * delta, z * delta)) {
+                        elements = 0;
+
+                        for (Shape shape : shapes) {
+                            if (this == shape) {
+                                continue;
+                            }
+
+                            if (shape.contains(x * delta, y * delta, z * delta)) {
+                                continue local;
+                            }
+                        }
+
+                        in.add(x, y, z, elements);
                     }
                 }
             }
