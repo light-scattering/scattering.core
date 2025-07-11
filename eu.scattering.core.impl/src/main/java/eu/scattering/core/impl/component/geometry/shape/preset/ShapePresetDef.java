@@ -5,7 +5,6 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
-import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -24,9 +23,10 @@ public abstract class ShapePresetDef implements Shape {
     private double epsilon = SHAPE_EPSILON;
     private double delta = SHAPE_DELTA;
 
+    private final boolean shift = true;
+
     private int index = -1;
     private String tag = "";
-    private boolean shift = true;
 
     public ShapePresetDef(ScatFactory factory) {
 
@@ -98,15 +98,15 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape setTag(String tag) {
+    public Shape setMeta(String meta) {
 
-        this.tag = tag;
+        this.tag = meta;
 
         return this;
     }
 
     @Override
-    public String getTag() {
+    public String getMeta() {
 
         return this.tag;
     }
@@ -503,14 +503,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInner() - shape.getRadiusInner() - epsilon;
+        reqDist = this.getInnerRadius() - shape.getInnerRadius() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean enclosesDelta(Shape shape) {
@@ -552,14 +552,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInner() + shape.getRadiusInner() - epsilon;
+        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.FALSE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.TRUE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.TRUE : Relation.UNDEFINED;
     }
 
     protected boolean touchesDelta(Shape shape, double delta) {
@@ -612,14 +612,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInner() + shape.getRadiusInner() - epsilon;
+        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean overlapsDelta(Shape shape) {
@@ -649,14 +649,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = Math.abs(this.getRadiusInner() - shape.getRadiusInner()) - epsilon;
+        reqDist = Math.abs(this.getInnerRadius() - shape.getInnerRadius()) - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 > reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean intersectsDelta(Shape shape, double delta) {
@@ -817,7 +817,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void addVolumeArray(FArrayMesh in, double delta) {
+    public void addVolumeArray(FArray in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -826,19 +826,17 @@ public abstract class ShapePresetDef implements Shape {
         double cY = factor * getCenterY();
         double cZ = factor * getCenterZ();
 
-        int minX = (int) Math.floor(cX - radiusParsed);
-        int maxX = (int) Math.ceil(cX + radiusParsed);
-        int minY = (int) Math.floor(cY - radiusParsed);
-        int maxY = (int) Math.ceil(cY + radiusParsed);
-        int minZ = (int) Math.floor(cZ - radiusParsed);
-        int maxZ = (int) Math.ceil(cZ + radiusParsed);
+        double minX = Math.floor(cX - radiusParsed) * delta;
+        double maxX = getCenterX() + getRadius();
+        double minY = Math.floor(cY - radiusParsed) * delta;
+        double maxY = getCenterY() + getRadius();
+        double minZ = Math.floor(cZ - radiusParsed) * delta;
+        double maxZ = getCenterZ() + getRadius();
 
-        in.reset();
-
-        for (int x = minX ; x <= maxX ; x++) {
-            for (int y = minY ; y <= maxY ; y++) {
-                for (int z = minZ ; z <= maxZ ; z++) {
-                    if (contains(x * delta, y * delta, z * delta)) {
+        for (double x = minX ; x < maxX ; x += delta) {
+            for (double y = minY ; y < maxY ; y += delta) {
+                for (double z = minZ ; z < maxZ ; z += delta) {
+                    if (contains(x, y, z)) {
                         in.add(x, y, z);
                     }
                 }
@@ -847,7 +845,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void addVolumeArray(FArrayMesh in, Iterable<? extends Shape> shapes, double delta) {
+    public void addVolumeArray(FArray in, Iterable<? extends Shape> shapes) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -856,35 +854,31 @@ public abstract class ShapePresetDef implements Shape {
         double cY = factor * getCenterY();
         double cZ = factor * getCenterZ();
 
-        int minX = (int) Math.floor(cX - radiusParsed);
-        int maxX = (int) Math.ceil(cX + radiusParsed);
-        int minY = (int) Math.floor(cY - radiusParsed);
-        int maxY = (int) Math.ceil(cY + radiusParsed);
-        int minZ = (int) Math.floor(cZ - radiusParsed);
-        int maxZ = (int) Math.ceil(cZ + radiusParsed);
+        double minX = Math.floor(cX - radiusParsed) * delta;
+        double maxX = getCenterX() + getRadius();
+        double minY = Math.floor(cY - radiusParsed) * delta;
+        double maxY = getCenterY() + getRadius();
+        double minZ = Math.floor(cZ - radiusParsed) * delta;
+        double maxZ = getCenterZ() + getRadius();
 
-        in.reset();
-
-        int elements;
-        for (int x = minX ; x <= maxX ; x++) {
-            for (int y = minY ; y <= maxY ; y++) {
+        for (double x = minX ; x < maxX ; x += delta) {
+            for (double y = minY ; y < maxY ; y += delta) {
 
                 local:
-                for (int z = minZ ; z <= maxZ ; z++) {
-                    if (contains(x * delta, y * delta, z * delta)) {
-                        elements = 0;
+                for (double z = minZ ; z < maxZ ; z += delta) {
+                    if (contains(x, y, z)) {
 
                         for (Shape shape : shapes) {
                             if (this == shape) {
                                 continue;
                             }
 
-                            if (shape.contains(x * delta, y * delta, z * delta)) {
+                            if (shape.contains(x, y, z)) {
                                 continue local;
                             }
                         }
 
-                        in.add(x, y, z, elements);
+                        in.add(x, y, z);
                     }
                 }
             }

@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -18,8 +18,7 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.scattering.core.impl.ConfigDef.SHAPE_DELTA;
-import static eu.scattering.core.impl.ConfigDef.SHAPE_EPSILON;
+import static eu.scattering.core.impl.ConfigDef.*;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -189,10 +188,10 @@ public class FSphereTest {
         void setRadiusInner() {
             FSphere fSphere = TestHelper.getRandFSphere();
 
-            Shape results = fSphere.setRadiusInner(11);
+            Shape results = fSphere.setInnerRadius(11);
 
             Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(11, fSphere.getRadiusInner(),
+                    () -> assertEquals(11, fSphere.getInnerRadius(),
                             "The radius is incorrect"),
                     () -> assertSame(results, fSphere,
                             "The reference should not change")
@@ -522,12 +521,12 @@ public class FSphereTest {
         void setTag() {
             Shape fSphere = factory.getFSphere();
 
-            assertEquals("", fSphere.getTag(),
+            assertEquals("", fSphere.getMeta(),
                     "The default tag value is incorrect");
 
-            Shape results = fSphere.setTag("123");
+            Shape results = fSphere.setMeta("123");
 
-            assertEquals("123", fSphere.getTag(),
+            assertEquals("123", fSphere.getMeta(),
                     "The tag value is incorrect");
             assertSame(results, fSphere,
                     "The reference should not change");
@@ -2468,41 +2467,47 @@ public class FSphereTest {
         @Test
         @DisplayName("Volume mesh")
         void volumeMesh() {
-            FArrayMesh fMesh = factory.getFArrayMesh(50000);
+            double delta = 0.05;
 
-            Shape fSphere = factory.getFSphere(5, 5, 5, 1);
+            FArray fMesh = factory.getFArray(50000);
+
+            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta);
 
             FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
 
             fSphere.translate(offset);
 
-            double delta = 0.05;
-
-            fSphere.addVolumeArray(fMesh, delta);
+            fSphere.addVolumeArray(fMesh);
 
             int elements = fMesh.size();
 
             fMesh.iterate((index, d0, d1, d2, value) ->
-                    assertTrue(fSphere.contains(d0 * delta, d1 * delta, d2 * delta)));
+                    assertTrue(fSphere.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
             double volTotal = fSphere.getVolume();
+            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
                     () -> assertTrue(elements > 0,
                             "The number of elements should be greater than zero"),
-                    () -> assertTrue(factory.getFStatHelper().valRelErr(volTotal, elements * volUnit, 0.005),
-                            "The volume relative error is erroneous")
+                    () -> assertTrue(volRelErr < 0.5,
+                            "The relative error is erroneous")
             );
         }
 
         @Test
         @DisplayName("Volume mesh double, distant")
         void volumeMeshDoubleDistant() {
-            FArrayMesh fMesh = factory.getFArrayMesh(50000);
+            double delta = 0.05;
 
-            Shape fSphereRef = factory.getFSphere( 1);
-            Shape fSphereA = factory.getFSphere(5, 5, 5, 1);
+            FArray fMesh = factory.getFArray(50000);
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta);
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
 
@@ -2510,33 +2515,36 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            double delta = 0.05;
-
-            fSphereRef.addVolumeArray(fMesh, fAssembly, delta);
+            fSphereRef.addVolumeArray(fMesh, fAssembly);
 
             int elements = fMesh.size();
 
             fMesh.iterate((index, d0, d1, d2, value) ->
-                    assertTrue(fSphereRef.contains(d0 * delta, d1 * delta, d2 * delta)));
+                    assertTrue(fSphereRef.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
             double volTotal = fSphereRef.getVolume();
+            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
                     () -> assertTrue(elements > 0,
                             "The number of elements should be greater than zero"),
-                    () -> assertTrue(factory.getFStatHelper().valRelErr(volTotal, elements * volUnit, 0.005),
-                            "The volume relative error is erroneous")
+                    () -> assertTrue(volRelErr < 0.5,
+                            "The relative error is erroneous")
             );
         }
 
         @Test
         @DisplayName("Volume mesh double, close")
         void volumeMeshDoubleClose() {
-            FArrayMesh fMesh = factory.getFArrayMesh(50000);
+            double delta = 0.05;
 
-            Shape fSphereRef = factory.getFSphere( 1);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            FArray fMesh = factory.getFArray(50000);
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
 
@@ -2544,23 +2552,279 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            double delta = 0.05;
-
-            fSphereRef.addVolumeArray(fMesh, fAssembly, delta);
+            fSphereRef.addVolumeArray(fMesh, fAssembly);
 
             int elements = fMesh.size();
 
             fMesh.iterate((index, d0, d1, d2, value) ->
-                    assertTrue(fSphereRef.contains(d0 * delta, d1 * delta, d2 * delta)));
+                    assertTrue(fSphereRef.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
             double volTotal = fSphereRef.getVolume() - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
                     () -> assertTrue(elements > 0,
                             "The number of elements should be greater than zero"),
-                    () -> assertTrue(factory.getFStatHelper().valRelErr(volTotal, elements * volUnit, 0.005),
-                            "The volume relative error is erroneous")
+                    () -> assertTrue(volRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Surface data")
+        void surfaceData() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphere.translate(offset);
+
+            fSphere.addSurface(fLayer);
+
+            int elements = fLayer.get();
+
+            double srfUnit = delta * delta;
+            double srfTotal = fSphere.getSurface();
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(srfRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Surface data double, distant")
+        void surfaceDataDoubleDistant() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addSurface(fLayer, fAssembly);
+
+            int elements = fLayer.get();
+
+            double srfUnit = delta * delta;
+            double srfTotal = fSphereRef.getSurface();
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(srfRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Surface data double, close")
+        void surfaceDataDoubleClose() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addSurface(fLayer, fAssembly);
+
+            int elementsTotal = (int) fLayer.addSelf();
+            int elementsCommon = fLayer.get(1);
+
+            double srfUnit = delta * delta;
+            double srfTotal = fSphereRef.getSurface();
+            double srfCommon = 2 * Math.PI * 1 * 0.5;
+            double srfRelErrTotal = factory.getFStatHelper().getRelErr(srfTotal, elementsTotal * srfUnit) * 100;
+            double srfRelErrCommon = factory.getFStatHelper().getRelErr(srfCommon, elementsCommon * srfUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elementsTotal > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(srfRelErrTotal < 0.5,
+                            "The total relative error is erroneous"),
+                    () -> assertTrue(srfRelErrCommon < 0.5,
+                            "The common relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Surface data multiple, close")
+        void surfaceDataMultipleClose() {
+            double delta = 0.05;
+
+            FLayer fLayer = factory.getFLayer();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(0, 1, 0, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(2, 2, 2, 3)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addSurface(fLayer, fAssembly);
+
+            int elements = (int) fLayer.addSelf();
+
+            double srfUnit = delta * delta;
+            double srfTotal = fSphereRef.getSurface();
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(srfRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Surface mesh")
+        void surfaceMesh() {
+            double delta = 0.05;
+
+            FArray fMesh = factory.getFArray(50000);
+
+            Shape fSphere = factory.getFSphere(1)
+                    .setDelta(delta);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphere.translate(offset);
+
+            fSphere.addSurfaceArray(fMesh);
+
+            int elements = fMesh.size();
+
+            FSphere fSphereTmp = factory.getFSphere(EPSILON);
+            fMesh.iterate((index, d0, d1, d2, value) -> {
+                fSphereTmp.setCenter(d0, d1, d2);
+                assertTrue(fSphere.touches(fSphereTmp));
+            });
+
+            double srfUnit = delta * delta;
+            double srfTotal = fSphere.getSurface();
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(srfRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Surface mesh double, distant")
+        void surfaceMeshDoubleDistant() {
+            double delta = 0.05;
+
+            FArray fMesh = factory.getFArray(50000);
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addSurfaceArray(fMesh, fAssembly);
+
+            int elements = fMesh.size();
+
+            FSphere fSphereTmp = factory.getFSphere(EPSILON);
+            fMesh.iterate((index, d0, d1, d2, value) -> {
+                fSphereTmp.setCenter(d0, d1, d2);
+                assertTrue(fSphereRef.touches(fSphereTmp));
+            });
+
+            double srfUnit = delta * delta;
+            double srfTotal = fSphereRef.getSurface();
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(srfRelErr < 0.5,
+                            "The relative error is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Surface mesh double, close")
+        void surfaceMeshDoubleClose() {
+            double delta = 0.05;
+
+            FArray fMesh = factory.getFArray(50000);
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.addSurfaceArray(fMesh, fAssembly);
+
+            int elements = fMesh.size();
+
+            FSphere fSphereTmp = factory.getFSphere(EPSILON);
+            fMesh.iterate((index, d0, d1, d2, value) -> {
+                fSphereTmp.setCenter(d0, d1, d2);
+                assertTrue(fSphereRef.touches(fSphereTmp));
+            });
+
+            double srfUnit = delta * delta;
+            double srfTotal = fSphereRef.getSurface() - (2 * Math.PI * 1 * 0.5);
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+
+            Assertions.assertAll("Validate buffer",
+                    () -> assertTrue(elements > 0,
+                            "The number of elements should be greater than zero"),
+                    () -> assertTrue(srfRelErr < 0.5,
+                            "The relative error is erroneous")
             );
         }
 

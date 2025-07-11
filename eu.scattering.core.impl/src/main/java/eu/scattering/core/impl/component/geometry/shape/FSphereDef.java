@@ -8,9 +8,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
-import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayDef;
-import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayMeshDef;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import org.json.JSONObject;
 
@@ -27,7 +25,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     private static final String JSON_RADIUS = "radius";
     private static final String JSON_CENTER = "center";
     private static final String JSON_INDEX = "index";
-    private static final String JSON_TAG = "tag";
+    private static final String JSON_META = "meta";
 
     private static final double DEF_RADIUS = 1;
 
@@ -36,7 +34,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     private final ScatFactory factory;
-    private final FCache cache;
 
     private FPoint center;
     private double radius;
@@ -45,7 +42,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         super(factory);
 
         this.factory = factory;
-        this.cache = factory.getFCache();
     }
 
     public static FSphere create(ScatFactory factory, FPoint refCenter) {
@@ -155,8 +151,14 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         getRefCenter().set(json.getJSONObject(JSON_CENTER));
         setRadius(json.getDouble(JSON_RADIUS));
-        setIndex(json.getInt(JSON_INDEX));
-        setTag(json.getString(JSON_TAG));
+
+        if (json.has(JSON_INDEX)) {
+            setIndex(json.getInt(JSON_INDEX));
+        }
+
+        if (json.has(JSON_META)) {
+            setMeta(json.getString(JSON_META));
+        }
 
         return this;
     }
@@ -246,8 +248,14 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_CENTER, getRefCenter().toJSON());
         json.put(JSON_RADIUS, radius);
-        json.put(JSON_INDEX, getIndex());
-        json.put(JSON_TAG, getTag());
+
+        if (getIndex() >= 0) {
+            json.put(JSON_INDEX, getIndex());
+        }
+
+        if (!getMeta().equals("")) {
+            json.put(JSON_META, getMeta());
+        }
 
         return json;
     }
@@ -286,13 +294,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public double getRadiusInner() {
+    public double getInnerRadius() {
 
         return getRadius();
     }
 
     @Override
-    public Shape setRadiusInner(double radius) {
+    public Shape setInnerRadius(double radius) {
 
         return setRadius(radius);
     }
@@ -338,6 +346,98 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         return distP2 < radP2;
     }
+
+    @Override
+    public void addSurface(FLayer in) {
+
+        in.set(0, in.get(0) + (int) Math.round(getSurface() / (getDelta() * getDelta())));
+    }
+
+    @Override
+    public void addSurface(FLayer in, Iterable<? extends Shape> shapes) {
+
+        getSurfacePoints((x, y, z) -> {
+            int layers = 0;
+
+            for (Shape shape : shapes) {
+                if (this == shape) {
+                    continue;
+                }
+
+                if (shape.contains(x, y, z)) {
+                    layers++;
+                }
+            }
+
+            in.inc(layers);
+        });
+
+    }
+
+    @Override
+    public void addSurfaceArray(FArray in) {
+
+       getSurfacePoints(in::add);
+    }
+
+    @Override
+    public void addSurfaceArray(FArray in, Iterable<? extends Shape> shapes) {
+
+        getSurfacePoints((x, y, z) -> {
+            boolean add = true;
+
+            for (Shape shape : shapes) {
+                if (this == shape) {
+                    continue;
+                }
+
+                if (shape.contains(x, y, z)) {
+                    add = false;
+                }
+            }
+
+            if (add) {
+                in.add(x, y, z);
+            }
+        });
+    }
+
+    private void getSurfacePoints(TriConsumer consumer) {
+        int points = (int) Math.round(getSurface() / (getDelta() * getDelta()));
+
+        double offset = 2.0 / points;
+        double increment = Math.PI * (3.0 - Math.sqrt(5));
+
+        for (int i = 0; i < points; i++) {
+            double y = 1 - (i + 0.5) * offset;
+            double r = Math.sqrt(1 - y * y);
+            double phi = i * increment;
+
+            double x = Math.cos(phi) * r;
+            double z = Math.sin(phi) * r;
+
+            consumer.consume(
+                    getCenterX() + (x * radius),
+                    getCenterY() + (y * radius),
+                    getCenterZ() + (z * radius)
+            );
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -467,17 +567,12 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void getSurfaceMesh(FArrayMeshDef buffer, double delta) {
-
-    }
-
-    @Override
-    public Shape setRadiusMin(FAssembly<? extends Shape> field, double minCutoff) {
+    public Shape setMinRadius(FAssembly<? extends Shape> field, double minCutoff) {
         return null;
     }
 
     @Override
-    public Shape setRadiusMax(FAssembly<? extends Shape> field, double maxCutoff) {
+    public Shape setMaxRadius(FAssembly<? extends Shape> field, double maxCutoff) {
         return null;
     }
 
@@ -495,5 +590,12 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     private FSphere supplyFSphere() {
 
         return factory.getFSphere();
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    @FunctionalInterface
+    interface TriConsumer {
+        void consume(double x, double y, double z);
     }
 }

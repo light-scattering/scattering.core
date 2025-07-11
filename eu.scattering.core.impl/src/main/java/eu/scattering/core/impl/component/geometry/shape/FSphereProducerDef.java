@@ -71,7 +71,7 @@ public class FSphereProducerDef implements FSphereProducer {
         FSphere fSphere = processor.produce();
 
         if (this.tag != null) {
-            fSphere.setTag(this.tag);
+            fSphere.setMeta(this.tag);
         }
 
         if (this.delta != null) {

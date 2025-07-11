@@ -24,7 +24,7 @@ import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 public class FVectorDef implements FVector {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "vector";
-    private static final String JSON_VAL = "val";
+    private static final String JSON_VAL = "position";
 
     // -------------------------------------------------------------------------------------------------
     // The following fields must be redefined while extending the class.

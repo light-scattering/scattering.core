@@ -5,9 +5,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.util.annotation.Fragment;
-import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayMeshDef;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
@@ -64,28 +63,25 @@ public interface Shape extends Geometry {
 
     double getVolume();
     Shape setVolume(double volume);
-
     void addVolume(FLayer in);
     void addVolume(FLayer in, Iterable<? extends Shape> shapes);
-//    void getVolumeArray(FArray buffer, double delta);
-//    void getVolumeArray(FArray buffer, Iterable<? extends Shape> shapes, double delta);
-    void addVolumeArray(FArrayMesh in, double delta);
-    void addVolumeArray(FArrayMesh in, Iterable<? extends Shape> shapes, double delta);
+    void addVolumeArray(FArray in);
+    void addVolumeArray(FArray in, Iterable<? extends Shape> shapes);
 
     double getSurface();
     Shape setSurface(double surface);
-
-    void getSurfaceMesh(FArrayMeshDef buffer, double delta);
-
-
+    void addSurface(FLayer in);
+    void addSurface(FLayer in, Iterable<? extends Shape> shapes);
+    void addSurfaceArray(FArray in);
+    void addSurfaceArray(FArray in, Iterable<? extends Shape> shapes);
 
     double getRadius();
-    double getRadiusInner();
-
+    double getInnerRadius();
     Shape setRadius(double radius);
-    Shape setRadiusInner(double radius);
-    Shape setRadiusMin(FAssembly<? extends Shape> field, double minCutoff);
-    Shape setRadiusMax(FAssembly<? extends Shape> field, double maxCutoff);
+    Shape setInnerRadius(double radius);
+
+    Shape setMinRadius(FAssembly<? extends Shape> field, double minCutoff);
+    Shape setMaxRadius(FAssembly<? extends Shape> field, double maxCutoff);
 
     boolean attachLinear(Shape target);
     boolean attachSpherical(Shape target, double x, double y, double z);
@@ -99,20 +95,21 @@ public interface Shape extends Geometry {
     // -------------------------------------------------------------------------------------------------
 
     Shape createCache();
-    Shape setCache(FCache cache);
+
     FCache getCache();
+    Shape setCache(FCache cache);
 
-    Shape setTag(String tag);
-    String getTag();
+    String getMeta();
+    Shape setMeta(String meta);
 
-    Shape setIndex(int index);
-    int getIndex();
-
-    Shape setEpsilon(double epsilon);
     double getEpsilon();
+    Shape setEpsilon(double epsilon);
 
-    Shape setDelta(double delta);
     double getDelta();
+    Shape setDelta(double delta);
+
+    int getIndex();
+    Shape setIndex(int index);
 
     //--------------------------------------------------
 

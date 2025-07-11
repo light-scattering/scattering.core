@@ -781,7 +781,7 @@ public class FSphereProducerTest {
         FSphere resultA = producerA.produce();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("", resultA.getTag(),
+                () -> assertEquals("", resultA.getMeta(),
                         "The default tag is erroneous"),
                 () -> assertEquals(SHAPE_EPSILON, resultA.getEpsilon(),
                         "The default epsilon value is erroneous"),
@@ -802,7 +802,7 @@ public class FSphereProducerTest {
         FSphere resultB = producerB.produce();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("123", resultB.getTag(),
+                () -> assertEquals("123", resultB.getMeta(),
                         "The tag is erroneous"),
                 () -> assertEquals(1, resultB.getEpsilon(),
                         "The epsilon value is erroneous"),
