@@ -567,7 +567,7 @@ public class FSphereTest {
     }
 
     @Nested
-    @Tag("Basic")
+    @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FSphereAdvancedTest {
 
@@ -3195,6 +3195,75 @@ public class FSphereTest {
                             "The FSphere should be positioned"),
                     () -> assertTrue(fSphereRef.touches(fSphereArg),
                             "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @DisplayName("Set min radius")
+        void setMinRadius() {
+            Shape fSphereRef = factory.getFSphere( 1);
+            Shape fSphereA = factory.getFSphere(5, 0, 0, 2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            Shape results = fSphereRef.setMinRadius(fAssembly);
+
+            Assertions.assertAll("Validate position",
+                    () -> assertEquals(7, fSphereRef.getRadius(),
+                            2 * EPSILON," The radius is erroneous"),
+                    () -> assertTrue(fSphereRef.encloses(fSphereA),
+                            "Sphere A should be positioned inside the reference sphere"),
+                    () -> assertSame(fSphereRef, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set min radius, self")
+        void setMinRadiusSelf() {
+            Shape fSphereRef = factory.getFSphere( 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            Shape results = fSphereRef.setMinRadius(fAssembly);
+
+            Assertions.assertAll("Validate position",
+                    () -> assertEquals(1, fSphereRef.getRadius()
+                            ," The radius is erroneous"),
+                    () -> assertSame(fSphereRef, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set min radius, multiple")
+        void setMinRadiusMultiple() {
+            Shape fSphereRef = factory.getFSphere(1, 2, 3, EPSILON);
+
+            Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(100);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(20));
+
+            Shape results = fSphereRef.setMinRadius(fAssembly);
+
+            for (Shape shape : fAssembly) {
+                assertTrue(fSphereRef.encloses(shape),
+                        "All FSpheres should be enclosed");
+            }
+
+            Assertions.assertAll("Validate position",
+                    () -> assertSame(fSphereRef, results,
+                            "The reference should not change")
             );
         }
     }

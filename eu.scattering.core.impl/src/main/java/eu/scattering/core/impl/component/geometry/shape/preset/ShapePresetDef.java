@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.geometry.shape.preset;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
@@ -503,7 +504,7 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getInnerRadius() - shape.getInnerRadius() - epsilon;
+        reqDist = this.getInnerRadius() - shape.getInnerRadius() + epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
@@ -883,6 +884,30 @@ public abstract class ShapePresetDef implements Shape {
                 }
             }
         }
+    }
+
+    @Override
+    public Shape setMinRadius(Iterable<? extends Shape> shapes) {
+        double minRadius = getRadius();
+
+        double dist = 0;
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            dist = getDistCenter(shape) + shape.getRadius();
+
+            if (dist > minRadius) {
+                minRadius = dist;
+            }
+        }
+        
+        if (minRadius > getRadius()) {
+            setRadius(minRadius + EPSILON);
+        }
+
+        return this;
     }
 
     // -------------------------------------------------------------------------------------------------

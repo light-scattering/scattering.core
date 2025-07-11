@@ -566,15 +566,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return units;
     }
 
-    @Override
-    public Shape setMinRadius(FAssembly<? extends Shape> field, double minCutoff) {
-        return null;
-    }
 
-    @Override
-    public Shape setMaxRadius(FAssembly<? extends Shape> field, double maxCutoff) {
-        return null;
-    }
 
 
     @Override

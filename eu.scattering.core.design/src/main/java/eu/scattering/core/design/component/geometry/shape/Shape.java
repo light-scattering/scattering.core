@@ -80,8 +80,7 @@ public interface Shape extends Geometry {
     Shape setRadius(double radius);
     Shape setInnerRadius(double radius);
 
-    Shape setMinRadius(FAssembly<? extends Shape> field, double minCutoff);
-    Shape setMaxRadius(FAssembly<? extends Shape> field, double maxCutoff);
+    Shape setMinRadius(Iterable<? extends Shape> shapes);
 
     boolean attachLinear(Shape target);
     boolean attachSpherical(Shape target, double x, double y, double z);
