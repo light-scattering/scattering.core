@@ -3,13 +3,13 @@ package eu.scattering.core.impl.component.geometry.shape.preset;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -85,17 +85,9 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape setIndex(int index) {
+    public String getMeta() {
 
-        this.index = index;
-
-        return this;
-    }
-
-    @Override
-    public int getIndex() {
-
-        return this.index;
+        return this.tag;
     }
 
     @Override
@@ -107,9 +99,17 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public String getMeta() {
+    public int getIndex() {
 
-        return this.tag;
+        return this.index;
+    }
+
+    @Override
+    public Shape setIndex(int index) {
+
+        this.index = index;
+
+        return this;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -167,6 +167,20 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
+    public Shape scale(double factor) {
+
+        setCenter(
+                getCenterX() * factor,
+                getCenterY() * factor,
+                getCenterZ() * factor
+        );
+
+        setRadius(getRadius() * factor);
+
+        return this;
+    }
+
+    @Override
     public Shape translate(double x, double y, double z) {
 
         setCenter(
@@ -188,20 +202,6 @@ public abstract class ShapePresetDef implements Shape {
     public Shape translate(FPos3D fPos3D) {
 
         return translate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
-    }
-
-    @Override
-    public Shape scale(double factor) {
-
-        setCenter(
-                getCenterX() * factor,
-                getCenterY() * factor,
-                getCenterZ() * factor
-        );
-
-        setRadius(getRadius() * factor);
-
-        return this;
     }
 
     @Override
@@ -309,6 +309,66 @@ public abstract class ShapePresetDef implements Shape {
         return in.size();
     }
 
+    protected Relation touchesEpsilon(Shape shape, double epsilon) {
+        double distP2 = getDistCenterP2(shape);
+
+        double reqDist = this.getRadius() + shape.getRadius() + epsilon;
+        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 > reqDistP2) {
+            return Relation.FALSE;
+        }
+
+        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
+        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 < reqDistP2) {
+            return Relation.FALSE;
+        }
+
+        return this.getRadius() == this.getInnerRadius() ? Relation.TRUE : Relation.UNDEFINED;
+    }
+
+    protected boolean touchesDelta(Shape shape, double delta) {
+        FVector range = getOperationRange(shape);
+
+        boolean ruleTouch = false;
+
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
+            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
+                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
+                    boolean containsA = this.contains(x, y, z);
+                    boolean containsB = shape.contains(x, y, z);
+
+                    if (containsA && containsB) {
+                        return false;
+                    }
+
+                    if (!ruleTouch) {
+                        if (containsA) {
+                            if (shape.contains(x + delta, y, z) ||
+                                    shape.contains(x, y + delta, z) ||
+                                    shape.contains(x, y, z + delta)) {
+                                ruleTouch = true;
+                            }
+                        }
+
+                        if (containsB) {
+                            if (this.contains(x + delta, y, z) ||
+                                    this.contains(x, y + delta, z) ||
+                                    this.contains(x, y, z + delta)) {
+                                ruleTouch = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return ruleTouch;
+    }
+
     @Override
     public boolean overlaps(Shape shape) {
 
@@ -367,6 +427,43 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         return in.size();
+    }
+
+    protected Relation overlapsEpsilon(Shape shape) {
+        double distP2 = getDistCenterP2(shape);
+
+        double reqDist = this.getRadius() + shape.getRadius() - epsilon;
+        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 > reqDistP2) {
+            return Relation.FALSE;
+        }
+
+        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
+        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 < reqDistP2) {
+            return Relation.TRUE;
+        }
+
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
+    }
+
+    protected boolean overlapsDelta(Shape shape) {
+        FVector range = getOperationRange(shape);
+
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
+            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
+                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
+                    if (this.contains(x, y, z) && shape.contains(x, y, z)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -429,6 +526,60 @@ public abstract class ShapePresetDef implements Shape {
         return in.size();
     }
 
+    protected Relation enclosesEpsilon(Shape shape) {
+
+        if (this.getRadius() < shape.getRadius()) {
+            return Relation.FALSE;
+        }
+
+        double distP2 = getDistCenterP2(shape);
+
+        double reqDist = this.getRadius() + shape.getRadius() - epsilon;
+        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 > reqDistP2) {
+            return Relation.FALSE;
+        }
+
+        reqDist = this.getInnerRadius() - shape.getInnerRadius() + epsilon;
+        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 < reqDistP2) {
+            return Relation.TRUE;
+        }
+
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
+    }
+
+    protected boolean enclosesDelta(Shape shape) {
+        FVector range = getOperationRange(shape);
+
+        if (range.getBaseX() == range.getHeadX()) {
+            return false;
+        }
+
+        if (range.getBaseY() == range.getHeadY()) {
+            return false;
+        }
+
+        if (range.getBaseZ() == range.getHeadZ()) {
+            return false;
+        }
+
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
+            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
+                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
+                    if (shape.contains(x, y, z) && !this.contains(x, y, z)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     @Override
     public boolean intersects(Shape shape) {
 
@@ -487,157 +638,6 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         return in.size();
-    }
-
-    protected Relation enclosesEpsilon(Shape shape) {
-
-        if (this.getRadius() < shape.getRadius()) {
-            return Relation.FALSE;
-        }
-
-        double distP2 = getDistCenterP2(shape);
-
-        double reqDist = this.getRadius() + shape.getRadius() - epsilon;
-        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        if (distP2 > reqDistP2) {
-            return Relation.FALSE;
-        }
-
-        reqDist = this.getInnerRadius() - shape.getInnerRadius() + epsilon;
-        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        if (distP2 < reqDistP2) {
-            return Relation.TRUE;
-        }
-
-        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
-    }
-
-    protected boolean enclosesDelta(Shape shape) {
-        FVector range = getOperationRange(shape);
-
-        if (range.getBaseX() == range.getHeadX()) {
-            return false;
-        }
-
-        if (range.getBaseY() == range.getHeadY()) {
-            return false;
-        }
-
-        if (range.getBaseZ() == range.getHeadZ()) {
-            return false;
-        }
-
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
-        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
-                    if (shape.contains(x, y, z) && !this.contains(x, y, z)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    protected Relation touchesEpsilon(Shape shape, double epsilon) {
-        double distP2 = getDistCenterP2(shape);
-
-        double reqDist = this.getRadius() + shape.getRadius() + epsilon;
-        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        if (distP2 > reqDistP2) {
-            return Relation.FALSE;
-        }
-
-        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
-        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        if (distP2 < reqDistP2) {
-            return Relation.FALSE;
-        }
-
-        return this.getRadius() == this.getInnerRadius() ? Relation.TRUE : Relation.UNDEFINED;
-    }
-
-    protected boolean touchesDelta(Shape shape, double delta) {
-        FVector range = getOperationRange(shape);
-
-        boolean ruleTouch = false;
-
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
-        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
-                    boolean containsA = this.contains(x, y, z);
-                    boolean containsB = shape.contains(x, y, z);
-
-                    if (containsA && containsB) {
-                        return false;
-                    }
-
-                    if (!ruleTouch) {
-                        if (containsA) {
-                            if (shape.contains(x + delta, y, z) ||
-                                    shape.contains(x, y + delta, z) ||
-                                    shape.contains(x, y, z + delta)) {
-                                ruleTouch = true;
-                            }
-                        }
-
-                        if (containsB) {
-                            if (this.contains(x + delta, y, z) ||
-                                    this.contains(x, y + delta, z) ||
-                                    this.contains(x, y, z + delta)) {
-                                ruleTouch = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return ruleTouch;
-    }
-
-    protected Relation overlapsEpsilon(Shape shape) {
-        double distP2 = getDistCenterP2(shape);
-
-        double reqDist = this.getRadius() + shape.getRadius() - epsilon;
-        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        if (distP2 > reqDistP2) {
-            return Relation.FALSE;
-        }
-
-        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
-        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
-
-        if (distP2 < reqDistP2) {
-            return Relation.TRUE;
-        }
-
-        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
-    }
-
-    protected boolean overlapsDelta(Shape shape) {
-        FVector range = getOperationRange(shape);
-
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
-        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
-                    if (this.contains(x, y, z) && shape.contains(x, y, z)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     protected Relation intersectsEpsilon(Shape shape, double epsilon) {
@@ -702,14 +702,6 @@ public abstract class ShapePresetDef implements Shape {
         return false;
     }
 
-    public void sortByDistance(List<? extends Shape> in) {
-        CmpDistRef cmp = getCacheCmpDistRef();
-
-        cmp.setRef(this);
-
-        in.sort(cmp);
-    }
-
     protected FVector getOperationRange(Shape shape) {
         FVector range = getCacheFVector();
 
@@ -746,6 +738,15 @@ public abstract class ShapePresetDef implements Shape {
         range.setHeadZ(Math.min(opA, opB));
 
         return range;
+    }
+
+    @Override
+    public void sortByDistance(List<? extends Shape> in) {
+        CmpDistCenter cmp = getCacheCmpDistRef();
+
+        cmp.setRef(this);
+
+        in.sort(cmp);
     }
 
     @Override
@@ -890,7 +891,7 @@ public abstract class ShapePresetDef implements Shape {
     public Shape setMinRadius(Iterable<? extends Shape> shapes) {
         double minRadius = getRadius();
 
-        double dist = 0;
+        double dist;
         for (Shape shape : shapes) {
             if (this == shape) {
                 continue;
@@ -930,13 +931,22 @@ public abstract class ShapePresetDef implements Shape {
         return supplyFVector();
     }
 
-    protected CmpDistRef getCacheCmpDistRef() {
+    protected List<Shape> getListShape() {
 
         if (cache != null) {
-            return cache.get("cmpDistRef", CmpDistRef.class, (cache) -> supplyCmpDistRef());
+            return cache.get("listShape", ListShape.class, (cache) -> supplyListShape()).get();
         }
 
-        return supplyCmpDistRef();
+        return supplyListShape().get();
+    }
+
+    protected CmpDistCenter getCacheCmpDistRef() {
+
+        if (cache != null) {
+            return cache.get(CmpDistCenter.class, (cache) -> supplyCmpDistCenter());
+        }
+
+        return supplyCmpDistCenter();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -956,9 +966,14 @@ public abstract class ShapePresetDef implements Shape {
         return factory.getFVector();
     }
 
-    protected CmpDistRef supplyCmpDistRef() {
+    protected ListShape supplyListShape() {
 
-        return CmpDistRef.create();
+        return ListShape.create();
+    }
+
+    protected CmpDistCenter supplyCmpDistCenter() {
+
+        return CmpDistCenter.create();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -968,14 +983,14 @@ public abstract class ShapePresetDef implements Shape {
     }
 }
 
-class CmpDistRef implements Comparator<Shape> {
+class CmpDistCenter implements Comparator<Shape> {
     private Shape ref;
 
-    private CmpDistRef() {}
+    private CmpDistCenter() {}
 
-    public static CmpDistRef create() {
+    public static CmpDistCenter create() {
 
-        return new CmpDistRef();
+        return new CmpDistCenter();
     }
 
     public void setRef(Shape ref) {
@@ -989,5 +1004,23 @@ class CmpDistRef implements Comparator<Shape> {
         double distS2 = this.ref.getDistCenterP2(s2);
 
         return Double.compare(distS1, distS2);
+    }
+}
+
+class ListShape {
+    private final List<Shape> list = new ArrayList<>(100);
+
+    private ListShape() {}
+
+    public static ListShape create() {
+
+        return new ListShape();
+    }
+
+    public List<Shape> get() {
+
+        list.clear();
+
+        return list;
     }
 }

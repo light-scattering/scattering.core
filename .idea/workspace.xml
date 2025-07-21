@@ -23,11 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/vector/FVector.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/vector/FVector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/Shape.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FVectorDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FVectorDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/base/FVectorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/base/FVectorTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -165,7 +167,7 @@
       <recent name="eu.scattering.core.transfer.container.buffer.FStream3D" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FSphereAdvancedTest.setMinRadiusMultiple">
+  <component name="RunManager" selected="Gradle.FSphereAdvancedTest.attachMonodisperseSingle">
     <configuration name="FSphereAdvancedTest.attachMonodisperseSingle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -189,7 +191,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSphereAdvancedTest.setMinRadius" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSphereAdvancedTest.projectMultipleB" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -202,7 +204,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.setMinRadius&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.projectMultipleB&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -212,7 +214,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSphereAdvancedTest.setMinRadiusMultiple" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSphereAdvancedTest.projectMultipleC" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -225,30 +227,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.setMinRadiusMultiple&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="FSphereAdvancedTest.setMinRadiusSelf" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.setMinRadiusSelf&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.projectMultipleC&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -281,13 +260,34 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.test:test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FSphereAdvancedTest.setMinRadiusMultiple" />
-        <item itemvalue="Gradle.FSphereTest" />
-        <item itemvalue="Gradle.FSphereAdvancedTest.setMinRadiusSelf" />
-        <item itemvalue="Gradle.FSphereAdvancedTest.setMinRadius" />
         <item itemvalue="Gradle.FSphereAdvancedTest.attachMonodisperseSingle" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.FSphereTest" />
+        <item itemvalue="Gradle.FSphereAdvancedTest.projectMultipleC" />
+        <item itemvalue="Gradle.FSphereAdvancedTest.projectMultipleB" />
       </list>
     </recent_temporary>
   </component>
@@ -528,8 +528,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java</url>
-          <line>3263</line>
-          <option name="timeStamp" value="26" />
+          <line>3111</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

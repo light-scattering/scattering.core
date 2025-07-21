@@ -515,8 +515,7 @@ public class FVectorDef implements FVector {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FVector) {
-            FVector ref = (FVector) object;
+        if (object instanceof FVector ref) {
 
             return getRefBase().equals(ref.getRefBase()) && getRefHead().equals(ref.getRefHead());
         }
@@ -531,6 +530,36 @@ public class FVectorDef implements FVector {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FVector scale(double factor) {
+
+        getRefBase().mulFactor(factor);
+        getRefHead().mulFactor(factor);
+
+        return this;
+    }
+
+    @Override
+    public FVector translate(double x, double y, double z) {
+
+        getRefBase().add(x, y, z);
+        getRefHead().add(x, y, z);
+
+        return this;
+    }
+
+    @Override
+    public FVector translate(FPoint arg) {
+
+        return translate(arg.getX(), arg.getY(), arg.getZ());
+    }
+
+    @Override
+    public FVector translate(FPos3D arg) {
+
+        return translate(arg.getD0(), arg.getD1(), arg.getD2());
+    }
 
     @Override
     public FVector add(double bX, double bY, double bZ, double hX, double hY, double hZ) {

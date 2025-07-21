@@ -4,7 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
@@ -181,6 +181,15 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return this;
     }
 
+    @Override
+    public Collection<FPoint> toFPoints() {
+        Collection<FPoint> units = new ArrayList<>();
+
+        units.add(getRefCenter());
+
+        return units;
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -247,7 +256,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_CENTER, getRefCenter().toJSON());
-        json.put(JSON_RADIUS, radius);
+        json.put(JSON_RADIUS, getRadius());
 
         if (getIndex() >= 0) {
             json.put(JSON_INDEX, getIndex());
@@ -337,11 +346,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     @Override
     public boolean contains(double x, double y, double z) {
-        double tX = x - center.getX();
-        double tY = y - center.getY();
-        double tZ = z - center.getZ();
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
 
-        double radP2 = radius * radius;
+        double radP2 = getRadius() * getRadius();
         double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
 
         return distP2 < radP2;
@@ -417,43 +426,15 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             double z = Math.sin(phi) * r;
 
             consumer.consume(
-                    getCenterX() + (x * radius),
-                    getCenterY() + (y * radius),
-                    getCenterZ() + (z * radius)
+                    getCenterX() + (x * getRadius()),
+                    getCenterY() + (y * getRadius()),
+                    getCenterZ() + (z * getRadius())
             );
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public boolean attachLinear(Shape target) {
-
-        if (!(target instanceof FSphere)) {
-            throw new UnsupportedOperationException("The operation is not implemented");
-        }
 
         // The FSphere is already at a correct position.
         if (super.touches(target)) {
@@ -473,18 +454,14 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public boolean attachSpherical(Shape target, double x, double y, double z) {
 
-        if (!(target instanceof FSphere)) {
-            throw new UnsupportedOperationException("The operation is not implemented");
-        }
-
         // The FSphere is already at a correct position.
         if (super.touches(target)) {
             return true;
         }
 
-        FPoint fPointTarget = getCacheFPoint()
+        FPoint fPointTarget = super.getCacheFPoint()
                 .set(target.getCenterX(), target.getCenterY(), target.getCenterZ());
-        FVector fVectorAxis = getCacheFVector()
+        FVector fVectorAxis = super.getCacheFVector()
                 .setBase(x, y, z)
                 .setHead(this.getCenterX(), this.getCenterY(), this.getCenterZ());
 
@@ -512,22 +489,16 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean attach(Shape target, Iterable<? extends Shape> field, int corrections) {
-
-        if (!(target instanceof FSphere)) {
-            throw new UnsupportedOperationException("The operation is not implemented");
-        }
-
+    public boolean attach(Shape target, Iterable<? extends Shape> shapes, int corrections) {
         int repositions = 1;
 
-        // The FSphere cannot be positioned.
         if (!attachLinear(target)) {
             return false;
         }
 
         List<Shape> neighbours = new ArrayList<>();
 
-        Shape closestNeighbour = getClosestNeighbour(neighbours, field);
+        Shape closestNeighbour = getClosestNeighbour(neighbours, shapes);
 
         if (closestNeighbour == null) {
             return true;
@@ -539,7 +510,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                 return false;
             }
 
-            closestNeighbour = getClosestNeighbour(neighbours, field);
+            closestNeighbour = getClosestNeighbour(neighbours, shapes);
         }
 
         return closestNeighbour == null;
@@ -552,30 +523,63 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return neighbours.size() > 0 ? neighbours.get(0) : null;
     }
 
-
-
-
-
-
     @Override
-    public Collection<FPoint> toFPoints() {
-        Collection<FPoint> units = new ArrayList<>();
+    public boolean project(FRay ray, Iterable<? extends Shape> shapes) {
+        List<Shape> candidates = super.getListShape();
 
-        units.add(getRefCenter());
+        setBasePosition(ray);
+        getCollisionList(candidates, ray, shapes);
 
-        return units;
-    }
+        for (Shape candidate : candidates) {
+            if (validateCollision(candidate, ray, shapes)) {
+                return true;
+            }
+        }
 
-
-
-
-    @Override
-    public boolean project(FPoint aim, List<FSphere> field) {
         return false;
     }
 
+    private void setBasePosition(FRay ray) {
 
+        this.setCenter(ray.getRefOrigin().getRefBase());
+    }
 
+    private void getCollisionList(List<Shape> in, FRay ray, Iterable<? extends Shape> shapes) {
+        FPoint fPoint = super.getCacheFPoint();
+
+        for (Shape shape : shapes) {
+            fPoint.set(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+
+            double dist = ray.getDistance(fPoint);
+            if (dist >= 0 && dist < this.getRadius() + shape.getRadius() && !this.overlaps(shape)) {
+                in.add(shape);
+            }
+        }
+
+        sortByDistance(in);
+    }
+
+    private boolean validateCollision(Shape candidate, FRay ray, Iterable<? extends Shape> shapes) {
+        FPoint fPoint = super.getCacheFPoint();
+        FVector fVector = super.getCacheFVector();
+
+        fPoint.set(candidate.getCenterX(), candidate.getCenterY(), candidate.getCenterZ());
+
+        ray.project(fPoint);
+
+        double sideA = fPoint.getDistance(candidate.getCenterX(), candidate.getCenterY(), candidate.getCenterZ());
+        double sideC = this.getRadius() + candidate.getRadius();
+        double sideB = Math.sqrt((sideC * sideC) - (sideA * sideA));
+
+        fVector.setBase(fPoint);
+        fVector.setHead(ray.getRefOrigin().getRefBase());
+
+        fVector.setMagnitude(sideB);
+
+        this.setCenter(fVector.getHeadX(), fVector.getHeadY(), fVector.getHeadZ());
+
+        return this.overlaps(shapes) <= 0;
+    }
 
     // -------------------------------------------------------------------------------------------------
 

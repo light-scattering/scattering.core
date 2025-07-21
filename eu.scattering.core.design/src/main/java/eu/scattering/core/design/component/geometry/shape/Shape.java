@@ -2,8 +2,7 @@ package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
-import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.util.annotation.Fragment;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
@@ -85,9 +84,9 @@ public interface Shape extends Geometry {
     boolean attachLinear(Shape target);
     boolean attachSpherical(Shape target, double x, double y, double z);
 
-    boolean attach(Shape target, Iterable<? extends Shape> field, int corrections);
+    boolean attach(Shape target, Iterable<? extends Shape> shapes, int corrections);
 
-    boolean project(FPoint aim, List<FSphere> field);
+    boolean project(FRay ray, Iterable<? extends Shape> shapes);
 
     void sortByDistance(List<? extends Shape> in);
 

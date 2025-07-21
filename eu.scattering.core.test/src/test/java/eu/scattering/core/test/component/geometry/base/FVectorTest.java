@@ -5539,6 +5539,66 @@ public class FVectorTest {
     class FVectorMutableTest {
 
         @Test
+        @DisplayName("Scale")
+        void scale() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            FVector results = fVector.scale(2);
+
+            Assertions.assertAll("Validate FVector",
+                    () -> assertEquals(factory.getFVector(2, 4, 6, 8, 10, 12), fVector,
+                            "The value is erroneous"),
+                    () -> assertSame(fVector, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Translate with primitives")
+        void translateWithPrimitives() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            FVector results = fVector.translate(1, 2, 3);
+
+            Assertions.assertAll("Validate FVector",
+                    () -> assertEquals(factory.getFVector(2, 4, 6, 5, 7, 9), fVector,
+                            "The value is erroneous"),
+                    () -> assertSame(fVector, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Translate with FPoint")
+        void translateWithFPoint() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            FVector results = fVector.translate(factory.getFPoint(1, 2, 3));
+
+            Assertions.assertAll("Validate FVector",
+                    () -> assertEquals(factory.getFVector(2, 4, 6, 5, 7, 9), fVector,
+                            "The value is erroneous"),
+                    () -> assertSame(fVector, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Translate with FPos3D")
+        void translateWithFPos3D() {
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+
+            FVector results = fVector.translate(factory.getFPos3D(1, 2, 3));
+
+            Assertions.assertAll("Validate FVector",
+                    () -> assertEquals(factory.getFVector(2, 4, 6, 5, 7, 9), fVector,
+                            "The value is erroneous"),
+                    () -> assertSame(fVector, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Add FPoint")
         void addFPoint() {
             FVector fVector = TestHelper.getRandFVector();

@@ -56,6 +56,12 @@ public interface FVector extends Base<FVector> {
 
     //--------------------------------------------------
 
+    FVector scale(double factor);
+
+    FVector translate(double x, double y, double z);
+    FVector translate(FPoint arg);
+    FVector translate(FPos3D arg);
+
     FVector add(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector add(FPoint base, FPoint head);
     FVector add(FPos3D base, FPos3D head);
