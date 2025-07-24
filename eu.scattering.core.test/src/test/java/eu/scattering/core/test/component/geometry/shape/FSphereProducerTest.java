@@ -1,10 +1,14 @@
 package eu.scattering.core.test.component.geometry.shape;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.impl.FactoryDef;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -592,8 +596,8 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Preset base fixed radius")
-    void presetBaseFixedRadius() {
+    @DisplayName("Preset center and fixed radius")
+    void presetCenterAndFixedRadius() {
         FPointProducer pCenter = factory.getFPointProducer()
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
@@ -622,8 +626,42 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Preset base fixed radius (simple)")
-    void presetBaseFixedRadiusSimple() {
+    @DisplayName("Preset dist center and fixed radius")
+    void presetDistCenterAndFixedRadius() {
+        FDist3D center = factory.getFRand()
+                .getFDist3DManual((random, results) -> {
+                    results[0] = 1.0;
+                    results[1] = 2.0;
+                    results[2] = 3.0;
+                });
+
+        FSphereProducer producer = factory.getFSphereProducer()
+                .withCenterAndFixedRadius(center, 5, 1);
+
+        FSphere resultA = producer.produce();
+        FSphere resultB = producer.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertTrue(resultA.getRefCenter().isExact(1, 2, 3),
+                        "The FSphere A center position is erroneous"),
+                () -> assertTrue(resultB.getRefCenter().isExact(1, 2, 3),
+                        "The FSphere B center position is erroneous"),
+                () -> assertEquals(5, resultA.getRadius(),
+                        epsilon, "The Sphere A radius is erroneous"),
+                () -> assertEquals(5, resultB.getRadius(),
+                        epsilon, "The Sphere B radius is erroneous"),
+                () -> assertEquals(-1, resultA.getIndex(),
+                        "Index A is incorrect"),
+                () -> assertEquals(-1, resultB.getIndex(),
+                        "Index B is incorrect"),
+                () -> assertNotSame(resultA, resultB,
+                        "Elements should not be the same")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset center and fixed radius (simple)")
+    void presetCenterAndFixedRadiusSimple() {
         FPointProducer pCenter = factory.getFPointProducer()
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
@@ -657,11 +695,48 @@ public class FSphereProducerTest {
         FDist1D radius = factory.getFRand()
                 .getFDist1DUniform(epsilon, 0.001);
 
-        FPointProducer pCenter = factory.getFPointProducer()
+        FPointProducer center = factory.getFPointProducer()
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndDistRadius(pCenter, radius, 1);
+                .withCenterAndDistRadius(center, radius, 1);
+
+        FSphere resultA = producer.produce();
+        FSphere resultB = producer.produce();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertTrue(resultA.getRefCenter().isExact(1, 2, 3),
+                        "The FSphere A center position is erroneous"),
+                () -> assertTrue(resultB.getRefCenter().isExact(1, 2, 3),
+                        "The FSphere B center position is erroneous"),
+                () -> assertTrue(Math.abs(resultA.getRadius()) < 0.01,
+                        "Radius A is incorrect"),
+                () -> assertTrue(Math.abs(resultB.getRadius()) < 0.01,
+                        "Radius B is incorrect"),
+                () -> assertEquals(-1, resultA.getIndex(),
+                        "Index A is incorrect"),
+                () -> assertEquals(-1, resultB.getIndex(),
+                        "Index B is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset dist center and dist radius")
+    void presetDistCenterAndDistRadius() {
+        FDist1D radius = factory.getFRand()
+                .getFDist1DUniform(epsilon, 0.001);
+
+        FDist3D center = factory.getFRand()
+                .getFDist3DManual((random, results) -> {
+                    results[0] = 1.0;
+                    results[1] = 2.0;
+                    results[2] = 3.0;
+                });
+
+        FSphereProducer producer = factory.getFSphereProducer()
+                .withCenterAndDistRadius(center, radius, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -827,5 +902,230 @@ public class FSphereProducerTest {
                 () -> assertSame(producerB, producerC,
                         "The reference should not change")
         );
+    }
+
+    @Test
+    @DisplayName("Facade - Custom rule (Function)")
+    void facadeCustomRuleFunction() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer((factory) -> {
+            double x = factoryA.getFRand().nextDouble();
+            double y = factoryA.getFRand().nextDouble();
+            double z = factoryA.getFRand().nextDouble();
+            double r = factoryA.getFRand().nextDouble();
+
+            return factory.getFSphere(x, y, z, r);
+        });
+
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withCustomRule((factory) -> {
+                    double x = factoryB.getFRand().nextDouble();
+                    double y = factoryB.getFRand().nextDouble();
+                    double z = factoryB.getFRand().nextDouble();
+                    double r = factoryB.getFRand().nextDouble();
+
+                    return factory.getFSphere(x, y, z, r);
+                });
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Custom rule (BiFunction)")
+    void facadeCustomRuleBiFunction() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer((factory, random) -> {
+            double x = random.getFRand().nextDouble();
+            double y = random.getFRand().nextDouble();
+            double z = random.getFRand().nextDouble();
+            double r = random.getFRand().nextDouble();
+
+            return factory.getFSphere(x, y, z, r);
+        });
+
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withCustomRule((factory, random) -> {
+                    double x = random.getFRand().nextDouble();
+                    double y = random.getFRand().nextDouble();
+                    double z = random.getFRand().nextDouble();
+                    double r = random.getFRand().nextDouble();
+
+                    return factory.getFSphere(x, y, z, r);
+                });
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Fixed radius")
+    void facadeFixedRadius() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer(5);
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withFixedRadius(5);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Dist radius")
+    void facadeDistRadius() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        FDist1D distA = factoryA.getFRand().getFDist1DUniform(1, 2);
+        FDist1D distB = factoryB.getFRand().getFDist1DUniform(1, 2);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer(distA);
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withDistRadius(distB);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Center and fixed radius")
+    void facadeCenterFixedRadius() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+
+        Producer<FPoint> prodA = factoryA.getFPointProducer(distPA);
+        Producer<FPoint> prodB = factoryB.getFPointProducer(distPB);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer(prodA, 5);
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withCenterAndFixedRadius(prodB, 5);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Center and dist radius")
+    void facadeCenterDistRadius() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+
+        Producer<FPoint> prodA = factoryA.getFPointProducer(distPA);
+        Producer<FPoint> prodB = factoryB.getFPointProducer(distPB);
+
+        FDist1D distRA = factoryA.getFRand().getFDist1DUniform(1, 2);
+        FDist1D distRB = factoryB.getFRand().getFDist1DUniform(1, 2);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer(prodA, distRA);
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withCenterAndDistRadius(prodB, distRB);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Dist center and fixed radius")
+    void facadeDistCenterFixedRadius() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, 5);
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withCenterAndFixedRadius(distPB, 5);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Dist center and dist radius")
+    void facadeDistCenterDistRadius() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        FDist3D distPA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distPB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+
+        FDist1D distRA = factoryA.getFRand().getFDist1DUniform(1, 2);
+        FDist1D distRB = factoryB.getFRand().getFDist1DUniform(1, 2);
+
+        Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, distRA);
+        Producer<FSphere> producerB = factoryB.getFSphereProducer()
+                .withCenterAndDistRadius(distPB, distRB);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
     }
 }

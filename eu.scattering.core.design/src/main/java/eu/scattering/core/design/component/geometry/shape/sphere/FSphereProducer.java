@@ -3,6 +3,7 @@ package eu.scattering.core.design.component.geometry.shape.sphere;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 
@@ -41,7 +42,10 @@ public interface FSphereProducer extends Producer<FSphere> {
     FSphereProducer withFixedRadius(double radius, int weight);
     FSphereProducer withDistRadius(FDist1D radius, int weight);
 
+    FSphereProducer withCenterAndFixedRadius(FDist3D dCenter, double radius, int weight);
     FSphereProducer withCenterAndFixedRadius(Producer<FPoint> pCenter, double radius, int weight);
+
+    FSphereProducer withCenterAndDistRadius(FDist3D dCenter, FDist1D radius, int weight);
     FSphereProducer withCenterAndDistRadius(Producer<FPoint> pCenter, FDist1D radius, int weight);
 
     // -------------------------------------------------------------------------------------------------
@@ -66,9 +70,19 @@ public interface FSphereProducer extends Producer<FSphere> {
         return withDistRadius(radius, 1);
     }
 
+    default FSphereProducer withCenterAndFixedRadius(FDist3D dCenter, double radius) {
+
+        return withCenterAndFixedRadius(dCenter, radius, 1);
+    }
+
     default FSphereProducer withCenterAndFixedRadius(Producer<FPoint> pCenter, double radius) {
 
         return withCenterAndFixedRadius(pCenter, radius, 1);
+    }
+
+    default FSphereProducer withCenterAndDistRadius(FDist3D dCenter, FDist1D radius) {
+
+        return withCenterAndDistRadius(dCenter, radius, 1);
     }
 
     default FSphereProducer withCenterAndDistRadius(Producer<FPoint> pCenter, FDist1D radius) {

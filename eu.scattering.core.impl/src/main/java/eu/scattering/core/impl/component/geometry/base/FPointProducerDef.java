@@ -88,7 +88,7 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer withRadius(double radius, int weight) {
+    public FPointProducer withOnSphere(double radius, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
                 factory.getFPoint().applyStateFrom(rndGenerator.nextDoubleOnSphere(radius));
 

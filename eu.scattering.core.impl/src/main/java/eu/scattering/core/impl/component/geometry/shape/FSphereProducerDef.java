@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
@@ -128,6 +129,16 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
+    public FSphereProducer withCenterAndFixedRadius(FDist3D dCenter, double radius, int weight) {
+
+        Function<FSphereFactory, FSphere> function = (factory) -> factory.getFSphere(dCenter.produce(), radius);
+
+        withCustomRule(function, weight);
+
+        return this;
+    }
+
+    @Override
     public FSphereProducer withCenterAndFixedRadius(Producer<FPoint> pCenter, double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
@@ -138,6 +149,16 @@ public class FSphereProducerDef implements FSphereProducer {
 
             return fSphere;
         };
+
+        withCustomRule(function, weight);
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer withCenterAndDistRadius(FDist3D dCenter, FDist1D radius, int weight) {
+
+        Function<FSphereFactory, FSphere> function = (factory) -> factory.getFSphere(dCenter.produce(), radius.produce());
 
         withCustomRule(function, weight);
 

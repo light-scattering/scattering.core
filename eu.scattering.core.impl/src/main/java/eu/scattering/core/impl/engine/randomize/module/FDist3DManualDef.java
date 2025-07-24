@@ -1,14 +1,14 @@
 package eu.scattering.core.impl.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.manual.FDist3DManual;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.custom.FDist3DCustom;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.BiConsumer;
 
-public class FDist3DManualDef implements FDist3DManual {
+public class FDist3DManualDef implements FDist3DCustom {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private final BiConsumer<FRandGenerator, Double[]> consumer;
     private final FRandGenerator random;
@@ -20,7 +20,7 @@ public class FDist3DManualDef implements FDist3DManual {
         this.consumer = consumer;
     }
 
-    public static FDist3DManual get(FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
+    public static FDist3DCustom get(FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
 
         return new FDist3DManualDef(random, consumer);
     }

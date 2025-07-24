@@ -39,8 +39,6 @@ public interface FPointFactory {
     }
 
     // -------------------------------------------------------------------------------------------------
-    // Producer facades.
-    // -------------------------------------------------------------------------------------------------
 
     default FPointProducer getFPointProducer(Function<FPointFactory, FPoint> function) {
 
@@ -62,14 +60,14 @@ public interface FPointFactory {
         return getFPointProducer().withInRange(range);
     }
 
-    default FPointProducer getFPointProducer(double radius, FPointProducer.Type type) {
+    default FPointProducer getFPointProducer(double radius, FPointProducer.Location type) {
 
-        if (type == FPointProducer.Type.IN_SPHERE) {
+        if (type == FPointProducer.Location.IN_SPHERE) {
             return getFPointProducer().withInSphere(radius);
         }
 
-        if (type == FPointProducer.Type.ON_SPHERE) {
-            return getFPointProducer().withRadius(radius);
+        if (type == FPointProducer.Location.ON_SPHERE) {
+            return getFPointProducer().withOnSphere(radius);
         }
 
         throw new IllegalArgumentException("Unsupported producer type");

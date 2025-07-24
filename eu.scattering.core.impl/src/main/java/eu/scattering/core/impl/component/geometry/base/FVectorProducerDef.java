@@ -146,7 +146,7 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
-    public FVectorProducer withRadius(double radius, int weight) {
+    public FVectorProducer withOnSphere(double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FVector fVector = factory.getFVector();
 
@@ -175,7 +175,7 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
-    public FVectorProducer withBaseAndRadius(FPointProducer pBase, double radius, int weight) {
+    public FVectorProducer withBaseAndOnSphere(FPointProducer pBase, double radius, int weight) {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FPoint base = pBase.produce();
             FPoint head = base.copy().add(rndGenerator.nextDoubleOnSphere(radius));

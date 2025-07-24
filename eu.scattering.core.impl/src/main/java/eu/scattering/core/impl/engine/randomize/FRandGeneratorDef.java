@@ -3,16 +3,16 @@ package eu.scattering.core.impl.engine.randomize;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.engine.randomize.generator.module.dist1d.manual.FDist1DManual;
+import eu.scattering.core.design.engine.randomize.generator.module.dist1d.custom.FDist1DCustom;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.fixed.FDist1DFixed;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.uniform.FDist1DUniform;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.joint.FDist2DJoint;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.fixed.FDist2DFixed;
-import eu.scattering.core.design.engine.randomize.generator.module.dist2d.manual.FDist2DManual;
+import eu.scattering.core.design.engine.randomize.generator.module.dist2d.custom.FDist2DCustom;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.uniform.FDist2DUniform;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.joint.FDist3DJoint;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.fixed.FDist3DFixed;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.manual.FDist3DManual;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.custom.FDist3DCustom;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.uniform.FDist3DUniform;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreOptimizedDef;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreSimpleDef;
@@ -26,7 +26,6 @@ import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -278,7 +277,7 @@ public class FRandGeneratorDef implements FRandGenerator {
     //--------------------------------------------------
 
     @Override
-    public FDist1DManual getFDist1DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
+    public FDist1DCustom getFDist1DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
         return FDist1DManualDef.get(this, consumer);
     }
@@ -296,7 +295,7 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist2DManual getFDist2DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
+    public FDist2DCustom getFDist2DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
         return FDist2DManualDef.get(this, consumer);
     }
@@ -332,7 +331,7 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
-    public FDist3DManual getFDist3DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
+    public FDist3DCustom getFDist3DManual(BiConsumer<FRandGenerator, Double[]> consumer) {
 
         return FDist3DManualDef.get(this, consumer);
     }

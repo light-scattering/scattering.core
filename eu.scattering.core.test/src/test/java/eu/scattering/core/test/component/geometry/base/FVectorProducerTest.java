@@ -484,7 +484,7 @@ public class FVectorProducerTest {
     @DisplayName("Preset on radius")
     void presetOnRadius() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withRadius(0.01, 1);
+                .withOnSphere(0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -503,7 +503,7 @@ public class FVectorProducerTest {
     @DisplayName("Preset on radius (simple)")
     void presetOnRadiusSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withRadius(0.01);
+                .withOnSphere(0.01);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -569,7 +569,7 @@ public class FVectorProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FVectorProducer producer = factory.getFVectorProducer()
-                .withBaseAndRadius(pBase, 0.01, 1);
+                .withBaseAndOnSphere(pBase, 0.01, 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -591,7 +591,7 @@ public class FVectorProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FVectorProducer producer = factory.getFVectorProducer()
-                .withBaseAndRadius(pBase, 0.01);
+                .withBaseAndOnSphere(pBase, 0.01);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();

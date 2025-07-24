@@ -36,10 +36,10 @@ public interface FVectorProducer extends Producer<FVector> {
     FVectorProducer withBaseAndDirOZ(FPointProducer pBase, double length, int weight);
 
     FVectorProducer withInSphere(double radius, int weight);
-    FVectorProducer withRadius(double radius, int weight);
+    FVectorProducer withOnSphere(double radius, int weight);
 
     FVectorProducer withBaseAndInSphere(FPointProducer pBase, double radius, int weight);
-    FVectorProducer withBaseAndRadius(FPointProducer pBase, double radius, int weight);
+    FVectorProducer withBaseAndOnSphere(FPointProducer pBase, double radius, int weight);
 
     FVectorProducer withBase(FPointProducer pBase, int weight);
     FVectorProducer withHead(FPointProducer pHead, int weight);
@@ -93,9 +93,9 @@ public interface FVectorProducer extends Producer<FVector> {
         return withInSphere(radius, 1);
     }
 
-    default FVectorProducer withRadius(double radius) {
+    default FVectorProducer withOnSphere(double radius) {
 
-        return withRadius(radius, 1);
+        return withOnSphere(radius, 1);
     }
 
     default FVectorProducer withBaseAndInSphere(FPointProducer pBase, double radius) {
@@ -103,9 +103,9 @@ public interface FVectorProducer extends Producer<FVector> {
         return withBaseAndInSphere(pBase, radius, 1);
     }
 
-    default FVectorProducer withBaseAndRadius(FPointProducer pBase, double radius) {
+    default FVectorProducer withBaseAndOnSphere(FPointProducer pBase, double radius) {
 
-        return withBaseAndRadius(pBase, radius, 1);
+        return withBaseAndOnSphere(pBase, radius, 1);
     }
 
     default FVectorProducer withBase(FPointProducer pBase) {

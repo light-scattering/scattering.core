@@ -2,13 +2,14 @@ package eu.scattering.core.impl.component.support;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class ProducerCoreDef<E> {
-    private final List<AbstractMap.SimpleEntry<Integer, Supplier<E>>> config = new ArrayList<>();
+    private final List<ProducerRecord> config = new ArrayList<>();
 
     private final FRandGenerator randomizer;
 
@@ -24,7 +25,7 @@ public class ProducerCoreDef<E> {
 
     public void addConfig(Supplier<E> supplier, int weight) {
 
-        this.config.add(new AbstractMap.SimpleEntry<>(weight, supplier));
+        this.config.add(new ProducerRecord(weight, supplier));
     }
 
     public E produce() {
@@ -49,19 +50,19 @@ public class ProducerCoreDef<E> {
 
     private Supplier<E> getSupplierFixed() {
 
-        return this.config.get(0).getValue();
+        return this.config.get(0).getSupplier();
     }
 
     private Supplier<E> getSupplierRandomized() {
-        double valueMax = this.config.stream().map(AbstractMap.SimpleEntry::getKey).reduce(0, Integer::sum);
+        double valueMax = this.config.stream().map(ProducerRecord::getWeight).reduce(0, Integer::sum);
         double valueRandom = this.randomizer.nextDouble(0, valueMax);
 
         double value = 0;
         for (var record : this.config) {
-            value += record.getKey();
+            value += record.getWeight();
 
             if (valueRandom < value) {
-                return record.getValue();
+                return record.getSupplier();
             }
         }
 
@@ -142,8 +143,8 @@ public class ProducerCoreDef<E> {
     private void getListAuto(List<E> results) {
 
         this.config.forEach(e -> {
-            for (int i = 0 ; i < e.getKey() ; i++) {
-                results.add(e.getValue().get());
+            for (int i = 0 ; i < e.getWeight() ; i++) {
+                results.add(e.getSupplier().get());
             }
         });
     }
@@ -173,15 +174,15 @@ public class ProducerCoreDef<E> {
     }
 
     private int iterate(List<E> results, int size, int index) {
-        AbstractMap.SimpleEntry<Integer, Supplier<E>> record = this.config.get(index);
+        ProducerRecord record = this.config.get(index);
 
         double weight = getWeight(index);
-        double probability = record.getKey() / weight;
+        double probability = record.getWeight() / weight;
 
         int quantity = (int) Math.round(probability * size);
 
         for (int i = 0; i < quantity; i++) {
-            results.add(record.getValue().get());
+            results.add(record.getSupplier().get());
         }
 
         return quantity;
@@ -210,10 +211,10 @@ public class ProducerCoreDef<E> {
     private void iterateLastKeep() {}
 
     private void iterateLastExpand(List<E> results, int size) {
-        AbstractMap.SimpleEntry<Integer, Supplier<E>> record = this.config.get(this.config.size() - 1);
+        ProducerRecord record = this.config.get(this.config.size() - 1);
 
         for (int i = 0 ; i < size ; i++) {
-            results.add(record.getValue().get());
+            results.add(record.getSupplier().get());
         }
     }
 
@@ -230,7 +231,7 @@ public class ProducerCoreDef<E> {
 
         int weight = 0;
         for (int j = index; j < this.config.size(); j++) {
-            weight += this.config.get(j).getKey();
+            weight += this.config.get(j).getWeight();
         }
 
         return weight;
@@ -243,7 +244,7 @@ public class ProducerCoreDef<E> {
 
     private void mutateResults(List<E> results, Consumer<List<E>> consumer) {
 
-        Collections.shuffle(results);
+        randomizer.shuffle(results);
 
         if (consumer != null) {
             consumer.accept(results);
@@ -252,31 +253,24 @@ public class ProducerCoreDef<E> {
 
     // -------------------------------------------------------------------------------------------------
 
-    class ProducerRecord {
+    private class ProducerRecord {
         private final int weight;
         private final Supplier<E> supplier;
-        private final String description;
 
-        private ProducerRecord(int weight, Supplier<E> supplier, String description) {
+        private ProducerRecord(int weight, Supplier<E> supplier) {
 
             this.weight = weight;
             this.supplier = supplier;
-            this.description = description;
         }
 
-        public int getWeight() {
+        private int getWeight() {
 
             return this.weight;
         }
 
-        public Supplier<E> getSupplier() {
+        private Supplier<E> getSupplier() {
 
             return this.supplier;
-        }
-
-        public String getDescription() {
-
-            return this.description;
         }
     }
 }

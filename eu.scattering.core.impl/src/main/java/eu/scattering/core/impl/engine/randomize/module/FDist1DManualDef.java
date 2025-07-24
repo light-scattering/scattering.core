@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.randomize.generator.module.dist1d.manual.FDist1DManual;
+import eu.scattering.core.design.engine.randomize.generator.module.dist1d.custom.FDist1DCustom;
 
 import java.util.function.BiConsumer;
 
-public class FDist1DManualDef implements FDist1DManual {
+public class FDist1DManualDef implements FDist1DCustom {
     private final BiConsumer<FRandGenerator, Double[]> consumer;
     private final FRandGenerator random;
     private final Double[] arr = new Double[1];
@@ -16,7 +16,7 @@ public class FDist1DManualDef implements FDist1DManual {
         this.consumer = consumer;
     }
 
-    public static FDist1DManual get(FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
+    public static FDist1DCustom get(FRandGenerator random, BiConsumer<FRandGenerator, Double[]> consumer) {
 
         return new FDist1DManualDef(random, consumer);
     }

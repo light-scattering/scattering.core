@@ -31,7 +31,7 @@ public interface FPointProducer extends Producer<FPoint> {
     FPointProducer withZero(int weight);
 
     FPointProducer withInSphere(double radius, int weight);
-    FPointProducer withRadius(double radius, int weight);
+    FPointProducer withOnSphere(double radius, int weight);
 
     FPointProducer withInRange(FPairPos3D range, int weight);
 
@@ -59,9 +59,9 @@ public interface FPointProducer extends Producer<FPoint> {
         return withInSphere(radius, 1);
     }
 
-    default FPointProducer withRadius(double radius) {
+    default FPointProducer withOnSphere(double radius) {
 
-        return withRadius(radius, 1);
+        return withOnSphere(radius, 1);
     }
 
     default FPointProducer withInRange(FPairPos3D range) {
@@ -76,5 +76,5 @@ public interface FPointProducer extends Producer<FPoint> {
 
     // -------------------------------------------------------------------------------------------------
 
-    enum Type { IN_SPHERE, ON_SPHERE }
+    enum Location { IN_SPHERE, ON_SPHERE }
 }

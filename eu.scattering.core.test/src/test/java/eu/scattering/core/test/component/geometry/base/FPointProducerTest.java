@@ -1,8 +1,11 @@
 package eu.scattering.core.test.component.geometry.base;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.impl.FactoryDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +14,6 @@ import org.junit.jupiter.api.Timeout;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
@@ -207,7 +209,7 @@ public class FPointProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint().setX(2), 20)
                 .withCustomRule((factory) -> factory.getFPoint().setX(3), 20);
 
-        List<FPoint> results = producer.stream().limit(60).collect(Collectors.toList());
+        List<FPoint> results = producer.stream().limit(60).toList();
 
         boolean sequence = true;
         for (int i = 0 ; i < 20 ; i++) {
@@ -341,7 +343,7 @@ public class FPointProducerTest {
     @DisplayName("Preset on sphere")
     void presetOnSphere() {
         FPointProducer producer = factory.getFPointProducer()
-                .withRadius(0.01, 1);
+                .withOnSphere(0.01, 1);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -358,7 +360,7 @@ public class FPointProducerTest {
     @DisplayName("Preset on sphere (simple)")
     void presetOnSphereSimple() {
         FPointProducer producer = factory.getFPointProducer()
-                .withRadius(0.01);
+                .withOnSphere(0.01);
 
         FPoint resultA = producer.produce();
         FPoint resultB = producer.produce();
@@ -467,5 +469,162 @@ public class FPointProducerTest {
                 () -> assertNotSame(resultA, resultB,
                         "Elements should not be the same")
         );
+    }
+
+    @Test
+    @DisplayName("Facade - Custom rule (Function)")
+    void facadeCustomRuleFunction() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FPoint> producerA = factoryA.getFPointProducer((factory) -> {
+            double x = factoryA.getFRand().nextDouble();
+            double y = factoryA.getFRand().nextDouble();
+            double z = factoryA.getFRand().nextDouble();
+
+            return factory.getFPoint(x, y, z);
+        });
+
+        Producer<FPoint> producerB = factoryB.getFPointProducer()
+                .withCustomRule((factory) -> {
+                    double x = factoryB.getFRand().nextDouble();
+                    double y = factoryB.getFRand().nextDouble();
+                    double z = factoryB.getFRand().nextDouble();
+
+                    return factory.getFPoint(x, y, z);
+                });
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Custom rule (BiFunction)")
+    void facadeCustomRuleBiFunction() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FPoint> producerA = factoryA.getFPointProducer((factory, random) -> {
+            double x = random.getFRand().nextDouble();
+            double y = random.getFRand().nextDouble();
+            double z = random.getFRand().nextDouble();
+
+            return factory.getFPoint(x, y, z);
+        });
+
+        Producer<FPoint> producerB = factoryB.getFPointProducer()
+                .withCustomRule((factory, random) -> {
+                    double x = random.getFRand().nextDouble();
+                    double y = random.getFRand().nextDouble();
+                    double z = random.getFRand().nextDouble();
+
+                    return factory.getFPoint(x, y, z);
+                });
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Distribution")
+    void facadeDistribution() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        FDist3D distA = factoryA.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+        FDist3D distB = factoryB.getFRand().getFDist3DUniform(-1, 1, -1, 1, -1, 1);
+
+        Producer<FPoint> producerA = factoryA.getFPointProducer(distA);
+        Producer<FPoint> producerB = factoryB.getFPointProducer()
+                .withDist(distB);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - Range")
+    void facadeRange() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        FPairPos3D range = factory.getFPairPos3D(-1, -1, -1, 1, 1, 1);
+
+        Producer<FPoint> producerA = factoryA.getFPointProducer(range);
+        Producer<FPoint> producerB = factoryB.getFPointProducer()
+                .withInRange(range);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - In Sphere")
+    void facadeInSphere() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FPoint> producerA = factoryA.getFPointProducer(10, FPointProducer.Location.IN_SPHERE);
+        Producer<FPoint> producerB = factoryB.getFPointProducer()
+                .withInSphere(10);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - On Sphere")
+    void facadeOnSphere() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FPoint> producerA = factoryA.getFPointProducer(10, FPointProducer.Location.ON_SPHERE);
+        Producer<FPoint> producerB = factoryB.getFPointProducer()
+                .withOnSphere(10);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
     }
 }

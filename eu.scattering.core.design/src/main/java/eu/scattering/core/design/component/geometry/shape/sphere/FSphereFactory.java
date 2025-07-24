@@ -1,8 +1,15 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
+import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public interface FSphereFactory {
 
@@ -32,6 +39,16 @@ public interface FSphereFactory {
         return (FSphere) getFSphere().setCenter(x, y, z).setRadius(radius);
     }
 
+    default FSphere getFSphere(FPos3D center) {
+
+        return (FSphere) getFSphere().setCenter(center);
+    }
+
+    default FSphere getFSphere(FPos3D center, double radius) {
+
+        return (FSphere) getFSphere().setCenter(center).setRadius(radius);
+    }
+
     @Modificator
     default FSphere getRefFSphere(FPoint refCenter, double radius) {
 
@@ -39,11 +56,44 @@ public interface FSphereFactory {
     }
 
     // -------------------------------------------------------------------------------------------------
-    // Facades.
-    // -------------------------------------------------------------------------------------------------
+
+    default FSphereProducer getFSphereProducer(Function<FSphereFactory, FSphere> function) {
+
+        return getFSphereProducer().withCustomRule(function);
+    }
+
+    default FSphereProducer getFSphereProducer(BiFunction<FSphereFactory, FRandEngine, FSphere> function) {
+
+        return getFSphereProducer().withCustomRule(function);
+    }
+
+    default FSphereProducer getFSphereProducer(double radius) {
+
+        return getFSphereProducer().withFixedRadius(radius);
+    }
+
+    default FSphereProducer getFSphereProducer(FDist1D radius) {
+
+        return getFSphereProducer().withDistRadius(radius);
+    }
+
+    default FSphereProducer getFSphereProducer(FDist3D dCenter, double radius) {
+
+        return getFSphereProducer().withCenterAndFixedRadius(dCenter, radius);
+    }
 
     default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, double radius) {
 
         return getFSphereProducer().withCenterAndFixedRadius(pCenter, radius);
+    }
+
+    default FSphereProducer getFSphereProducer(FDist3D dCenter, FDist1D radius) {
+
+        return getFSphereProducer().withCenterAndDistRadius(dCenter, radius);
+    }
+
+    default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, FDist1D radius) {
+
+        return getFSphereProducer().withCenterAndDistRadius(pCenter, radius);
     }
 }

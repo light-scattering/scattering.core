@@ -90,6 +90,24 @@ public class FSphereTest {
         }
 
         @Test
+        @DisplayName("Construct with FPos3D")
+        void constructWithFPos3D() {
+            FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
+            FSphere fSphere = factory.getFSphere(fPos3D);
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, fSphere.getCenterX(),
+                            "The X value is incorrect"),
+                    () -> assertEquals(2, fSphere.getCenterY(),
+                            "The Y value is incorrect"),
+                    () -> assertEquals(3, fSphere.getCenterZ(),
+                            "The Z value is incorrect"),
+                    () -> assertEquals(1, fSphere.getRadius(),
+                            "The radius is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Construct with radius")
         void constructWithRadius() {
             FSphere fSphere = factory.getFSphere(5);
@@ -158,6 +176,24 @@ public class FSphereTest {
                             "The radius is incorrect"),
                     () -> assertSame(fPoint, refCenter,
                             "The core reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with FPos3D and radius")
+        void constructWithFPos3DAndRadius() {
+            FPos3D fPos3D = factory.getFPos3D(1, 2, 3);
+            FSphere fSphere = factory.getFSphere(fPos3D, 4);
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, fSphere.getCenterX(),
+                            "The X value is incorrect"),
+                    () -> assertEquals(2, fSphere.getCenterY(),
+                            "The Y value is incorrect"),
+                    () -> assertEquals(3, fSphere.getCenterZ(),
+                            "The Z value is incorrect"),
+                    () -> assertEquals(4, fSphere.getRadius(),
+                            "The radius is incorrect")
             );
         }
 
@@ -2982,7 +3018,7 @@ public class FSphereTest {
         void attachLinearEnclosed() {
             Shape fSphereRef = factory.getFSphere(10);
 
-            Producer<FPoint> fPointProducer = factory.getFPointProducer(8.9, FPointProducer.Type.IN_SPHERE);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(8.9, FPointProducer.Location.IN_SPHERE);
             Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereArg = fSphereProducer.produce();
@@ -3010,10 +3046,8 @@ public class FSphereTest {
         void attachLinearDistant() {
             Shape fSphereRef = factory.getFSphere(1);
 
-            Producer<FPoint> fPointProducer = factory.getFPointProducer()
-                    .withRadius(10);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(10, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereArg = fSphereProducer.produce();
 
@@ -3040,10 +3074,8 @@ public class FSphereTest {
         void attachLinearTouching() {
             Shape fSphereRef = factory.getFSphere(1);
 
-            Producer<FPoint> fPointProducer = factory.getFPointProducer()
-                    .withRadius(2);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(2, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereArg = fSphereProducer.produce();
 
@@ -3088,10 +3120,8 @@ public class FSphereTest {
         @Timeout(1)
         @DisplayName("Attach spherical with primitives")
         void attachSphericalWithPrimitives() {
-            Producer<FPoint> fPointProducer = factory.getFPointProducer()
-                    .withRadius(1.5);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereRef = fSphereProducer.produce();
             Shape candidate = fSphereProducer.produce();
@@ -3121,10 +3151,8 @@ public class FSphereTest {
         @Timeout(1)
         @DisplayName("Attach spherical with FPoint")
         void attachSphericalWithFPoint() {
-            Producer<FPoint> fPointProducer = factory.getFPointProducer()
-                    .withRadius(1.5);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereRef = fSphereProducer.produce();
             Shape candidate = fSphereProducer.produce();
@@ -3154,10 +3182,8 @@ public class FSphereTest {
         @Timeout(1)
         @DisplayName("Attach spherical with FPos3D")
         void attachSphericalWithFPos3D() {
-            Producer<FPoint> fPointProducer = factory.getFPointProducer()
-                    .withRadius(1.5);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereRef = fSphereProducer.produce();
             Shape candidate = fSphereProducer.produce();
@@ -3187,10 +3213,8 @@ public class FSphereTest {
         @Timeout(1)
         @DisplayName("Attach spherical, distant")
         void attachSphericalDistant() {
-            Producer<FPoint> fPointProducer = factory.getFPointProducer()
-                    .withRadius(1.5);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereRef = fSphereProducer.produce();
             Shape candidate = fSphereProducer.produce();
@@ -3316,21 +3340,18 @@ public class FSphereTest {
         @Test
         @DisplayName("Attach monodisperse, single")
         void attachMonodisperseSingle() {
-            Producer<FPoint> fFieldPointProducer = factory.getFPointProducer().withRadius(5);
-            Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fFieldPointProducer, 1);
+            Producer<FPoint> fFieldPointProducer = factory.getFPointProducer(5, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer(fFieldPointProducer, 1);
 
             FAssembly<FSphere> fSphereField = factory.getFAssembly(fFieldSphereProducer.getListFixed(2));
 
-            Producer<FPoint> fPointRefProducer = factory.getFPointProducer().withInSphere(3.9);
-            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointRefProducer, 1);
+            Producer<FPoint> fPointRefProducer = factory.getFPointProducer(3.9, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer(fPointRefProducer, 1);
 
             FSphere fSphereRef = fSphereRefProducer.produce();
 
-            Producer<FPoint> fPointArgProducer = factory.getFPointProducer().withRadius(6);
-            Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointArgProducer, 1);
+            Producer<FPoint> fPointArgProducer = factory.getFPointProducer(6, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer(fPointArgProducer, 1);
 
             FSphere fSphereArg = fSphereArgProducer.produce();
 
@@ -3347,15 +3368,13 @@ public class FSphereTest {
         @Test
         @DisplayName("Attach monodisperse, field")
         void attachMonodisperseField() {
-            Producer<FPoint> fPointProducer = factory.getFPointProducer().withRadius(2);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(2, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             FAssembly<FSphere> fSphereField = factory.getFAssembly(fSphereProducer.getListFixed(3));
 
-            Producer<FPoint> fPointRefProducer = factory.getFPointProducer().withInSphere(4);
-            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointRefProducer, 1);
+            Producer<FPoint> fPointRefProducer = factory.getFPointProducer(4, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer(fPointRefProducer, 1);
 
             FSphere fSphereRef = fSphereRefProducer.produce();
 
@@ -3384,21 +3403,18 @@ public class FSphereTest {
         @Test
         @DisplayName("Attach polydisperse, single")
         void attachPolydisperseSingle() {
-            Producer<FPoint> fFieldPointProducer = factory.getFPointProducer().withRadius(5);
-            Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fFieldPointProducer, 1);
+            Producer<FPoint> fFieldPointProducer = factory.getFPointProducer(5, FPointProducer.Location.ON_SPHERE);
+            Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer(fFieldPointProducer, 1);
 
             FAssembly<FSphere> fSphereField = factory.getFAssembly(fFieldSphereProducer.getListFixed(10));
 
-            Producer<FPoint> fPointRefProducer = factory.getFPointProducer().withInSphere(3.9);
-            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointRefProducer, 1);
+            Producer<FPoint> fPointRefProducer = factory.getFPointProducer(3.9, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer(fPointRefProducer, 1);
 
             FSphere fSphereRef = fSphereRefProducer.produce();
 
-            Producer<FPoint> fPointArgProducer = factory.getFPointProducer().withRadius(6);
-            Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointArgProducer, 1);
+            Producer<FPoint> fPointArgProducer = factory.getFPointProducer(6, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer(fPointArgProducer, 1);
 
             FSphere fSphereArg = fSphereArgProducer.produce();
 
@@ -3462,9 +3478,8 @@ public class FSphereTest {
         void setMinRadiusMultiple() {
             Shape fSphereRef = factory.getFSphere(1, 2, 3, EPSILON);
 
-            Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(100);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(100, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(20));
 
