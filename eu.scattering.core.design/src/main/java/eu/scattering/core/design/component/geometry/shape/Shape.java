@@ -20,6 +20,7 @@ public interface Shape extends Geometry {
     boolean isSimilarCenter(Shape arg);
 
     FPos3D getCenter();
+
     double getCenterX();
     double getCenterY();
     double getCenterZ();
@@ -27,11 +28,19 @@ public interface Shape extends Geometry {
     Shape setCenter(double x, double y, double z);
     Shape setCenter(FPoint fPoint);
     Shape setCenter(FPos3D fPos3D);
+
     Shape setCenterX(double x);
     Shape setCenterY(double y);
     Shape setCenterZ(double z);
 
+    double getDistCenter(double x, double y, double z);
+    double getDistCenter(FPoint fPoint);
+    double getDistCenter(FPos3D fPos3D);
     double getDistCenter(Shape shape);
+
+    Shape setDistCenter(double x, double y, double z, double dist);
+    Shape setDistCenter(FPoint fPoint, double dist);
+    Shape setDistCenter(FPos3D fPos3D, double dist);
     Shape setDistCenter(Shape shape, double dist);
 
     Shape translate(double x, double y, double z);
@@ -62,33 +71,42 @@ public interface Shape extends Geometry {
 
     double getVolume();
     Shape setVolume(double volume);
-    void addVolume(FLayer in);
-    void addVolume(FLayer in, Iterable<? extends Shape> shapes);
-    void addVolumeArray(FArray in);
-    void addVolumeArray(FArray in, Iterable<? extends Shape> shapes);
+
+    void fillVolumeLayer(FLayer in);
+    void fillVolumeLayer(FLayer in, Iterable<? extends Shape> shapes);
+
+    void fillVolumeArray(FArray in);
+    void fillVolumeArray(FArray in, Iterable<? extends Shape> shapes);
 
     double getSurface();
     Shape setSurface(double surface);
-    void addSurface(FLayer in);
-    void addSurface(FLayer in, Iterable<? extends Shape> shapes);
-    void addSurfaceArray(FArray in);
-    void addSurfaceArray(FArray in, Iterable<? extends Shape> shapes);
+
+    void fillSurfaceLayer(FLayer in);
+    void fillSurfaceLayer(FLayer in, Iterable<? extends Shape> shapes);
+
+    void fillSurfaceArray(FArray in);
+    void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes);
 
     double getRadius();
-    double getInnerRadius();
     Shape setRadius(double radius);
+
+    double getInnerRadius();
     Shape setInnerRadius(double radius);
 
     Shape setMinRadius(Iterable<? extends Shape> shapes);
 
     boolean attachLinear(Shape target);
+
     boolean attachSpherical(Shape target, double x, double y, double z);
+    boolean attachSpherical(Shape target, FPoint center);
+    boolean attachSpherical(Shape target, FPos3D center);
 
     boolean attach(Shape target, Iterable<? extends Shape> shapes, int corrections);
 
     boolean project(FRay ray, Iterable<? extends Shape> shapes);
 
-    void sortByDistance(List<? extends Shape> in);
+    void sortByDistCenter(List<? extends Shape> in);
+    void sortByDistSpace(List<? extends Shape> in);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -114,12 +132,11 @@ public interface Shape extends Geometry {
     Shape copy();
 
     @Fragment
+    double getDistCenterP2(double x, double y, double z);
+    @Fragment
+    double getDistCenterP2(FPoint fPoint);
+    @Fragment
+    double getDistCenterP2(FPos3D fPos3D);
+    @Fragment
     double getDistCenterP2(Shape shape);
-
-    //--------------------------------------------------
-
-    default boolean attachSpherical(Shape target, FPos3D center) {
-
-        return attachSpherical(target, center.getD0(), center.getD1(), center.getD2());
-    }
 }

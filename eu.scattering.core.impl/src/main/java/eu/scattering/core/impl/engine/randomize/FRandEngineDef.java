@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
@@ -309,5 +310,76 @@ public class FRandEngineDef implements FRandEngine {
     public FPoint ortToPosBOnCircle(FPoint in, FSegment ref, double radius) {
 
         return ortToHeadOnCircle(in, ref.getRefOrigin(), radius);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public boolean attachLinear(Shape in, Shape target) {
+
+        in.setCenter(this.core.nextDoubleOnSphere((in.getRadius() + target.getRadius() * 2)));
+
+        return in.attachLinear(target);
+    }
+
+    @Override
+    public boolean attachLinear(Shape in, Shape target, Iterable<? extends Shape> shapes, int corrections) {
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            boolean results = attachLinear(in, target);
+
+            if (!results) {
+                continue;
+            }
+
+            if (in.overlaps(shapes) == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean attachSpherical(Shape in, Shape target, double x, double y, double z) {
+        double dist = in.getDistCenter(x, y, z);
+
+        in.setCenter(this.core.nextDoubleOnSphere(dist));
+        in.translate(x, y, z);
+
+        return in.attachSpherical(target, x, y, z);
+    }
+
+    @Override
+    public boolean attachSpherical(Shape in, Shape target, double x, double y, double z, Iterable<? extends Shape> shapes, int corrections) {
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            boolean results = attachSpherical(in, target, x, y, z);
+
+            if (!results) {
+                continue;
+            }
+
+            if (in.overlaps(shapes) == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean attach(Shape in, Shape target, Iterable<? extends Shape> shapes, int corrections) {
+
+        boolean isLinear = attachLinear(in, target, shapes, corrections);
+
+        if (isLinear) {
+            return true;
+        }
+
+
+        return false;
     }
 }

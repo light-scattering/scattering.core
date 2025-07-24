@@ -73,4 +73,8 @@ public interface FPointProducer extends Producer<FPoint> {
 
         return withDist(dist, 1);
     }
+
+    // -------------------------------------------------------------------------------------------------
+
+    enum Type { IN_SPHERE, ON_SPHERE }
 }

@@ -9,6 +9,8 @@ import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
+import java.util.List;
+
 public interface FRandGenerator extends FRandCore, ModuleFactory {
 
     FPos2D nextDouble2D(FPairPos2D range);
@@ -20,4 +22,6 @@ public interface FRandGenerator extends FRandCore, ModuleFactory {
 
     FPos3D nextDoubleOnSphere(double radius);
     FPos3D nextDoubleInSphere(double radius);
+
+    <T> T getElement(List<T> in, boolean remove);
 }

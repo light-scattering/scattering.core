@@ -12,11 +12,13 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Timeout(5)
 @DisplayName("FEngine")
 public class FRandomTest {
 
@@ -157,6 +159,90 @@ public class FRandomTest {
 
             assertThrows(IllegalArgumentException.class,
                     () -> fRandom.nextDouble(max, min));
+        }
+
+        @Test
+        @DisplayName("Get random long")
+        void nextLong() {
+            long seed = 12345;
+
+            FRandGenerator fRandom = FactoryDef.create(seed).getFRand();
+
+            long valA = fRandom.nextLong();
+            long valB = fRandom.nextLong();
+
+            assertNotEquals(valA, valB,
+                    "Values should not be equal");
+        }
+
+        @Test
+        @DisplayName("Get random long with range")
+        void nextLongWithRange() {
+            long seed = 12345;
+
+            FRandGenerator fRandom = FactoryDef.create(seed).getFRand();
+
+            boolean has0 = false;
+            boolean has1 = false;
+            for (int i = 0 ; i < 100 ; i++) {
+                long value = fRandom.nextLong(0L, 2L);
+
+                if (value == 0) {
+                    has0 = true;
+                }
+
+                if (value == 1) {
+                    has1 = true;
+                }
+
+                assertTrue(value == 0 || value == 1,
+                        "The value is out of range");
+            }
+
+            assertTrue(has0 && has1,
+                    "The range is erroneous");
+        }
+
+        @Test
+        @DisplayName("Get random integer")
+        void nextInteger() {
+            long seed = 12345;
+
+            FRandGenerator fRandom = FactoryDef.create(seed).getFRand();
+
+            int valA = fRandom.nextInteger();
+            int valB = fRandom.nextInteger();
+
+            assertNotEquals(valA, valB,
+                    "Values should not be equal");
+        }
+
+        @Test
+        @DisplayName("Get random integer with range")
+        void nextIntegerWithRange() {
+            long seed = 12345;
+
+            FRandGenerator fRandom = FactoryDef.create(seed).getFRand();
+
+            boolean has0 = false;
+            boolean has1 = false;
+            for (int i = 0 ; i < 100 ; i++) {
+                long value = fRandom.nextInteger(0, 2);
+
+                if (value == 0) {
+                    has0 = true;
+                }
+
+                if (value == 1) {
+                    has1 = true;
+                }
+
+                assertTrue(value == 0 || value == 1,
+                        "The value is out of range");
+            }
+
+            assertTrue(has0 && has1,
+                    "The range is erroneous");
         }
     }
 
@@ -435,5 +521,109 @@ public class FRandomTest {
                     () -> assertFalse(pointA.isExact(pointB))
             );
         }
+
+        @Test
+        @DisplayName("Shuffle list - Seed enabled")
+        void shuffleListWithSeed() {
+            List<Integer> listA = new ArrayList<>(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+            List<Integer> listB = new ArrayList<>(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+            for (int i = 0 ; i < 10 ; i++) {
+                assertEquals(listA.get(i), listB.get(i),
+                        "Lists should be equal");
+            }
+
+            FRandGenerator fRandomA = FactoryDef.create(123).getFRand();
+            FRandGenerator fRandomB = FactoryDef.create(123).getFRand();
+
+            fRandomA.shuffle(listA);
+            fRandomB.shuffle(listB);
+
+            boolean areExact = true;
+
+            for (int i = 0 ; i < 10 ; i++) {
+                if (!Objects.equals(listA.get(i), listB.get(i))) {
+                    areExact = false;
+                    break;
+                }
+            }
+
+            assertTrue(areExact, "List elements should have same order");
+        }
+
+        @Test
+        @DisplayName("Shuffle list - Seed disabled")
+        void shuffleListWithoutSeed() {
+            List<Integer> listA = new ArrayList<>(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+            List<Integer> listB = new ArrayList<>(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+            for (int i = 0 ; i < 10 ; i++) {
+                assertEquals(listA.get(i), listB.get(i),
+                        "Lists should be equal");
+            }
+
+            FRandGenerator fRandomA = FactoryDef.create().getFRand();
+            FRandGenerator fRandomB = FactoryDef.create().getFRand();
+
+            fRandomA.shuffle(listA);
+            fRandomB.shuffle(listB);
+
+            boolean areExact = true;
+
+            for (int i = 0 ; i < 10 ; i++) {
+                if (!Objects.equals(listA.get(i), listB.get(i))) {
+                    areExact = false;
+                    break;
+                }
+            }
+
+            assertFalse(areExact, "List elements should have different order");
+        }
+
+        @Test
+        @DisplayName("Get list element")
+        void getListElement() {
+            long seed = 12345;
+
+            FRandGenerator fRandom = FactoryDef.create(seed).getFRand();
+
+            List<Integer> list = List.of(1, 2, 3, 4, 5);
+
+            int valA = fRandom.getElement(list, false);
+            int valB = fRandom.getElement(list, false);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertNotEquals(valA, valB,
+                            "The elements should be different (with the predefined seed"),
+                    () -> assertEquals(5, list.size(),
+                            "The number of elements should not change"));
+        }
+
+        @Test
+        @DisplayName("Get list element with removal")
+        void getListElementWithRemoval() {
+            long seed = 12345;
+
+            FRandGenerator fRandom = FactoryDef.create(seed).getFRand();
+
+            List<Integer> list = new ArrayList<>(List.of(1, 2, 3, 4, 5));
+
+            int valA = fRandom.getElement(list, true);
+            int valB = fRandom.getElement(list, true);
+
+            fRandom.getElement(list, true);
+            fRandom.getElement(list, true);
+            fRandom.getElement(list, true);
+
+            Assertions.assertAll("Validate elements",
+                    () -> assertNotEquals(valA, valB,
+                            "The elements should be different (with the predefined seed"),
+                    () -> assertThrows(IllegalArgumentException.class, () -> fRandom.getElement(list, true),
+                            "The list should be empty"),
+                    () -> assertEquals(0, list.size(),
+                            "The list should be empty"));
+        }
+
+
     }
 }

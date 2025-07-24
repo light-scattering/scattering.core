@@ -1,5 +1,6 @@
 package eu.scattering.core.design.engine.randomize.generator.core;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FRandCore {
@@ -10,4 +11,12 @@ public interface FRandCore {
 
     double nextDouble();
     double nextDouble(double origin, double bound);
+
+    long nextLong();
+    long nextLong(long origin, long bound);
+
+    int nextInteger();
+    int nextInteger(int origin, int bound);
+
+    <T> void shuffle(List<T> in);
 }

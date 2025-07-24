@@ -2,6 +2,7 @@ package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.util.support.Producer;
 
 public interface FSphereFactory {
 
@@ -35,5 +36,14 @@ public interface FSphereFactory {
     default FSphere getRefFSphere(FPoint refCenter, double radius) {
 
         return (FSphere) getRefFSphere(refCenter).setRadius(radius);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+    // Facades.
+    // -------------------------------------------------------------------------------------------------
+
+    default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, double radius) {
+
+        return getFSphereProducer().withCenterAndFixedRadius(pCenter, radius);
     }
 }

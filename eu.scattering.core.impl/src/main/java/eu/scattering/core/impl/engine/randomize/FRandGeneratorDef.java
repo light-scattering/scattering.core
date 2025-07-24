@@ -26,6 +26,8 @@ import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
@@ -85,6 +87,30 @@ public class FRandGeneratorDef implements FRandGenerator {
     public double nextDouble(double origin, double bound) {
 
         return this.core.nextDouble(origin, bound);
+    }
+
+    @Override
+    public long nextLong() {
+
+        return this.core.nextLong();
+    }
+
+    @Override
+    public long nextLong(long origin, long bound) {
+
+        return this.core.nextLong(origin, bound);
+    }
+
+    @Override
+    public int nextInteger() {
+
+        return this.core.nextInteger();
+    }
+
+    @Override
+    public int nextInteger(int origin, int bound) {
+
+        return this.core.nextInteger(origin, bound);
     }
 
     @Override
@@ -201,6 +227,30 @@ public class FRandGeneratorDef implements FRandGenerator {
         }
     }
 
+    @Override
+    public <T> T getElement(List<T> in, boolean remove) {
+
+        if (in.size() == 0) {
+            throw new IllegalArgumentException("The list is empty");
+        }
+
+        int index = this.core.nextInteger(0, in.size());
+
+        T element = in.get(index);
+
+        if (remove) {
+            in.remove(index);
+        }
+
+        return element;
+    }
+
+    @Override
+    public <T> void shuffle(List<T> in) {
+
+        this.core.shuffle(in);
+    }
+
     //--------------------------------------------------
 
     private double distP2(double val, double ref) {
@@ -226,7 +276,6 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     //--------------------------------------------------
-
 
     @Override
     public FDist1DManual getFDist1DManual(BiConsumer<FRandGenerator, Double[]> consumer) {

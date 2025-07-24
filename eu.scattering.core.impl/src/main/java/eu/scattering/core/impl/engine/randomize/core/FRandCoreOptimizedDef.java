@@ -2,12 +2,18 @@ package eu.scattering.core.impl.engine.randomize.core;
 
 import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class FRandCoreOptimizedDef implements FRandCore {
+    private final ThreadLocalRandom random;
 
-    private FRandCoreOptimizedDef() {}
+    private FRandCoreOptimizedDef() {
+
+        this.random = ThreadLocalRandom.current();
+    }
 
     public static FRandCore create() {
 
@@ -23,13 +29,13 @@ public class FRandCoreOptimizedDef implements FRandCore {
     @Override
     public boolean nextBoolean() {
 
-        return ThreadLocalRandom.current().nextBoolean();
+        return this.random.nextBoolean();
     }
 
     @Override
     public double nextDouble() {
 
-        return ThreadLocalRandom.current().nextDouble();
+        return this.random.nextDouble();
     }
 
     @Override
@@ -40,9 +46,55 @@ public class FRandCoreOptimizedDef implements FRandCore {
         }
 
         if (bound > origin) {
-            return ThreadLocalRandom.current().nextDouble(origin, bound);
+            return this.random.nextDouble(origin, bound);
         }
 
-        return ThreadLocalRandom.current().nextDouble(bound, origin);
+        return this.random.nextDouble(bound, origin);
+    }
+
+    @Override
+    public long nextLong() {
+
+        return this.random.nextLong();
+    }
+
+    @Override
+    public long nextLong(long origin, long bound) {
+
+        if (origin == bound) {
+            throw new IllegalArgumentException("The range cannot be zero");
+        }
+
+        if (bound > origin) {
+            return this.random.nextLong(origin, bound);
+        }
+
+        return this.random.nextLong(bound, origin);
+    }
+
+    @Override
+    public int nextInteger() {
+
+        return this.random.nextInt();
+    }
+
+    @Override
+    public int nextInteger(int origin, int bound) {
+
+        if (origin == bound) {
+            throw new IllegalArgumentException("The range cannot be zero");
+        }
+
+        if (bound > origin) {
+            return this.random.nextInt(origin, bound);
+        }
+
+        return this.random.nextInt(bound, origin);
+    }
+
+    @Override
+    public <T> void shuffle(List<T> in) {
+
+        Collections.shuffle(in, this.random);
     }
 }

@@ -10,12 +10,10 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -357,13 +355,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void addSurface(FLayer in) {
+    public void fillSurfaceLayer(FLayer in) {
 
         in.set(0, in.get(0) + (int) Math.round(getSurface() / (getDelta() * getDelta())));
     }
 
     @Override
-    public void addSurface(FLayer in, Iterable<? extends Shape> shapes) {
+    public void fillSurfaceLayer(FLayer in, Iterable<? extends Shape> shapes) {
 
         getSurfacePoints((x, y, z) -> {
             int layers = 0;
@@ -384,13 +382,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void addSurfaceArray(FArray in) {
+    public void fillSurfaceArray(FArray in) {
 
        getSurfacePoints(in::add);
     }
 
     @Override
-    public void addSurfaceArray(FArray in, Iterable<? extends Shape> shapes) {
+    public void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes) {
 
         getSurfacePoints((x, y, z) -> {
             boolean add = true;
@@ -489,6 +487,18 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
+    public boolean attachSpherical(Shape target, FPoint center) {
+
+        return attachSpherical(target, center.getX(), center.getY(), center.getZ());
+    }
+
+    @Override
+    public boolean attachSpherical(Shape target, FPos3D center) {
+
+        return attachSpherical(target, center.getD0(), center.getD1(), center.getD2());
+    }
+
+    @Override
     public boolean attach(Shape target, Iterable<? extends Shape> shapes, int corrections) {
         int repositions = 1;
 
@@ -498,7 +508,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         List<Shape> neighbours = new ArrayList<>();
 
-        Shape closestNeighbour = getClosestNeighbour(neighbours, shapes);
+        Shape closestNeighbour = getClosestNeighbourCenter(neighbours, shapes);
 
         if (closestNeighbour == null) {
             return true;
@@ -510,17 +520,17 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                 return false;
             }
 
-            closestNeighbour = getClosestNeighbour(neighbours, shapes);
+            closestNeighbour = getClosestNeighbourCenter(neighbours, shapes);
         }
 
         return closestNeighbour == null;
     }
 
-    private Shape getClosestNeighbour(List<Shape> neighbours, Iterable<? extends Shape> field) {
-        overlaps(field, neighbours);
-        sortByDistance(neighbours);
+    public Shape getClosestNeighbourCenter(List<Shape> arg, Iterable<? extends Shape> shapes) {
+        overlaps(shapes, arg);
+        sortByDistCenter(arg);
 
-        return neighbours.size() > 0 ? neighbours.get(0) : null;
+        return arg.size() > 0 ? arg.get(0) : null;
     }
 
     @Override
@@ -556,7 +566,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             }
         }
 
-        sortByDistance(in);
+        sortByDistCenter(in);
     }
 
     private boolean validateCollision(Shape candidate, FRay ray, Iterable<? extends Shape> shapes) {
@@ -581,6 +591,26 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return this.overlaps(shapes) <= 0;
     }
 
+    @Override
+    public void sortByDistSpace(List<? extends Shape> in) {
+        CmpDistSpace cmp = getCacheCmpDistSpace();
+
+        cmp.setRef(this);
+
+        in.sort(cmp);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private CmpDistSpace getCacheCmpDistSpace() {
+
+        if (super.getCache() != null) {
+            return super.getCache().get(CmpDistSpace.class, (cache) -> supplyCmpDistSpace());
+        }
+
+        return supplyCmpDistSpace();
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     private FSphere supplyFSphere() {
@@ -588,10 +618,39 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return factory.getFSphere();
     }
 
+    private CmpDistSpace supplyCmpDistSpace() {
+
+        return CmpDistSpace.create();
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @FunctionalInterface
     interface TriConsumer {
         void consume(double x, double y, double z);
+    }
+}
+
+class CmpDistSpace implements Comparator<Shape> {
+    private Shape ref;
+
+    private CmpDistSpace() {}
+
+    public static CmpDistSpace create() {
+
+        return new CmpDistSpace();
+    }
+
+    public void setRef(Shape ref) {
+
+        this.ref = ref;
+    }
+
+    @Override
+    public int compare(Shape s1, Shape s2) {
+        double distS1 = this.ref.getDistCenter(s1) - this.ref.getRadius() - s1.getRadius();
+        double distS2 = this.ref.getDistCenter(s2) - this.ref.getRadius() - s2.getRadius();
+
+        return Double.compare(distS1, distS2);
     }
 }

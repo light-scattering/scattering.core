@@ -205,29 +205,65 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double getDistCenter(Shape shape) {
+    public double getDistCenter(double x, double y, double z) {
         FVector fVector = getCacheFVector();
 
-        fVector.setBase(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+        fVector.setBase(x, y, z);
         fVector.setHead(getCenterX(), getCenterY(), getCenterZ());
 
         return fVector.getMagnitude();
     }
 
     @Override
-    public double getDistCenterP2(Shape shape) {
-        double dimX = getCenterX() - shape.getCenterX();
-        double dimY = getCenterY() - shape.getCenterY();
-        double dimZ = getCenterZ() - shape.getCenterZ();
+    public double getDistCenter(FPoint fPoint) {
+
+        return getDistCenter(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
+
+    @Override
+    public double getDistCenter(FPos3D fPos3D) {
+
+        return getDistCenter(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+    }
+
+    @Override
+    public double getDistCenter(Shape shape) {
+
+        return getDistCenter(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+    }
+
+    @Override
+    public double getDistCenterP2(double x, double y, double z) {
+        double dimX = getCenterX() - x;
+        double dimY = getCenterY() - y;
+        double dimZ = getCenterZ() - z;
 
         return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
     }
 
     @Override
-    public Shape setDistCenter(Shape shape, double dist) {
+    public double getDistCenterP2(FPoint fPoint) {
+
+        return getDistCenterP2(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
+
+    @Override
+    public double getDistCenterP2(FPos3D fPos3D) {
+
+        return getDistCenterP2(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+    }
+
+    @Override
+    public double getDistCenterP2(Shape shape) {
+
+        return getDistCenterP2(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+    }
+
+    @Override
+    public Shape setDistCenter(double x, double y, double z, double dist) {
         FVector fVector = getCacheFVector();
 
-        fVector.setBase(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+        fVector.setBase(x, y, z);
         fVector.setHead(getCenterX(), getCenterY(), getCenterZ());
 
         fVector.setMagnitude(dist);
@@ -235,6 +271,24 @@ public abstract class ShapePresetDef implements Shape {
         setCenter(fVector.getRefHead());
 
         return this;
+    }
+
+    @Override
+    public Shape setDistCenter(FPoint fPoint, double dist) {
+
+        return setDistCenter(fPoint.getX(), fPoint.getY(), fPoint.getZ(), dist);
+    }
+
+    @Override
+    public Shape setDistCenter(FPos3D fPos3D, double dist) {
+
+        return setDistCenter(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2(), dist);
+    }
+
+    @Override
+    public Shape setDistCenter(Shape shape, double dist) {
+
+        return setDistCenter(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ(), dist);
     }
 
     @Override
@@ -741,8 +795,8 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void sortByDistance(List<? extends Shape> in) {
-        CmpDistCenter cmp = getCacheCmpDistRef();
+    public void sortByDistCenter(List<? extends Shape> in) {
+        CmpDistCenter cmp = getCacheCmpDistCenter();
 
         cmp.setRef(this);
 
@@ -750,7 +804,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void addVolume(FLayer in) {
+    public void fillVolumeLayer(FLayer in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -778,7 +832,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void addVolume(FLayer in, Iterable<? extends Shape> shapes) {
+    public void fillVolumeLayer(FLayer in, Iterable<? extends Shape> shapes) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -819,7 +873,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void addVolumeArray(FArray in) {
+    public void fillVolumeArray(FArray in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -847,7 +901,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void addVolumeArray(FArray in, Iterable<? extends Shape> shapes) {
+    public void fillVolumeArray(FArray in, Iterable<? extends Shape> shapes) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -940,7 +994,7 @@ public abstract class ShapePresetDef implements Shape {
         return supplyListShape().get();
     }
 
-    protected CmpDistCenter getCacheCmpDistRef() {
+    protected CmpDistCenter getCacheCmpDistCenter() {
 
         if (cache != null) {
             return cache.get(CmpDistCenter.class, (cache) -> supplyCmpDistCenter());

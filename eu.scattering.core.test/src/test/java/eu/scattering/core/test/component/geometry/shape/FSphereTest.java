@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -393,8 +394,53 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Get distance center")
-        void getDistCenter() {
+        @DisplayName("Get distance center with primitives")
+        void getDistCenterWithPrimitives() {
+            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+            double dist = fSphere.getDistCenter(-2, -2, -2);
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * Math.sqrt(3), dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                            "The Shape should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get distance center with FPoint")
+        void getDistCenterWithFPoint() {
+            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+            double dist = fSphere.getDistCenter(factory.getFPoint(-2, -2, -2));
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * Math.sqrt(3), dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                            "The Shape should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get distance center with FPos3D")
+        void getDistCenterWithFPos3D() {
+            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+            double dist = fSphere.getDistCenter(factory.getFPos3D(-2, -2, -2));
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * Math.sqrt(3), dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                            "The Shape should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get distance center with Shape")
+        void getDistCenterWithShape() {
             FSphere fSphereA = factory.getFSphere(2, 2, 2, 1);
             FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
 
@@ -414,8 +460,53 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Get distance center P2")
-        void getDistCenterP2() {
+        @DisplayName("Get distance center P2 with primitives")
+        void getDistCenterP2WithPrimitives() {
+            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+            double dist = fSphere.getDistCenterP2(-2, -2, -2);
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * 4 * 3, dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                            "The shape should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get distance center P2 with FPoint")
+        void getDistCenterP2WithFPoint() {
+            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+            double dist = fSphere.getDistCenterP2(factory.getFPoint(-2, -2, -2));
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * 4 * 3, dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                            "The shape should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get distance center P2 with FPos3D")
+        void getDistCenterP2WithFPos3D() {
+            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+            double dist = fSphere.getDistCenterP2(factory.getFPos3D(-2, -2, -2));
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * 4 * 3, dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                            "The shape should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get distance center P2 with Shape")
+        void getDistCenterP2WithShape() {
             FSphere fSphereA = factory.getFSphere(2, 2, 2, 1);
             FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
 
@@ -424,9 +515,9 @@ public class FSphereTest {
 
             Assertions.assertAll("Validate distance values",
                     () -> assertEquals(4 * 4 * 3, distA,
-                            epsilon, "The distance A is incorrect"),
+                            epsilon, "Distance A is incorrect"),
                     () -> assertEquals(4 * 4 * 3, distB,
-                            epsilon, "The distance B is incorrect"),
+                            epsilon, "Distance B is incorrect"),
                     () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphereA,
                             "Shape A should not change"),
                     () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
@@ -435,8 +526,65 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Set distance center")
-        void setDistCenter() {
+        @DisplayName("Set distance center with primitives")
+        void setDistCenterWithPrimitives() {
+            FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
+
+            Shape results = fSphere.setDistCenter(-2, -2, -2, 4 * Math.sqrt(3));
+
+            double dist = fSphere.getDistCenter(-2, -2, -2);
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * Math.sqrt(3), dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
+                            "The position is not correct"),
+                    () -> assertSame(fSphere, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set distance center with FPoint")
+        void setDistCenterWithFPoint() {
+            FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
+
+            Shape results = fSphere.setDistCenter(factory.getFPoint(-2, -2, -2), 4 * Math.sqrt(3));
+
+            double dist = fSphere.getDistCenter(-2, -2, -2);
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * Math.sqrt(3), dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
+                            "The position is not correct"),
+                    () -> assertSame(fSphere, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set distance center with FPos3D")
+        void setDistCenterWithFPos3D() {
+            FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
+
+            Shape results = fSphere.setDistCenter(factory.getFPos3D(-2, -2, -2), 4 * Math.sqrt(3));
+
+            double dist = fSphere.getDistCenter(-2, -2, -2);
+
+            Assertions.assertAll("Validate distance values",
+                    () -> assertEquals(4 * Math.sqrt(3), dist,
+                            epsilon, "The distance is incorrect"),
+                    () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
+                            "The position is not correct"),
+                    () -> assertSame(fSphere, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set distance center with Shape")
+        void setDistCenterWithShape() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
             FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
 
@@ -447,9 +595,9 @@ public class FSphereTest {
 
             Assertions.assertAll("Validate distance values",
                     () -> assertEquals(4 * Math.sqrt(3), distA,
-                            epsilon, "The distance A is incorrect"),
+                            epsilon, "Distance A is incorrect"),
                     () -> assertEquals(4 * Math.sqrt(3), distB,
-                            epsilon, "The distance B is incorrect"),
+                            epsilon, "Distance B is incorrect"),
                     () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphereA),
                             "Shape A is not correct"),
                     () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
@@ -758,7 +906,7 @@ public class FSphereTest {
             in.add(fSphereB);
             in.add((fSphereC));
 
-            fSphereRef.sortByDistance(in);
+            fSphereRef.sortByDistCenter(in);
 
             Assertions.assertAll("Validate positions",
                     () -> assertEquals(3, in.size(),
@@ -2338,7 +2486,7 @@ public class FSphereTest {
 
             fSphere.translate(offset);
 
-            fSphere.addVolume(fLayer);
+            fSphere.fillVolumeLayer(fLayer);
 
             int elements = fLayer.get();
 
@@ -2372,7 +2520,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addVolume(fLayer, fAssembly);
+            fSphereRef.fillVolumeLayer(fLayer, fAssembly);
 
             int elements = fLayer.get();
 
@@ -2406,7 +2554,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addVolume(fLayer, fAssembly);
+            fSphereRef.fillVolumeLayer(fLayer, fAssembly);
 
             int elementsTotal = (int) fLayer.addSelf();
             int elementsCommon = fLayer.get(1);
@@ -2449,7 +2597,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addVolume(fLayer, fAssembly);
+            fSphereRef.fillVolumeLayer(fLayer, fAssembly);
 
             int elements = (int) fLayer.addSelf();
 
@@ -2479,7 +2627,7 @@ public class FSphereTest {
 
             fSphere.translate(offset);
 
-            fSphere.addVolumeArray(fMesh);
+            fSphere.fillVolumeArray(fMesh);
 
             int elements = fMesh.size();
 
@@ -2516,7 +2664,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addVolumeArray(fMesh, fAssembly);
+            fSphereRef.fillVolumeArray(fMesh, fAssembly);
 
             int elements = fMesh.size();
 
@@ -2553,7 +2701,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addVolumeArray(fMesh, fAssembly);
+            fSphereRef.fillVolumeArray(fMesh, fAssembly);
 
             int elements = fMesh.size();
 
@@ -2586,7 +2734,7 @@ public class FSphereTest {
 
             fSphere.translate(offset);
 
-            fSphere.addSurface(fLayer);
+            fSphere.fillSurfaceLayer(fLayer);
 
             int elements = fLayer.get();
 
@@ -2620,7 +2768,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addSurface(fLayer, fAssembly);
+            fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
 
             int elements = fLayer.get();
 
@@ -2654,7 +2802,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addSurface(fLayer, fAssembly);
+            fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
 
             int elementsTotal = (int) fLayer.addSelf();
             int elementsCommon = fLayer.get(1);
@@ -2697,7 +2845,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addSurface(fLayer, fAssembly);
+            fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
 
             int elements = (int) fLayer.addSelf();
 
@@ -2727,7 +2875,7 @@ public class FSphereTest {
 
             fSphere.translate(offset);
 
-            fSphere.addSurfaceArray(fMesh);
+            fSphere.fillSurfaceArray(fMesh);
 
             int elements = fMesh.size();
 
@@ -2767,7 +2915,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addSurfaceArray(fMesh, fAssembly);
+            fSphereRef.fillSurfaceArray(fMesh, fAssembly);
 
             int elements = fMesh.size();
 
@@ -2807,7 +2955,7 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.addSurfaceArray(fMesh, fAssembly);
+            fSphereRef.fillSurfaceArray(fMesh, fAssembly);
 
             int elements = fMesh.size();
 
@@ -2834,9 +2982,8 @@ public class FSphereTest {
         void attachLinearEnclosed() {
             Shape fSphereRef = factory.getFSphere(10);
 
-            Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(8.9);
-            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                    .withCenterAndFixedRadius(fPointProducer, 1);
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(8.9, FPointProducer.Type.IN_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
             Shape fSphereArg = fSphereProducer.produce();
 
@@ -2939,8 +3086,74 @@ public class FSphereTest {
 
         @Test
         @Timeout(1)
-        @DisplayName("Attach spherical, overlapping")
-        void attachSpherical() {
+        @DisplayName("Attach spherical with primitives")
+        void attachSphericalWithPrimitives() {
+            Producer<FPoint> fPointProducer = factory.getFPointProducer()
+                    .withRadius(1.5);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            Shape fSphereRef = fSphereProducer.produce();
+            Shape candidate = fSphereProducer.produce();
+
+            while (!fSphereRef.overlaps(candidate)) {
+                candidate = fSphereProducer.produce();
+            }
+
+            Shape fSphereArg = fSphereProducer.produce();
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, offset.getD0(), offset.getD1(), offset.getD2());
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @Timeout(1)
+        @DisplayName("Attach spherical with FPoint")
+        void attachSphericalWithFPoint() {
+            Producer<FPoint> fPointProducer = factory.getFPointProducer()
+                    .withRadius(1.5);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                    .withCenterAndFixedRadius(fPointProducer, 1);
+
+            Shape fSphereRef = fSphereProducer.produce();
+            Shape candidate = fSphereProducer.produce();
+
+            while (!fSphereRef.overlaps(candidate)) {
+                candidate = fSphereProducer.produce();
+            }
+
+            Shape fSphereArg = fSphereProducer.produce();
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphereRef.translate(offset);
+            fSphereArg.translate(offset);
+
+            boolean isPositioned = fSphereRef.attachSpherical(fSphereArg, factory.getFPoint(offset));
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(isPositioned,
+                            "The reference sphere should be positioned"),
+                    () -> assertTrue(fSphereRef.touches(fSphereArg),
+                            "Spheres should be in point contact")
+            );
+        }
+
+        @Test
+        @Timeout(1)
+        @DisplayName("Attach spherical with FPos3D")
+        void attachSphericalWithFPos3D() {
             Producer<FPoint> fPointProducer = factory.getFPointProducer()
                     .withRadius(1.5);
             Producer<FSphere> fSphereProducer = factory.getFSphereProducer()

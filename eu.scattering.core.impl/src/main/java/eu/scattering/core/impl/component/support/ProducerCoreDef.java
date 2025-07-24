@@ -249,4 +249,34 @@ public class ProducerCoreDef<E> {
             consumer.accept(results);
         }
     }
+
+    // -------------------------------------------------------------------------------------------------
+
+    class ProducerRecord {
+        private final int weight;
+        private final Supplier<E> supplier;
+        private final String description;
+
+        private ProducerRecord(int weight, Supplier<E> supplier, String description) {
+
+            this.weight = weight;
+            this.supplier = supplier;
+            this.description = description;
+        }
+
+        public int getWeight() {
+
+            return this.weight;
+        }
+
+        public Supplier<E> getSupplier() {
+
+            return this.supplier;
+        }
+
+        public String getDescription() {
+
+            return this.description;
+        }
+    }
 }
