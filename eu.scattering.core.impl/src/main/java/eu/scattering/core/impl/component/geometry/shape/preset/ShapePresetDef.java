@@ -967,14 +967,14 @@ public abstract class ShapePresetDef implements Shape {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected FPoint getCacheFPoint() {
-
-        if (cache != null) {
-            return cache.get("fPoint", FPoint.class, (cache) -> supplyFPoint());
-        }
-
-        return supplyFPoint();
-    }
+//    protected FPoint getCacheFPoint() {
+//
+//        if (cache != null) {
+//            return cache.get("fPoint", FPoint.class, (cache) -> supplyFPoint());
+//        }
+//
+//        return supplyFPoint();
+//    }
 
     protected FVector getCacheFVector() {
 
@@ -1010,10 +1010,10 @@ public abstract class ShapePresetDef implements Shape {
         return factory.getFCache();
     }
 
-    protected FPoint supplyFPoint() {
-
-        return factory.getFPoint();
-    }
+//    protected FPoint supplyFPoint() {
+//
+//        return factory.getFPoint();
+//    }
 
     protected FVector supplyFVector() {
 

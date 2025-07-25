@@ -457,19 +457,17 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             return true;
         }
 
-        FPoint fPointTarget = super.getCacheFPoint()
-                .set(target.getCenterX(), target.getCenterY(), target.getCenterZ());
         FVector fVectorAxis = super.getCacheFVector()
                 .setBase(x, y, z)
                 .setHead(this.getCenterX(), this.getCenterY(), this.getCenterZ());
 
         // The FSphere is on the rotation axis, and therefore, cannot be linearly positioned.
-        if (fVectorAxis.isCollinearBaseCommon(fPointTarget)) {
+        if (fVectorAxis.isCollinearBaseCommon(target.getCenter())) {
             return false;
         }
 
         double sideA = fVectorAxis.getMagnitude();
-        double sideB = fPointTarget.getDistance(fVectorAxis.getRefBase());
+        double sideB = target.getDistCenter(fVectorAxis.getRefBase());
         double sideC = this.getRadius() + target.getRadius();
 
         // The FSphere cannot be positioned.
@@ -479,7 +477,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         double angle = factory.getFTrigHelper().getAngle(sideB, sideA, sideC);
 
-        factory.getFRotEngine().setRgAngleBaseCommon(fVectorAxis, fPointTarget, angle);
+        factory.getFRotEngine().setRgAngleBaseCommon(fVectorAxis, target.getCenter(), angle);
 
         this.setCenter(fVectorAxis.getRefHead());
 
@@ -555,12 +553,10 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     private void getCollisionList(List<Shape> in, FRay ray, Iterable<? extends Shape> shapes) {
-        FPoint fPoint = super.getCacheFPoint();
 
         for (Shape shape : shapes) {
-            fPoint.set(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
 
-            double dist = ray.getDistance(fPoint);
+            double dist = ray.getDistance(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
             if (dist >= 0 && dist < this.getRadius() + shape.getRadius() && !this.overlaps(shape)) {
                 in.add(shape);
             }
@@ -570,18 +566,17 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     private boolean validateCollision(Shape candidate, FRay ray, Iterable<? extends Shape> shapes) {
-        FPoint fPoint = super.getCacheFPoint();
         FVector fVector = super.getCacheFVector();
 
-        fPoint.set(candidate.getCenterX(), candidate.getCenterY(), candidate.getCenterZ());
+        this.setCenter(candidate.getCenterX(), candidate.getCenterY(), candidate.getCenterZ());
 
-        ray.project(fPoint);
+        FPos3D projection = ray.project(this.getCenterX(), this.getCenterY(), this.getCenterZ());
 
-        double sideA = fPoint.getDistance(candidate.getCenterX(), candidate.getCenterY(), candidate.getCenterZ());
+        double sideA = candidate.getDistCenter(projection);
         double sideC = this.getRadius() + candidate.getRadius();
         double sideB = Math.sqrt((sideC * sideC) - (sideA * sideA));
 
-        fVector.setBase(fPoint);
+        fVector.setBase(projection);
         fVector.setHead(ray.getRefOrigin().getRefBase());
 
         fVector.setMagnitude(sideB);

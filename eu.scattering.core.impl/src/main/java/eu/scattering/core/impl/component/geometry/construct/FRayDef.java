@@ -302,6 +302,14 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
                 .allMatch(e -> isUnitPartOf(e, epsilon));
     }
 
+    // TODO - Not optimized
+    @Override
+    public double getDistance(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        return getDistance(fPoint);
+    }
+
     @Override
     public double getDistance(FPoint arg) {
 

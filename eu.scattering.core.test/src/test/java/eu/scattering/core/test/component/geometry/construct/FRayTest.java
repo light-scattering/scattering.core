@@ -779,6 +779,18 @@ public class FRayTest {
         }
 
         @Test
+        @DisplayName("Get primitives distance")
+        void getPrimitivesDistance() {
+            FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fRay.getRefOrigin().addXYZ(offset);
+
+            assertEquals(Math.sqrt(6), fRay.getDistance(offset.getX(), offset.getY() + 3, offset.getZ()));
+        }
+
+        @Test
         @DisplayName("Get unit distance")
         void getUnitDistance() {
             FRay fRay = factory.getRefFRay(factory.getFVector(2, 2, 2));
