@@ -12,6 +12,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -199,6 +200,12 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     // -------------------------------------------------------------------------------------------------
 
     @Override
+    public FPos3D project(double x, double y, double z) {
+
+        throw new RuntimeException("The 'project' method cannot be used with FDraft");
+    }
+
+    @Override
     public void project(FPoint in) {
 
         throw new RuntimeException("The 'project' method cannot be used with FDraft");
@@ -208,6 +215,12 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     public void project(Geometry in) {
 
         throw new RuntimeException("The 'project' method cannot be used with FDraft");
+    }
+
+    @Override
+    public FPos3D reflect(double x, double y, double z) {
+
+        throw new RuntimeException("The 'reflect' method cannot be used with FDraft");
     }
 
     @Override

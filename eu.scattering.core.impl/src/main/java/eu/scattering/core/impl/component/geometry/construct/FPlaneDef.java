@@ -1,12 +1,12 @@
 package eu.scattering.core.impl.component.geometry.construct;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
-import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -193,10 +192,9 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FPlane) {
-            FPlane ref = (FPlane) object;
+        if (object instanceof FPlane fPlane) {
 
-            return getRefOrigin().equals(ref.getRefOrigin());
+            return getRefOrigin().equals(fPlane.getRefOrigin());
         }
 
         return false;
@@ -214,6 +212,16 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     public boolean isSamePlane(FPlane arg) {
 
         return getRefOrigin().isCollinear(arg.getRefOrigin()) && isPartOf(arg.getRefOrigin().getRefBase());
+    }
+
+    // TODO - Not optimized
+    @Override
+    public FPos3D project(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        project(fPoint);
+
+        return fPoint.toFPos3D();
     }
 
     @Override
@@ -235,6 +243,16 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         in.toFPoints()
                 .forEach(this::projectUnitOnPlane);
+    }
+
+    // TODO - Not optimized
+    @Override
+    public FPos3D reflect(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        reflect(fPoint);
+
+        return fPoint.toFPos3D();
     }
 
     @Override
@@ -340,7 +358,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         List<Boolean> isInHalfSpace = arg.toFPoints().stream()
                 .map(this::isUnitInHalfSpace)
-                .collect(Collectors.toList());
+                .toList();
 
         boolean conditionTrue = isInHalfSpace.stream().anyMatch(e -> e);
         boolean conditionFalse = isInHalfSpace.stream().anyMatch(e -> !e);
@@ -571,14 +589,9 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
     // -------------------------------------------------------------------------------------------------
 
-    private FPlane supplyFPlane() {
+    private FPoint supplyFPoint() {
 
-        return factory.getFPlane();
-    }
-
-    private FLine supplyFLine() {
-
-        return factory.getFLine();
+        return factory.getFPoint();
     }
 
     private FVector supplyFVector() {
@@ -586,9 +599,14 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         return factory.getFVector();
     }
 
-    private FPoint supplyFPoint() {
+    private FLine supplyFLine() {
 
-        return factory.getFPoint();
+        return factory.getFLine();
+    }
+
+    private FPlane supplyFPlane() {
+
+        return factory.getFPlane();
     }
 }
 

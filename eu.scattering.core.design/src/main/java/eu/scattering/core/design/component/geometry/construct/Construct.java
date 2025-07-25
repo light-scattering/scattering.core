@@ -5,6 +5,7 @@ import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 public interface Construct<T> extends Geometry {
@@ -30,9 +31,11 @@ public interface Construct<T> extends Geometry {
     boolean isPartOf(Geometry arg);
     boolean isPartOf(Geometry arg, double epsilon);
 
+    FPos3D project(double x, double y, double z);
     void project(FPoint in);
     void project(Geometry in);
 
+    FPos3D reflect(double x, double y, double z);
     void reflect(FPoint in);
     void reflect(Geometry in);
 

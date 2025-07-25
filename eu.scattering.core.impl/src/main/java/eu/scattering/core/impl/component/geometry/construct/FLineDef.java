@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import java.util.Optional;
@@ -173,10 +174,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FLine) {
-            FLine ref = (FLine) object;
+        if (object instanceof FLine fLine) {
 
-            return getRefOrigin().equals(ref.getRefOrigin());
+            return getRefOrigin().equals(fLine.getRefOrigin());
         }
 
         return false;
@@ -194,6 +194,16 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     public boolean isSameLine(FLine arg) {
 
         return arg.isPartOf(origin);
+    }
+
+    // TODO - Not optimized
+    @Override
+    public FPos3D project(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        project(fPoint);
+
+        return fPoint.toFPos3D();
     }
 
     @Override
@@ -215,6 +225,16 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         in.toFPoints()
                 .forEach(this::projectUnit);
+    }
+
+    // TODO - Not optimized
+    @Override
+    public FPos3D reflect(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        reflect(fPoint);
+
+        return fPoint.toFPos3D();
     }
 
     @Override
@@ -279,7 +299,6 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return arg.toFPoints().stream()
                 .allMatch(e -> isUnitPartOf(e, epsilon));
     }
-
 
     @Override
     public double getDistance(FPoint arg) {
@@ -481,15 +500,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         in.moveBaseToCenter();
 
         switch (plane) {
-            case XY:
-                in.getRefHead().setCrossProduct(memoABX, memoABY, 1);
-                break;
-            case YZ:
-                in.getRefHead().setCrossProduct(1, memoABY, memoABZ);
-                break;
-            case XZ:
-                in.getRefHead().setCrossProduct(memoABX, 1, memoABZ);
-                break;
+            case XY -> in.getRefHead().setCrossProduct(memoABX, memoABY, 1);
+            case YZ -> in.getRefHead().setCrossProduct(1, memoABY, memoABZ);
+            case XZ -> in.getRefHead().setCrossProduct(memoABX, 1, memoABZ);
         }
 
         in.moveBase(memoABX, memoABY, memoABZ);
@@ -498,18 +511,18 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private void projectOnPlane(FVector in, Plane plane) {
 
         switch (plane) {
-            case XY:
+            case XY -> {
                 in.getRefBase().setZ(0);
                 in.getRefHead().setZ(0);
-                break;
-            case YZ:
+            }
+            case YZ -> {
                 in.getRefBase().setX(0);
                 in.getRefHead().setX(0);
-                break;
-            case XZ:
+            }
+            case XZ -> {
                 in.getRefBase().setY(0);
                 in.getRefHead().setY(0);
-                break;
+            }
         }
     }
 
@@ -524,15 +537,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     private FPoint setCandidate3D(FPoint in, Plane plane) {
 
         switch (plane) {
-            case XY:
-                setCandidate3DXY(in);
-                break;
-            case YZ:
-                setCandidate3DYZ(in);
-                break;
-            case XZ:
-                setCandidate3DXZ(in);
-                break;
+            case XY -> setCandidate3DXY(in);
+            case YZ -> setCandidate3DYZ(in);
+            case XZ -> setCandidate3DXZ(in);
         }
 
         return in;
@@ -730,9 +737,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
     // -------------------------------------------------------------------------------------------------
 
-    private FLine supplyFLine() {
+    private FPoint supplyFPoint() {
 
-        return factory.getFLine();
+        return factory.getFPoint();
     }
 
     private FVector supplyFVector() {
@@ -740,9 +747,9 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         return factory.getFVector();
     }
 
-    private FPoint supplyFPoint() {
+    private FLine supplyFLine() {
 
-        return factory.getFPoint();
+        return factory.getFLine();
     }
 }
 

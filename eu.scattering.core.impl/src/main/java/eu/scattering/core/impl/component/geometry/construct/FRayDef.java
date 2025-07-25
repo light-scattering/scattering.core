@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
@@ -171,10 +172,9 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FRay) {
-            FRay ref = (FRay) object;
+        if (object instanceof FRay fRay) {
 
-            return getRefOrigin().equals(ref.getRefOrigin());
+            return getRefOrigin().equals(fRay.getRefOrigin());
         }
 
         return false;
@@ -198,6 +198,16 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         return getUnitDistance(arg) > -1;
     }
 
+    // TODO - Not optimized
+    @Override
+    public FPos3D project(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        project(fPoint);
+
+        return fPoint.toFPos3D();
+    }
+
     @Override
     public void project(FPoint in) {
 
@@ -217,6 +227,16 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
         in.toFPoints()
                 .forEach(this::projectUnit);
+    }
+
+    // TODO - Not optimized
+    @Override
+    public FPos3D reflect(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        reflect(fPoint);
+
+        return fPoint.toFPos3D();
     }
 
     @Override
@@ -564,9 +584,9 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
     // -------------------------------------------------------------------------------------------------
 
-    private FRay supplyFRay() {
+    private FPoint supplyFPoint() {
 
-        return factory.getFRay();
+        return factory.getFPoint();
     }
 
     private FVector supplyFVector() {
@@ -574,8 +594,8 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         return factory.getFVector();
     }
 
-    private FPoint supplyFPoint() {
+    private FRay supplyFRay() {
 
-        return factory.getFPoint();
+        return factory.getFRay();
     }
 }

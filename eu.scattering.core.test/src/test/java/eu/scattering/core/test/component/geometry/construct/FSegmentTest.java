@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FSegmentTestHelper;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -456,6 +457,20 @@ public class FSegmentTest {
     class FSegmentAdvancedTest {
 
         @Test
+        @DisplayName("Project primitives")
+        void projectPrimitives() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fSegment.getRefOrigin().addXYZ(offset);
+
+            FPos3D results = fSegment.project(offset.getX(), offset.getY() + 3, offset.getZ());
+
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(results));
+        }
+
+        @Test
         @DisplayName("Project unit")
         void projectUnit() {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
@@ -552,6 +567,16 @@ public class FSegmentTest {
 
             Assertions.assertThrows(IllegalStateException.class, () -> fSegment.project((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Reflect primitives")
+        void reflectPrimitives() {
+            FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
+
+            FPos3D results = fSegment.reflect(0, 3, 0);
+
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(results));
         }
 
         @Test

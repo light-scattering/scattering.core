@@ -12,6 +12,8 @@ public interface FPointFactory {
 
     FPointProducer getFPointProducer();
 
+    FPointHelper getFPointHelper();
+
     //--------------------------------------------------
 
     FPoint getFPoint();

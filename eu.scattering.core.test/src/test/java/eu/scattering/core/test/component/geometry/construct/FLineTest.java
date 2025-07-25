@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.construct.support.FLineTestHelper;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -527,6 +528,20 @@ public class FLineTest {
     class FLineAdvancedTest {
 
         @Test
+        @DisplayName("Project primitives")
+        void projectPrimitives() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fLine.getRefOrigin().addXYZ(offset);
+
+            FPos3D results = fLine.project(offset.getX(), offset.getY() + 3, offset.getZ());
+
+            assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(results));
+        }
+
+        @Test
         @DisplayName("Project unit")
         void projectUnit() {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
@@ -639,6 +654,16 @@ public class FLineTest {
 
             Assertions.assertThrows(IllegalStateException.class, () -> fLine.project((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Reflect primitives")
+        void reflectPrimitives() {
+            FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
+
+            FPos3D results = fLine.reflect(0, 3, 0);
+
+            assertTrue(factory.getFPoint(2, -1, 2).isSimilar(results));
         }
 
         @Test

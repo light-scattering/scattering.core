@@ -493,6 +493,15 @@ public class FDraftTest {
         }
 
         @Test
+        @DisplayName("Project primitives")
+        void projectPrimitives() {
+            FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 2, 3));
+
+            assertThrows(RuntimeException.class, () -> fDraft.project(4, 5, 6),
+                    "The method should not be implemented");
+        }
+
+        @Test
         @DisplayName("Project unit")
         void projectUnit() {
             FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 2, 3));
@@ -509,6 +518,15 @@ public class FDraftTest {
             FPoint fPoint = factory.getFPoint(4, 5, 6);
 
             assertThrows(RuntimeException.class, () -> fDraft.project((Geometry) fPoint),
+                    "The method should not be implemented");
+        }
+
+        @Test
+        @DisplayName("Reflect primitives")
+        void reflectPrimitives() {
+            FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 2, 3));
+
+            assertThrows(RuntimeException.class, () -> fDraft.reflect(4, 5, 6),
                     "The method should not be implemented");
         }
 

@@ -635,6 +635,21 @@ public class FPlaneTest {
     class FPlaneAdvancedTest {
 
         @Test
+        @DisplayName("Project primitives")
+        void projectPrimitives() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+
+            FPoint offset = TestHelper.getRandFPoint();
+
+            fPlane.getRefOrigin().addXYZ(offset);
+
+            FPos3D results = fPlane.project(offset.getX(), offset.getY() + 3, offset.getZ());
+
+            assertTrue(factory.getFPoint(-1, 2, -1).addXYZ(offset).isSimilar(results),
+                    "The projection is erroneous");
+        }
+
+        @Test
         @DisplayName("Project unit")
         void projectUnit() {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
@@ -709,6 +724,17 @@ public class FPlaneTest {
 
             Assertions.assertThrows(IllegalStateException.class, () -> fPlane.project((Geometry) fPoint),
                     "The origin is a non-directional FVector");
+        }
+
+        @Test
+        @DisplayName("Reflect primitives")
+        void reflectPrimitives() {
+            FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
+
+            FPos3D results = fPlane.reflect(0, 3, 0);
+
+            assertTrue(factory.getFPoint(-2, 1, -2).isSimilar(results),
+                    "The reflection is erroneous");
         }
 
         @Test

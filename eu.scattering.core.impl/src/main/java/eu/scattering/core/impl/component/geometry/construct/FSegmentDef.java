@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.construct.ConstructFactory;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
@@ -171,10 +172,9 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FSegment) {
-            var ref = (FSegment) object;
+        if (object instanceof FSegment fSegment) {
 
-            return getRefOrigin().equals(ref.getRefOrigin());
+            return getRefOrigin().equals(fSegment.getRefOrigin());
         }
 
         return false;
@@ -198,6 +198,16 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         return getUnitDistance(arg) > -1;
     }
 
+    // TODO - Not optimized
+    @Override
+    public FPos3D project(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        project(fPoint);
+
+        return fPoint.toFPos3D();
+    }
+
     @Override
     public void project(FPoint in) {
 
@@ -217,6 +227,16 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
         in.toFPoints()
                 .forEach(this::projectUnit);
+    }
+
+    // TODO - Not optimized
+    @Override
+    public FPos3D reflect(double x, double y, double z) {
+        FPoint fPoint = supplyFPoint().set(x, y, z);
+
+        reflect(fPoint);
+
+        return fPoint.toFPos3D();
     }
 
     @Override
@@ -448,13 +468,18 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
     // -------------------------------------------------------------------------------------------------
 
-    private FSegment supplyFSegment() {
+    private FPoint supplyFPoint() {
 
-        return factory.getFSegment();
+        return factory.getFPoint();
     }
 
     private FVector supplyFVector() {
 
         return factory.getFVector();
+    }
+
+    private FSegment supplyFSegment() {
+
+        return factory.getFSegment();
     }
 }
