@@ -73,20 +73,20 @@ public class FDraftProducerDef implements FDraftProducer {
     }
 
     @Override
-    public List<FDraft> getListAuto() {
+    public List<FDraft> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FDraft> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FDraft> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
     }
 }

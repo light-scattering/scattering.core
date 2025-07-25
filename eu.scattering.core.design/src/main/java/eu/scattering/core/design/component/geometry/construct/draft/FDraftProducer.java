@@ -14,7 +14,7 @@ public interface FDraftProducer extends Producer<FDraft> {
     @Override
     FDraft produce();
     @Override
-    List<FDraft> getListAuto();
+    List<FDraft> getList();
     @Override
     List<FDraft> getListRandomized(int quantity);
     @Override

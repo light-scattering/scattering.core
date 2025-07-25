@@ -140,7 +140,7 @@ public class FDraftProducerTest {
         int qValue2 = 0;
         int qValue3 = 0;
 
-        for (FDraft construct : producer.getListAuto()) {
+        for (FDraft construct : producer.getList()) {
 
             if (construct.getRefOrigin().getHeadX() == 1) {
                 qValue1++;

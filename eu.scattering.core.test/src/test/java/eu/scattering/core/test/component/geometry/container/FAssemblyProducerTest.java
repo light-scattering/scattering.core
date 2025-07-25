@@ -154,7 +154,7 @@ public class FAssemblyProducerTest {
         int aCountB = 0;
         int qCountC = 0;
 
-        for (FAssembly<FSphere> fAssembly : producer.getListAuto()) {
+        for (FAssembly<FSphere> fAssembly : producer.getList()) {
 
             if (fAssembly.asList().get(0).getRadius() == 1) {
                 qCountA++;

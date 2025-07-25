@@ -121,7 +121,7 @@ public class FVectorProducerTest {
         int qLength2 = 0;
         int qLength3 = 0;
 
-        for (FVector fVector : producer.getListAuto()) {
+        for (FVector fVector : producer.getList()) {
 
             if (fVector.getHeadX() == 1) {
                 qLength1++;

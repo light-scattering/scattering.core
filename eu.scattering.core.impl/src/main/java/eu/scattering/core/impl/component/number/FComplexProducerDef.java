@@ -71,20 +71,20 @@ public class FComplexProducerDef implements FComplexProducer {
     }
 
     @Override
-    public List<FComplex> getListAuto() {
+    public List<FComplex> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FComplex> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FComplex> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
     }
 }

@@ -119,7 +119,7 @@ public class FComplexProducerTest {
         int qRe2 = 0;
         int qRe3 = 0;
 
-        for (FComplex fComplex : producer.getListAuto()) {
+        for (FComplex fComplex : producer.getList()) {
 
             if (fComplex.getRe() == 1) {
                 qRe1++;

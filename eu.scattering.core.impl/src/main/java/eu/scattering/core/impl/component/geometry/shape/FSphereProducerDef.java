@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.util.support.Producer;
@@ -12,16 +13,17 @@ import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class FSphereProducerDef implements FSphereProducer {
-    private static final Consumer<List<FSphere>> ITERATOR_PROCESSOR;
+    private static final Consumer<List<FSphere>> MUTATION_ITERATION;
 
     static {
-        ITERATOR_PROCESSOR =  (list) -> {
+        MUTATION_ITERATION =  (list) -> {
             for (int i = 0 ; i < list.size() ; i++) {
                 list.get(i).setIndex(i);
             }
@@ -30,9 +32,9 @@ public class FSphereProducerDef implements FSphereProducer {
 
     private final FSphereFactory factory;
     private final ProducerCoreDef<FSphere> processor;
-    private final FRandEngine rndEngine;
+    private final FRandEngine randomizer;
 
-    private String tag = null;
+    private String meta = null;
     private FCache cache = null;
     private Double delta = null;
     private Double epsilon = null;
@@ -42,8 +44,10 @@ public class FSphereProducerDef implements FSphereProducer {
     private FSphereProducerDef(FSphereFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
+        this.randomizer = randomizer;
+        this.processor = new ProducerCoreDef<>(this.randomizer.getFRand());
+
+        this.processor.addMutation(MUTATION_ITERATION);
     }
 
     public static FSphereProducer create(FSphereFactory factory, FRandEngine randomizer) {
@@ -62,7 +66,7 @@ public class FSphereProducerDef implements FSphereProducer {
     @Override
     public FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandEngine, FSphere> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, randomizer), weight);
 
         return this;
     }
@@ -71,8 +75,8 @@ public class FSphereProducerDef implements FSphereProducer {
     public FSphere produce() {
         FSphere fSphere = processor.produce();
 
-        if (this.tag != null) {
-            fSphere.setMeta(this.tag);
+        if (this.meta != null) {
+            fSphere.setMeta(this.meta);
         }
 
         if (this.delta != null) {
@@ -97,7 +101,7 @@ public class FSphereProducerDef implements FSphereProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSphereProducer withFixedRadius(double radius, int weight) {
+    public FSphereProducer withFixRadius(double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FSphere fSphere = factory.getFSphere();
@@ -129,7 +133,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndFixedRadius(FDist3D dCenter, double radius, int weight) {
+    public FSphereProducer withDistCenterAndFixRadius(FDist3D dCenter, double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> factory.getFSphere(dCenter.produce(), radius);
 
@@ -139,7 +143,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndFixedRadius(Producer<FPoint> pCenter, double radius, int weight) {
+    public FSphereProducer withProdCenterAndFixRadius(Producer<FPoint> pCenter, double radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FPoint fPoint = pCenter.produce();
@@ -156,7 +160,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndDistRadius(FDist3D dCenter, FDist1D radius, int weight) {
+    public FSphereProducer withDistCenterAndDistRadius(FDist3D dCenter, FDist1D radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> factory.getFSphere(dCenter.produce(), radius.produce());
 
@@ -166,7 +170,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCenterAndDistRadius(Producer<FPoint> pCenter, FDist1D radius, int weight) {
+    public FSphereProducer withProdCenterAndDistRadius(Producer<FPoint> pCenter, FDist1D radius, int weight) {
 
         Function<FSphereFactory, FSphere> function = (factory) -> {
             FPoint fPoint = pCenter.produce();
@@ -185,8 +189,8 @@ public class FSphereProducerDef implements FSphereProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSphereProducer setTag(String tag) {
-        this.tag = tag;
+    public FSphereProducer setMeta(String meta) {
+        this.meta = meta;
 
         return this;
     }
@@ -221,6 +225,13 @@ public class FSphereProducerDef implements FSphereProducer {
         return this;
     }
 
+    @Override
+    public FSphereProducer forceNoOverlap() {
+        this.processor.addValidation((fSphere, results) -> fSphere.overlaps(results) == 0);
+
+        return this;
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -230,21 +241,45 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public List<FSphere> getListAuto() {
+    public List<FSphere> getList() {
 
-        return this.processor.getListAdopted(ITERATOR_PROCESSOR);
+        return this.processor.getList();
     }
 
     @Override
     public List<FSphere> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, ITERATOR_PROCESSOR);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FSphere> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, ITERATOR_PROCESSOR);
+        return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public FSphereProducer addMutation(Consumer<List<FSphere>> mutation) {
+
+        this.processor.addMutation(mutation);
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer addValidation(BiFunction<FSphere, List<FSphere>, Boolean> validation) {
+
+        this.processor.addValidation(validation);
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer addCorrection(BiConsumer<FSphere, FRandGenerator> correction) {
+
+        this.processor.addCorrection(correction);
+
+        return this;
     }
 }
 

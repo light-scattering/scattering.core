@@ -61,20 +61,20 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
     }
 
     @Override
-    public List<FAssembly<T>> getListAuto() {
+    public List<FAssembly<T>> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FAssembly<T>> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FAssembly<T>> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
     }
 }

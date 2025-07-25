@@ -140,7 +140,7 @@ public class FSegmentProducerTest {
         int qValue2 = 0;
         int qValue3 = 0;
 
-        for (FSegment construct : producer.getListAuto()) {
+        for (FSegment construct : producer.getList()) {
 
             if (construct.getRefOrigin().getHeadX() == 1) {
                 qValue1++;

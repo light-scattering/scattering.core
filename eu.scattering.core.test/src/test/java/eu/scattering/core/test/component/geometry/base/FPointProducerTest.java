@@ -12,9 +12,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -124,7 +126,7 @@ public class FPointProducerTest {
         int qLength2 = 0;
         int qLength3 = 0;
 
-        for (FPoint fPoint : producer.getListAuto()) {
+        for (FPoint fPoint : producer.getList()) {
 
             if (fPoint.getX() == 1) {
                 qLength1++;
@@ -626,5 +628,171 @@ public class FPointProducerTest {
             assertEquals(valA, valB,
                     "Elements must be equal");
         }
+    }
+
+    @Test
+    @DisplayName("Add correction")
+    void addCorrection() {
+        FPoint center = factory.getFPoint();
+
+        Producer<FPoint> producer = factory.getFPointProducer(10, FPointProducer.Location.IN_SPHERE)
+                .addCorrection((fPoint, randomizer) -> fPoint.setDistance(center, 1));
+
+        center.set(1, 2, 3);
+
+        FPoint fPointA = producer.produce();
+
+        Assertions.assertAll("Validate FPoint A",
+                () -> assertEquals(fPointA.getDistance(center), 1,
+                        EPSILON, "The position is erroneous")
+        );
+
+        center.set(4, 5, 6);
+
+        FPoint fPointB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint B",
+                () -> assertEquals(fPointB.getDistance(center), 1,
+                        EPSILON, "The position is erroneous"),
+                () -> assertNotSame(fPointA, fPointB,
+                        "The reference should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Add mutation")
+    void addMutation() {
+        Producer<FPoint> producer = factory.getFPointProducer(10, FPointProducer.Location.IN_SPHERE)
+                .addMutation((list) -> list.forEach(e -> {
+                    e.setX(Math.abs(e.getX()));
+                    e.setY(Math.abs(e.getY()));
+                    e.setZ(Math.abs(e.getZ()));
+                }));
+
+        List<FPoint> results = producer.getListFixed(2);
+
+        Assertions.assertAll("Validate FPoint A",
+                () -> assertTrue(results.get(0).getX() > 0,
+                        "The x value of FPoint A is erroneous"),
+                () -> assertTrue(results.get(0).getY() > 0,
+                        "The y value of FPoint A is erroneous"),
+                () -> assertTrue(results.get(0).getZ() > 0,
+                        "The z value of FPoint A is erroneous")
+        );
+
+        Assertions.assertAll("Validate FPoint B",
+                () -> assertTrue(results.get(1).getX() > 0,
+                        "The x value of FPoint B is erroneous"),
+                () -> assertTrue(results.get(1).getY() > 0,
+                        "The y value of FPoint B is erroneous"),
+                () -> assertTrue(results.get(1).getZ() > 0,
+                        "The z value of FPoint B is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Add validation")
+    void addValidation() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> producer = factory.getFPointProducer(range)
+                .addValidation((fPoint, results) -> {
+                    for (FPoint result : results) {
+                        if (fPoint.getDistance(result) < 2) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+        List<FPoint> results = new ArrayList<>();
+
+        while (true) {
+            FPoint candidate = producer.produce();
+
+            if (candidate != null) {
+                results.add(candidate);
+            } else {
+                break;
+            }
+        }
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Validate list")
+    void validateList() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> producer = factory.getFPointProducer(range)
+                .addValidation((fPoint, results) -> {
+                    for (FPoint result : results) {
+                        if (fPoint.getDistance(result) < 2) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+        List<FPoint> results = producer.getList();
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Validate list (fixed)")
+    void validateListFixed() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> producer = factory.getFPointProducer(range)
+                .addValidation((fPoint, results) -> {
+                    for (FPoint result : results) {
+                        if (fPoint.getDistance(result) < 2) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+        List<FPoint> results = producer.getListFixed(100);
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Validate list (randomized)")
+    void validateListRandomized() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> producer = factory.getFPointProducer(range)
+                .addValidation((fPoint, results) -> {
+                    for (FPoint result : results) {
+                        if (fPoint.getDistance(result) < 2) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+
+        List<FPoint> results = producer.getListRandomized(100);
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
     }
 }

@@ -13,7 +13,7 @@ public interface FComplexProducer extends Producer<FComplex> {
     @Override
     FComplex produce();
     @Override
-    List<FComplex> getListAuto();
+    List<FComplex> getList();
     @Override
     List<FComplex> getListRandomized(int quantity);
     @Override

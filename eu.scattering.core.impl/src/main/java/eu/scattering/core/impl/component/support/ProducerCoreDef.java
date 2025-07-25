@@ -4,12 +4,20 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class ProducerCoreDef<E> {
-    private final List<ProducerRecord> config = new ArrayList<>();
+    private final List<ProducerRecord> records = new ArrayList<>();
+
+    private final List<E> storage = new ArrayList<>();
+
+    private final List<Consumer<List<E>>> mutations = new ArrayList<>();
+    private final List<BiFunction<E, List<E>, Boolean>> validations = new ArrayList<>();
+    private final List<BiConsumer<E, FRandGenerator>> corrections = new ArrayList<>();
 
     private final FRandGenerator randomizer;
 
@@ -18,30 +26,88 @@ public class ProducerCoreDef<E> {
         this.randomizer = randomizer;
     }
 
-    public void addConfig(Supplier<E> supplier) {
-
-        this.addConfig(supplier, 1);
-    }
-
     public void addConfig(Supplier<E> supplier, int weight) {
 
-        this.config.add(new ProducerRecord(weight, supplier));
+        this.records.add(new ProducerRecord(weight, supplier));
+    }
+
+    public void addMutation(Consumer<List<E>> mutation) {
+
+        this.mutations.add(mutation);
+    }
+
+    public void addValidation(BiFunction<E, List<E>, Boolean> validation) {
+
+        this.validations.add(validation);
+    }
+
+    public void addCorrection(BiConsumer<E, FRandGenerator> correction) {
+
+        this.corrections.add(correction);
     }
 
     public E produce() {
 
-        validateState();
+        return produce(getSupplier());
+    }
 
-        return getSupplier().get();
+    private E produce(Supplier<E> supplier) {
+        validateState(0);
+
+        if (this.validations.size() == 0) {
+            E candidate = supplier.get();
+
+            for (var correction : this.corrections) {
+                correction.accept(candidate, randomizer);
+            }
+
+            return candidate;
+        }
+
+        int iteration = 0;
+        int maxIteration = 100;
+
+        validation:
+        while (iteration++ < maxIteration) {
+            E candidate = supplier.get();
+
+            for (var correction : this.corrections) {
+                correction.accept(candidate, randomizer);
+            }
+
+            for (var validation : this.validations) {
+                if (!validation.apply(candidate, this.storage)) {
+                    continue validation;
+                }
+            }
+
+            this.storage.add(candidate);
+
+            return candidate;
+        }
+
+        return null;
+    }
+
+    private void produceAndAdd(Supplier<E> supplier, List<E> results, int quantity) {
+
+        for (int i = 0; i < quantity; i++) {
+            E candidate = produce(supplier);
+
+            if (candidate != null) {
+                results.add(candidate);
+            } else {
+                throw new IllegalStateException("Generation error");
+            }
+        }
     }
 
     // -------------------------------------------------------------------------------------------------
 
     private Supplier<E> getSupplier() {
+        validateState(0);
 
-        validateState();
-
-        if (this.config.size() == 1) {
+        if (this.records.size() == 1) {
             return this.getSupplierFixed();
         }
 
@@ -50,15 +116,15 @@ public class ProducerCoreDef<E> {
 
     private Supplier<E> getSupplierFixed() {
 
-        return this.config.get(0).getSupplier();
+        return this.records.get(0).getSupplier();
     }
 
     private Supplier<E> getSupplierRandomized() {
-        double valueMax = this.config.stream().map(ProducerRecord::getWeight).reduce(0, Integer::sum);
+        double valueMax = this.records.stream().map(ProducerRecord::getWeight).reduce(0, Integer::sum);
         double valueRandom = this.randomizer.nextDouble(0, valueMax);
 
         double value = 0;
-        for (var record : this.config) {
+        for (var record : this.records) {
             value += record.getWeight();
 
             if (valueRandom < value) {
@@ -72,95 +138,87 @@ public class ProducerCoreDef<E> {
     // -------------------------------------------------------------------------------------------------
 
     public Stream<E> stream() {
-
-        validateState();
+        validateState(0);
 
         return Stream.generate(this::produce);
     }
 
-    public List<E> getListAdopted(Consumer<List<E>> consumer) {
+    public List<E> getList() {
+        validateState(0);
 
-        validateState();
+        List<E> results = getListInitial(getWeightTotal());
 
-        List<E> results = getInitialList(getWeight());
+        try {
+            updateListWeighted(results);
+        } catch (Exception ignored) {}
 
-        getListAuto(results);
-
-        mutateResults(results, consumer);
-
-        return results;
-    }
-
-    public List<E> getListRandomized(int quantity, Consumer<List<E>> consumer) {
-
-        validateState();
-
-        if (quantity < 0) {
-            throw new IllegalArgumentException("The quantity must be at least zero");
-        }
-
-        List<E> results = getInitialList(quantity);
-
-        for (int i = 0 ; i < quantity ; i++) {
-            results.add(produce());
-        }
-
-        mutateResults(results, consumer);
+        mutateResults(results);
 
         return results;
     }
 
-    public List<E> getListFixed(int quantity, Consumer<List<E>> consumer) {
+    public List<E> getListFixed(int quantity) {
+        validateState(quantity);
 
-        validateState();
+        List<E> results = getListInitial(quantity);
 
-        List<E> results = getInitialList(quantity);
-
-        if (quantity < 0) {
-            throw new IllegalArgumentException("The quantity must be at least zero");
-        } else if (quantity == 0) {
-            getListEmpty();
-        } else if (getWeight() % quantity == 0) {
-            getListAuto(results, quantity);
-        } else {
-            getListDefault(results, quantity);
-        }
-
-        mutateResults(results, consumer);
-
-        return results;
-    }
-
-    private void validateState() {
-
-        if (this.config.isEmpty()) {
-            throw new IllegalStateException("The provider has not been configured");
-        }
-    }
-
-    private void getListEmpty() {}
-
-    private void getListAuto(List<E> results) {
-
-        this.config.forEach(e -> {
-            for (int i = 0 ; i < e.getWeight() ; i++) {
-                results.add(e.getSupplier().get());
+        try {
+             if (quantity == 0) {
+                updateListEmpty();
+            } else if (getWeightTotal() % quantity == 0) {
+                updateListWeightedMultiplied(results, quantity);
+            } else {
+                updateListDefault(results, quantity);
             }
-        });
+        } catch (Exception ignored) {}
+
+        mutateResults(results);
+
+        return results;
     }
 
-    private void getListAuto(List<E> results, int quantity) {
+    public List<E> getListRandomized(int quantity) {
+        validateState(quantity);
 
-        for (int i = 0; i < (getWeight() / quantity); i++) {
-            getListAuto(results);
+        List<E> results = getListInitial(quantity);
+
+        try {
+            for (int i = 0; i < quantity; i++) {
+                produceAndAdd(getSupplier(), results, 1);
+            }
+        } catch (Exception ignored) {}
+
+        mutateResults(results);
+
+        return results;
+    }
+
+    private List<E> getListInitial(int quantity) {
+
+        return new ArrayList<>(Math.max(quantity, 0));
+    }
+
+    private void updateListEmpty() {}
+
+    private void updateListWeighted(List<E> results) {
+
+        for (ProducerRecord record : this.records) {
+            produceAndAdd(record.getSupplier(), results, record.getWeight());
         }
     }
 
-    private void getListDefault(List<E> results, int quantity) {
+    private void updateListWeightedMultiplied(List<E> results, int quantity) {
+
+        for (int i = 0; i < (getWeightTotal() / quantity); i++) {
+            updateListWeighted(results);
+        }
+    }
+
+    private void updateListDefault(List<E> results, int quantity) {
         int quantityRemaining = quantity;
 
-        for (int i = 0 ; i < this.config.size() ; i++) {
-            if (isLastIteration(i)) {
+        for (int i = 0; i < this.records.size() ; i++) {
+            if (i == this.records.size() - 1) {
                 quantityRemaining -= iterateLast(results, quantityRemaining);
             } else {
                 quantityRemaining -= iterate(results, quantityRemaining, i);
@@ -168,22 +226,15 @@ public class ProducerCoreDef<E> {
         }
     }
 
-    private boolean isLastIteration(int index) {
-
-        return index == this.config.size() - 1;
-    }
-
     private int iterate(List<E> results, int size, int index) {
-        ProducerRecord record = this.config.get(index);
+        ProducerRecord record = this.records.get(index);
 
-        double weight = getWeight(index);
+        double weight = getWeightRemaining(index);
         double probability = record.getWeight() / weight;
 
         int quantity = (int) Math.round(probability * size);
 
-        for (int i = 0; i < quantity; i++) {
-            results.add(record.getSupplier().get());
-        }
+        produceAndAdd(record.getSupplier(), results, quantity);
 
         return quantity;
     }
@@ -201,6 +252,8 @@ public class ProducerCoreDef<E> {
         return 0;
     }
 
+    private void iterateLastKeep() {}
+
     private void iterateLastTrim(List<E> results, int size) {
 
         for (int i = 0 ; i > size ; i--) {
@@ -208,46 +261,50 @@ public class ProducerCoreDef<E> {
         }
     }
 
-    private void iterateLastKeep() {}
-
     private void iterateLastExpand(List<E> results, int size) {
-        ProducerRecord record = this.config.get(this.config.size() - 1);
+        ProducerRecord record = this.records.get(this.records.size() - 1);
 
-        for (int i = 0 ; i < size ; i++) {
-            results.add(record.getSupplier().get());
-        }
+        produceAndAdd(record.getSupplier(), results, size);
     }
 
-    private int getWeight() {
+    private int getWeightTotal() {
 
-        return getWeight(0);
+        return getWeightRemaining(0);
     }
 
-    private int getWeight(int index) {
+    private int getWeightRemaining(int index) {
 
-        if (index < 0 || index >= this.config.size()) {
+        if (index < 0 || index >= this.records.size()) {
             throw new IllegalStateException("The index position is erroneous");
         }
 
         int weight = 0;
-        for (int j = index; j < this.config.size(); j++) {
-            weight += this.config.get(j).getWeight();
+        for (int j = index; j < this.records.size(); j++) {
+            weight += this.records.get(j).getWeight();
         }
 
         return weight;
     }
 
-    private List<E> getInitialList(int quantity) {
+    private void mutateResults(List<E> results) {
 
-        return new ArrayList<>(Math.max(quantity, 0));
+        if (this.mutations.size() > 0) {
+            this.randomizer.shuffle(results);
+
+            for (var mutation : this.mutations) {
+                mutation.accept(results);
+            }
+        }
     }
 
-    private void mutateResults(List<E> results, Consumer<List<E>> consumer) {
+    private void validateState(int quantity) {
 
-        randomizer.shuffle(results);
+        if (this.records.isEmpty()) {
+            throw new IllegalStateException("The provider is not configured");
+        }
 
-        if (consumer != null) {
-            consumer.accept(results);
+        if (quantity < 0) {
+            throw new IllegalArgumentException("The quantity must be at least zero");
         }
     }
 

@@ -10,7 +10,9 @@ import eu.scattering.core.impl.component.support.ProducerCoreDef;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -116,20 +118,44 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public List<FPoint> getListAuto() {
+    public List<FPoint> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FPoint> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FPoint> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public FPointProducer addMutation(Consumer<List<FPoint>> mutation) {
+
+        this.processor.addMutation(mutation);
+
+        return this;
+    }
+
+    @Override
+    public FPointProducer addValidation(BiFunction<FPoint, List<FPoint>, Boolean> validation) {
+
+        this.processor.addValidation(validation);
+
+        return this;
+    }
+
+    @Override
+    public FPointProducer addCorrection(BiConsumer<FPoint, FRandGenerator> correction) {
+
+        this.processor.addCorrection(correction);
+
+        return this;
     }
 }

@@ -69,7 +69,7 @@ public interface FSphereFactory {
 
     default FSphereProducer getFSphereProducer(double radius) {
 
-        return getFSphereProducer().withFixedRadius(radius);
+        return getFSphereProducer().withFixRadius(radius);
     }
 
     default FSphereProducer getFSphereProducer(FDist1D radius) {
@@ -79,21 +79,21 @@ public interface FSphereFactory {
 
     default FSphereProducer getFSphereProducer(FDist3D dCenter, double radius) {
 
-        return getFSphereProducer().withCenterAndFixedRadius(dCenter, radius);
-    }
-
-    default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, double radius) {
-
-        return getFSphereProducer().withCenterAndFixedRadius(pCenter, radius);
+        return getFSphereProducer().withDistCenterAndFixRadius(dCenter, radius);
     }
 
     default FSphereProducer getFSphereProducer(FDist3D dCenter, FDist1D radius) {
 
-        return getFSphereProducer().withCenterAndDistRadius(dCenter, radius);
+        return getFSphereProducer().withDistCenterAndDistRadius(dCenter, radius);
+    }
+
+    default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, double radius) {
+
+        return getFSphereProducer().withProdCenterAndFixRadius(pCenter, radius);
     }
 
     default FSphereProducer getFSphereProducer(Producer<FPoint> pCenter, FDist1D radius) {
 
-        return getFSphereProducer().withCenterAndDistRadius(pCenter, radius);
+        return getFSphereProducer().withProdCenterAndDistRadius(pCenter, radius);
     }
 }

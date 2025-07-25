@@ -10,7 +10,7 @@ public interface ShapeProducer extends Producer<Shape> {
     @Override
     Shape produce();
     @Override
-    List<Shape> getListAuto();
+    List<Shape> getList();
     @Override
     List<Shape> getListRandomized(int quantity);
     @Override

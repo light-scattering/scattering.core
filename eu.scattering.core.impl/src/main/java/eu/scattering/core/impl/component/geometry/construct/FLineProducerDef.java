@@ -73,20 +73,20 @@ public class FLineProducerDef implements FLineProducer {
     }
 
     @Override
-    public List<FLine> getListAuto() {
+    public List<FLine> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FLine> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FLine> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
     }
 }

@@ -14,7 +14,7 @@ public interface FPlaneProducer extends Producer<FPlane> {
     @Override
     FPlane produce();
     @Override
-    List<FPlane> getListAuto();
+    List<FPlane> getList();
     @Override
     List<FPlane> getListRandomized(int quantity);
     @Override

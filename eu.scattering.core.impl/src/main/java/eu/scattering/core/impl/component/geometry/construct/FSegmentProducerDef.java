@@ -73,20 +73,20 @@ public class FSegmentProducerDef implements FSegmentProducer {
     }
 
     @Override
-    public List<FSegment> getListAuto() {
+    public List<FSegment> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FSegment> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FSegment> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
     }
 }

@@ -34,7 +34,7 @@ public class ShapeProducerTest {
     @DisplayName("Produce")
     void produceWithProvider() {
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                .withFixedRadius(3);
+                .withFixRadius(3);
 
         Producer<Shape> producer = factory.getShapeProducer()
                 .withProducer(fSphereProducer, 1);
@@ -60,7 +60,7 @@ public class ShapeProducerTest {
     @DisplayName("Produce (simple)")
     void produceWithProviderSimple() {
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
-                .withFixedRadius(3);
+                .withFixRadius(3);
 
         Producer<Shape> producer = factory.getShapeProducer()
                 .withProducer(fSphereProducer);
@@ -135,7 +135,7 @@ public class ShapeProducerTest {
         int qRadius3 = 0;
 
         int i = 0;
-        for (Shape shape : producer.getListAuto()) {
+        for (Shape shape : producer.getList()) {
 
             if (shape.getIndex() != i++) {
                 throw new IllegalStateException("The index is erroneous");

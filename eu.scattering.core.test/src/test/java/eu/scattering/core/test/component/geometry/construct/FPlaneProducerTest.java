@@ -140,7 +140,7 @@ public class FPlaneProducerTest {
         int qValue2 = 0;
         int qValue3 = 0;
 
-        for (FPlane construct : producer.getListAuto()) {
+        for (FPlane construct : producer.getList()) {
 
             if (construct.getRefOrigin().getHeadX() == 1) {
                 qValue1++;

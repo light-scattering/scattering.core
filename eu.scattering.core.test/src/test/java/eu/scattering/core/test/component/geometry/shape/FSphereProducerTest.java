@@ -10,11 +10,10 @@ import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.FactoryDef;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -132,7 +131,7 @@ public class FSphereProducerTest {
         int qRadius3 = 0;
 
         int i = 0;
-        for (FSphere fSphere : producer.getListAuto()) {
+        for (FSphere fSphere : producer.getList()) {
 
             if (fSphere.getIndex() != i++) {
                 throw new IllegalStateException("The index is erroneous");
@@ -159,7 +158,7 @@ public class FSphereProducerTest {
     void iterateAutoException() {
         FSphereProducer producer = factory.getFSphereProducer();
 
-        assertThrows(IllegalStateException.class, producer::getListAuto,
+        assertThrows(IllegalStateException.class, producer::getList,
                 "The producer should not be configured");
     }
 
@@ -493,7 +492,7 @@ public class FSphereProducerTest {
     @DisplayName("Preset fixed radius")
     void presetFixedRadius() {
         FSphereProducer producer = factory.getFSphereProducer()
-                .withFixedRadius(5, 1);
+                .withFixRadius(5, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -520,7 +519,7 @@ public class FSphereProducerTest {
     @DisplayName("Preset fixed radius (simple)")
     void presetFixedRadiusSimple() {
         FSphereProducer producer = factory.getFSphereProducer()
-                .withFixedRadius(5);
+                .withFixRadius(5);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -602,7 +601,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndFixedRadius(pCenter, 5, 1);
+                .withProdCenterAndFixRadius(pCenter, 5, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -636,7 +635,7 @@ public class FSphereProducerTest {
                 });
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndFixedRadius(center, 5, 1);
+                .withDistCenterAndFixRadius(center, 5, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -666,7 +665,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndFixedRadius(pCenter, 5);
+                .withProdCenterAndFixRadius(pCenter, 5);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -699,7 +698,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndDistRadius(center, radius, 1);
+                .withProdCenterAndDistRadius(center, radius, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -736,7 +735,7 @@ public class FSphereProducerTest {
                 });
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndDistRadius(center, radius, 1);
+                .withDistCenterAndDistRadius(center, radius, 1);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -769,7 +768,7 @@ public class FSphereProducerTest {
                 .withCustomRule((factory) -> factory.getFPoint(1, 2, 3));
 
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCenterAndDistRadius(pCenter, radius);
+                .withProdCenterAndDistRadius(pCenter, radius);
 
         FSphere resultA = producer.produce();
         FSphere resultB = producer.produce();
@@ -851,7 +850,7 @@ public class FSphereProducerTest {
     void setters() {
 
         FSphereProducer producerA = factory.getFSphereProducer()
-                .withFixedRadius(1);
+                .withFixRadius(1);
 
         FSphere resultA = producerA.produce();
 
@@ -869,7 +868,7 @@ public class FSphereProducerTest {
         FCache cache = factory.getFCache();
 
         FSphereProducer producerB = producerA
-                .setTag("123")
+                .setMeta("123")
                 .setEpsilon(1)
                 .setDelta(2)
                 .setCache(cache);
@@ -986,7 +985,7 @@ public class FSphereProducerTest {
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(5);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
-                .withFixedRadius(5);
+                .withFixRadius(5);
 
         for (int i = 0 ; i < 10 ; i++) {
             var valA = producerA.produce();
@@ -1037,7 +1036,7 @@ public class FSphereProducerTest {
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(prodA, 5);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
-                .withCenterAndFixedRadius(prodB, 5);
+                .withProdCenterAndFixRadius(prodB, 5);
 
         for (int i = 0 ; i < 10 ; i++) {
             var valA = producerA.produce();
@@ -1067,7 +1066,7 @@ public class FSphereProducerTest {
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(prodA, distRA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
-                .withCenterAndDistRadius(prodB, distRB);
+                .withProdCenterAndDistRadius(prodB, distRB);
 
         for (int i = 0 ; i < 10 ; i++) {
             var valA = producerA.produce();
@@ -1091,7 +1090,7 @@ public class FSphereProducerTest {
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, 5);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
-                .withCenterAndFixedRadius(distPB, 5);
+                .withDistCenterAndFixRadius(distPB, 5);
 
         for (int i = 0 ; i < 10 ; i++) {
             var valA = producerA.produce();
@@ -1118,7 +1117,7 @@ public class FSphereProducerTest {
 
         Producer<FSphere> producerA = factoryA.getFSphereProducer(distPA, distRA);
         Producer<FSphere> producerB = factoryB.getFSphereProducer()
-                .withCenterAndDistRadius(distPB, distRB);
+                .withDistCenterAndDistRadius(distPB, distRB);
 
         for (int i = 0 ; i < 10 ; i++) {
             var valA = producerA.produce();
@@ -1127,5 +1126,170 @@ public class FSphereProducerTest {
             assertEquals(valA, valB,
                     "Elements must be equal");
         }
+    }
+
+    @Test
+    @DisplayName("Add correction")
+    void addCorrection() {
+        FPoint center = factory.getFPoint();
+
+        Producer<FSphere> producer = factory.getFSphereProducer(1)
+                .addCorrection((fSphere, randomizer) -> fSphere.setCenter(center))
+                .addCorrection((fSphere, randomizer) -> fSphere.setMeta("TEST"));
+
+        center.set(1, 2, 3);
+
+        FSphere fSphereA = producer.produce();
+
+        Assertions.assertAll("Validate FSphere A",
+                () -> assertEquals("TEST", fSphereA.getMeta(),
+                        "The tag is erroneous"),
+                () -> assertTrue(fSphereA.isExact(factory.getFSphere(1, 2, 3, 1)),
+                        "The position is erroneous")
+        );
+
+        center.set(4, 5, 6);
+
+        FSphere fSphereB = producer.produce();
+
+        Assertions.assertAll("Validate FSphere B",
+                () -> assertEquals("TEST", fSphereB.getMeta(),
+                        "The tag is erroneous"),
+                () -> assertTrue(fSphereB.isExact(factory.getFSphere(4, 5, 6, 1)),
+                        "The position is erroneous"),
+                () -> assertNotSame(fSphereA, fSphereB,
+                        "The reference should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Add mutation")
+    void addMutation() {
+        Producer<FSphere> producer = factory.getFSphereProducer(1)
+                .addMutation((list) -> list.forEach(e -> e.setMeta("TEST")));
+
+        List<FSphere> results = producer.getListFixed(2);
+
+        Assertions.assertAll("Validate FSphere A",
+                () -> assertEquals("TEST", results.get(0).getMeta(),
+                        "The tag is erroneous")
+        );
+
+        Assertions.assertAll("Validate FSphere B",
+                () -> assertEquals("TEST", results.get(1).getMeta(),
+                        "The tag is erroneous"),
+                () -> assertNotSame(results.get(0), results.get(1),
+                        "The reference should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Add validation")
+    void addValidation() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> center = factory.getFPointProducer(range);
+
+        Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
+                .addValidation(((fSphere, results) -> fSphere.overlaps(results) == 0));
+
+        List<FSphere> results = new ArrayList<>();
+
+        while (true) {
+            FSphere candidate = producer.produce();
+
+            if (candidate != null) {
+                results.add(candidate);
+            } else {
+                break;
+            }
+        }
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Validate list")
+    void validateList() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> center = factory.getFPointProducer(range);
+
+        Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
+                .addValidation(((fSphere, results) -> fSphere.overlaps(results) == 0));
+
+        List<FSphere> results = producer.getList();
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Validate list (fixed)")
+    void validateListFixed() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> center = factory.getFPointProducer(range);
+
+        Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
+                .addValidation(((fSphere, results) -> fSphere.overlaps(results) == 0));
+
+        List<FSphere> results = producer.getListFixed(100);
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Validate list (randomized)")
+    void validateListRandomized() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> center = factory.getFPointProducer(range);
+
+        Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
+                .addValidation(((fSphere, results) -> fSphere.overlaps(results) == 0));
+
+        List<FSphere> results = producer.getListRandomized(100);
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Force no overlap")
+    void forceNoOverlap() {
+        FPairPos3D range = factory.getFPairPos3D(1);
+
+        Producer<FPoint> center = factory.getFPointProducer(range);
+
+        Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
+                .forceNoOverlap();
+
+        List<FSphere> results = new ArrayList<>();
+
+        while (true) {
+            FSphere candidate = producer.produce();
+
+            if (candidate != null) {
+                results.add(candidate);
+            } else {
+                break;
+            }
+        }
+
+        Assertions.assertAll("Validate results",
+                () -> assertTrue(results.size() > 0 && results.size() < 5,
+                        "The number of generated elements is erroneous")
+        );
     }
 }

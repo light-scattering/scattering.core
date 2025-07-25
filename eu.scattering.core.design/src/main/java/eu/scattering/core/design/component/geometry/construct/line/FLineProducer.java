@@ -14,7 +14,7 @@ public interface FLineProducer extends Producer<FLine> {
     @Override
     FLine produce();
     @Override
-    List<FLine> getListAuto();
+    List<FLine> getList();
     @Override
     List<FLine> getListRandomized(int quantity);
     @Override

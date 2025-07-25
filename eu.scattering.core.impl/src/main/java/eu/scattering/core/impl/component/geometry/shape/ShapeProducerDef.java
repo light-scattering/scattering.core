@@ -11,10 +11,10 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class ShapeProducerDef implements ShapeProducer {
-    private static final Consumer<List<Shape>> ITERATOR_PROCESSOR;
+    private static final Consumer<List<Shape>> MUTATION_ITERATION;
 
     static {
-        ITERATOR_PROCESSOR =  (list) -> {
+        MUTATION_ITERATION =  (list) -> {
             for (int i = 0 ; i < list.size() ; i++) {
                 list.get(i).setIndex(i);
             }
@@ -26,6 +26,8 @@ public class ShapeProducerDef implements ShapeProducer {
     private ShapeProducerDef(FRandGenerator randomizer) {
 
         this.processor = new ProducerCoreDef<>(randomizer);
+
+        this.processor.addMutation(MUTATION_ITERATION);
     }
 
     public static ShapeProducer create(FRandGenerator randomizer) {
@@ -56,20 +58,20 @@ public class ShapeProducerDef implements ShapeProducer {
     }
 
     @Override
-    public List<Shape> getListAuto() {
+    public List<Shape> getList() {
 
-        return this.processor.getListAdopted(ITERATOR_PROCESSOR);
+        return this.processor.getList();
     }
 
     @Override
     public List<Shape> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, ITERATOR_PROCESSOR);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<Shape> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, ITERATOR_PROCESSOR);
+        return this.processor.getListFixed(quantity);
     }
 }

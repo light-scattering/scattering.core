@@ -9,7 +9,7 @@ public interface Producer<T> {
 
     Stream<T> stream();
 
-    List<T> getListAuto();
+    List<T> getList();
     List<T> getListRandomized(int quantity);
     List<T> getListFixed(int quantity);
 }

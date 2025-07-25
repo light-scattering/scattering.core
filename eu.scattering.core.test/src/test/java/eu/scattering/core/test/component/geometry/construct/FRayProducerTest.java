@@ -140,7 +140,7 @@ public class FRayProducerTest {
         int qValue2 = 0;
         int qValue3 = 0;
 
-        for (FRay construct : producer.getListAuto()) {
+        for (FRay construct : producer.getList()) {
 
             if (construct.getRefOrigin().getHeadX() == 1) {
                 qValue1++;

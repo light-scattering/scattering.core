@@ -73,20 +73,20 @@ public class FPlaneProducerDef implements FPlaneProducer {
     }
 
     @Override
-    public List<FPlane> getListAuto() {
+    public List<FPlane> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FPlane> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FPlane> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
     }
 }

@@ -14,7 +14,7 @@ public interface FVectorProducer extends Producer<FVector> {
     @Override
     FVector produce();
     @Override
-    List<FVector> getListAuto();
+    List<FVector> getList();
     @Override
     List<FVector> getListRandomized(int quantity);
     @Override

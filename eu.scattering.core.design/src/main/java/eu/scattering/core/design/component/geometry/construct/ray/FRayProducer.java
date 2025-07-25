@@ -14,7 +14,7 @@ public interface FRayProducer extends Producer<FRay> {
     @Override
     FRay produce();
     @Override
-    List<FRay> getListAuto();
+    List<FRay> getList();
     @Override
     List<FRay> getListRandomized(int quantity);
     @Override

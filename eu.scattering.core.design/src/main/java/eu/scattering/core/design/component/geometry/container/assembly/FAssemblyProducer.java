@@ -14,7 +14,7 @@ public interface FAssemblyProducer<T extends Geometry> extends Producer<FAssembl
     @Override
     FAssembly<T> produce();
     @Override
-    List<FAssembly<T>> getListAuto();
+    List<FAssembly<T>> getList();
     @Override
     List<FAssembly<T>> getListRandomized(int quantity);
     @Override

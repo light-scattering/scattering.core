@@ -71,20 +71,20 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     }
 
     @Override
-    public List<FQuaternion> getListAuto() {
+    public List<FQuaternion> getList() {
 
-        return this.processor.getListAdopted(null);
+        return this.processor.getList();
     }
 
     @Override
     public List<FQuaternion> getListRandomized(int quantity) {
 
-        return this.processor.getListRandomized(quantity, null);
+        return this.processor.getListRandomized(quantity);
     }
 
     @Override
     public List<FQuaternion> getListFixed(int quantity) {
 
-        return this.processor.getListFixed(quantity, null);
+        return this.processor.getListFixed(quantity);
     }
 }

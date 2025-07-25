@@ -14,7 +14,7 @@ public interface FSegmentProducer extends Producer<FSegment> {
     @Override
     FSegment produce();
     @Override
-    List<FSegment> getListAuto();
+    List<FSegment> getList();
     @Override
     List<FSegment> getListRandomized(int quantity);
     @Override

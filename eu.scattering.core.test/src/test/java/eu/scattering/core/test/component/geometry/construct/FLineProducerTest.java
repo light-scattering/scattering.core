@@ -140,7 +140,7 @@ public class FLineProducerTest {
         int qValue2 = 0;
         int qValue3 = 0;
 
-        for (FLine construct : producer.getListAuto()) {
+        for (FLine construct : producer.getList()) {
 
             if (construct.getRefOrigin().getHeadX() == 1) {
                 qValue1++;

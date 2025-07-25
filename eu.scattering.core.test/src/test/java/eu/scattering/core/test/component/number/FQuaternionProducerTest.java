@@ -119,7 +119,7 @@ public class FQuaternionProducerTest {
         int qRe2 = 0;
         int qRe3 = 0;
 
-        for (FQuaternion fQuaternion : producer.getListAuto()) {
+        for (FQuaternion fQuaternion : producer.getList()) {
 
             if (fQuaternion.getRe() == 1) {
                 qRe1++;
