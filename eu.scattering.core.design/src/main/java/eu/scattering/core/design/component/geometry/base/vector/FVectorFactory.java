@@ -8,8 +8,6 @@ public interface FVectorFactory {
 
     FVectorProducer getFVectorProducer();
 
-    FVectorHelper getFVectorHelper();
-
     //--------------------------------------------------
     FVector getFVector();
 
