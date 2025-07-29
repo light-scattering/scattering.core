@@ -302,6 +302,29 @@ public class FSphereTest {
         }
 
         @Test
+        @DisplayName("Set position with Shape")
+        void setPositionWithShape() {
+            FSphere fSphereRef = TestHelper.getRandFSphere();
+            FSphere fSphereArg = factory.getFSphere(1, 2, 3, 10);
+
+            Shape results = fSphereRef.setCenter(fSphereArg);
+            FPos3D position = fSphereRef.getCenter();
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, position.getD0(),
+                            "The X value is incorrect"),
+                    () -> assertEquals(2, position.getD1(),
+                            "The Y value is incorrect"),
+                    () -> assertEquals(3, position.getD2(),
+                            "The Z value is incorrect"),
+                    () -> assertTrue(fSphereArg.isExact(factory.getFSphere(1, 2, 3, 10)),
+                            "The input FSphere values should not change"),
+                    () -> assertSame(fSphereRef, results,
+                            "The FSphere reference should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Set position with FPoint")
         void setPositionWithFPoint() {
             FSphere fSphere = TestHelper.getRandFSphere();
@@ -730,22 +753,6 @@ public class FSphereTest {
 
             assertSame(cache, fSphere.getCache(),
                     "The cache instance is incorrect");
-            assertSame(results, fSphere,
-                    "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Cache (create)")
-        void createFCache() {
-            Shape fSphere = factory.getFSphere();
-
-            assertNull(fSphere.getCache(),
-                    "The cache value should be null");
-
-            Shape results = fSphere.createCache();
-
-            assertNotNull(fSphere.getCache(),
-                    "The cache instance should not be null");
             assertSame(results, fSphere,
                     "The reference should not change");
         }

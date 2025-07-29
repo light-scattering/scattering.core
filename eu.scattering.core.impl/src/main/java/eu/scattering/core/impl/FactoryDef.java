@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.base.vector.FVectorHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraftProducer;
@@ -71,6 +72,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private final FStatHelper fStatHelper;
 
     private final FPointHelper fPointHelper;
+    private final FVectorHelper fVectorHelper;
 
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
@@ -87,6 +89,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
         this.fGeometryParser = GeometryParserDef.get(this);
 
         this.fPointHelper = FPointHelperDef.get();
+        this.fVectorHelper = FVectorHelperDef.get();
     }
 
     private FactoryDef(long seed) {
@@ -104,6 +107,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
         this.fGeometryParser = GeometryParserDef.get(this);
 
         this.fPointHelper = FPointHelperDef.get();
+        this.fVectorHelper = FVectorHelperDef.get();
     }
 
     public static ScatFactoryConcrete create() {
@@ -165,6 +169,12 @@ public final class FactoryDef extends ScatFactoryConcrete {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public FVectorHelper getFVectorHelper() {
+
+        return this.fVectorHelper;
+    }
 
     @Override
     public FVectorProducer getFVectorProducer() {

@@ -887,20 +887,6 @@ public class FSphereProducerTest {
                 () -> assertSame(producerA, producerB,
                         "The reference should not change")
         );
-
-        FSphereProducer producerC = producerB
-                .createCache();
-
-        FSphere resultC = producerC.produce();
-
-        Assertions.assertAll("Validate FSphere values",
-                () -> assertNotNull(resultC.getCache(),
-                        "The cache value should not be null"),
-                () -> assertNotSame(cache, resultC.getCache(),
-                        "The cache value is erroneous"),
-                () -> assertSame(producerB, producerC,
-                        "The reference should not change")
-        );
     }
 
     @Test

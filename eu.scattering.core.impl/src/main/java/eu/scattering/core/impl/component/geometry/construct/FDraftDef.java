@@ -182,10 +182,9 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FDraft) {
-            FDraft ref = (FDraft) object;
+        if (object instanceof FDraft fDraft) {
 
-            return getRefOrigin().equals(ref.getRefOrigin());
+            return getRefOrigin().equals(fDraft.getRefOrigin());
         }
 
         return false;

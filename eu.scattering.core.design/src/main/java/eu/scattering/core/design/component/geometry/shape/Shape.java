@@ -26,6 +26,7 @@ public interface Shape extends Geometry {
     double getCenterZ();
 
     Shape setCenter(double x, double y, double z);
+    Shape setCenter(Shape shape);
     Shape setCenter(FPoint fPoint);
     Shape setCenter(FPos3D fPos3D);
 
@@ -109,8 +110,6 @@ public interface Shape extends Geometry {
     void sortByDistSpace(List<? extends Shape> in);
 
     // -------------------------------------------------------------------------------------------------
-
-    Shape createCache();
 
     FCache getCache();
     Shape setCache(FCache cache);

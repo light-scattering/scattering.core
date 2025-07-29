@@ -449,6 +449,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return true;
     }
 
+    // TODO - Not optimized
     @Override
     public boolean attachSpherical(Shape target, double x, double y, double z) {
 
@@ -457,7 +458,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             return true;
         }
 
-        FVector fVectorAxis = super.getCacheFVector()
+        FVector fVectorAxis = super.supplyFVector()
                 .setBase(x, y, z)
                 .setHead(this.getCenterX(), this.getCenterY(), this.getCenterZ());
 
@@ -531,9 +532,10 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return arg.size() > 0 ? arg.get(0) : null;
     }
 
+    // TODO - Not optimized
     @Override
     public boolean project(FRay ray, Iterable<? extends Shape> shapes) {
-        List<Shape> candidates = super.getListShape();
+        List<Shape> candidates = new ArrayList<>();
 
         setBasePosition(ray);
         getCollisionList(candidates, ray, shapes);
@@ -566,9 +568,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     private boolean validateCollision(Shape candidate, FRay ray, Iterable<? extends Shape> shapes) {
-        FVector fVector = super.getCacheFVector();
 
-        this.setCenter(candidate.getCenterX(), candidate.getCenterY(), candidate.getCenterZ());
+        this.setCenter(candidate);
 
         FPos3D projection = ray.project(this.getCenterX(), this.getCenterY(), this.getCenterZ());
 
@@ -576,12 +577,9 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double sideC = this.getRadius() + candidate.getRadius();
         double sideB = Math.sqrt((sideC * sideC) - (sideA * sideA));
 
-        fVector.setBase(projection);
-        fVector.setHead(ray.getRefOrigin().getRefBase());
+        FPos3D center = getFPointHelper().setDistance(projection, ray.getRefOrigin().getRefBase().toFPos3D(), sideB);
 
-        fVector.setMagnitude(sideB);
-
-        this.setCenter(fVector.getHeadX(), fVector.getHeadY(), fVector.getHeadZ());
+        this.setCenter(center);
 
         return this.overlaps(shapes) <= 0;
     }

@@ -2,14 +2,15 @@ package eu.scattering.core.impl.component.geometry.shape.preset;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,14 +33,6 @@ public abstract class ShapePresetDef implements Shape {
     public ShapePresetDef(ScatFactory factory) {
 
         this.factory = factory;
-    }
-
-    @Override
-    public Shape createCache() {
-
-        this.cache = supplyFCache();
-
-        return this;
     }
 
     @Override
@@ -151,6 +144,14 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
+    public Shape setCenter(Shape shape) {
+
+        setCenter(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+
+        return this;
+    }
+
+    @Override
     public Shape setCenter(FPoint fPoint) {
 
         setCenter(fPoint.getX(), fPoint.getY(), fPoint.getZ());
@@ -206,12 +207,8 @@ public abstract class ShapePresetDef implements Shape {
 
     @Override
     public double getDistCenter(double x, double y, double z) {
-        FVector fVector = getCacheFVector();
 
-        fVector.setBase(x, y, z);
-        fVector.setHead(getCenterX(), getCenterY(), getCenterZ());
-
-        return fVector.getMagnitude();
+        return getFPointHelper().getDistance(x, y, z, getCenterX(), getCenterY(), getCenterZ());
     }
 
     @Override
@@ -261,14 +258,9 @@ public abstract class ShapePresetDef implements Shape {
 
     @Override
     public Shape setDistCenter(double x, double y, double z, double dist) {
-        FVector fVector = getCacheFVector();
+        FPos3D center = getFPointHelper().setDistance(x, y, z, getCenterX(), getCenterY(), getCenterZ(), dist);
 
-        fVector.setBase(x, y, z);
-        fVector.setHead(getCenterX(), getCenterY(), getCenterZ());
-
-        fVector.setMagnitude(dist);
-
-        setCenter(fVector.getRefHead());
+        setCenter(center);
 
         return this;
     }
@@ -384,14 +376,14 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected boolean touchesDelta(Shape shape, double delta) {
-        FVector range = getOperationRange(shape);
+        FPairPos3D range = getOperationRange(shape);
 
         boolean ruleTouch = false;
 
         double offset = shift ? delta * SHIFT_OFFSET : 0;
-        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
+        for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
+            for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
+                for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
                     boolean containsA = this.contains(x, y, z);
                     boolean containsB = shape.contains(x, y, z);
 
@@ -504,12 +496,12 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected boolean overlapsDelta(Shape shape) {
-        FVector range = getOperationRange(shape);
+        FPairPos3D range = getOperationRange(shape);
 
         double offset = shift ? delta * SHIFT_OFFSET : 0;
-        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
+        for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
+            for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
+                for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
                     if (this.contains(x, y, z) && shape.contains(x, y, z)) {
                         return true;
                     }
@@ -606,24 +598,24 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected boolean enclosesDelta(Shape shape) {
-        FVector range = getOperationRange(shape);
+        FPairPos3D range = getOperationRange(shape);
 
-        if (range.getBaseX() == range.getHeadX()) {
+        if (range.getPosA().getD0() == range.getPosB().getD0()) {
             return false;
         }
 
-        if (range.getBaseY() == range.getHeadY()) {
+        if (range.getPosA().getD1() == range.getPosB().getD1()) {
             return false;
         }
 
-        if (range.getBaseZ() == range.getHeadZ()) {
+        if (range.getPosA().getD2() == range.getPosB().getD2()) {
             return false;
         }
 
         double offset = shift ? delta * SHIFT_OFFSET : 0;
-        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
+        for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
+            for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
+                for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
                     if (shape.contains(x, y, z) && !this.contains(x, y, z)) {
                         return false;
                     }
@@ -715,16 +707,16 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected boolean intersectsDelta(Shape shape, double delta) {
-        FVector range = getOperationRange(shape);
+        FPairPos3D range = getOperationRange(shape);
 
         boolean ruleShapeA = false;
         boolean ruleShapeB = false;
         boolean ruleCommon = false;
 
         double offset = shift ? delta * SHIFT_OFFSET : 0;
-        for (double x = range.getBaseX() + offset ; x < range.getHeadX() ; x += delta) {
-            for (double y = range.getBaseY() + offset ; y < range.getHeadY() ; y += delta) {
-                for (double z = range.getBaseZ() + offset ; z < range.getHeadZ() ; z += delta) {
+        for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
+            for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
+                for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
                     boolean containsA = this.contains(x, y, z);
                     boolean containsB = shape.contains(x, y, z);
 
@@ -756,42 +748,40 @@ public abstract class ShapePresetDef implements Shape {
         return false;
     }
 
-    protected FVector getOperationRange(Shape shape) {
-        FVector range = getCacheFVector();
-
+    protected FPairPos3D getOperationRange(Shape shape) {
         double opA, opB;
 
         opA = this.getCenterX() - this.getRadius();
         opB = shape.getCenterX() - shape.getRadius();
 
-        range.setBaseX(Math.max(opA, opB));
+        double bX = Math.max(opA, opB);
 
         opA = this.getCenterX() + this.getRadius();
         opB = shape.getCenterX() + shape.getRadius();
 
-        range.setHeadX(Math.min(opA, opB));
+        double hX = Math.min(opA, opB);
 
         opA = this.getCenterY() - this.getRadius();
         opB = shape.getCenterY() - shape.getRadius();
 
-        range.setBaseY(Math.max(opA, opB));
+        double bY = Math.max(opA, opB);
 
         opA = this.getCenterY() + this.getRadius();
         opB = shape.getCenterY() + shape.getRadius();
 
-        range.setHeadY(Math.min(opA, opB));
+        double hY = Math.min(opA, opB);
 
         opA = this.getCenterZ() - this.getRadius();
         opB = shape.getCenterZ() - shape.getRadius();
 
-        range.setBaseZ(Math.max(opA, opB));
+        double bZ = Math.max(opA, opB);
 
         opA = this.getCenterZ() + this.getRadius();
         opB = shape.getCenterZ() + shape.getRadius();
 
-        range.setHeadZ(Math.min(opA, opB));
+        double hZ = Math.min(opA, opB);
 
-        return range;
+        return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
     }
 
     @Override
@@ -967,31 +957,9 @@ public abstract class ShapePresetDef implements Shape {
 
     // -------------------------------------------------------------------------------------------------
 
-//    protected FPoint getCacheFPoint() {
-//
-//        if (cache != null) {
-//            return cache.get("fPoint", FPoint.class, (cache) -> supplyFPoint());
-//        }
-//
-//        return supplyFPoint();
-//    }
+    protected FPointHelper getFPointHelper() {
 
-    protected FVector getCacheFVector() {
-
-        if (cache != null) {
-            return cache.get("fVector", FVector.class, (cache) -> supplyFVector());
-        }
-
-        return supplyFVector();
-    }
-
-    protected List<Shape> getListShape() {
-
-        if (cache != null) {
-            return cache.get("listShape", ListShape.class, (cache) -> supplyListShape()).get();
-        }
-
-        return supplyListShape().get();
+        return factory.getFPointHelper();
     }
 
     protected CmpDistCenter getCacheCmpDistCenter() {
@@ -1005,24 +973,9 @@ public abstract class ShapePresetDef implements Shape {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected FCache supplyFCache() {
-
-        return factory.getFCache();
-    }
-
-//    protected FPoint supplyFPoint() {
-//
-//        return factory.getFPoint();
-//    }
-
     protected FVector supplyFVector() {
 
         return factory.getFVector();
-    }
-
-    protected ListShape supplyListShape() {
-
-        return ListShape.create();
     }
 
     protected CmpDistCenter supplyCmpDistCenter() {
@@ -1058,23 +1011,5 @@ class CmpDistCenter implements Comparator<Shape> {
         double distS2 = this.ref.getDistCenterP2(s2);
 
         return Double.compare(distS1, distS2);
-    }
-}
-
-class ListShape {
-    private final List<Shape> list = new ArrayList<>(100);
-
-    private ListShape() {}
-
-    public static ListShape create() {
-
-        return new ListShape();
-    }
-
-    public List<Shape> get() {
-
-        list.clear();
-
-        return list;
     }
 }

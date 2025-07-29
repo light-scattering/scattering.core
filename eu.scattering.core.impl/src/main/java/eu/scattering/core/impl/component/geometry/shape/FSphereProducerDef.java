@@ -39,8 +39,6 @@ public class FSphereProducerDef implements FSphereProducer {
     private Double delta = null;
     private Double epsilon = null;
 
-    private boolean createCache = false;
-
     private FSphereProducerDef(FSphereFactory factory, FRandEngine randomizer) {
 
         this.factory = factory;
@@ -89,10 +87,6 @@ public class FSphereProducerDef implements FSphereProducer {
 
         if (this.cache != null) {
             fSphere.setCache(this.cache);
-        }
-
-        if (this.createCache) {
-            fSphere.createCache();
         }
 
         return fSphere;
@@ -211,16 +205,7 @@ public class FSphereProducerDef implements FSphereProducer {
 
     @Override
     public FSphereProducer setCache(FCache cache) {
-        this.createCache = false;
         this.cache = cache;
-
-        return this;
-    }
-
-    @Override
-    public FSphereProducer createCache() {
-        this.createCache = true;
-        this.cache = null;
 
         return this;
     }

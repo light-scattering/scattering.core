@@ -1,10 +1,14 @@
 package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FPointHelperDef implements FPointHelper {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     private FPointHelperDef() {}
 
@@ -17,6 +21,30 @@ public class FPointHelperDef implements FPointHelper {
     public double getMagnitude(double x, double y, double z) {
 
         return Math.sqrt(getMagnitudeP2(x, y, z));
+    }
+
+    @Override
+    public FPos3D setMagnitude(double refX, double refY, double refZ, double magnitude) {
+
+        if (isNearZero(refX, refY, refZ)) {
+            throw new IllegalStateException("The vector is non-directional (the position is too close to zero)");
+        }
+
+        double factor = magnitude / getMagnitude(refX, refY, refZ);
+
+        return factory.getFPos3D(refX * factor, refY * factor, refZ * factor);
+    }
+
+    @Override
+    public FPos3D setMagnitude(FPos3D ref, double magnitude) {
+
+        return setMagnitude(ref.getD0(), ref.getD1(), ref.getD2(), magnitude);
+    }
+
+    @Override
+    public boolean isNearZero(double x, double y, double z) {
+
+        return isSimilar(x, y, z, 0, 0, 0);
     }
 
     @Override
@@ -40,6 +68,38 @@ public class FPointHelperDef implements FPointHelper {
         return Math.sqrt(getDistanceP2(aX, aY, aZ, bX, bY, bZ));
     }
 
+    @Override
+    public FPos3D setDistance(double x, double y, double z, double refX, double refY, double refZ, double distance) {
+
+        if (isExact(x, y, z, refX, refY, refZ)) {
+            throw new IllegalStateException("FPoints must not be on the same position");
+        }
+
+        double posX = refX - x;
+        double posY = refY - y;
+        double posZ = refZ - z;
+
+        double factor = distance / getMagnitude(posX, posY, posZ);
+
+        posX = (posX * factor) + x;
+        posY = (posY * factor) + y;
+        posZ = (posZ * factor) + z;
+
+        return factory.getFPos3D(posX, posY, posZ);
+    }
+
+    @Override
+    public FPos3D setDistance(double x, double y, double z, FPos3D ref, double distance) {
+
+        return setDistance(x, y, z, ref.getD0(), ref.getD1(), ref.getD2(), distance);
+    }
+
+    @Override
+    public FPos3D setDistance(FPos3D center, FPos3D ref, double distance) {
+
+        return setDistance(center.getD0(), center.getD1(), center.getD2(), ref, distance);
+    }
+
     //--------------------------------------------------
 
     @Override
@@ -56,5 +116,4 @@ public class FPointHelperDef implements FPointHelper {
 
         return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
     }
-
 }

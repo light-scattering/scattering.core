@@ -250,10 +250,9 @@ public class FPointDef implements FPoint {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FPoint) {
-            FPoint ref = (FPoint) object;
+        if (object instanceof FPoint fPoint) {
 
-            return getX() == ref.getX() && getY() == ref.getY() && getZ() == ref.getZ();
+            return getX() == fPoint.getX() && getY() == fPoint.getY() && getZ() == fPoint.getZ();
         }
 
         return false;

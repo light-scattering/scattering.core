@@ -1,5 +1,6 @@
 package eu.scattering.core.test.component.geometry.base;
 
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,6 @@ public class FPointHelperTest {
         );
     }
 
-
     @Test
     @DisplayName("Get magnitude")
     void getMagnitude() {
@@ -98,6 +98,59 @@ public class FPointHelperTest {
     }
 
     @Test
+    @DisplayName("Set magnitude")
+    void setMagnitude() {
+        var helper = factory.getFPointHelper();
+
+        double x = rand.nextDouble();
+        double y = rand.nextDouble();
+        double z = rand.nextDouble();
+
+        FPos3D results = helper.setMagnitude(x, y, z, 1);
+
+        assertEquals(1, helper.getMagnitude(results.getD0(), results.getD1(), results.getD2()),
+                epsilon, "The magnitude is erroneous");
+    }
+
+    @Test
+    @DisplayName("Set magnitude with FPos3D")
+    void setMagnitudeWithFPos3D() {
+        var helper = factory.getFPointHelper();
+
+        double x = rand.nextDouble();
+        double y = rand.nextDouble();
+        double z = rand.nextDouble();
+
+        FPos3D results = helper.setMagnitude(factory.getFPos3D(x, y, z), 1);
+
+        assertEquals(1, helper.getMagnitude(results.getD0(), results.getD1(), results.getD2()),
+                epsilon, "The magnitude is erroneous");
+    }
+
+    @Test
+    @DisplayName("Get distance")
+    void getDistance() {
+        var helper = factory.getFPointHelper();
+
+        double aX = rand.nextDouble();
+        double aY = rand.nextDouble();
+        double aZ = rand.nextDouble();
+        double bX = rand.nextDouble();
+        double bY = rand.nextDouble();
+        double bZ = rand.nextDouble();
+
+        double dimX = aX - bX;
+        double dimY = aY - bY;
+        double dimZ = aZ - bZ;
+
+        double distance = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
+
+
+        assertEquals(distance, helper.getDistance(aX, aY, aZ, bX, bY, bZ),
+                epsilon, "The distance is erroneous");
+    }
+
+    @Test
     @DisplayName("Get distance P2")
     void getDistanceP2() {
         var helper = factory.getFPointHelper();
@@ -121,25 +174,56 @@ public class FPointHelperTest {
     }
 
     @Test
-    @DisplayName("Get distance")
-    void getDistance() {
+    @DisplayName("Set distance")
+    void setDistance() {
         var helper = factory.getFPointHelper();
 
-        double aX = rand.nextDouble();
-        double aY = rand.nextDouble();
-        double aZ = rand.nextDouble();
-        double bX = rand.nextDouble();
-        double bY = rand.nextDouble();
-        double bZ = rand.nextDouble();
+        double x = rand.nextDouble();
+        double y = rand.nextDouble();
+        double z = rand.nextDouble();
+        double refX = rand.nextDouble();
+        double refY = rand.nextDouble();
+        double refZ = rand.nextDouble();
 
-        double dimX = aX - bX;
-        double dimY = aY - bY;
-        double dimZ = aZ - bZ;
+        FPos3D results = helper.setDistance(x, y, z, refX, refY, refZ, 1);
 
-        double distance = Math.sqrt((dimX * dimX) + (dimY * dimY) + (dimZ * dimZ));
+        assertEquals(1, helper.getDistance(x, y, z, results.getD0(), results.getD1(), results.getD2()),
+                epsilon, "The distance is erroneous");
+    }
 
+    @Test
+    @DisplayName("Set distance with FPos3D")
+    void setDistanceWithFPos3D() {
+        var helper = factory.getFPointHelper();
 
-        assertEquals(distance, helper.getDistance(aX, aY, aZ, bX, bY, bZ),
+        double x = rand.nextDouble();
+        double y = rand.nextDouble();
+        double z = rand.nextDouble();
+        double refX = rand.nextDouble();
+        double refY = rand.nextDouble();
+        double refZ = rand.nextDouble();
+
+        FPos3D results = helper.setDistance(x, y, z, factory.getFPos3D(refX, refY, refZ), 1);
+
+        assertEquals(1, helper.getDistance(x, y, z, results.getD0(), results.getD1(), results.getD2()),
+                epsilon, "The distance is erroneous");
+    }
+
+    @Test
+    @DisplayName("Set distance with center and FPos3D")
+    void setDistanceWithCenterAndFPos3D() {
+        var helper = factory.getFPointHelper();
+
+        double x = rand.nextDouble();
+        double y = rand.nextDouble();
+        double z = rand.nextDouble();
+        double refX = rand.nextDouble();
+        double refY = rand.nextDouble();
+        double refZ = rand.nextDouble();
+
+        FPos3D results = helper.setDistance(factory.getFPos3D(x, y, z), factory.getFPos3D(refX, refY, refZ), 1);
+
+        assertEquals(1, helper.getDistance(x, y, z, results.getD0(), results.getD1(), results.getD2()),
                 epsilon, "The distance is erroneous");
     }
 }

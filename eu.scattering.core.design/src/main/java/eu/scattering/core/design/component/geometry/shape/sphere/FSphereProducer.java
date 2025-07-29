@@ -36,8 +36,6 @@ public interface FSphereProducer extends Producer<FSphere> {
 
     // -------------------------------------------------------------------------------------------------
 
-    FSphereProducer createCache();
-
     FSphereProducer setMeta(String meta);
     FSphereProducer setCache(FCache cache);
     FSphereProducer setDelta(double delta);
