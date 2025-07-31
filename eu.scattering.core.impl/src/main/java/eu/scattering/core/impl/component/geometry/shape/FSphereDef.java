@@ -431,8 +431,14 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
     public boolean attachLinear(Shape target) {
+
+        if (this == target) {
+            throw new IllegalArgumentException("Cannot attach to itself");
+        }
 
         // The FSphere is already at a correct position.
         if (super.touches(target)) {
@@ -453,6 +459,10 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public boolean attachSpherical(Shape target, double x, double y, double z) {
 
+        if (this == target) {
+            throw new IllegalArgumentException("Cannot attach to itself");
+        }
+
         // The FSphere is already at a correct position.
         if (super.touches(target)) {
             return true;
@@ -460,7 +470,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         FVector fVectorAxis = super.supplyFVector()
                 .setBase(x, y, z)
-                .setHead(this.getCenterX(), this.getCenterY(), this.getCenterZ());
+                .setHead(getCenter());
 
         // The FSphere is on the rotation axis, and therefore, cannot be linearly positioned.
         if (fVectorAxis.isCollinearBaseCommon(target.getCenter())) {
@@ -472,13 +482,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double sideC = this.getRadius() + target.getRadius();
 
         // The FSphere cannot be positioned.
-        if (!factory.getFTrigHelper().isValid(sideA, sideB, sideC)) {
+        if (!super.getFTrigHelper().isValid(sideA, sideB, sideC)) {
             return false;
         }
 
-        double angle = factory.getFTrigHelper().getAngle(sideB, sideA, sideC);
+        double angle = super.getFTrigHelper().getAngle(sideB, sideA, sideC);
 
-        factory.getFRotEngine().setRgAngleBaseCommon(fVectorAxis, target.getCenter(), angle);
+        super.getFRotEngine().setRgAngleBaseCommon(fVectorAxis, target.getCenter(), angle);
 
         this.setCenter(fVectorAxis.getRefHead());
 
@@ -498,7 +508,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean attach(Shape target, Iterable<? extends Shape> shapes, int corrections) {
+    public boolean attachLinearAndSpherical(Shape target, Iterable<? extends Shape> field, int corrections) {
         int repositions = 1;
 
         if (!attachLinear(target)) {
@@ -507,7 +517,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         List<Shape> neighbours = new ArrayList<>();
 
-        Shape closestNeighbour = getClosestNeighbourCenter(neighbours, shapes);
+        Shape closestNeighbour = getClosestNeighbourCenter(neighbours, field);
 
         if (closestNeighbour == null) {
             return true;
@@ -519,7 +529,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                 return false;
             }
 
-            closestNeighbour = getClosestNeighbourCenter(neighbours, shapes);
+            closestNeighbour = getClosestNeighbourCenter(neighbours, field);
         }
 
         return closestNeighbour == null;
@@ -532,56 +542,48 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return arg.size() > 0 ? arg.get(0) : null;
     }
 
-    // TODO - Not optimized
     @Override
-    public boolean project(FRay ray, Iterable<? extends Shape> shapes) {
-        List<Shape> candidates = new ArrayList<>();
+    public boolean project(Shape target, FRay ray) {
 
-        setBasePosition(ray);
-        getCollisionList(candidates, ray, shapes);
+        FPos3D projection = ray.project(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
-        for (Shape candidate : candidates) {
-            if (validateCollision(candidate, ray, shapes)) {
-                return true;
-            }
+        if (projection == null) {
+            return false;
         }
 
-        return false;
-    }
-
-    private void setBasePosition(FRay ray) {
-
-        this.setCenter(ray.getRefOrigin().getRefBase());
-    }
-
-    private void getCollisionList(List<Shape> in, FRay ray, Iterable<? extends Shape> shapes) {
-
-        for (Shape shape : shapes) {
-
-            double dist = ray.getDistance(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
-            if (dist >= 0 && dist < this.getRadius() + shape.getRadius() && !this.overlaps(shape)) {
-                in.add(shape);
-            }
+        if (target.getDistCenter(projection) > this.getRadius() + target.getRadius()) {
+            return false;
         }
 
-        sortByDistCenter(in);
-    }
-
-    private boolean validateCollision(Shape candidate, FRay ray, Iterable<? extends Shape> shapes) {
-
-        this.setCenter(candidate);
-
-        FPos3D projection = ray.project(this.getCenterX(), this.getCenterY(), this.getCenterZ());
-
-        double sideA = candidate.getDistCenter(projection);
-        double sideC = this.getRadius() + candidate.getRadius();
+        double sideA = target.getDistCenter(projection);
+        double sideC = this.getRadius() + target.getRadius();
         double sideB = Math.sqrt((sideC * sideC) - (sideA * sideA));
 
         FPos3D center = getFPointHelper().setDistance(projection, ray.getRefOrigin().getRefBase().toFPos3D(), sideB);
 
         this.setCenter(center);
 
-        return this.overlaps(shapes) <= 0;
+        return true;
+    }
+
+    @Override
+    public boolean project(Iterable<? extends Shape> field, FRay ray) {
+        List<Shape> candidates = new ArrayList<>();
+
+        setCenter(ray.getRefOrigin().getRefBase());
+        getCollisionListDirectional(candidates, field, ray);
+
+        sortByDistCenter(candidates);
+
+        for (Shape candidate : candidates) {
+            if (project(candidate, ray)) {
+                if (overlaps(field) <= 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -593,15 +595,62 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         in.sort(cmp);
     }
 
+    @Override
+    public void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z) {
+        in.clear();
+
+        double dist = getDistCenter(x, y, z);
+        double distMin = dist - getRadius();
+        double distMax = dist + getRadius();
+
+        double distShape;
+        for (Shape shape : field) {
+
+            if (this == shape) {
+                continue;
+            }
+
+            distShape = shape.getDistCenter(x, y, z);
+
+            if (distShape - shape.getRadius() < distMin) {
+                continue;
+            }
+
+            if (distShape + shape.getRadius() > distMax) {
+                continue;
+            }
+
+            in.add(shape);
+        }
+    }
+    @Override
+    public void getCollisionListDirectional(List<Shape> in, Iterable<? extends Shape> field, FRay ray) {
+        in.clear();
+
+        double distShape;
+        for (Shape shape : field) {
+
+            if (this == shape) {
+                continue;
+            }
+
+            distShape = ray.getDistance(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+
+            if (distShape >= 0 && distShape < this.getRadius() + shape.getRadius() && !this.overlaps(shape)) {
+                in.add(shape);
+            }
+        }
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     private CmpDistSpace getCacheCmpDistSpace() {
 
         if (super.getCache() != null) {
-            return super.getCache().get(CmpDistSpace.class, (cache) -> supplyCmpDistSpace());
+            return super.getCache().get(CmpDistSpace.class, (cache) -> CmpDistSpace.create());
         }
 
-        return supplyCmpDistSpace();
+        return CmpDistSpace.create();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -609,11 +658,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     private FSphere supplyFSphere() {
 
         return factory.getFSphere();
-    }
-
-    private CmpDistSpace supplyCmpDistSpace() {
-
-        return CmpDistSpace.create();
     }
 
     // -------------------------------------------------------------------------------------------------

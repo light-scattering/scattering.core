@@ -538,6 +538,7 @@ public class FLineTest {
 
             FPos3D results = fLine.project(offset.getX(), offset.getY() + 3, offset.getZ());
 
+            assertNotNull(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(results));
         }
 
@@ -552,8 +553,9 @@ public class FLineTest {
             fLine.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fLine.project(fPoint);
+            boolean results = fLine.project(fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
 
@@ -563,8 +565,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.project((Geometry) fPoint);
+            boolean results = fLine.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 5, 5).isSimilar(fPoint));
         }
 
@@ -574,8 +577,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, -1, 5, 5, 1, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.project((Geometry) fPoint);
+            boolean results = fLine.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(5, 2, 5).isSimilar(fPoint));
         }
 
@@ -585,8 +589,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, 5, -1, 5, 5, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.project((Geometry) fPoint);
+            boolean results = fLine.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(5, 5, 3).isSimilar(fPoint));
         }
 
@@ -601,8 +606,9 @@ public class FLineTest {
             fLine.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fLine.project((Geometry) fPoint);
+            boolean results = fLine.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
 
@@ -613,8 +619,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector);
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fLine.project((Geometry) fPoint);
+            boolean results = fLine.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(-3, -3, -3).isSimilar(fPoint));
 
             var angle = factory.getFTrigHelper().getAngleBetweenVectors(
@@ -633,8 +640,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fLine.project((Geometry) fPoint);
+            boolean results = fLine.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(3, 3, 3).isSimilar(fPoint));
 
             var angle = factory.getFTrigHelper().getAngleBetweenVectors(
@@ -663,6 +671,7 @@ public class FLineTest {
 
             FPos3D results = fLine.reflect(0, 3, 0);
 
+            assertNotNull(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(results));
         }
 
@@ -672,8 +681,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fLine.reflect(fPoint);
+            boolean results = fLine.reflect(fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
@@ -683,8 +693,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.reflect((Geometry) fPoint);
+            boolean results = fLine.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 8, 7).isSimilar(fPoint));
         }
 
@@ -694,8 +705,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, -1, 5, 5, 1, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.reflect((Geometry) fPoint);
+            boolean results = fLine.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(9, 2, 7).isSimilar(fPoint));
         }
 
@@ -705,8 +717,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(5, 5, -1, 5, 5, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fLine.reflect((Geometry) fPoint);
+            boolean results = fLine.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(9, 8, 3).isSimilar(fPoint));
         }
 
@@ -716,8 +729,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(factory.getFVector(2, 2, 2));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fLine.reflect((Geometry) fPoint);
+            boolean results = fLine.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
@@ -728,8 +742,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fLine.reflect((Geometry) fPoint);
+            boolean results = fLine.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(-6, 3, -6).isSimilar(fPoint));
         }
 
@@ -740,8 +755,9 @@ public class FLineTest {
             FLine fLine = factory.getRefFLine(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fLine.reflect((Geometry) fPoint);
+            boolean results = fLine.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(6, -3, 6).isSimilar(fPoint));
         }
 

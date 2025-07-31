@@ -205,13 +205,13 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     }
 
     @Override
-    public void project(FPoint in) {
+    public boolean project(FPoint in) {
 
         throw new RuntimeException("The 'project' method cannot be used with FDraft");
     }
 
     @Override
-    public void project(Geometry in) {
+    public boolean project(Geometry in) {
 
         throw new RuntimeException("The 'project' method cannot be used with FDraft");
     }
@@ -223,13 +223,13 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     }
 
     @Override
-    public void reflect(FPoint in) {
+    public boolean reflect(FPoint in) {
 
         throw new RuntimeException("The 'reflect' method cannot be used with FDraft");
     }
 
     @Override
-    public void reflect(Geometry in) {
+    public boolean reflect(Geometry in) {
 
         throw new RuntimeException("The 'reflect' method cannot be used with FDraft");
     }

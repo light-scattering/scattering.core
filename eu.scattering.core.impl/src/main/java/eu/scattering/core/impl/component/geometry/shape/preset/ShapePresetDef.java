@@ -5,6 +5,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.engine.rotate.FRotEngine;
+import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
@@ -28,7 +30,7 @@ public abstract class ShapePresetDef implements Shape {
     private final boolean shift = true;
 
     private int index = -1;
-    private String tag = "";
+    private String meta = "";
 
     public ShapePresetDef(ScatFactory factory) {
 
@@ -80,13 +82,13 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public String getMeta() {
 
-        return this.tag;
+        return this.meta;
     }
 
     @Override
     public Shape setMeta(String meta) {
 
-        this.tag = meta;
+        this.meta = meta;
 
         return this;
     }
@@ -110,23 +112,23 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public boolean isExactCenter(Shape arg) {
 
-        if (getCenterX() != arg.getCenterX()) {
+        if (this.getCenterX() != arg.getCenterX()) {
             return false;
         }
 
-        if (getCenterY() != arg.getCenterY()) {
+        if (this.getCenterY() != arg.getCenterY()) {
             return false;
         }
 
-        return getCenterZ() == arg.getCenterZ();
+        return this.getCenterZ() == arg.getCenterZ();
     }
 
     @Override
     public boolean isSimilarCenter(Shape arg) {
 
-        double distanceX = Math.abs(getCenterX() - arg.getCenterX());
-        double distanceY = Math.abs(getCenterY() - arg.getCenterY());
-        double distanceZ = Math.abs(getCenterZ() - arg.getCenterZ());
+        double distanceX = Math.abs(this.getCenterX() - arg.getCenterX());
+        double distanceY = Math.abs(this.getCenterY() - arg.getCenterY());
+        double distanceZ = Math.abs(this.getCenterZ() - arg.getCenterZ());
 
         return distanceX < EPSILON && distanceY < EPSILON && distanceZ < EPSILON;
     }
@@ -140,7 +142,11 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public Shape setCenter(double x, double y, double z) {
 
-        return setCenterX(x).setCenterY(y).setCenterZ(z);
+        setCenterX(x);
+        setCenterY(y);
+        setCenterZ(z);
+
+        return this;
     }
 
     @Override
@@ -231,11 +237,11 @@ public abstract class ShapePresetDef implements Shape {
 
     @Override
     public double getDistCenterP2(double x, double y, double z) {
-        double dimX = getCenterX() - x;
-        double dimY = getCenterY() - y;
-        double dimZ = getCenterZ() - z;
+        double distanceX = getCenterX() - x;
+        double distanceY = getCenterY() - y;
+        double distanceZ = getCenterZ() - z;
 
-        return (dimX * dimX) + (dimY * dimY) + (dimZ * dimZ);
+        return (distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ);
     }
 
     @Override
@@ -962,13 +968,23 @@ public abstract class ShapePresetDef implements Shape {
         return factory.getFPointHelper();
     }
 
+    protected FTrigHelper getFTrigHelper() {
+
+        return factory.getFTrigHelper();
+    }
+
+    protected FRotEngine getFRotEngine() {
+
+        return factory.getFRotEngine();
+    }
+
     protected CmpDistCenter getCacheCmpDistCenter() {
 
         if (cache != null) {
-            return cache.get(CmpDistCenter.class, (cache) -> supplyCmpDistCenter());
+            return cache.get(CmpDistCenter.class, (cache) -> CmpDistCenter.create());
         }
 
-        return supplyCmpDistCenter();
+        return CmpDistCenter.create();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -978,38 +994,33 @@ public abstract class ShapePresetDef implements Shape {
         return factory.getFVector();
     }
 
-    protected CmpDistCenter supplyCmpDistCenter() {
-
-        return CmpDistCenter.create();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     protected enum Relation {
         TRUE, FALSE, UNDEFINED
     }
-}
 
-class CmpDistCenter implements Comparator<Shape> {
-    private Shape ref;
+    static class CmpDistCenter implements Comparator<Shape> {
+        private Shape ref;
 
-    private CmpDistCenter() {}
+        private CmpDistCenter() {}
 
-    public static CmpDistCenter create() {
+        public static CmpDistCenter create() {
 
-        return new CmpDistCenter();
-    }
+            return new CmpDistCenter();
+        }
 
-    public void setRef(Shape ref) {
+        public void setRef(Shape ref) {
 
-        this.ref = ref;
-    }
+            this.ref = ref;
+        }
 
-    @Override
-    public int compare(Shape s1, Shape s2) {
-        double distS1 = this.ref.getDistCenterP2(s1);
-        double distS2 = this.ref.getDistCenterP2(s2);
+        @Override
+        public int compare(Shape s1, Shape s2) {
+            double distS1 = this.ref.getDistCenterP2(s1);
+            double distS2 = this.ref.getDistCenterP2(s2);
 
-        return Double.compare(distS1, distS2);
+            return Double.compare(distS1, distS2);
+        }
     }
 }

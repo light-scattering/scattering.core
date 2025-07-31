@@ -467,6 +467,7 @@ public class FSegmentTest {
 
             FPos3D results = fSegment.project(offset.getX(), offset.getY() + 3, offset.getZ());
 
+            assertNotNull(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(results));
         }
 
@@ -481,8 +482,9 @@ public class FSegmentTest {
             fSegment.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fSegment.project(fPoint);
+            boolean results = fSegment.project(fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
 
@@ -492,8 +494,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-1, 5, 5, 1, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.project((Geometry) fPoint);
+            boolean results = fSegment.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 5, 5).isSimilar(fPoint));
         }
 
@@ -503,8 +506,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, -5, 5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.project((Geometry) fPoint);
+            boolean results = fSegment.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(5, 2, 5).isSimilar(fPoint));
         }
 
@@ -514,8 +518,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, -5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.project((Geometry) fPoint);
+            boolean results = fSegment.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(5, 5, 3).isSimilar(fPoint));
         }
 
@@ -530,8 +535,9 @@ public class FSegmentTest {
             fSegment.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fSegment.project((Geometry) fPoint);
+            boolean results = fSegment.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 1, 1).addXYZ(offset).isSimilar(fPoint));
         }
 
@@ -542,8 +548,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector);
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fSegment.project((Geometry) fPoint);
+            boolean results = fSegment.project((Geometry) fPoint);
 
+            assertFalse(results);
             assertTrue(factory.getFPoint(0, -9, 0).isSimilar(fPoint));
         }
 
@@ -554,8 +561,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fSegment.project((Geometry) fPoint);
+            boolean results = fSegment.project((Geometry) fPoint);
 
+            assertFalse(results);
             assertTrue(factory.getFPoint(0, 9, 0).isSimilar(fPoint));
         }
 
@@ -576,6 +584,7 @@ public class FSegmentTest {
 
             FPos3D results = fSegment.reflect(0, 3, 0);
 
+            assertNotNull(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(results));
         }
 
@@ -585,8 +594,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fSegment.reflect(fPoint);
+            boolean results = fSegment.reflect(fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
@@ -596,8 +606,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(-5, 5, 5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.reflect((Geometry) fPoint);
+            boolean results = fSegment.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 8, 7).isSimilar(fPoint));
         }
 
@@ -607,8 +618,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, -5, 5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.reflect((Geometry) fPoint);
+            boolean results = fSegment.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(9, 2, 7).isSimilar(fPoint));
         }
 
@@ -618,8 +630,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, -5, 5, 5, 5));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fSegment.reflect((Geometry) fPoint);
+            boolean results = fSegment.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(9, 8, 3).isSimilar(fPoint));
         }
 
@@ -629,8 +642,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(factory.getFVector(5, 5, 5));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fSegment.reflect((Geometry) fPoint);
+            boolean results = fSegment.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(2, -1, 2).isSimilar(fPoint));
         }
 
@@ -641,8 +655,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, -9, 0);
 
-            fSegment.reflect((Geometry) fPoint);
+            boolean results = fSegment.reflect((Geometry) fPoint);
 
+            assertFalse(results);
             assertTrue(factory.getFPoint(0, -9, 0).isSimilar(fPoint));
         }
 
@@ -653,8 +668,9 @@ public class FSegmentTest {
             FSegment fSegment = factory.getRefFSegment(fVector.copy());
             FPoint fPoint = factory.getFPoint(0, 9, 0);
 
-            fSegment.reflect((Geometry) fPoint);
+            boolean results = fSegment.reflect((Geometry) fPoint);
 
+            assertFalse(results);
             assertTrue(factory.getFPoint(0, 9, 0).isSimilar(fPoint));
         }
 

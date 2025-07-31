@@ -32,12 +32,12 @@ public interface Construct<T> extends Geometry {
     boolean isPartOf(Geometry arg, double epsilon);
 
     FPos3D project(double x, double y, double z);
-    void project(FPoint in);
-    void project(Geometry in);
+    boolean project(FPoint in);
+    boolean project(Geometry in);
 
     FPos3D reflect(double x, double y, double z);
-    void reflect(FPoint in);
-    void reflect(Geometry in);
+    boolean reflect(FPoint in);
+    boolean reflect(Geometry in);
 
     T copy();
 

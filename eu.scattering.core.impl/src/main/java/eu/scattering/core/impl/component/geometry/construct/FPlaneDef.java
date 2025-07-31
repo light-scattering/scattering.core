@@ -225,17 +225,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public void project(FPoint in) {
+    public boolean project(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         projectUnitOnPlane(in);
+
+        return true;
     }
 
     @Override
-    public void project(Geometry in) {
+    public boolean project(Geometry in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -243,6 +245,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         in.toFPoints()
                 .forEach(this::projectUnitOnPlane);
+
+        return true;
     }
 
     // TODO - Not optimized
@@ -256,17 +260,19 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     }
 
     @Override
-    public void reflect(FPoint in) {
+    public boolean reflect(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
         reflectUnit(in);
+
+        return true;
     }
 
     @Override
-    public void reflect(Geometry in) {
+    public boolean reflect(Geometry in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
@@ -274,6 +280,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         in.toFPoints()
                 .forEach(this::reflectUnit);
+
+        return true;
     }
 
     @Override

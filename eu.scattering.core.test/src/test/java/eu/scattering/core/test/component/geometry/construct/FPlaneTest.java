@@ -645,6 +645,7 @@ public class FPlaneTest {
 
             FPos3D results = fPlane.project(offset.getX(), offset.getY() + 3, offset.getZ());
 
+            assertNotNull(results);
             assertTrue(factory.getFPoint(-1, 2, -1).addXYZ(offset).isSimilar(results),
                     "The projection is erroneous");
         }
@@ -660,8 +661,9 @@ public class FPlaneTest {
             fPlane.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fPlane.project(fPoint);
+            boolean results = fPlane.project(fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(-1, 2, -1).addXYZ(offset).isSimilar(fPoint),
                     "The projection is erroneous");
         }
@@ -672,8 +674,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 0, 0));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.project((Geometry) fPoint);
+            boolean results = fPlane.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(0, 2, 3).isSimilar(fPoint));
         }
 
@@ -683,8 +686,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 1, 0));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.project((Geometry) fPoint);
+            boolean results = fPlane.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 0, 3).isSimilar(fPoint));
         }
 
@@ -694,8 +698,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 0, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.project((Geometry) fPoint);
+            boolean results = fPlane.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 2, 0).isSimilar(fPoint));
         }
 
@@ -710,8 +715,9 @@ public class FPlaneTest {
             fPlane.getRefOrigin().addXYZ(offset);
             fPoint.addXYZ(offset);
 
-            fPlane.project((Geometry) fPoint);
+            boolean results = fPlane.project((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(-1, 2, -1).addXYZ(offset).isSimilar(fPoint),
                     "The projection is erroneous");
         }
@@ -733,6 +739,7 @@ public class FPlaneTest {
 
             FPos3D results = fPlane.reflect(0, 3, 0);
 
+            assertNotNull(results);
             assertTrue(factory.getFPoint(-2, 1, -2).isSimilar(results),
                     "The reflection is erroneous");
         }
@@ -743,8 +750,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fPlane.reflect(fPoint);
+            boolean results = fPlane.reflect(fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(-2, 1, -2).isSimilar(fPoint),
                     "The reflection is erroneous");
         }
@@ -755,8 +763,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 0, 0));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.reflect((Geometry) fPoint);
+            boolean results = fPlane.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(-1, 2, 3).isSimilar(fPoint));
         }
 
@@ -766,8 +775,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 1, 0));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.reflect((Geometry) fPoint);
+            boolean results = fPlane.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, -2, 3).isSimilar(fPoint));
         }
 
@@ -777,8 +787,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(0, 0, 1));
             FPoint fPoint = factory.getFPoint(1, 2, 3);
 
-            fPlane.reflect((Geometry) fPoint);
+            boolean results = fPlane.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(1, 2, -3).isSimilar(fPoint));
         }
 
@@ -788,8 +799,9 @@ public class FPlaneTest {
             FPlane fPlane = factory.getRefFPlane(factory.getFVector(1, 1, 1));
             FPoint fPoint = factory.getFPoint(0, 3, 0);
 
-            fPlane.reflect((Geometry) fPoint);
+            boolean results = fPlane.reflect((Geometry) fPoint);
 
+            assertTrue(results);
             assertTrue(factory.getFPoint(-2, 1, -2).isSimilar(fPoint),
                     "The reflection is erroneous");
         }

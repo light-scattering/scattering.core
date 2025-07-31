@@ -209,24 +209,24 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     @Override
-    public void project(FPoint in) {
+    public boolean project(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        projectUnit(in);
+        return projectUnit(in);
     }
 
     @Override
-    public void project(Geometry in) {
+    public boolean project(Geometry in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
-                .forEach(this::projectUnit);
+        return in.toFPoints().stream()
+                .allMatch(this::projectUnit);
     }
 
     // TODO - Not optimized
@@ -240,24 +240,24 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     @Override
-    public void reflect(FPoint in) {
+    public boolean reflect(FPoint in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        reflectUnit(in);
+        return reflectUnit(in);
     }
 
     @Override
-    public void reflect(Geometry in) {
+    public boolean reflect(Geometry in) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        in.toFPoints()
-                .forEach(this::reflectUnit);
+        return in.toFPoints().stream()
+                .allMatch(this::reflectUnit);
     }
 
     @Override
@@ -414,7 +414,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         in.setDistance(pX, pY, pZ, distance);
     }
 
-    private void reflectUnit(FPoint in) {
+    private boolean reflectUnit(FPoint in) {
         double oX = in.getX();
         double oY = in.getY();
         double oZ = in.getZ();
@@ -428,10 +428,12 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         in.set(oX, oY, oZ);
 
         if (!isValid) {
-            return;
+            return false;
         }
 
         in.reflect(pX, pY, pZ);
+
+        return true;
     }
 
     private boolean projectUnit(FPoint in) {

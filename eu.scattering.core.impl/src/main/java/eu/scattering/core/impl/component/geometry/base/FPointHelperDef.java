@@ -95,6 +95,12 @@ public class FPointHelperDef implements FPointHelper {
     }
 
     @Override
+    public FPos3D setDistance(FPos3D center, double refX, double refY, double refZ, double distance) {
+
+        return setDistance(center.getD0(), center.getD1(), center.getD2(), refX, refY, refZ, distance);
+    }
+
+    @Override
     public FPos3D setDistance(FPos3D center, FPos3D ref, double distance) {
 
         return setDistance(center.getD0(), center.getD1(), center.getD2(), ref, distance);

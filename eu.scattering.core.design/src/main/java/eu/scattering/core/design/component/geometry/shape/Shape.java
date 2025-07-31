@@ -102,12 +102,16 @@ public interface Shape extends Geometry {
     boolean attachSpherical(Shape target, FPoint center);
     boolean attachSpherical(Shape target, FPos3D center);
 
-    boolean attach(Shape target, Iterable<? extends Shape> shapes, int corrections);
+    boolean attachLinearAndSpherical(Shape target, Iterable<? extends Shape> field, int corrections);
 
-    boolean project(FRay ray, Iterable<? extends Shape> shapes);
+    boolean project(Shape target, FRay ray);
+    boolean project(Iterable<? extends Shape> field, FRay ray);
 
     void sortByDistCenter(List<? extends Shape> in);
     void sortByDistSpace(List<? extends Shape> in);
+
+    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
+    void getCollisionListDirectional(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
 
     // -------------------------------------------------------------------------------------------------
 

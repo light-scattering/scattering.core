@@ -210,6 +210,24 @@ public class FPointHelperTest {
     }
 
     @Test
+    @DisplayName("Set distance with center")
+    void setDistanceWithCenter() {
+        var helper = factory.getFPointHelper();
+
+        double x = rand.nextDouble();
+        double y = rand.nextDouble();
+        double z = rand.nextDouble();
+        double refX = rand.nextDouble();
+        double refY = rand.nextDouble();
+        double refZ = rand.nextDouble();
+
+        FPos3D results = helper.setDistance(factory.getFPos3D(x, y, z), refX, refY, refZ, 1);
+
+        assertEquals(1, helper.getDistance(x, y, z, results.getD0(), results.getD1(), results.getD2()),
+                epsilon, "The distance is erroneous");
+    }
+
+    @Test
     @DisplayName("Set distance with center and FPos3D")
     void setDistanceWithCenterAndFPos3D() {
         var helper = factory.getFPointHelper();

@@ -17,6 +17,7 @@ public interface FPointHelper {
     double getDistance(double aX, double aY, double aZ, double bX, double bY, double bZ);
     FPos3D setDistance(double x, double y, double z, double refX, double refY, double refZ, double distance);
     FPos3D setDistance(double x, double y, double z, FPos3D ref, double distance);
+    FPos3D setDistance(FPos3D center, double refX, double refY, double refZ, double distance);
     FPos3D setDistance(FPos3D center, FPos3D ref, double distance);
 
     //--------------------------------------------------

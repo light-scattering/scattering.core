@@ -25,6 +25,7 @@ import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 @DisplayName("FSphere")
 public class FSphereTest {
 
@@ -278,6 +279,54 @@ public class FSphereTest {
                             "The FPoint reference should not change"),
                     () -> assertNotSame(fPoint, fCenterA,
                             "The FPoint reference should be different")
+            );
+        }
+
+        @Test
+        @DisplayName("Set position X")
+        void setPositionX() {
+            FSphere fSphere = TestHelper.getRandFSphere();
+
+            Shape results = fSphere.setCenterX(1);
+            FPos3D position = fSphere.getCenter();
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, position.getD0(),
+                            "The X value is incorrect"),
+                    () -> assertSame(fSphere, results,
+                            "The FSphere reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set position Y")
+        void setPositionY() {
+            FSphere fSphere = TestHelper.getRandFSphere();
+
+            Shape results = fSphere.setCenterY(1);
+            FPos3D position = fSphere.getCenter();
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, position.getD1(),
+                            "The Y value is incorrect"),
+                    () -> assertSame(fSphere, results,
+                            "The FSphere reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set position Z")
+        void setPositionZ() {
+            FSphere fSphere = TestHelper.getRandFSphere();
+
+            Shape results = fSphere.setCenterZ(1);
+            FPos3D position = fSphere.getCenter();
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(1, position.getD2(),
+                            "The Z value is incorrect"),
+                    () -> assertSame(fSphere, results,
+                            "The FSphere reference should not change")
             );
         }
 
@@ -950,6 +999,34 @@ public class FSphereTest {
             in.add((fSphereC));
 
             fSphereRef.sortByDistCenter(in);
+
+            Assertions.assertAll("Validate positions",
+                    () -> assertEquals(3, in.size(),
+                            "The size of the list is incorrect"),
+                    () -> assertSame(fSphereA, in.get(1),
+                            "The position of shape A is incorrect"),
+                    () -> assertSame(fSphereB, in.get(2),
+                            "The position of shape B is incorrect"),
+                    () -> assertSame(fSphereC, in.get(0),
+                            "The position of shape C is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sort by space")
+        void sortBySpace() {
+            List<Shape> in = new ArrayList<>();
+
+            FSphere fSphereRef = factory.getFSphere(0, 0, 0, 4);
+            FSphere fSphereA = factory.getFSphere(0, 8, 0, 4);
+            FSphere fSphereB = factory.getFSphere(7, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            in.add(fSphereA);
+            in.add(fSphereB);
+            in.add((fSphereC));
+
+            fSphereRef.sortByDistSpace(in);
 
             Assertions.assertAll("Validate positions",
                     () -> assertEquals(3, in.size(),
@@ -3362,7 +3439,7 @@ public class FSphereTest {
 
             FSphere fSphereArg = fSphereArgProducer.produce();
 
-            boolean isPositioned = fSphereRef.attach(fSphereArg, fSphereField, 100);
+            boolean isPositioned = fSphereRef.attachLinearAndSpherical(fSphereArg, fSphereField, 100);
 
             Assertions.assertAll("Validate results",
                     () -> assertTrue(isPositioned,
@@ -3387,7 +3464,7 @@ public class FSphereTest {
 
             FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-            boolean isPositioned = fSphereRef.attach(fSphereArg, fSphereField, 100);
+            boolean isPositioned = fSphereRef.attachLinearAndSpherical(fSphereArg, fSphereField, 100);
 
             fSphereField.register(fSphereRef);
             fSphereField.register(fSphereArg);
@@ -3425,7 +3502,7 @@ public class FSphereTest {
 
             FSphere fSphereArg = fSphereArgProducer.produce();
 
-            boolean isPositioned = fSphereRef.attach(fSphereArg, fSphereField, 100);
+            boolean isPositioned = fSphereRef.attachLinearAndSpherical(fSphereArg, fSphereField, 100);
 
             Assertions.assertAll("Validate results",
                     () -> assertTrue(isPositioned,
@@ -3504,18 +3581,16 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("project, single")
+        @DisplayName("Project, single")
         void projectSingle() {
             FSphere fSphereRef = factory.getFSphere();
             FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-            fSphereRef.setCenter(factory.getFRand().nextDoubleInSphere(100));
-
-            FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereArg));
+            fSphereRef.setCenter(factory.getFRand().nextDoubleOnSphere(100));
 
             FRay ray = factory.getRefFRay(factory.getFVector(10, 0, 0, 9, 0, 0));
 
-            boolean isPositioned = fSphereRef.project(ray, fAssembly);
+            boolean isPositioned = fSphereRef.project(fSphereArg, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertTrue(fSphereRef.touches(fSphereArg),
@@ -3526,21 +3601,19 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("project, single random")
+        @DisplayName("Project, single random")
         void projectSingleRandom() {
             FSphere fSphereRef = factory.getFSphere();
             FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
             fSphereRef.setCenter(factory.getFRand().nextDoubleInSphere(100));
 
-            FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereArg));
-
             FPoint fRayBase = factory.getFPoint(factory.getFRand().nextDoubleOnSphere(10));
             FPoint fRayHead = factory.getFPoint(factory.getFRand().nextDoubleInSphere(1.9));
 
             FRay ray = factory.getRefFRay(factory.getRefFVector(fRayBase, fRayHead));
 
-            boolean isPositioned = fSphereRef.project(ray, fAssembly);
+            boolean isPositioned = fSphereRef.project(fSphereArg, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertTrue(fSphereRef.touches(fSphereArg),
@@ -3551,18 +3624,16 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("project, single fail (opposite direction)")
+        @DisplayName("Project, single fail (opposite direction)")
         void projectSingleFailOppositeDirection() {
             FSphere fSphereRef = factory.getFSphere();
             FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
             fSphereRef.setCenter(factory.getFRand().nextDoubleInSphere(100));
 
-            FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereArg));
-
             FRay ray = factory.getRefFRay(factory.getFVector(9, 0, 0, 10, 0, 0));
 
-            boolean isPositioned = fSphereRef.project(ray, fAssembly);
+            boolean isPositioned = fSphereRef.project(fSphereArg, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertFalse(isPositioned,
@@ -3571,7 +3642,7 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("project, single fail (miss)")
+        @DisplayName("Project, single fail (miss)")
         void projectSingleFailMiss() {
             FSphere fSphereRef = factory.getFSphere();
             FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
@@ -3582,7 +3653,7 @@ public class FSphereTest {
 
             FRay ray = factory.getRefFRay(factory.getFVector(5, 0, 5, 0, 5, 0));
 
-            boolean isPositioned = fSphereRef.project(ray, fAssembly);
+            boolean isPositioned = fSphereRef.project(fAssembly, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertFalse(isPositioned,
@@ -3591,7 +3662,7 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("project, multiple A")
+        @DisplayName("Project, multiple A")
         void projectMultipleA() {
             FSphere fSphereRef = factory.getFSphere();
 
@@ -3607,7 +3678,7 @@ public class FSphereTest {
             fAssembly.translate(offset);
             ray.getRefOrigin().translate(offset);
 
-            boolean isPositioned = fSphereRef.project(ray, fAssembly);
+            boolean isPositioned = fSphereRef.project(fAssembly, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertTrue(fSphereRef.touches(fSphereA) || fSphereRef.touches(fSphereB),
@@ -3622,7 +3693,7 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("project, multiple B")
+        @DisplayName("Project, multiple B")
         void projectMultipleB() {
             FSphere fSphereRef = factory.getFSphere();
 
@@ -3638,7 +3709,7 @@ public class FSphereTest {
             fAssembly.translate(offset);
             ray.getRefOrigin().translate(offset);
 
-            boolean isPositioned = fSphereRef.project(ray, fAssembly);
+            boolean isPositioned = fSphereRef.project(fAssembly, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertTrue(fSphereRef.touches(fSphereA) || fSphereRef.touches(fSphereB),
@@ -3653,7 +3724,7 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("project, multiple C")
+        @DisplayName("Project, multiple C")
         void projectMultipleC() {
             FSphere fSphereRef = factory.getFSphere();
 
@@ -3673,7 +3744,7 @@ public class FSphereTest {
 
             FRay ray = factory.getRefFRay(factory.getRefFVector(fRayBase, fRayHead));
 
-            boolean isPositioned = fSphereRef.project(ray, fAssembly);
+            boolean isPositioned = fSphereRef.project(fAssembly, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertTrue(fSphereRef.touches(fAssembly) > 0,
@@ -3683,6 +3754,12 @@ public class FSphereTest {
                     () -> assertTrue(isPositioned,
                             "The FSphere should be positioned")
             );
+        }
+
+        @Test
+        @DisplayName("Get collision list - spherical")
+        void getCollisionListSpherical() {
+
         }
     }
 
