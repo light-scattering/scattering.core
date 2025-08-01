@@ -24,6 +24,12 @@ public class FPointHelperDef implements FPointHelper {
     }
 
     @Override
+    public double getMagnitude(FPos3D center) {
+
+        return getMagnitude(center.getD0(), center.getD1(), center.getD2());
+    }
+
+    @Override
     public FPos3D setMagnitude(double refX, double refY, double refZ, double magnitude) {
 
         if (isNearZero(refX, refY, refZ)) {

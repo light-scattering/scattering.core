@@ -612,31 +612,48 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
             distShape = shape.getDistCenter(x, y, z);
 
-            if (distShape - shape.getRadius() < distMin) {
+            if (distShape + shape.getRadius() < distMin) {
                 continue;
             }
 
-            if (distShape + shape.getRadius() > distMax) {
+            if (distShape - shape.getRadius() > distMax) {
                 continue;
             }
 
             in.add(shape);
         }
     }
+
+    @Override
+    public void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint center) {
+
+        getCollisionListSpherical(in, field, center.getX(), center.getY(), center.getZ());
+    }
+
+    @Override
+    public void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPos3D center) {
+
+        getCollisionListSpherical(in, field, center.getD0(), center.getD1(), center.getD2());
+    }
+
     @Override
     public void getCollisionListDirectional(List<Shape> in, Iterable<? extends Shape> field, FRay ray) {
         in.clear();
 
-        double distShape;
+        this.setCenter(ray.getRefOrigin().getRefBase());
+
+        double distShape, distTarget, distRadius;
         for (Shape shape : field) {
 
             if (this == shape) {
                 continue;
             }
 
+            distRadius = this.getRadius() + shape.getRadius();
             distShape = ray.getDistance(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+            distTarget = shape.getDistCenter(ray.getRefOrigin().getRefBase()) - distRadius;
 
-            if (distShape >= 0 && distShape < this.getRadius() + shape.getRadius() && !this.overlaps(shape)) {
+            if (distShape >= 0 && distShape < distRadius && distTarget > distRadius) {
                 in.add(shape);
             }
         }

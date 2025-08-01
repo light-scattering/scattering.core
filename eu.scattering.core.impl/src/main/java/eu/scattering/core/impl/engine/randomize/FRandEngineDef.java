@@ -1,5 +1,7 @@
 package eu.scattering.core.impl.engine.randomize;
 
+import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.component.geometry.GeometryFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
@@ -12,20 +14,26 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FRandEngineDef implements FRandEngine {
     private final FRandGenerator core;
+    private final GeometryFactory factory;
 
-    private FRandEngineDef(FRandGenerator core) {
+    private FRandEngineDef(FRandGenerator core, GeometryFactory factory) {
 
         this.core = core;
+        this.factory = factory;
     }
 
-    public static FRandEngine create(FRandGenerator core) {
+    public static FRandEngine create(FRandGenerator core, GeometryFactory factory) {
 
-        return new FRandEngineDef(core);
+        return new FRandEngineDef(core, factory);
     }
 
     //--------------------------------------------------
@@ -317,13 +325,22 @@ public class FRandEngineDef implements FRandEngine {
     @Override
     public boolean attachLinear(Shape in, Shape target) {
 
+        if (in == target) {
+            return false;
+        }
+
         in.setCenter(this.core.nextDoubleOnSphere((in.getRadius() + target.getRadius() * 2)));
 
         return in.attachLinear(target);
     }
 
     @Override
-    public boolean attachLinear(Shape in, Shape target, Iterable<? extends Shape> shapes, int corrections) {
+    public boolean attachLinear(Shape in, Shape target, Iterable<? extends Shape> field, int corrections) {
+
+        if (in == target) {
+            return false;
+        }
+
         int iterations = 0;
 
         while (iterations++ <= corrections) {
@@ -333,7 +350,7 @@ public class FRandEngineDef implements FRandEngine {
                 continue;
             }
 
-            if (in.overlaps(shapes) == 0) {
+            if (in.overlaps(field) == 0) {
                 return true;
             }
         }
@@ -343,6 +360,11 @@ public class FRandEngineDef implements FRandEngine {
 
     @Override
     public boolean attachSpherical(Shape in, Shape target, double x, double y, double z) {
+
+        if (in == target) {
+            return false;
+        }
+
         double dist = in.getDistCenter(x, y, z);
 
         in.setCenter(this.core.nextDoubleOnSphere(dist));
@@ -352,7 +374,24 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public boolean attachSpherical(Shape in, Shape target, double x, double y, double z, Iterable<? extends Shape> shapes, int corrections) {
+    public boolean attachSpherical(Shape in, Shape target, FPoint center) {
+
+        return attachSpherical(in, target, center.getX(), center.getY(), center.getZ());
+    }
+
+    @Override
+    public boolean attachSpherical(Shape in, Shape target, FPos3D center) {
+
+        return attachSpherical(in, target, center.getD0(), center.getD1(), center.getD2());
+    }
+
+    @Override
+    public boolean attachSpherical(Shape in, Shape target, double x, double y, double z, Iterable<? extends Shape> field, int corrections) {
+
+        if (in == target) {
+            return false;
+        }
+
         int iterations = 0;
 
         while (iterations++ <= corrections) {
@@ -362,7 +401,7 @@ public class FRandEngineDef implements FRandEngine {
                 continue;
             }
 
-            if (in.overlaps(shapes) == 0) {
+            if (in.overlaps(field) == 0) {
                 return true;
             }
         }
@@ -371,14 +410,74 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
-    public boolean attach(Shape in, Shape target, Iterable<? extends Shape> shapes, int corrections) {
+    public boolean attachSpherical(Shape in, Shape target, FPoint center, Iterable<? extends Shape> field, int corrections) {
 
-        boolean isLinear = attachLinear(in, target, shapes, corrections);
+        return attachSpherical(in, target, center.getX(), center.getY(), center.getZ(), field, corrections);
+    }
+
+    @Override
+    public boolean attachSpherical(Shape in, Shape target, FPos3D center, Iterable<? extends Shape> field, int corrections) {
+
+        return attachSpherical(in, target, center.getD0(), center.getD1(), center.getD2(), field, corrections);
+    }
+
+    @Override
+    public boolean attachLinearAndSpherical(Shape in, Shape target, Iterable<? extends Shape> field, int corrections) {
+
+        if (in == target) {
+            return false;
+        }
+
+        boolean isLinear = attachLinear(in, target, field, corrections);
 
         if (isLinear) {
             return true;
         }
 
+        List<Shape> candidates = new ArrayList<>();
+        in.getCollisionListSpherical(candidates, field, target.getCenter());
+
+        if (candidates.size() == 0) {
+            return false;
+        }
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            Shape candidate = getFRand().getElement(candidates, false);
+
+            if (in == candidate) {
+                continue;
+            }
+
+            boolean isSpherical = attachSpherical(in, candidate, target.getCenterX(), target.getCenterY(), target.getCenterZ(), field, corrections);
+
+            if (isSpherical) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean project(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
+        FRay ray = factory.getFRay();
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            ray.getRefOrigin()
+                    .setBase(core.nextDoubleOnSphere(10 * range.getRadius()))
+                    .setHead(core.nextDoubleInSphere(range.getRadius()))
+                    .translate(range.getCenter());
+
+            boolean isPositioned = in.project(field, ray);
+
+            if (isPositioned) {
+                return true;
+            }
+        }
 
         return false;
     }

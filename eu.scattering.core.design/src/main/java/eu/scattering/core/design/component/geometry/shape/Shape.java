@@ -35,14 +35,14 @@ public interface Shape extends Geometry {
     Shape setCenterZ(double z);
 
     double getDistCenter(double x, double y, double z);
+    double getDistCenter(Shape shape);
     double getDistCenter(FPoint fPoint);
     double getDistCenter(FPos3D fPos3D);
-    double getDistCenter(Shape shape);
 
     Shape setDistCenter(double x, double y, double z, double dist);
+    Shape setDistCenter(Shape shape, double dist);
     Shape setDistCenter(FPoint fPoint, double dist);
     Shape setDistCenter(FPos3D fPos3D, double dist);
-    Shape setDistCenter(Shape shape, double dist);
 
     Shape translate(double x, double y, double z);
     Shape translate(FPoint fPoint);
@@ -111,6 +111,9 @@ public interface Shape extends Geometry {
     void sortByDistSpace(List<? extends Shape> in);
 
     void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
+    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint center);
+    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPos3D center);
+
     void getCollisionListDirectional(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
 
     // -------------------------------------------------------------------------------------------------

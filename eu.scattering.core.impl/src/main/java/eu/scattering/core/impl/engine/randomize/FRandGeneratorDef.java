@@ -227,6 +227,28 @@ public class FRandGeneratorDef implements FRandGenerator {
     }
 
     @Override
+    public FPos3D nextDoubleInShell(double radiusMin, double radiusMax) {
+
+        if (radiusMin < 0 || radiusMax < 0) {
+            throw new IllegalArgumentException("The radius cannot be lower than zero");
+        }
+
+        double rMin, rMax;
+
+        if (radiusMin <= radiusMax) {
+            rMin = radiusMin;
+            rMax = radiusMax;
+        } else {
+            rMin = radiusMax;
+            rMax = radiusMin;
+        }
+
+        double radius = Math.cbrt((Math.pow(rMax, 3) - Math.pow(rMin, 3)) * nextDouble() + Math.pow(rMin, 3));
+
+        return nextDoubleOnSphere(radius);
+    }
+
+    @Override
     public <T> T getElement(List<T> in, boolean remove) {
 
         if (in.size() == 0) {

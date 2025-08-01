@@ -25,6 +25,8 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
 
     //--------------------------------------------------
 
+    //--------------------------------------------------
+
     FAssembly<T> translate(double x, double y, double z);
     FAssembly<T> translate(FPos3D offset);
 
@@ -36,7 +38,7 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     FPairPos3D getRange();
 
     FPos3D getSpatialCenter();
-    FAssembly<T> zeroSpatialCenter();
+    FAssembly<T> resetSpatialCenter();
 
     //--------------------------------------------------
 

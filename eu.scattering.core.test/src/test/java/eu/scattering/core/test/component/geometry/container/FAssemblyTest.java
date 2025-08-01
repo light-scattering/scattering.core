@@ -1272,7 +1272,7 @@ public class FAssemblyTest {
 
             fAssembly.translate(factory.getFRand().nextDoubleInSphere(100));
 
-            FAssembly<Shape> results = fAssembly.zeroSpatialCenter();
+            FAssembly<Shape> results = fAssembly.resetSpatialCenter();
 
             FPos3D center = fAssembly.getSpatialCenter();
 

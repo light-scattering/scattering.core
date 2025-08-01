@@ -6,6 +6,7 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 public interface FPointHelper {
 
     double getMagnitude(double x, double y, double z);
+    double getMagnitude(FPos3D center);
     FPos3D setMagnitude(double refX, double refY, double refZ, double magnitude);
     FPos3D setMagnitude(FPos3D ref, double magnitude);
 

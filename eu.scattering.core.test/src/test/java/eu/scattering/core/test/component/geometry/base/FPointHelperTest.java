@@ -98,6 +98,21 @@ public class FPointHelperTest {
     }
 
     @Test
+    @DisplayName("Get magnitude with FPos3D")
+    void getMagnitudeWithFPos3D() {
+        var helper = factory.getFPointHelper();
+
+        double x = rand.nextDouble();
+        double y = rand.nextDouble();
+        double z = rand.nextDouble();
+
+        double magnitude = Math.sqrt((x * x) + (y * y) + (z * z));
+
+        assertEquals(magnitude, helper.getMagnitude(factory.getFPos3D(x, y, z)),
+                epsilon, "The magnitude is erroneous");
+    }
+
+    @Test
     @DisplayName("Set magnitude")
     void setMagnitude() {
         var helper = factory.getFPointHelper();

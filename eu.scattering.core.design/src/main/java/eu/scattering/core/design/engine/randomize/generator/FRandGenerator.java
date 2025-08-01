@@ -23,5 +23,7 @@ public interface FRandGenerator extends FRandCore, ModuleFactory {
     FPos3D nextDoubleOnSphere(double radius);
     FPos3D nextDoubleInSphere(double radius);
 
+    FPos3D nextDoubleInShell(double radiusMin, double radiusMax);
+
     <T> T getElement(List<T> in, boolean remove);
 }

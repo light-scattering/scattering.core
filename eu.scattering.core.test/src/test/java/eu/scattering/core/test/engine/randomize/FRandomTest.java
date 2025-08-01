@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static eu.scattering.core.test.Config.epsilon;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FEngine")
@@ -523,6 +524,83 @@ public class FRandomTest {
         }
 
         @Test
+        @DisplayName("Get position in shell - Seed enabled")
+        void getPositionInShellWithSeed() {
+            long seed = 123;
+
+            FRandGenerator fRandA = FactoryDef.create(seed).getFRand();
+            FRandGenerator fRandB = FactoryDef.create(seed).getFRand();
+
+            double rMin = 2.5;
+            double rMax = 4.5;
+
+            for (int i = 0 ; i < 100 ; i++) {
+                FPos3D valA = fRandA.nextDoubleInShell(rMin, rMax);
+                FPos3D valB = fRandB.nextDoubleInShell(rMin, rMax);
+
+                assertEquals(valA, valB,
+                        "Values generated with the same seed should be equal");
+            }
+        }
+
+        @Test
+        @DisplayName("Get position in shell - Seed disabled")
+        void getPositionInShellWithoutSeed() {
+            ScatFactory factory = FactoryDef.create();
+
+            double rMin = 2.5;
+            double rMax = 4.5;
+
+            FRandGenerator random = factory.getFRand();
+
+            for (int i = 0 ; i < 100 ; i++) {
+                FPos3D value = random.nextDoubleInShell(rMin, rMax);
+                double distance = factory.getFPointHelper().getMagnitude(value);
+
+                assertTrue(distance >= rMin && distance < rMax,
+                        "The distance is erroneous");
+            }
+        }
+
+        @Test
+        @DisplayName("Get position in shell (inverted) - Seed disabled")
+        void getPositionInShellInvertedWithoutSeed() {
+            ScatFactory factory = FactoryDef.create();
+
+            double rMin = 2.5;
+            double rMax = 4.5;
+
+            FRandGenerator random = factory.getFRand();
+
+            for (int i = 0 ; i < 100 ; i++) {
+                FPos3D value = random.nextDoubleInShell(rMax, rMin);
+                double distance = factory.getFPointHelper().getMagnitude(value);
+
+                assertTrue(distance >= rMin && distance < rMax,
+                        "The distance is erroneous");
+            }
+        }
+
+        @Test
+        @DisplayName("Get position in shell (equal) - Seed disabled")
+        void getPositionInShellEqualWithoutSeed() {
+            ScatFactory factory = FactoryDef.create();
+
+            double rMin = 3;
+            double rMax = 3;
+
+            FRandGenerator random = factory.getFRand();
+
+            for (int i = 0 ; i < 100 ; i++) {
+                FPos3D value = random.nextDoubleInShell(rMin, rMax);
+                double distance = factory.getFPointHelper().getMagnitude(value);
+
+                assertEquals(3, distance,
+                        epsilon, "The distance is erroneous");
+            }
+        }
+
+        @Test
         @DisplayName("Shuffle list - Seed enabled")
         void shuffleListWithSeed() {
             List<Integer> listA = new ArrayList<>(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
@@ -623,7 +701,5 @@ public class FRandomTest {
                     () -> assertEquals(0, list.size(),
                             "The list should be empty"));
         }
-
-
     }
 }

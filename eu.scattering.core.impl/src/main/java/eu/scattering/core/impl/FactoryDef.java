@@ -75,7 +75,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
 
-        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
+        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
         this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
 
@@ -92,7 +92,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private FactoryDef(long seed) {
         this.fRandGenerator = FRandGeneratorDef.create(seed);
 
-        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator);
+        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
         this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
 

@@ -24,13 +24,23 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/base/point/FPointProducer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/Shape.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeEngineRand.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeEngineRand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/engine/randomize/generator/FRandGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/engine/randomize/generator/FRandGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FPointHelperDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FPointHelperDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FPointProducerDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/base/FPointProducerDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandEngineDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandEngineDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandGeneratorDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandGeneratorDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/base/FPointHelperTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/base/FPointHelperTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/base/FPointProducerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/base/FPointProducerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/engine/randomize/FRandomTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/engine/randomize/FRandomTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,8 +177,8 @@
       <recent name="eu.scattering.core.transfer.container.buffer.FStream3D" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FRayAdvancedTest.projectPrimitives">
-    <configuration name="FRayAdvancedTest.projectPrimitives" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
+    <configuration name="ShapeRandomizeTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -181,7 +191,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.construct.FRayTest$FRayAdvancedTest.projectPrimitives&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.engine.ShapeRandomizeTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -191,7 +201,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSphereAdvancedTest.projectSingle" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ShapeRandomizeTest.attachLinearAndSpherical" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -204,7 +214,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.projectSingle&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.engine.ShapeRandomizeTest.attachLinearAndSpherical&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -214,7 +224,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSphereAdvancedTest.projectSingleFailOppositeDirection" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ShapeRandomizeTest.attachSpherical" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -227,7 +237,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.projectSingleFailOppositeDirection&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.engine.ShapeRandomizeTest.attachSpherical&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -237,7 +247,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSphereAdvancedTest.projectSingleRandom" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ShapeRandomizeTest.project" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -250,7 +260,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest.projectSingleRandom&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.engine.ShapeRandomizeTest.project&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -283,11 +293,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FRayAdvancedTest.projectPrimitives" />
-        <item itemvalue="Gradle.FSphereAdvancedTest.projectSingleFailOppositeDirection" />
-        <item itemvalue="Gradle.FSphereAdvancedTest.projectSingleRandom" />
-        <item itemvalue="Gradle.FSphereAdvancedTest.projectSingle" />
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.ShapeRandomizeTest.project" />
+        <item itemvalue="Gradle.ShapeRandomizeTest.attachLinearAndSpherical" />
+        <item itemvalue="Gradle.ShapeRandomizeTest" />
+        <item itemvalue="Gradle.ShapeRandomizeTest.attachSpherical" />
       </list>
     </recent_temporary>
   </component>
@@ -521,11 +531,6 @@
           <line>176</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/construct/FRayDef.java</url>
-          <line>205</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -534,5 +539,6 @@
     <SUITE FILE_PATH="coverage/scattering_core$FSphereTest.ic" NAME="FSphereTest Coverage Results" MODIFIED="1753799958828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/scattering_core$Tests_in__scattering_core_eu_scattering_core_test_.ic" NAME="Tests in 'scattering.core.eu.scattering.core.test' Coverage Results" MODIFIED="1753800061562" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/scattering_core$FSphereAdvancedTest_volumeStream3DI.ic" NAME="FSphereAdvancedTest.volumeStream3DI Coverage Results" MODIFIED="1740996505272" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/scattering_core$FSphereAdvancedTest_getCollisionListDirectional.ic" NAME="FSphereAdvancedTest.getCollisionListDirectional Coverage Results" MODIFIED="1753970624656" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

@@ -25,7 +25,6 @@ import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @DisplayName("FSphere")
 public class FSphereTest {
 
@@ -3649,11 +3648,9 @@ public class FSphereTest {
 
             fSphereRef.setCenter(factory.getFRand().nextDoubleInSphere(100));
 
-            FAssembly<FSphere> fAssembly = factory.getFAssembly(List.of(fSphereArg));
-
             FRay ray = factory.getRefFRay(factory.getFVector(5, 0, 5, 0, 5, 0));
 
-            boolean isPositioned = fSphereRef.project(fAssembly, ray);
+            boolean isPositioned = fSphereRef.project(fSphereArg, ray);
 
             Assertions.assertAll("Validate position",
                     () -> assertFalse(isPositioned,
@@ -3757,9 +3754,164 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Get collision list - spherical")
-        void getCollisionListSpherical() {
+        @DisplayName("Get collision list - directional")
+        void getCollisionListDirectional() {
+            FSphere fSphereRef = factory.getFSphere();
+            FSphere fSphereZero = factory.getFSphere();
 
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
+                    .forceNoOverlap();
+
+            FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
+
+            if (fSphereZero.overlaps(fAssembly) == 0) {
+                fAssembly.register(fSphereZero);
+            }
+
+            FPoint fRayBase = factory.getFPoint(factory.getFRand().nextDoubleOnSphere(100));
+            FPoint fRayHead = factory.getFPoint();
+
+            FRay ray = factory.getRefFRay(factory.getRefFVector(fRayBase, fRayHead));
+
+            List<Shape> collisions = new ArrayList<>();
+
+            fSphereRef.getCollisionListDirectional(collisions, fAssembly, ray);
+
+            assertTrue(collisions.size() > 0,
+                    "At least on element should be present");
+
+            for (Shape shape : fAssembly) {
+                if (collisions.contains(shape)) {
+                    assertTrue(fSphereRef.project(shape, ray),
+                            "The FSphere should be projectable");
+                    assertTrue(fSphereRef.touches(shape),
+                            "The FSpheres should be in point contact");
+                } else {
+                    assertFalse(fSphereRef.project(shape, ray),
+                            "The FSphere should not be projectable");
+                    assertFalse(fSphereRef.touches(shape),
+                            "The FSpheres should not be in point contact");
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("Get collision list with primitives- spherical")
+        void getCollisionListWithPrimitivesSpherical() {
+            FSphere fSphereRef = factory.getFSphere(-4, 2, 3);
+            FSphere fSphereZero = factory.getFSphere(1, 7, 3);
+
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
+                    .forceNoOverlap();
+
+            FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
+
+            if (fSphereZero.overlaps(fAssembly) == 0) {
+                fAssembly.register(fSphereZero);
+            }
+
+            List<Shape> collisions = new ArrayList<>();
+
+            fSphereRef.getCollisionListSpherical(collisions, fAssembly, 1, 2, 3);
+
+            assertTrue(collisions.size() > 0,
+                    "At least on element should be present");
+
+            for (Shape shape : fAssembly) {
+                if (collisions.contains(shape)) {
+                    assertTrue(fSphereRef.attachSpherical(shape, 1, 2, 3),
+                            "The FSphere should be attachable");
+                    assertTrue(fSphereRef.touches(shape),
+                            "The FSpheres should be in point contact");
+                } else {
+                    assertFalse(fSphereRef.attachSpherical(shape, 1, 2, 3),
+                            "The FSphere should not be attachable");
+                    assertFalse(fSphereRef.touches(shape),
+                            "The FSpheres should not be in point contact");
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("Get collision list with FPoint - spherical")
+        void getCollisionListWithFPointSpherical() {
+            FPoint center = factory.getFPoint(1, 2, 3);
+
+            FSphere fSphereRef = factory.getFSphere(-4, 2, 3);
+            FSphere fSphereZero = factory.getFSphere(1, 7, 3);
+
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
+                    .forceNoOverlap();
+
+            FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
+
+            if (fSphereZero.overlaps(fAssembly) == 0) {
+                fAssembly.register(fSphereZero);
+            }
+
+            List<Shape> collisions = new ArrayList<>();
+
+            fSphereRef.getCollisionListSpherical(collisions, fAssembly, center);
+
+            assertTrue(collisions.size() > 0,
+                    "At least on element should be present");
+
+            for (Shape shape : fAssembly) {
+                if (collisions.contains(shape)) {
+                    assertTrue(fSphereRef.attachSpherical(shape, center),
+                            "The FSphere should be attachable");
+                    assertTrue(fSphereRef.touches(shape),
+                            "The FSpheres should be in point contact");
+                } else {
+                    assertFalse(fSphereRef.attachSpherical(shape, center),
+                            "The FSphere should not be attachable");
+                    assertFalse(fSphereRef.touches(shape),
+                            "The FSpheres should not be in point contact");
+                }
+            }
+        }
+
+        @Test
+        @DisplayName("Get collision list with FPos3D - spherical")
+        void getCollisionListWithFPos3DSpherical() {
+            FPos3D center = factory.getFPos3D(1, 2, 3);
+
+            FSphere fSphereRef = factory.getFSphere(-4, 2, 3);
+            FSphere fSphereZero = factory.getFSphere(1, 7, 3);
+
+            Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
+                    .forceNoOverlap();
+
+            FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
+
+            if (fSphereZero.overlaps(fAssembly) == 0) {
+                fAssembly.register(fSphereZero);
+            }
+
+            List<Shape> collisions = new ArrayList<>();
+
+            fSphereRef.getCollisionListSpherical(collisions, fAssembly, center);
+
+            assertTrue(collisions.size() > 0,
+                    "At least on element should be present");
+
+            for (Shape shape : fAssembly) {
+                if (collisions.contains(shape)) {
+                    assertTrue(fSphereRef.attachSpherical(shape, center),
+                            "The FSphere should be attachable");
+                    assertTrue(fSphereRef.touches(shape),
+                            "The FSpheres should be in point contact");
+                } else {
+                    assertFalse(fSphereRef.attachSpherical(shape, center),
+                            "The FSphere should not be attachable");
+                    assertFalse(fSphereRef.touches(shape),
+                            "The FSpheres should not be in point contact");
+                }
+            }
         }
     }
 

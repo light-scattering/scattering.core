@@ -401,7 +401,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FAssembly<T> zeroSpatialCenter() {
+    public FAssembly<T> resetSpatialCenter() {
         FPos3D center = getSpatialCenter();
 
         translate(-center.getD0(), -center.getD1(), -center.getD2());

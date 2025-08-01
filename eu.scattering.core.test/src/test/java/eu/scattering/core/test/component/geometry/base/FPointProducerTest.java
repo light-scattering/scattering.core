@@ -376,6 +376,40 @@ public class FPointProducerTest {
     }
 
     @Test
+    @DisplayName("Preset in spherical shell")
+    void presetInSphericalShell() {
+        FPointProducer producer = factory.getFPointProducer()
+                .withInShell(0.01, 0.02, 1);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(resultA.getMagnitude() >= 0.01 && resultA.getMagnitude() < 0.02 ,
+                        "Position is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
+    @DisplayName("Preset in spherical shell (simple)")
+    void presetInSphericalShellSimple() {
+        FPointProducer producer = factory.getFPointProducer()
+                .withInShell(0.01, 0.02);
+
+        FPoint resultA = producer.produce();
+        FPoint resultB = producer.produce();
+
+        Assertions.assertAll("Validate FPoint values",
+                () -> assertTrue(resultA.getMagnitude() >= 0.01 && resultA.getMagnitude() < 0.02 ,
+                        "Position is incorrect"),
+                () -> assertFalse(resultA.isExact(resultB),
+                        "Values should be different")
+        );
+    }
+
+    @Test
     @DisplayName("Preset distribution")
     void presetDistribution() {
         FPairPos3D range = factory.getFPairPos3D(-0.01, -0.01, -0.01, 0.01, 0.01, 0.01);
@@ -620,6 +654,27 @@ public class FPointProducerTest {
         Producer<FPoint> producerA = factoryA.getFPointProducer(10, FPointProducer.Location.ON_SPHERE);
         Producer<FPoint> producerB = factoryB.getFPointProducer()
                 .withOnSphere(10);
+
+        for (int i = 0 ; i < 10 ; i++) {
+            var valA = producerA.produce();
+            var valB = producerB.produce();
+
+            assertEquals(valA, valB,
+                    "Elements must be equal");
+        }
+    }
+
+    @Test
+    @DisplayName("Facade - In Spherical Shell")
+    void facadeInSphericalShell() {
+        long seed = 123;
+
+        ScatFactory factoryA = FactoryDef.create(seed);
+        ScatFactory factoryB = FactoryDef.create(seed);
+
+        Producer<FPoint> producerA = factoryA.getFPointProducer(0.01, 0.02);
+        Producer<FPoint> producerB = factoryB.getFPointProducer()
+                .withInShell(0.01, 0.02);
 
         for (int i = 0 ; i < 10 ; i++) {
             var valA = producerA.produce();

@@ -74,4 +74,9 @@ public interface FPointFactory {
 
         throw new IllegalArgumentException("Unsupported producer type");
     }
+
+    default FPointProducer getFPointProducer(double radiusMin, double radiusMax) {
+
+        return getFPointProducer().withInShell(radiusMin, radiusMax);
+    }
 }
