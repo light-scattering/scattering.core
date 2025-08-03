@@ -355,6 +355,18 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
+    public boolean containsWithSurface(double x, double y, double z) {
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
+
+        double radP2 = getRadius() * getRadius();
+        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+
+        return distP2 <= radP2 + getEpsilon();
+    }
+
+    @Override
     public void fillSurfaceLayer(FLayer in) {
 
         in.set(0, in.get(0) + (int) Math.round(getSurface() / (getDelta() * getDelta())));
@@ -371,7 +383,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                     continue;
                 }
 
-                if (shape.contains(x, y, z)) {
+                if (shape.containsWithSurface(x, y, z)) {
                     layers++;
                 }
             }

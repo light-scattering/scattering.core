@@ -12,12 +12,15 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
+import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
@@ -41,9 +44,9 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         }
     }
 
-    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf, List<T> elements) {
+    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf, List<? extends T> elements) {
 
-        return new FAssemblyDef<>(factorySelf, elements);
+        return new FAssemblyDef<>(factorySelf, new ArrayList<>(elements));
     }
 
     protected static boolean isParsable(String tag) {
@@ -67,12 +70,37 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public boolean registerWithCheck(Collection<T> elements) {
+    public boolean registerWithCheck(T element, BiFunction<T, Collection<T>, Boolean> rule) {
+
+        if (rule.apply(element, this.elements)) {
+            return registerWithCheck(element);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean registerWithCheck(Collection<? extends T> elements) {
         boolean updated = false;
 
         for (T element : elements) {
             if (registerWithCheck(element)) {
                 updated = true;
+            }
+        }
+
+        return updated;
+    }
+
+    @Override
+    public boolean registerWithCheck(Collection<? extends T> elements, BiFunction<T, Collection<T>, Boolean> rule) {
+        boolean updated = false;
+
+        for (T element : elements) {
+            if (rule.apply(element, this.elements)) {
+                if (registerWithCheck(element)) {
+                    updated = true;
+                }
             }
         }
 
@@ -88,9 +116,31 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FAssembly<T> register(Collection<T> elements) {
+    public FAssembly<T> register(T element, BiFunction<T, Collection<T>, Boolean> rule) {
+
+        if (rule.apply(element, this.elements)) {
+            register(element);
+        }
+
+        return this;
+    }
+
+    @Override
+    public FAssembly<T> register(Collection<? extends T> elements) {
 
         elements.forEach(this::registerWithCheck);
+
+        return this;
+    }
+
+    @Override
+    public FAssembly<T> register(Collection<? extends T> elements, BiFunction<T, Collection<T>, Boolean> rule) {
+
+        for (T element : elements) {
+            if (rule.apply(element, this.elements)) {
+                register(element);
+            }
+        }
 
         return this;
     }
@@ -387,6 +437,62 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         this.fPoints.forEach(e -> e.mulFactor(factor));
 
         return this;
+    }
+
+    @Override
+    public double getVolume() {
+        FLayer fLayer = factory.getFLayer();
+
+        List<Shape> list = this.elements.stream()
+                .filter(e -> e instanceof Shape)
+                .map(e -> (Shape) e)
+                .distinct()
+                .toList();
+
+        Queue<Shape> queue = new LinkedList<>(list);
+
+        queue.poll();
+
+        double volume = 0;
+        for (Shape element : list) {
+
+            if (element.overlaps(queue) == 0) {
+                volume += element.getVolume();
+            } else {
+                fLayer.reset();
+                element.fillVolumeLayer(fLayer, queue);
+                volume += fLayer.get() * Math.pow(element.getDelta(), 3);
+            }
+
+            queue.poll();
+        }
+
+        return volume;
+    }
+
+    @Override
+    public double getSurface() {
+        FLayer fLayer = factory.getFLayer();
+
+        List<Shape> list = this.elements.stream()
+                .filter(e -> e instanceof Shape)
+                .map(e -> (Shape) e)
+                .distinct()
+                .toList();
+
+        double surface = 0;
+        for (Shape element : list) {
+
+            if (element.overlaps(list) == 0) {
+                surface += element.getSurface();
+            } else {
+                fLayer.reset();
+                element.fillSurfaceLayer(fLayer, list);
+                surface += fLayer.get() * Math.pow(element.getDelta(), 2);
+            }
+        }
+
+        return surface;
     }
 
     @Override

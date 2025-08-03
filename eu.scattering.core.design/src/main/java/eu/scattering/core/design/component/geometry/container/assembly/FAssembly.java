@@ -8,14 +8,21 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, Iterable<T> {
 
     boolean registerWithCheck(T element);
-    boolean registerWithCheck(Collection<T> elements);
+    boolean registerWithCheck(T element, BiFunction<T, Collection<T>, Boolean> rule);
+
+    boolean registerWithCheck(Collection<? extends T> elements);
+    boolean registerWithCheck(Collection<? extends T> elements, BiFunction<T, Collection<T>, Boolean> rule);
 
     FAssembly<T> register(T element);
-    FAssembly<T> register(Collection<T> elements);
+    FAssembly<T> register(T element, BiFunction<T, Collection<T>, Boolean> rule);
+
+    FAssembly<T> register(Collection<? extends T> elements);
+    FAssembly<T> register(Collection<? extends T> elements, BiFunction<T, Collection<T>, Boolean> rule);
 
     boolean deregisterWithCheck(T element);
     boolean deregisterWithCheck(Collection<T> elements);
@@ -25,15 +32,13 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
 
     //--------------------------------------------------
 
-    //--------------------------------------------------
-
     FAssembly<T> translate(double x, double y, double z);
     FAssembly<T> translate(FPos3D offset);
 
     FAssembly<T> scale(double factor);
 
-//    double getVolume();
-//    double getSurface();
+    double getVolume();
+    double getSurface();
 
     FPairPos3D getRange();
 

@@ -3797,7 +3797,7 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Get collision list with primitives- spherical")
+        @DisplayName("Get collision list with primitives - spherical")
         void getCollisionListWithPrimitivesSpherical() {
             FSphere fSphereRef = factory.getFSphere(-4, 2, 3);
             FSphere fSphereZero = factory.getFSphere(1, 7, 3);

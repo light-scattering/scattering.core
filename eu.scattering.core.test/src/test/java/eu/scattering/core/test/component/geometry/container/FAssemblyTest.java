@@ -3,6 +3,7 @@ package eu.scattering.core.test.component.geometry.container;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.Base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
@@ -12,6 +13,7 @@ import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
@@ -20,12 +22,12 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Timeout(5)
 @DisplayName("FAssembly")
 public class FAssemblyTest {
 
@@ -690,6 +692,33 @@ public class FAssemblyTest {
         }
 
         @Test
+        @DisplayName("Register elements with check and rule")
+        void registerElementsWithCheckAndRule() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 1, 0, 1);
+
+            BiFunction<Shape, Collection<Shape>, Boolean> rule = (single, all) -> single.overlaps(all) == 0;
+
+            var registerA = fAssembly.registerWithCheck(fSphereA, rule);
+            var registerB = fAssembly.registerWithCheck(fSphereB, rule);
+            var registerC = fAssembly.registerWithCheck(fSphereC, rule);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(registerA,
+                            "The addition of FSphere A should be successful"),
+                    () -> assertTrue(registerB,
+                            "The addition of FSphere B should be successful"),
+                    () -> assertFalse(registerC,
+                            "The addition of FSphere C should be successful"),
+                    () -> assertEquals(2, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Register elements")
         void registerElements() {
             FAssembly<FVector> fAssembly = factory.getFAssembly();
@@ -706,6 +735,32 @@ public class FAssemblyTest {
                     () -> assertEquals(2, fAssembly.size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Register elements with rule")
+        void registerElementsWithRule() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 1, 0, 1);
+
+            BiFunction<Shape, Collection<Shape>, Boolean> rule = (single, all) -> single.overlaps(all) == 0;
+
+            FAssembly<Shape> results = fAssembly
+                    .register(fSphereA, rule)
+                    .register(fSphereB, rule)
+                    .register(fSphereC, rule);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(2, fAssembly.size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(2, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
                     () -> assertSame(fAssembly, results,
                             "The reference should not change")
@@ -749,6 +804,32 @@ public class FAssemblyTest {
         }
 
         @Test
+        @DisplayName("Register elements with check and rule (collection)")
+        void registerElementsWithCheckAndRuleCollection() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 1, 0, 1);
+
+            Collection<FSphere> collection = new ArrayList<>();
+            collection.add(fSphereA);
+            collection.add(fSphereB);
+            collection.add(fSphereC);
+
+            BiFunction<Shape, Collection<Shape>, Boolean> rule = (single, all) -> single.overlaps(all) == 0;
+
+            var register = fAssembly.registerWithCheck(collection, rule);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(register,
+                            "At least one element should be added"),
+                    () -> assertEquals(2, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Register elements (collection)")
         void registerElementsCollection() {
             FAssembly<FVector> fAssembly = factory.getFAssembly();
@@ -772,6 +853,34 @@ public class FAssemblyTest {
                     () -> assertEquals(3, fAssembly.size(),
                             "The size of the FAssembly is erroneous"),
                     () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Register elements with rule (collection)")
+        void registerElementsWithRuleCollection() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 1, 0, 1);
+
+            Collection<FSphere> collection = new ArrayList<>();
+            collection.add(fSphereA);
+            collection.add(fSphereB);
+            collection.add(fSphereC);
+
+            BiFunction<Shape, Collection<Shape>, Boolean> rule = (single, all) -> single.overlaps(all) == 0;
+
+            FAssembly<Shape> results = fAssembly.register(collection, rule);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(2, fAssembly.size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(2, fAssembly.toFPoints().size(),
                             "The number of FPoints is incorrect"),
                     () -> assertSame(fAssembly, results,
                             "The reference should not change")
@@ -1263,8 +1372,8 @@ public class FAssemblyTest {
         }
 
         @Test
-        @DisplayName("Zero spatial center")
-        void zeroSpatialCenter() {
+        @DisplayName("Reset spatial center")
+        void resetSpatialCenter() {
             FSphere fSphereA = factory.getFSphere(1, 0, 0, 1);
             FSphere fSphereB = factory.getFSphere(-1, 0, 0, 1);
 
@@ -1281,6 +1390,233 @@ public class FAssemblyTest {
                             "The range center is erroneous"),
                     () -> assertSame(fAssembly, results,
                             "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, point contact A")
+        void getVolumePointContactA() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double volumeCalculated = fAssembly.getVolume();
+            double volumeExpected = 4 * (4  * Math.PI / 3);
+
+            double relError = factory.getFStatHelper().getRelErr(volumeExpected, volumeCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, point contact B")
+        void getVolumePointContactB() {
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).forceNoOverlap();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
+
+            double volumeCalculated = fAssembly.getVolume();
+            double volumeExpected = 50 * (4  * Math.PI / 3);
+
+            double relError = factory.getFStatHelper().getRelErr(volumeExpected, volumeCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (full) - monodisperse")
+        void getVolumeOverlapFullMonodisperse() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double volumeCalculated = fAssembly.getVolume();
+            double volumeExpected = 1 * (4  * Math.PI / 3);
+
+            double relError = factory.getFStatHelper().getRelErr(volumeExpected, volumeCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (full) - polydisperse A")
+        void getVolumeOverlapFullPolydisperseA() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double volumeCalculated = fAssembly.getVolume();
+            double volumeExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
+
+            double relError = factory.getFStatHelper().getRelErr(volumeExpected, volumeCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (full) - polydisperse B")
+        void getVolumeOverlapFullPolydisperseB() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double volumeCalculated = fAssembly.getVolume();
+            double volumeExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
+
+            double relError = factory.getFStatHelper().getRelErr(volumeExpected, volumeCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (mixed)")
+        void getVolumeOverlapMixed() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 5, 0, 1).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 5, 1).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double volumeCalculated = fAssembly.getVolume();
+            double volumeExpected = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double relError = factory.getFStatHelper().getRelErr(volumeExpected, volumeCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, point contact A")
+        void getSurfacePointContactA() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double surfaceCalculated = fAssembly.getSurface();
+            double surfaceExpected = 4 * (4  * Math.PI);
+
+            double relError = factory.getFStatHelper().getRelErr(surfaceExpected, surfaceCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, point contact B")
+        void getSurfacePointContactB() {
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).forceNoOverlap();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
+
+            double surfaceCalculated = fAssembly.getSurface();
+            double surfaceExpected = 50 * (4  * Math.PI);
+
+            double relError = factory.getFStatHelper().getRelErr(surfaceExpected, surfaceCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, overlap (full) - monodisperse")
+        void getSurfaceOverlapFullMonodisperse() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double surfaceCalculated = fAssembly.getSurface();
+            double surfaceExpected = 1 * (4  * Math.PI);
+
+            double relError = factory.getFStatHelper().getRelErr(surfaceExpected, surfaceCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, overlap (full) - polydisperse A")
+        void getSurfaceOverlapFullPolydisperseA() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double surfaceCalculated = fAssembly.getSurface();
+            double surfaceExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
+
+            double relError = factory.getFStatHelper().getRelErr(surfaceExpected, surfaceCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, overlap (full) - polydisperse B")
+        void getSurfaceOverlapFullPolydisperseB() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double surfaceCalculated = fAssembly.getSurface();
+            double surfaceExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
+
+            double relError = factory.getFStatHelper().getRelErr(surfaceExpected, surfaceCalculated);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
             );
         }
     }

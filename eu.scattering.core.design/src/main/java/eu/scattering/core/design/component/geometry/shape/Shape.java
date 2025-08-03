@@ -145,4 +145,7 @@ public interface Shape extends Geometry {
     double getDistCenterP2(FPos3D fPos3D);
     @Fragment
     double getDistCenterP2(Shape shape);
+
+    @Fragment
+    boolean containsWithSurface(double x, double y, double z);
 }

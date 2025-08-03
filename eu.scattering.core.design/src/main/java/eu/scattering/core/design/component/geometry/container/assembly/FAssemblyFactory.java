@@ -10,5 +10,5 @@ public interface FAssemblyFactory {
     <T extends Geometry> FAssemblyProducer<T> getFAssemblyProducer();
 
     <T extends Geometry> FAssembly<T> getFAssembly();
-    <T extends Geometry> FAssembly<T> getFAssembly(List<T> elements);
+    <T extends Geometry> FAssembly<T> getFAssembly(List<? extends T> elements);
 }

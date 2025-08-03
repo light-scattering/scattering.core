@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.geometry.shape.engine;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
@@ -176,7 +177,7 @@ public class ShapeRandomizeTest {
                 .withProdCenterAndFixRadius(fPointProducer, 1)
                 .forceNoOverlap();
 
-        FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);
@@ -206,7 +207,7 @@ public class ShapeRandomizeTest {
                 .withProdCenterAndFixRadius(fPointProducer, 1)
                 .forceNoOverlap();
 
-        FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);
@@ -236,7 +237,7 @@ public class ShapeRandomizeTest {
                 .withProdCenterAndFixRadius(fPointProducer, 1)
                 .forceNoOverlap();
 
-        FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);
@@ -265,7 +266,7 @@ public class ShapeRandomizeTest {
                 .withProdCenterAndFixRadius(fPointProducer, 1)
                 .forceNoOverlap();
 
-        FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
         fAssembly.register(fSphereRef);
 

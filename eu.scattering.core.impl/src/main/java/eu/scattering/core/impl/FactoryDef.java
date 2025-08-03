@@ -327,7 +327,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     }
 
     @Override
-    public <T extends Geometry> FAssembly<T> getFAssembly(List<T> elements) {
+    public <T extends Geometry> FAssembly<T> getFAssembly(List<? extends T> elements) {
 
         return FAssemblyDef.create(this, elements);
     }
