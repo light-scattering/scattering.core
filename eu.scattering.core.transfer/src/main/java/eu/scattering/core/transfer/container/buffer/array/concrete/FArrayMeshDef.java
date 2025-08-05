@@ -1,7 +1,11 @@
 package eu.scattering.core.transfer.container.buffer.array.concrete;
 
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.array.utils.FArrayMeshConsumer;
+import eu.scattering.core.transfer.container.storage.FPos3DI.FPos3DI;
+import eu.scattering.core.transfer.container.storage.FPos4DI.FPos4DI;
 import org.json.JSONObject;
 
 import java.util.Iterator;
@@ -10,6 +14,8 @@ import java.util.NoSuchElementException;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FArrayMeshDef implements FArrayMesh {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
+
     private static final String JSON_MAIN = "arrayMesh";
     private static final String JSON_LENGTH = "length";
     private static final String JSON_CAPACITY = "capacity";
@@ -55,11 +61,17 @@ public class FArrayMeshDef implements FArrayMesh {
     @Override
     public void add(int d0, int d1, int d2) {
 
-        add(d0, d1, d2, 0);
+        addWithValue(d0, d1, d2, 0);
     }
 
     @Override
-    public void add(int d0, int d1, int d2, double value) {
+    public void add(FPos3DI pos) {
+
+        add(pos.getD0(), pos.getD1(), pos.getD2());
+    }
+
+    @Override
+    public void addWithValue(int d0, int d1, int d2, double value) {
 
         if (index > capacity) {
             throw new IndexOutOfBoundsException("The index exceeded the size limit");
@@ -72,6 +84,38 @@ public class FArrayMeshDef implements FArrayMesh {
         this.value[index] = value;
 
         index++;
+    }
+
+    @Override
+    public void addWithValue(FPos3DI pos, double value) {
+
+        addWithValue(pos.getD0(), pos.getD1(), pos.getD2(), value);
+    }
+
+    @Override
+    public void addWithValue(FPos4DI pos) {
+
+        addWithValue(pos.getD0(), pos.getD1(), pos.getD2(), pos.getD3());
+    }
+
+    @Override
+    public FPos3DI getFPos3DI(int index) {
+
+        if (index >= this.index) {
+            throw new IndexOutOfBoundsException("The index exceeded the current array size");
+        }
+
+        return factory.getFPos3DI(this.d0[index], this.d1[index], this.d2[index]);
+    }
+
+    @Override
+    public FPos4DI getFPos4DI(int index) {
+
+        if (index >= this.index) {
+            throw new IndexOutOfBoundsException("The index exceeded the current array size");
+        }
+
+        return factory.getFPos4DI(this.d0[index], this.d1[index], this.d2[index], (int) this.value[index]);
     }
 
     @Override
@@ -127,7 +171,7 @@ public class FArrayMeshDef implements FArrayMesh {
     }
 
     @Override
-    public void iterate(FArrayMeshConsumer consumer) {
+    public void forEach(FArrayMeshConsumer consumer) {
 
         for (int i = 0; i < index; i++) {
             consumer.apply(i, d0[i], d1[i], d2[i], value[i]);

@@ -34,8 +34,8 @@ public class FArrayMeshTest {
             FArrayMesh fArray = factory.getFArrayMesh(100);
 
             fArray.add(1, 2, 3);
-            fArray.add(4, 5, 6);
-            fArray.add(7, 8, 9);
+            fArray.add(factory.getFPos3DI(4, 5, 6));
+            fArray.add(factory.getFPos3DI(7, 8, 9));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(3, fArray.size(),
@@ -72,9 +72,9 @@ public class FArrayMeshTest {
         void incWithValue() {
             FArrayMesh fArray = factory.getFArrayMesh(100);
 
-            fArray.add(1, 2, 3, 1.1);
-            fArray.add(4, 5, 6, 2.2);
-            fArray.add(7, 8, 9, 3.3);
+            fArray.addWithValue(1, 2, 3, 1.1);
+            fArray.addWithValue(factory.getFPos3DI(4, 5, 6), 2.2);
+            fArray.addWithValue(factory.getFPos4DI(7, 8, 9, 3));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(3, fArray.size(),
@@ -101,7 +101,7 @@ public class FArrayMeshTest {
                             "The value (0) is erroneous"),
                     () -> assertEquals(2.2, fArray.getValue(1),
                             "The value (1) is erroneous"),
-                    () -> assertEquals(3.3, fArray.getValue(2),
+                    () -> assertEquals(3, fArray.getValue(2),
                             "The value (2) is erroneous")
             );
         }
@@ -111,9 +111,9 @@ public class FArrayMeshTest {
         void outOfBoundsException() {
             FArrayMesh fArray = factory.getFArrayMesh(3);
 
-            fArray.add(1, 2, 3, 1.1);
-            fArray.add(4, 5, 6, 2.2);
-            fArray.add(7, 8, 9, 3.3);
+            fArray.addWithValue(1, 2, 3, 1.1);
+            fArray.addWithValue(4, 5, 6, 2.2);
+            fArray.addWithValue(7, 8, 9, 3.3);
 
             assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(-1),
                     "The index is out of bounds (negative), an exception should be thrown");
@@ -130,13 +130,13 @@ public class FArrayMeshTest {
         void reset() {
             FArrayMesh fArray = factory.getFArrayMesh(100);
 
-            fArray.add(1, 2, 3, 1.1);
-            fArray.add(4, 5, 6, 2.2);
-            fArray.add(7, 8, 9, 3.3);
+            fArray.addWithValue(1, 2, 3, 1.1);
+            fArray.addWithValue(4, 5, 6, 2.2);
+            fArray.addWithValue(7, 8, 9, 3.3);
 
             fArray.reset();
 
-            fArray.add(7, 8, 9, 3.3);
+            fArray.addWithValue(7, 8, 9, 3.3);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fArray.size(),
@@ -154,6 +154,21 @@ public class FArrayMeshTest {
             assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(1),
                     "The index is out of bounds (positive), an exception should be thrown");
         }
+
+        @Test
+        @DisplayName("Get")
+        void get() {
+            FArrayMesh fArray = factory.getFArrayMesh(100);
+
+            fArray.addWithValue(1, 2, 3, 4);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(factory.getFPos3DI(1, 2, 3), fArray.getFPos3DI(0),
+                            "The values are incorrect"),
+                    () -> assertEquals(factory.getFPos4DI(1, 2, 3, 4), fArray.getFPos4DI(0),
+                            "The values are incorrect")
+            );
+        }
     }
 
     @Nested
@@ -167,17 +182,17 @@ public class FArrayMeshTest {
             FArrayMesh fArray1 = factory.getFArrayMesh(10);
             FArrayMesh fArray2 = factory.getFArrayMesh(15);
 
-            fArray1.add(4, 5, 6, 2.2);
-            fArray1.add(7, 8, 9, 3.3);
+            fArray1.addWithValue(4, 5, 6, 2.2);
+            fArray1.addWithValue(7, 8, 9, 3.3);
 
-            fArray2.add(3, 2, 1, 9.9);
-            fArray2.add(6, 5, 4, 8.8);
-            fArray2.add(9, 8, 7, 7.7);
+            fArray2.addWithValue(3, 2, 1, 9.9);
+            fArray2.addWithValue(6, 5, 4, 8.8);
+            fArray2.addWithValue(9, 8, 7, 7.7);
 
             fArray2.reset();
 
-            fArray2.add(4, 5, 6, 2.2);
-            fArray2.add(7, 8, 9, 3.3);
+            fArray2.addWithValue(4, 5, 6, 2.2);
+            fArray2.addWithValue(7, 8, 9, 3.3);
 
             Assertions.assertAll("Check equality",
                     () -> assertEquals(fArray1, fArray2,
@@ -195,12 +210,12 @@ public class FArrayMeshTest {
             FArrayMesh fArray1 = factory.getFArrayMesh(10);
             FArrayMesh fArray2 = factory.getFArrayMesh(15);
 
-            fArray1.add(4, 5, 6, 2.2);
-            fArray1.add(7, 8, 9, 3.3);
+            fArray1.addWithValue(4, 5, 6, 2.2);
+            fArray1.addWithValue(7, 8, 9, 3.3);
 
-            fArray2.add(3, 2, 1, 9.9);
-            fArray2.add(6, 5, 4, 8.8);
-            fArray2.add(9, 8, 7, 7.7);
+            fArray2.addWithValue(3, 2, 1, 9.9);
+            fArray2.addWithValue(6, 5, 4, 8.8);
+            fArray2.addWithValue(9, 8, 7, 7.7);
 
             Assertions.assertAll("Check equality",
                     () -> assertNotEquals(fArray1, fArray2,
@@ -221,9 +236,9 @@ public class FArrayMeshTest {
         void parseJSON() {
             FArrayMesh dtoOrigin = factory.getFArrayMesh(123);
 
-            dtoOrigin.add(3, 2, 1, 9.9);
-            dtoOrigin.add(6, 5, 4, 8.8);
-            dtoOrigin.add(9, 8, 7, 7.7);
+            dtoOrigin.addWithValue(3, 2, 1, 9.9);
+            dtoOrigin.addWithValue(6, 5, 4, 8.8);
+            dtoOrigin.addWithValue(9, 8, 7, 7.7);
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
@@ -238,13 +253,13 @@ public class FArrayMeshTest {
         void iteration() {
             FArrayMesh fArray = factory.getFArrayMesh(100);
 
-            fArray.add(1, 2, 3, 1.1);
-            fArray.add(4, 5, 6, 2.2);
-            fArray.add(7, 8, 9, 3.3);
+            fArray.addWithValue(1, 2, 3, 1.1);
+            fArray.addWithValue(4, 5, 6, 2.2);
+            fArray.addWithValue(7, 8, 9, 3.3);
 
             double[] sum = new double[fArray.size()];
 
-            fArray.iterate((index, d0, d1, d2, value) -> sum[index] = d0 + d1 + d2 + value);
+            fArray.forEach((index, d0, d1, d2, value) -> sum[index] = d0 + d1 + d2 + value);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(7.1, sum[0],
@@ -261,9 +276,9 @@ public class FArrayMeshTest {
         void iterator() {
             FArrayMesh fArray = factory.getFArrayMesh(100);
 
-            fArray.add(1, 2, 3, 1.1);
-            fArray.add(4, 5, 6, 2.2);
-            fArray.add(7, 8, 9, 3.3);
+            fArray.addWithValue(1, 2, 3, 1.1);
+            fArray.addWithValue(4, 5, 6, 2.2);
+            fArray.addWithValue(7, 8, 9, 3.3);
 
             double[] sum = new double[fArray.size()];
 

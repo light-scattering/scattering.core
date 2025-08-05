@@ -3275,7 +3275,7 @@ public class FSphereTest {
 
             int elements = fMesh.size();
 
-            fMesh.iterate((index, d0, d1, d2, value) ->
+            fMesh.forEach((index, d0, d1, d2, value) ->
                     assertTrue(fSphere.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
@@ -3312,7 +3312,7 @@ public class FSphereTest {
 
             int elements = fMesh.size();
 
-            fMesh.iterate((index, d0, d1, d2, value) ->
+            fMesh.forEach((index, d0, d1, d2, value) ->
                     assertTrue(fSphereRef.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
@@ -3349,7 +3349,7 @@ public class FSphereTest {
 
             int elements = fMesh.size();
 
-            fMesh.iterate((index, d0, d1, d2, value) ->
+            fMesh.forEach((index, d0, d1, d2, value) ->
                     assertTrue(fSphereRef.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
@@ -3524,7 +3524,7 @@ public class FSphereTest {
             int elements = fMesh.size();
 
             FSphere fSphereTmp = factory.getFSphere(EPSILON);
-            fMesh.iterate((index, d0, d1, d2, value) -> {
+            fMesh.forEach((index, d0, d1, d2, value) -> {
                 fSphereTmp.setCenter(d0, d1, d2);
                 assertTrue(fSphere.touches(fSphereTmp));
             });
@@ -3564,7 +3564,7 @@ public class FSphereTest {
             int elements = fMesh.size();
 
             FSphere fSphereTmp = factory.getFSphere(EPSILON);
-            fMesh.iterate((index, d0, d1, d2, value) -> {
+            fMesh.forEach((index, d0, d1, d2, value) -> {
                 fSphereTmp.setCenter(d0, d1, d2);
                 assertTrue(fSphereRef.touches(fSphereTmp));
             });
@@ -3604,7 +3604,7 @@ public class FSphereTest {
             int elements = fMesh.size();
 
             FSphere fSphereTmp = factory.getFSphere(EPSILON);
-            fMesh.iterate((index, d0, d1, d2, value) -> {
+            fMesh.forEach((index, d0, d1, d2, value) -> {
                 fSphereTmp.setCenter(d0, d1, d2);
                 assertTrue(fSphereRef.touches(fSphereTmp));
             });

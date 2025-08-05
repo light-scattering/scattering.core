@@ -1,15 +1,22 @@
 package eu.scattering.core.transfer.container.buffer.array.concrete;
 
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.utils.FArrayConsumer;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import org.json.JSONObject;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.function.BiConsumer;
 
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FArrayDef implements FArray {
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
+
     private static final String JSON_MAIN = "array";
     private static final String JSON_LENGTH = "length";
     private static final String JSON_CAPACITY = "capacity";
@@ -55,11 +62,17 @@ public class FArrayDef implements FArray {
     @Override
     public void add(double d0, double d1, double d2) {
 
-        add(d0, d1, d2, 0);
+        addWithValue(d0, d1, d2, 0);
     }
 
     @Override
-    public void add(double d0, double d1, double d2, double value) {
+    public void add(FPos3D pos) {
+
+        add(pos.getD0(), pos.getD1(), pos.getD2());
+    }
+
+    @Override
+    public void addWithValue(double d0, double d1, double d2, double value) {
 
         if (index > capacity) {
             throw new IndexOutOfBoundsException("The index exceeded the size limit");
@@ -72,6 +85,38 @@ public class FArrayDef implements FArray {
         this.value[index] = value;
 
         index++;
+    }
+
+    @Override
+    public void addWithValue(FPos3D pos, double value) {
+
+        addWithValue(pos.getD0(), pos.getD1(), pos.getD2(), value);
+    }
+
+    @Override
+    public void addWithValue(FPos4D pos) {
+
+        addWithValue(pos.getD0(), pos.getD1(), pos.getD2(), pos.getD3());
+    }
+
+    @Override
+    public FPos4D getFPos4D(int index) {
+
+        if (index >= this.index) {
+            throw new IndexOutOfBoundsException("The index exceeded the current array size");
+        }
+
+        return factory.getFPos4D(this.d0[index], this.d1[index], this.d2[index], this.value[index]);
+    }
+
+    @Override
+    public FPos3D getFPos3D(int index) {
+
+        if (index >= this.index) {
+            throw new IndexOutOfBoundsException("The index exceeded the current array size");
+        }
+
+        return factory.getFPos3D(this.d0[index], this.d1[index], this.d2[index]);
     }
 
     @Override
@@ -127,7 +172,7 @@ public class FArrayDef implements FArray {
     }
 
     @Override
-    public void iterate(FArrayConsumer consumer) {
+    public void forEach(FArrayConsumer consumer) {
 
         for (int i = 0 ; i < index ; i++) {
             consumer.apply(i, d0[i], d1[i], d2[i], value[i]);

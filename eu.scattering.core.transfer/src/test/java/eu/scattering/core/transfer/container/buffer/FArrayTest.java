@@ -34,8 +34,8 @@ public class FArrayTest {
             FArray fArray = factory.getFArray(100);
 
             fArray.add(1.1, 2.2, 3.3);
-            fArray.add(4.4, 5.5, 6.6);
-            fArray.add(7.7, 8.8, 9.9);
+            fArray.add(factory.getFPos3D(4.4, 5.5, 6.6));
+            fArray.add(factory.getFPos3D(7.7, 8.8, 9.9));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(3, fArray.size(),
@@ -72,9 +72,9 @@ public class FArrayTest {
         void incWithValue() {
             FArray fArray = factory.getFArray(100);
 
-            fArray.add(1.5, 2.5, 3.5, 1.1);
-            fArray.add(4.5, 5.5, 6.5, 2.2);
-            fArray.add(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithValue(factory.getFPos3D(4.5, 5.5, 6.5), 2.2);
+            fArray.addWithValue(factory.getFPos4D(7.5, 8.5, 9.5, 3.3));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(3, fArray.size(),
@@ -111,9 +111,9 @@ public class FArrayTest {
         void outOfBoundsException() {
             FArray fArray = factory.getFArray(3);
 
-            fArray.add(1, 2, 3, 1.1);
-            fArray.add(4, 5, 6, 2.2);
-            fArray.add(7, 8, 9, 3.3);
+            fArray.addWithValue(1, 2, 3, 1.1);
+            fArray.addWithValue(factory.getFPos3D(4, 5, 6), 2.2);
+            fArray.addWithValue(factory.getFPos4D(7, 8, 9, 3.3));
 
             assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(-1),
                     "The index is out of bounds (negative), an exception should be thrown");
@@ -130,13 +130,13 @@ public class FArrayTest {
         void reset() {
             FArray fArray = factory.getFArray(100);
 
-            fArray.add(1.5, 2.5, 3.5, 1.1);
-            fArray.add(4.5, 5.5, 6.5, 2.2);
-            fArray.add(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithValue(4.5, 5.5, 6.5, 2.2);
+            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
 
             fArray.reset();
 
-            fArray.add(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fArray.size(),
@@ -154,6 +154,21 @@ public class FArrayTest {
             assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(1),
                     "The index is out of bounds (positive), an exception should be thrown");
         }
+
+        @Test
+        @DisplayName("Get")
+        void get() {
+            FArray fArray = factory.getFArray(100);
+
+            fArray.addWithValue(1, 2, 3, 4);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(factory.getFPos3D(1, 2, 3), fArray.getFPos3D(0),
+                            "The values are incorrect"),
+                    () -> assertEquals(factory.getFPos4D(1, 2, 3, 4), fArray.getFPos4D(0),
+                            "The values are incorrect")
+            );
+        }
     }
 
     @Nested
@@ -166,9 +181,9 @@ public class FArrayTest {
         void parseJSON() {
             FArray dtoOrigin = factory.getFArray(123);
 
-            dtoOrigin.add(3.5, 2.5, 1.5, 9.9);
-            dtoOrigin.add(6.5, 5.5, 4.5, 8.8);
-            dtoOrigin.add(9.5, 8.5, 7.5, 7.7);
+            dtoOrigin.addWithValue(3.5, 2.5, 1.5, 9.9);
+            dtoOrigin.addWithValue(6.5, 5.5, 4.5, 8.8);
+            dtoOrigin.addWithValue(9.5, 8.5, 7.5, 7.7);
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
@@ -183,13 +198,13 @@ public class FArrayTest {
         void iteration() {
             FArray fArray = factory.getFArray(100);
 
-            fArray.add(1.5, 2.5, 3.5, 1.1);
-            fArray.add(4.5, 5.5, 6.5, 2.2);
-            fArray.add(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithValue(4.5, 5.5, 6.5, 2.2);
+            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
 
             double[] sum = new double[fArray.size()];
 
-            fArray.iterate((index, d0, d1, d2, value) -> sum[index] = d0 + d1 + d2 + value);
+            fArray.forEach((index, d0, d1, d2, value) -> sum[index] = d0 + d1 + d2 + value);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(8.6, sum[0],
@@ -206,9 +221,9 @@ public class FArrayTest {
         void iterator() {
             FArray fArray = factory.getFArray(100);
 
-            fArray.add(1.5, 2.5, 3.5, 1.1);
-            fArray.add(4.5, 5.5, 6.5, 2.2);
-            fArray.add(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithValue(4.5, 5.5, 6.5, 2.2);
+            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
 
             double[] sum = new double[fArray.size()];
 
