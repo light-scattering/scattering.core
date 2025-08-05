@@ -50,9 +50,36 @@ public interface Shape extends Geometry {
 
     Shape scale(double factor);
 
+    Shape removeCoat();
+
+    Shape applyCoatFrom(Shape shape);
+
+    Shape addCoat(double width);
+    Shape addCoat(double... width);
+
+    Shape addCoatInternal(double width);
+    Shape addCoatInternal(double... width);
+
+    int getCoatCount();
+    int getLayerCount();
+
+    double getCoatWidth(int index);
+    double getCoatWidthTotal();
+
+    void setCoatWidth(int index, double width);
+
+    double getCoatVolume(int index);
+    double getCoatVolumeTotal();
+
+    double getLayerVolume(int index);
+
     boolean contains(double x, double y, double z);
     boolean contains(FPoint fPoint);
     boolean contains(FPos3D fPos3D);
+
+    int locate(double x, double y, double z);
+    int locate(FPoint fPoint);
+    int locate(FPos3D fPos3D);
 
     boolean touches(Shape shape);
     int touches(Iterable<? extends Shape> shapes);
@@ -74,7 +101,9 @@ public interface Shape extends Geometry {
     Shape setVolume(double volume);
 
     void fillVolumeLayer(FLayer in);
-    void fillVolumeLayer(FLayer in, Iterable<? extends Shape> shapes);
+
+    void fillOverlapLayer(FLayer in);
+    void fillOverlapLayer(FLayer in, Iterable<? extends Shape> shapes);
 
     void fillVolumeArray(FArray in);
     void fillVolumeArray(FArray in, Iterable<? extends Shape> shapes);
@@ -89,12 +118,12 @@ public interface Shape extends Geometry {
     void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes);
 
     double getRadius();
+    double getRadiusInner();
+
     Shape setRadius(double radius);
+    Shape getRadiusInner(double radius);
 
-    double getInnerRadius();
-    Shape setInnerRadius(double radius);
-
-    Shape setMinRadius(Iterable<? extends Shape> shapes);
+    Shape setRadiusMin(Iterable<? extends Shape> shapes);
 
     boolean attachLinear(Shape target);
 

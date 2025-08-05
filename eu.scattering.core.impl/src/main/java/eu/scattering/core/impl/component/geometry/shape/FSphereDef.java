@@ -22,6 +22,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     private static final String JSON_MAIN = "sphere";
     private static final String JSON_RADIUS = "radius";
     private static final String JSON_CENTER = "center";
+    private static final String JSON_COATS = "coats";
     private static final String JSON_INDEX = "index";
     private static final String JSON_META = "meta";
 
@@ -130,6 +131,10 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             throw new IllegalArgumentException("The radius must be greater than zero");
         }
 
+        if (radius <= getCoatWidthTotal()) {
+            throw new IllegalArgumentException("The radius cannot be smaller than the width of the coating");
+        }
+
         this.radius = radius;
 
         return this;
@@ -150,6 +155,16 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         getRefCenter().set(json.getJSONObject(JSON_CENTER));
         setRadius(json.getDouble(JSON_RADIUS));
 
+        if (json.has(JSON_COATS)) {
+            var coats = json.getJSONArray(JSON_COATS);
+
+            getCoating().clear();
+            for (int i = 0 ; i < coats.length() ; i++) {
+                addCoatInternal(coats.getDouble(i));
+            }
+
+        }
+
         if (json.has(JSON_INDEX)) {
             setIndex(json.getInt(JSON_INDEX));
         }
@@ -167,14 +182,18 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         getRefCenter().applyStateFrom(arg.getRefCenter());
         setRadius(arg.getRadius());
 
+        this.getCoating().clear();
+        for (int i = 0; i < arg.getCoatCount() ; i++) {
+            this.addCoatInternal(arg.getCoatWidth(i));
+        }
+
         return this;
     }
 
     @Override
     public FSphere applyStateTo(FSphere in) {
 
-        in.getRefCenter().applyStateFrom(this.getRefCenter());
-        in.setRadius(getRadius());
+        in.applyStateFrom(this);
 
         return this;
     }
@@ -195,7 +214,27 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         if (arg instanceof FSphere fSphere) {
 
-            return getRefCenter().isExact(fSphere.getRefCenter()) && getRadius() == fSphere.getRadius();
+            if (!this.getRefCenter().isExact(fSphere.getRefCenter())) {
+                return false;
+            }
+
+            if (this.getRadius() != fSphere.getRadius()) {
+                return false;
+            }
+
+            int coats = this.getCoatCount();
+
+            if (arg.getCoatCount() != coats) {
+                return false;
+            }
+
+            for (int i = 0 ; i < coats ; i++) {
+                if (this.getCoatWidth(i) != arg.getCoatWidth(i)) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
        return false;
@@ -216,11 +255,27 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         if (arg instanceof FSphere fSphere) {
 
-            if (Math.abs(getRadius() - fSphere.getRadius()) > EPSILON) {
+            if (!this.getRefCenter().isSimilar(fSphere.getRefCenter())) {
                 return false;
             }
 
-            return getRefCenter().isSimilar(fSphere.getRefCenter());
+            if (Math.abs(this.getRadius() - fSphere.getRadius()) > EPSILON) {
+                return false;
+            }
+
+            int coats = this.getCoatCount();
+
+            if (arg.getCoatCount() != coats) {
+                return false;
+            }
+
+            for (int i = 0 ; i < coats ; i++) {
+                if (Math.abs(this.getCoatWidth(i) - arg.getCoatWidth(i)) > EPSILON) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         return false;
@@ -256,6 +311,12 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         json.put(JSON_CENTER, getRefCenter().toJSON());
         json.put(JSON_RADIUS, getRadius());
 
+        if (getCoating().size() > 0) {
+            for (int i = 0; i < getCoating().size() ; i++) {
+                json.append(JSON_COATS, this.getCoatWidth(i));
+            }
+        }
+
         if (getIndex() >= 0) {
             json.put(JSON_INDEX, getIndex());
         }
@@ -278,7 +339,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getRefCenter(), getRadius());
+        return Objects.hash(getRefCenter(), getRadius(), getCoating());
     }
 
     @Override
@@ -301,22 +362,78 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public double getInnerRadius() {
+    public double getRadiusInner() {
 
         return getRadius();
     }
 
     @Override
-    public Shape setInnerRadius(double radius) {
+    public Shape getRadiusInner(double radius) {
 
         return setRadius(radius);
     }
 
     @Override
     public double getVolume() {
-        double r = getRadius();
 
-        return 4 * Math.PI * r * r * r / 3;
+        return getVolumeSphere(getRadius());
+    }
+
+    @Override
+    public double getCoatVolume(int index) {
+
+        if (getCoating().size() == 0) {
+            throw new IllegalArgumentException("The shape is not coated");
+        }
+
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getCoatCount()) {
+            throw new IllegalArgumentException("the coat index is erroneous");
+        }
+
+        double radiusMin = getRadius() - getCoatWidthTotal();
+
+        for (int i = 0 ; i < index ; i++) {
+            radiusMin += getCoatWidth(i);
+        }
+
+        double radiusMax = radiusMin + getCoatWidth(index);
+
+        return getVolumeSphere(radiusMax) - getVolumeSphere(radiusMin);
+    }
+
+    @Override
+    public double getCoatVolumeTotal() {
+
+        if (getCoating().size() == 0) {
+            return 0;
+        }
+
+        double radiusMin = getRadius() - getCoatWidthTotal();
+
+        return getVolumeSphere(getRadius()) - getVolumeSphere(radiusMin);
+    }
+
+    @Override
+    public double getLayerVolume(int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getLayerCount()) {
+            throw new IllegalArgumentException("the layer index is erroneous");
+        }
+
+        if (index == 0) {
+            return getVolumeSphere(getRadius() - getCoatWidthTotal());
+        }
+
+        return getCoatVolume(index - 1);
+
     }
 
     @Override
@@ -325,6 +442,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         setRadius(Math.pow(0.75 * volume / Math.PI, 1.0 / 3));
 
         return this;
+    }
+
+    private double getVolumeSphere(double radius) {
+
+        return 4 * Math.PI * radius * radius * radius / 3;
     }
 
     @Override
@@ -348,10 +470,39 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double tY = y - getCenterY();
         double tZ = z - getCenterZ();
 
-        double radP2 = getRadius() * getRadius();
         double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+        double radP2 = getRadius() * getRadius();
 
         return distP2 < radP2;
+    }
+
+    @Override
+    public int locate(double x, double y, double z) {
+
+        if (super.getCoatCount() == 0) {
+            return contains(x, y, z) ? 0 : -1;
+        }
+
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
+
+        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+        double radius = getRadiusInner() - getCoatWidthTotal();
+
+        if (distP2 < radius * radius) {
+            return 0;
+        }
+
+        for (int i = 0; i < getCoatCount() ; i++) {
+            radius += getCoatWidth(i);
+
+            if (distP2 < radius * radius) {
+                return i + 1;
+            }
+        }
+
+        return -1;
     }
 
     @Override

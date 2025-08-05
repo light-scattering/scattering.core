@@ -12,7 +12,6 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayer;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -460,7 +459,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
                 volume += element.getVolume();
             } else {
                 fLayer.reset();
-                element.fillVolumeLayer(fLayer, queue);
+                element.fillOverlapLayer(fLayer, queue);
                 volume += fLayer.get() * Math.pow(element.getDelta(), 3);
             }
 

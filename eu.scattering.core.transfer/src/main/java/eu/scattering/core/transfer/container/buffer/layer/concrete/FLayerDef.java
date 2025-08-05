@@ -133,7 +133,7 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public void average(FLayer... fLayers) {
+    public void avg(FLayer... fLayers) {
         int index = size();
 
         for (FLayer fLayer : fLayers) {
@@ -188,7 +188,7 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public double averageSelf() {
+    public double avgSelf() {
         double results = 0;
 
         for (int i = 0 ; i <= index ; i++) {

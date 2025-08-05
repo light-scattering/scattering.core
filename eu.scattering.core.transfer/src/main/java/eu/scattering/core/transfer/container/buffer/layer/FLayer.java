@@ -9,11 +9,11 @@ public interface FLayer extends Buffer<FLayer>, Iterable<Integer> {
     int set(int layer, int value);
 
     void add(FLayer... fLayer);
-    void average(FLayer... fLayer);
+    void avg(FLayer... fLayer);
     void max(FLayer... fLayer);
 
     double addSelf();
-    double averageSelf();
+    double avgSelf();
     double maxSelf();
 
     int size();

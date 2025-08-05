@@ -448,7 +448,7 @@ public class FLayerTest {
             fLayer.set(1, 4);
             fLayer.set(4, 6);
 
-            fLayer.average();
+            fLayer.avg();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(2, fLayer.get(0),
@@ -486,7 +486,7 @@ public class FLayerTest {
             fLayerB.set(4, 2);
             fLayerB.set(5, 1);
 
-            fLayer.average(fLayerA, fLayerB);
+            fLayer.avg(fLayerA, fLayerB);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fLayer.get(0),
@@ -599,7 +599,7 @@ public class FLayerTest {
             fLayer.set(1, 4);
             fLayer.set(4, 6);
 
-            double results = fLayer.averageSelf();
+            double results = fLayer.avgSelf();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals((double) 12 / 5, results,
