@@ -9,7 +9,7 @@ import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
@@ -948,7 +948,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void fillOverlapLayer(FLayer in) {
+    public void fillOverlapLayer(FLayerCounter in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -976,7 +976,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void fillOverlapLayer(FLayer in, Iterable<? extends Shape> shapes) {
+    public void fillOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -1017,7 +1017,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void fillVolumeLayer(FLayer in) {
+    public void fillVolumeLayer(FLayerCounter in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();

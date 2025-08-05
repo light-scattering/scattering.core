@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.util.annotation.Fragment;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.List;
@@ -100,10 +100,10 @@ public interface Shape extends Geometry {
     double getVolume();
     Shape setVolume(double volume);
 
-    void fillVolumeLayer(FLayer in);
+    void fillVolumeLayer(FLayerCounter in);
 
-    void fillOverlapLayer(FLayer in);
-    void fillOverlapLayer(FLayer in, Iterable<? extends Shape> shapes);
+    void fillOverlapLayer(FLayerCounter in);
+    void fillOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
 
     void fillVolumeArray(FArray in);
     void fillVolumeArray(FArray in, Iterable<? extends Shape> shapes);
@@ -111,8 +111,8 @@ public interface Shape extends Geometry {
     double getSurface();
     Shape setSurface(double surface);
 
-    void fillSurfaceLayer(FLayer in);
-    void fillSurfaceLayer(FLayer in, Iterable<? extends Shape> shapes);
+    void fillSurfaceLayer(FLayerCounter in);
+    void fillSurfaceLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
 
     void fillSurfaceArray(FArray in);
     void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes);

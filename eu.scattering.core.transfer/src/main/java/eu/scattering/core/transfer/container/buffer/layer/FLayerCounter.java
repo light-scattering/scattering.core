@@ -2,15 +2,15 @@ package eu.scattering.core.transfer.container.buffer.layer;
 
 import eu.scattering.core.transfer.container.buffer.Buffer;
 
-public interface FLayer extends Buffer<FLayer>, Iterable<Integer> {
+public interface FLayerCounter extends Buffer<FLayerCounter>, Iterable<Integer> {
 
     int get(int layer);
     int inc(int layer);
     int set(int layer, int value);
 
-    void add(FLayer... fLayer);
-    void avg(FLayer... fLayer);
-    void max(FLayer... fLayer);
+    void add(FLayerCounter... fLayer);
+    void avg(FLayerCounter... fLayer);
+    void max(FLayerCounter... fLayer);
 
     double addSelf();
     double avgSelf();
@@ -19,6 +19,9 @@ public interface FLayer extends Buffer<FLayer>, Iterable<Integer> {
     int size();
 
     void reset();
+
+    boolean isEmpty();
+    boolean isZeroLayerOnly();
 
     // -------------------------------------------------------------------------------------------------
 

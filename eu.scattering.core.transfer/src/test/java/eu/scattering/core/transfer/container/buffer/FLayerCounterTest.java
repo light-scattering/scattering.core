@@ -2,25 +2,25 @@ package eu.scattering.core.transfer.container.buffer;
 
 import eu.scattering.core.transfer.container.ContainerFactory;
 import eu.scattering.core.transfer.container.ContainerFactoryConcrete;
-import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("FLayer")
-public class FLayerTest {
+@DisplayName("FLayerCounter")
+public class FLayerCounterTest {
     private final ContainerFactory factory = ContainerFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")
     @DisplayName("Basic")
-    class FLayerBasicTest {
+    class FLayerCounterBasicTest {
 
         @Test
         @DisplayName("Construct")
         void construct() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fLayer.get(),
@@ -39,7 +39,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Single layer incrementation")
         void singleLayerInc() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.inc();
             fLayer.inc();
@@ -67,7 +67,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Single layer incrementation (index)")
         void singleLayerIncIndex() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.inc(0);
             fLayer.inc(0);
@@ -95,7 +95,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Multi layer incrementation")
         void multiLayerInc() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             int addedLayersA = fLayer.inc(1);
             int addedLayersB = fLayer.inc(2);
@@ -130,7 +130,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Multi layer incrementation (distant)")
         void multiLayerIncDistant() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             int addedLayersA = fLayer.inc(5);
             int addedLayersB = fLayer.inc(5);
@@ -162,7 +162,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Single layer setter")
         void singleLayerSet() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(2);
             fLayer.set(4);
@@ -188,7 +188,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Multi layer setter")
         void multiLayerSet() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             int addedLayersA = fLayer.set(5, 2);
             int addedLayersB = fLayer.set(5, 5);
@@ -220,7 +220,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Reset")
         void reset() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.inc(1);
             fLayer.inc(2);
@@ -254,7 +254,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Illegal layer exception - increment")
         void wrongLayerIncException() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             assertThrows(IllegalArgumentException.class, () -> fLayer.inc(-1),
                     "Accessing an incorrect layer should throw an exception");
@@ -263,7 +263,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Illegal layer exception - get")
         void wrongLayerGetException() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             assertThrows(IllegalArgumentException.class, () -> fLayer.get(-1),
                     "Accessing an incorrect layer should throw an exception");
@@ -272,7 +272,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Illegal layer exception - set")
         void wrongLayerSetException() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             assertThrows(IllegalArgumentException.class, () -> fLayer.set(-1),
                     "Accessing an incorrect layer should throw an exception");
@@ -281,7 +281,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Illegal layer exception - set, value")
         void wrongLayerSetValueException() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             assertThrows(IllegalArgumentException.class, () -> fLayer.set(0, -1),
                     "Setting an incorrect value should throw an exception");
@@ -291,13 +291,13 @@ public class FLayerTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core")
-    class FLayerCoreTest {
+    class FLayerCounterCoreTest {
 
         @Test
         @DisplayName("Equals")
         void equals() {
-            FLayer fLayer1 = factory.getFLayer();
-            FLayer fLayer2 = factory.getFLayer();
+            FLayerCounter fLayer1 = factory.getFLayerCounter();
+            FLayerCounter fLayer2 = factory.getFLayerCounter();
 
             fLayer1.inc(0);
             fLayer1.inc(1);
@@ -326,8 +326,8 @@ public class FLayerTest {
         @Test
         @DisplayName("Equals (fail)")
         void equalsFail() {
-            FLayer fLayer1 = factory.getFLayer();
-            FLayer fLayer2 = factory.getFLayer();
+            FLayerCounter fLayer1 = factory.getFLayerCounter();
+            FLayerCounter fLayer2 = factory.getFLayerCounter();
 
             fLayer1.inc(0);
             fLayer1.inc(1);
@@ -349,12 +349,12 @@ public class FLayerTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Advanced")
-    class FRotAdvancedTest {
+    class FLayerCounterAdvancedTest {
 
         @Test
         @DisplayName("JSON")
         void parseJSON() {
-            FLayer dtoOrigin = factory.getFLayer();
+            FLayerCounter dtoOrigin = factory.getFLayerCounter();
 
             dtoOrigin.inc(0);
             dtoOrigin.inc(1);
@@ -366,7 +366,7 @@ public class FLayerTest {
 
             JSONObject jsonOrigin = dtoOrigin.toJSON();
 
-            FLayer dtoCopy = factory.getFLayer(jsonOrigin);
+            FLayerCounter dtoCopy = factory.getFLayerCounter(jsonOrigin);
 
             assertEquals(dtoOrigin.size(), dtoCopy.size(),
                     "The parsed JSON is erroneous");
@@ -375,7 +375,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Add zero")
         void addZero() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
@@ -402,19 +402,19 @@ public class FLayerTest {
         @Test
         @DisplayName("Add multiple")
         void addMultiple() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
             fLayer.set(4, 6);
 
-            FLayer fLayerA = factory.getFLayer();
+            FLayerCounter fLayerA = factory.getFLayerCounter();
 
             fLayerA.set(1, 2);
             fLayerA.set(3, 1);
             fLayerA.set(4, 1);
 
-            FLayer fLayerB = factory.getFLayer();
+            FLayerCounter fLayerB = factory.getFLayerCounter();
 
             fLayerB.set(4, 2);
             fLayerB.set(5, 1);
@@ -442,7 +442,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Average zero")
         void averageZero() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
@@ -469,19 +469,19 @@ public class FLayerTest {
         @Test
         @DisplayName("Average multiple")
         void averageMultiple() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
             fLayer.set(4, 6);
 
-            FLayer fLayerA = factory.getFLayer();
+            FLayerCounter fLayerA = factory.getFLayerCounter();
 
             fLayerA.set(1, 2);
             fLayerA.set(3, 1);
             fLayerA.set(4, 1);
 
-            FLayer fLayerB = factory.getFLayer();
+            FLayerCounter fLayerB = factory.getFLayerCounter();
 
             fLayerB.set(4, 2);
             fLayerB.set(5, 1);
@@ -509,7 +509,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Max zero")
         void maxZero() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
@@ -536,19 +536,19 @@ public class FLayerTest {
         @Test
         @DisplayName("Max multiple")
         void maxMultiple() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
             fLayer.set(4, 6);
 
-            FLayer fLayerA = factory.getFLayer();
+            FLayerCounter fLayerA = factory.getFLayerCounter();
 
             fLayerA.set(1, 2);
             fLayerA.set(3, 1);
             fLayerA.set(4, 1);
 
-            FLayer fLayerB = factory.getFLayer();
+            FLayerCounter fLayerB = factory.getFLayerCounter();
 
             fLayerB.set(4, 2);
             fLayerB.set(5, 1);
@@ -576,7 +576,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Add self")
         void addSelf() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
@@ -593,7 +593,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Average self")
         void averageSelf() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
@@ -610,7 +610,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Max self")
         void maxSelf() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
@@ -627,7 +627,7 @@ public class FLayerTest {
         @Test
         @DisplayName("Iterate")
         void iterate() {
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             fLayer.set(0, 2);
             fLayer.set(1, 4);
@@ -652,6 +652,38 @@ public class FLayerTest {
                     () -> assertEquals(6, results[4],
                             "Layer 4 value is incorrect")
             );
+        }
+
+        @Test
+        @DisplayName("Is empty")
+        void isEmpty() {
+            FLayerCounter fLayer = factory.getFLayerCounter();
+
+            assertTrue(fLayer.isEmpty());
+
+            fLayer.set(4, 6);
+
+            assertFalse(fLayer.isEmpty());
+
+            fLayer.reset();
+
+            assertTrue(fLayer.isEmpty());
+        }
+
+        @Test
+        @DisplayName("Is zero layer only")
+        void isZeroLayerOnly() {
+            FLayerCounter fLayer = factory.getFLayerCounter();
+
+            assertTrue(fLayer.isZeroLayerOnly());
+
+            fLayer.set(0, 2);
+
+            assertTrue(fLayer.isZeroLayerOnly());
+
+            fLayer.set(1, 4);
+
+            assertFalse(fLayer.isZeroLayerOnly());
         }
     }
 }

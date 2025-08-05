@@ -1,6 +1,6 @@
 package eu.scattering.core.transfer.container.buffer.layer.concrete;
 
-import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
-public class FLayerDef implements FLayer {
+public class FLayerCounterDef implements FLayerCounter {
     private static final String JSON_MAIN = "layer";
     private static final String JSON_SIZE = "size";
 
@@ -18,25 +18,25 @@ public class FLayerDef implements FLayer {
 
     private int index;
 
-    private FLayerDef() {
+    private FLayerCounterDef() {
         this.index = 0;
 
         this.layers = new ArrayList<>();
         this.layers.add(FLayerUnit.create());
     }
 
-    public static FLayer create() {
+    public static FLayerCounter create() {
 
-        return new FLayerDef();
+        return new FLayerCounterDef();
     }
 
-    public static FLayer create(JSONObject json) {
+    public static FLayerCounter create(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FLayer fLayer = new FLayerDef();
+        FLayerCounter fLayer = new FLayerCounterDef();
 
         fLayer.set(json.getInt(JSON_SIZE) - 1, 0);
 
@@ -112,10 +112,10 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public void add(FLayer... fLayers) {
+    public void add(FLayerCounter... fLayers) {
         int index = size();
 
-        for (FLayer fLayer : fLayers) {
+        for (FLayerCounter fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -124,7 +124,7 @@ public class FLayerDef implements FLayer {
         for (int i = 0 ; i < index ; i++) {
             int sum = get(i);
 
-            for (FLayer fLayer : fLayers) {
+            for (FLayerCounter fLayer : fLayers) {
                 sum += fLayer.get(i);
             }
 
@@ -133,10 +133,10 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public void avg(FLayer... fLayers) {
+    public void avg(FLayerCounter... fLayers) {
         int index = size();
 
-        for (FLayer fLayer : fLayers) {
+        for (FLayerCounter fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -145,7 +145,7 @@ public class FLayerDef implements FLayer {
         for (int i = 0 ; i < index ; i++) {
             int sum = get(i);
 
-            for (FLayer fLayer : fLayers) {
+            for (FLayerCounter fLayer : fLayers) {
                 sum += fLayer.get(i);
             }
 
@@ -154,10 +154,10 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
-    public void max(FLayer... fLayers) {
+    public void max(FLayerCounter... fLayers) {
         int index = size();
 
-        for (FLayer fLayer : fLayers) {
+        for (FLayerCounter fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -166,7 +166,7 @@ public class FLayerDef implements FLayer {
         for (int i = 0 ; i < index ; i++) {
             int max = get(i);
 
-            for (FLayer fLayer : fLayers) {
+            for (FLayerCounter fLayer : fLayers) {
                 if (fLayer.get(i) > max) {
                     max = fLayer.get(i);
                 }
@@ -224,6 +224,18 @@ public class FLayerDef implements FLayer {
         this.layers.get(0).reset();
     }
 
+    @Override
+    public boolean isEmpty() {
+
+        return addSelf() == 0;
+    }
+
+    @Override
+    public boolean isZeroLayerOnly() {
+
+        return size() == 1;
+    }
+
     //--------------------------------------------------
 
     @Override
@@ -252,7 +264,7 @@ public class FLayerDef implements FLayer {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FLayerDef fLayer) {
+        if (object instanceof FLayerCounterDef fLayer) {
 
             if (index != fLayer.index) {
                 return false;
@@ -290,7 +302,7 @@ public class FLayerDef implements FLayer {
         @Override
         public boolean hasNext() {
 
-            return index < FLayerDef.this.size();
+            return index < FLayerCounterDef.this.size();
         }
 
         @Override
@@ -300,7 +312,7 @@ public class FLayerDef implements FLayer {
                 throw new NoSuchElementException();
             }
 
-            return FLayerDef.this.get(index++);
+            return FLayerCounterDef.this.get(index++);
         }
     }
 

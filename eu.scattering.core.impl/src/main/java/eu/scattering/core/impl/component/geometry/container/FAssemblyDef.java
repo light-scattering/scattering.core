@@ -12,7 +12,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONArray;
@@ -440,7 +440,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public double getVolume() {
-        FLayer fLayer = factory.getFLayer();
+        FLayerCounter fLayer = factory.getFLayerCounter();
 
         List<Shape> list = this.elements.stream()
                 .filter(e -> e instanceof Shape)
@@ -471,7 +471,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public double getSurface() {
-        FLayer fLayer = factory.getFLayer();
+        FLayerCounter fLayer = factory.getFLayerCounter();
 
         List<Shape> list = this.elements.stream()
                 .filter(e -> e instanceof Shape)

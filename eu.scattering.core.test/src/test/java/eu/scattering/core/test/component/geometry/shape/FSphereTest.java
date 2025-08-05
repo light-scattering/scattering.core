@@ -12,7 +12,7 @@ import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -3077,7 +3077,7 @@ public class FSphereTest {
         void volumeData() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphere = factory.getFSphere(5, 5, 5, 1)
                             .setDelta(delta);
@@ -3107,7 +3107,7 @@ public class FSphereTest {
         void volumeDataWithCoating() {
             double delta = 0.1;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphere = factory.getFSphere(1)
                     .addCoat(1, 1, 1)
@@ -3151,7 +3151,7 @@ public class FSphereTest {
         void volumeDataDoubleDistant() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
                     .setDelta(delta);
@@ -3185,7 +3185,7 @@ public class FSphereTest {
         void volumeDataDoubleClose() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
                     .setDelta(delta);
@@ -3224,7 +3224,7 @@ public class FSphereTest {
         void volumeDataMultipleClose() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
                     .setDelta(delta);
@@ -3369,7 +3369,7 @@ public class FSphereTest {
         void surfaceData() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphere = factory.getFSphere(5, 5, 5, 1)
                     .setDelta(delta);
@@ -3399,7 +3399,7 @@ public class FSphereTest {
         void surfaceDataDoubleDistant() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
                     .setDelta(delta);
@@ -3433,7 +3433,7 @@ public class FSphereTest {
         void surfaceDataDoubleClose() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
                     .setDelta(delta);
@@ -3472,7 +3472,7 @@ public class FSphereTest {
         void surfaceDataMultipleClose() {
             double delta = 0.05;
 
-            FLayer fLayer = factory.getFLayer();
+            FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
                     .setDelta(delta);

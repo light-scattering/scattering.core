@@ -9,7 +9,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
-import eu.scattering.core.transfer.container.buffer.layer.FLayer;
+import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
@@ -518,13 +518,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void fillSurfaceLayer(FLayer in) {
+    public void fillSurfaceLayer(FLayerCounter in) {
 
         in.set(0, in.get(0) + (int) Math.round(getSurface() / (getDelta() * getDelta())));
     }
 
     @Override
-    public void fillSurfaceLayer(FLayer in, Iterable<? extends Shape> shapes) {
+    public void fillSurfaceLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
 
         getSurfacePoints((x, y, z) -> {
             int layers = 0;
