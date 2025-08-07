@@ -24,13 +24,16 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/container/assembly/FAssembly.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/container/assembly/FAssembly.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/Shape.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/sphere/FSphereProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/sphere/FSphereProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/container/FAssemblyDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/container/FAssemblyDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereProducerDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereProducerDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/container/FAssemblyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/container/FAssemblyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereProducerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereProducerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/FArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/FArray.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/FArrayMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/FArrayMesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayMeshDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayMeshDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/buffer/FArrayMeshTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/buffer/FArrayMeshTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/buffer/FArrayTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/buffer/FArrayTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/engine/ShapeRandomizeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/engine/ShapeRandomizeTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,8 +170,8 @@
       <recent name="eu.scattering.core.transfer.container.buffer.FStream3D" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FArrayMeshTest">
-    <configuration name="FArrayBasicTest.get" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
+    <configuration name="FAssemblyTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -179,9 +182,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
+            <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.buffer.FArrayTest$FArrayBasicTest.get&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.container.FAssemblyTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -191,7 +194,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FArrayBasicTest.incWithValue" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPointAdvancedTest.getVolumeLayerOverlapFullMonodisperse" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -202,9 +205,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
+            <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.buffer.FArrayTest$FArrayBasicTest.incWithValue&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.container.FAssemblyTest$FPointAdvancedTest.getVolumeLayerOverlapFullMonodisperse&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -214,7 +217,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FArrayBasicTest.outOfBoundsException" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FPointAdvancedTest.getVolumeLayerOverlapMixed" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -225,9 +228,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
+            <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.buffer.FArrayTest$FArrayBasicTest.outOfBoundsException&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.container.FAssemblyTest$FPointAdvancedTest.getVolumeLayerOverlapMixed&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -237,7 +240,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FArrayMeshTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSphereProducerTest.settersWithStream" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -248,9 +251,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
+            <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.buffer.FArrayMeshTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereProducerTest.settersWithStream&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -260,7 +263,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FArrayTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -271,9 +274,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.buffer.FArrayTest&quot;" />
+            <option value=":eu.scattering.core.test:test" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -285,11 +286,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FArrayMeshTest" />
-        <item itemvalue="Gradle.FArrayTest" />
-        <item itemvalue="Gradle.FArrayBasicTest.get" />
-        <item itemvalue="Gradle.FArrayBasicTest.outOfBoundsException" />
-        <item itemvalue="Gradle.FArrayBasicTest.incWithValue" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.FAssemblyTest" />
+        <item itemvalue="Gradle.FPointAdvancedTest.getVolumeLayerOverlapMixed" />
+        <item itemvalue="Gradle.FPointAdvancedTest.getVolumeLayerOverlapFullMonodisperse" />
+        <item itemvalue="Gradle.FSphereProducerTest.settersWithStream" />
       </list>
     </recent_temporary>
   </component>
@@ -525,7 +526,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/container/FAssemblyTest.java</url>
-          <line>1616</line>
+          <line>1784</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>

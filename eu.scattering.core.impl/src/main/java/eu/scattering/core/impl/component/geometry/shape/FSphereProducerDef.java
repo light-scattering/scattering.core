@@ -56,7 +56,7 @@ public class FSphereProducerDef implements FSphereProducer {
     @Override
     public FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory), weight);
+        this.processor.addConfig(() -> updateConfig(function.apply(factory)), weight);
 
         return this;
     }
@@ -64,32 +64,9 @@ public class FSphereProducerDef implements FSphereProducer {
     @Override
     public FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandEngine, FSphere> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, randomizer), weight);
+        this.processor.addConfig(() -> updateConfig(function.apply(factory, randomizer)), weight);
 
         return this;
-    }
-
-    @Override
-    public FSphere produce() {
-        FSphere fSphere = processor.produce();
-
-        if (this.meta != null) {
-            fSphere.setMeta(this.meta);
-        }
-
-        if (this.delta != null) {
-            fSphere.setDelta(this.delta);
-        }
-
-        if (this.epsilon != null) {
-            fSphere.setEpsilon(this.epsilon);
-        }
-
-        if (this.cache != null) {
-            fSphere.setCache(this.cache);
-        }
-
-        return fSphere;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -211,13 +188,33 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer forceNoOverlap() {
+    public FSphereProducer mutateAddCoat(double... width) {
+        this.processor.addMutation((results) -> results.forEach(e -> e.addCoat(width)));
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer correctAddCoat(double... width) {
+        this.processor.addCorrection((fSphere, random) -> fSphere.addCoat(width));
+
+        return this;
+    }
+
+    @Override
+    public FSphereProducer validateNoOverlap() {
         this.processor.addValidation((fSphere, results) -> fSphere.overlaps(results) == 0);
 
         return this;
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FSphere produce() {
+
+        return processor.produce();
+    }
 
     @Override
     public Stream<FSphere> stream() {
@@ -265,6 +262,29 @@ public class FSphereProducerDef implements FSphereProducer {
         this.processor.addCorrection(correction);
 
         return this;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FSphere updateConfig(FSphere fSphere) {
+
+        if (this.meta != null) {
+            fSphere.setMeta(this.meta);
+        }
+
+        if (this.delta != null) {
+            fSphere.setDelta(this.delta);
+        }
+
+        if (this.epsilon != null) {
+            fSphere.setEpsilon(this.epsilon);
+        }
+
+        if (this.cache != null) {
+            fSphere.setCache(this.cache);
+        }
+
+        return fSphere;
     }
 }
 

@@ -58,7 +58,7 @@ public class ShapeRandomizeTest {
                 .withOnSphere(3.5);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
                 .withProdCenterAndFixRadius(fPointProducer, 1)
-                .forceNoOverlap();
+                .validateNoOverlap();
 
         FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(10));
         fAssembly.register(fSphereCenter);
@@ -145,7 +145,7 @@ public class ShapeRandomizeTest {
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
                 .withProdCenterAndFixRadius(fPointProducer, 1)
-                .forceNoOverlap();
+                .validateNoOverlap();
 
         FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
@@ -175,7 +175,7 @@ public class ShapeRandomizeTest {
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
                 .withProdCenterAndFixRadius(fPointProducer, 1)
-                .forceNoOverlap();
+                .validateNoOverlap();
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
@@ -205,7 +205,7 @@ public class ShapeRandomizeTest {
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
                 .withProdCenterAndFixRadius(fPointProducer, 1)
-                .forceNoOverlap();
+                .validateNoOverlap();
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
@@ -235,7 +235,7 @@ public class ShapeRandomizeTest {
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
                 .withProdCenterAndFixRadius(fPointProducer, 1)
-                .forceNoOverlap();
+                .validateNoOverlap();
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 
@@ -264,7 +264,7 @@ public class ShapeRandomizeTest {
         Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
         Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
                 .withProdCenterAndFixRadius(fPointProducer, 1)
-                .forceNoOverlap();
+                .validateNoOverlap();
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
 

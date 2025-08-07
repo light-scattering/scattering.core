@@ -1418,7 +1418,7 @@ public class FAssemblyTest {
         @DisplayName("Get volume, point contact B")
         void getVolumePointContactB() {
             Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
-            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).forceNoOverlap();
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
 
@@ -1518,6 +1518,174 @@ public class FAssemblyTest {
         }
 
         @Test
+        @DisplayName("Get volume layer, point contact A")
+        void getVolumeLayerPointContactA() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(6, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 6, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 6, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double[] volLayers = new double[3];
+            double volTotal = fAssembly.getVolumeLayer(volLayers);
+
+            double volAlgCore = 4 * fSphereA.getLayerVolume(0);
+            double volAlgLayer1 = 4 * fSphereA.getLayerVolume(1);
+            double volAlgLayer2 = 4 * fSphereA.getLayerVolume(2);
+            double volAlgTotal = 4 * fSphereA.getVolume();
+
+            double volErrCore = factory.getFStatHelper().getRelErr(volAlgCore, volLayers[0]);
+            double volErrLayer1 = factory.getFStatHelper().getRelErr(volAlgLayer1, volLayers[1]);
+            double volErrLayer2 = factory.getFStatHelper().getRelErr(volAlgLayer2, volLayers[2]);
+            double volErrTotal = factory.getFStatHelper().getRelErr(volAlgTotal, volTotal);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(volErrCore < 0.01,
+                            "The core volume is erroneous"),
+                    () -> assertTrue(volErrLayer1 < 0.01,
+                            "Layer 1 volume is erroneous"),
+                    () -> assertTrue(volErrLayer2 < 0.01,
+                            "Layer 2 volume is erroneous"),
+                    () -> assertTrue(volErrTotal < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume layer, point contact B")
+        void getVolumeLayerPointContactB() {
+            double delta = 0.1;
+            int quantity = 25;
+
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .setDelta(delta)
+                    .correctAddCoat(1, 1)
+                    .validateNoOverlap();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
+
+            FSphere fSphereRef = fSphereProd.produce();
+
+            double[] volLayers = new double[3];
+            double volTotal = fAssembly.getVolumeLayer(volLayers);
+
+            double volAlgCore = quantity * fSphereRef.getLayerVolume(0);
+            double volAlgLayer1 = quantity * fSphereRef.getLayerVolume(1);
+            double volAlgLayer2 = quantity * fSphereRef.getLayerVolume(2);
+            double volAlgTotal = quantity * fSphereRef.getVolume();
+
+            double volErrCore = factory.getFStatHelper().getRelErr(volAlgCore, volLayers[0]);
+            double volErrLayer1 = factory.getFStatHelper().getRelErr(volAlgLayer1, volLayers[1]);
+            double volErrLayer2 = factory.getFStatHelper().getRelErr(volAlgLayer2, volLayers[2]);
+            double volErrTotal = factory.getFStatHelper().getRelErr(volAlgTotal, volTotal);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(volErrCore < 0.01,
+                            "The core volume is erroneous"),
+                    () -> assertTrue(volErrLayer1 < 0.01,
+                            "Layer 1 volume is erroneous"),
+                    () -> assertTrue(volErrLayer2 < 0.01,
+                            "Layer 2 volume is erroneous"),
+                    () -> assertTrue(volErrTotal < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume layer, overlap (full) - monodisperse")
+        void getVolumeLayerOverlapFullMonodisperse() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double[] volLayers = new double[3];
+            double volTotal = fAssembly.getVolumeLayer(volLayers);
+
+            double volAlgCore = fSphereA.getLayerVolume(0);
+            double volAlgLayer1 = fSphereA.getLayerVolume(1);
+            double volAlgLayer2 = fSphereA.getLayerVolume(2);
+            double volAlgTotal = fSphereA.getVolume();
+
+            double volErrCore = factory.getFStatHelper().getRelErr(volAlgCore, volLayers[0]);
+            double volErrLayer1 = factory.getFStatHelper().getRelErr(volAlgLayer1, volLayers[1]);
+            double volErrLayer2 = factory.getFStatHelper().getRelErr(volAlgLayer2, volLayers[2]);
+            double volErrTotal = factory.getFStatHelper().getRelErr(volAlgTotal, volTotal);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(volErrCore < 0.01,
+                            "The core volume is erroneous"),
+                    () -> assertTrue(volErrLayer1 < 0.01,
+                            "Layer 1 volume is erroneous"),
+                    () -> assertTrue(volErrLayer2 < 0.01,
+                            "Layer 2 volume is erroneous"),
+                    () -> assertTrue(volErrTotal < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume layer, overlap (mixed)")
+        void getVolumeLayerOverlapMixed() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            double[] volLayers = new double[4];
+            double volTotal = fAssembly.getVolumeLayer(volLayers);
+
+            double volAlgCore = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volAlgTotal = fAssembly.getVolume();
+
+            double volErrCore = factory.getFStatHelper().getRelErr(volAlgCore, volLayers[0]);
+            double volErrTotal = factory.getFStatHelper().getRelErr(volAlgTotal, volTotal);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertTrue(volErrCore < 0.01,
+                            "The core volume is erroneous"),
+                    () -> assertTrue(volErrTotal < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
         @DisplayName("Get surface, point contact A")
         void getSurfacePointContactA() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
@@ -1542,7 +1710,7 @@ public class FAssemblyTest {
         @DisplayName("Get surface, point contact B")
         void getSurfacePointContactB() {
             Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
-            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).forceNoOverlap();
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
 

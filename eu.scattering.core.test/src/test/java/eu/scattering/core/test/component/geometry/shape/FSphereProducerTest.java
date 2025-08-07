@@ -855,14 +855,10 @@ public class FSphereProducerTest {
         FSphere resultA = producerA.produce();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("", resultA.getMeta(),
-                        "The default tag is erroneous"),
-                () -> assertEquals(SHAPE_EPSILON, resultA.getEpsilon(),
-                        "The default epsilon value is erroneous"),
-                () -> assertEquals(SHAPE_DELTA, resultA.getDelta(),
-                        "The default delta value is erroneous"),
-                () -> assertNull(resultA.getCache(),
-                        "The default cache should be null")
+                () -> assertEquals("", resultA.getMeta()),
+                () -> assertEquals(SHAPE_EPSILON, resultA.getEpsilon()),
+                () -> assertEquals(SHAPE_DELTA, resultA.getDelta()),
+                () -> assertNull(resultA.getCache())
         );
 
         FCache cache = factory.getFCache();
@@ -876,16 +872,73 @@ public class FSphereProducerTest {
         FSphere resultB = producerB.produce();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("123", resultB.getMeta(),
-                        "The tag is erroneous"),
-                () -> assertEquals(1, resultB.getEpsilon(),
-                        "The epsilon value is erroneous"),
-                () -> assertEquals(2, resultB.getDelta(),
-                        "The delta value is erroneous"),
-                () -> assertSame(cache, resultB.getCache(),
-                        "The cache value is erroneous"),
-                () -> assertSame(producerA, producerB,
-                        "The reference should not change")
+                () -> assertEquals("123", resultB.getMeta()),
+                () -> assertEquals(1, resultB.getEpsilon()),
+                () -> assertEquals(2, resultB.getDelta()),
+                () -> assertSame(cache, resultB.getCache()),
+                () -> assertSame(producerA, producerB)
+        );
+    }
+
+    @Test
+    @DisplayName("Setters with list")
+    void settersWithList() {
+        FCache cache = factory.getFCache();
+
+        FSphereProducer producer = factory.getFSphereProducer()
+                .withFixRadius(1)
+                .setCache(cache)
+                .setMeta("123")
+                .setEpsilon(1)
+                .setDelta(2);
+
+        FSphere fSphere = producer.getList().getFirst();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertEquals("123", fSphere.getMeta()),
+                () -> assertEquals(1, fSphere.getEpsilon()),
+                () -> assertEquals(2, fSphere.getDelta()),
+                () -> assertSame(cache, fSphere.getCache())
+        );
+
+        FSphere fSphereFixed = producer.getListFixed(1).getFirst();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertEquals("123", fSphereFixed.getMeta()),
+                () -> assertEquals(1, fSphereFixed.getEpsilon()),
+                () -> assertEquals(2, fSphereFixed.getDelta()),
+                () -> assertSame(cache, fSphereFixed.getCache())
+        );
+
+        FSphere fSphereRandomized = producer.getListRandomized(1).getFirst();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertEquals("123", fSphereRandomized.getMeta()),
+                () -> assertEquals(1, fSphereRandomized.getEpsilon()),
+                () -> assertEquals(2, fSphereRandomized.getDelta()),
+                () -> assertSame(cache, fSphereRandomized.getCache())
+        );
+    }
+
+    @Test
+    @DisplayName("Setters with stream")
+    void settersWithStream() {
+        FCache cache = factory.getFCache();
+
+        FSphereProducer producer = factory.getFSphereProducer()
+                .withFixRadius(1)
+                .setCache(cache)
+                .setMeta("123")
+                .setEpsilon(1)
+                .setDelta(2);
+
+        FSphere fSphere = producer.stream().limit(1).toList().getFirst();
+
+        Assertions.assertAll("Validate FSphere values",
+                () -> assertEquals("123", fSphere.getMeta()),
+                () -> assertEquals(1, fSphere.getEpsilon()),
+                () -> assertEquals(2, fSphere.getDelta()),
+                () -> assertSame(cache, fSphere.getCache())
         );
     }
 
@@ -1252,14 +1305,71 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Force no overlap")
-    void forceNoOverlap() {
+    @DisplayName("Mutate add coat")
+    void mutateAddCoat() {
+        FPairPos3D range = factory.getFPairPos3D(10);
+
+        Producer<FPoint> center = factory.getFPointProducer(range);
+
+        Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
+                .mutateAddCoat(3, 2, 1);
+
+        List<FSphere> results = producer.getListRandomized(5);
+
+        for (FSphere fSphere : results) {
+
+            Assertions.assertAll("Validate coats",
+                    () -> assertEquals(3, fSphere.getCoatCount(),
+                            "The number of coats is erroneous"),
+                    () -> assertEquals(3, fSphere.getCoatWidth(0),
+                            "Coat 0 width is erroneous"),
+                    () -> assertEquals(2, fSphere.getCoatWidth(1),
+                            "Coat 1 width is erroneous"),
+                    () -> assertEquals(1, fSphere.getCoatWidth(2),
+                            "Coat 2 width is erroneous"),
+                    () -> assertEquals(7, fSphere.getRadius(),
+                            "The radius is erroneous")
+            );
+        }
+    }
+
+    @Test
+    @DisplayName("Correct add coat")
+    void correctAddCoat() {
+        FPairPos3D range = factory.getFPairPos3D(10);
+
+        Producer<FPoint> center = factory.getFPointProducer(range);
+
+        Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
+                .correctAddCoat(3, 2, 1);
+
+        for (int i = 0 ; i < 5 ; i++) {
+            FSphere fSphere = producer.produce();
+
+            Assertions.assertAll("Validate coats",
+                    () -> assertEquals(3, fSphere.getCoatCount(),
+                            "The number of coats is erroneous"),
+                    () -> assertEquals(3, fSphere.getCoatWidth(0),
+                            "Coat 0 width is erroneous"),
+                    () -> assertEquals(2, fSphere.getCoatWidth(1),
+                            "Coat 1 width is erroneous"),
+                    () -> assertEquals(1, fSphere.getCoatWidth(2),
+                            "Coat 2 width is erroneous"),
+                    () -> assertEquals(7, fSphere.getRadius(),
+                            "The radius is erroneous")
+            );
+        }
+    }
+
+    @Test
+    @DisplayName("Validate no overlap")
+    void validateNoOverlap() {
         FPairPos3D range = factory.getFPairPos3D(1);
 
         Producer<FPoint> center = factory.getFPointProducer(range);
 
         Producer<FSphere> producer = factory.getFSphereProducer(center, 1)
-                .forceNoOverlap();
+                .validateNoOverlap();
 
         List<FSphere> results = new ArrayList<>();
 

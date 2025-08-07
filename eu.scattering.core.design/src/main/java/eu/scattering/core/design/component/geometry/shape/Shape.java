@@ -50,29 +50,6 @@ public interface Shape extends Geometry {
 
     Shape scale(double factor);
 
-    Shape removeCoat();
-
-    Shape applyCoatFrom(Shape shape);
-
-    Shape addCoat(double width);
-    Shape addCoat(double... width);
-
-    Shape addCoatInternal(double width);
-    Shape addCoatInternal(double... width);
-
-    int getCoatCount();
-    int getLayerCount();
-
-    double getCoatWidth(int index);
-    double getCoatWidthTotal();
-
-    void setCoatWidth(int index, double width);
-
-    double getCoatVolume(int index);
-    double getCoatVolumeTotal();
-
-    double getLayerVolume(int index);
-
     boolean contains(double x, double y, double z);
     boolean contains(FPoint fPoint);
     boolean contains(FPos3D fPos3D);
@@ -101,6 +78,7 @@ public interface Shape extends Geometry {
     Shape setVolume(double volume);
 
     void fillVolumeLayer(FLayerCounter in);
+    void fillVolumeLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
 
     void fillOverlapLayer(FLayerCounter in);
     void fillOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
@@ -144,6 +122,32 @@ public interface Shape extends Geometry {
     void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPos3D center);
 
     void getCollisionListDirectional(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
+
+    // -------------------------------------------------------------------------------------------------
+
+    Shape removeCoat();
+
+    Shape applyCoatFrom(Shape shape);
+
+    Shape addCoat(double width);
+    Shape addCoat(double... width);
+
+    Shape addCoatInternal(double width);
+    Shape addCoatInternal(double... width);
+
+    int getCoatCount();
+
+    double getCoatWidth(int index);
+    double getCoatWidthTotal();
+
+    void setCoatWidth(int index, double width);
+
+    double getCoatVolume(int index);
+    double getCoatVolumeTotal();
+
+    int getLayerCount();
+
+    double getLayerVolume(int index);
 
     // -------------------------------------------------------------------------------------------------
 

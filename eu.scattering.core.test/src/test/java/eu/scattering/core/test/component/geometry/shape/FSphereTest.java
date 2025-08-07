@@ -4312,7 +4312,7 @@ public class FSphereTest {
 
             Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
             Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
-                    .forceNoOverlap();
+                    .validateNoOverlap();
 
             FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
 
@@ -4355,7 +4355,7 @@ public class FSphereTest {
 
             Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
             Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
-                    .forceNoOverlap();
+                    .validateNoOverlap();
 
             FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
 
@@ -4395,7 +4395,7 @@ public class FSphereTest {
 
             Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
             Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
-                    .forceNoOverlap();
+                    .validateNoOverlap();
 
             FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
 
@@ -4435,7 +4435,7 @@ public class FSphereTest {
 
             Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
             Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
-                    .forceNoOverlap();
+                    .validateNoOverlap();
 
             FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(100));
 

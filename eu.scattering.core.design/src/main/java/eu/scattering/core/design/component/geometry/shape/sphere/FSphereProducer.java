@@ -30,18 +30,23 @@ public interface FSphereProducer extends Producer<FSphere> {
 
     FSphereProducer addMutation(Consumer<List<FSphere>> mutation);
 
-    FSphereProducer addValidation(BiFunction<FSphere, List<FSphere>, Boolean> validation);
-
     FSphereProducer addCorrection(BiConsumer<FSphere, FRandGenerator> correction);
+
+    FSphereProducer addValidation(BiFunction<FSphere, List<FSphere>, Boolean> validation);
 
     // -------------------------------------------------------------------------------------------------
 
-    FSphereProducer setMeta(String meta);
     FSphereProducer setCache(FCache cache);
+
+    FSphereProducer setMeta(String meta);
     FSphereProducer setDelta(double delta);
     FSphereProducer setEpsilon(double epsilon);
 
-    FSphereProducer forceNoOverlap();
+    FSphereProducer mutateAddCoat(double... width);
+
+    FSphereProducer correctAddCoat(double... width);
+
+    FSphereProducer validateNoOverlap();
 
     // -------------------------------------------------------------------------------------------------
 

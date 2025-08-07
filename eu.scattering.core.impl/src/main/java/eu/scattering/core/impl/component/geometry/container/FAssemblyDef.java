@@ -495,6 +495,47 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public double getVolumeLayer(double[] layers) {
+        FLayerCounter fLayer = factory.getFLayerCounter();
+
+        List<Shape> list = getUniqueShapes();
+
+        int maxLayer = Integer.MIN_VALUE;
+        double volUnit;
+        for (Shape shape : list) {
+            fLayer.reset();
+
+            shape.fillVolumeLayer(fLayer, list);
+            volUnit = Math.pow(shape.getDelta(), 3);
+
+            if (fLayer.size() > maxLayer) {
+                maxLayer = fLayer.size();
+            }
+
+            for (int i = 0 ; i < fLayer.size() ; i++) {
+                layers[i] += fLayer.get(i) * volUnit;
+            }
+        }
+
+        double volTotal = 0;
+
+        for (int i = 0 ; i < maxLayer ; i++) {
+            volTotal += layers[i];
+        }
+
+        return volTotal;
+    }
+
+    private List<Shape> getUniqueShapes() {
+
+        return  this.elements.stream()
+                .filter(e -> e instanceof Shape)
+                .map(e -> (Shape) e)
+                .distinct()
+                .toList();
+    }
+
+    @Override
     public FPos3D getSpatialCenter() {
         FPairPos3D dimension = getRange();
 

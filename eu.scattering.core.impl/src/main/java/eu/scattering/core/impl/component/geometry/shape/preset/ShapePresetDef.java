@@ -1048,6 +1048,122 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
+    public void fillVolumeLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
+        double factor = 1 / delta;
+
+        double radiusParsed = factor * getRadius();
+
+        double cX = factor * getCenterX();
+        double cY = factor * getCenterY();
+        double cZ = factor * getCenterZ();
+
+        double minX = Math.floor(cX - radiusParsed) * delta;
+        double maxX = getCenterX() + getRadius();
+        double minY = Math.floor(cY - radiusParsed) * delta;
+        double maxY = getCenterY() + getRadius();
+        double minZ = Math.floor(cZ - radiusParsed) * delta;
+        double maxZ = getCenterZ() + getRadius();
+
+        List<Shape> shape = new ArrayList<>();
+        List<Shape> shapeBefore = new ArrayList<>();
+        List<Shape> shapeAfter = new ArrayList<>();
+
+        shapes.forEach(shape::add);
+
+        separateShapes(shape, shapeBefore, shapeAfter);
+
+        int locRef;
+        for (double x = minX ; x < maxX ; x += delta) {
+            for (double y = minY ; y < maxY ; y += delta) {
+                for (double z = minZ ; z < maxZ ; z += delta) {
+                    locRef = locate(x, y, z);
+
+                    if (locRef < 0) {
+                        continue;
+                    }
+
+                    if (!validateLayerBefore(shapeBefore, locRef, x, y, z)) {
+                        continue;
+                    }
+
+                    if (!validateLayerAfter(shapeAfter, locRef, x, y, z)) {
+                        continue;
+                    }
+
+                    in.inc(locRef);
+                }
+            }
+        }
+    }
+
+    void separateShapes(List<Shape> shapes, List<Shape> before, List<Shape> after) {
+        int index = shapes.indexOf(this);
+
+        if (index == -1) {
+            throw new IllegalArgumentException("The shape must be a part of the list");
+        }
+
+        before.clear();
+        after.clear();
+
+        for (int i = 0 ; i < index ; i++) {
+            before.add(shapes.get(i));
+        }
+
+        for (int i = index + 1 ; i < shapes.size() ; i++) {
+            after.add(shapes.get(i));
+        }
+    }
+
+    boolean validateLayerBefore(List<Shape> shapes, int locRef, double x, double y, double z) {
+        double locArgMin = Integer.MAX_VALUE;
+
+        double locArg;
+        for (Shape shape : shapes) {
+
+            if (!overlaps(shape)) {
+                continue;
+            }
+
+            locArg = shape.locate(x, y, z);
+
+            if (locArg < 0) {
+                continue;
+            }
+
+            if (locArg < locArgMin) {
+                locArgMin = locArg;
+            }
+        }
+
+        return locRef <= locArgMin;
+    }
+
+    boolean validateLayerAfter(List<Shape> shapes, int locRef, double x, double y, double z) {
+        double locArgMin = Integer.MAX_VALUE;
+
+        double locArg;
+        for (Shape shape : shapes) {
+
+            if (!overlaps(shape)) {
+                continue;
+            }
+
+            locArg = shape.locate(x, y, z);
+
+            if (locArg < 0) {
+                continue;
+            }
+
+            if (locArg < locArgMin) {
+                locArgMin = locArg;
+            }
+        }
+
+        return locRef < locArgMin;
+    }
+
+    @Override
     public void fillVolumeArray(FArray in) {
         double factor = 1 / delta;
 
