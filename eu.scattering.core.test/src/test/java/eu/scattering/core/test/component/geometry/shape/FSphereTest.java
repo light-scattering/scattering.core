@@ -226,10 +226,10 @@ public class FSphereTest {
         void setRadiusInner() {
             FSphere fSphere = TestHelper.getRandFSphere();
 
-            Shape results = fSphere.getRadiusInner(11);
+            Shape results = fSphere.getRadiusInternal(11);
 
             Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(11, fSphere.getRadiusInner(),
+                    () -> assertEquals(11, fSphere.getRadiusInternal(),
                             "The radius is incorrect"),
                     () -> assertSame(results, fSphere,
                             "The reference should not change")
@@ -258,7 +258,7 @@ public class FSphereTest {
 
             fSphere.addCoat(1, 2, 3);
 
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getRadiusInner(5),
+            assertThrows(IllegalArgumentException.class, () -> fSphere.getRadiusInternal(5),
                     "The radius cannot be smaller than the width of the coating");
 
             fSphere.setRadius(10);

@@ -362,13 +362,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public double getRadiusInner() {
+    public double getRadiusInternal() {
 
         return getRadius();
     }
 
     @Override
-    public Shape getRadiusInner(double radius) {
+    public Shape getRadiusInternal(double radius) {
 
         return setRadius(radius);
     }
@@ -488,7 +488,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double tZ = z - getCenterZ();
 
         double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-        double radius = getRadiusInner() - getCoatWidthTotal();
+        double radius = getRadiusInternal() - getCoatWidthTotal();
 
         if (distP2 < radius * radius) {
             return 0;

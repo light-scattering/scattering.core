@@ -439,21 +439,38 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public double getSurface() {
+        FLayerCounter fLayer = factory.getFLayerCounter();
+
+        List<Shape> field = getUniqueShapes();
+
+        double surface = 0;
+        for (Shape element : field) {
+
+            if (element.overlaps(field) == 0) {
+                surface += element.getSurface();
+            } else {
+                fLayer.reset();
+                element.fillSurfaceLayer(fLayer, field);
+                surface += fLayer.get() * Math.pow(element.getDelta(), 2);
+            }
+        }
+
+        return surface;
+    }
+
+    @Override
     public double getVolume() {
         FLayerCounter fLayer = factory.getFLayerCounter();
 
-        List<Shape> list = this.elements.stream()
-                .filter(e -> e instanceof Shape)
-                .map(e -> (Shape) e)
-                .distinct()
-                .toList();
+        List<Shape> field = getUniqueShapes();
 
-        Queue<Shape> queue = new LinkedList<>(list);
+        Queue<Shape> queue = new LinkedList<>(field);
 
         queue.poll();
 
         double volume = 0;
-        for (Shape element : list) {
+        for (Shape element : field) {
 
             if (element.overlaps(queue) == 0) {
                 volume += element.getVolume();
@@ -470,60 +487,58 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public double getSurface() {
+    public double getVolume(double[] layers) {
         FLayerCounter fLayer = factory.getFLayerCounter();
 
-        List<Shape> list = this.elements.stream()
-                .filter(e -> e instanceof Shape)
-                .map(e -> (Shape) e)
-                .distinct()
-                .toList();
+        List<Shape> field = getUniqueShapes();
 
-        double surface = 0;
-        for (Shape element : list) {
+        int layerCountMax = Integer.MIN_VALUE;
+        for (Shape shape : field) {
+            int layerCount = getVol(fLayer, field, shape, layers);
 
-            if (element.overlaps(list) == 0) {
-                surface += element.getSurface();
-            } else {
-                fLayer.reset();
-                element.fillSurfaceLayer(fLayer, list);
-                surface += fLayer.get() * Math.pow(element.getDelta(), 2);
-            }
-        }
-
-        return surface;
-    }
-
-    @Override
-    public double getVolumeLayer(double[] layers) {
-        FLayerCounter fLayer = factory.getFLayerCounter();
-
-        List<Shape> list = getUniqueShapes();
-
-        int maxLayer = Integer.MIN_VALUE;
-        double volUnit;
-        for (Shape shape : list) {
-            fLayer.reset();
-
-            shape.fillVolumeLayer(fLayer, list);
-            volUnit = Math.pow(shape.getDelta(), 3);
-
-            if (fLayer.size() > maxLayer) {
-                maxLayer = fLayer.size();
-            }
-
-            for (int i = 0 ; i < fLayer.size() ; i++) {
-                layers[i] += fLayer.get(i) * volUnit;
+            if (layerCount > layerCountMax) {
+                layerCountMax = layerCount;
             }
         }
 
         double volTotal = 0;
 
-        for (int i = 0 ; i < maxLayer ; i++) {
+        for (int i = 0 ; i < layerCountMax ; i++) {
             volTotal += layers[i];
         }
 
         return volTotal;
+    }
+
+    private int getVol(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] layer) {
+
+        if (shape.overlaps(field) == 0) {
+            return getVolAlg(shape, layer);
+        }
+
+        return getVolMsh(fLayer, field, shape, layer);
+    }
+
+    private int getVolAlg(Shape shape, double[] layer) {
+
+        for (int i = 0 ; i < shape.getLayerCount() ; i++) {
+            layer[i] += shape.getLayerVolume(i);
+        }
+
+        return shape.getLayerCount();
+    }
+
+    private int getVolMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] layer) {
+        fLayer.reset();
+
+        shape.fillVolumeLayer(fLayer, field);
+        double volUnit = Math.pow(shape.getDelta(), 3);
+
+        for (int i = 0 ; i < fLayer.size() ; i++) {
+            layer[i] += fLayer.get(i) * volUnit;
+        }
+
+        return fLayer.size();
     }
 
     private List<Shape> getUniqueShapes() {

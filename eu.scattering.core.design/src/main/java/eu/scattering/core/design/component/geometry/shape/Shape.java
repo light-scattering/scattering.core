@@ -96,10 +96,10 @@ public interface Shape extends Geometry {
     void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes);
 
     double getRadius();
-    double getRadiusInner();
+    double getRadiusInternal();
 
     Shape setRadius(double radius);
-    Shape getRadiusInner(double radius);
+    Shape getRadiusInternal(double radius);
 
     Shape setRadiusMin(Iterable<? extends Shape> shapes);
 

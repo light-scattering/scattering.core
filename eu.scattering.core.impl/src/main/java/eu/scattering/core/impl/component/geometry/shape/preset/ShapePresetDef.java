@@ -16,6 +16,7 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static eu.scattering.core.impl.ConfigDef.*;
 
@@ -519,14 +520,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInner() + shape.getRadiusInner() - epsilon;
+        reqDist = this.getRadiusInternal() + shape.getRadiusInternal() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.FALSE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.TRUE : Relation.UNDEFINED;
+        return this.getRadius() == this.getRadiusInternal() ? Relation.TRUE : Relation.UNDEFINED;
     }
 
     protected boolean touchesDelta(Shape shape, double delta) {
@@ -639,14 +640,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInner() + shape.getRadiusInner() - epsilon;
+        reqDist = this.getRadiusInternal() + shape.getRadiusInternal() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean overlapsDelta(Shape shape) {
@@ -741,14 +742,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInner() - shape.getRadiusInner() + epsilon;
+        reqDist = this.getRadiusInternal() - shape.getRadiusInternal() + epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean enclosesDelta(Shape shape) {
@@ -850,14 +851,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = Math.abs(this.getRadiusInner() - shape.getRadiusInner()) - epsilon;
+        reqDist = Math.abs(this.getRadiusInternal() - shape.getRadiusInternal()) - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 > reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInner() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean intersectsDelta(Shape shape, double delta) {
@@ -1064,13 +1065,10 @@ public abstract class ShapePresetDef implements Shape {
         double minZ = Math.floor(cZ - radiusParsed) * delta;
         double maxZ = getCenterZ() + getRadius();
 
-        List<Shape> shape = new ArrayList<>();
-        List<Shape> shapeBefore = new ArrayList<>();
-        List<Shape> shapeAfter = new ArrayList<>();
+        List<Shape> prefix = new ArrayList<>();
+        List<Shape> suffix = new ArrayList<>();
 
-        shapes.forEach(shape::add);
-
-        separateShapes(shape, shapeBefore, shapeAfter);
+        catItems(shapes, prefix, suffix);
 
         int locRef;
         for (double x = minX ; x < maxX ; x += delta) {
@@ -1082,43 +1080,42 @@ public abstract class ShapePresetDef implements Shape {
                         continue;
                     }
 
-                    if (!validateLayerBefore(shapeBefore, locRef, x, y, z)) {
+                    if (locRef > getLocArg(prefix, x, y, z)) {
                         continue;
                     }
 
-                    if (!validateLayerAfter(shapeAfter, locRef, x, y, z)) {
-                        continue;
+                    if (locRef < getLocArg(suffix, x, y, z)) {
+                        in.inc(locRef);
                     }
-
-                    in.inc(locRef);
                 }
             }
         }
     }
 
-    void separateShapes(List<Shape> shapes, List<Shape> before, List<Shape> after) {
-        int index = shapes.indexOf(this);
+    void catItems(Iterable<? extends Shape> list, List<Shape> prefix, List<Shape> suffix) {
 
-        if (index == -1) {
+        var isFound = new AtomicBoolean(false);
+        list.forEach(e -> {
+            if (this == e) {
+                isFound.set(true);
+            } else {
+                if (isFound.get()) {
+                    suffix.add(e);
+                } else {
+                    prefix.add(e);
+                }
+            }
+        });
+
+        if (!isFound.get()) {
             throw new IllegalArgumentException("The shape must be a part of the list");
         }
-
-        before.clear();
-        after.clear();
-
-        for (int i = 0 ; i < index ; i++) {
-            before.add(shapes.get(i));
-        }
-
-        for (int i = index + 1 ; i < shapes.size() ; i++) {
-            after.add(shapes.get(i));
-        }
     }
 
-    boolean validateLayerBefore(List<Shape> shapes, int locRef, double x, double y, double z) {
-        double locArgMin = Integer.MAX_VALUE;
+    int getLocArg(List<Shape> shapes, double x, double y, double z) {
+        int locArgMin = Integer.MAX_VALUE;
 
-        double locArg;
+        int locArg;
         for (Shape shape : shapes) {
 
             if (!overlaps(shape)) {
@@ -1136,31 +1133,7 @@ public abstract class ShapePresetDef implements Shape {
             }
         }
 
-        return locRef <= locArgMin;
-    }
-
-    boolean validateLayerAfter(List<Shape> shapes, int locRef, double x, double y, double z) {
-        double locArgMin = Integer.MAX_VALUE;
-
-        double locArg;
-        for (Shape shape : shapes) {
-
-            if (!overlaps(shape)) {
-                continue;
-            }
-
-            locArg = shape.locate(x, y, z);
-
-            if (locArg < 0) {
-                continue;
-            }
-
-            if (locArg < locArgMin) {
-                locArgMin = locArg;
-            }
-        }
-
-        return locRef < locArgMin;
+        return locArgMin;
     }
 
     @Override

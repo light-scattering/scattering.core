@@ -1538,7 +1538,7 @@ public class FAssemblyTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
             double[] volLayers = new double[3];
-            double volTotal = fAssembly.getVolumeLayer(volLayers);
+            double volTotal = fAssembly.getVolume(volLayers);
 
             double volAlgCore = 4 * fSphereA.getLayerVolume(0);
             double volAlgLayer1 = 4 * fSphereA.getLayerVolume(1);
@@ -1579,7 +1579,7 @@ public class FAssemblyTest {
             FSphere fSphereRef = fSphereProd.produce();
 
             double[] volLayers = new double[3];
-            double volTotal = fAssembly.getVolumeLayer(volLayers);
+            double volTotal = fAssembly.getVolume(volLayers);
 
             double volAlgCore = quantity * fSphereRef.getLayerVolume(0);
             double volAlgLayer1 = quantity * fSphereRef.getLayerVolume(1);
@@ -1624,7 +1624,7 @@ public class FAssemblyTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
             double[] volLayers = new double[3];
-            double volTotal = fAssembly.getVolumeLayer(volLayers);
+            double volTotal = fAssembly.getVolume(volLayers);
 
             double volAlgCore = fSphereA.getLayerVolume(0);
             double volAlgLayer1 = fSphereA.getLayerVolume(1);
@@ -1669,7 +1669,7 @@ public class FAssemblyTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
             double[] volLayers = new double[4];
-            double volTotal = fAssembly.getVolumeLayer(volLayers);
+            double volTotal = fAssembly.getVolume(volLayers);
 
             double volAlgCore = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
             double volAlgTotal = fAssembly.getVolume();
