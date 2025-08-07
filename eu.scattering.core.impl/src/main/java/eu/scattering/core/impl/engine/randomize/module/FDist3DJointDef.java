@@ -7,7 +7,8 @@ import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public class FDist3DJointDef implements FDist3DJoint {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private final FDist1D dX, dY, dZ;
 
     private FDist3DJointDef(FDist1D dX, FDist1D dY, FDist1D dZ) {
@@ -25,7 +26,7 @@ public class FDist3DJointDef implements FDist3DJoint {
     @Override
     public FPos3D produce() {
 
-        return factory.getFPos3D(
+        return factoryExt.getFPos3D(
                 this.dX.produce(),
                 this.dY.produce(),
                 this.dZ.produce()

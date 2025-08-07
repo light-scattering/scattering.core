@@ -6,7 +6,7 @@ import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public class FTrigHelperDef implements FTrigHelper {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
     private static FTrigHelperDef self;
 
     private FTrigHelperDef() {}
@@ -62,7 +62,7 @@ public class FTrigHelperDef implements FTrigHelper {
         var d1 = origin.getD1() - ref.getD1();
         var d2 = origin.getD2() - ref.getD2();
 
-        return factory.getFPos3D(d0, d1, d2);
+        return factoryExt.getFPos3D(d0, d1, d2);
     }
 
     private double getLength(FPos3D ref) {

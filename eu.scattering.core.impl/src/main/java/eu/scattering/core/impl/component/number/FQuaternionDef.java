@@ -16,7 +16,8 @@ import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FQuaternionDef implements FQuaternion {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private static final String JSON_MAIN = "qt";
     private static final String JSON_VAL = "val";
 
@@ -158,7 +159,7 @@ public class FQuaternionDef implements FQuaternion {
     @Override
     public FPos4D toFPos4D() {
 
-        return factory.getFPos4D(getRe(), getI(), getJ(), getK());
+        return factoryExt.getFPos4D(getRe(), getI(), getJ(), getK());
     }
 
     @Override

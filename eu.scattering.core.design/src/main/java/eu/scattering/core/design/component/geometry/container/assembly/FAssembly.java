@@ -33,12 +33,13 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
 
     //--------------------------------------------------
 
-//    FAssembly<T> mutate(Class<? extends T> type, Consumer<? extends T> action);
+//    <U extends T> FAssembly<T> mutate(Class<U> type, Consumer<U> action);
 
     FAssembly<T> translate(double x, double y, double z);
     FAssembly<T> translate(FPos3D offset);
 
-    FAssembly<T> scale(double factor);
+    FAssembly<T> scaleSize(double factor);
+    FAssembly<T> scalePosition(double factor);
 
     double getVolume();
     double getVolume(double[] layers);

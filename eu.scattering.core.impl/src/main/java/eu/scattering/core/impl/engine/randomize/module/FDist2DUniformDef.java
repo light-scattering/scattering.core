@@ -8,7 +8,8 @@ import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 
 public class FDist2DUniformDef implements FDist2DUniform {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private final FRandGenerator random;
     private final double x1, x2, y1, y2;
 
@@ -37,7 +38,7 @@ public class FDist2DUniformDef implements FDist2DUniform {
     @Override
     public FPos2D produce() {
 
-        return factory.getFPos2D(
+        return factoryExt.getFPos2D(
                 this.random.nextDouble(x1, x2),
                 this.random.nextDouble(y1, y2)
         );

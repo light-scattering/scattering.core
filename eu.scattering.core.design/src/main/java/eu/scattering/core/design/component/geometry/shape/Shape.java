@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.util.annotation.Fragment;
+import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
@@ -48,7 +49,8 @@ public interface Shape extends Geometry {
     Shape translate(FPoint fPoint);
     Shape translate(FPos3D fPos3D);
 
-    Shape scale(double factor);
+    Shape scaleSize(double factor);
+    Shape scalePosition(double factor);
 
     boolean contains(double x, double y, double z);
     boolean contains(FPoint fPoint);
@@ -131,13 +133,13 @@ public interface Shape extends Geometry {
 
     Shape removeCoat();
 
-    Shape applyCoatFrom(Shape shape);
-
     Shape addCoat(double width);
     Shape addCoat(double... width);
 
     Shape addCoatInternal(double width);
     Shape addCoatInternal(double... width);
+
+    Shape applyCoatFrom(Shape shape);
 
     int getCoatCount();
 
@@ -155,24 +157,34 @@ public interface Shape extends Geometry {
 
     // -------------------------------------------------------------------------------------------------
 
-    FCache getCache();
-    Shape setCache(FCache cache);
+    FCache getFCache();
+    Shape setFCache(FCache cache);
+    Shape rstFCache();
 
-    String getMeta();
-    Shape setMeta(String meta);
+    String getDesc();
+    Shape setDesc(String desc);
+    Shape rstDesc();
 
     double getEpsilon();
     Shape setEpsilon(double epsilon);
+    Shape rstEpsilon();
 
     double getDelta();
     Shape setDelta(double delta);
+    Shape rstDelta();
 
-    int getIndex();
-    Shape setIndex(int index);
+    double getIndex();
+    Shape setIndex(double index);
+    Shape rstIndex();
 
     //--------------------------------------------------
 
     Shape copy();
+
+    @Modificator
+    FPoint getRefCenter();
+    @Modificator
+    Shape setRefCenter(FPoint refCenter);
 
     @Fragment
     double getDistCenterP2(double x, double y, double z);

@@ -10,12 +10,11 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.BiConsumer;
 
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FArrayDef implements FArray {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
     private static final String JSON_MAIN = "array";
     private static final String JSON_LENGTH = "length";
@@ -106,7 +105,7 @@ public class FArrayDef implements FArray {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factory.getFPos4D(this.d0[index], this.d1[index], this.d2[index], this.value[index]);
+        return factoryExt.getFPos4D(this.d0[index], this.d1[index], this.d2[index], this.value[index]);
     }
 
     @Override
@@ -116,7 +115,7 @@ public class FArrayDef implements FArray {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factory.getFPos3D(this.d0[index], this.d1[index], this.d2[index]);
+        return factoryExt.getFPos3D(this.d0[index], this.d1[index], this.d2[index]);
     }
 
     @Override

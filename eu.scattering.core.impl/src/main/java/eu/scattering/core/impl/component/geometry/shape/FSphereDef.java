@@ -170,7 +170,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         if (json.has(JSON_META)) {
-            setMeta(json.getString(JSON_META));
+            setDesc(json.getString(JSON_META));
         }
 
         return this;
@@ -321,8 +321,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             json.put(JSON_INDEX, getIndex());
         }
 
-        if (!getMeta().equals("")) {
-            json.put(JSON_META, getMeta());
+        if (!getDesc().equals("")) {
+            json.put(JSON_META, getDesc());
         }
 
         return json;
@@ -830,8 +830,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     private CmpDistSpace getCacheCmpDistSpace() {
 
-        if (super.getCache() != null) {
-            return super.getCache().get(CmpDistSpace.class, (cache) -> CmpDistSpace.create());
+        if (super.getFCache() != null) {
+            return super.getFCache().get(CmpDistSpace.class, (cache) -> CmpDistSpace.create());
         }
 
         return CmpDistSpace.create();

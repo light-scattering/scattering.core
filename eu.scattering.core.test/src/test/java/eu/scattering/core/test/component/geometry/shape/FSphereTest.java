@@ -303,7 +303,7 @@ public class FSphereTest {
 
             FPoint fCenterA = TestHelper.getRandFPoint();
 
-            FSphere results = fSphere.setRefCenter(fCenterA);
+            Shape results = fSphere.setRefCenter(fCenterA);
 
             fCenterA.set(1, 2, 3);
 
@@ -524,18 +524,21 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Scale")
-        void scale() {
+        @DisplayName("Scale size")
+        void scaleSize() {
             FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
 
-            Shape results = fSphere.scale(2);
+            assertThrows(IllegalArgumentException.class, () -> fSphere.scaleSize(-1),
+                    "The factor must be a positive value");
+
+            Shape results = fSphere.scaleSize(2);
 
             Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(4, results.getCenterX(),
+                    () -> assertEquals(2, results.getCenterX(),
                             "The X value is incorrect"),
-                    () -> assertEquals(6, results.getCenterY(),
+                    () -> assertEquals(3, results.getCenterY(),
                             "The Y value is incorrect"),
-                    () -> assertEquals(8, results.getCenterZ(),
+                    () -> assertEquals(4, results.getCenterZ(),
                             "The Z value is incorrect"),
                     () -> assertEquals(2, results.getRadius(),
                             "The radius is incorrect"),
@@ -545,13 +548,11 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Scale with coating")
-        void scaleWithCoating() {
+        @DisplayName("Scale position")
+        void scalePosition() {
             FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
 
-            fSphere.addCoat(3).addCoat(2).addCoat(1);
-
-            Shape results = fSphere.scale(2);
+            Shape results = fSphere.scalePosition(2);
 
             Assertions.assertAll("Validate FSphere values",
                     () -> assertEquals(4, results.getCenterX(),
@@ -560,13 +561,49 @@ public class FSphereTest {
                             "The Y value is incorrect"),
                     () -> assertEquals(8, results.getCenterZ(),
                             "The Z value is incorrect"),
-                    () -> assertEquals(14, results.getRadius(),
+                    () -> assertEquals(1, results.getRadius(),
                             "The radius is incorrect"),
+                    () -> assertSame(fSphere, results,
+                            "The FSphere reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Scale size with coating")
+        void scaleSizeWithCoating() {
+            FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
+
+            fSphere.addCoat(3).addCoat(2).addCoat(1);
+
+            Shape results = fSphere.scaleSize(2);
+
+            Assertions.assertAll("Validate FSphere values",
                     () -> assertEquals(6, results.getCoatWidth(0),
                             "Coat A width is incorrect"),
                     () -> assertEquals(4, results.getCoatWidth(1),
                             "Coat B width is incorrect"),
                     () -> assertEquals(2, results.getCoatWidth(2),
+                            "Coat C width is incorrect"),
+                    () -> assertSame(fSphere, results,
+                            "The FSphere reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Scale position with coating")
+        void scalePositionWithCoating() {
+            FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
+
+            fSphere.addCoat(3).addCoat(2).addCoat(1);
+
+            Shape results = fSphere.scalePosition(2);
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(3, results.getCoatWidth(0),
+                            "Coat A width is incorrect"),
+                    () -> assertEquals(2, results.getCoatWidth(1),
+                            "Coat B width is incorrect"),
+                    () -> assertEquals(1, results.getCoatWidth(2),
                             "Coat C width is incorrect"),
                     () -> assertSame(fSphere, results,
                             "The FSphere reference should not change")
@@ -798,83 +835,118 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Epsilon")
+        @DisplayName("Set epsilon")
         void setEpsilon() {
             Shape fSphere = factory.getFSphere();
 
             assertEquals(SHAPE_EPSILON, fSphere.getEpsilon(),
                     "The default epsilon value is incorrect");
 
-            Shape results = fSphere.setEpsilon(123);
+            Shape resultsA = fSphere.setEpsilon(123);
 
             assertEquals(123, fSphere.getEpsilon(),
                     "The epsilon value is incorrect");
-            assertSame(results, fSphere,
+            assertSame(resultsA, fSphere,
+                    "The reference should not change");
+
+            Shape resultsB = fSphere.rstEpsilon();
+
+            assertEquals(SHAPE_EPSILON, fSphere.getEpsilon(),
+                    "The epsilon value is incorrect");
+            assertSame(resultsB, fSphere,
                     "The reference should not change");
         }
 
         @Test
-        @DisplayName("Delta")
+        @DisplayName("Set delta")
         void setDelta() {
             Shape fSphere = factory.getFSphere();
 
             assertEquals(SHAPE_DELTA, fSphere.getDelta(),
                     "The default delta value is incorrect");
 
-            Shape results = fSphere.setDelta(123);
+            Shape resultsA = fSphere.setDelta(123);
 
             assertEquals(123, fSphere.getDelta(),
                     "The delta value is incorrect");
-            assertSame(results, fSphere,
+            assertSame(resultsA, fSphere,
+                    "The reference should not change");
+
+            Shape resultsB = fSphere.rstDelta();
+
+            assertEquals(SHAPE_DELTA, fSphere.getDelta(),
+                    "The delta value is incorrect");
+            assertSame(resultsB, fSphere,
                     "The reference should not change");
         }
 
         @Test
-        @DisplayName("Index")
+        @DisplayName("Set index")
         void setIndex() {
             Shape fSphere = factory.getFSphere();
 
             assertEquals(-1, fSphere.getIndex(),
                     "The default index value is incorrect");
 
-            Shape results = fSphere.setIndex(123);
+            Shape resultsA = fSphere.setIndex(123);
 
             assertEquals(123, fSphere.getIndex(),
                     "The index value is incorrect");
-            assertSame(results, fSphere,
+            assertSame(resultsA, fSphere,
+                    "The reference should not change");
+
+            Shape resultsB = fSphere.rstIndex();
+
+            assertEquals(-1, fSphere.getIndex(),
+                    "The index value is incorrect");
+            assertSame(resultsB, fSphere,
                     "The reference should not change");
         }
 
         @Test
-        @DisplayName("Tag")
-        void setTag() {
+        @DisplayName("Set desc")
+        void setDesc() {
             Shape fSphere = factory.getFSphere();
 
-            assertEquals("", fSphere.getMeta(),
+            assertEquals("", fSphere.getDesc(),
                     "The default tag value is incorrect");
 
-            Shape results = fSphere.setMeta("123");
+            Shape resultsA = fSphere.setDesc("123");
 
-            assertEquals("123", fSphere.getMeta(),
+            assertEquals("123", fSphere.getDesc(),
                     "The tag value is incorrect");
-            assertSame(results, fSphere,
+            assertSame(resultsA, fSphere,
+                    "The reference should not change");
+
+            Shape resultsB = fSphere.rstDesc();
+
+            assertEquals("", fSphere.getDesc(),
+                    "The tag value is incorrect");
+            assertSame(resultsB, fSphere,
                     "The reference should not change");
         }
 
         @Test
-        @DisplayName("Cache (set)")
-        void setFCache() {
+        @DisplayName("Set cache")
+        void setCache() {
             Shape fSphere = factory.getFSphere();
 
-            assertNull(fSphere.getCache(),
+            assertNull(fSphere.getFCache(),
                     "The cache value should be null");
 
             FCache cache = factory.getFCache();
-            Shape results = fSphere.setCache(cache);
+            Shape resultsA = fSphere.setFCache(cache);
 
-            assertSame(cache, fSphere.getCache(),
+            assertSame(cache, fSphere.getFCache(),
                     "The cache instance is incorrect");
-            assertSame(results, fSphere,
+            assertSame(resultsA, fSphere,
+                    "The reference should not change");
+
+            Shape resultsB = fSphere.rstFCache();
+
+            assertNull(fSphere.getFCache(),
+                    "The cache value should be null");
+            assertSame(resultsB, fSphere,
                     "The reference should not change");
         }
     }

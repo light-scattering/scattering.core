@@ -9,7 +9,8 @@ import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import java.util.function.BiConsumer;
 
 public class FDist2DManualDef implements FDist2DCustom {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private final BiConsumer<FRandGenerator, Double[]> consumer;
     private final FRandGenerator random;
     private final Double[] arr = new Double[2];
@@ -30,7 +31,7 @@ public class FDist2DManualDef implements FDist2DCustom {
 
         this.consumer.accept(this.random, this.arr);
 
-        return factory.getFPos2D(this.arr[0], this.arr[1]);
+        return factoryExt.getFPos2D(this.arr[0], this.arr[1]);
     }
 
     @Override

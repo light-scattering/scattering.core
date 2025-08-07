@@ -9,7 +9,8 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import java.util.function.BiConsumer;
 
 public class FDist3DManualDef implements FDist3DCustom {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private final BiConsumer<FRandGenerator, Double[]> consumer;
     private final FRandGenerator random;
     private final Double[] arr = new Double[3];
@@ -30,7 +31,7 @@ public class FDist3DManualDef implements FDist3DCustom {
 
         this.consumer.accept(this.random, this.arr);
 
-        return factory.getFPos3D(this.arr[0], this.arr[1], this.arr[2]);
+        return factoryExt.getFPos3D(this.arr[0], this.arr[1], this.arr[2]);
     }
 
     @Override

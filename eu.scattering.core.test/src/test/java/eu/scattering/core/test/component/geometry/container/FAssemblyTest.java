@@ -1164,8 +1164,28 @@ public class FAssemblyTest {
         }
 
         @Test
-        @DisplayName("Scale")
-        void scale() {
+        @DisplayName("Scale size")
+        void scaleSize() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+            FSphere fSphere = factory.getFSphere(4, 5, 6, 1);
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPoint, fSphere));
+
+            FAssembly<Geometry> results = fAssembly.scaleSize(2);
+
+            Assertions.assertAll("Validate FSphere values",
+                    () -> assertEquals(factory.getFSphere(4, 5, 6, 2), fSphere,
+                            "The FSphere size is incorrect"),
+                    () -> assertEquals(factory.getFPoint(1, 2, 3), fPoint,
+                            "The FPoint size is incorrect"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Scale position")
+        void scalePosition() {
             FPoint base = factory.getFPoint(1,2, 3);
 
             FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
@@ -1174,7 +1194,7 @@ public class FAssemblyTest {
 
             FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
 
-            FAssembly<FVector> results = fAssembly.scale(2);
+            FAssembly<FVector> results = fAssembly.scalePosition(2);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertEquals(3, fAssembly.size(),

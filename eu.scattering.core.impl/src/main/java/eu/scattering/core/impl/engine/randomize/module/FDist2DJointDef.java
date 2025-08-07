@@ -7,7 +7,8 @@ import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 
 public class FDist2DJointDef implements FDist2DJoint {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private final FDist1D dX, dY;
 
     private FDist2DJointDef(FDist1D dX, FDist1D dY) {
@@ -24,7 +25,7 @@ public class FDist2DJointDef implements FDist2DJoint {
     @Override
     public FPos2D produce() {
 
-        return factory.getFPos2D(
+        return factoryExt.getFPos2D(
                 this.dX.produce(),
                 this.dY.produce()
         );

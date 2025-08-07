@@ -8,7 +8,7 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FPointHelperDef implements FPointHelper {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
     private FPointHelperDef() {}
 
@@ -38,7 +38,7 @@ public class FPointHelperDef implements FPointHelper {
 
         double factor = magnitude / getMagnitude(refX, refY, refZ);
 
-        return factory.getFPos3D(refX * factor, refY * factor, refZ * factor);
+        return factoryExt.getFPos3D(refX * factor, refY * factor, refZ * factor);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class FPointHelperDef implements FPointHelper {
         posY = (posY * factor) + y;
         posZ = (posZ * factor) + z;
 
-        return factory.getFPos3D(posX, posY, posZ);
+        return factoryExt.getFPos3D(posX, posY, posZ);
     }
 
     @Override

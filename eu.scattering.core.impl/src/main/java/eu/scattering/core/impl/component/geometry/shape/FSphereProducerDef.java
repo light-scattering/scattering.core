@@ -10,6 +10,8 @@ import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class FSphereProducerDef implements FSphereProducer {
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private static final Consumer<List<FSphere>> MUTATION_ITERATION;
 
     static {
@@ -34,12 +38,15 @@ public class FSphereProducerDef implements FSphereProducer {
     private final ProducerCoreDef<FSphere> processor;
     private final FRandEngine randomizer;
 
+    private FCache cache;
+
     private String meta = null;
-    private FCache cache = null;
     private Double delta = null;
     private Double epsilon = null;
 
     private FSphereProducerDef(FSphereFactory factory, FRandEngine randomizer) {
+
+        this.cache = factoryExt.getFCache();
 
         this.factory = factory;
         this.randomizer = randomizer;
@@ -269,7 +276,7 @@ public class FSphereProducerDef implements FSphereProducer {
     private FSphere updateConfig(FSphere fSphere) {
 
         if (this.meta != null) {
-            fSphere.setMeta(this.meta);
+            fSphere.setDesc(this.meta);
         }
 
         if (this.delta != null) {
@@ -281,7 +288,7 @@ public class FSphereProducerDef implements FSphereProducer {
         }
 
         if (this.cache != null) {
-            fSphere.setCache(this.cache);
+            fSphere.setFCache(this.cache);
         }
 
         return fSphere;

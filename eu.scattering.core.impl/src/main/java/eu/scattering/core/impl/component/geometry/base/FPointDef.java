@@ -19,7 +19,8 @@ import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FPointDef implements FPoint {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private static final String JSON_MAIN = "point";
     private static final String JSON_VAL = "position";
 
@@ -224,7 +225,7 @@ public class FPointDef implements FPoint {
     @Override
     public FPos3D toFPos3D() {
 
-        return factory.getFPos3D(getX(), getY(), getZ());
+        return factoryExt.getFPos3D(getX(), getY(), getZ());
     }
 
     @Override

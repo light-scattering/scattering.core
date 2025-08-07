@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FArrayMeshDef implements FArrayMesh {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
     private static final String JSON_MAIN = "arrayMesh";
     private static final String JSON_LENGTH = "length";
@@ -105,7 +105,7 @@ public class FArrayMeshDef implements FArrayMesh {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factory.getFPos3DI(this.d0[index], this.d1[index], this.d2[index]);
+        return factoryExt.getFPos3DI(this.d0[index], this.d1[index], this.d2[index]);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class FArrayMeshDef implements FArrayMesh {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factory.getFPos4DI(this.d0[index], this.d1[index], this.d2[index], (int) this.value[index]);
+        return factoryExt.getFPos4DI(this.d0[index], this.d1[index], this.d2[index], (int) this.value[index]);
     }
 
     @Override

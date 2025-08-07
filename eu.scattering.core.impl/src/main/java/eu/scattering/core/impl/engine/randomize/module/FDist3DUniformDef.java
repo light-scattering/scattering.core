@@ -8,7 +8,8 @@ import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 public class FDist3DUniformDef implements FDist3DUniform {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private final FRandGenerator random;
     private final double x1, x2, y1, y2, z1, z2;
 
@@ -40,7 +41,7 @@ public class FDist3DUniformDef implements FDist3DUniform {
     @Override
     public FPos3D produce() {
 
-        return factory.getFPos3D(
+        return factoryExt.getFPos3D(
                 this.random.nextDouble(x1, x2),
                 this.random.nextDouble(y1, y2),
                 this.random.nextDouble(z1, z2)

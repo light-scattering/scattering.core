@@ -31,10 +31,10 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class FRandGeneratorDef implements FRandGenerator {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
-    private static final FPos2D posZero2D = factory.getFPos2D(0, 0);
-    private static final FPos3D posZero3D = factory.getFPos3D(0, 0, 0);
+    private static final FPos2D posZero2D = factoryExt.getFPos2D(0, 0);
+    private static final FPos3D posZero3D = factoryExt.getFPos3D(0, 0, 0);
 
     private final FRandCore core;
 
@@ -117,7 +117,7 @@ public class FRandGeneratorDef implements FRandGenerator {
         double rndD0 = nextDouble(range.getPosA().getD0(), range.getPosB().getD0());
         double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
 
-        return factory.getFPos2D(rndD0, rndD1);
+        return factoryExt.getFPos2D(rndD0, rndD1);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class FRandGeneratorDef implements FRandGenerator {
         double rndD1 = nextDouble(range.getPosA().getD1(), range.getPosB().getD1());
         double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
 
-        return factory.getFPos3D(rndD0, rndD1, rndD2);
+        return factoryExt.getFPos3D(rndD0, rndD1, rndD2);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class FRandGeneratorDef implements FRandGenerator {
         double rndD2 = nextDouble(range.getPosA().getD2(), range.getPosB().getD2());
         double rndD3 = nextDouble(range.getPosA().getD3(), range.getPosB().getD3());
 
-        return factory.getFPos4D(rndD0, rndD1, rndD2, rndD3);
+        return factoryExt.getFPos4D(rndD0, rndD1, rndD2, rndD3);
     }
 
     @Override
@@ -146,17 +146,17 @@ public class FRandGeneratorDef implements FRandGenerator {
         double d0 = Math.sin(rnd) * radius;
         double d1 = Math.cos(rnd) * radius;
 
-        return factory.getFPos2D(d0, d1);
+        return factoryExt.getFPos2D(d0, d1);
     }
 
     @Override
     public FPos2D nextDoubleInCircle(double radius) {
         double radiusP2 = radius * radius;
 
-        FPos2D posA = factory.getFPos2D(-radius, -radius);
-        FPos2D posB = factory.getFPos2D(radius, radius);
+        FPos2D posA = factoryExt.getFPos2D(-radius, -radius);
+        FPos2D posB = factoryExt.getFPos2D(radius, radius);
 
-        FPairPos2D range = factory.getFPairPos2D(posA, posB);
+        FPairPos2D range = factoryExt.getFPairPos2D(posA, posB);
 
         int retries = 0;
 
@@ -193,17 +193,17 @@ public class FRandGeneratorDef implements FRandGenerator {
         double y = 2 * x2 * Math.sqrt(1 - f) * radius;
         double z = (1 - 2 * f) * radius;
 
-        return factory.getFPos3D(x, y, z);
+        return factoryExt.getFPos3D(x, y, z);
     }
 
     @Override
     public FPos3D nextDoubleInSphere(double radius) {
         double radiusP2 = radius * radius;
 
-        FPos3D posA = factory.getFPos3D(-radius, -radius, -radius);
-        FPos3D posB = factory.getFPos3D(radius, radius, radius);
+        FPos3D posA = factoryExt.getFPos3D(-radius, -radius, -radius);
+        FPos3D posB = factoryExt.getFPos3D(radius, radius, radius);
 
-        FPairPos3D range = factory.getFPairPos3D(posA, posB);
+        FPairPos3D range = factoryExt.getFPairPos3D(posA, posB);
 
         int retries = 0;
 

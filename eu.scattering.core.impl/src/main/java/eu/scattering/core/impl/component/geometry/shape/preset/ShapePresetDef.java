@@ -31,8 +31,8 @@ public abstract class ShapePresetDef implements Shape {
 
     private final boolean shift = true;
 
-    private int index = -1;
-    private String meta = "";
+    private double index = -1;
+    private String desc = "";
 
     protected List<Double> coating = new ArrayList<>();
 
@@ -42,15 +42,23 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public FCache getCache() {
+    public FCache getFCache() {
 
         return this.cache;
     }
 
     @Override
-    public Shape setCache(FCache cache) {
+    public Shape setFCache(FCache cache) {
 
         this.cache = cache;
+
+        return this;
+    }
+
+    @Override
+    public Shape rstFCache() {
+
+        this.cache = null;
 
         return this;
     }
@@ -70,6 +78,14 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
+    public Shape rstEpsilon() {
+
+        this.epsilon = SHAPE_EPSILON;
+
+        return this;
+    }
+
+    @Override
     public double getDelta() {
 
         return this.delta;
@@ -84,29 +100,53 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public String getMeta() {
+    public Shape rstDelta() {
 
-        return this.meta;
-    }
-
-    @Override
-    public Shape setMeta(String meta) {
-
-        this.meta = meta;
+        this.delta = SHAPE_DELTA;
 
         return this;
     }
 
     @Override
-    public int getIndex() {
+    public String getDesc() {
+
+        return this.desc;
+    }
+
+    @Override
+    public Shape setDesc(String desc) {
+
+        this.desc = desc;
+
+        return this;
+    }
+
+    @Override
+    public Shape rstDesc() {
+
+        this.desc = "";
+
+        return this;
+    }
+
+    @Override
+    public double getIndex() {
 
         return this.index;
     }
 
     @Override
-    public Shape setIndex(int index) {
+    public Shape setIndex(double index) {
 
         this.index = index;
+
+        return this;
+    }
+
+    @Override
+    public Shape rstIndex() {
+
+        this.index = -1;
 
         return this;
     }
@@ -307,19 +347,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape scale(double factor) {
+    public Shape scaleSize(double factor) {
 
-        setCenter(
-                getCenterX() * factor,
-                getCenterY() * factor,
-                getCenterZ() * factor
-        );
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The factor must be a positive value");
+        }
 
         setRadius(getRadius() * factor);
 
         for (int i = 0; i < getCoatCount() ; i++) {
             setCoatWidth(i, getCoatWidth(i) * factor);
         }
+
+        return this;
+    }
+
+    @Override
+    public Shape scalePosition(double factor) {
+
+        setCenter(
+                getCenterX() * factor,
+                getCenterY() * factor,
+                getCenterZ() * factor
+        );
 
         return this;
     }

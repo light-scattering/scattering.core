@@ -10,7 +10,8 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 public class FRotProcessorDef implements FRotGenerator {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private static FRotProcessorDef self;
 
     public static FRotGenerator get() {
@@ -27,9 +28,9 @@ public class FRotProcessorDef implements FRotGenerator {
     @Override
     public FRotQt getRotQt(double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
 
-        return getRotQt(factory.getFPairPos3D(
-                factory.getFPos3D(bX, bY, bZ),
-                factory.getFPos3D(hX, hY, hZ)),
+        return getRotQt(factoryExt.getFPairPos3D(
+                factoryExt.getFPos3D(bX, bY, bZ),
+                factoryExt.getFPos3D(hX, hY, hZ)),
                 angle
         );
     }
@@ -37,9 +38,9 @@ public class FRotProcessorDef implements FRotGenerator {
     @Override
     public FRotQt getRotQt(double x, double y, double z, double angle) {
 
-        return getRotQt(factory.getFPairPos3D(
-                factory.getFPos3D(0, 0, 0),
-                factory.getFPos3D(x, y, z)),
+        return getRotQt(factoryExt.getFPairPos3D(
+                factoryExt.getFPos3D(0, 0, 0),
+                factoryExt.getFPos3D(x, y, z)),
                 angle
         );
     }
@@ -47,7 +48,7 @@ public class FRotProcessorDef implements FRotGenerator {
     @Override
     public FRotQt getRotQt(FPos3D axis, double angle) {
 
-        return getRotQt(factory.getFPairPos3D(factory.getFPos3D(0, 0, 0), axis), angle);
+        return getRotQt(factoryExt.getFPairPos3D(factoryExt.getFPos3D(0, 0, 0), axis), angle);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class FRotProcessorDef implements FRotGenerator {
         FPos3D offset = getOffset(axis);
         FMatrix3x3D matrix = getMatrix(quaternion);
 
-        return factory.getFRotQt(quaternion, offset, matrix);
+        return factoryExt.getFRotQt(quaternion, offset, matrix);
     }
 
     private FPos4D getQuaternion(FPairPos3D axis, double angle) {
@@ -81,7 +82,7 @@ public class FRotProcessorDef implements FRotGenerator {
         headY *= factor2;
         headZ *= factor2;
 
-        return factory.getFPos4D(Math.cos(angle * 0.5), headX, headY, headZ);
+        return factoryExt.getFPos4D(Math.cos(angle * 0.5), headX, headY, headZ);
     }
 
     private FPos3D getOffset(FPairPos3D axis) {
@@ -107,7 +108,7 @@ public class FRotProcessorDef implements FRotGenerator {
         origin[2][1] = 2 * ((j * k) - (re * i));
         origin[2][2] = 1 - (2 * i * i) - (2 * j * j);
 
-        return factory.getFMatrix3x3D(origin);
+        return factoryExt.getFMatrix3x3D(origin);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -143,12 +144,12 @@ public class FRotProcessorDef implements FRotGenerator {
 
         double factor = 1 / Math.sqrt(1 - (re * re));
 
-        FPos3D head = factory.getFPos3D(
+        FPos3D head = factoryExt.getFPos3D(
                 (i * factor) + offset.getD0(),
                 (j * factor) + offset.getD1(),
                 (k * factor) + offset.getD2()
         );
 
-        return factory.getFPairPos3D(offset, head);
+        return factoryExt.getFPairPos3D(offset, head);
     }
 }

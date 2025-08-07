@@ -16,7 +16,8 @@ import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FComplexDef implements FComplex {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private static final String JSON_MAIN = "cpx";
     private static final String JSON_VAL = "val";
 
@@ -128,7 +129,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FPos2D toFPos2D() {
 
-        return factory.getFPos2D(getRe(), getIm());
+        return factoryExt.getFPos2D(getRe(), getIm());
     }
 
     @Override

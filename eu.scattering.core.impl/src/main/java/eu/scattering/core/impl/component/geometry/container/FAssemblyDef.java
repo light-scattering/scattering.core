@@ -24,7 +24,8 @@ import java.util.function.BiFunction;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+
     private static final String JSON_MAIN = "assembly";
     private static final String JSON_VAL = "val";
 
@@ -431,7 +432,18 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FAssembly<T> scale(double factor) {
+    public FAssembly<T> scaleSize(double factor) {
+
+        this.elements.stream()
+                .filter(e -> e instanceof Shape)
+                .map(e -> (Shape) e)
+                .forEach(e -> e.scaleSize(factor));
+
+        return this;
+    }
+
+    @Override
+    public FAssembly<T> scalePosition(double factor) {
 
         this.fPoints.forEach(e -> e.mulFactor(factor));
 
@@ -440,7 +452,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public double getSurface() {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayerCounter fLayer = factoryExt.getFLayerCounter();
 
         List<Shape> field = getUniqueShapes();
 
@@ -461,7 +473,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public double getVolume() {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayerCounter fLayer = factoryExt.getFLayerCounter();
 
         List<Shape> field = getUniqueShapes();
 
@@ -488,7 +500,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public double getVolume(double[] layers) {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayerCounter fLayer = factoryExt.getFLayerCounter();
 
         List<Shape> field = getUniqueShapes();
 
@@ -558,7 +570,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         double y = (dimension.getPosA().getD1() + dimension.getPosB().getD1()) * 0.5;
         double z = (dimension.getPosA().getD2() + dimension.getPosB().getD2()) * 0.5;
 
-        return factory.getFPos3D(x, y, z);
+        return factoryExt.getFPos3D(x, y, z);
     }
 
     @Override
@@ -644,7 +656,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
             }
         }
 
-        return factory.getFPairPos3D(minX, minY, minZ, maxX, maxY, maxZ);
+        return factoryExt.getFPairPos3D(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     // -------------------------------------------------------------------------------------------------
