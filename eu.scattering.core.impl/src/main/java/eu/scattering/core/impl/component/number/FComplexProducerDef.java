@@ -45,12 +45,6 @@ public class FComplexProducerDef implements FComplexProducer {
         return this;
     }
 
-    @Override
-    public FComplex produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -65,9 +59,9 @@ public class FComplexProducerDef implements FComplexProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FComplex> stream() {
+    public FComplex produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -86,5 +80,11 @@ public class FComplexProducerDef implements FComplexProducer {
     public List<FComplex> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FComplex> stream() {
+
+        return this.processor.stream();
     }
 }

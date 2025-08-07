@@ -450,15 +450,17 @@ public abstract class ShapePresetDef implements Shape {
         return locate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
-    public boolean touches(Shape shape) {
+    public boolean repels(Shape shape) {
 
         if (epsilon <= 0 && delta <= 0) {
             throw new IllegalArgumentException("At least one precision parameter must be defined");
         }
 
         if (epsilon > 0) {
-            Relation relation = touchesEpsilon(shape, epsilon);
+            Relation relation = repelsEpsilon(shape);
 
             if (relation == Relation.TRUE) {
                 return true;
@@ -470,7 +472,123 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         if (delta > 0) {
-            return touchesDelta(shape, delta);
+            return repelsDelta(shape);
+        }
+
+        throw new IllegalStateException("The problem cannot be solved with direct equations");
+    }
+
+    @Override
+    public int repels(Iterable<? extends Shape> shapes) {
+        int count = 0;
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (repels(shape)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @Override
+    public int repels(Iterable<? extends Shape> shapes, List<Shape> in) {
+        in.clear();
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (repels(shape)) {
+                in.add(shape);
+            }
+        }
+
+        return in.size();
+    }
+
+    protected Relation repelsEpsilon(Shape shape) {
+        double distP2 = getDistCenterP2(shape);
+
+        double reqDist = this.getRadius() + shape.getRadius() + epsilon;
+        double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 > reqDistP2) {
+            return Relation.TRUE;
+        }
+
+        reqDist = this.getRadiusInternal() + shape.getRadiusInternal() - epsilon;
+        reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
+
+        if (distP2 < reqDistP2) {
+            return Relation.FALSE;
+        }
+
+        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
+    }
+
+    protected boolean repelsDelta(Shape shape) {
+        FPairPos3D range = getOperationRange(shape);
+
+        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
+            for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
+                for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
+                    boolean containsA = this.contains(x, y, z);
+                    boolean containsB = shape.contains(x, y, z);
+
+                    if (containsA && containsB) {
+                        return false;
+                    }
+
+                    if (containsA) {
+                        if (shape.contains(x + delta, y, z) ||
+                                shape.contains(x, y + delta, z) ||
+                                shape.contains(x, y, z + delta)) {
+                            return false;
+                        }
+                    }
+
+                    if (containsB) {
+                        if (this.contains(x + delta, y, z) ||
+                                this.contains(x, y + delta, z) ||
+                                this.contains(x, y, z + delta)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean touches(Shape shape) {
+
+        if (epsilon <= 0 && delta <= 0) {
+            throw new IllegalArgumentException("At least one precision parameter must be defined");
+        }
+
+        if (epsilon > 0) {
+            Relation relation = touchesEpsilon(shape);
+
+            if (relation == Relation.TRUE) {
+                return true;
+            }
+
+            if (relation == Relation.FALSE) {
+                return false;
+            }
+        }
+
+        if (delta > 0) {
+            return touchesDelta(shape);
         }
 
         throw new IllegalStateException("The problem cannot be solved with direct equations");
@@ -510,7 +628,7 @@ public abstract class ShapePresetDef implements Shape {
         return in.size();
     }
 
-    protected Relation touchesEpsilon(Shape shape, double epsilon) {
+    protected Relation touchesEpsilon(Shape shape) {
         double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() + epsilon;
@@ -530,7 +648,7 @@ public abstract class ShapePresetDef implements Shape {
         return this.getRadius() == this.getRadiusInternal() ? Relation.TRUE : Relation.UNDEFINED;
     }
 
-    protected boolean touchesDelta(Shape shape, double delta) {
+    protected boolean touchesDelta(Shape shape) {
         FPairPos3D range = getOperationRange(shape);
 
         boolean ruleTouch = false;
@@ -789,7 +907,7 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         if (epsilon > 0) {
-            Relation relation = intersectsEpsilon(shape, epsilon);
+            Relation relation = intersectsEpsilon(shape);
 
             if (relation == Relation.TRUE) {
                 return true;
@@ -801,7 +919,7 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         if (delta > 0) {
-            return intersectsDelta(shape, delta);
+            return intersectsDelta(shape);
         }
 
         throw new IllegalStateException("The problem cannot be solved with direct equations");
@@ -841,7 +959,7 @@ public abstract class ShapePresetDef implements Shape {
         return in.size();
     }
 
-    protected Relation intersectsEpsilon(Shape shape, double epsilon) {
+    protected Relation intersectsEpsilon(Shape shape) {
         double distP2 = getDistCenterP2(shape);
 
         double reqDist = this.getRadius() + shape.getRadius() - epsilon;
@@ -861,7 +979,7 @@ public abstract class ShapePresetDef implements Shape {
         return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
-    protected boolean intersectsDelta(Shape shape, double delta) {
+    protected boolean intersectsDelta(Shape shape) {
         FPairPos3D range = getOperationRange(shape);
 
         boolean ruleShapeA = false;
@@ -902,6 +1020,8 @@ public abstract class ShapePresetDef implements Shape {
 
         return false;
     }
+
+    // -------------------------------------------------------------------------------------------------
 
     protected FPairPos3D getOperationRange(Shape shape) {
         double opA, opB;
@@ -1068,7 +1188,7 @@ public abstract class ShapePresetDef implements Shape {
         List<Shape> prefix = new ArrayList<>();
         List<Shape> suffix = new ArrayList<>();
 
-        catItems(shapes, prefix, suffix);
+        categorizeShapes(shapes, prefix, suffix);
 
         int locRef;
         for (double x = minX ; x < maxX ; x += delta) {
@@ -1080,11 +1200,11 @@ public abstract class ShapePresetDef implements Shape {
                         continue;
                     }
 
-                    if (locRef > getLocArg(prefix, x, y, z)) {
+                    if (locRef > getLocation(prefix, x, y, z)) {
                         continue;
                     }
 
-                    if (locRef < getLocArg(suffix, x, y, z)) {
+                    if (locRef < getLocation(suffix, x, y, z)) {
                         in.inc(locRef);
                     }
                 }
@@ -1092,7 +1212,7 @@ public abstract class ShapePresetDef implements Shape {
         }
     }
 
-    void catItems(Iterable<? extends Shape> list, List<Shape> prefix, List<Shape> suffix) {
+    void categorizeShapes(Iterable<? extends Shape> list, List<Shape> prefix, List<Shape> suffix) {
 
         var isFound = new AtomicBoolean(false);
         list.forEach(e -> {
@@ -1108,11 +1228,13 @@ public abstract class ShapePresetDef implements Shape {
         });
 
         if (!isFound.get()) {
-            throw new IllegalArgumentException("The shape must be a part of the list");
+
+            suffix.addAll(prefix);
+            prefix.clear();
         }
     }
 
-    int getLocArg(List<Shape> shapes, double x, double y, double z) {
+    int getLocation(List<Shape> shapes, double x, double y, double z) {
         int locArgMin = Integer.MAX_VALUE;
 
         int locArg;

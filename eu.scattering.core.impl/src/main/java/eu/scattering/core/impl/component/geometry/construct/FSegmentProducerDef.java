@@ -46,12 +46,6 @@ public class FSegmentProducerDef implements FSegmentProducer {
         return this;
     }
 
-    @Override
-    public FSegment produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -67,9 +61,9 @@ public class FSegmentProducerDef implements FSegmentProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FSegment> stream() {
+    public FSegment produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -88,5 +82,11 @@ public class FSegmentProducerDef implements FSegmentProducer {
     public List<FSegment> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FSegment> stream() {
+
+        return this.processor.stream();
     }
 }

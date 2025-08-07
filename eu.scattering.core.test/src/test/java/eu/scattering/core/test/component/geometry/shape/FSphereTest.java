@@ -1465,62 +1465,6 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Sort by distance")
-        void sortByDistance() {
-            List<Shape> in = new ArrayList<>();
-
-            FSphere fSphereRef = factory.getFSphere(0, 0, 0, 5);
-            FSphere fSphereA = factory.getFSphere(0, 5, 0, 1);
-            FSphere fSphereB = factory.getFSphere(5, 5, 5, 1);
-            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
-
-            in.add(fSphereA);
-            in.add(fSphereB);
-            in.add((fSphereC));
-
-            fSphereRef.sortByDistCenter(in);
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertEquals(3, in.size(),
-                            "The size of the list is incorrect"),
-                    () -> assertSame(fSphereA, in.get(1),
-                            "The position of shape A is incorrect"),
-                    () -> assertSame(fSphereB, in.get(2),
-                            "The position of shape B is incorrect"),
-                    () -> assertSame(fSphereC, in.get(0),
-                            "The position of shape C is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Sort by space")
-        void sortBySpace() {
-            List<Shape> in = new ArrayList<>();
-
-            FSphere fSphereRef = factory.getFSphere(0, 0, 0, 4);
-            FSphere fSphereA = factory.getFSphere(0, 8, 0, 4);
-            FSphere fSphereB = factory.getFSphere(7, 0, 0, 1);
-            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
-
-            in.add(fSphereA);
-            in.add(fSphereB);
-            in.add((fSphereC));
-
-            fSphereRef.sortByDistSpace(in);
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertEquals(3, in.size(),
-                            "The size of the list is incorrect"),
-                    () -> assertSame(fSphereA, in.get(1),
-                            "The position of shape A is incorrect"),
-                    () -> assertSame(fSphereB, in.get(2),
-                            "The position of shape B is incorrect"),
-                    () -> assertSame(fSphereC, in.get(0),
-                            "The position of shape C is incorrect")
-            );
-        }
-
-        @Test
         @DisplayName("Encloses (epsilon) - same position")
         void enclosesEpsilonSamePosition() {
             Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
@@ -3069,6 +3013,346 @@ public class FSphereTest {
                             "The number of overlapping spheres is incorrect"),
                     () -> assertEquals(3, elements.size(),
                             "The number of overlapping spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (epsilon) - same position")
+        void repelsEpsilonSamePosition() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                    .setDelta(-1);
+            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                    .setDelta(-1);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertFalse(fSphereA.repels(fSphereB),
+                            "The spheres should not be distant"),
+                    () -> assertFalse(fSphereB.repels(fSphereA),
+                            "The spheres should not be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (epsilon) - distant")
+        void repelsEpsilonDistant() {
+            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                    .setDelta(-1);
+            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                    .setDelta(-1);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertTrue(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertTrue(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (epsilon) - A")
+        void repelsEpsilonA() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                    .setDelta(-1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                    .setDelta(-1);
+
+            FRandGenerator rand = factory.getFRand();
+
+            fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
+
+            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+            fSphereA.translate(translation);
+            fSphereB.translate(translation);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertFalse(fSphereA.repels(fSphereB),
+                            "The spheres should not be distant"),
+                    () -> assertFalse(fSphereB.repels(fSphereA),
+                            "The spheres should not be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (epsilon) - B")
+        void repelsEpsilonB() {
+            Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
+                    .setDelta(-1);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(-1);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertTrue(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertTrue(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (epsilon) - C")
+        void repelsEpsilonC() {
+            Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
+                    .setEpsilon(0.05)
+                    .setDelta(-1);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .setEpsilon(0.05)
+                    .setDelta(-1);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertFalse(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertFalse(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (epsilon, min) - A")
+        void repelsEpsilonMinA() {
+            Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
+                    .setEpsilon(1E-6)
+                    .setDelta(-1);
+            Shape fSphereB = factory.getFSphere(0.01, 0, 0, 0.01)
+                    .setEpsilon(1E-6)
+                    .setDelta(-1);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertTrue(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertTrue(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (epsilon, min) - B")
+        void repelsEpsilonMinB() {
+            Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
+                    .setEpsilon(1E-4)
+                    .setDelta(-1);
+            Shape fSphereB = factory.getFSphere(0.01, 0, 0, 0.01)
+                    .setEpsilon(1E-4)
+                    .setDelta(-1);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertFalse(fSphereA.repels(fSphereB),
+                            "The spheres should not be distant"),
+                    () -> assertFalse(fSphereB.repels(fSphereA),
+                            "The spheres should not be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (delta) - same position")
+        void repelsDeltaSamePosition() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertFalse(fSphereA.repels(fSphereB),
+                            "The spheres should not be distant"),
+                    () -> assertFalse(fSphereB.repels(fSphereA),
+                            "The spheres should not be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (delta) - distant")
+        void repelsDeltaDistant() {
+            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertTrue(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertTrue(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (delta) - A")
+        void repelsDeltaA() {
+            Shape fSphereA = factory.getFSphere(3 + 0.025, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertTrue(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertTrue(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (delta) - B")
+        void repelsDeltaB() {
+            Shape fSphereA = factory.getFSphere(3 - 0.025, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.01);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertFalse(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertFalse(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (delta) - C")
+        void repelsDeltaC() {
+            Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.005);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.005);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertTrue(fSphereA.repels(fSphereB),
+                            "The spheres should be distant"),
+                    () -> assertTrue(fSphereB.repels(fSphereA),
+                            "The spheres should be distant")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels (delta) - D")
+        void repelsDeltaD() {
+            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.05);
+            Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
+                    .setEpsilon(-1)
+                    .setDelta(0.05);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertFalse(fSphereA.repels(fSphereB),
+                            "The spheres should not be distant"),
+                    () -> assertFalse(fSphereB.repels(fSphereA),
+                            "The spheres should not be distant")
+            );
+        }
+
+
+        @Test
+        @DisplayName("Repels, field")
+        void repelsField() {
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.repels(fAssembly);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertEquals(1, count,
+                            "The number of distant spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Repels, field, list")
+        void repelsFieldList() {
+            List<Shape> elements = new ArrayList<>();
+
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.repels(fAssembly, elements);
+
+            Assertions.assertAll("Validate distance",
+                    () -> assertEquals(1, count,
+                            "The number of distant spheres is incorrect"),
+                    () -> assertEquals(1, elements.size(),
+                            "The number of distant spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sort by distance")
+        void sortByDistance() {
+            List<Shape> in = new ArrayList<>();
+
+            FSphere fSphereRef = factory.getFSphere(0, 0, 0, 5);
+            FSphere fSphereA = factory.getFSphere(0, 5, 0, 1);
+            FSphere fSphereB = factory.getFSphere(5, 5, 5, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            in.add(fSphereA);
+            in.add(fSphereB);
+            in.add((fSphereC));
+
+            fSphereRef.sortByDistCenter(in);
+
+            Assertions.assertAll("Validate positions",
+                    () -> assertEquals(3, in.size(),
+                            "The size of the list is incorrect"),
+                    () -> assertSame(fSphereA, in.get(1),
+                            "The position of shape A is incorrect"),
+                    () -> assertSame(fSphereB, in.get(2),
+                            "The position of shape B is incorrect"),
+                    () -> assertSame(fSphereC, in.get(0),
+                            "The position of shape C is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sort by space")
+        void sortBySpace() {
+            List<Shape> in = new ArrayList<>();
+
+            FSphere fSphereRef = factory.getFSphere(0, 0, 0, 4);
+            FSphere fSphereA = factory.getFSphere(0, 8, 0, 4);
+            FSphere fSphereB = factory.getFSphere(7, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            in.add(fSphereA);
+            in.add(fSphereB);
+            in.add((fSphereC));
+
+            fSphereRef.sortByDistSpace(in);
+
+            Assertions.assertAll("Validate positions",
+                    () -> assertEquals(3, in.size(),
+                            "The size of the list is incorrect"),
+                    () -> assertSame(fSphereA, in.get(1),
+                            "The position of shape A is incorrect"),
+                    () -> assertSame(fSphereB, in.get(2),
+                            "The position of shape B is incorrect"),
+                    () -> assertSame(fSphereC, in.get(0),
+                            "The position of shape C is incorrect")
             );
         }
 

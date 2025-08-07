@@ -52,12 +52,6 @@ public class FPointProducerDef implements FPointProducer {
         return this;
     }
 
-    @Override
-    public FPoint produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -122,9 +116,9 @@ public class FPointProducerDef implements FPointProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FPoint> stream() {
+    public FPoint produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -143,6 +137,12 @@ public class FPointProducerDef implements FPointProducer {
     public List<FPoint> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FPoint> stream() {
+
+        return this.processor.stream();
     }
 
     @Override

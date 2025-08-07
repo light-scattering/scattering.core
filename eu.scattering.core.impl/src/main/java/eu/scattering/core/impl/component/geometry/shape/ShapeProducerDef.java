@@ -43,18 +43,12 @@ public class ShapeProducerDef implements ShapeProducer {
         return this;
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
     public Shape produce() {
 
         return processor.produce();
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Stream<Shape> stream() {
-
-        return this.processor.stream();
     }
 
     @Override
@@ -73,5 +67,11 @@ public class ShapeProducerDef implements ShapeProducer {
     public List<Shape> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<Shape> stream() {
+
+        return this.processor.stream();
     }
 }

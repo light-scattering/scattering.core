@@ -217,12 +217,6 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public Stream<FSphere> stream() {
-
-        return this.processor.stream();
-    }
-
-    @Override
     public List<FSphere> getList() {
 
         return this.processor.getList();
@@ -238,6 +232,12 @@ public class FSphereProducerDef implements FSphereProducer {
     public List<FSphere> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FSphere> stream() {
+
+        return this.processor.stream();
     }
 
     @Override

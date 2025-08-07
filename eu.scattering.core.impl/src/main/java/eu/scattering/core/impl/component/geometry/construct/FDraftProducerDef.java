@@ -46,11 +46,7 @@ public class FDraftProducerDef implements FDraftProducer {
         return this;
     }
 
-    @Override
-    public FDraft produce() {
 
-        return processor.produce();
-    }
 
     // -------------------------------------------------------------------------------------------------
 
@@ -67,9 +63,9 @@ public class FDraftProducerDef implements FDraftProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FDraft> stream() {
+    public FDraft produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -88,5 +84,11 @@ public class FDraftProducerDef implements FDraftProducer {
     public List<FDraft> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FDraft> stream() {
+
+        return this.processor.stream();
     }
 }

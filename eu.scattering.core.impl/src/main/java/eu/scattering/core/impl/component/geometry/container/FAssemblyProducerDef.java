@@ -46,18 +46,12 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
         return this;
     }
 
+    // -------------------------------------------------------------------------------------------------
+
     @Override
     public FAssembly<T> produce() {
 
         return processor.produce();
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public Stream<FAssembly<T>> stream() {
-
-        return this.processor.stream();
     }
 
     @Override
@@ -76,5 +70,11 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
     public List<FAssembly<T>> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FAssembly<T>> stream() {
+
+        return this.processor.stream();
     }
 }

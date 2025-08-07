@@ -46,12 +46,6 @@ public class FPlaneProducerDef implements FPlaneProducer {
         return this;
     }
 
-    @Override
-    public FPlane produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -67,9 +61,9 @@ public class FPlaneProducerDef implements FPlaneProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FPlane> stream() {
+    public FPlane produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -88,5 +82,11 @@ public class FPlaneProducerDef implements FPlaneProducer {
     public List<FPlane> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FPlane> stream() {
+
+        return this.processor.stream();
     }
 }

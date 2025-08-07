@@ -444,16 +444,10 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return this;
     }
 
-    private double getVolumeSphere(double radius) {
-
-        return 4 * Math.PI * radius * radius * radius / 3;
-    }
-
     @Override
     public double getSurface() {
-        double r = getRadius();
 
-        return 4 * Math.PI * r * r;
+        return getSurfaceSphere(getRadius());
     }
 
     @Override
@@ -592,6 +586,16 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                     getCenterZ() + (z * getRadius())
             );
         }
+    }
+
+    private double getVolumeSphere(double radius) {
+
+        return 4 * Math.PI * radius * radius * radius / 3;
+    }
+
+    private double getSurfaceSphere(double radius) {
+
+        return 4 * Math.PI * radius * radius;
     }
 
     // -------------------------------------------------------------------------------------------------

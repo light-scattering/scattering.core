@@ -46,12 +46,6 @@ public class FLineProducerDef implements FLineProducer {
         return this;
     }
 
-    @Override
-    public FLine produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -67,9 +61,9 @@ public class FLineProducerDef implements FLineProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FLine> stream() {
+    public FLine produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -88,5 +82,11 @@ public class FLineProducerDef implements FLineProducer {
     public List<FLine> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FLine> stream() {
+
+        return this.processor.stream();
     }
 }

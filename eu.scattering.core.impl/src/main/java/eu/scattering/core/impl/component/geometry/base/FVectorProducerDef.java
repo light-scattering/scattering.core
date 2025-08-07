@@ -50,12 +50,6 @@ public class FVectorProducerDef implements FVectorProducer {
         return this;
     }
 
-    @Override
-    public FVector produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -233,9 +227,9 @@ public class FVectorProducerDef implements FVectorProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FVector> stream() {
+    public FVector produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -254,5 +248,11 @@ public class FVectorProducerDef implements FVectorProducer {
     public List<FVector> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FVector> stream() {
+
+        return this.processor.stream();
     }
 }

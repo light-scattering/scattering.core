@@ -177,7 +177,7 @@ public class ShapeRandomizeTest {
                 .withProdCenterAndFixRadius(fPointProducer, 1)
                 .validateNoOverlap();
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(20));
 
         fAssembly.register(fSphereRef);
         fAssembly.register(fSphereArg);

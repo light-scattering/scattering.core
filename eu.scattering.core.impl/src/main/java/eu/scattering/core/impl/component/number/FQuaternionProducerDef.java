@@ -45,12 +45,6 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
         return this;
     }
 
-    @Override
-    public FQuaternion produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -65,9 +59,9 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FQuaternion> stream() {
+    public FQuaternion produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -86,5 +80,11 @@ public class FQuaternionProducerDef implements FQuaternionProducer {
     public List<FQuaternion> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FQuaternion> stream() {
+
+        return this.processor.stream();
     }
 }

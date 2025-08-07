@@ -58,6 +58,10 @@ public interface Shape extends Geometry {
     int locate(FPoint fPoint);
     int locate(FPos3D fPos3D);
 
+    boolean repels(Shape shape);
+    int repels(Iterable<? extends Shape> shapes);
+    int repels(Iterable<? extends Shape> shapes, List<Shape> in);
+
     boolean touches(Shape shape);
     int touches(Iterable<? extends Shape> shapes);
     int touches(Iterable<? extends Shape> shapes, List<Shape> in);

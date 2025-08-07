@@ -46,12 +46,6 @@ public class FRayProducerDef implements FRayProducer {
         return this;
     }
 
-    @Override
-    public FRay produce() {
-
-        return processor.produce();
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     @Override
@@ -67,9 +61,9 @@ public class FRayProducerDef implements FRayProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Stream<FRay> stream() {
+    public FRay produce() {
 
-        return this.processor.stream();
+        return processor.produce();
     }
 
     @Override
@@ -88,5 +82,11 @@ public class FRayProducerDef implements FRayProducer {
     public List<FRay> getListFixed(int quantity) {
 
         return this.processor.getListFixed(quantity);
+    }
+
+    @Override
+    public Stream<FRay> stream() {
+
+        return this.processor.stream();
     }
 }
