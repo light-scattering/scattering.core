@@ -19,8 +19,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
@@ -418,6 +421,17 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public <U extends T> FAssembly<T> mutate(Class<U> type, Consumer<U> action) {
+
+        this.elements.stream()
+                .filter(type::isInstance)
+                .map(type::cast)
+                .forEach(action);
+
+        return this;
+    }
+
+    @Override
     public FAssembly<T> translate(double x, double y, double z) {
 
         this.fPoints.forEach(e -> e.add(x, y, z));
@@ -434,10 +448,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     @Override
     public FAssembly<T> scaleSize(double factor) {
 
-        this.elements.stream()
-                .filter(e -> e instanceof Shape)
-                .map(e -> (Shape) e)
-                .forEach(e -> e.scaleSize(factor));
+        getShapes().forEach(e -> e.scaleSize(factor));
 
         return this;
     }
@@ -499,14 +510,14 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public double getVolume(double[] layers) {
+    public double getVolume(double[] volume) {
         FLayerCounter fLayer = factoryExt.getFLayerCounter();
 
         List<Shape> field = getUniqueShapes();
 
         int layerCountMax = Integer.MIN_VALUE;
         for (Shape shape : field) {
-            int layerCount = getVol(fLayer, field, shape, layers);
+            int layerCount = getVol(fLayer, field, shape, volume);
 
             if (layerCount > layerCountMax) {
                 layerCountMax = layerCount;
@@ -516,70 +527,156 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         double volTotal = 0;
 
         for (int i = 0 ; i < layerCountMax ; i++) {
-            volTotal += layers[i];
+            volTotal += volume[i];
         }
 
         return volTotal;
     }
 
-    private int getVol(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] layer) {
+    private int getVol(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] volume) {
 
         if (shape.overlaps(field) == 0) {
-            return getVolAlg(shape, layer);
+            return getVolAlg(shape, volume);
         }
 
-        return getVolMsh(fLayer, field, shape, layer);
+        return getVolMsh(fLayer, field, shape, volume);
     }
 
-    private int getVolAlg(Shape shape, double[] layer) {
+    private int getVolAlg(Shape shape, double[] volume) {
 
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
-            layer[i] += shape.getLayerVolume(i);
+            volume[i] += shape.getLayerVolume(i);
         }
 
         return shape.getLayerCount();
     }
 
-    private int getVolMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] layer) {
+    private int getVolMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] volume) {
         fLayer.reset();
 
         shape.fillVolumeLayer(fLayer, field);
         double volUnit = Math.pow(shape.getDelta(), 3);
 
         for (int i = 0 ; i < fLayer.size() ; i++) {
-            layer[i] += fLayer.get(i) * volUnit;
+            volume[i] += fLayer.get(i) * volUnit;
         }
 
         return fLayer.size();
     }
 
-    private List<Shape> getUniqueShapes() {
+    @Override
+    public double getOverlapFactor() {
+        FLayerCounter fLayer = factoryExt.getFLayerCounter();
+        List<Double> layer = new ArrayList<>();
 
-        return  this.elements.stream()
-                .filter(e -> e instanceof Shape)
-                .map(e -> (Shape) e)
-                .distinct()
-                .toList();
+        List<Shape> field = getShapes();
+
+        for (Shape shape : field) {
+            getOFac(fLayer, field, shape, layer);
+        }
+
+       return getOFacPost(layer);
+    }
+
+    private void getOFac(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, List<Double> volume) {
+
+        if (shape.overlaps(field) == 0) {
+            getOFacAlg(shape, volume);
+        } else {
+            getOFacMsh(fLayer, field, shape, volume);
+        }
+    }
+
+    private void getOFacAlg(Shape shape, List<Double> layer) {
+
+        if (layer.size() < 1) {
+            layer.add(0d);
+        }
+
+        layer.set(0, layer.get(0) + shape.getVolume());
+    }
+
+    private void getOFacMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, List<Double> volume) {
+        fLayer.reset();
+
+        shape.fillOverlapLayer(fLayer, field);
+
+        double volUnit = Math.pow(shape.getDelta(), 3);
+
+        while (fLayer.size() > volume.size()) {
+            volume.add(0d);
+        }
+
+        for (int i = 0 ; i < fLayer.size() ; i++) {
+            volume.set(i, volume.get(i) + (fLayer.get(i) * volUnit));
+        }
+    }
+
+    private double getOFacPost(List<Double> volume) {
+        double volTmp;
+        double volTotal = 0;
+        double volOverlap = 0;
+
+        for (int i = 0 ; i < volume.size() ; i++) {
+            volTmp = volume.get(i) / (i + 1);
+
+            volTotal += volTmp;
+
+            if (i > 0) {
+                volOverlap += volTmp;
+            }
+        }
+
+        return volOverlap / volTotal;
     }
 
     @Override
-    public FPos3D getSpatialCenter() {
-        FPairPos3D dimension = getRange();
+    public double getOverlapFactorLegacy() {
+        List<Shape> field = getShapes();
 
-        double x = (dimension.getPosA().getD0() + dimension.getPosB().getD0()) * 0.5;
-        double y = (dimension.getPosA().getD1() + dimension.getPosB().getD1()) * 0.5;
-        double z = (dimension.getPosA().getD2() + dimension.getPosB().getD2()) * 0.5;
+        int oFacCount = 0;
+        double oFacTotal = 0;
+        Shape shapeA, shapeB;
+        for (int i = 0 ; i < field.size() ; i++) {
+            shapeA = field.get(i);
 
-        return factoryExt.getFPos3D(x, y, z);
+            for (int j = i + 1 ; j < field.size() ; j++) {
+                shapeB = field.get(j);
+
+                if (shapeA == shapeB) {
+                    continue;
+                }
+
+                if (shapeA.repels(shapeB)) {
+                    continue;
+                }
+
+                oFacTotal += getOFacLeg(shapeA, shapeB);
+                oFacCount += 1;
+            }
+        }
+
+        if (oFacCount == 0) {
+            return 0;
+        }
+
+        return oFacTotal / oFacCount;
     }
 
-    @Override
-    public FAssembly<T> resetSpatialCenter() {
-        FPos3D center = getSpatialCenter();
+    private double getOFacLeg(Shape shapeA, Shape shapeB) {
 
-        translate(-center.getD0(), -center.getD1(), -center.getD2());
+        double dist = shapeA.getDistCenter(shapeB);
+        double oFacRaw = 1 - (dist / (shapeA.getRadius() + shapeB.getRadius()));
 
-        return this;
+        if (oFacRaw > 1) {
+            return 1;
+        }
+
+        if (oFacRaw < 0) {
+            return 0;
+        }
+
+        return oFacRaw;
     }
 
     @Override
@@ -593,21 +690,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
         for (T element : asList()) {
 
-            if (element instanceof FDraft) {
-                throw new IllegalStateException("The dimension of FDraft is undefined");
-            }
-
-            if (element instanceof FLine) {
-                throw new IllegalStateException("The dimension of FLine is undefined");
-            }
-
-            if (element instanceof FPlane) {
-                throw new IllegalStateException("The dimension of FPlane is undefined");
-            }
-
-            if (element instanceof FRay) {
-                throw new IllegalStateException("The dimension of FRay is undefined");
-            }
+            validateSpatialGeometry(element);
 
             if (element instanceof Shape shape) {
                 if (shape.getCenterX() - shape.getRadius() < minX) {
@@ -657,6 +740,154 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         }
 
         return factoryExt.getFPairPos3D(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    @Override
+    public void setSpatialCenter(FPoint center) {
+        FPairPos3D dimension = getRange();
+
+        double x = (dimension.getPosA().getD0() + dimension.getPosB().getD0()) * 0.5;
+        double y = (dimension.getPosA().getD1() + dimension.getPosB().getD1()) * 0.5;
+        double z = (dimension.getPosA().getD2() + dimension.getPosB().getD2()) * 0.5;
+
+        center.set(x, y, z);
+    }
+
+    @Override
+    public void setSphericalCenter(FPoint center) {
+        setSpatialCenter(center);
+
+        double learningRate = 0.1;
+        double learningRateChange = 0.9;
+        int stepMax = 100;
+
+        for (int step = 0; step < stepMax; step++) {
+            FPoint candidate = null;
+            double distMax = 0;
+            double radius = 0;
+
+            for (Geometry element : asList()) {
+
+                validateSpatialGeometry(element);
+
+                if (element instanceof Shape shape) {
+                    double dist = center.getDistance(shape.getRefCenter()) + shape.getRadius();
+
+                    if (dist > distMax) {
+                        radius = shape.getRadius();
+                        distMax = dist;
+                        candidate = shape.getRefCenter();
+                    }
+                } else {
+
+                    for (FPoint point : element.toFPoints()) {
+                        double dist = center.getDistance(point);
+
+                        if (dist > distMax) {
+                            radius = 0;
+                            distMax = dist;
+                            candidate = point;
+                        }
+                    }
+                }
+            }
+
+            if (candidate != null) {
+                center.setDistance(candidate,(distMax - radius) * (1 - learningRate));
+            }
+
+            if (learningRate < EPSILON) {
+                return;
+            }
+
+            learningRate *= learningRateChange;
+        }
+    }
+
+    @Override
+    public boolean isCompact() {
+        List<Shape> field = getUniqueShapes();
+        List<Shape> processed = new ArrayList<>();
+
+        if (field.size() == 0) {
+            return false;
+        }
+
+        isCompactCheck(field.get(0), field, processed);
+
+        return field.size() == processed.size();
+    }
+
+    private void isCompactCheck(Shape shape, List<Shape> field, List<Shape> processed) {
+
+        if (processed.contains(shape)) {
+            return;
+        }
+
+        processed.add(shape);
+
+        List<Shape> candidates = new ArrayList<>();
+        shape.touchesOrOverlaps(field, candidates);
+
+        for (Shape candidate : candidates) {
+            isCompactCheck(candidate, field, processed);
+        }
+    }
+
+    @Override
+    public void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
+        List<Shape> field = getShapes();
+        List<Shape> candidates = new ArrayList<>();
+
+        Queue<Shape> queue = new LinkedList<>(field);
+
+        queue.poll();
+
+        for (Shape shape : field) {
+            candidates.clear();
+
+            shape.touchesOrOverlaps(queue, candidates);
+
+            candidates.forEach(e -> consumer.accept(shape, e));
+
+            queue.poll();
+        }
+    }
+
+    private List<Shape> getShapes() {
+
+        return  this.elements.stream()
+                .filter(e -> e instanceof Shape)
+                .map(e -> (Shape) e)
+                .toList();
+    }
+
+    private List<Shape> getUniqueShapes() {
+
+        return  this.elements.stream()
+                .filter(e -> e instanceof Shape)
+                .map(e -> (Shape) e)
+                .distinct()
+                .toList();
+    }
+
+    private void validateSpatialGeometry(Geometry element) {
+
+        if (element instanceof FDraft) {
+            throw new IllegalStateException("The dimension of FDraft is undefined");
+        }
+
+        if (element instanceof FLine) {
+            throw new IllegalStateException("The dimension of FLine is undefined");
+        }
+
+        if (element instanceof FPlane) {
+            throw new IllegalStateException("The dimension of FPlane is undefined");
+        }
+
+        if (element instanceof FRay) {
+            throw new IllegalStateException("The dimension of FRay is undefined");
+        }
     }
 
     // -------------------------------------------------------------------------------------------------

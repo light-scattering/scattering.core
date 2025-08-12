@@ -60,26 +60,6 @@ public interface Shape extends Geometry {
     int locate(FPoint fPoint);
     int locate(FPos3D fPos3D);
 
-    boolean repels(Shape shape);
-    int repels(Iterable<? extends Shape> shapes);
-    int repels(Iterable<? extends Shape> shapes, List<Shape> in);
-
-    boolean touches(Shape shape);
-    int touches(Iterable<? extends Shape> shapes);
-    int touches(Iterable<? extends Shape> shapes, List<Shape> in);
-
-    boolean overlaps(Shape shape);
-    int overlaps(Iterable<? extends Shape> shapes);
-    int overlaps(Iterable<? extends Shape> shapes, List<Shape> in);
-
-    boolean encloses(Shape shape);
-    int encloses(Iterable<? extends Shape> shapes);
-    int encloses(Iterable<? extends Shape> shapes, List<Shape> in);
-
-    boolean intersects(Shape shape);
-    int intersects(Iterable<? extends Shape> shapes);
-    int intersects(Iterable<? extends Shape> shapes, List<Shape> in);
-
     double getVolume();
     Shape setVolume(double volume);
 
@@ -109,6 +89,41 @@ public interface Shape extends Geometry {
 
     Shape setRadiusMin(Iterable<? extends Shape> shapes);
 
+    void sortByDistCenter(List<? extends Shape> in);
+    void sortByDistSpace(List<? extends Shape> in);
+
+    // -------------------------------------------------------------------------------------------------
+
+    boolean repels(Shape shape);
+    int repels(Iterable<? extends Shape> shapes);
+    int repels(Iterable<? extends Shape> shapes, List<Shape> in);
+
+    boolean touches(Shape shape);
+    int touches(Iterable<? extends Shape> shapes);
+    int touches(Iterable<? extends Shape> shapes, List<Shape> in);
+
+    boolean overlaps(Shape shape);
+    int overlaps(Iterable<? extends Shape> shapes);
+    int overlaps(Iterable<? extends Shape> shapes, List<Shape> in);
+
+    boolean encloses(Shape shape);
+    int encloses(Iterable<? extends Shape> shapes);
+    int encloses(Iterable<? extends Shape> shapes, List<Shape> in);
+
+    boolean intersects(Shape shape);
+    int intersects(Iterable<? extends Shape> shapes);
+    int intersects(Iterable<? extends Shape> shapes, List<Shape> in);
+
+    boolean touchesOrRepels(Shape shape);
+    int touchesOrRepels(Iterable<? extends Shape> shapes);
+    int touchesOrRepels(Iterable<? extends Shape> shapes, List<Shape> in);
+
+    boolean touchesOrOverlaps(Shape shape);
+    int touchesOrOverlaps(Iterable<? extends Shape> shapes);
+    int touchesOrOverlaps(Iterable<? extends Shape> shapes, List<Shape> in);
+
+    // -------------------------------------------------------------------------------------------------
+
     boolean attachLinear(Shape target);
 
     boolean attachSpherical(Shape target, double x, double y, double z);
@@ -119,9 +134,6 @@ public interface Shape extends Geometry {
 
     boolean project(Shape target, FRay ray);
     boolean project(Iterable<? extends Shape> field, FRay ray);
-
-    void sortByDistCenter(List<? extends Shape> in);
-    void sortByDistSpace(List<? extends Shape> in);
 
     void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
     void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint center);
@@ -159,23 +171,23 @@ public interface Shape extends Geometry {
 
     FCache getFCache();
     Shape setFCache(FCache cache);
-    Shape rstFCache();
+    Shape resetFCache();
 
     String getDesc();
     Shape setDesc(String desc);
-    Shape rstDesc();
+    Shape resetDesc();
 
     double getEpsilon();
     Shape setEpsilon(double epsilon);
-    Shape rstEpsilon();
+    Shape resetEpsilon();
 
     double getDelta();
     Shape setDelta(double delta);
-    Shape rstDelta();
+    Shape resetDelta();
 
     double getIndex();
     Shape setIndex(double index);
-    Shape rstIndex();
+    Shape resetIndex();
 
     //--------------------------------------------------
 

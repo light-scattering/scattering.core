@@ -56,7 +56,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape rstFCache() {
+    public Shape resetFCache() {
 
         this.cache = null;
 
@@ -78,7 +78,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape rstEpsilon() {
+    public Shape resetEpsilon() {
 
         this.epsilon = SHAPE_EPSILON;
 
@@ -100,7 +100,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape rstDelta() {
+    public Shape resetDelta() {
 
         this.delta = SHAPE_DELTA;
 
@@ -122,7 +122,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape rstDesc() {
+    public Shape resetDesc() {
 
         this.desc = "";
 
@@ -144,7 +144,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape rstIndex() {
+    public Shape resetIndex() {
 
         this.index = -1;
 
@@ -281,6 +281,8 @@ public abstract class ShapePresetDef implements Shape {
 
          this.coating.set(index, width);
     }
+
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isExactCenter(Shape arg) {
@@ -1069,6 +1071,86 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean touchesOrRepels(Shape shape) {
+
+        return !overlaps(shape);
+    }
+
+    @Override
+    public int touchesOrRepels(Iterable<? extends Shape> shapes) {
+        int count = 0;
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (!overlaps(shape)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @Override
+    public int touchesOrRepels(Iterable<? extends Shape> shapes, List<Shape> in) {
+        in.clear();
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (!overlaps(shape)) {
+                in.add(shape);
+            }
+        }
+
+        return in.size();
+    }
+
+    @Override
+    public boolean touchesOrOverlaps(Shape shape) {
+
+        return !repels(shape);
+    }
+
+    @Override
+    public int touchesOrOverlaps(Iterable<? extends Shape> shapes) {
+        int count = 0;
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (!repels(shape)) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    @Override
+    public int touchesOrOverlaps(Iterable<? extends Shape> shapes, List<Shape> in) {
+        in.clear();
+
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            if (!repels(shape)) {
+                in.add(shape);
+            }
+        }
+
+        return in.size();
     }
 
     // -------------------------------------------------------------------------------------------------

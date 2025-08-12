@@ -22,6 +22,7 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 
 import static eu.scattering.core.test.Config.epsilon;
@@ -1102,6 +1103,30 @@ public class FAssemblyTest {
         }
 
         @Test
+        @DisplayName("Mutate")
+        void mutate() {
+            FPoint fPoint = factory.getFPoint(1, 2, 3);
+            FVector fVector = factory.getFVector(1, 2, 3, 4, 5, 6);
+            FSphere fSphere = factory.getFSphere(1, 2, 3, 4);
+
+            assertEquals(0, fSphere.getCoatCount(),
+                    "The FSphere is not coated");
+
+            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPoint, fVector, fSphere));
+
+            FAssembly<Geometry> results = fAssembly.mutate(Shape.class, (e) -> e.addCoat(1, 2, 3));
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fSphere.getCoatCount(),
+                            "The number of coats is erroneous"),
+                    () -> assertEquals(3, fAssembly.size(),
+                            "The size of FAssembly is erroneous"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
         @DisplayName("Translate with primitives")
         void translateWithPrimitives() {
             FPoint base = factory.getFPoint(1,2, 3);
@@ -1376,41 +1401,20 @@ public class FAssemblyTest {
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-            FPos3D centerA = fAssembly.getSpatialCenter();
+            FPoint center = factory.getFPoint();
+            fAssembly.setSpatialCenter(center);
 
-            assertTrue(factory.getFPoint(centerA).isSimilar(0, 0, 0),
+            assertTrue(center.isSimilar(0, 0, 0),
                     "The range center is erroneous");
 
             FPos3D offset = factory.getFPos3D(1, 2, 3);
 
             fAssembly.translate(offset);
 
-            FPos3D center = fAssembly.getSpatialCenter();
+            fAssembly.setSpatialCenter(center);
 
-            assertTrue(factory.getFPoint(center).isSimilar(1, 2, 3),
+            assertTrue(center.isSimilar(1, 2, 3),
                     "The range center is erroneous");
-        }
-
-        @Test
-        @DisplayName("Reset spatial center")
-        void resetSpatialCenter() {
-            FSphere fSphereA = factory.getFSphere(1, 0, 0, 1);
-            FSphere fSphereB = factory.getFSphere(-1, 0, 0, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-            fAssembly.translate(factory.getFRand().nextDoubleInSphere(100));
-
-            FAssembly<Shape> results = fAssembly.resetSpatialCenter();
-
-            FPos3D center = fAssembly.getSpatialCenter();
-
-            Assertions.assertAll("Validate FAssembly",
-                    () -> assertTrue(factory.getFPoint(center).isNearZero(),
-                            "The range center is erroneous"),
-                    () -> assertSame(fAssembly, results,
-                            "The reference should not change")
-            );
         }
 
         @Test
@@ -1805,6 +1809,311 @@ public class FAssemblyTest {
             Assertions.assertAll("Validate FAssembly",
                     () -> assertTrue(relError < 0.01,
                             "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Same position - Double")
+        void getOverlapFactorSamePositionDouble() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            double overlap = fAssembly.getOverlapFactor();
+
+            assertEquals(1, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Same position - Triple")
+        void getOverlapFactorSamePositionTriple() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+            FSphere fSphereC = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            double overlap = fAssembly.getOverlapFactor();
+
+            assertEquals(1, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Distant")
+        void getOverlapFactorDistant() {
+            FSphere fSphereA = factory.getFSphere(-1, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            double overlap = fAssembly.getOverlapFactor();
+
+            assertEquals(0, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Intersecting")
+        void getOverlapFactorIntersecting() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            double overlap = fAssembly.getOverlapFactor();
+
+            double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double relError = factory.getFStatHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+
+            assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Field")
+        void getOverlapFactorField() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 5, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 5);
+            FSphere fSphereE = factory.getFSphere(0, 0, 5, 2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            double overlap = fAssembly.getOverlapFactor();
+
+            double volAlgOverlap = (4  * Math.PI / 3) +
+                    2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volAlgTotal = (4  * Math.PI * Math.pow(2, 3) / 3) +
+                    3 * (4  * Math.PI / 3) -
+                    2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double relError = factory.getFStatHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+
+            assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Same position")
+        void getOverlapFactorLegacySamePosition() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            double overlap = fAssembly.getOverlapFactorLegacy();
+
+            assertEquals(1, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Distant")
+        void getOverlapFactorLegacyDistant() {
+            FSphere fSphereA = factory.getFSphere(-2, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            double overlap = fAssembly.getOverlapFactorLegacy();
+
+            assertEquals(0, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Intersecting")
+        void getOverlapFactorLegacyIntersecting() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            double overlap = fAssembly.getOverlapFactorLegacy();
+
+            assertEquals(0.5, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Field")
+        void getOverlapFactorLegacyField() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 3, 0);
+            FSphere fSphereD = factory.getFSphere(0, 4, 0);
+            FSphere fSphereE = factory.getFSphere(5, 5, 5);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            double overlap = fAssembly.getOverlapFactorLegacy();
+
+            double relError = factory.getFStatHelper().getRelErr(0.5, overlap);
+
+            assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Is compact")
+        void isCompact() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+            FSphere fSphereE = factory.getFSphere(0, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            assertTrue(fAssembly.isCompact());
+        }
+
+        @Test
+        @DisplayName("Is compact - Fail")
+        void isCompactFail() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+            FSphere fSphereE = factory.getFSphere(5, 5, 5);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            assertFalse(fAssembly.isCompact());
+        }
+
+        @Test
+        @DisplayName("Is compact - Empty")
+        void isCompactEmpty() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
+
+            assertFalse(fAssembly.isCompact());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - A")
+        void forEachPairInContactA() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+            FSphere fSphereE = factory.getFSphere(0, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAssembly.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(7, count.get());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - B")
+        void forEachPairInContactB() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(-2, 0, 0);
+            FSphere fSphereD = factory.getFSphere(0, 2, 0);
+            FSphere fSphereE = factory.getFSphere(0, -2, 0);
+            FSphere fSphereF = factory.getFSphere(0, 0, 2);
+            FSphere fSphereG = factory.getFSphere(0, 0, -2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE, fSphereF, fSphereG)
+            );
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAssembly.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(6, count.get());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - C")
+        void forEachPairInContactC() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(3, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 3, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 3);
+            FSphere fSphereE = factory.getFSphere(-3, -3, -3);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAssembly.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(0, count.get());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - D")
+        void forEachPairInContactD() {
+            FSphere fSphereA = factory.getFSphere(-1, -1, 0);
+            FSphere fSphereB = factory.getFSphere(-1, 1, 0);
+            FSphere fSphereC = factory.getFSphere(1, -1, 0);
+            FSphere fSphereD = factory.getFSphere(1, 1, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAssembly.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(4, count.get());
+        }
+
+        @Test
+        @DisplayName("Get spherical center - A")
+        void getSphericalCenterA() {
+            FSphere fSphereA = factory.getFSphere(-3, 0, 0);
+            FSphere fSphereB = factory.getFSphere(-1, 0, 0);
+            FSphere fSphereC = factory.getFSphere(1, 0, 0);
+            FSphere fSphereD = factory.getFSphere(3, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            FPoint center = factory.getFPoint();
+            fAssembly.setSphericalCenter(center);
+
+            double relErrX = factory.getFStatHelper().getRelErr(offset.getD0(), center.getX());
+            double relErrY = factory.getFStatHelper().getRelErr(offset.getD1(), center.getY());
+            double relErrZ = factory.getFStatHelper().getRelErr(offset.getD2(), center.getZ());
+
+            Assertions.assertAll("Validate position",
+                    () -> assertTrue(relErrX < 0.01),
+                    () -> assertTrue(relErrY < 0.01),
+                    () -> assertTrue(relErrZ < 0.01)
+            );
+        }
+
+        @Test
+        @DisplayName("Get spherical center - B")
+        void getSphericalCenterB() {
+            FSphere fSphereA = factory.getFSphere(-1.5, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1.5, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 1.5 * Math.sqrt(3), 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            FPoint center = factory.getFPoint();
+            fAssembly.setSphericalCenter(center);
+
+            double relErrX = factory.getFStatHelper().getRelErr(offset.getD0(), center.getX());
+            double relErrY = factory.getFStatHelper().getRelErr(offset.getD1() + (0.5 * Math.sqrt(3)), center.getY());
+            double relErrZ = factory.getFStatHelper().getRelErr(offset.getD2(), center.getZ());
+
+            Assertions.assertAll("Validate position",
+                    () -> assertTrue(relErrX < 0.01),
+                    () -> assertTrue(relErrY < 0.01),
+                    () -> assertTrue(relErrZ < 0.01)
             );
         }
     }

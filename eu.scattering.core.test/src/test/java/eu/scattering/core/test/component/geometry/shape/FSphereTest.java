@@ -849,7 +849,7 @@ public class FSphereTest {
             assertSame(resultsA, fSphere,
                     "The reference should not change");
 
-            Shape resultsB = fSphere.rstEpsilon();
+            Shape resultsB = fSphere.resetEpsilon();
 
             assertEquals(SHAPE_EPSILON, fSphere.getEpsilon(),
                     "The epsilon value is incorrect");
@@ -872,7 +872,7 @@ public class FSphereTest {
             assertSame(resultsA, fSphere,
                     "The reference should not change");
 
-            Shape resultsB = fSphere.rstDelta();
+            Shape resultsB = fSphere.resetDelta();
 
             assertEquals(SHAPE_DELTA, fSphere.getDelta(),
                     "The delta value is incorrect");
@@ -895,7 +895,7 @@ public class FSphereTest {
             assertSame(resultsA, fSphere,
                     "The reference should not change");
 
-            Shape resultsB = fSphere.rstIndex();
+            Shape resultsB = fSphere.resetIndex();
 
             assertEquals(-1, fSphere.getIndex(),
                     "The index value is incorrect");
@@ -918,7 +918,7 @@ public class FSphereTest {
             assertSame(resultsA, fSphere,
                     "The reference should not change");
 
-            Shape resultsB = fSphere.rstDesc();
+            Shape resultsB = fSphere.resetDesc();
 
             assertEquals("", fSphere.getDesc(),
                     "The tag value is incorrect");
@@ -942,7 +942,7 @@ public class FSphereTest {
             assertSame(resultsA, fSphere,
                     "The reference should not change");
 
-            Shape resultsB = fSphere.rstFCache();
+            Shape resultsB = fSphere.resetFCache();
 
             assertNull(fSphere.getFCache(),
                     "The cache value should be null");
@@ -3323,7 +3323,6 @@ public class FSphereTest {
             );
         }
 
-
         @Test
         @DisplayName("Repels, field")
         void repelsField() {
@@ -3369,6 +3368,120 @@ public class FSphereTest {
                             "The number of distant spheres is incorrect"),
                     () -> assertEquals(1, elements.size(),
                             "The number of distant spheres is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Touches or repels")
+        void touchesOrRepels() {
+
+            assertFalse(factory.getFSphere().touchesOrRepels(factory.getFSphere(1, 0, 0)));
+            assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(2, 0, 0)));
+            assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(3, 0, 0)));
+        }
+
+        @Test
+        @DisplayName("Touches or repels, field")
+        void touchesOrRepelsField() {
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.touchesOrRepels(fAssembly);
+
+            Assertions.assertAll("Validate condition",
+                    () -> assertEquals(2, count,
+                            "The condition is not satisfied")
+            );
+        }
+
+        @Test
+        @DisplayName("Touches or repels, field, list")
+        void touchesOrRepelsFieldList() {
+            List<Shape> elements = new ArrayList<>();
+
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.touchesOrRepels(fAssembly, elements);
+
+            Assertions.assertAll("Validate condition",
+                    () -> assertEquals(2, count,
+                            "The condition is not satisfied"),
+                    () -> assertEquals(2, elements.size(),
+                            "The condition is not satisfied")
+            );
+        }
+
+        @Test
+        @DisplayName("Touches or overlaps")
+        void touchesOrOverlaps() {
+
+            assertTrue(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(1, 0, 0)));
+            assertTrue(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(2, 0, 0)));
+            assertFalse(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(3, 0, 0)));
+        }
+
+        @Test
+        @DisplayName("Touches or overlaps, field")
+        void touchesOrOverlapsField() {
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.touchesOrOverlaps(fAssembly);
+
+            Assertions.assertAll("Validate condition",
+                    () -> assertEquals(3, count,
+                            "The condition is not satisfied")
+            );
+        }
+
+        @Test
+        @DisplayName("Touches or overlaps, field, list")
+        void touchesOrOverlapsFieldList() {
+            List<Shape> elements = new ArrayList<>();
+
+            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+            Shape fSphereCopy = fSphereRef.copy();
+            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+            );
+
+            int count = fSphereRef.touchesOrOverlaps(fAssembly, elements);
+
+            Assertions.assertAll("Validate condition",
+                    () -> assertEquals(3, count,
+                            "The condition is not satisfied"),
+                    () -> assertEquals(3, elements.size(),
+                            "The condition is not satisfied")
             );
         }
 

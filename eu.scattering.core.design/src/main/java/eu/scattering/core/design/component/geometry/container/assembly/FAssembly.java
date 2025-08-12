@@ -1,13 +1,16 @@
 package eu.scattering.core.design.component.geometry.container.assembly;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.Container;
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -33,7 +36,7 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
 
     //--------------------------------------------------
 
-//    <U extends T> FAssembly<T> mutate(Class<U> type, Consumer<U> action);
+    <U extends T> FAssembly<T> mutate(Class<U> type, Consumer<U> action);
 
     FAssembly<T> translate(double x, double y, double z);
     FAssembly<T> translate(FPos3D offset);
@@ -42,14 +45,21 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     FAssembly<T> scalePosition(double factor);
 
     double getVolume();
-    double getVolume(double[] layers);
+    double getVolume(double[] volume);
 
     double getSurface();
 
+    double getOverlapFactor();
+    double getOverlapFactorLegacy();
+
     FPairPos3D getRange();
 
-    FPos3D getSpatialCenter();
-    FAssembly<T> resetSpatialCenter();
+    void setSpatialCenter(FPoint center);
+    void setSphericalCenter(FPoint center);
+
+    boolean isCompact();
+
+    void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
 
     //--------------------------------------------------
 

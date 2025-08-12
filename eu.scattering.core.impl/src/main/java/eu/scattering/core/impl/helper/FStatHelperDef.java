@@ -31,6 +31,10 @@ public class FStatHelperDef implements FStatHelper {
     @Override
     public double getRelErr(double base, double ref) {
 
+        if (base == ref) {
+            return 0;
+        }
+
         return Math.abs((base - ref) / base);
     }
 
