@@ -23,24 +23,23 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
 
     private final int capacity;
 
-    private final int[] d0;
-    private final int[] d1;
-    private final int[] d2;
-
-    private List<T> meta;
+    private final int[][] value;
+    private final List<T> meta;
 
     private int index;
 
     private FArrayMeshDef(int capacity) {
-        this.capacity = capacity;
-
         this.index = 0;
 
-        this.d0 = new int[capacity];
-        this.d1 = new int[capacity];
-        this.d2 = new int[capacity];
+        this.capacity = capacity;
 
-        setUpMeta();
+        this.value = new int[3][this.capacity];
+
+        this.meta = new ArrayList<>(this.capacity);
+
+        while(this.meta.size() < this.capacity) {
+            this.meta.add(null);
+        }
     }
 
     public static <T> FArrayMesh<T> create(int capacity) {
@@ -55,9 +54,9 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the size limit");
         }
 
-        this.d0[index] = d0;
-        this.d1[index] = d1;
-        this.d2[index] = d2;
+        this.value[0][index] = d0;
+        this.value[1][index] = d1;
+        this.value[2][index] = d2;
 
         this.meta.set(index, null);
 
@@ -77,9 +76,9 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the size limit");
         }
 
-        this.d0[index] = d0;
-        this.d1[index] = d1;
-        this.d2[index] = d2;
+        this.value[0][index] = d0;
+        this.value[1][index] = d1;
+        this.value[2][index] = d2;
 
         this.meta.set(index, meta);
 
@@ -99,7 +98,9 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factoryExt.getFPos3DI(this.d0[index], this.d1[index], this.d2[index]);
+        return factoryExt.getFPos3DI(
+                this.value[0][index], this.value[1][index], this.value[2][index]
+        );
     }
 
     @Override
@@ -109,7 +110,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.d0[index];
+        return this.value[0][index];
     }
 
     @Override
@@ -119,7 +120,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.d1[index];
+        return this.value[1][index];
     }
 
     @Override
@@ -129,7 +130,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.d2[index];
+        return this.value[2][index];
     }
 
     @Override
@@ -147,15 +148,15 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
 
         for (int i = 0 ; i < this.index ; i++) {
 
-            if (this.d0[i] != d0) {
+            if (this.value[0][i] != d0) {
                 continue;
             }
 
-            if (this.d1[i] != d1) {
+            if (this.value[1][i] != d1) {
                 continue;
             }
 
-            if (this.d2[i] != d2) {
+            if (this.value[2][i] != d2) {
                 continue;
             }
 
@@ -187,14 +188,16 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     public void forEach(FArrayMeshConsumer<T> consumer) {
 
         for (int i = 0; i < index; i++) {
-            consumer.apply(i, d0[i], d1[i], d2[i], meta.get(i));
+            consumer.apply(
+                    i, this.value[0][i], this.value[1][i], this.value[2][i], this.meta.get(i)
+            );
         }
     }
 
     @Override
     public void clear() {
 
-        index = 0;
+        this.index = 0;
     }
 
     @Override
@@ -208,9 +211,9 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             if (isUnique) {
                 this.meta.set(j, this.meta.get(i));
 
-                this.d0[j] = this.d0[i];
-                this.d1[j] = this.d1[i];
-                this.d2[j] = this.d2[i];
+                this.value[0][j] = this.value[0][i];
+                this.value[1][j] = this.value[1][i];
+                this.value[2][j] = this.value[2][i];
 
                 j++;
             }
@@ -237,9 +240,9 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             if (isPositionUnique) {
                 this.meta.set(j, this.meta.get(i));
 
-                this.d0[j] = this.d0[i];
-                this.d1[j] = this.d1[i];
-                this.d2[j] = this.d2[i];
+                this.value[0][j] = this.value[0][i];
+                this.value[1][j] = this.value[1][i];
+                this.value[2][j] = this.value[2][i];
 
                 j++;
             } else {
@@ -284,8 +287,8 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     public int hashCode() {
         int hashCode = 1;
 
-        for (int i = 0; i < index; i++) {
-            hashCode = 31 * hashCode + d0[i] + d1[i] + d2[i];
+        for (int i = 0; i < this.index; i++) {
+            hashCode = 31 * hashCode + this.value[0][i] + this.value[1][i] + this.value[2][i];
         }
 
         return hashCode;
@@ -301,7 +304,16 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             }
 
             for (int i = 0; i < index; i++) {
-                if (d0[i] != fArray.getD0(i) || d1[i] != fArray.getD1(i) || d2[i] != fArray.getD2(i)) {
+
+                if (this.value[0][i] != fArray.getD0(i)) {
+                    return false;
+                }
+
+                if (this.value[1][i] != fArray.getD1(i)) {
+                    return false;
+                }
+
+                if (this.value[2][i] != fArray.getD2(i)) {
                     return false;
                 }
             }
@@ -316,20 +328,5 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     public String toString() {
 
         return toJSON().toString();
-    }
-
-    //--------------------------------------------------
-
-    private void setUpMeta() {
-
-        if (this.meta != null) {
-            return;
-        }
-
-        this.meta = new ArrayList<>(capacity);
-
-        while(this.meta.size() < capacity) {
-            this.meta.add(null);
-        }
     }
 }

@@ -5,63 +5,62 @@ import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.utils.FArrayConsumer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import org.json.JSONObject;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.BiFunction;
 
-import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
-
-public class FArrayDef implements FArray {
+public class FArrayDef<T> implements FArray<T> {
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
     private static final String JSON_MAIN = "array";
-    private static final String JSON_LENGTH = "length";
+    private static final String JSON_TYPE = "type";
+    private static final String JSON_SIZE = "size";
     private static final String JSON_CAPACITY = "capacity";
 
     private final int capacity;
 
-    private final double[] d0;
-    private final double[] d1;
-    private final double[] d2;
-
-    private final double[] value;
+    private final double[][] value;
+    private final List<T> meta;
 
     private int index;
 
     private FArrayDef(int capacity) {
-        this.capacity = capacity;
-
         this.index = 0;
 
-        this.d0 = new double[capacity];
-        this.d1 = new double[capacity];
-        this.d2 = new double[capacity];
+        this.capacity = capacity;
 
-        this.value = new double[capacity];
-    }
+        this.value = new double[3][this.capacity];
 
-    public static FArray create(int capacity) {
+        this.meta = new ArrayList<>(this.capacity);
 
-        return new FArrayDef(capacity);
-    }
-
-    public static FArray create(JSONObject json) {
-
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
-            throw new IllegalArgumentException("The object type is incorrect");
+        while(this.meta.size() < this.capacity) {
+            this.meta.add(null);
         }
+    }
 
-        int capacity = json.getInt(JSON_CAPACITY);
+    public static <T> FArray<T> create(int capacity) {
 
-        return new FArrayDef(capacity);
+        return new FArrayDef<>(capacity);
     }
 
     @Override
     public void add(double d0, double d1, double d2) {
 
-        addWithValue(d0, d1, d2, 0);
+        if (index > capacity) {
+            throw new IndexOutOfBoundsException("The index exceeded the size limit");
+        }
+
+        this.value[0][index] = d0;
+        this.value[1][index] = d1;
+        this.value[2][index] = d2;
+
+        this.meta.set(index, null);
+
+        index++;
     }
 
     @Override
@@ -71,41 +70,25 @@ public class FArrayDef implements FArray {
     }
 
     @Override
-    public void addWithValue(double d0, double d1, double d2, double value) {
+    public void addWithMeta(double d0, double d1, double d2, T meta) {
 
         if (index > capacity) {
             throw new IndexOutOfBoundsException("The index exceeded the size limit");
         }
 
-        this.d0[index] = d0;
-        this.d1[index] = d1;
-        this.d2[index] = d2;
+        this.value[0][index] = d0;
+        this.value[1][index] = d1;
+        this.value[2][index] = d2;
 
-        this.value[index] = value;
+        this.meta.set(index, meta);
 
         index++;
     }
 
     @Override
-    public void addWithValue(FPos3D pos, double value) {
+    public void addWithMeta(FPos3D pos, T meta) {
 
-        addWithValue(pos.getD0(), pos.getD1(), pos.getD2(), value);
-    }
-
-    @Override
-    public void addWithValue(FPos4D pos) {
-
-        addWithValue(pos.getD0(), pos.getD1(), pos.getD2(), pos.getD3());
-    }
-
-    @Override
-    public FPos4D getFPos4D(int index) {
-
-        if (index >= this.index) {
-            throw new IndexOutOfBoundsException("The index exceeded the current array size");
-        }
-
-        return factoryExt.getFPos4D(this.d0[index], this.d1[index], this.d2[index], this.value[index]);
+        addWithMeta(pos.getD0(), pos.getD1(), pos.getD2(), meta);
     }
 
     @Override
@@ -115,7 +98,9 @@ public class FArrayDef implements FArray {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factoryExt.getFPos3D(this.d0[index], this.d1[index], this.d2[index]);
+        return factoryExt.getFPos3D(
+                this.value[0][index], this.value[1][index], this.value[2][index]
+        );
     }
 
     @Override
@@ -125,7 +110,7 @@ public class FArrayDef implements FArray {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.d0[index];
+        return this.value[0][index];
     }
 
     @Override
@@ -135,7 +120,7 @@ public class FArrayDef implements FArray {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.d1[index];
+        return this.value[1][index];
     }
 
     @Override
@@ -145,17 +130,46 @@ public class FArrayDef implements FArray {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.d2[index];
+        return this.value[2][index];
     }
 
     @Override
-    public double getValue(int index) {
+    public T getMeta(int index) {
 
         if (index >= this.index) {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.value[index];
+        return this.meta.get(index);
+    }
+
+    @Override
+    public int findIndex(double d0, double d1, double d2) {
+
+        for (int i = 0 ; i < this.index ; i++) {
+
+            if (this.value[0][i] != d0) {
+                continue;
+            }
+
+            if (this.value[1][i] != d1) {
+                continue;
+            }
+
+            if (this.value[2][i] != d2) {
+                continue;
+            }
+
+            return i;
+        }
+
+        return -1;
+    }
+
+    @Override
+    public int findIndex(FPos3D pos) {
+
+        return findIndex(pos.getD0(), pos.getD1(), pos.getD2());
     }
 
     @Override
@@ -171,17 +185,85 @@ public class FArrayDef implements FArray {
     }
 
     @Override
-    public void forEach(FArrayConsumer consumer) {
+    public void forEach(FArrayConsumer<T> consumer) {
 
-        for (int i = 0 ; i < index ; i++) {
-            consumer.apply(i, d0[i], d1[i], d2[i], value[i]);
+        for (int i = 0; i < index; i++) {
+            consumer.apply(
+                    i, this.value[0][i], this.value[1][i], this.value[2][i], this.meta.get(i)
+            );
         }
     }
 
     @Override
-    public void reset() {
+    public void clear() {
 
-        index = 0;
+        this.index = 0;
+    }
+
+    @Override
+    public int deduplicate() {
+        Set<FPos3D> elements = new HashSet<>();
+
+        int i = 0, j = 0;
+        while (i < this.index) {
+            boolean isUnique = elements.add(getFPos3D(i));
+
+            if (isUnique) {
+                this.meta.set(j, this.meta.get(i));
+
+                this.value[0][j] = this.value[0][i];
+                this.value[1][j] = this.value[1][i];
+                this.value[2][j] = this.value[2][i];
+
+                j++;
+            }
+
+            i++;
+        }
+
+        elements.clear();
+
+        this.index = j;
+
+        return i - j;
+    }
+
+    @Override
+    public int deduplicate(BiFunction<T, T, Boolean> collision) {
+        Set<FPos3D> elements = new HashSet<>();
+
+        int i = 0, j = 0;
+        while (i < this.index) {
+            FPos3D position = getFPos3D(i);
+            boolean isPositionUnique = elements.add(position);
+
+            if (isPositionUnique) {
+                this.meta.set(j, this.meta.get(i));
+
+                this.value[0][j] = this.value[0][i];
+                this.value[1][j] = this.value[1][i];
+                this.value[2][j] = this.value[2][i];
+
+                j++;
+            } else {
+                int indexOld = findIndex(position);
+
+                T metaNew = this.meta.get(i);
+                T metaOld = getMeta(indexOld);
+
+                if (collision.apply(metaOld, metaNew)) {
+                    this.meta.set(indexOld, metaNew);
+                }
+            }
+
+            i++;
+        }
+
+        elements.clear();
+
+        this.index = j;
+
+        return i - j;
     }
 
     //--------------------------------------------------
@@ -192,8 +274,9 @@ public class FArrayDef implements FArray {
 
         json.put(JSON_TYPE, JSON_MAIN);
 
+        json.put(JSON_TYPE, "integer");
         json.put(JSON_CAPACITY, capacity);
-        json.put(JSON_LENGTH, index);
+        json.put(JSON_SIZE, index);
 
         return json;
     }
@@ -204,52 +287,46 @@ public class FArrayDef implements FArray {
     public int hashCode() {
         int hashCode = 1;
 
-        for (int i = 0 ; i < index ; i++) {
-            hashCode = 31 * hashCode + (int) (d0[i] + d1[i] + d2[i] + value[i]);
+        for (int i = 0; i < this.index; i++) {
+            hashCode = 31 * hashCode + (int) (this.value[0][i] + this.value[1][i] + this.value[2][i]);
         }
 
         return hashCode;
     }
 
     @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof FArrayDef fArray) {
+
+            if (index != fArray.index) {
+                return false;
+            }
+
+            for (int i = 0; i < index; i++) {
+
+                if (this.value[0][i] != fArray.getD0(i)) {
+                    return false;
+                }
+
+                if (this.value[1][i] != fArray.getD1(i)) {
+                    return false;
+                }
+
+                if (this.value[2][i] != fArray.getD2(i)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public String toString() {
 
         return toJSON().toString();
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public Iterator<double[]> iterator() {
-
-        return new FArrayIterator();
-    }
-
-    class FArrayIterator implements Iterator<double[]> {
-        private final double[] data = new double[4];
-        private int index = 0;
-
-        @Override
-        public boolean hasNext() {
-
-            return index < FArrayDef.this.size();
-        }
-
-        @Override
-        public double[] next() {
-
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-
-            this.data[0] = FArrayDef.this.getD0(index);
-            this.data[1] = FArrayDef.this.getD1(index);
-            this.data[2] = FArrayDef.this.getD2(index);
-            this.data[3] = FArrayDef.this.getValue(index);
-
-            this.index++;
-
-            return this.data;
-        }
     }
 }

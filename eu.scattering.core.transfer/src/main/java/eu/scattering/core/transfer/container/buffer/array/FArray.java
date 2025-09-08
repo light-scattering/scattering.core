@@ -3,32 +3,35 @@ package eu.scattering.core.transfer.container.buffer.array;
 import eu.scattering.core.transfer.container.buffer.Buffer;
 import eu.scattering.core.transfer.container.buffer.array.utils.FArrayConsumer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 public interface FArray<T> extends Buffer<FArray<T>> {
 
     void add(double d0, double d1, double d2);
     void add(FPos3D pos);
 
-    void addWithValue(double d0, double d1, double d2, double value);
-    void addWithValue(FPos3D pos, double value);
-    void addWithValue(FPos4D pos);
+    void addWithMeta(double d0, double d1, double d2, T meta);
+    void addWithMeta(FPos3D pos, T meta);
 
-    FPos3D getFPos3D(int index);
-    FPos4D getFPos4D(int index);
+    T getMeta(int index);
 
     double getD0(int index);
     double getD1(int index);
     double getD2(int index);
 
-    double getValue(int index);
+    FPos3D getFPos3D(int index);
 
-    void forEach(FArrayConsumer consumer);
+    int findIndex(double d0, double d1, double d2);
+    int findIndex(FPos3D pos);
+
+    void forEach(FArrayConsumer<T> consumer);
 
     int size();
     int capacity();
 
-    void reset();
+    int deduplicate();
+    int deduplicate(BiFunction<T, T, Boolean> collision);
+
+    void clear();
 }

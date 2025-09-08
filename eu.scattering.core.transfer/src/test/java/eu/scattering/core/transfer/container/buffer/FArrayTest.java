@@ -3,8 +3,9 @@ package eu.scattering.core.transfer.container.buffer;
 import eu.scattering.core.transfer.container.ContainerFactory;
 import eu.scattering.core.transfer.container.ContainerFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
-import org.json.JSONObject;
 import org.junit.jupiter.api.*;
+
+import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,9 +19,9 @@ public class FArrayTest {
     class FArrayBasicTest {
 
         @Test
-        @DisplayName("Creation")
-        void creation() {
-            FArray fArray = factory.getFArray(100);
+        @DisplayName("Create")
+        void create() {
+            FArray<Double> fArray = factory.getFArray(100);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fArray.size(),
@@ -29,9 +30,9 @@ public class FArrayTest {
         }
 
         @Test
-        @DisplayName("Incrementation")
-        void inc() {
-            FArray fArray = factory.getFArray(100);
+        @DisplayName("Increment")
+        void increment() {
+            FArray<Double> fArray = factory.getFArray(100);
 
             fArray.add(1.1, 2.2, 3.3);
             fArray.add(factory.getFPos3D(4.4, 5.5, 6.6));
@@ -41,114 +42,99 @@ public class FArrayTest {
                     () -> assertEquals(3, fArray.size(),
                             "The number of elements is incorrect"),
                     () -> assertEquals(1.1, fArray.getD0(0),
-                            "The D0 (0) is erroneous"),
+                            "D0 (0) is erroneous"),
                     () -> assertEquals(2.2, fArray.getD1(0),
-                            "The D1 (0) is erroneous"),
+                            "D1 (0) is erroneous"),
                     () -> assertEquals(3.3, fArray.getD2(0),
-                            "The D2 (0) is erroneous"),
+                            "D2 (0) is erroneous"),
                     () -> assertEquals(4.4, fArray.getD0(1),
-                            "The D0 (1) is erroneous"),
+                            "D0 (1) is erroneous"),
                     () -> assertEquals(5.5, fArray.getD1(1),
-                            "The D1 (1) is erroneous"),
+                            "D1 (1) is erroneous"),
                     () -> assertEquals(6.6, fArray.getD2(1),
-                            "The D2 (2) is erroneous"),
+                            "D2 (1) is erroneous"),
                     () -> assertEquals(7.7, fArray.getD0(2),
-                            "The D0 (3) is erroneous"),
+                            "D0 (2) is erroneous"),
                     () -> assertEquals(8.8, fArray.getD1(2),
-                            "The D1 (3) is erroneous"),
+                            "D1 (2) is erroneous"),
                     () -> assertEquals(9.9, fArray.getD2(2),
-                            "The D2 (3) is erroneous"),
-                    () -> assertEquals(0, fArray.getValue(0),
-                            "The value (0) is erroneous"),
-                    () -> assertEquals(0, fArray.getValue(1),
+                            "D2 (2) is erroneous"),
+                    () -> assertNull(fArray.getMeta(0),
+                            "Value (0) is erroneous"),
+                    () -> assertNull(fArray.getMeta(1),
                             "The value (1) is erroneous"),
-                    () -> assertEquals(0, fArray.getValue(2),
-                            "The value (2) is erroneous")
+                    () -> assertNull(fArray.getMeta(2),
+                            "Value (2) is erroneous")
             );
         }
 
         @Test
-        @DisplayName("Incrementation with value")
-        void incWithValue() {
-            FArray fArray = factory.getFArray(100);
+        @DisplayName("Increment with meta")
+        void incrementWithMeta() {
+            FArray<Double> fArray = factory.getFArray(100);
 
-            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
-            fArray.addWithValue(factory.getFPos3D(4.5, 5.5, 6.5), 2.2);
-            fArray.addWithValue(factory.getFPos4D(7.5, 8.5, 9.5, 3.3));
+            fArray.addWithMeta(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithMeta(factory.getFPos3D(4.5, 5.5, 6.5), 2.2);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(3, fArray.size(),
+                    () -> assertEquals(2, fArray.size(),
                             "The number of elements is incorrect"),
                     () -> assertEquals(1.5, fArray.getD0(0),
-                            "The D0 (0) is erroneous"),
+                            "D0 (0) is erroneous"),
                     () -> assertEquals(2.5, fArray.getD1(0),
-                            "The D1 (0) is erroneous"),
+                            "D1 (0) is erroneous"),
                     () -> assertEquals(3.5, fArray.getD2(0),
-                            "The D2 (0) is erroneous"),
+                            "D2 (0) is erroneous"),
                     () -> assertEquals(4.5, fArray.getD0(1),
-                            "The D0 (1) is erroneous"),
+                            "D0 (1) is erroneous"),
                     () -> assertEquals(5.5, fArray.getD1(1),
-                            "The D1 (1) is erroneous"),
+                            "D1 (1) is erroneous"),
                     () -> assertEquals(6.5, fArray.getD2(1),
-                            "The D2 (2) is erroneous"),
-                    () -> assertEquals(7.5, fArray.getD0(2),
-                            "The D0 (3) is erroneous"),
-                    () -> assertEquals(8.5, fArray.getD1(2),
-                            "The D1 (3) is erroneous"),
-                    () -> assertEquals(9.5, fArray.getD2(2),
-                            "The D2 (3) is erroneous"),
-                    () -> assertEquals(1.1, fArray.getValue(0),
-                            "The value (0) is erroneous"),
-                    () -> assertEquals(2.2, fArray.getValue(1),
-                            "The value (1) is erroneous"),
-                    () -> assertEquals(3.3, fArray.getValue(2),
-                            "The value (2) is erroneous")
+                            "D2 (1) is erroneous"),
+                    () -> assertEquals(1.1, fArray.getMeta(0),
+                            "Value (0) is erroneous"),
+                    () -> assertEquals(2.2, fArray.getMeta(1),
+                            "Value (1) is erroneous")
             );
         }
 
         @Test
-        @DisplayName("Out of bounds exception")
-        void outOfBoundsException() {
-            FArray fArray = factory.getFArray(3);
+        @DisplayName("Get FPos3D")
+        void getFPos3D() {
+            FArray<Double> fArray = factory.getFArray(100);
 
-            fArray.addWithValue(1, 2, 3, 1.1);
-            fArray.addWithValue(factory.getFPos3D(4, 5, 6), 2.2);
-            fArray.addWithValue(factory.getFPos4D(7, 8, 9, 3.3));
+            fArray.addWithMeta(1, 2, 3, 1.1);
 
-            assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(-1),
-                    "The index is out of bounds (negative), an exception should be thrown");
-
-            assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(3),
-                    "The index is out of bounds (positive), an exception should be thrown");
-
-            assertThrows(IndexOutOfBoundsException.class, () -> fArray.add(1, 2, 3),
-                    "The index is out of bounds (buffer overflow), an exception should be thrown");
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(factory.getFPos3D(1, 2, 3), fArray.getFPos3D(0),
+                            "The values are incorrect")
+            );
         }
 
         @Test
-        @DisplayName("Reset")
-        void reset() {
-            FArray fArray = factory.getFArray(100);
+        @DisplayName("Clear")
+        void clear() {
+            FArray<Double> fArray = factory.getFArray(100);
 
-            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
-            fArray.addWithValue(4.5, 5.5, 6.5, 2.2);
-            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithMeta(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithMeta(4.5, 5.5, 6.5, 2.2);
+            fArray.addWithMeta(7.5, 8.5, 9.5, 3.3);
 
-            fArray.reset();
+            fArray.clear();
 
-            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithMeta(7.5, 8.5, 9.5, 3.3);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fArray.size(),
                             "The number of elements is incorrect"),
                     () -> assertEquals(7.5, fArray.getD0(0),
-                            "The D0 (0) is erroneous"),
+                            "D0 (0) is erroneous"),
                     () -> assertEquals(8.5, fArray.getD1(0),
-                            "The D1 (0) is erroneous"),
+                            "D1 (0) is erroneous"),
                     () -> assertEquals(9.5, fArray.getD2(0),
-                            "The D2 (0) is erroneous"),
-                    () -> assertEquals(3.3, fArray.getValue(0),
-                            "The value (0) is erroneous")
+                            "D2 (0) is erroneous"),
+                    () -> assertEquals(3.3, fArray.getMeta(0),
+                            "Value (0) is erroneous")
             );
 
             assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(1),
@@ -156,17 +142,74 @@ public class FArrayTest {
         }
 
         @Test
-        @DisplayName("Get")
-        void get() {
-            FArray fArray = factory.getFArray(100);
+        @DisplayName("Out of bounds exception")
+        void outOfBoundsException() {
+            FArray<Double> fArray = factory.getFArray(2);
 
-            fArray.addWithValue(1, 2, 3, 4);
+            fArray.addWithMeta(1, 2, 3, 1.1);
+            fArray.addWithMeta(factory.getFPos3D(4, 5, 6), 2.2);
 
-            Assertions.assertAll("Check values",
-                    () -> assertEquals(factory.getFPos3D(1, 2, 3), fArray.getFPos3D(0),
-                            "The values are incorrect"),
-                    () -> assertEquals(factory.getFPos4D(1, 2, 3, 4), fArray.getFPos4D(0),
-                            "The values are incorrect")
+            assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(-1),
+                    "The index is out of bounds (negative), an exception should be thrown");
+
+            assertThrows(IndexOutOfBoundsException.class, () -> fArray.getD0(2),
+                    "The index is out of bounds (positive), an exception should be thrown");
+
+            assertThrows(IndexOutOfBoundsException.class, () -> fArray.add(1, 2, 3),
+                    "The index is out of bounds (buffer overflow), an exception should be thrown");
+        }
+    }
+
+    @Nested
+    @Tag("Core")
+    @DisplayName("Core")
+    class FArrayCoreTest {
+
+        @Test
+        @DisplayName("Equals")
+        void equals() {
+            FArray<Double> fArray1 = factory.getFArray(10);
+            FArray<Double> fArray2 = factory.getFArray(15);
+
+            fArray1.addWithMeta(4.1, 5.1, 6.1, 2.2);
+            fArray1.addWithMeta(7.1, 8.1, 9.1, 3.3);
+
+            fArray2.addWithMeta(3.1, 2.1, 1.1, 9.9);
+            fArray2.addWithMeta(6.1, 5.1, 4.1, 8.8);
+            fArray2.addWithMeta(9.1, 8.1, 7.1, 7.7);
+
+            fArray2.clear();
+
+            fArray2.addWithMeta(4.1, 5.1, 6.1, 4.4);
+            fArray2.addWithMeta(7.1, 8.1, 9.1, 5.5);
+
+            Assertions.assertAll("Check equality",
+                    () -> assertEquals(fArray1, fArray2,
+                            "Arrays should be equal"),
+                    () -> assertEquals(fArray2, fArray1,
+                            "Arrays should be equal"),
+                    () -> assertEquals(fArray1.hashCode(), fArray2.hashCode(),
+                            "Hash codes should be the same")
+            );
+        }
+
+        @Test
+        @DisplayName("Equals (fail)")
+        void equalsFail() {
+            FArray<Double> fArray1 = factory.getFArray(10);
+            FArray<Double> fArray2 = factory.getFArray(15);
+
+            fArray1.addWithMeta(4.1, 5.1, 6.1, 2.2);
+            fArray1.addWithMeta(7.1, 8.1, 9.1, 3.3);
+
+            fArray2.addWithMeta(4.0, 5.0, 6.0, 2.2);
+            fArray2.addWithMeta(7.0, 8.0, 9.0, 3.3);
+
+            Assertions.assertAll("Check equality",
+                    () -> assertNotEquals(fArray1, fArray2,
+                            "Arrays should not be equal"),
+                    () -> assertNotEquals(fArray2, fArray1,
+                            "Arrays should not be equal")
             );
         }
     }
@@ -174,33 +217,16 @@ public class FArrayTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Advanced")
-    class FArrayIAdvancedTest {
+    class FArrayAdvancedTest {
 
         @Test
-        @DisplayName("JSON")
-        void parseJSON() {
-            FArray dtoOrigin = factory.getFArray(123);
+        @DisplayName("Iterate")
+        void iterate() {
+            FArray<Double> fArray = factory.getFArray(100);
 
-            dtoOrigin.addWithValue(3.5, 2.5, 1.5, 9.9);
-            dtoOrigin.addWithValue(6.5, 5.5, 4.5, 8.8);
-            dtoOrigin.addWithValue(9.5, 8.5, 7.5, 7.7);
-
-            JSONObject jsonOrigin = dtoOrigin.toJSON();
-
-            FArray dtoCopy = factory.getFArray(jsonOrigin);
-
-            assertEquals(dtoOrigin.capacity(), dtoCopy.capacity(),
-                    "The parsed JSON object is erroneous");
-        }
-
-        @Test
-        @DisplayName("Iteration")
-        void iteration() {
-            FArray fArray = factory.getFArray(100);
-
-            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
-            fArray.addWithValue(4.5, 5.5, 6.5, 2.2);
-            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithMeta(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithMeta(4.5, 5.5, 6.5, 2.2);
+            fArray.addWithMeta(7.5, 8.5, 9.5, 3.3);
 
             double[] sum = new double[fArray.size()];
 
@@ -217,28 +243,131 @@ public class FArrayTest {
         }
 
         @Test
-        @DisplayName("Iterator")
-        void iterator() {
-            FArray fArray = factory.getFArray(100);
+        @DisplayName("Deduplicate - Single")
+        void deduplicateSingle() {
+            int size = 10;
 
-            fArray.addWithValue(1.5, 2.5, 3.5, 1.1);
-            fArray.addWithValue(4.5, 5.5, 6.5, 2.2);
-            fArray.addWithValue(7.5, 8.5, 9.5, 3.3);
+            FArray<Double> fArray = factory.getFArray(size);
 
-            double[] sum = new double[fArray.size()];
-
-            int index = 0;
-            for (double[] data : fArray) {
-                sum[index++] = data[0] + data[1] + data[2] + data[3];
+            for (int i = 0 ; i < fArray.capacity() ; i++) {
+                fArray.addWithMeta(i, i, i, i * 1.1);
             }
 
-            Assertions.assertAll("Check values",
-                    () -> assertEquals(8.6, sum[0],
-                            "Index 0 value is erroneous"),
-                    () -> assertEquals(18.7, sum[1],
-                            "Index 1 value is erroneous"),
-                    () -> assertEquals(28.8, sum[2],
-                            "Index 2 value is erroneous")
+            int removed = fArray.deduplicate();
+
+            Assertions.assertAll("Check results",
+                    () -> assertEquals(10, fArray.size(),
+                            "The number of elements is erroneous"),
+                    () -> assertEquals(0, removed,
+                            "The number of removed elements is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Deduplicate - Multiple")
+        void deduplicateMultiple() {
+            FArray<Double> fArray = factory.getFArray(20);
+
+            fArray.addWithMeta(1.1, 1.1, 1.1, -1.1);
+            fArray.addWithMeta(1.1, 2.1, 3.1, 1.1);
+            fArray.addWithMeta(4.1, 5.1, 6.1, 2.2);
+            fArray.addWithMeta(7.1, 8.1, 9.1, 3.3);
+            fArray.addWithMeta(2.1, 2.1, 2.1, -2.2);
+            fArray.addWithMeta(7.1, 8.1, 9.1, 4.4);
+            fArray.addWithMeta(4.1, 5.1, 6.1, 5.5);
+            fArray.addWithMeta(1.1, 2.1, 3.1, 6.6);
+            fArray.addWithMeta(3.1, 3.1, 3.1, -3.3);
+            fArray.addWithMeta(1.1, 2.1, 3.1, 7.7);
+            fArray.addWithMeta(4.1, 5.1, 6.1, 8.8);
+            fArray.addWithMeta(7.1, 8.1, 9.1, 9.9);
+            fArray.addWithMeta(1.1, 1.1, 1.1, -4.4);
+
+            int removed = fArray.deduplicate();
+
+            Assertions.assertAll("Check results",
+                    () -> assertEquals(6, fArray.size(),
+                            "The number of elements is erroneous"),
+                    () -> assertEquals(7, removed,
+                            "The number of removed elements is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(0), factory.getFPos3D(1.1, 1.1, 1.1),
+                            "Index 0 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(0), -1.1,
+                            "Index 0 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(1), factory.getFPos3D(1.1, 2.1, 3.1),
+                            "Index 1 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(1), 1.1,
+                            "Index 1 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(2), factory.getFPos3D(4.1, 5.1, 6.1),
+                            "Index 2 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(2), 2.2,
+                            "Index 2 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(3), factory.getFPos3D(7.1, 8.1, 9.1),
+                            "Index 3 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(3), 3.3,
+                            "Index 3 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(4), factory.getFPos3D(2.1, 2.1, 2.1),
+                            "Index 4 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(4), -2.2,
+                            "Index 4 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(5), factory.getFPos3D(3.1, 3.1, 3.1),
+                            "Index 5 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(5), -3.3,
+                            "Index 5 meta is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Deduplicate with collision - Multiple")
+        void deduplicateWithCollisionMultiple() {
+            FArray<Double> fArray = factory.getFArray(20);
+
+            fArray.addWithMeta(1.1, 1.1, 1.1, -1.1);
+            fArray.addWithMeta(1.1, 2.1, 3.1, 1.1);
+            fArray.addWithMeta(4.1, 5.1, 6.1, 2.2);
+            fArray.addWithMeta(7.1, 8.1, 9.1, 3.3);
+            fArray.addWithMeta(2.1, 2.1, 2.1, -2.2);
+            fArray.addWithMeta(7.1, 8.1, 9.1, 4.4);
+            fArray.addWithMeta(4.1, 5.1, 6.1, 5.5);
+            fArray.addWithMeta(1.1, 2.1, 3.1, 6.6);
+            fArray.addWithMeta(3.1, 3.1, 3.1, -3.3);
+            fArray.addWithMeta(1.1, 2.1, 3.1, 7.7);
+            fArray.addWithMeta(4.1, 5.1, 6.1, 8.8);
+            fArray.addWithMeta(7.1, 8.1, 9.1, 9.9);
+            fArray.addWithMeta(1.1, 1.1, 1.1, -4.4);
+
+            BiFunction<Double, Double, Boolean> collision = (metaOld, metaNew) -> metaNew > metaOld;
+
+            int removed = fArray.deduplicate(collision);
+
+            Assertions.assertAll("Check results",
+                    () -> assertEquals(6, fArray.size(),
+                            "The number of elements is erroneous"),
+                    () -> assertEquals(7, removed,
+                            "The number of removed elements is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(0), factory.getFPos3D(1.1, 1.1, 1.1),
+                            "Index 0 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(0), -1.1,
+                            "Index 0 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(1), factory.getFPos3D(1.1, 2.1, 3.1),
+                            "Index 1 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(1), 7.7,
+                            "Index 1 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(2), factory.getFPos3D(4.1, 5.1, 6.1),
+                            "Index 2 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(2), 8.8,
+                            "Index 2 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(3), factory.getFPos3D(7.1, 8.1, 9.1),
+                            "Index 3 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(3), 9.9,
+                            "Index 3 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(4), factory.getFPos3D(2.1, 2.1, 2.1),
+                            "Index 4 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(4), -2.2,
+                            "Index 4 meta is erroneous"),
+                    () -> assertEquals(fArray.getFPos3D(5), factory.getFPos3D(3.1, 3.1, 3.1),
+                            "Index 5 position is erroneous"),
+                    () -> assertEquals(fArray.getMeta(5), -3.3,
+                            "Index 5 meta is erroneous")
             );
         }
     }
