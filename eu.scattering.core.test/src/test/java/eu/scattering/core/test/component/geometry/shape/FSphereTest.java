@@ -226,10 +226,10 @@ public class FSphereTest {
         void setRadiusInner() {
             FSphere fSphere = TestHelper.getRandFSphere();
 
-            Shape results = fSphere.getRadiusInternal(11);
+            Shape results = fSphere.setInnerRadius(11);
 
             Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(11, fSphere.getRadiusInternal(),
+                    () -> assertEquals(11, fSphere.getInnerRadius(),
                             "The radius is incorrect"),
                     () -> assertSame(results, fSphere,
                             "The reference should not change")
@@ -258,7 +258,7 @@ public class FSphereTest {
 
             fSphere.addCoat(1, 2, 3);
 
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getRadiusInternal(5),
+            assertThrows(IllegalArgumentException.class, () -> fSphere.setInnerRadius(5),
                     "The radius cannot be smaller than the width of the coating");
 
             fSphere.setRadius(10);
@@ -908,19 +908,19 @@ public class FSphereTest {
         void setDesc() {
             Shape fSphere = factory.getFSphere();
 
-            assertEquals("", fSphere.getDesc(),
+            assertEquals("", fSphere.getTag(),
                     "The default tag value is incorrect");
 
-            Shape resultsA = fSphere.setDesc("123");
+            Shape resultsA = fSphere.setTag("123");
 
-            assertEquals("123", fSphere.getDesc(),
+            assertEquals("123", fSphere.getTag(),
                     "The tag value is incorrect");
             assertSame(resultsA, fSphere,
                     "The reference should not change");
 
-            Shape resultsB = fSphere.resetDesc();
+            Shape resultsB = fSphere.resetTag();
 
-            assertEquals("", fSphere.getDesc(),
+            assertEquals("", fSphere.getTag(),
                     "The tag value is incorrect");
             assertSame(resultsB, fSphere,
                     "The reference should not change");
@@ -1175,7 +1175,7 @@ public class FSphereTest {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
 
             fSphere.addCoat(3, 2, 1);
-            Shape results = fSphere.removeCoat();
+            Shape results = fSphere.removeCoating();
 
             assertEquals(0, fSphere.getCoatCount(),
                     "The number of coats is incorrect");
@@ -1191,7 +1191,7 @@ public class FSphereTest {
 
             fSphereArg.addCoat(3, 2, 1);
 
-            Shape results = fSphereRef.applyCoatFrom(fSphereArg);
+            Shape results = fSphereRef.applyCoatingFrom(fSphereArg);
 
             assertEquals(3, fSphereRef.getCoatCount(),
                     "The number of coats is incorrect");
@@ -1210,7 +1210,7 @@ public class FSphereTest {
         void getVolume() {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
 
-            double volGet = fSphere.getVolume();
+            double volGet = fSphere.getVolumeAlgebraic();
             double volCalc = 4 * Math.PI * Math.pow(5, 3) / 3;
 
             assertEquals(volCalc, volGet,
@@ -1287,30 +1287,8 @@ public class FSphereTest {
                             epsilon, "Layer 2 volume is erroneous"),
                     () -> assertEquals(vol3, fSphere.getLayerVolume(3),
                             epsilon, "Layer 3 volume is erroneous"),
-                    () -> assertEquals(volTotal, fSphere.getVolume(),
+                    () -> assertEquals(volTotal, fSphere.getVolumeAlgebraic(),
                             epsilon, "The total volume is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Set volume")
-        void setVolume() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            double vol = 100;
-            double radius = Math.pow((0.75 * vol) / Math.PI, 1.0 / 3);
-
-            Shape results = fSphere.setVolume(vol);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertTrue(fSphere.getRefCenter().isExact(1, 2, 3),
-                            "The FSphere position is incorrect"),
-                    () -> assertEquals(radius, fSphere.getRadius(),
-                            epsilon, "The radius is incorrect"),
-                    () -> assertTrue(factory.getFStatHelper().valRelErr(vol, fSphere.getVolume(), 0.0001),
-                            "The volume is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
             );
         }
 
@@ -1319,33 +1297,11 @@ public class FSphereTest {
         void getSurface() {
             FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
 
-            double volGet = fSphere.getSurface();
+            double volGet = fSphere.getSurfaceAlgebraic();
             double volCalc = 4 * Math.PI * Math.pow(5, 2);
 
             assertEquals(volCalc, volGet,
                     epsilon, "The FSphere surface is erroneous");
-        }
-
-        @Test
-        @DisplayName("Set surface")
-        void setSurface() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 4);
-
-            double sur = 100;
-            double radius = Math.pow(0.25 * sur / Math.PI, 0.5);
-
-            Shape results = fSphere.setSurface(sur);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertTrue(fSphere.getRefCenter().isExact(1, 2, 3),
-                            "The FSphere position is incorrect"),
-                    () -> assertEquals(radius, fSphere.getRadius(),
-                            epsilon, "The radius is incorrect"),
-                    () -> assertTrue(factory.getFStatHelper().valRelErr(sur, fSphere.getSurface(), 0.0001),
-                            "The surface is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
         }
 
         @Test
@@ -3555,12 +3511,12 @@ public class FSphereTest {
 
             fSphere.translate(offset);
 
-            fSphere.fillOverlapLayer(fLayer);
+            fSphere.fillVolumeOverlapLayer(fLayer);
 
             int elements = fLayer.get();
 
             double volUnit = delta * delta * delta;
-            double volTotal = fSphere.getVolume();
+            double volTotal = fSphere.getVolumeAlgebraic();
             double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -3593,7 +3549,7 @@ public class FSphereTest {
             double vol1 = fSphere.getLayerVolume(1);
             double vol2 = fSphere.getLayerVolume(2);
             double vol3 = fSphere.getLayerVolume(3);
-            double volTotal = fSphere.getVolume();
+            double volTotal = fSphere.getVolumeAlgebraic();
 
             double vol0RelError = factory.getFStatHelper().getRelErr(vol0, fLayer.get(0) * volUnit);
             double vol1RelError = factory.getFStatHelper().getRelErr(vol1, fLayer.get(1) * volUnit);
@@ -3633,12 +3589,12 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.fillOverlapLayer(fLayer, fAssembly);
+            fSphereRef.fillVolumeOverlapLayer(fLayer, fAssembly);
 
             int elements = fLayer.get();
 
             double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolume();
+            double volTotal = fSphereRef.getVolumeAlgebraic();
             double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -3667,13 +3623,13 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.fillOverlapLayer(fLayer, fAssembly);
+            fSphereRef.fillVolumeOverlapLayer(fLayer, fAssembly);
 
             int elementsTotal = (int) fLayer.addSelf();
             int elementsCommon = fLayer.get(1);
 
             double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolume();
+            double volTotal = fSphereRef.getVolumeAlgebraic();
             double volCommon = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
             double volRelErrTotal = factory.getFStatHelper().getRelErr(volTotal, elementsTotal * volUnit) * 100;
             double volRelErrCommon = factory.getFStatHelper().getRelErr(volCommon, elementsCommon * volUnit) * 100;
@@ -3710,12 +3666,12 @@ public class FSphereTest {
 
             fAssembly.translate(offset);
 
-            fSphereRef.fillOverlapLayer(fLayer, fAssembly);
+            fSphereRef.fillVolumeOverlapLayer(fLayer, fAssembly);
 
             int elements = (int) fLayer.addSelf();
 
             double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolume();
+            double volTotal = fSphereRef.getVolumeAlgebraic();
             double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -3748,7 +3704,7 @@ public class FSphereTest {
                     assertTrue(fSphere.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
-            double volTotal = fSphere.getVolume();
+            double volTotal = fSphere.getVolumeAlgebraic();
             double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -3785,7 +3741,7 @@ public class FSphereTest {
                     assertTrue(fSphereRef.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolume();
+            double volTotal = fSphereRef.getVolumeAlgebraic();
             double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -3822,7 +3778,7 @@ public class FSphereTest {
                     assertTrue(fSphereRef.contains(d0, d1, d2)));
 
             double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolume() - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volTotal = fSphereRef.getVolumeAlgebraic() - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
             double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -3833,9 +3789,116 @@ public class FSphereTest {
             );
         }
 
+
+
+
+
+
+
+
+
+
+
         @Test
-        @DisplayName("Surface data")
-        void surfaceData() {
+        @DisplayName("Get surface discrete")
+        void getSurfaceDiscrete() {
+            double delta = 0.05;
+
+            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta)
+                    .addCoat(1);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphere.translate(offset);
+
+            double srf = fSphere.getSurfaceDiscrete();
+
+            double srfTotal = factory.getFSphereHelper().getSurface(2);
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, srf);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(srfRelErr < 0.005)
+            );
+        }
+
+        @Test
+        @DisplayName("Surface overlap layer - Single")
+        void surfaceOverlapLayerSingle() {
+            double delta = 0.05;
+
+            FLayerCounter fLayer = factory.getFLayerCounter();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.fillSurfaceOverlapLayer(fLayer, fAssembly);
+
+            int elTotal = (int) fLayer.addSelf();
+            int elCommon = fLayer.get(1);
+
+            double srfUnit = delta * delta;
+            double srfTotal = factory.getFSphereHelper().getSurface(1);
+            double srfCommon = factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1) / 2;
+            double srfRelErrTotal = factory.getFStatHelper().getRelErr(srfTotal, elTotal * srfUnit);
+            double srfRelErrCommon = factory.getFStatHelper().getRelErr(srfCommon, elCommon * srfUnit);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(elTotal > 0),
+                    () -> assertTrue(srfRelErrTotal < 0.5),
+                    () -> assertTrue(srfRelErrCommon < 0.5)
+            );
+        }
+
+        @Test
+        @DisplayName("Surface overlap layer - Multiple")
+        void surfaceOverlapLayerMultiple() {
+            double delta = 0.05;
+
+            FLayerCounter fLayer = factory.getFLayerCounter();
+
+            Shape fSphereRef = factory.getFSphere( 1)
+                    .setDelta(delta);
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(0, 1, 0, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB));
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fAssembly.translate(offset);
+
+            fSphereRef.fillSurfaceOverlapLayer(fLayer, fAssembly);
+
+            int elTotal = (int) fLayer.addSelf();
+            int elL1 = fLayer.get(1);
+            int elL2 = fLayer.get(2);
+
+            double srfUnit = delta * delta;
+            double srfTotal = factory.getFSphereHelper().getSurface(1);
+            double srfRelErrTotal = factory.getFStatHelper().getRelErr(srfTotal, elTotal * srfUnit);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(elTotal > 0),
+                    () -> assertTrue(elL1 > 0),
+                    () -> assertTrue(elL2 > 0),
+                    () -> assertTrue(srfRelErrTotal < 0.5)
+            );
+        }
+
+        @Test
+        @DisplayName("Surface layer")
+        void surfaceLayer() {
             double delta = 0.05;
 
             FLayerCounter fLayer = factory.getFLayerCounter();
@@ -3849,31 +3912,74 @@ public class FSphereTest {
 
             fSphere.fillSurfaceLayer(fLayer);
 
-            int elements = fLayer.get();
+            int el = fLayer.get();
 
             double srfUnit = delta * delta;
-            double srfTotal = fSphere.getSurface();
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+            double srfTotal = factory.getFSphereHelper().getSurface(1);
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, el * srfUnit);
 
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(srfRelErr < 0.5,
-                            "The relative error is erroneous")
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(el > 0),
+                    () -> assertTrue(srfRelErr < 0.005)
             );
         }
 
         @Test
-        @DisplayName("Surface data double, distant")
-        void surfaceDataDoubleDistant() {
+        @DisplayName("Surface layer with coating")
+        void surfaceLayerWithCoating() {
+            double delta = 0.05;
+
+            FLayerCounter fLayer = factory.getFLayerCounter();
+
+            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
+                    .setDelta(delta)
+                    .addCoat(1, 1, 1);
+
+            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+            fSphere.translate(offset);
+
+            fSphere.fillSurfaceLayer(fLayer);
+
+            int layer0 = fLayer.get(0);
+            int layer1 = fLayer.get(1);
+            int layer2 = fLayer.get(2);
+            int layer3 = fLayer.get(3);
+
+            assertEquals(4, fSphere.getLayerCount());
+
+            double srfUnit = delta * delta;
+            double srfLayer0 = 4 * Math.PI;
+            double srfLayer1 = 4 * Math.PI * Math.pow(2, 2);
+            double srfLayer2 = 4 * Math.PI * Math.pow(3, 2);
+            double srfLayer3 = 4 * Math.PI * Math.pow(4, 2);
+
+            double srfRelErr0 = factory.getFStatHelper().getRelErr(srfLayer0, layer0 * srfUnit);
+            double srfRelErr1 = factory.getFStatHelper().getRelErr(srfLayer1, layer1 * srfUnit);
+            double srfRelErr2 = factory.getFStatHelper().getRelErr(srfLayer2, layer2 * srfUnit);
+            double srfRelErr3 = factory.getFStatHelper().getRelErr(srfLayer3, layer3 * srfUnit);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(srfRelErr0 < 0.05),
+                    () -> assertTrue(srfRelErr1 < 0.05),
+                    () -> assertTrue(srfRelErr2 < 0.05),
+                    () -> assertTrue(srfRelErr3 < 0.05)
+            );
+        }
+
+        @Test
+        @DisplayName("Surface layer - Distant")
+        void surfaceLayerSingleDistant() {
             double delta = 0.05;
 
             FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
+                    .setDelta(delta)
+                    .addCoat(1);
             Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta);
+                    .setDelta(delta)
+                    .addCoat(1);
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
 
@@ -3883,31 +3989,31 @@ public class FSphereTest {
 
             fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
 
-            int elements = fLayer.get();
+            int el = fLayer.get();
 
             double srfUnit = delta * delta;
-            double srfTotal = fSphereRef.getSurface();
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+            double srfTotal = factory.getFSphereHelper().getSurface(1);
+            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, el * srfUnit);
 
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(srfRelErr < 0.5,
-                            "The relative error is erroneous")
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(el > 0),
+                    () -> assertTrue(srfRelErr < 0.005)
             );
         }
 
         @Test
-        @DisplayName("Surface data double, close")
-        void surfaceDataDoubleClose() {
+        @DisplayName("Surface layer - Close")
+        void surfaceLayerSingleClose() {
             double delta = 0.05;
 
             FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
+                    .setDelta(delta)
+                    .addCoat(1);
             Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
+                    .setDelta(delta)
+                    .addCoat(1);
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
 
@@ -3917,42 +4023,40 @@ public class FSphereTest {
 
             fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
 
-            int elementsTotal = (int) fLayer.addSelf();
-            int elementsCommon = fLayer.get(1);
+            int elL0 = fLayer.get(0);
+            int elL1 = fLayer.get(1);
 
             double srfUnit = delta * delta;
-            double srfTotal = fSphereRef.getSurface();
-            double srfCommon = 2 * Math.PI * 1 * 0.5;
-            double srfRelErrTotal = factory.getFStatHelper().getRelErr(srfTotal, elementsTotal * srfUnit) * 100;
-            double srfRelErrCommon = factory.getFStatHelper().getRelErr(srfCommon, elementsCommon * srfUnit) * 100;
+            double srfL0 = factory.getFSphereHelper().getSurface(1) - factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1) / 2;
+            double srfL1 = factory.getFSphereHelper().getSurface(2) - factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 2, 2) / 2;
+            double srfRelErrL0 = factory.getFStatHelper().getRelErr(srfL0, elL0 * srfUnit);
+            double srfRelErrL1 = factory.getFStatHelper().getRelErr(srfL1, elL1 * srfUnit);
 
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elementsTotal > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(srfRelErrTotal < 0.5,
-                            "The total relative error is erroneous"),
-                    () -> assertTrue(srfRelErrCommon < 0.5,
-                            "The common relative error is erroneous")
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(elL0 > 0),
+                    () -> assertTrue(srfRelErrL0 < 0.005),
+                    () -> assertTrue(srfRelErrL1 < 0.005)
             );
         }
 
         @Test
-        @DisplayName("Surface data multiple, close")
-        void surfaceDataMultipleClose() {
+        @DisplayName("Surface layer - Multiple")
+        void surfaceLayerMultiple() {
             double delta = 0.05;
 
             FLayerCounter fLayer = factory.getFLayerCounter();
 
             Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
-            Shape fSphereB = factory.getFSphere(0, 1, 0, 1)
-                    .setDelta(delta);
-            Shape fSphereC = factory.getFSphere(2, 2, 2, 3)
-                    .setDelta(delta);
+                    .setDelta(delta)
+                    .addCoat(11);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .setDelta(delta)
+                    .addCoat(1);
+            Shape fSphereC = factory.getFSphere(4, 4, 4, 2)
+                    .setDelta(delta)
+                    .addCoat(1);
 
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereB, fSphereC));
 
             FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
 
@@ -3960,17 +4064,19 @@ public class FSphereTest {
 
             fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
 
-            int elements = (int) fLayer.addSelf();
+            int elL0 = fLayer.get(0);
+            int elL1 = fLayer.get(1);
 
             double srfUnit = delta * delta;
-            double srfTotal = fSphereRef.getSurface();
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
+            double srfL0 = factory.getFSphereHelper().getSurface(1) - factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1) / 2;
+            double srfL1 = factory.getFSphereHelper().getSurface(12);
+            double srfRelErrL0 = factory.getFStatHelper().getRelErr(srfL0, elL0 * srfUnit);
+            double srfRelErrL1 = factory.getFStatHelper().getRelErr(srfL1, elL1 * srfUnit);
 
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(srfRelErr < 0.5,
-                            "The relative error is erroneous")
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(elL0 > 0),
+                    () -> assertTrue(srfRelErrL0 < 0.005),
+                    () -> assertTrue(srfRelErrL1 < 0.005)
             );
         }
 
@@ -3999,7 +4105,7 @@ public class FSphereTest {
             });
 
             double srfUnit = delta * delta;
-            double srfTotal = fSphere.getSurface();
+            double srfTotal = fSphere.getSurfaceAlgebraic();
             double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -4039,7 +4145,7 @@ public class FSphereTest {
             });
 
             double srfUnit = delta * delta;
-            double srfTotal = fSphereRef.getSurface();
+            double srfTotal = fSphereRef.getSurfaceAlgebraic();
             double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
 
             Assertions.assertAll("Validate buffer",
@@ -4079,7 +4185,7 @@ public class FSphereTest {
             });
 
             double srfUnit = delta * delta;
-            double srfTotal = fSphereRef.getSurface() - (2 * Math.PI * 1 * 0.5);
+            double srfTotal = fSphereRef.getSurfaceAlgebraic() - (2 * Math.PI * 1 * 0.5);
             double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
 
             Assertions.assertAll("Validate buffer",

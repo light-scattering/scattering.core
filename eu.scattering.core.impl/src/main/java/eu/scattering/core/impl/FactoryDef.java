@@ -22,6 +22,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
 import eu.scattering.core.design.component.geometry.shape.ShapeProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
@@ -40,6 +41,7 @@ import eu.scattering.core.impl.component.geometry.construct.*;
 import eu.scattering.core.impl.component.geometry.container.FAssemblyDef;
 import eu.scattering.core.impl.component.geometry.container.FAssemblyProducerDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereDef;
+import eu.scattering.core.impl.component.geometry.shape.FSphereHelperDef;
 import eu.scattering.core.impl.component.geometry.shape.FSphereProducerDef;
 import eu.scattering.core.impl.component.geometry.shape.ShapeProducerDef;
 import eu.scattering.core.impl.component.number.FComplexDef;
@@ -71,6 +73,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private final FStatHelper fStatHelper;
 
     private final FPointHelper fPointHelper;
+    private final FSphereHelper fSphereHelper;
 
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
@@ -87,6 +90,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
         this.fGeometryParser = GeometryParserDef.get(this);
 
         this.fPointHelper = FPointHelperDef.get();
+        this.fSphereHelper = FSphereHelperDef.get(this.fPointHelper);
     }
 
     private FactoryDef(long seed) {
@@ -104,6 +108,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
         this.fGeometryParser = GeometryParserDef.get(this);
 
         this.fPointHelper = FPointHelperDef.get();
+        this.fSphereHelper = FSphereHelperDef.get(this.fPointHelper);
     }
 
     public static ScatFactoryConcrete create() {
@@ -299,6 +304,13 @@ public final class FactoryDef extends ScatFactoryConcrete {
     }
 
     //--------------------------------------------------
+
+
+    @Override
+    public FSphereHelper getFSphereHelper() {
+
+        return this.fSphereHelper;
+    }
 
     @Override
     public FSphereProducer getFSphereProducer() {

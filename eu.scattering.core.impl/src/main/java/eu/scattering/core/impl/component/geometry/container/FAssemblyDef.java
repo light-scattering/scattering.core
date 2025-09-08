@@ -446,15 +446,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FAssembly<T> scaleSize(double factor) {
-
-        getShapes().forEach(e -> e.scaleSize(factor));
-
-        return this;
-    }
-
-    @Override
-    public FAssembly<T> scalePosition(double factor) {
+    public FAssembly<T> scale(double factor) {
 
         this.fPoints.forEach(e -> e.mulFactor(factor));
 
@@ -471,7 +463,28 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         for (Shape element : field) {
 
             if (element.overlaps(field) == 0) {
-                surface += element.getSurface();
+                surface += element.getSurfaceAlgebraic();
+            } else {
+                fLayer.reset();
+                element.fillSurfaceLayer(fLayer, field);
+                surface += fLayer.get() * Math.pow(element.getDelta(), 2);
+            }
+        }
+
+        return surface;
+    }
+
+    @Override
+    public double getSurface(double[] layers) {
+        FLayerCounter fLayer = factoryExt.getFLayerCounter();
+
+        List<Shape> field = getUniqueShapes();
+
+        double surface = 0;
+        for (Shape element : field) {
+
+            if (element.overlaps(field) == 0) {
+                surface += element.getSurfaceAlgebraic();
             } else {
                 fLayer.reset();
                 element.fillSurfaceLayer(fLayer, field);
@@ -496,10 +509,10 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         for (Shape element : field) {
 
             if (element.overlaps(queue) == 0) {
-                volume += element.getVolume();
+                volume += element.getVolumeAlgebraic();
             } else {
                 fLayer.reset();
-                element.fillOverlapLayer(fLayer, queue);
+                element.fillVolumeOverlapLayer(fLayer, queue);
                 volume += fLayer.get() * Math.pow(element.getDelta(), 3);
             }
 
@@ -510,14 +523,14 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public double getVolume(double[] volume) {
+    public double getVolume(double[] layers) {
         FLayerCounter fLayer = factoryExt.getFLayerCounter();
 
         List<Shape> field = getUniqueShapes();
 
         int layerCountMax = Integer.MIN_VALUE;
         for (Shape shape : field) {
-            int layerCount = getVol(fLayer, field, shape, volume);
+            int layerCount = getVol(fLayer, field, shape, layers);
 
             if (layerCount > layerCountMax) {
                 layerCountMax = layerCount;
@@ -527,7 +540,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         double volTotal = 0;
 
         for (int i = 0 ; i < layerCountMax ; i++) {
-            volTotal += volume[i];
+            volTotal += layers[i];
         }
 
         return volTotal;
@@ -593,13 +606,13 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
             layer.add(0d);
         }
 
-        layer.set(0, layer.get(0) + shape.getVolume());
+        layer.set(0, layer.get(0) + shape.getVolumeAlgebraic());
     }
 
     private void getOFacMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, List<Double> volume) {
         fLayer.reset();
 
-        shape.fillOverlapLayer(fLayer, field);
+        shape.fillVolumeOverlapLayer(fLayer, field);
 
         double volUnit = Math.pow(shape.getDelta(), 3);
 

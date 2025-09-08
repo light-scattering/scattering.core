@@ -276,7 +276,7 @@ public class FSphereProducerDef implements FSphereProducer {
     private FSphere updateConfig(FSphere fSphere) {
 
         if (this.meta != null) {
-            fSphere.setDesc(this.meta);
+            fSphere.setTag(this.meta);
         }
 
         if (this.delta != null) {

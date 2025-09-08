@@ -60,32 +60,33 @@ public interface Shape extends Geometry {
     int locate(FPoint fPoint);
     int locate(FPos3D fPos3D);
 
-    double getVolume();
-    Shape setVolume(double volume);
+    double getVolumeAlgebraic();
 
     void fillVolumeLayer(FLayerCounter in);
     void fillVolumeLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
 
-    void fillOverlapLayer(FLayerCounter in);
-    void fillOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
+    void fillVolumeOverlapLayer(FLayerCounter in);
+    void fillVolumeOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
 
     void fillVolumeArray(FArray in);
     void fillVolumeArray(FArray in, Iterable<? extends Shape> shapes);
 
-    double getSurface();
-    Shape setSurface(double surface);
+    double getSurfaceAlgebraic();
+    double getSurfaceDiscrete();
 
     void fillSurfaceLayer(FLayerCounter in);
     void fillSurfaceLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
+
+    void fillSurfaceOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes);
 
     void fillSurfaceArray(FArray in);
     void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes);
 
     double getRadius();
-    double getRadiusInternal();
-
     Shape setRadius(double radius);
-    Shape getRadiusInternal(double radius);
+
+    double getInnerRadius();
+    Shape setInnerRadius(double radius);
 
     Shape setRadiusMin(Iterable<? extends Shape> shapes);
 
@@ -143,15 +144,15 @@ public interface Shape extends Geometry {
 
     // -------------------------------------------------------------------------------------------------
 
-    Shape removeCoat();
+    Shape applyCoatingFrom(Shape shape);
+
+    Shape removeCoating();
 
     Shape addCoat(double width);
     Shape addCoat(double... width);
 
     Shape addCoatInternal(double width);
     Shape addCoatInternal(double... width);
-
-    Shape applyCoatFrom(Shape shape);
 
     int getCoatCount();
 
@@ -165,6 +166,8 @@ public interface Shape extends Geometry {
 
     int getLayerCount();
 
+    double getLayerWidthRemaining(int index);
+
     double getLayerVolume(int index);
 
     // -------------------------------------------------------------------------------------------------
@@ -172,10 +175,6 @@ public interface Shape extends Geometry {
     FCache getFCache();
     Shape setFCache(FCache cache);
     Shape resetFCache();
-
-    String getDesc();
-    Shape setDesc(String desc);
-    Shape resetDesc();
 
     double getEpsilon();
     Shape setEpsilon(double epsilon);
@@ -188,6 +187,10 @@ public interface Shape extends Geometry {
     double getIndex();
     Shape setIndex(double index);
     Shape resetIndex();
+
+    String getTag();
+    Shape setTag(String tag);
+    Shape resetTag();
 
     //--------------------------------------------------
 
@@ -207,6 +210,8 @@ public interface Shape extends Geometry {
     @Fragment
     double getDistCenterP2(Shape shape);
 
+    @Fragment
+    boolean containsWithSurface(double x, double y, double z, int layer);
     @Fragment
     boolean containsWithSurface(double x, double y, double z);
 }

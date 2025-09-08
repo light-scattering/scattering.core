@@ -15,6 +15,8 @@ public interface FSphereFactory {
 
     FSphereProducer getFSphereProducer();
 
+    FSphereHelper getFSphereHelper();
+
     //--------------------------------------------------
 
     FSphere getFSphere();

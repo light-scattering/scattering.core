@@ -170,7 +170,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         if (json.has(JSON_META)) {
-            setDesc(json.getString(JSON_META));
+            setTag(json.getString(JSON_META));
         }
 
         return this;
@@ -321,8 +321,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             json.put(JSON_INDEX, getIndex());
         }
 
-        if (!getDesc().equals("")) {
-            json.put(JSON_META, getDesc());
+        if (!getTag().equals("")) {
+            json.put(JSON_META, getTag());
         }
 
         return json;
@@ -362,21 +362,21 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public double getRadiusInternal() {
+    public double getInnerRadius() {
 
         return getRadius();
     }
 
     @Override
-    public Shape getRadiusInternal(double radius) {
+    public Shape setInnerRadius(double radius) {
 
         return setRadius(radius);
     }
 
     @Override
-    public double getVolume() {
+    public double getVolumeAlgebraic() {
 
-        return getVolumeSphere(getRadius());
+        return getVolume(getRadius());
     }
 
     @Override
@@ -402,7 +402,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         double radiusMax = radiusMin + getCoatWidth(index);
 
-        return getVolumeSphere(radiusMax) - getVolumeSphere(radiusMin);
+        return getVolume(radiusMax) - getVolume(radiusMin);
     }
 
     @Override
@@ -414,7 +414,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         double radiusMin = getRadius() - getCoatWidthTotal();
 
-        return getVolumeSphere(getRadius()) - getVolumeSphere(radiusMin);
+        return getVolume(getRadius()) - getVolume(radiusMin);
     }
 
     @Override
@@ -429,7 +429,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         if (index == 0) {
-            return getVolumeSphere(getRadius() - getCoatWidthTotal());
+            return getVolume(getRadius() - getCoatWidthTotal());
         }
 
         return getCoatVolume(index - 1);
@@ -437,25 +437,9 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public FSphere setVolume(double volume) {
+    public double getSurfaceAlgebraic() {
 
-        setRadius(Math.pow(0.75 * volume / Math.PI, 1.0 / 3));
-
-        return this;
-    }
-
-    @Override
-    public double getSurface() {
-
-        return getSurfaceSphere(getRadius());
-    }
-
-    @Override
-    public FSphere setSurface(double surface) {
-
-        setRadius(Math.pow(0.25 * surface / Math.PI, 0.5));
-
-        return this;
+        return getSurface(getRadius());
     }
 
     @Override
@@ -482,7 +466,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double tZ = z - getCenterZ();
 
         double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-        double radius = getRadiusInternal() - getCoatWidthTotal();
+        double radius = getInnerRadius() - getCoatWidthTotal();
 
         if (distP2 < radius * radius) {
             return 0;
@@ -500,30 +484,58 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean containsWithSurface(double x, double y, double z) {
-        double tX = x - getCenterX();
-        double tY = y - getCenterY();
-        double tZ = z - getCenterZ();
-
-        double radP2 = getRadius() * getRadius();
-        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-
-        return distP2 <= radP2 + getEpsilon();
-    }
-
-    @Override
     public void fillSurfaceLayer(FLayerCounter in) {
+        double unit = getDelta() * getDelta();
 
-        in.set(0, in.get(0) + (int) Math.round(getSurface() / (getDelta() * getDelta())));
+        for (int i = 0 ; i < getLayerCount() ; i++) {
+            in.set(i, in.get(i) + (int) Math.round(getSurface(getLayerRadius(i)) / unit));
+        }
     }
 
     @Override
     public void fillSurfaceLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
 
-        getSurfacePoints((x, y, z) -> {
+        for (int i = 0 ; i < getLayerCount() ; i++) {
+            int layer = i;
+
+            getSurfaceElements(getLayerRadius(layer), (x, y, z) -> {
+                boolean isPartOf = true;
+
+                for (Shape shape : shapes) {
+
+                    if (this == shape) {
+                        continue;
+                    }
+
+                    if (shape.containsWithSurface(x, y, z, layer)) {
+                        isPartOf = false;
+
+                        break;
+                    }
+                }
+
+                if (isPartOf) {
+                    in.inc(layer);
+                }
+            });
+        }
+    }
+
+    @Override
+    public double getSurfaceDiscrete() {
+        double unit = getDelta() * getDelta();
+
+        return unit * ((int) Math.round(getSurface(getRadius()) / unit));
+    }
+
+    @Override
+    public void fillSurfaceOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
+
+        getSurfaceElements(getRadius(), (x, y, z) -> {
             int layers = 0;
 
             for (Shape shape : shapes) {
+
                 if (this == shape) {
                     continue;
                 }
@@ -535,19 +547,18 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
             in.inc(layers);
         });
-
     }
 
     @Override
     public void fillSurfaceArray(FArray in) {
 
-       getSurfacePoints(in::add);
+       getSurfaceElements(getRadius(), in::add);
     }
 
     @Override
     public void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes) {
 
-        getSurfacePoints((x, y, z) -> {
+        getSurfaceElements(getRadius(), (x, y, z) -> {
             boolean add = true;
 
             for (Shape shape : shapes) {
@@ -566,8 +577,46 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         });
     }
 
-    private void getSurfacePoints(TriConsumer consumer) {
-        int points = (int) Math.round(getSurface() / (getDelta() * getDelta()));
+    @Override
+    public boolean containsWithSurface(double x, double y, double z, int layer) {
+
+        if (layer < 0) {
+            throw new IllegalArgumentException("The layer index cannot be lower than zero");
+        }
+
+        if (layer > getLayerCount()) {
+            throw new IllegalArgumentException("The layer index is erroneous");
+        }
+
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
+
+        double radius = getRadius();
+        for (int i = getLayerCount() - 1 ; i > layer ; i--) {
+            radius -= getCoatWidth(i - 1);
+        }
+
+        double radP2 = radius * radius;
+        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+
+        return distP2 <= radP2 + getEpsilon();
+    }
+
+    @Override
+    public boolean containsWithSurface(double x, double y, double z) {
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
+
+        double radP2 = getRadius() * getRadius();
+        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+
+        return distP2 <= radP2 + getEpsilon();
+    }
+
+    private void getSurfaceElements(double radius, TriConsumer consumer) {
+        int points = (int) Math.round(getSurface(radius) / (getDelta() * getDelta()));
 
         double offset = 2.0 / points;
         double increment = Math.PI * (3.0 - Math.sqrt(5));
@@ -581,21 +630,36 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             double z = Math.sin(phi) * r;
 
             consumer.consume(
-                    getCenterX() + (x * getRadius()),
-                    getCenterY() + (y * getRadius()),
-                    getCenterZ() + (z * getRadius())
+                    getCenterX() + (x * radius),
+                    getCenterY() + (y * radius),
+                    getCenterZ() + (z * radius)
             );
         }
     }
 
-    private double getVolumeSphere(double radius) {
+    private double getSurface(double radius) {
+
+        return 4 * Math.PI * radius * radius;
+    }
+
+    private double getSurfaceRadius(double surface) {
+
+        return Math.pow(0.25 * surface / Math.PI, 0.5);
+    }
+
+    private double getVolume(double radius) {
 
         return 4 * Math.PI * radius * radius * radius / 3;
     }
 
-    private double getSurfaceSphere(double radius) {
+    private double getVolumeRadius(double volume) {
 
-        return 4 * Math.PI * radius * radius;
+        return Math.pow(0.75 * volume / Math.PI, 1.0 / 3);
+    }
+
+    private double getLayerRadius(int layer) {
+
+        return getRadius() - getLayerWidthRemaining(layer);
     }
 
     // -------------------------------------------------------------------------------------------------

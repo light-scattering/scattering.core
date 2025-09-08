@@ -41,21 +41,26 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     FAssembly<T> translate(double x, double y, double z);
     FAssembly<T> translate(FPos3D offset);
 
-    FAssembly<T> scaleSize(double factor);
-    FAssembly<T> scalePosition(double factor);
-
-    double getVolume();
-    double getVolume(double[] volume);
-
-    double getSurface();
-
-    double getOverlapFactor();
-    double getOverlapFactorLegacy();
+    FAssembly<T> scale(double factor);
 
     FPairPos3D getRange();
 
     void setSpatialCenter(FPoint center);
     void setSphericalCenter(FPoint center);
+
+    //--------------------------------------------------
+
+    double getVolume();
+    double getVolume(double[] layers);
+
+    double getSurface();
+    double getSurface(double[] layers);
+
+    double getOverlapFactor();
+    double getOverlapFactorLegacy();
+
+//    double getVolumeRadius();
+//    double getSurfaceRadius();
 
     boolean isCompact();
 

@@ -32,9 +32,10 @@ public abstract class ShapePresetDef implements Shape {
     private final boolean shift = true;
 
     private double index = -1;
-    private String desc = "";
 
-    protected List<Double> coating = new ArrayList<>();
+    private String tag = "";
+
+    protected List<Double> coatWidth = new ArrayList<>();
 
     public ShapePresetDef(ScatFactory factory) {
 
@@ -108,23 +109,23 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public String getDesc() {
+    public String getTag() {
 
-        return this.desc;
+        return this.tag;
     }
 
     @Override
-    public Shape setDesc(String desc) {
+    public Shape setTag(String tag) {
 
-        this.desc = desc;
+        this.tag = tag;
 
         return this;
     }
 
     @Override
-    public Shape resetDesc() {
+    public Shape resetTag() {
 
-        this.desc = "";
+        this.tag = "";
 
         return this;
     }
@@ -153,13 +154,13 @@ public abstract class ShapePresetDef implements Shape {
 
     protected List<Double> getCoating() {
 
-        return this.coating;
+        return this.coatWidth;
     }
 
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Shape removeCoat() {
+    public Shape removeCoating() {
 
         getCoating().clear();
 
@@ -217,9 +218,9 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape applyCoatFrom(Shape shape) {
+    public Shape applyCoatingFrom(Shape shape) {
 
-        removeCoat();
+        removeCoating();
 
         for (int i = 0; i < shape.getCoatCount() ; i++) {
             addCoat(shape.getCoatWidth(i));
@@ -231,7 +232,7 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public int getCoatCount() {
 
-        return this.coating.size();
+        return this.coatWidth.size();
     }
 
     @Override
@@ -251,11 +252,11 @@ public abstract class ShapePresetDef implements Shape {
             throw new IllegalArgumentException("The index cannot be lower than zero");
         }
 
-        if (index >= getCoating().size()) {
+        if (index >= getCoatCount()) {
             throw new IllegalArgumentException("the coat index is erroneous");
         }
 
-        return this.coating.get(index);
+        return this.coatWidth.get(index);
     }
 
     @Override
@@ -279,7 +280,26 @@ public abstract class ShapePresetDef implements Shape {
             throw new IllegalArgumentException("the coat index is erroneous");
         }
 
-         this.coating.set(index, width);
+         this.coatWidth.set(index, width);
+    }
+
+    @Override
+    public double getLayerWidthRemaining(int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getLayerCount()) {
+            throw new IllegalArgumentException("the layer index is erroneous");
+        }
+
+        double width = 0;
+        for (int i = getLayerCount() - 1 ; i > index ; i--) {
+            width += getCoatWidth(i - 1);
+        }
+
+        return width;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -574,14 +594,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.TRUE;
         }
 
-        reqDist = this.getRadiusInternal() + shape.getRadiusInternal() - epsilon;
+        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.FALSE;
         }
 
-        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean repelsDelta(Shape shape) {
@@ -690,14 +710,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInternal() + shape.getRadiusInternal() - epsilon;
+        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.FALSE;
         }
 
-        return this.getRadius() == this.getRadiusInternal() ? Relation.TRUE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.TRUE : Relation.UNDEFINED;
     }
 
     protected boolean touchesDelta(Shape shape) {
@@ -810,14 +830,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInternal() + shape.getRadiusInternal() - epsilon;
+        reqDist = this.getInnerRadius() + shape.getInnerRadius() - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean overlapsDelta(Shape shape) {
@@ -912,14 +932,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = this.getRadiusInternal() - shape.getRadiusInternal() + epsilon;
+        reqDist = this.getInnerRadius() - shape.getInnerRadius() + epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 < reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean enclosesDelta(Shape shape) {
@@ -1021,14 +1041,14 @@ public abstract class ShapePresetDef implements Shape {
             return Relation.FALSE;
         }
 
-        reqDist = Math.abs(this.getRadiusInternal() - shape.getRadiusInternal()) - epsilon;
+        reqDist = Math.abs(this.getInnerRadius() - shape.getInnerRadius()) - epsilon;
         reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 > reqDistP2) {
             return Relation.TRUE;
         }
 
-        return this.getRadius() == this.getRadiusInternal() ? Relation.FALSE : Relation.UNDEFINED;
+        return this.getRadius() == this.getInnerRadius() ? Relation.FALSE : Relation.UNDEFINED;
     }
 
     protected boolean intersectsDelta(Shape shape) {
@@ -1201,7 +1221,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void fillOverlapLayer(FLayerCounter in) {
+    public void fillVolumeOverlapLayer(FLayerCounter in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -1229,7 +1249,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public void fillOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
+    public void fillVolumeOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();

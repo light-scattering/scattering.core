@@ -7,7 +7,7 @@ import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 import java.util.function.BiConsumer;
 
-public interface FArray extends Buffer<FArray>, Iterable<double[]> {
+public interface FArray<T> extends Buffer<FArray<T>> {
 
     void add(double d0, double d1, double d2);
     void add(FPos3D pos);

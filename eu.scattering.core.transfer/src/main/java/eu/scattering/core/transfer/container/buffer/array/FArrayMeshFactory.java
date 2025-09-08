@@ -1,17 +1,11 @@
 package eu.scattering.core.transfer.container.buffer.array;
 
 import eu.scattering.core.transfer.container.buffer.array.concrete.FArrayMeshDef;
-import org.json.JSONObject;
 
 public interface FArrayMeshFactory {
 
-    default FArrayMesh getFArrayMesh(int length) {
+    default <T> FArrayMesh<T> getFArrayMesh(int capacity) {
 
-        return FArrayMeshDef.create(length);
-    }
-
-    default FArrayMesh getFArrayMesh(JSONObject json) {
-
-        return FArrayMeshDef.create(json);
+        return FArrayMeshDef.create(capacity);
     }
 }

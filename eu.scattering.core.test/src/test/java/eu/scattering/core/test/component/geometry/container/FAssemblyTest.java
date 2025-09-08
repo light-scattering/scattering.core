@@ -1189,28 +1189,8 @@ public class FAssemblyTest {
         }
 
         @Test
-        @DisplayName("Scale size")
-        void scaleSize() {
-            FPoint fPoint = factory.getFPoint(1, 2, 3);
-            FSphere fSphere = factory.getFSphere(4, 5, 6, 1);
-
-            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPoint, fSphere));
-
-            FAssembly<Geometry> results = fAssembly.scaleSize(2);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(factory.getFSphere(4, 5, 6, 2), fSphere,
-                            "The FSphere size is incorrect"),
-                    () -> assertEquals(factory.getFPoint(1, 2, 3), fPoint,
-                            "The FPoint size is incorrect"),
-                    () -> assertSame(fAssembly, results,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Scale position")
-        void scalePosition() {
+        @DisplayName("Scale")
+        void scale() {
             FPoint base = factory.getFPoint(1,2, 3);
 
             FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
@@ -1219,7 +1199,7 @@ public class FAssemblyTest {
 
             FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
 
-            FAssembly<FVector> results = fAssembly.scalePosition(2);
+            FAssembly<FVector> results = fAssembly.scale(2);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertEquals(3, fAssembly.size(),
@@ -1567,7 +1547,7 @@ public class FAssemblyTest {
             double volAlgCore = 4 * fSphereA.getLayerVolume(0);
             double volAlgLayer1 = 4 * fSphereA.getLayerVolume(1);
             double volAlgLayer2 = 4 * fSphereA.getLayerVolume(2);
-            double volAlgTotal = 4 * fSphereA.getVolume();
+            double volAlgTotal = 4 * fSphereA.getVolumeAlgebraic();
 
             double volErrCore = factory.getFStatHelper().getRelErr(volAlgCore, volLayers[0]);
             double volErrLayer1 = factory.getFStatHelper().getRelErr(volAlgLayer1, volLayers[1]);
@@ -1608,7 +1588,7 @@ public class FAssemblyTest {
             double volAlgCore = quantity * fSphereRef.getLayerVolume(0);
             double volAlgLayer1 = quantity * fSphereRef.getLayerVolume(1);
             double volAlgLayer2 = quantity * fSphereRef.getLayerVolume(2);
-            double volAlgTotal = quantity * fSphereRef.getVolume();
+            double volAlgTotal = quantity * fSphereRef.getVolumeAlgebraic();
 
             double volErrCore = factory.getFStatHelper().getRelErr(volAlgCore, volLayers[0]);
             double volErrLayer1 = factory.getFStatHelper().getRelErr(volAlgLayer1, volLayers[1]);
@@ -1653,7 +1633,7 @@ public class FAssemblyTest {
             double volAlgCore = fSphereA.getLayerVolume(0);
             double volAlgLayer1 = fSphereA.getLayerVolume(1);
             double volAlgLayer2 = fSphereA.getLayerVolume(2);
-            double volAlgTotal = fSphereA.getVolume();
+            double volAlgTotal = fSphereA.getVolumeAlgebraic();
 
             double volErrCore = factory.getFStatHelper().getRelErr(volAlgCore, volLayers[0]);
             double volErrLayer1 = factory.getFStatHelper().getRelErr(volAlgLayer1, volLayers[1]);

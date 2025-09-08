@@ -96,10 +96,9 @@ public class FPos3DI implements Storage<FPos3DI> {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FPos3DI) {
-            FPos3DI fPosition = (FPos3DI) object;
+        if (object instanceof FPos3DI fPos3DI) {
 
-            return d0 == fPosition.getD0() && d1 == fPosition.getD1() && d2 == fPosition.getD2();
+            return d0 == fPos3DI.getD0() && d1 == fPos3DI.getD1() && d2 == fPos3DI.getD2();
         }
 
         return false;
