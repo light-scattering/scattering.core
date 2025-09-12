@@ -43,4 +43,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.engine.randomize.generator.module.dist3d.custom;
     exports eu.scattering.core.design.util.support;
     exports eu.scattering.core.design.util.annotation;
+    exports eu.scattering.core.design.util.container;
 }

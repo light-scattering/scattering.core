@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.util.container.DipoleData;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
@@ -204,95 +205,6 @@ public class FSphereTest {
 
             assertThrows(IllegalArgumentException.class, () -> factory.getRefFSphere(fPoint, -1),
                     "The radius value is incorrect, an exception should be thrown");
-        }
-
-        @Test
-        @DisplayName("Set radius")
-        void setRadius() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setRadius(10);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(10, fSphere.getRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(results, fSphere,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set radius (inner)")
-        void setRadiusInner() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setInnerRadius(11);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(11, fSphere.getInnerRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(results, fSphere,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set radius (outer)")
-        void setRadiusOuter() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setRadius(12);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(12, fSphere.getRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(results, fSphere,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set radius inner with coating")
-        void setRadiusInnerWithCoating() {
-            FSphere fSphere = factory.getFSphere();
-
-            fSphere.addCoat(1, 2, 3);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.setInnerRadius(5),
-                    "The radius cannot be smaller than the width of the coating");
-
-            fSphere.setRadius(10);
-
-            Assertions.assertAll("Validate layers",
-                    () -> assertEquals(1, fSphere.getCoatWidth(0),
-                            "Coat 0 width is incorrect"),
-                    () -> assertEquals(2, fSphere.getCoatWidth(1),
-                            "Coat 1 width is incorrect"),
-                    () -> assertEquals(3, fSphere.getCoatWidth(2),
-                            "Coat 2 width is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Set radius outer with coating")
-        void setRadiusOuterWithCoating() {
-            FSphere fSphere = factory.getFSphere();
-
-            fSphere.addCoat(1, 2, 3);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.setRadius(5),
-                    "The radius cannot be smaller than the width of the coating");
-
-            fSphere.setRadius(10);
-
-            Assertions.assertAll("Validate layers",
-                    () -> assertEquals(1, fSphere.getCoatWidth(0),
-                            "Coat 0 width is incorrect"),
-                    () -> assertEquals(2, fSphere.getCoatWidth(1),
-                            "Coat 1 width is incorrect"),
-                    () -> assertEquals(3, fSphere.getCoatWidth(2),
-                            "Coat 2 width is incorrect")
-            );
         }
 
         @Test
@@ -956,2489 +868,3207 @@ public class FSphereTest {
     @DisplayName("Functionality - Advanced")
     class FSphereAdvancedTest {
 
-        @Test
-        @DisplayName("Add coat")
-        void addCoat() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            Shape results = fSphere.addCoat(3);
-
-            assertEquals(13, fSphere.getRadius(),
-                    EPSILON, "The radius is incorrect");
-            assertSame(fSphere, results,
-                    "The reference should not change");
-
-            fSphere.addCoat(2);
-            fSphere.addCoat(1);
-
-            assertEquals(16, fSphere.getRadius(),
-                    "The radius is incorrect");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.addCoat(-1),
-                    "The coat width cannot be negative");
-        }
-
-        @Test
-        @DisplayName("Add coat vararg")
-        void addCoatVararg() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            Shape results = fSphere.addCoat(3, 2, 1);
-
-            assertEquals(16, fSphere.getRadius(),
-                    "The radius is incorrect");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.addCoat(-1),
-                    "The coat width cannot be negative");
-            assertSame(fSphere, results,
-                    "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Add coat internal")
-        void addCoatInternal() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            Shape results = fSphere.addCoatInternal(3);
-
-            assertEquals(10, fSphere.getRadius(),
-                    EPSILON, "The radius is incorrect");
-            assertSame(fSphere, results,
-                    "The reference should not change");
-
-            fSphere.addCoatInternal(2);
-            fSphere.addCoatInternal(1);
-
-            assertEquals(10, fSphere.getRadius(),
-                    "The radius is incorrect");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
-                    "The coat width cannot be negative");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(10),
-                    "The coat width is too large");
-        }
-
-        @Test
-        @DisplayName("Add coat internal vararg")
-        void addCoatInternalVararg() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            Shape results = fSphere.addCoatInternal(3, 2, 1);
-
-            assertEquals(10, fSphere.getRadius(),
-                    "The radius is incorrect");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
-                    "The coat width cannot be negative");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(10),
-                    "The coat width is too large");
-            assertSame(fSphere, results,
-                    "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Get coat size")
-        void getCoatSize() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            assertEquals(0, fSphere.getCoatCount(),
-                    "The FSphere is not coated");
-
-            fSphere.addCoat(3);
-            fSphere.addCoat(2);
-            fSphere.addCoat(1);
-
-            assertEquals(3, fSphere.getCoatCount(),
-                    "The number of coats is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get coat size internal")
-        void getCoatSizeInternal() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            assertEquals(0, fSphere.getCoatCount(),
-                    "The FSphere is not coated");
-
-            fSphere.addCoatInternal(3);
-            fSphere.addCoatInternal(2);
-            fSphere.addCoatInternal(1);
-
-            assertEquals(3, fSphere.getCoatCount(),
-                    "The number of coats is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get layer size")
-        void getLayerSize() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            assertEquals(1, fSphere.getLayerCount(),
-                    "The FSphere is not coated");
-
-            fSphere.addCoat(3, 2, 1);
-
-            assertEquals(4, fSphere.getLayerCount(),
-                    "The number of layers is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get layer size internal")
-        void getLayerSizeInternal() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            assertEquals(1, fSphere.getLayerCount(),
-                    "The FSphere is not coated");
-
-            fSphere.addCoatInternal(3, 2, 1);
-
-            assertEquals(4, fSphere.getLayerCount(),
-                    "The number of layers is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get coat width")
-        void getCoatWidth() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(0),
-                    "The shape is not coated");
-
-            fSphere.addCoat(3);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(-1),
-                    "The index is lower then zero");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(1),
-                    "The index is erroneous");
-
-            fSphere.addCoat(2);
-            fSphere.addCoat(1);
-
-            assertEquals(3, fSphere.getCoatWidth(0),
-                    EPSILON, "The coat width is erroneous");
-            assertEquals(2, fSphere.getCoatWidth(1),
-                    EPSILON, "The coat width is erroneous");
-            assertEquals(1, fSphere.getCoatWidth(2),
-                    EPSILON, "The coat width is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get coat internal width")
-        void getCoatInternalWidth() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(0),
-                    "The shape is not coated");
-
-            fSphere.addCoatInternal(3);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(-1),
-                    "The index is lower then zero");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(1),
-                    "The index is erroneous");
-
-            fSphere.addCoatInternal(2);
-            fSphere.addCoatInternal(1);
-
-            assertEquals(3, fSphere.getCoatWidth(0),
-                    EPSILON, "The coat width is erroneous");
-            assertEquals(2, fSphere.getCoatWidth(1),
-                    EPSILON, "The coat width is erroneous");
-            assertEquals(1, fSphere.getCoatWidth(2),
-                    EPSILON, "The coat width is erroneous");
-        }
-
-        @Test
-        @DisplayName("Set coat width")
-        void setCoatWidth() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3);
-
-            fSphere.addCoat(3).addCoat(2).addCoat(1);
-
-            fSphere.setCoatWidth(2, 5);
-
-            assertEquals(5, fSphere.getCoatWidth(2),
-                    epsilon, "The coat width is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get coat width total")
-        void getCoatWidthTotal() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            fSphere.addCoat(3);
-            fSphere.addCoatInternal(2);
-
-            assertEquals(5, fSphere.getCoatWidthTotal(),
-                    EPSILON, "The total coat width is erroneous");
-        }
-
-        @Test
-        @DisplayName("Clear coat")
-        void clearCoat() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
-
-            fSphere.addCoat(3, 2, 1);
-            Shape results = fSphere.removeCoating();
-
-            assertEquals(0, fSphere.getCoatCount(),
-                    "The number of coats is incorrect");
-            assertSame(fSphere, results,
-                    "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Set coat")
-        void setCoat() {
-            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 10);
-            FSphere fSphereArg = factory.getFSphere();
-
-            fSphereArg.addCoat(3, 2, 1);
-
-            Shape results = fSphereRef.applyCoatingFrom(fSphereArg);
-
-            assertEquals(3, fSphereRef.getCoatCount(),
-                    "The number of coats is incorrect");
-            assertEquals(3, fSphereRef.getCoatWidth(0),
-                    EPSILON, "The coat width is erroneous");
-            assertEquals(2, fSphereRef.getCoatWidth(1),
-                    EPSILON, "The coat width is erroneous");
-            assertEquals(1, fSphereRef.getCoatWidth(2),
-                    EPSILON, "The coat width is erroneous");
-            assertSame(fSphereRef, results,
-                    "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Get volume")
-        void getVolume() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            double volGet = fSphere.getVolumeAlgebraic();
-            double volCalc = 4 * Math.PI * Math.pow(5, 3) / 3;
-
-            assertEquals(volCalc, volGet,
-                    epsilon, "The FSphere volume is erroneous");
-        }
-
-        @Test
-        @DisplayName("Get coat volume")
-        void getCoatVolume() {
-            FSphere fSphere = factory.getFSphere();
-
-            fSphere.translate(factory.getFRand().nextDoubleInSphere(100));
-
-            assertEquals(0, fSphere.getCoatVolumeTotal(),
-                    epsilon, "The total coat volume is erroneous");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatVolume(0),
-                    "The shape is not coated");
-
-            fSphere.addCoat(1, 2, 3);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatVolume(-1),
-                    "The index cannot be lower than zero");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatVolume(3),
-                    "The index is out of bounds");
-
-            double vol0 = (4 * Math.PI * Math.pow(2, 3) / 3) - (4 * Math.PI * Math.pow(1, 3) / 3);
-            double vol1 = (4 * Math.PI * Math.pow(4, 3) / 3) - (4 * Math.PI * Math.pow(2, 3) / 3);
-            double vol2 = (4 * Math.PI * Math.pow(7, 3) / 3) - (4 * Math.PI * Math.pow(4, 3) / 3);
-            double volTotal = (4 * Math.PI * Math.pow(7, 3) / 3) - (4 * Math.PI * Math.pow(1, 3) / 3);
-
-            Assertions.assertAll("Validate volume",
-                    () -> assertEquals(vol0, fSphere.getCoatVolume(0),
-                            epsilon, "Coat A volume is erroneous"),
-                    () -> assertEquals(vol1, fSphere.getCoatVolume(1),
-                            epsilon, "Coat B volume is erroneous"),
-                    () -> assertEquals(vol2, fSphere.getCoatVolume(2),
-                            epsilon, "Coat C volume is erroneous"),
-                    () -> assertEquals(volTotal, fSphere.getCoatVolumeTotal(),
-                            epsilon, "The total coat volume is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Get layer volume")
-        void getLayerVolume() {
-            FSphere fSphere = factory.getFSphere();
-
-            fSphere.translate(factory.getFRand().nextDoubleInSphere(100));
-
-            double vol0 = 4 * Math.PI * Math.pow(1, 3) / 3;
-
-            assertEquals(vol0, fSphere.getLayerVolume(0),
-                    epsilon, "Layer 0 volume is erroneous");
-
-            fSphere.addCoat(1, 2, 3);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getLayerVolume(-1),
-                    "The index cannot be lower than zero");
-            assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatVolume(4),
-                    "The index is out of bounds");
-
-
-            double vol1 = (4 * Math.PI * Math.pow(2, 3) / 3) - (4 * Math.PI * Math.pow(1, 3) / 3);
-            double vol2 = (4 * Math.PI * Math.pow(4, 3) / 3) - (4 * Math.PI * Math.pow(2, 3) / 3);
-            double vol3 = (4 * Math.PI * Math.pow(7, 3) / 3) - (4 * Math.PI * Math.pow(4, 3) / 3);
-            double volTotal = vol0 + vol1 + vol2 + vol3;
-
-            Assertions.assertAll("Validate volume",
-                    () -> assertEquals(vol0, fSphere.getLayerVolume(0),
-                            epsilon, "Layer 0 volume is erroneous"),
-                    () -> assertEquals(vol1, fSphere.getLayerVolume(1),
-                            epsilon, "Layer 1 volume is erroneous"),
-                    () -> assertEquals(vol2, fSphere.getLayerVolume(2),
-                            epsilon, "Layer 2 volume is erroneous"),
-                    () -> assertEquals(vol3, fSphere.getLayerVolume(3),
-                            epsilon, "Layer 3 volume is erroneous"),
-                    () -> assertEquals(volTotal, fSphere.getVolumeAlgebraic(),
-                            epsilon, "The total volume is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Get surface")
-        void getSurface() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            double volGet = fSphere.getSurfaceAlgebraic();
-            double volCalc = 4 * Math.PI * Math.pow(5, 2);
-
-            assertEquals(volCalc, volGet,
-                    epsilon, "The FSphere surface is erroneous");
-        }
-
-        @Test
-        @DisplayName("Contains with parameters")
-        void containsWithParameters() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getCenterX();
-            double y = fSphere.getCenterY();
-            double z = fSphere.getCenterZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(x, y, z)),
-                    () -> assertTrue(fSphere.contains(x + mid, y, z)),
-                    () -> assertTrue(fSphere.contains(x - mid, y, z)),
-                    () -> assertTrue(fSphere.contains(x, y + mid, z)),
-                    () -> assertTrue(fSphere.contains(x, y - mid, z)),
-                    () -> assertTrue(fSphere.contains(x, y, z + mid)),
-                    () -> assertTrue(fSphere.contains(x, y, z - mid)),
-                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
-                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with parameters (min)")
-        void containsWithParametersMin() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 0.01);
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getCenterX();
-            double y = fSphere.getCenterY();
-            double z = fSphere.getCenterZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(x, y, z)),
-                    () -> assertTrue(fSphere.contains(x + mid, y, z)),
-                    () -> assertTrue(fSphere.contains(x - mid, y, z)),
-                    () -> assertTrue(fSphere.contains(x, y + mid, z)),
-                    () -> assertTrue(fSphere.contains(x, y - mid, z)),
-                    () -> assertTrue(fSphere.contains(x, y, z + mid)),
-                    () -> assertTrue(fSphere.contains(x, y, z - mid)),
-                    () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
-                    () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with FPoint")
-        void containsWithFPoint() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getCenterX();
-            double y = fSphere.getCenterY();
-            double z = fSphere.getCenterZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x + mid, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x - mid, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + mid, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - mid, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + mid))),
-                    () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - mid))),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x + max, y + max, z + max))),
-                    () -> assertFalse(fSphere.contains(factory.getFPoint(x - max, y - max, z - max)))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with FPos3D")
-        void containsWithFPos3D() {
-            FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
-
-            double max = fSphere.getRadius();
-
-            double x = fSphere.getCenterX();
-            double y = fSphere.getCenterY();
-            double z = fSphere.getCenterZ();
-
-            double mid = max * 0.5;
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x + mid, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x - mid, y, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + mid, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - mid, z))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + mid))),
-                    () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - mid))),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x + max, y + max, z + max))),
-                    () -> assertFalse(fSphere.contains(factory.getFPos3D(x - max, y - max, z - max)))
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with coating and parameters")
-        void containsWithCoatingAndParameters() {
-            FSphere fSphere = factory.getFSphere(2);
-            fSphere.addCoat(2).addCoat(4).addCoat(6);
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertEquals(0, fSphere.locate(1, 1, 1),
-                            "The position is erroneous"),
-                    () -> assertEquals(1, fSphere.locate(3, 0, 0),
-                            "The position is erroneous"),
-                    () -> assertEquals(2, fSphere.locate(0, 6, 0),
-                            "The position is erroneous"),
-                    () -> assertEquals(3, fSphere.locate(0, 0, 11),
-                            "The position is erroneous"),
-                    () -> assertEquals(-1, fSphere.locate(20, 20, 20),
-                            "The position is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with coating and FPoint")
-        void containsWithCoatingAndFPoint() {
-            FSphere fSphere = factory.getFSphere(2);
-            fSphere.addCoat(2).addCoat(4).addCoat(6);
-
-            FPoint fPoint0 = factory.getFPoint(1, 1, 1);
-            FPoint fPoint1 = factory.getFPoint(3, 0, 0);
-            FPoint fPoint2 = factory.getFPoint(0, 6, 0);
-            FPoint fPoint3 = factory.getFPoint(0, 0, 11);
-            FPoint fPointOut = factory.getFPoint(20, 20, 20);
-
-            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(
-                    fSphere, fPoint0, fPoint1, fPoint2, fPoint3, fPointOut
-            ));
-
-            fAssembly.translate(factory.getFRand().nextDoubleInSphere(100));
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertEquals(0, fSphere.locate(fPoint0),
-                            "The position is erroneous"),
-                    () -> assertEquals(1, fSphere.locate(fPoint1),
-                            "The position is erroneous"),
-                    () -> assertEquals(2, fSphere.locate(fPoint2),
-                            "The position is erroneous"),
-                    () -> assertEquals(3, fSphere.locate(fPoint3),
-                            "The position is erroneous"),
-                    () -> assertEquals(-1, fSphere.locate(fPointOut),
-                            "The position is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Contains with coating and FPos3D")
-        void containsWithCoatingAndFPos3D() {
-            FSphere fSphere = factory.getFSphere(2);
-            fSphere.addCoat(2).addCoat(4).addCoat(6);
-
-            FPoint fPoint0 = factory.getFPoint(1, 1, 1);
-            FPoint fPoint1 = factory.getFPoint(3, 0, 0);
-            FPoint fPoint2 = factory.getFPoint(0, 6, 0);
-            FPoint fPoint3 = factory.getFPoint(0, 0, 11);
-            FPoint fPointOut = factory.getFPoint(20, 20, 20);
-
-            FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(
-                    fSphere, fPoint0, fPoint1, fPoint2, fPoint3, fPointOut
-            ));
-
-            fAssembly.translate(factory.getFRand().nextDoubleInSphere(100));
-
-            Assertions.assertAll("Validate positions",
-                    () -> assertEquals(0, fSphere.locate(fPoint0.toFPos3D()),
-                            "The position is erroneous"),
-                    () -> assertEquals(1, fSphere.locate(fPoint1.toFPos3D()),
-                            "The position is erroneous"),
-                    () -> assertEquals(2, fSphere.locate(fPoint2.toFPos3D()),
-                            "The position is erroneous"),
-                    () -> assertEquals(3, fSphere.locate(fPoint3.toFPos3D()),
-                            "The position is erroneous"),
-                    () -> assertEquals(-1, fSphere.locate(fPointOut.toFPos3D()),
-                            "The position is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (epsilon) - same position")
-        void enclosesEpsilonSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertTrue(fSphereA.encloses(fSphereB),
-                            "The sphere should be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (epsilon) - distant")
-        void enclosesEpsilonDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertFalse(fSphereA.encloses(fSphereB),
-                            "The sphere should not be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (epsilon) A")
-        void enclosesEpsilonA() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(4.5, 0, 0, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertFalse(fSphereA.encloses(fSphereB),
-                            "The sphere should not be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (epsilon) B")
-        void enclosesEpsilonB() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(4, 0, 0, 1 - 0.15)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertTrue(fSphereA.encloses(fSphereB),
-                            "The sphere should be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (epsilon) C")
-        void enclosesEpsilonC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertTrue(fSphereA.encloses(fSphereB),
-                            "The sphere should be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The sphere should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (epsilon) D")
-        void enclosesEpsilonD() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(4.1));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertFalse(fSphereA.encloses(fSphereB),
-                            "The sphere should not be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The sphere should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (delta) - same position")
-        void enclosesDeltaSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setEpsilon(-1);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setEpsilon(-1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertTrue(fSphereA.encloses(fSphereB),
-                            "The sphere should be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (delta) - distant")
-        void enclosesDeltaDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setEpsilon(-1);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setEpsilon(-1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertFalse(fSphereA.encloses(fSphereB),
-                            "The sphere should not be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (delta) A")
-        void enclosesDeltaA() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.1);
-            Shape fSphereB = factory.getFSphere(4.5, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertFalse(fSphereA.encloses(fSphereB),
-                            "The sphere should not be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (delta) B")
-        void enclosesDeltaB() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.1);
-            Shape fSphereB = factory.getFSphere(4, 0, 0, 1 - 0.15)
-                    .setEpsilon(-1)
-                    .setDelta(0.1);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertTrue(fSphereA.encloses(fSphereB),
-                            "The sphere should be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The spheres should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (delta) C")
-        void enclosesDeltaC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertTrue(fSphereA.encloses(fSphereB),
-                            "The sphere should be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The sphere should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses (delta) D")
-        void enclosesDeltaD() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(4.1));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertFalse(fSphereA.encloses(fSphereB),
-                            "The sphere should not be enclosed"),
-                    () -> assertFalse(fSphereB.encloses(fSphereA),
-                            "The sphere should not be enclosed")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses, field")
-        void enclosesField() {
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 5);
-
-            Shape fSphereCopy = fSphereRef.copy().setRadius(4.9);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
-            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.encloses(fAssembly);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertEquals(2, count,
-                            "The number of enclosed spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Encloses, field, list")
-        void enclosesFieldList() {
-            List<Shape> elements = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 5);
-
-            Shape fSphereCopy = fSphereRef.copy().setRadius(4.9);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
-            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.encloses(fAssembly, elements);
-
-            Assertions.assertAll("Validate enclosure",
-                    () -> assertEquals(2, count,
-                            "The number of enclosed spheres is incorrect"),
-                    () -> assertEquals(2, elements.size(),
-                            "The number of enclosed spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon)")
-        void intersectsEpsilon() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertTrue(fSphereA.intersects(fSphereB),
-                            "The spheres should intersect"),
-                    () -> assertTrue(fSphereB.intersects(fSphereA),
-                            "The spheres should intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) - same position")
-        void intersectsEpsilonSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) - distant")
-        void intersectsEpsilonDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) - point contact")
-        void intersectsEpsilonPointContact() {
-            Shape fSphereA = factory.getFSphere(-1, 0, 0, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) A")
-        void intersectsEpsilonA() {
-            Shape fSphereA = factory.getFSphere(-1 + 0.01, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) B")
-        void intersectsEpsilonB() {
-            Shape fSphereA = factory.getFSphere(-1 + 0.1, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertTrue(fSphereA.intersects(fSphereB),
-                            "The spheres should intersect"),
-                    () -> assertTrue(fSphereB.intersects(fSphereA),
-                            "The spheres should intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) C")
-        void intersectsEpsilonC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(5));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertTrue(fSphereA.intersects(fSphereB),
-                            "The spheres should intersect"),
-                    () -> assertTrue(fSphereB.intersects(fSphereA),
-                            "The spheres should intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) D")
-        void intersectsEpsilonD() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (epsilon) E")
-        void intersectsEpsilonE() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6.01));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta)")
-        void intersectsDelta() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertTrue(fSphereA.intersects(fSphereB),
-                            "The spheres should intersect"),
-                    () -> assertTrue(fSphereB.intersects(fSphereA),
-                            "The spheres should intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) - same position")
-        void intersectsDeltaSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setEpsilon(-1);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setEpsilon(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) - distant")
-        void intersectsDeltaDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setEpsilon(-1);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setEpsilon(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) - point contact")
-        void intersectsDeltaPointContact() {
-            Shape fSphereA = factory.getFSphere(-1, 0, 0, 1)
-                    .setEpsilon(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(-1);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) A")
-        void intersectsDeltaA() {
-            Shape fSphereA = factory.getFSphere(-1 + 0.01, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) B")
-        void intersectsDeltaB() {
-            Shape fSphereA = factory.getFSphere(-1 + 0.1, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertTrue(fSphereA.intersects(fSphereB),
-                            "The spheres should intersect"),
-                    () -> assertTrue(fSphereB.intersects(fSphereA),
-                            "The spheres should intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) C")
-        void intersectsDeltaC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(5));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertTrue(fSphereA.intersects(fSphereB),
-                            "The spheres should intersect"),
-                    () -> assertTrue(fSphereB.intersects(fSphereA),
-                            "The spheres should intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) D")
-        void intersectsDeltaD() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects (delta) E")
-        void intersectsDeltaE() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6.01));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate intersection",
-                    () -> assertFalse(fSphereA.intersects(fSphereB),
-                            "The spheres should not intersect"),
-                    () -> assertFalse(fSphereB.intersects(fSphereA),
-                            "The spheres should not intersect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects, field")
-        void intersectsField() {
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
-            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.intersects(fAssembly);
-
-            Assertions.assertAll("Validate intersections",
-                    () -> assertEquals(2, count,
-                            "The number of intersecting spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Intersects, field, list")
-        void intersectsFieldList() {
-            List<Shape> elements = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
-            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.intersects(fAssembly, elements);
-
-            Assertions.assertAll("Validate intersections",
-                    () -> assertEquals(2, count,
-                            "The number of intersecting spheres is incorrect"),
-                    () -> assertEquals(2, elements.size(),
-                            "The number of intersecting spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon)")
-        void touchesEpsilon() {
-            Shape fSphereA = factory.getFSphere(0, 1, 0, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, -1, 0, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) - same position")
-        void touchesEpsilonSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) - distant")
-        void touchesEpsilonDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) A")
-        void touchesEpsilonA() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) B")
-        void touchesEpsilonB() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1 - 0.01)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) C")
-        void touchesEpsilonC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) D")
-        void touchesEpsilonD() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) E")
-        void touchesEpsilonE() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) A - fail")
-        void touchesEpsilonFailA() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(0.01)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
-                    .setEpsilon(0.01)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (epsilon) B - fail")
-        void touchesEpsilonFailB() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(0.01)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1 - 0.025, 0, 0, 1)
-                    .setEpsilon(0.01)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta)")
-        void touchesDelta() {
-            Shape fSphereA = factory.getFSphere(0, 1, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(0, -1, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) - same position")
-        void touchesDeltaSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) - distant")
-        void touchesDeltaDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) A")
-        void touchesDeltaA() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-            Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) B")
-        void touchesDeltaB() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1 - 0.01)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) C")
-        void touchesDeltaC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.touches(fSphereB),
-                            "The spheres should be in point contact"),
-                    () -> assertTrue(fSphereB.touches(fSphereA),
-                            "The spheres should be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) D")
-        void touchesDeltaD() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) E")
-        void touchesDeltaE() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) A - fail")
-        void touchesDeltaFailA() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches (delta) B - fail")
-        void touchesDeltaFailB() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1 - 0.025, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.touches(fSphereB),
-                            "The spheres should not be in point contact"),
-                    () -> assertFalse(fSphereB.touches(fSphereA),
-                            "The spheres should not be in point contact")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches, field")
-        void touchesField() {
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(0, 2, 0, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.touches(fAssembly);
-
-            Assertions.assertAll("Validate touch",
-                    () -> assertEquals(2, count,
-                            "The number of touching spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches, field, delta")
-        void touchesFieldDelta() {
-            List<Shape> elements = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(0, 2, 0, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.touches(fAssembly, elements);
-
-            Assertions.assertAll("Validate touch",
-                    () -> assertEquals(2, count,
-                            "The number of touching spheres is incorrect"),
-                    () -> assertEquals(2, elements.size(),
-                            "The number of touching spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon) - same position")
-        void overlapsEpsilonSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon) - distant")
-        void overlapsEpsilonDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should not overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should not overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon) - A")
-        void overlapsEpsilonA() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon) - B")
-        void overlapsEpsilonB() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon) - C")
-        void overlapsEpsilonC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon)")
-        void overlapsEpsilon() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon) - fail")
-        void overlapsEpsilonFail() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon, min)")
-        void overlapsEpsilonMin() {
-            Shape fSphereA = factory.getFSphere(0.03, 0, 0, 0.01)
-                    .setEpsilon(1E-6)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0.01001, 0, 0, 0.01)
-                    .setEpsilon(1E-6)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (epsilon, min) - fail")
-        void overlapsEpsilonFailMin() {
-            Shape fSphereA = factory.getFSphere(0.03, 0, 0, 0.01)
-                    .setEpsilon(1E-4)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0.01001, 0, 0, 0.01)
-                    .setEpsilon(1E-4)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should not overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should not overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) A - fail")
-        void overlapsDeltaFailA() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) B - fail")
-        void overlapsDeltaFailB() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1 - 0.025, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate point contact",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should not overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should not overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) - same position")
-        void overlapsDeltaSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) - distant")
-        void overlapsDeltaDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should not overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should not overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) - A")
-        void overlapsDeltaA() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) - B")
-        void overlapsDeltaB() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) - C")
-        void overlapsDeltaC() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta)")
-        void overlapsDelta() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertTrue(fSphereA.overlaps(fSphereB),
-                            "The spheres should overlap"),
-                    () -> assertTrue(fSphereB.overlaps(fSphereA),
-                            "The spheres should overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps (delta) - fail")
-        void overlapsDeltaFail() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-            Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertFalse(fSphereA.overlaps(fSphereB),
-                            "The spheres should not overlap"),
-                    () -> assertFalse(fSphereB.overlaps(fSphereA),
-                            "The spheres should not overlap")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps, field")
-        void overlapsField() {
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.overlaps(fAssembly);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertEquals(3, count,
-                            "The number of overlapping spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Overlaps, field, list")
-        void overlapsFieldList() {
-            List<Shape> elements = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.overlaps(fAssembly, elements);
-
-            Assertions.assertAll("Validate overlap",
-                    () -> assertEquals(3, count,
-                            "The number of overlapping spheres is incorrect"),
-                    () -> assertEquals(3, elements.size(),
-                            "The number of overlapping spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (epsilon) - same position")
-        void repelsEpsilonSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertFalse(fSphereA.repels(fSphereB),
-                            "The spheres should not be distant"),
-                    () -> assertFalse(fSphereB.repels(fSphereA),
-                            "The spheres should not be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (epsilon) - distant")
-        void repelsEpsilonDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertTrue(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertTrue(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (epsilon) - A")
-        void repelsEpsilonA() {
-            Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                    .setDelta(-1);
-
-            FRandGenerator rand = factory.getFRand();
-
-            fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
-
-            FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
-
-            fSphereA.translate(translation);
-            fSphereB.translate(translation);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertFalse(fSphereA.repels(fSphereB),
-                            "The spheres should not be distant"),
-                    () -> assertFalse(fSphereB.repels(fSphereA),
-                            "The spheres should not be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (epsilon) - B")
-        void repelsEpsilonB() {
-            Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertTrue(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertTrue(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (epsilon) - C")
-        void repelsEpsilonC() {
-            Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(0.05)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertFalse(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertFalse(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (epsilon, min) - A")
-        void repelsEpsilonMinA() {
-            Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
-                    .setEpsilon(1E-6)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0.01, 0, 0, 0.01)
-                    .setEpsilon(1E-6)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertTrue(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertTrue(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (epsilon, min) - B")
-        void repelsEpsilonMinB() {
-            Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
-                    .setEpsilon(1E-4)
-                    .setDelta(-1);
-            Shape fSphereB = factory.getFSphere(0.01, 0, 0, 0.01)
-                    .setEpsilon(1E-4)
-                    .setDelta(-1);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertFalse(fSphereA.repels(fSphereB),
-                            "The spheres should not be distant"),
-                    () -> assertFalse(fSphereB.repels(fSphereA),
-                            "The spheres should not be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (delta) - same position")
-        void repelsDeltaSamePosition() {
-            Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertFalse(fSphereA.repels(fSphereB),
-                            "The spheres should not be distant"),
-                    () -> assertFalse(fSphereB.repels(fSphereA),
-                            "The spheres should not be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (delta) - distant")
-        void repelsDeltaDistant() {
-            Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertTrue(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertTrue(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (delta) - A")
-        void repelsDeltaA() {
-            Shape fSphereA = factory.getFSphere(3 + 0.025, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertTrue(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertTrue(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (delta) - B")
-        void repelsDeltaB() {
-            Shape fSphereA = factory.getFSphere(3 - 0.025, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.01);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertFalse(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertFalse(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (delta) - C")
-        void repelsDeltaC() {
-            Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.005);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertTrue(fSphereA.repels(fSphereB),
-                            "The spheres should be distant"),
-                    () -> assertTrue(fSphereB.repels(fSphereA),
-                            "The spheres should be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels (delta) - D")
-        void repelsDeltaD() {
-            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-            Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
-                    .setEpsilon(-1)
-                    .setDelta(0.05);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertFalse(fSphereA.repels(fSphereB),
-                            "The spheres should not be distant"),
-                    () -> assertFalse(fSphereB.repels(fSphereA),
-                            "The spheres should not be distant")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels, field")
-        void repelsField() {
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.repels(fAssembly);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertEquals(1, count,
-                            "The number of distant spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Repels, field, list")
-        void repelsFieldList() {
-            List<Shape> elements = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.repels(fAssembly, elements);
-
-            Assertions.assertAll("Validate distance",
-                    () -> assertEquals(1, count,
-                            "The number of distant spheres is incorrect"),
-                    () -> assertEquals(1, elements.size(),
-                            "The number of distant spheres is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches or repels")
-        void touchesOrRepels() {
-
-            assertFalse(factory.getFSphere().touchesOrRepels(factory.getFSphere(1, 0, 0)));
-            assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(2, 0, 0)));
-            assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(3, 0, 0)));
-        }
-
-        @Test
-        @DisplayName("Touches or repels, field")
-        void touchesOrRepelsField() {
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.touchesOrRepels(fAssembly);
-
-            Assertions.assertAll("Validate condition",
-                    () -> assertEquals(2, count,
-                            "The condition is not satisfied")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches or repels, field, list")
-        void touchesOrRepelsFieldList() {
-            List<Shape> elements = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.touchesOrRepels(fAssembly, elements);
-
-            Assertions.assertAll("Validate condition",
-                    () -> assertEquals(2, count,
-                            "The condition is not satisfied"),
-                    () -> assertEquals(2, elements.size(),
-                            "The condition is not satisfied")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches or overlaps")
-        void touchesOrOverlaps() {
-
-            assertTrue(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(1, 0, 0)));
-            assertTrue(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(2, 0, 0)));
-            assertFalse(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(3, 0, 0)));
-        }
-
-        @Test
-        @DisplayName("Touches or overlaps, field")
-        void touchesOrOverlapsField() {
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.touchesOrOverlaps(fAssembly);
-
-            Assertions.assertAll("Validate condition",
-                    () -> assertEquals(3, count,
-                            "The condition is not satisfied")
-            );
-        }
-
-        @Test
-        @DisplayName("Touches or overlaps, field, list")
-        void touchesOrOverlapsFieldList() {
-            List<Shape> elements = new ArrayList<>();
-
-            Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
-
-            Shape fSphereCopy = fSphereRef.copy();
-            Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
-            Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
-            Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(
-                    List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
-            );
-
-            int count = fSphereRef.touchesOrOverlaps(fAssembly, elements);
-
-            Assertions.assertAll("Validate condition",
-                    () -> assertEquals(3, count,
-                            "The condition is not satisfied"),
-                    () -> assertEquals(3, elements.size(),
-                            "The condition is not satisfied")
-            );
+        @Nested
+        @Tag("Module - Dimension")
+        @DisplayName("Functionality - Advanced (dimension)")
+        class FSphereModuleDimensionTest {
+
+            @Test
+            @DisplayName("Set radius")
+            void setRadius() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                Shape results = fSphere.setRadius(10);
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(10, fSphere.getRadius(),
+                                "The radius is incorrect"),
+                        () -> assertSame(results, fSphere,
+                                "The reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set inner radius")
+            void setInnerRadius() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                Shape results = fSphere.setInnerRadius(11);
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(11, fSphere.getInnerRadius(),
+                                "The radius is incorrect"),
+                        () -> assertSame(results, fSphere,
+                                "The reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set radius with coating")
+            void setRadiusWithCoating() {
+                FSphere fSphere = factory.getFSphere();
+
+                fSphere.addCoat(1, 2, 3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.setRadius(5),
+                        "The radius cannot be smaller than the width of the coating");
+
+                fSphere.setRadius(10);
+
+                Assertions.assertAll("Validate layers",
+                        () -> assertEquals(1, fSphere.getCoatWidth(0),
+                                "Coat 0 width is incorrect"),
+                        () -> assertEquals(2, fSphere.getCoatWidth(1),
+                                "Coat 1 width is incorrect"),
+                        () -> assertEquals(3, fSphere.getCoatWidth(2),
+                                "Coat 2 width is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Set inner radius with coating")
+            void setInnerRadiusWithCoating() {
+                FSphere fSphere = factory.getFSphere();
+
+                fSphere.addCoat(1, 2, 3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.setInnerRadius(5),
+                        "The radius cannot be smaller than the width of the coating");
+
+                fSphere.setInnerRadius(10);
+
+                Assertions.assertAll("Validate layers",
+                        () -> assertEquals(1, fSphere.getCoatWidth(0),
+                                "Coat 0 width is incorrect"),
+                        () -> assertEquals(2, fSphere.getCoatWidth(1),
+                                "Coat 1 width is incorrect"),
+                        () -> assertEquals(3, fSphere.getCoatWidth(2),
+                                "Coat 2 width is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Add coat")
+            void addCoat() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                Shape results = fSphere.addCoat(3);
+
+                assertEquals(13, fSphere.getRadius(),
+                        EPSILON, "The radius is incorrect");
+                assertSame(fSphere, results,
+                        "The reference should not change");
+
+                fSphere.addCoat(2);
+                fSphere.addCoat(1);
+
+                assertEquals(16, fSphere.getRadius(),
+                        "The radius is incorrect");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoat(-1),
+                        "The coat width cannot be negative");
+            }
+
+            @Test
+            @DisplayName("Add coat vararg")
+            void addCoatVararg() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                Shape results = fSphere.addCoat(3, 2, 1);
+
+                assertEquals(16, fSphere.getRadius(),
+                        "The radius is incorrect");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoat(-1),
+                        "The coat width cannot be negative");
+                assertSame(fSphere, results,
+                        "The reference should not change");
+            }
+
+            @Test
+            @DisplayName("Add internal coat")
+            void addInternalCoat() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                Shape results = fSphere.addCoatInternal(3);
+
+                assertEquals(10, fSphere.getRadius(),
+                        EPSILON, "The radius is incorrect");
+                assertSame(fSphere, results,
+                        "The reference should not change");
+
+                fSphere.addCoatInternal(2);
+                fSphere.addCoatInternal(1);
+
+                assertEquals(10, fSphere.getRadius(),
+                        "The radius is incorrect");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
+                        "The coat width cannot be negative");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(10),
+                        "The coat width is too large");
+            }
+
+            @Test
+            @DisplayName("Add internal coat vararg")
+            void addInternalCoatVararg() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                Shape results = fSphere.addCoatInternal(3, 2, 1);
+
+                assertEquals(10, fSphere.getRadius(),
+                        "The radius is incorrect");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
+                        "The coat width cannot be negative");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(10),
+                        "The coat width is too large");
+                assertSame(fSphere, results,
+                        "The reference should not change");
+            }
+
+            @Test
+            @DisplayName("Set coat width")
+            void setCoatWidth() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3);
+
+                fSphere.addCoat(3).addCoat(2).addCoat(1);
+
+                Shape results = fSphere.setCoatWidth(2, 5);
+
+                assertEquals(fSphere, results,
+                        "The reference should not change");
+                assertEquals(5, fSphere.getCoatWidth(2),
+                        epsilon, "The coat width is erroneous");
+            }
+
+            @Test
+            @DisplayName("Get coat width")
+            void getCoatWidth() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(0),
+                        "The shape is not coated");
+
+                fSphere.addCoat(3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(-1),
+                        "The index is lower then zero");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(1),
+                        "The index is erroneous");
+
+                fSphere.addCoat(2);
+                fSphere.addCoat(1);
+
+                assertEquals(16, fSphere.getRadius(),
+                        EPSILON, "The shape radius is erroneous");
+                assertEquals(3, fSphere.getCoatWidth(0),
+                        EPSILON, "The coat width is erroneous");
+                assertEquals(2, fSphere.getCoatWidth(1),
+                        EPSILON, "The coat width is erroneous");
+                assertEquals(1, fSphere.getCoatWidth(2),
+                        EPSILON, "The coat width is erroneous");
+            }
+
+            @Test
+            @DisplayName("Get internal coat width")
+            void getInternalCoatWidth() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(0),
+                        "The shape is not coated");
+
+                fSphere.addCoatInternal(3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(-1),
+                        "The index is lower then zero");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatWidth(1),
+                        "The index is erroneous");
+
+                fSphere.addCoatInternal(2);
+                fSphere.addCoatInternal(1);
+
+                assertEquals(10, fSphere.getRadius(),
+                        EPSILON, "The shape radius is erroneous");
+                assertEquals(3, fSphere.getCoatWidth(0),
+                        EPSILON, "The coat width is erroneous");
+                assertEquals(2, fSphere.getCoatWidth(1),
+                        EPSILON, "The coat width is erroneous");
+                assertEquals(1, fSphere.getCoatWidth(2),
+                        EPSILON, "The coat width is erroneous");
+            }
+
+            @Test
+            @DisplayName("Get total coat width")
+            void getTotalCoatWidth() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                fSphere.addCoat(3);
+                fSphere.addCoatInternal(2);
+
+                assertEquals(5, fSphere.getLayerWidthRemaining(0),
+                        EPSILON, "The total coat width is erroneous");
+            }
+
+            @Test
+            @DisplayName("Get coat count")
+            void getCoatCount() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                assertEquals(0, fSphere.getCoatCount(),
+                        "The FSphere is not coated");
+
+                fSphere.addCoat(3);
+                fSphere.addCoat(2);
+                fSphere.addCoat(1);
+
+                assertEquals(3, fSphere.getCoatCount(),
+                        "The number of coats is erroneous");
+            }
+
+            @Test
+            @DisplayName("Get internal coat count")
+            void getInternalCoatCount() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                assertEquals(0, fSphere.getCoatCount(),
+                        "The FSphere is not coated");
+
+                fSphere.addCoatInternal(3);
+                fSphere.addCoatInternal(2);
+                fSphere.addCoatInternal(1);
+
+                assertEquals(3, fSphere.getCoatCount(),
+                        "The number of coats is erroneous");
+            }
+
+            @Test
+            @DisplayName("Get layer count")
+            void getLayerCount() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                assertEquals(1, fSphere.getLayerCount(),
+                        "The FSphere is not coated");
+
+                fSphere.addCoat(3, 2, 1);
+
+                assertEquals(4, fSphere.getLayerCount(),
+                        "The number of layers is erroneous");
+            }
+
+            @Test
+            @DisplayName("Get internal layer count")
+            void getInternalLayerCount() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                assertEquals(1, fSphere.getLayerCount(),
+                        "The FSphere is not coated");
+
+                fSphere.addCoatInternal(3, 2, 1);
+
+                assertEquals(4, fSphere.getLayerCount(),
+                        "The number of layers is erroneous");
+            }
+
+            @Test
+            @DisplayName("Apply coats")
+            void applyCoats() {
+                FSphere fSphereRef = factory.getFSphere(1, 2, 3, 10);
+                FSphere fSphereArg = factory.getFSphere();
+
+                fSphereArg.addCoat(3, 2, 1);
+
+                Shape results = fSphereRef.applyCoatsFrom(fSphereArg);
+
+                assertEquals(3, fSphereRef.getCoatCount(),
+                        "The number of coats is incorrect");
+                assertEquals(3, fSphereRef.getCoatWidth(0),
+                        EPSILON, "The coat width is erroneous");
+                assertEquals(2, fSphereRef.getCoatWidth(1),
+                        EPSILON, "The coat width is erroneous");
+                assertEquals(1, fSphereRef.getCoatWidth(2),
+                        EPSILON, "The coat width is erroneous");
+                assertSame(fSphereRef, results,
+                        "The reference should not change");
+            }
+
+            @Test
+            @DisplayName("Remove coats")
+            void removeCoats() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 10);
+
+                fSphere.addCoat(3, 2, 1);
+                Shape results = fSphere.removeCoats();
+
+                assertEquals(0, fSphere.getCoatCount(),
+                        "The number of coats is incorrect");
+                assertSame(fSphere, results,
+                        "The reference should not change");
+            }
+
+            @Test
+            @DisplayName("Get layer volume")
+            void getLayerVolume() {
+                FSphere fSphere = factory.getFSphere();
+
+                fSphere.translate(factory.getFRand().nextDoubleInSphere(100));
+
+                double vol0 = 4 * Math.PI * Math.pow(1, 3) / 3;
+
+                assertEquals(vol0, fSphere.getLayerVolume(0),
+                        epsilon, "Layer 0 volume is erroneous");
+
+                fSphere.addCoat(1, 2, 3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getLayerVolume(-1),
+                        "The index cannot be lower than zero");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getLayerVolume(4),
+                        "The index is out of bounds");
+
+
+                double vol1 = (4 * Math.PI * Math.pow(2, 3) / 3) - (4 * Math.PI * Math.pow(1, 3) / 3);
+                double vol2 = (4 * Math.PI * Math.pow(4, 3) / 3) - (4 * Math.PI * Math.pow(2, 3) / 3);
+                double vol3 = (4 * Math.PI * Math.pow(7, 3) / 3) - (4 * Math.PI * Math.pow(4, 3) / 3);
+                double volTotal = vol0 + vol1 + vol2 + vol3;
+
+                Assertions.assertAll("Validate volume",
+                        () -> assertEquals(vol0, fSphere.getLayerVolume(0),
+                                epsilon, "Layer 0 volume is erroneous"),
+                        () -> assertEquals(vol1, fSphere.getLayerVolume(1),
+                                epsilon, "Layer 1 volume is erroneous"),
+                        () -> assertEquals(vol2, fSphere.getLayerVolume(2),
+                                epsilon, "Layer 2 volume is erroneous"),
+                        () -> assertEquals(vol3, fSphere.getLayerVolume(3),
+                                epsilon, "Layer 3 volume is erroneous"),
+                        () -> assertEquals(volTotal, fSphere.getVolumeAlgebraic(),
+                                epsilon, "The total volume is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Get coat volume")
+            void getCoatVolume() {
+                FSphere fSphere = factory.getFSphere();
+
+                fSphere.translate(factory.getFRand().nextDoubleInSphere(100));
+
+                assertEquals(0, fSphere.getCoatVolume(),
+                        epsilon, "The total coat volume is erroneous");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatVolume(0),
+                        "The shape is not coated");
+
+                fSphere.addCoat(1, 2, 3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatVolume(-1),
+                        "The index cannot be lower than zero");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatVolume(3),
+                        "The index is out of bounds");
+
+                double vol0 = (4 * Math.PI * Math.pow(2, 3) / 3) - (4 * Math.PI * Math.pow(1, 3) / 3);
+                double vol1 = (4 * Math.PI * Math.pow(4, 3) / 3) - (4 * Math.PI * Math.pow(2, 3) / 3);
+                double vol2 = (4 * Math.PI * Math.pow(7, 3) / 3) - (4 * Math.PI * Math.pow(4, 3) / 3);
+                double volTotal = (4 * Math.PI * Math.pow(7, 3) / 3) - (4 * Math.PI * Math.pow(1, 3) / 3);
+
+                Assertions.assertAll("Validate volume",
+                        () -> assertEquals(vol0, fSphere.getCoatVolume(0),
+                                epsilon, "Coat A volume is erroneous"),
+                        () -> assertEquals(vol1, fSphere.getCoatVolume(1),
+                                epsilon, "Coat B volume is erroneous"),
+                        () -> assertEquals(vol2, fSphere.getCoatVolume(2),
+                                epsilon, "Coat C volume is erroneous"),
+                        () -> assertEquals(volTotal, fSphere.getCoatVolume(),
+                                epsilon, "The total coat volume is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Get volume algebraic")
+            void getVolumeAlgebraic() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
+
+                double volActual = fSphere.getVolumeAlgebraic();
+                double volExpected = factory.getFSphereHelper().getVolume(5);
+
+                assertEquals(volExpected, volActual, epsilon);
+            }
+
+            @Test
+            @DisplayName("Volume layer overlap - Distant")
+            void volumeLayerOverlapDistant() {
+                double delta = 0.05;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 1)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fAssembly.translate(offset);
+
+                double volUnit = fSphereRef.fillVolumeLayerOverlap(fLayer, fAssembly);
+
+                double volActual = fLayer.get() * volUnit;
+                double volExpected = fSphereRef.getVolumeAlgebraic();
+
+                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, volActual);
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(volUnit, delta * delta * delta,
+                                epsilon, "The volume unit is erroneous"),
+                        () -> assertTrue(volRelErr < 0.005,
+                                "The relative error is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Volume layer overlap - Double (close)")
+            void volumeLayerOverlapDoubleClose() {
+                double delta = 0.05;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(1, 0, 0, 1)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fAssembly.translate(offset);
+
+                double volUnit = fSphereRef.fillVolumeLayerOverlap(fLayer, fAssembly);
+
+                double volExpected = fSphereRef.getVolumeAlgebraic();
+                double volExpectedCommon = factory.getFSphereHelper().getVolumeCommon(
+                        factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1
+                );
+
+                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, fLayer.addSelf() * volUnit);
+                double volRelErrCommon = factory.getFStatHelper().getRelErr(volExpectedCommon, fLayer.get(1) * volUnit);
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(volUnit, delta * delta * delta,
+                                epsilon, "The volume unit is erroneous"),
+                        () -> assertTrue(volRelErr < 0.005,
+                                "The relative error is erroneous"),
+                        () -> assertTrue(volRelErrCommon < 0.005,
+                                "The common relative error is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Volume layer overlap - Multiple (close)")
+            void volumeLayerOverlapMultipleClose() {
+                double delta = 0.05;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                        .setDelta(delta);
+                Shape fSphereB = factory.getFSphere(1)
+                        .setDelta(delta);
+                Shape fSphereC = factory.getFSphere(2, 2, 2, 3)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fAssembly.translate(offset);
+
+                double volUnit = fSphereRef.fillVolumeLayerOverlap(fLayer, fAssembly);
+
+                double volActual = fLayer.addSelf() * volUnit;
+                double volExpected = fSphereRef.getVolumeAlgebraic();
+
+                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, volActual);
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(volUnit, delta * delta * delta,
+                                epsilon, "The volume unit is erroneous"),
+                        () -> assertTrue(volRelErr < 0.005,
+                                "The relative error is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Volume layer")
+            void volumeLayer() {
+                double delta = 0.1;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphere = factory.getFSphere(1)
+                        .addCoat(1, 1, 1)
+                        .setDelta(delta);
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fSphere.translate(offset);
+
+                double volUnit = fSphere.fillVolumeLayer(fLayer);
+
+                double volTotal = fSphere.getVolumeAlgebraic();
+                double volActual0 = fSphere.getLayerVolume(0);
+                double volActual1 = fSphere.getLayerVolume(1);
+                double volActual2 = fSphere.getLayerVolume(2);
+                double volActual3 = fSphere.getLayerVolume(3);
+
+                double volRelErr = factory.getFStatHelper().getRelErr(volTotal, fLayer.addSelf() * volUnit);
+                double volRelErr0 = factory.getFStatHelper().getRelErr(volActual0, fLayer.get(0) * volUnit);
+                double volRelErr1 = factory.getFStatHelper().getRelErr(volActual1, fLayer.get(1) * volUnit);
+                double volRelErr2 = factory.getFStatHelper().getRelErr(volActual2, fLayer.get(2) * volUnit);
+                double volRelErr3 = factory.getFStatHelper().getRelErr(volActual3, fLayer.get(3) * volUnit);
+
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(volUnit, delta * delta * delta,
+                                epsilon, "The volume unit is erroneous"),
+                        () -> assertTrue(volRelErr0 < 0.005,
+                                "Layer 0 volume is erroneous"),
+                        () -> assertTrue(volRelErr1 < 0.005,
+                                "Layer 1 volume is erroneous"),
+                        () -> assertTrue(volRelErr2 < 0.005,
+                                "Layer 2 volume is erroneous"),
+                        () -> assertTrue(volRelErr3 < 0.005,
+                                "Layer 3 volume is erroneous"),
+                        () -> assertTrue(volRelErr < 0.005,
+                                "The volume is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Volume array")
+            void volumeArray() {
+                double delta = 0.1;
+
+                FArray<DipoleData> fArray = factory.getFArray(300000);
+
+                Shape fSphere = factory.getFSphere(1)
+                        .addCoat(1, 1, 1)
+                        .setDelta(delta);
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fSphere.translate(offset);
+
+                double volUnit = fSphere.fillVolumeArray(fArray);
+
+                double volExpected = fSphere.getVolumeAlgebraic();
+                double volExpected0 = fSphere.getLayerVolume(0);
+                double volExpected1 = fSphere.getLayerVolume(1);
+                double volExpected2 = fSphere.getLayerVolume(2);
+                double volExpected3 = fSphere.getLayerVolume(3);
+
+                int[] volActual = new int[4];
+
+                fArray.forEach((i, d0, d1, d2, data) -> {
+                    volActual[data.getLayer()]++;
+                });
+
+                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, fArray.size() * volUnit);
+                double volRelErr0 = factory.getFStatHelper().getRelErr(volExpected0, volActual[0] * volUnit);
+                double volRelErr1 = factory.getFStatHelper().getRelErr(volExpected1, volActual[1] * volUnit);
+                double volRelErr2 = factory.getFStatHelper().getRelErr(volExpected2, volActual[2] * volUnit);
+                double volRelErr3 = factory.getFStatHelper().getRelErr(volExpected3, volActual[3] * volUnit);
+
+                int duplicates = fArray.deduplicate();
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(volUnit, delta * delta * delta,
+                                epsilon, "The volume unit is erroneous"),
+                        () -> assertEquals(0, duplicates,
+                                "The array should not contain duplicates"),
+                        () -> assertTrue(volRelErr0 < 0.005,
+                                "Mesh 0 volume is erroneous"),
+                        () -> assertTrue(volRelErr1 < 0.005,
+                                "Mesh 1 volume is erroneous"),
+                        () -> assertTrue(volRelErr2 < 0.005,
+                                "Mesh 2 volume is erroneous"),
+                        () -> assertTrue(volRelErr3 < 0.005,
+                                "Mesh 3 volume is erroneous"),
+                        () -> assertTrue(volRelErr < 0.005,
+                                "The volume is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Volume layer - Volume unit")
+            void volumeLayerVolumeUnit() {
+                double delta = 0.1;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                double volUnit = fSphereRef.fillVolumeLayer(fLayer, fAssembly.asList());
+
+                assertEquals(0.001, volUnit, epsilon);
+            }
+
+            @Test
+            @DisplayName("Volume layer - Erroneous shape")
+            void volumeLayerErroneousShape() {
+                double delta = 1;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereArg));
+
+                assertThrows(IllegalArgumentException.class,
+                        () -> fSphereRef.fillVolumeLayer(fLayer, fAssembly.asList()));
+            }
+
+            @Test
+            @DisplayName("Volume array - Volume unit")
+            void volumeArrayVolumeUnit() {
+                double delta = 0.1;
+
+                FArray<DipoleData> fArray = factory.getFArray(1000);
+
+                Shape fSphereRef = factory.getFSphere( 0.5)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                double volUnit = fSphereRef.fillVolumeArray(fArray, fAssembly.asList());
+
+                assertEquals(0.001, volUnit, epsilon);
+            }
+
+            @Test
+            @DisplayName("Volume array - Erroneous shape")
+            void volumeArrayErroneousShape() {
+                double delta = 1;
+
+                FArray<DipoleData> fArray = factory.getFArray(1000);
+
+                Shape fSphereRef = factory.getFSphere( 0.5)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereArg));
+
+                assertThrows(IllegalArgumentException.class,
+                        () -> fSphereRef.fillVolumeArray(fArray, fAssembly.asList()));
+            }
+
+            @Test
+            @DisplayName("Get layer surface")
+            void getLayerSurface() {
+                FSphere fSphere = factory.getFSphere();
+
+                fSphere.translate(factory.getFRand().nextDoubleInSphere(100));
+
+                double srf0 = 4 * Math.PI * Math.pow(1, 2);
+
+                assertEquals(srf0, fSphere.getLayerSurface(0),
+                        epsilon, "Layer 0 surface is erroneous");
+
+                fSphere.addCoat(1, 2, 3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getLayerSurface(-1),
+                        "The index cannot be lower than zero");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getLayerSurface(4),
+                        "The index is out of bounds");
+
+
+                double srf1 = (4 * Math.PI * Math.pow(2, 2));
+                double srf2 = (4 * Math.PI * Math.pow(4, 2));
+                double srf3 = (4 * Math.PI * Math.pow(7, 2));
+
+                Assertions.assertAll("Validate surface",
+                        () -> assertEquals(srf0, fSphere.getLayerSurface(0),
+                                epsilon, "Layer 0 surface is erroneous"),
+                        () -> assertEquals(srf1, fSphere.getLayerSurface(1),
+                                epsilon, "Layer 1 surface is erroneous"),
+                        () -> assertEquals(srf2, fSphere.getLayerSurface(2),
+                                epsilon, "Layer 2 surface is erroneous"),
+                        () -> assertEquals(srf3, fSphere.getLayerSurface(3),
+                                epsilon, "Layer 3 surface is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Get coat surface")
+            void getCoatSurface() {
+                FSphere fSphere = factory.getFSphere();
+
+                fSphere.translate(factory.getFRand().nextDoubleInSphere(100));
+
+                assertEquals(0, fSphere.getCoatSurface(),
+                        epsilon, "The total coat surface is erroneous");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatSurface(0),
+                        "The shape is not coated");
+
+                fSphere.addCoat(1, 2, 3);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatSurface(-1),
+                        "The index cannot be lower than zero");
+                assertThrows(IllegalArgumentException.class, () -> fSphere.getCoatSurface(3),
+                        "The index is out of bounds");
+
+                double srf0 = (4 * Math.PI * Math.pow(2, 2));
+                double srf1 = (4 * Math.PI * Math.pow(4, 2));
+                double srf2 = (4 * Math.PI * Math.pow(7, 2));
+                double srfTotal = srf0 + srf1 + srf2;
+
+                Assertions.assertAll("Validate surface",
+                        () -> assertEquals(srf0, fSphere.getCoatSurface(0),
+                                epsilon, "Coat A surface is erroneous"),
+                        () -> assertEquals(srf1, fSphere.getCoatSurface(1),
+                                epsilon, "Coat B surface is erroneous"),
+                        () -> assertEquals(srf2, fSphere.getCoatSurface(2),
+                                epsilon, "Coat C surface is erroneous"),
+                        () -> assertEquals(srfTotal, fSphere.getCoatSurface(),
+                                epsilon, "The total coat surface is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Get surface algebraic")
+            void getSurfaceAlgebraic() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
+
+                double srfActual = fSphere.getSurfaceAlgebraic();
+                double srfExpected = factory.getFSphereHelper().getSurface(5);
+
+                assertEquals(srfExpected, srfActual, epsilon);
+            }
+
+            @Test
+            @DisplayName("Surface layer overlap - Distant")
+            void surfaceLayerOverlapDistant() {
+                double delta = 0.01;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 1)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fAssembly.translate(offset);
+
+                double srfUnit = fSphereRef.fillSurfaceLayerOverlap(fLayer, fAssembly);
+
+                double srfActual = fLayer.get() * srfUnit;
+                double srfExpected = fSphereRef.getSurfaceAlgebraic();
+
+                double srfRelErr = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(srfUnit, delta * delta,
+                                epsilon, "The surface unit is erroneous"),
+                        () -> assertTrue(srfRelErr < 0.005,
+                                "The relative error is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Surface layer overlap - Double (close)")
+            void surfaceLayerOverlapDoubleClose() {
+                double delta = 0.01;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(1, 0, 0, 1)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fAssembly.translate(offset);
+
+                double srfUnit = fSphereRef.fillSurfaceLayerOverlap(fLayer, fAssembly);
+
+                double srfExpected = fSphereRef.getSurfaceAlgebraic();
+                double srfExpectedCommon = 0.5 * factory.getFSphereHelper().getSurfaceCommon(
+                        factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1
+                );
+
+                double srfRelErr = factory.getFStatHelper().getRelErr(srfExpected, fLayer.addSelf() * srfUnit);
+                double srfRelErrCommon = factory.getFStatHelper().getRelErr(srfExpectedCommon, fLayer.get(1) * srfUnit);
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(srfUnit, delta * delta,
+                                epsilon, "The surface unit is erroneous"),
+                        () -> assertTrue(srfRelErr < 0.005,
+                                "The relative error is erroneous"),
+                        () -> assertTrue(srfRelErrCommon < 0.005,
+                                "The common relative error is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Surface layer overlap - Multiple (close)")
+            void surfaceLayerOverlapMultipleClose() {
+                double delta = 0.01;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                        .setDelta(delta);
+                Shape fSphereB = factory.getFSphere(1)
+                        .setDelta(delta);
+                Shape fSphereC = factory.getFSphere(2, 2, 2, 3)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fAssembly.translate(offset);
+
+                double srfUnit = fSphereRef.fillSurfaceLayerOverlap(fLayer, fAssembly);
+
+                double srfActual = fLayer.addSelf() * srfUnit;
+                double srfExpected = fSphereRef.getSurfaceAlgebraic();
+
+                double srfRelErr = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(srfUnit, delta * delta,
+                                epsilon, "The surface unit is erroneous"),
+                        () -> assertTrue(srfRelErr < 0.005,
+                                "The relative error is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Surface layer")
+            void surfaceLayer() {
+                double delta = 0.1;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphere = factory.getFSphere(1)
+                        .addCoat(1, 1, 1)
+                        .setDelta(delta);
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fSphere.translate(offset);
+
+                double srfUnit = fSphere.fillSurfaceLayer(fLayer);
+
+                double srfActual0 = fSphere.getLayerSurface(0);
+                double srfActual1 = fSphere.getLayerSurface(1);
+                double srfActual2 = fSphere.getLayerSurface(2);
+                double srfActual3 = fSphere.getLayerSurface(3);
+
+                double srfRelErr0 = factory.getFStatHelper().getRelErr(srfActual0, fLayer.get(0) * srfUnit);
+                double srfRelErr1 = factory.getFStatHelper().getRelErr(srfActual1, fLayer.get(1) * srfUnit);
+                double srfRelErr2 = factory.getFStatHelper().getRelErr(srfActual2, fLayer.get(2) * srfUnit);
+                double srfRelErr3 = factory.getFStatHelper().getRelErr(srfActual3, fLayer.get(3) * srfUnit);
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(srfUnit, delta * delta,
+                                epsilon, "The surface unit is erroneous"),
+                        () -> assertTrue(srfRelErr0 < 0.005,
+                                "Layer 0 surface is erroneous"),
+                        () -> assertTrue(srfRelErr1 < 0.005,
+                                "Layer 1 surface is erroneous"),
+                        () -> assertTrue(srfRelErr2 < 0.005,
+                                "Layer 2 surface is erroneous"),
+                        () -> assertTrue(srfRelErr3 < 0.005,
+                                "Layer 3 surface is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Surface array")
+            void surfaceArray() {
+                double delta = 0.1;
+
+                FArray<DipoleData> fArray = factory.getFArray(300000);
+
+                Shape fSphere = factory.getFSphere(1)
+                        .addCoat(1, 1, 1)
+                        .setDelta(delta);
+
+                FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
+
+                fSphere.translate(offset);
+
+                double srfUnit = fSphere.fillSurfaceArray(fArray);
+
+                double srfExpected0 = fSphere.getLayerSurface(0);
+                double srfExpected1 = fSphere.getLayerSurface(1);
+                double srfExpected2 = fSphere.getLayerSurface(2);
+                double srfExpected3 = fSphere.getLayerSurface(3);
+
+                int[] srfActual = new int[4];
+
+                fArray.forEach((i, d0, d1, d2, data) -> {
+                    srfActual[data.getLayer()]++;
+                });
+
+                double srfRelErr0 = factory.getFStatHelper().getRelErr(srfExpected0, srfActual[0] * srfUnit);
+                double srfRelErr1 = factory.getFStatHelper().getRelErr(srfExpected1, srfActual[1] * srfUnit);
+                double srfRelErr2 = factory.getFStatHelper().getRelErr(srfExpected2, srfActual[2] * srfUnit);
+                double srfRelErr3 = factory.getFStatHelper().getRelErr(srfExpected3, srfActual[3] * srfUnit);
+
+                int duplicates = fArray.deduplicate();
+
+                Assertions.assertAll("Validate results",
+                        () -> assertEquals(srfUnit, delta * delta,
+                                epsilon, "The surface unit is erroneous"),
+                        () -> assertEquals(0, duplicates,
+                                "The array should not contain duplicates"),
+                        () -> assertTrue(srfRelErr0 < 0.005,
+                                "Mesh 0 surface is erroneous"),
+                        () -> assertTrue(srfRelErr1 < 0.005,
+                                "Mesh 1 surface is erroneous"),
+                        () -> assertTrue(srfRelErr2 < 0.005,
+                                "Mesh 2 surface is erroneous"),
+                        () -> assertTrue(srfRelErr3 < 0.005,
+                                "Mesh 3 surface is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Surface layer - Surface unit")
+            void surfaceLayerSurfaceUnit() {
+                double delta = 0.1;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                double volUnit = fSphereRef.fillSurfaceLayer(fLayer, fAssembly.asList());
+
+                assertEquals(0.01, volUnit, epsilon);
+            }
+
+            @Test
+            @DisplayName("Surface layer - Erroneous shape")
+            void surfaceLayerErroneousShape() {
+                double delta = 1;
+
+                FLayerCounter fLayer = factory.getFLayerCounter();
+
+                Shape fSphereRef = factory.getFSphere( 1)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereArg));
+
+                assertThrows(IllegalArgumentException.class,
+                        () -> fSphereRef.fillSurfaceLayer(fLayer, fAssembly.asList()));
+            }
+
+            @Test
+            @DisplayName("Surface array - Surface unit")
+            void surfaceArraySurfaceUnit() {
+                double delta = 0.1;
+
+                FArray<DipoleData> fArray = factory.getFArray(1000);
+
+                Shape fSphereRef = factory.getFSphere( 0.5)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereArg));
+
+                double volUnit = fSphereRef.fillSurfaceArray(fArray, fAssembly.asList());
+
+                assertEquals(0.01, volUnit, epsilon);
+            }
+
+            @Test
+            @DisplayName("Surface array - Erroneous shape")
+            void surfaceArrayErroneousShape() {
+                double delta = 1;
+
+                FArray<DipoleData> fArray = factory.getFArray(1000);
+
+                Shape fSphereRef = factory.getFSphere( 0.5)
+                        .setDelta(delta);
+                Shape fSphereArg = factory.getFSphere(5, 5, 5, 0.5)
+                        .setDelta(delta);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereArg));
+
+                assertThrows(IllegalArgumentException.class,
+                        () -> fSphereRef.fillSurfaceArray(fArray, fAssembly.asList()));
+            }
+        }
+
+        @Nested
+        @Tag("Module - Relation")
+        class FSphereModuleRelationTest {
+
+            @Test
+            @DisplayName("Contains with parameters")
+            void containsWithParameters() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
+
+                double max = fSphere.getRadius();
+
+                double x = fSphere.getCenterX();
+                double y = fSphere.getCenterY();
+                double z = fSphere.getCenterZ();
+
+                double mid = max * 0.5;
+
+                Assertions.assertAll("Validate positions",
+                        () -> assertTrue(fSphere.contains(x, y, z)),
+                        () -> assertTrue(fSphere.contains(x + mid, y, z)),
+                        () -> assertTrue(fSphere.contains(x - mid, y, z)),
+                        () -> assertTrue(fSphere.contains(x, y + mid, z)),
+                        () -> assertTrue(fSphere.contains(x, y - mid, z)),
+                        () -> assertTrue(fSphere.contains(x, y, z + mid)),
+                        () -> assertTrue(fSphere.contains(x, y, z - mid)),
+                        () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
+                        () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
+                );
+            }
+
+            @Test
+            @DisplayName("Contains with parameters (min)")
+            void containsWithParametersMin() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 0.01);
+
+                double max = fSphere.getRadius();
+
+                double x = fSphere.getCenterX();
+                double y = fSphere.getCenterY();
+                double z = fSphere.getCenterZ();
+
+                double mid = max * 0.5;
+
+                Assertions.assertAll("Validate positions",
+                        () -> assertTrue(fSphere.contains(x, y, z)),
+                        () -> assertTrue(fSphere.contains(x + mid, y, z)),
+                        () -> assertTrue(fSphere.contains(x - mid, y, z)),
+                        () -> assertTrue(fSphere.contains(x, y + mid, z)),
+                        () -> assertTrue(fSphere.contains(x, y - mid, z)),
+                        () -> assertTrue(fSphere.contains(x, y, z + mid)),
+                        () -> assertTrue(fSphere.contains(x, y, z - mid)),
+                        () -> assertFalse(fSphere.contains(x + max, y + max, z + max)),
+                        () -> assertFalse(fSphere.contains(x - max, y - max, z - max))
+                );
+            }
+
+            @Test
+            @DisplayName("Contains with FPoint")
+            void containsWithFPoint() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
+
+                double max = fSphere.getRadius();
+
+                double x = fSphere.getCenterX();
+                double y = fSphere.getCenterY();
+                double z = fSphere.getCenterZ();
+
+                double mid = max * 0.5;
+
+                Assertions.assertAll("Validate positions",
+                        () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPoint(x + mid, y, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPoint(x - mid, y, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPoint(x, y + mid, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPoint(x, y - mid, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z + mid))),
+                        () -> assertTrue(fSphere.contains(factory.getFPoint(x, y, z - mid))),
+                        () -> assertFalse(fSphere.contains(factory.getFPoint(x + max, y + max, z + max))),
+                        () -> assertFalse(fSphere.contains(factory.getFPoint(x - max, y - max, z - max)))
+                );
+            }
+
+            @Test
+            @DisplayName("Contains with FPos3D")
+            void containsWithFPos3D() {
+                FSphere fSphere = factory.getFSphere(1, 2, 3, 5);
+
+                double max = fSphere.getRadius();
+
+                double x = fSphere.getCenterX();
+                double y = fSphere.getCenterY();
+                double z = fSphere.getCenterZ();
+
+                double mid = max * 0.5;
+
+                Assertions.assertAll("Validate positions",
+                        () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPos3D(x + mid, y, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPos3D(x - mid, y, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y + mid, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y - mid, z))),
+                        () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z + mid))),
+                        () -> assertTrue(fSphere.contains(factory.getFPos3D(x, y, z - mid))),
+                        () -> assertFalse(fSphere.contains(factory.getFPos3D(x + max, y + max, z + max))),
+                        () -> assertFalse(fSphere.contains(factory.getFPos3D(x - max, y - max, z - max)))
+                );
+            }
+
+            @Test
+            @DisplayName("Contains with coating and parameters")
+            void containsWithCoatingAndParameters() {
+                FSphere fSphere = factory.getFSphere(2);
+                fSphere.addCoat(2).addCoat(4).addCoat(6);
+
+                Assertions.assertAll("Validate positions",
+                        () -> assertEquals(0, fSphere.locate(1, 1, 1),
+                                "The position is erroneous"),
+                        () -> assertEquals(1, fSphere.locate(3, 0, 0),
+                                "The position is erroneous"),
+                        () -> assertEquals(2, fSphere.locate(0, 6, 0),
+                                "The position is erroneous"),
+                        () -> assertEquals(3, fSphere.locate(0, 0, 11),
+                                "The position is erroneous"),
+                        () -> assertEquals(-1, fSphere.locate(20, 20, 20),
+                                "The position is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Contains with coating and FPoint")
+            void containsWithCoatingAndFPoint() {
+                FSphere fSphere = factory.getFSphere(2);
+                fSphere.addCoat(2).addCoat(4).addCoat(6);
+
+                FPoint fPoint0 = factory.getFPoint(1, 1, 1);
+                FPoint fPoint1 = factory.getFPoint(3, 0, 0);
+                FPoint fPoint2 = factory.getFPoint(0, 6, 0);
+                FPoint fPoint3 = factory.getFPoint(0, 0, 11);
+                FPoint fPointOut = factory.getFPoint(20, 20, 20);
+
+                FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(
+                        fSphere, fPoint0, fPoint1, fPoint2, fPoint3, fPointOut
+                ));
+
+                fAssembly.translate(factory.getFRand().nextDoubleInSphere(100));
+
+                Assertions.assertAll("Validate positions",
+                        () -> assertEquals(0, fSphere.locate(fPoint0),
+                                "The position is erroneous"),
+                        () -> assertEquals(1, fSphere.locate(fPoint1),
+                                "The position is erroneous"),
+                        () -> assertEquals(2, fSphere.locate(fPoint2),
+                                "The position is erroneous"),
+                        () -> assertEquals(3, fSphere.locate(fPoint3),
+                                "The position is erroneous"),
+                        () -> assertEquals(-1, fSphere.locate(fPointOut),
+                                "The position is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Contains with coating and FPos3D")
+            void containsWithCoatingAndFPos3D() {
+                FSphere fSphere = factory.getFSphere(2);
+                fSphere.addCoat(2).addCoat(4).addCoat(6);
+
+                FPoint fPoint0 = factory.getFPoint(1, 1, 1);
+                FPoint fPoint1 = factory.getFPoint(3, 0, 0);
+                FPoint fPoint2 = factory.getFPoint(0, 6, 0);
+                FPoint fPoint3 = factory.getFPoint(0, 0, 11);
+                FPoint fPointOut = factory.getFPoint(20, 20, 20);
+
+                FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(
+                        fSphere, fPoint0, fPoint1, fPoint2, fPoint3, fPointOut
+                ));
+
+                fAssembly.translate(factory.getFRand().nextDoubleInSphere(100));
+
+                Assertions.assertAll("Validate positions",
+                        () -> assertEquals(0, fSphere.locate(fPoint0.toFPos3D()),
+                                "The position is erroneous"),
+                        () -> assertEquals(1, fSphere.locate(fPoint1.toFPos3D()),
+                                "The position is erroneous"),
+                        () -> assertEquals(2, fSphere.locate(fPoint2.toFPos3D()),
+                                "The position is erroneous"),
+                        () -> assertEquals(3, fSphere.locate(fPoint3.toFPos3D()),
+                                "The position is erroneous"),
+                        () -> assertEquals(-1, fSphere.locate(fPointOut.toFPos3D()),
+                                "The position is erroneous")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (epsilon) - same position")
+            void enclosesEpsilonSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertTrue(fSphereA.encloses(fSphereB),
+                                "The sphere should be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (epsilon) - distant")
+            void enclosesEpsilonDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertFalse(fSphereA.encloses(fSphereB),
+                                "The sphere should not be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (epsilon) A")
+            void enclosesEpsilonA() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(4.5, 0, 0, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertFalse(fSphereA.encloses(fSphereB),
+                                "The sphere should not be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (epsilon) B")
+            void enclosesEpsilonB() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(4, 0, 0, 1 - 0.15)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertTrue(fSphereA.encloses(fSphereB),
+                                "The sphere should be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (epsilon) C")
+            void enclosesEpsilonC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertTrue(fSphereA.encloses(fSphereB),
+                                "The sphere should be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The sphere should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (epsilon) D")
+            void enclosesEpsilonD() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(4.1));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertFalse(fSphereA.encloses(fSphereB),
+                                "The sphere should not be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The sphere should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (delta) - same position")
+            void enclosesDeltaSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setEpsilon(-1);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setEpsilon(-1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertTrue(fSphereA.encloses(fSphereB),
+                                "The sphere should be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (delta) - distant")
+            void enclosesDeltaDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setEpsilon(-1);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setEpsilon(-1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertFalse(fSphereA.encloses(fSphereB),
+                                "The sphere should not be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (delta) A")
+            void enclosesDeltaA() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.1);
+                Shape fSphereB = factory.getFSphere(4.5, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertFalse(fSphereA.encloses(fSphereB),
+                                "The sphere should not be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (delta) B")
+            void enclosesDeltaB() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.1);
+                Shape fSphereB = factory.getFSphere(4, 0, 0, 1 - 0.15)
+                        .setEpsilon(-1)
+                        .setDelta(0.1);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertTrue(fSphereA.encloses(fSphereB),
+                                "The sphere should be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The spheres should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (delta) C")
+            void enclosesDeltaC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertTrue(fSphereA.encloses(fSphereB),
+                                "The sphere should be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The sphere should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses (delta) D")
+            void enclosesDeltaD() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(4.1));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertFalse(fSphereA.encloses(fSphereB),
+                                "The sphere should not be enclosed"),
+                        () -> assertFalse(fSphereB.encloses(fSphereA),
+                                "The sphere should not be enclosed")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses, field")
+            void enclosesField() {
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 5);
+
+                Shape fSphereCopy = fSphereRef.copy().setRadius(4.9);
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+                Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.encloses(fAssembly);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertEquals(2, count,
+                                "The number of enclosed spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Encloses, field, list")
+            void enclosesFieldList() {
+                List<Shape> elements = new ArrayList<>();
+
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 5);
+
+                Shape fSphereCopy = fSphereRef.copy().setRadius(4.9);
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+                Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.encloses(fAssembly, elements);
+
+                Assertions.assertAll("Validate enclosure",
+                        () -> assertEquals(2, count,
+                                "The number of enclosed spheres is incorrect"),
+                        () -> assertEquals(2, elements.size(),
+                                "The number of enclosed spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon)")
+            void intersectsEpsilon() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertTrue(fSphereA.intersects(fSphereB),
+                                "The spheres should intersect"),
+                        () -> assertTrue(fSphereB.intersects(fSphereA),
+                                "The spheres should intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) - same position")
+            void intersectsEpsilonSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) - distant")
+            void intersectsEpsilonDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) - point contact")
+            void intersectsEpsilonPointContact() {
+                Shape fSphereA = factory.getFSphere(-1, 0, 0, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) A")
+            void intersectsEpsilonA() {
+                Shape fSphereA = factory.getFSphere(-1 + 0.01, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) B")
+            void intersectsEpsilonB() {
+                Shape fSphereA = factory.getFSphere(-1 + 0.1, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertTrue(fSphereA.intersects(fSphereB),
+                                "The spheres should intersect"),
+                        () -> assertTrue(fSphereB.intersects(fSphereA),
+                                "The spheres should intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) C")
+            void intersectsEpsilonC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(5));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertTrue(fSphereA.intersects(fSphereB),
+                                "The spheres should intersect"),
+                        () -> assertTrue(fSphereB.intersects(fSphereA),
+                                "The spheres should intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) D")
+            void intersectsEpsilonD() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (epsilon) E")
+            void intersectsEpsilonE() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6.01));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta)")
+            void intersectsDelta() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertTrue(fSphereA.intersects(fSphereB),
+                                "The spheres should intersect"),
+                        () -> assertTrue(fSphereB.intersects(fSphereA),
+                                "The spheres should intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) - same position")
+            void intersectsDeltaSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setEpsilon(-1);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setEpsilon(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) - distant")
+            void intersectsDeltaDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setEpsilon(-1);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setEpsilon(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) - point contact")
+            void intersectsDeltaPointContact() {
+                Shape fSphereA = factory.getFSphere(-1, 0, 0, 1)
+                        .setEpsilon(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(-1);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) A")
+            void intersectsDeltaA() {
+                Shape fSphereA = factory.getFSphere(-1 + 0.01, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) B")
+            void intersectsDeltaB() {
+                Shape fSphereA = factory.getFSphere(-1 + 0.1, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertTrue(fSphereA.intersects(fSphereB),
+                                "The spheres should intersect"),
+                        () -> assertTrue(fSphereB.intersects(fSphereA),
+                                "The spheres should intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) C")
+            void intersectsDeltaC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(5));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertTrue(fSphereA.intersects(fSphereB),
+                                "The spheres should intersect"),
+                        () -> assertTrue(fSphereB.intersects(fSphereA),
+                                "The spheres should intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) D")
+            void intersectsDeltaD() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(3.99));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects (delta) E")
+            void intersectsDeltaE() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6.01));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate intersection",
+                        () -> assertFalse(fSphereA.intersects(fSphereB),
+                                "The spheres should not intersect"),
+                        () -> assertFalse(fSphereB.intersects(fSphereA),
+                                "The spheres should not intersect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects, field")
+            void intersectsField() {
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+                Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.intersects(fAssembly);
+
+                Assertions.assertAll("Validate intersections",
+                        () -> assertEquals(2, count,
+                                "The number of intersecting spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Intersects, field, list")
+            void intersectsFieldList() {
+                List<Shape> elements = new ArrayList<>();
+
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(0, 0, 5, 5);
+                Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.intersects(fAssembly, elements);
+
+                Assertions.assertAll("Validate intersections",
+                        () -> assertEquals(2, count,
+                                "The number of intersecting spheres is incorrect"),
+                        () -> assertEquals(2, elements.size(),
+                                "The number of intersecting spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon)")
+            void touchesEpsilon() {
+                Shape fSphereA = factory.getFSphere(0, 1, 0, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, -1, 0, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) - same position")
+            void touchesEpsilonSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) - distant")
+            void touchesEpsilonDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) A")
+            void touchesEpsilonA() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) B")
+            void touchesEpsilonB() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1 - 0.01)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) C")
+            void touchesEpsilonC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) D")
+            void touchesEpsilonD() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) E")
+            void touchesEpsilonE() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) A - fail")
+            void touchesEpsilonFailA() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(0.01)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
+                        .setEpsilon(0.01)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (epsilon) B - fail")
+            void touchesEpsilonFailB() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(0.01)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1 - 0.025, 0, 0, 1)
+                        .setEpsilon(0.01)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta)")
+            void touchesDelta() {
+                Shape fSphereA = factory.getFSphere(0, 1, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(0, -1, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) - same position")
+            void touchesDeltaSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) - distant")
+            void touchesDeltaDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) A")
+            void touchesDeltaA() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+                Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) B")
+            void touchesDeltaB() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1 - 0.01)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) C")
+            void touchesDeltaC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.touches(fSphereB),
+                                "The spheres should be in point contact"),
+                        () -> assertTrue(fSphereB.touches(fSphereA),
+                                "The spheres should be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) D")
+            void touchesDeltaD() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) E")
+            void touchesDeltaE() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) A - fail")
+            void touchesDeltaFailA() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches (delta) B - fail")
+            void touchesDeltaFailB() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1 - 0.025, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.touches(fSphereB),
+                                "The spheres should not be in point contact"),
+                        () -> assertFalse(fSphereB.touches(fSphereA),
+                                "The spheres should not be in point contact")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches, field")
+            void touchesField() {
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(0, 2, 0, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.touches(fAssembly);
+
+                Assertions.assertAll("Validate touch",
+                        () -> assertEquals(2, count,
+                                "The number of touching spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches, field, delta")
+            void touchesFieldDelta() {
+                List<Shape> elements = new ArrayList<>();
+
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(0, 2, 0, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.touches(fAssembly, elements);
+
+                Assertions.assertAll("Validate touch",
+                        () -> assertEquals(2, count,
+                                "The number of touching spheres is incorrect"),
+                        () -> assertEquals(2, elements.size(),
+                                "The number of touching spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon) - same position")
+            void overlapsEpsilonSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon) - distant")
+            void overlapsEpsilonDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should not overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should not overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon) - A")
+            void overlapsEpsilonA() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon) - B")
+            void overlapsEpsilonB() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon) - C")
+            void overlapsEpsilonC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon)")
+            void overlapsEpsilon() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon) - fail")
+            void overlapsEpsilonFail() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon, min)")
+            void overlapsEpsilonMin() {
+                Shape fSphereA = factory.getFSphere(0.03, 0, 0, 0.01)
+                        .setEpsilon(1E-6)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0.01001, 0, 0, 0.01)
+                        .setEpsilon(1E-6)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (epsilon, min) - fail")
+            void overlapsEpsilonFailMin() {
+                Shape fSphereA = factory.getFSphere(0.03, 0, 0, 0.01)
+                        .setEpsilon(1E-4)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0.01001, 0, 0, 0.01)
+                        .setEpsilon(1E-4)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should not overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should not overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) A - fail")
+            void overlapsDeltaFailA() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1 + 0.025, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) B - fail")
+            void overlapsDeltaFailB() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1 - 0.025, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate point contact",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should not overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should not overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) - same position")
+            void overlapsDeltaSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) - distant")
+            void overlapsDeltaDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should not overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should not overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) - A")
+            void overlapsDeltaA() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) - B")
+            void overlapsDeltaB() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(5.9));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) - C")
+            void overlapsDeltaC() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleOnSphere(6.1));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta)")
+            void overlapsDelta() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertTrue(fSphereA.overlaps(fSphereB),
+                                "The spheres should overlap"),
+                        () -> assertTrue(fSphereB.overlaps(fSphereA),
+                                "The spheres should overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps (delta) - fail")
+            void overlapsDeltaFail() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+                Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertFalse(fSphereA.overlaps(fSphereB),
+                                "The spheres should not overlap"),
+                        () -> assertFalse(fSphereB.overlaps(fSphereA),
+                                "The spheres should not overlap")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps, field")
+            void overlapsField() {
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.overlaps(fAssembly);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertEquals(3, count,
+                                "The number of overlapping spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Overlaps, field, list")
+            void overlapsFieldList() {
+                List<Shape> elements = new ArrayList<>();
+
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.overlaps(fAssembly, elements);
+
+                Assertions.assertAll("Validate overlap",
+                        () -> assertEquals(3, count,
+                                "The number of overlapping spheres is incorrect"),
+                        () -> assertEquals(3, elements.size(),
+                                "The number of overlapping spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (epsilon) - same position")
+            void repelsEpsilonSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertFalse(fSphereA.repels(fSphereB),
+                                "The spheres should not be distant"),
+                        () -> assertFalse(fSphereB.repels(fSphereA),
+                                "The spheres should not be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (epsilon) - distant")
+            void repelsEpsilonDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertTrue(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertTrue(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (epsilon) - A")
+            void repelsEpsilonA() {
+                Shape fSphereA = factory.getFSphere(0, 0, 0, 5)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                        .setDelta(-1);
+
+                FRandGenerator rand = factory.getFRand();
+
+                fSphereB.setCenter(rand.nextDoubleInSphere(5.9));
+
+                FPos3D translation = rand.nextDouble3D(factory.getFPairPos3D(100));
+
+                fSphereA.translate(translation);
+                fSphereB.translate(translation);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertFalse(fSphereA.repels(fSphereB),
+                                "The spheres should not be distant"),
+                        () -> assertFalse(fSphereB.repels(fSphereA),
+                                "The spheres should not be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (epsilon) - B")
+            void repelsEpsilonB() {
+                Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertTrue(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertTrue(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (epsilon) - C")
+            void repelsEpsilonC() {
+                Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(0.05)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertFalse(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertFalse(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (epsilon, min) - A")
+            void repelsEpsilonMinA() {
+                Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
+                        .setEpsilon(1E-6)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0.01, 0, 0, 0.01)
+                        .setEpsilon(1E-6)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertTrue(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertTrue(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (epsilon, min) - B")
+            void repelsEpsilonMinB() {
+                Shape fSphereA = factory.getFSphere(0.03001, 0, 0, 0.01)
+                        .setEpsilon(1E-4)
+                        .setDelta(-1);
+                Shape fSphereB = factory.getFSphere(0.01, 0, 0, 0.01)
+                        .setEpsilon(1E-4)
+                        .setDelta(-1);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertFalse(fSphereA.repels(fSphereB),
+                                "The spheres should not be distant"),
+                        () -> assertFalse(fSphereB.repels(fSphereA),
+                                "The spheres should not be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (delta) - same position")
+            void repelsDeltaSamePosition() {
+                Shape fSphereA = factory.getFSphere(1, 2, 3, 2)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1, 2, 3, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertFalse(fSphereA.repels(fSphereB),
+                                "The spheres should not be distant"),
+                        () -> assertFalse(fSphereB.repels(fSphereA),
+                                "The spheres should not be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (delta) - distant")
+            void repelsDeltaDistant() {
+                Shape fSphereA = factory.getFSphere(1, 1, 1, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(-1, -1, -1, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertTrue(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertTrue(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (delta) - A")
+            void repelsDeltaA() {
+                Shape fSphereA = factory.getFSphere(3 + 0.025, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertTrue(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertTrue(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (delta) - B")
+            void repelsDeltaB() {
+                Shape fSphereA = factory.getFSphere(3 - 0.025, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.01);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertFalse(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertFalse(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (delta) - C")
+            void repelsDeltaC() {
+                Shape fSphereA = factory.getFSphere(3.01, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+                Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.005);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertTrue(fSphereA.repels(fSphereB),
+                                "The spheres should be distant"),
+                        () -> assertTrue(fSphereB.repels(fSphereA),
+                                "The spheres should be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels (delta) - D")
+            void repelsDeltaD() {
+                Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+                Shape fSphereB = factory.getFSphere(1.01, 0, 0, 1)
+                        .setEpsilon(-1)
+                        .setDelta(0.05);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertFalse(fSphereA.repels(fSphereB),
+                                "The spheres should not be distant"),
+                        () -> assertFalse(fSphereB.repels(fSphereA),
+                                "The spheres should not be distant")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels, field")
+            void repelsField() {
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.repels(fAssembly);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertEquals(1, count,
+                                "The number of distant spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Repels, field, list")
+            void repelsFieldList() {
+                List<Shape> elements = new ArrayList<>();
+
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(1, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.repels(fAssembly, elements);
+
+                Assertions.assertAll("Validate distance",
+                        () -> assertEquals(1, count,
+                                "The number of distant spheres is incorrect"),
+                        () -> assertEquals(1, elements.size(),
+                                "The number of distant spheres is incorrect")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches or repels")
+            void touchesOrRepels() {
+
+                assertFalse(factory.getFSphere().touchesOrRepels(factory.getFSphere(1, 0, 0)));
+                assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(2, 0, 0)));
+                assertTrue(factory.getFSphere().touchesOrRepels(factory.getFSphere(3, 0, 0)));
+            }
+
+            @Test
+            @DisplayName("Touches or repels, field")
+            void touchesOrRepelsField() {
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.touchesOrRepels(fAssembly);
+
+                Assertions.assertAll("Validate condition",
+                        () -> assertEquals(2, count,
+                                "The condition is not satisfied")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches or repels, field, list")
+            void touchesOrRepelsFieldList() {
+                List<Shape> elements = new ArrayList<>();
+
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.touchesOrRepels(fAssembly, elements);
+
+                Assertions.assertAll("Validate condition",
+                        () -> assertEquals(2, count,
+                                "The condition is not satisfied"),
+                        () -> assertEquals(2, elements.size(),
+                                "The condition is not satisfied")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches or overlaps")
+            void touchesOrOverlaps() {
+
+                assertTrue(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(1, 0, 0)));
+                assertTrue(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(2, 0, 0)));
+                assertFalse(factory.getFSphere().touchesOrOverlaps(factory.getFSphere(3, 0, 0)));
+            }
+
+            @Test
+            @DisplayName("Touches or overlaps, field")
+            void touchesOrOverlapsField() {
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.touchesOrOverlaps(fAssembly);
+
+                Assertions.assertAll("Validate condition",
+                        () -> assertEquals(3, count,
+                                "The condition is not satisfied")
+                );
+            }
+
+            @Test
+            @DisplayName("Touches or overlaps, field, list")
+            void touchesOrOverlapsFieldList() {
+                List<Shape> elements = new ArrayList<>();
+
+                Shape fSphereRef = factory.getFSphere(0, 0, 0, 1);
+
+                Shape fSphereCopy = fSphereRef.copy();
+                Shape fSphereA = factory.getFSphere(2, 0, 0, 1);
+                Shape fSphereB = factory.getFSphere(1, 1, 1, 5);
+                Shape fSphereC = factory.getFSphere(-5, -5, -5, 1);
+
+                FAssembly<Shape> fAssembly = factory.getFAssembly(
+                        List.of(fSphereRef, fSphereCopy, fSphereA, fSphereB, fSphereC)
+                );
+
+                int count = fSphereRef.touchesOrOverlaps(fAssembly, elements);
+
+                Assertions.assertAll("Validate condition",
+                        () -> assertEquals(3, count,
+                                "The condition is not satisfied"),
+                        () -> assertEquals(3, elements.size(),
+                                "The condition is not satisfied")
+                );
+            }
         }
 
         @Test
@@ -3494,705 +4124,6 @@ public class FSphereTest {
                             "The position of shape B is incorrect"),
                     () -> assertSame(fSphereC, in.get(0),
                             "The position of shape C is incorrect")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume data")
-        void volumeData() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
-                            .setDelta(delta);
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fSphere.translate(offset);
-
-            fSphere.fillVolumeOverlapLayer(fLayer);
-
-            int elements = fLayer.get();
-
-            double volUnit = delta * delta * delta;
-            double volTotal = fSphere.getVolumeAlgebraic();
-            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(volRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume data with coating")
-        void volumeDataWithCoating() {
-            double delta = 0.1;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphere = factory.getFSphere(1)
-                    .addCoat(1, 1, 1)
-                    .setDelta(delta);
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fSphere.translate(offset);
-
-            fSphere.fillVolumeLayer(fLayer);
-
-            double volUnit = delta * delta * delta;
-            double vol0 = fSphere.getLayerVolume(0);
-            double vol1 = fSphere.getLayerVolume(1);
-            double vol2 = fSphere.getLayerVolume(2);
-            double vol3 = fSphere.getLayerVolume(3);
-            double volTotal = fSphere.getVolumeAlgebraic();
-
-            double vol0RelError = factory.getFStatHelper().getRelErr(vol0, fLayer.get(0) * volUnit);
-            double vol1RelError = factory.getFStatHelper().getRelErr(vol1, fLayer.get(1) * volUnit);
-            double vol2RelError = factory.getFStatHelper().getRelErr(vol2, fLayer.get(2) * volUnit);
-            double vol3RelError = factory.getFStatHelper().getRelErr(vol3, fLayer.get(3) * volUnit);
-            double volTotalRelError = factory.getFStatHelper().getRelErr(volTotal, fLayer.addSelf() * volUnit);
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(vol0RelError < 0.5,
-                            "Layer 0 volume is erroneous"),
-                    () -> assertTrue(vol1RelError < 0.5,
-                            "Layer 1 volume is erroneous"),
-                    () -> assertTrue(vol2RelError < 0.5,
-                            "Layer 2 volume is erroneous"),
-                    () -> assertTrue(vol3RelError < 0.5,
-                            "Layer 3 volume is erroneous"),
-                    () -> assertTrue(volTotalRelError < 0.5,
-                            "Total layer volume is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume data double, distant")
-        void volumeDataDoubleDistant() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillVolumeOverlapLayer(fLayer, fAssembly);
-
-            int elements = fLayer.get();
-
-            double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolumeAlgebraic();
-            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(volRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume data double, close")
-        void volumeDataDoubleClose() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillVolumeOverlapLayer(fLayer, fAssembly);
-
-            int elementsTotal = (int) fLayer.addSelf();
-            int elementsCommon = fLayer.get(1);
-
-            double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolumeAlgebraic();
-            double volCommon = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-            double volRelErrTotal = factory.getFStatHelper().getRelErr(volTotal, elementsTotal * volUnit) * 100;
-            double volRelErrCommon = factory.getFStatHelper().getRelErr(volCommon, elementsCommon * volUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elementsTotal > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(volRelErrTotal < 0.5,
-                            "The total relative error is erroneous"),
-                    () -> assertTrue(volRelErrCommon < 0.5,
-                            "The common relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume data multiple, close")
-        void volumeDataMultipleClose() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
-            Shape fSphereB = factory.getFSphere(1)
-                    .setDelta(delta);
-            Shape fSphereC = factory.getFSphere(2, 2, 2, 3)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB, fSphereC));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillVolumeOverlapLayer(fLayer, fAssembly);
-
-            int elements = (int) fLayer.addSelf();
-
-            double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolumeAlgebraic();
-            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(volRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume mesh")
-        void volumeMesh() {
-            double delta = 0.05;
-
-            FArray fMesh = factory.getFArray(50000);
-
-            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta);
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fSphere.translate(offset);
-
-            fSphere.fillVolumeArray(fMesh);
-
-            int elements = fMesh.size();
-
-            fMesh.forEach((index, d0, d1, d2, value) ->
-                    assertTrue(fSphere.contains(d0, d1, d2)));
-
-            double volUnit = delta * delta * delta;
-            double volTotal = fSphere.getVolumeAlgebraic();
-            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(volRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume mesh double, distant")
-        void volumeMeshDoubleDistant() {
-            double delta = 0.05;
-
-            FArray fMesh = factory.getFArray(50000);
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillVolumeArray(fMesh, fAssembly);
-
-            int elements = fMesh.size();
-
-            fMesh.forEach((index, d0, d1, d2, value) ->
-                    assertTrue(fSphereRef.contains(d0, d1, d2)));
-
-            double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolumeAlgebraic();
-            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(volRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Volume mesh double, close")
-        void volumeMeshDoubleClose() {
-            double delta = 0.05;
-
-            FArray fMesh = factory.getFArray(50000);
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillVolumeArray(fMesh, fAssembly);
-
-            int elements = fMesh.size();
-
-            fMesh.forEach((index, d0, d1, d2, value) ->
-                    assertTrue(fSphereRef.contains(d0, d1, d2)));
-
-            double volUnit = delta * delta * delta;
-            double volTotal = fSphereRef.getVolumeAlgebraic() - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-            double volRelErr = factory.getFStatHelper().getRelErr(volTotal, elements * volUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(volRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-
-
-
-
-
-
-
-
-
-
-        @Test
-        @DisplayName("Get surface discrete")
-        void getSurfaceDiscrete() {
-            double delta = 0.05;
-
-            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta)
-                    .addCoat(1);
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fSphere.translate(offset);
-
-            double srf = fSphere.getSurfaceDiscrete();
-
-            double srfTotal = factory.getFSphereHelper().getSurface(2);
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, srf);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(srfRelErr < 0.005)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface overlap layer - Single")
-        void surfaceOverlapLayerSingle() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillSurfaceOverlapLayer(fLayer, fAssembly);
-
-            int elTotal = (int) fLayer.addSelf();
-            int elCommon = fLayer.get(1);
-
-            double srfUnit = delta * delta;
-            double srfTotal = factory.getFSphereHelper().getSurface(1);
-            double srfCommon = factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1) / 2;
-            double srfRelErrTotal = factory.getFStatHelper().getRelErr(srfTotal, elTotal * srfUnit);
-            double srfRelErrCommon = factory.getFStatHelper().getRelErr(srfCommon, elCommon * srfUnit);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(elTotal > 0),
-                    () -> assertTrue(srfRelErrTotal < 0.5),
-                    () -> assertTrue(srfRelErrCommon < 0.5)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface overlap layer - Multiple")
-        void surfaceOverlapLayerMultiple() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
-            Shape fSphereB = factory.getFSphere(0, 1, 0, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA, fSphereB));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillSurfaceOverlapLayer(fLayer, fAssembly);
-
-            int elTotal = (int) fLayer.addSelf();
-            int elL1 = fLayer.get(1);
-            int elL2 = fLayer.get(2);
-
-            double srfUnit = delta * delta;
-            double srfTotal = factory.getFSphereHelper().getSurface(1);
-            double srfRelErrTotal = factory.getFStatHelper().getRelErr(srfTotal, elTotal * srfUnit);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(elTotal > 0),
-                    () -> assertTrue(elL1 > 0),
-                    () -> assertTrue(elL2 > 0),
-                    () -> assertTrue(srfRelErrTotal < 0.5)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface layer")
-        void surfaceLayer() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta);
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fSphere.translate(offset);
-
-            fSphere.fillSurfaceLayer(fLayer);
-
-            int el = fLayer.get();
-
-            double srfUnit = delta * delta;
-            double srfTotal = factory.getFSphereHelper().getSurface(1);
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, el * srfUnit);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(el > 0),
-                    () -> assertTrue(srfRelErr < 0.005)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface layer with coating")
-        void surfaceLayerWithCoating() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphere = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta)
-                    .addCoat(1, 1, 1);
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fSphere.translate(offset);
-
-            fSphere.fillSurfaceLayer(fLayer);
-
-            int layer0 = fLayer.get(0);
-            int layer1 = fLayer.get(1);
-            int layer2 = fLayer.get(2);
-            int layer3 = fLayer.get(3);
-
-            assertEquals(4, fSphere.getLayerCount());
-
-            double srfUnit = delta * delta;
-            double srfLayer0 = 4 * Math.PI;
-            double srfLayer1 = 4 * Math.PI * Math.pow(2, 2);
-            double srfLayer2 = 4 * Math.PI * Math.pow(3, 2);
-            double srfLayer3 = 4 * Math.PI * Math.pow(4, 2);
-
-            double srfRelErr0 = factory.getFStatHelper().getRelErr(srfLayer0, layer0 * srfUnit);
-            double srfRelErr1 = factory.getFStatHelper().getRelErr(srfLayer1, layer1 * srfUnit);
-            double srfRelErr2 = factory.getFStatHelper().getRelErr(srfLayer2, layer2 * srfUnit);
-            double srfRelErr3 = factory.getFStatHelper().getRelErr(srfLayer3, layer3 * srfUnit);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(srfRelErr0 < 0.05),
-                    () -> assertTrue(srfRelErr1 < 0.05),
-                    () -> assertTrue(srfRelErr2 < 0.05),
-                    () -> assertTrue(srfRelErr3 < 0.05)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface layer - Distant")
-        void surfaceLayerSingleDistant() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta)
-                    .addCoat(1);
-            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta)
-                    .addCoat(1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
-
-            int el = fLayer.get();
-
-            double srfUnit = delta * delta;
-            double srfTotal = factory.getFSphereHelper().getSurface(1);
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, el * srfUnit);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(el > 0),
-                    () -> assertTrue(srfRelErr < 0.005)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface layer - Close")
-        void surfaceLayerSingleClose() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta)
-                    .addCoat(1);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta)
-                    .addCoat(1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
-
-            int elL0 = fLayer.get(0);
-            int elL1 = fLayer.get(1);
-
-            double srfUnit = delta * delta;
-            double srfL0 = factory.getFSphereHelper().getSurface(1) - factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1) / 2;
-            double srfL1 = factory.getFSphereHelper().getSurface(2) - factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 2, 2) / 2;
-            double srfRelErrL0 = factory.getFStatHelper().getRelErr(srfL0, elL0 * srfUnit);
-            double srfRelErrL1 = factory.getFStatHelper().getRelErr(srfL1, elL1 * srfUnit);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(elL0 > 0),
-                    () -> assertTrue(srfRelErrL0 < 0.005),
-                    () -> assertTrue(srfRelErrL1 < 0.005)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface layer - Multiple")
-        void surfaceLayerMultiple() {
-            double delta = 0.05;
-
-            FLayerCounter fLayer = factory.getFLayerCounter();
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta)
-                    .addCoat(11);
-            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta)
-                    .addCoat(1);
-            Shape fSphereC = factory.getFSphere(4, 4, 4, 2)
-                    .setDelta(delta)
-                    .addCoat(1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereB, fSphereC));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillSurfaceLayer(fLayer, fAssembly);
-
-            int elL0 = fLayer.get(0);
-            int elL1 = fLayer.get(1);
-
-            double srfUnit = delta * delta;
-            double srfL0 = factory.getFSphereHelper().getSurface(1) - factory.getFSphereHelper().getSurfaceCommon(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1) / 2;
-            double srfL1 = factory.getFSphereHelper().getSurface(12);
-            double srfRelErrL0 = factory.getFStatHelper().getRelErr(srfL0, elL0 * srfUnit);
-            double srfRelErrL1 = factory.getFStatHelper().getRelErr(srfL1, elL1 * srfUnit);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertTrue(elL0 > 0),
-                    () -> assertTrue(srfRelErrL0 < 0.005),
-                    () -> assertTrue(srfRelErrL1 < 0.005)
-            );
-        }
-
-        @Test
-        @DisplayName("Surface mesh")
-        void surfaceMesh() {
-            double delta = 0.05;
-
-            FArray fMesh = factory.getFArray(50000);
-
-            Shape fSphere = factory.getFSphere(1)
-                    .setDelta(delta);
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fSphere.translate(offset);
-
-            fSphere.fillSurfaceArray(fMesh);
-
-            int elements = fMesh.size();
-
-            FSphere fSphereTmp = factory.getFSphere(EPSILON);
-            fMesh.forEach((index, d0, d1, d2, value) -> {
-                fSphereTmp.setCenter(d0, d1, d2);
-                assertTrue(fSphere.touches(fSphereTmp));
-            });
-
-            double srfUnit = delta * delta;
-            double srfTotal = fSphere.getSurfaceAlgebraic();
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(srfRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Surface mesh double, distant")
-        void surfaceMeshDoubleDistant() {
-            double delta = 0.05;
-
-            FArray fMesh = factory.getFArray(50000);
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(5, 5, 5, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillSurfaceArray(fMesh, fAssembly);
-
-            int elements = fMesh.size();
-
-            FSphere fSphereTmp = factory.getFSphere(EPSILON);
-            fMesh.forEach((index, d0, d1, d2, value) -> {
-                fSphereTmp.setCenter(d0, d1, d2);
-                assertTrue(fSphereRef.touches(fSphereTmp));
-            });
-
-            double srfUnit = delta * delta;
-            double srfTotal = fSphereRef.getSurfaceAlgebraic();
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(srfRelErr < 0.5,
-                            "The relative error is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Surface mesh double, close")
-        void surfaceMeshDoubleClose() {
-            double delta = 0.05;
-
-            FArray fMesh = factory.getFArray(50000);
-
-            Shape fSphereRef = factory.getFSphere( 1)
-                    .setDelta(delta);
-            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                    .setDelta(delta);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereRef, fSphereA));
-
-            FPos3D offset = factory.getFRand().nextDoubleInSphere(1000);
-
-            fAssembly.translate(offset);
-
-            fSphereRef.fillSurfaceArray(fMesh, fAssembly);
-
-            int elements = fMesh.size();
-
-            FSphere fSphereTmp = factory.getFSphere(EPSILON);
-            fMesh.forEach((index, d0, d1, d2, value) -> {
-                fSphereTmp.setCenter(d0, d1, d2);
-                assertTrue(fSphereRef.touches(fSphereTmp));
-            });
-
-            double srfUnit = delta * delta;
-            double srfTotal = fSphereRef.getSurfaceAlgebraic() - (2 * Math.PI * 1 * 0.5);
-            double srfRelErr = factory.getFStatHelper().getRelErr(srfTotal, elements * srfUnit) * 100;
-
-            Assertions.assertAll("Validate buffer",
-                    () -> assertTrue(elements > 0,
-                            "The number of elements should be greater than zero"),
-                    () -> assertTrue(srfRelErr < 0.5,
-                            "The relative error is erroneous")
             );
         }
 
@@ -4538,7 +4469,7 @@ public class FSphereTest {
 
             FSphere fSphereArg = fSphereArgProducer.produce();
 
-            boolean isPositioned = fSphereRef.attachLinearAndSpherical(fSphereArg, fSphereField, 100);
+            boolean isPositioned = fSphereRef.attachLinearWithSphericalCorrection(fSphereArg, fSphereField, 100);
 
             Assertions.assertAll("Validate results",
                     () -> assertTrue(isPositioned,
@@ -4563,7 +4494,7 @@ public class FSphereTest {
 
             FSphere fSphereArg = factory.getFSphere(0, 0, 0, 1);
 
-            boolean isPositioned = fSphereRef.attachLinearAndSpherical(fSphereArg, fSphereField, 100);
+            boolean isPositioned = fSphereRef.attachLinearWithSphericalCorrection(fSphereArg, fSphereField, 100);
 
             fSphereField.register(fSphereRef);
             fSphereField.register(fSphereArg);
@@ -4601,7 +4532,7 @@ public class FSphereTest {
 
             FSphere fSphereArg = fSphereArgProducer.produce();
 
-            boolean isPositioned = fSphereRef.attachLinearAndSpherical(fSphereArg, fSphereField, 100);
+            boolean isPositioned = fSphereRef.attachLinearWithSphericalCorrection(fSphereArg, fSphereField, 100);
 
             Assertions.assertAll("Validate results",
                     () -> assertTrue(isPositioned,
@@ -4902,7 +4833,7 @@ public class FSphereTest {
 
             List<Shape> collisions = new ArrayList<>();
 
-            fSphereRef.getCollisionListDirectional(collisions, fAssembly, ray);
+            fSphereRef.getCollisionListLinear(collisions, fAssembly, ray);
 
             assertTrue(collisions.size() > 0,
                     "At least on element should be present");

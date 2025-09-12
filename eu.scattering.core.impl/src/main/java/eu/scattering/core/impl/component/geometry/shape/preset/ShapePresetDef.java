@@ -7,6 +7,8 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.design.util.container.DipoleData;
+import eu.scattering.core.impl.util.DipoleDataDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
@@ -16,7 +18,6 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static eu.scattering.core.impl.ConfigDef.*;
 
@@ -160,7 +161,7 @@ public abstract class ShapePresetDef implements Shape {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Shape removeCoating() {
+    public Shape removeCoats() {
 
         getCoating().clear();
 
@@ -198,7 +199,7 @@ public abstract class ShapePresetDef implements Shape {
             throw new IllegalArgumentException("The coat width cannot be lower than zero");
         }
 
-        if (getCoatWidthTotal() + width >= getRadius()) {
+        if (getLayerWidthRemaining(0) + width >= getRadius()) {
             throw new IllegalArgumentException("The total coat width cannot be larger than the radius");
         }
 
@@ -218,9 +219,9 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public Shape applyCoatingFrom(Shape shape) {
+    public Shape applyCoatsFrom(Shape shape) {
 
-        removeCoating();
+        removeCoats();
 
         for (int i = 0; i < shape.getCoatCount() ; i++) {
             addCoat(shape.getCoatWidth(i));
@@ -260,13 +261,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double getCoatWidthTotal() {
-
-        return getCoating().stream().mapToDouble(Double::doubleValue).sum();
-    }
-
-    @Override
-    public void setCoatWidth(int index, double width) {
+    public Shape setCoatWidth(int index, double width) {
 
         if (getCoating().size() == 0) {
             throw new IllegalArgumentException("The shape is not coated");
@@ -281,6 +276,8 @@ public abstract class ShapePresetDef implements Shape {
         }
 
          this.coatWidth.set(index, width);
+
+        return this;
     }
 
     @Override
@@ -292,6 +289,10 @@ public abstract class ShapePresetDef implements Shape {
 
         if (index >= getLayerCount()) {
             throw new IllegalArgumentException("the layer index is erroneous");
+        }
+
+        if (index == 0) {
+            return getCoating().stream().mapToDouble(Double::doubleValue).sum();
         }
 
         double width = 0;
@@ -1220,36 +1221,10 @@ public abstract class ShapePresetDef implements Shape {
         in.sort(cmp);
     }
 
-    @Override
-    public void fillVolumeOverlapLayer(FLayerCounter in) {
-        double factor = 1 / delta;
-
-        double radiusParsed = factor * getRadius();
-
-        double cX = factor * getCenterX();
-        double cY = factor * getCenterY();
-        double cZ = factor * getCenterZ();
-
-        double minX = Math.floor(cX - radiusParsed) * delta;
-        double maxX = getCenterX() + getRadius();
-        double minY = Math.floor(cY - radiusParsed) * delta;
-        double maxY = getCenterY() + getRadius();
-        double minZ = Math.floor(cZ - radiusParsed) * delta;
-        double maxZ = getCenterZ() + getRadius();
-
-        for (double x = minX ; x < maxX ; x += delta) {
-            for (double y = minY ; y < maxY ; y += delta) {
-                for (double z = minZ ; z < maxZ ; z += delta) {
-                    if (contains(x, y, z)) {
-                        in.inc();
-                    }
-                }
-            }
-        }
-    }
+    //--- Dimension
 
     @Override
-    public void fillVolumeOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
+    public double fillVolumeLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -1269,10 +1244,12 @@ public abstract class ShapePresetDef implements Shape {
         for (double x = minX ; x < maxX ; x += delta) {
             for (double y = minY ; y < maxY ; y += delta) {
                 for (double z = minZ ; z < maxZ ; z += delta) {
+
                     if (contains(x, y, z)) {
                         layers = 0;
 
-                        for (Shape shape : shapes) {
+                        for (Shape shape : field) {
+
                             if (this == shape) {
                                 continue;
                             }
@@ -1287,10 +1264,12 @@ public abstract class ShapePresetDef implements Shape {
                 }
             }
         }
+
+        return delta * delta * delta;
     }
 
     @Override
-    public void fillVolumeLayer(FLayerCounter in) {
+    public double fillVolumeLayer(FLayerCounter in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -1318,10 +1297,18 @@ public abstract class ShapePresetDef implements Shape {
                 }
             }
         }
+
+        return delta * delta * delta;
     }
 
     @Override
-    public void fillVolumeLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
+    public double fillVolumeLayer(FLayerCounter in, List<? extends Shape> structure) {
+        int position = structure.indexOf(this);
+
+        if (position == -1) {
+            throw new IllegalArgumentException("The shape must be a part of the structure");
+        }
+
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -1340,57 +1327,146 @@ public abstract class ShapePresetDef implements Shape {
         List<Shape> prefix = new ArrayList<>();
         List<Shape> suffix = new ArrayList<>();
 
-        categorizeShapes(shapes, prefix, suffix);
+        for (int i = 0 ; i < position ; i++) {
+            prefix.add(structure.get(i));
+        }
 
-        int locRef;
+        for (int i = position + 1 ; i < structure.size() ; i++) {
+            suffix.add(structure.get(i));
+        }
+
+        int location;
         for (double x = minX ; x < maxX ; x += delta) {
             for (double y = minY ; y < maxY ; y += delta) {
                 for (double z = minZ ; z < maxZ ; z += delta) {
-                    locRef = locate(x, y, z);
+                    location = locate(x, y, z);
 
-                    if (locRef < 0) {
+                    if (location < 0) {
                         continue;
                     }
 
-                    if (locRef > getLocation(prefix, x, y, z)) {
+                    if (location > locateInStructure(prefix, x, y, z)) {
                         continue;
                     }
 
-                    if (locRef < getLocation(suffix, x, y, z)) {
-                        in.inc(locRef);
+                    if (location < locateInStructure(suffix, x, y, z)) {
+                        in.inc(location);
                     }
                 }
             }
         }
+
+        return delta * delta * delta;
     }
 
-    void categorizeShapes(Iterable<? extends Shape> list, List<Shape> prefix, List<Shape> suffix) {
+    @Override
+    public double fillVolumeArray(FArray<DipoleData> in) {
+        DipoleData[] layer = new DipoleData[getLayerCount()];
 
-        var isFound = new AtomicBoolean(false);
-        list.forEach(e -> {
-            if (this == e) {
-                isFound.set(true);
-            } else {
-                if (isFound.get()) {
-                    suffix.add(e);
-                } else {
-                    prefix.add(e);
+        for (int i = 0 ; i < layer.length ; i++) {
+            layer[i] = DipoleDataDef.crete(i, getTag());
+        }
+
+        double factor = 1 / delta;
+
+        double radiusParsed = factor * getRadius();
+
+        double cX = factor * getCenterX();
+        double cY = factor * getCenterY();
+        double cZ = factor * getCenterZ();
+
+        double minX = Math.floor(cX - radiusParsed) * delta;
+        double maxX = getCenterX() + getRadius();
+        double minY = Math.floor(cY - radiusParsed) * delta;
+        double maxY = getCenterY() + getRadius();
+        double minZ = Math.floor(cZ - radiusParsed) * delta;
+        double maxZ = getCenterZ() + getRadius();
+
+        int location;
+        for (double x = minX ; x < maxX ; x += delta) {
+            for (double y = minY ; y < maxY ; y += delta) {
+                for (double z = minZ ; z < maxZ ; z += delta) {
+                    location = locate(x, y, z);
+
+                    if (location >= 0) {
+                        in.addWithMeta(x, y, z, layer[location]);
+                    }
                 }
             }
-        });
-
-        if (!isFound.get()) {
-
-            suffix.addAll(prefix);
-            prefix.clear();
         }
+
+        return delta * delta * delta;
     }
 
-    int getLocation(List<Shape> shapes, double x, double y, double z) {
+    @Override
+    public double fillVolumeArray(FArray<DipoleData> in, List<? extends Shape> structure) {
+        int position = structure.indexOf(this);
+
+        if (position == -1) {
+            throw new IllegalArgumentException("The shape must be a part of the structure");
+        }
+
+        DipoleData[] layer = new DipoleData[getLayerCount()];
+
+        for (int i = 0 ; i < layer.length ; i++) {
+            layer[i] = DipoleDataDef.crete(i, getTag());
+        }
+
+        double factor = 1 / delta;
+
+        double radiusParsed = factor * getRadius();
+
+        double cX = factor * getCenterX();
+        double cY = factor * getCenterY();
+        double cZ = factor * getCenterZ();
+
+        double minX = Math.floor(cX - radiusParsed) * delta;
+        double maxX = getCenterX() + getRadius();
+        double minY = Math.floor(cY - radiusParsed) * delta;
+        double maxY = getCenterY() + getRadius();
+        double minZ = Math.floor(cZ - radiusParsed) * delta;
+        double maxZ = getCenterZ() + getRadius();
+
+        List<Shape> prefix = new ArrayList<>();
+        List<Shape> suffix = new ArrayList<>();
+
+        for (int i = 0 ; i < position ; i++) {
+            prefix.add(structure.get(i));
+        }
+
+        for (int i = position + 1 ; i < structure.size() ; i++) {
+            suffix.add(structure.get(i));
+        }
+
+        int location;
+        for (double x = minX ; x < maxX ; x += delta) {
+            for (double y = minY ; y < maxY ; y += delta) {
+                for (double z = minZ ; z < maxZ ; z += delta) {
+                    location = locate(x, y, z);
+
+                    if (location < 0) {
+                        continue;
+                    }
+
+                    if (location > locateInStructure(prefix, x, y, z)) {
+                        continue;
+                    }
+
+                    if (location < locateInStructure(suffix, x, y, z)) {
+                        in.addWithMeta(x, y, z, layer[location]);
+                    }
+                }
+            }
+        }
+
+        return delta * delta * delta;
+    }
+
+    int locateInStructure(List<Shape> structure, double x, double y, double z) {
         int locArgMin = Integer.MAX_VALUE;
 
         int locArg;
-        for (Shape shape : shapes) {
+        for (Shape shape : structure) {
 
             if (!overlaps(shape)) {
                 continue;
@@ -1410,74 +1486,7 @@ public abstract class ShapePresetDef implements Shape {
         return locArgMin;
     }
 
-    @Override
-    public void fillVolumeArray(FArray in) {
-        double factor = 1 / delta;
-
-        double radiusParsed = factor * getRadius();
-
-        double cX = factor * getCenterX();
-        double cY = factor * getCenterY();
-        double cZ = factor * getCenterZ();
-
-        double minX = Math.floor(cX - radiusParsed) * delta;
-        double maxX = getCenterX() + getRadius();
-        double minY = Math.floor(cY - radiusParsed) * delta;
-        double maxY = getCenterY() + getRadius();
-        double minZ = Math.floor(cZ - radiusParsed) * delta;
-        double maxZ = getCenterZ() + getRadius();
-
-        for (double x = minX ; x < maxX ; x += delta) {
-            for (double y = minY ; y < maxY ; y += delta) {
-                for (double z = minZ ; z < maxZ ; z += delta) {
-                    if (contains(x, y, z)) {
-                        in.add(x, y, z);
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void fillVolumeArray(FArray in, Iterable<? extends Shape> shapes) {
-        double factor = 1 / delta;
-
-        double radiusParsed = factor * getRadius();
-
-        double cX = factor * getCenterX();
-        double cY = factor * getCenterY();
-        double cZ = factor * getCenterZ();
-
-        double minX = Math.floor(cX - radiusParsed) * delta;
-        double maxX = getCenterX() + getRadius();
-        double minY = Math.floor(cY - radiusParsed) * delta;
-        double maxY = getCenterY() + getRadius();
-        double minZ = Math.floor(cZ - radiusParsed) * delta;
-        double maxZ = getCenterZ() + getRadius();
-
-        for (double x = minX ; x < maxX ; x += delta) {
-            for (double y = minY ; y < maxY ; y += delta) {
-
-                local:
-                for (double z = minZ ; z < maxZ ; z += delta) {
-                    if (contains(x, y, z)) {
-
-                        for (Shape shape : shapes) {
-                            if (this == shape) {
-                                continue;
-                            }
-
-                            if (shape.contains(x, y, z)) {
-                                continue local;
-                            }
-                        }
-
-                        in.add(x, y, z);
-                    }
-                }
-            }
-        }
-    }
+    //---
 
     @Override
     public Shape setRadiusMin(Iterable<? extends Shape> shapes) {
@@ -1497,7 +1506,7 @@ public abstract class ShapePresetDef implements Shape {
         }
         
         if (minRadius > getRadius()) {
-            double coatWidth = getCoatWidthTotal();
+            double coatWidth = getLayerWidthRemaining(0);
 
             if (minRadius + EPSILON <= coatWidth) {
                 setRadius(coatWidth + EPSILON);

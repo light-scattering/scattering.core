@@ -512,7 +512,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
                 volume += element.getVolumeAlgebraic();
             } else {
                 fLayer.reset();
-                element.fillVolumeOverlapLayer(fLayer, queue);
+                element.fillVolumeLayerOverlap(fLayer, queue);
                 volume += fLayer.get() * Math.pow(element.getDelta(), 3);
             }
 
@@ -546,7 +546,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return volTotal;
     }
 
-    private int getVol(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] volume) {
+    private int getVol(FLayerCounter fLayer, List<? extends Shape> field, Shape shape, double[] volume) {
 
         if (shape.overlaps(field) == 0) {
             return getVolAlg(shape, volume);
@@ -564,7 +564,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return shape.getLayerCount();
     }
 
-    private int getVolMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, double[] volume) {
+    private int getVolMsh(FLayerCounter fLayer, List<? extends Shape> field, Shape shape, double[] volume) {
         fLayer.reset();
 
         shape.fillVolumeLayer(fLayer, field);
@@ -612,7 +612,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     private void getOFacMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, List<Double> volume) {
         fLayer.reset();
 
-        shape.fillVolumeOverlapLayer(fLayer, field);
+        shape.fillVolumeLayerOverlap(fLayer, field);
 
         double volUnit = Math.pow(shape.getDelta(), 3);
 

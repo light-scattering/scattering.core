@@ -7,7 +7,9 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.util.container.DipoleData;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
+import eu.scattering.core.impl.util.DipoleDataDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -131,7 +133,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             throw new IllegalArgumentException("The radius must be greater than zero");
         }
 
-        if (radius <= getCoatWidthTotal()) {
+        if (radius <= getLayerWidthRemaining(0)) {
             throw new IllegalArgumentException("The radius cannot be smaller than the width of the coating");
         }
 
@@ -373,74 +375,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return setRadius(radius);
     }
 
-    @Override
-    public double getVolumeAlgebraic() {
 
-        return getVolume(getRadius());
-    }
 
-    @Override
-    public double getCoatVolume(int index) {
 
-        if (getCoating().size() == 0) {
-            throw new IllegalArgumentException("The shape is not coated");
-        }
 
-        if (index < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
-        }
 
-        if (index >= getCoatCount()) {
-            throw new IllegalArgumentException("the coat index is erroneous");
-        }
-
-        double radiusMin = getRadius() - getCoatWidthTotal();
-
-        for (int i = 0 ; i < index ; i++) {
-            radiusMin += getCoatWidth(i);
-        }
-
-        double radiusMax = radiusMin + getCoatWidth(index);
-
-        return getVolume(radiusMax) - getVolume(radiusMin);
-    }
-
-    @Override
-    public double getCoatVolumeTotal() {
-
-        if (getCoating().size() == 0) {
-            return 0;
-        }
-
-        double radiusMin = getRadius() - getCoatWidthTotal();
-
-        return getVolume(getRadius()) - getVolume(radiusMin);
-    }
-
-    @Override
-    public double getLayerVolume(int index) {
-
-        if (index < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
-        }
-
-        if (index >= getLayerCount()) {
-            throw new IllegalArgumentException("the layer index is erroneous");
-        }
-
-        if (index == 0) {
-            return getVolume(getRadius() - getCoatWidthTotal());
-        }
-
-        return getCoatVolume(index - 1);
-
-    }
-
-    @Override
-    public double getSurfaceAlgebraic() {
-
-        return getSurface(getRadius());
-    }
 
     @Override
     public boolean contains(double x, double y, double z) {
@@ -466,7 +405,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double tZ = z - getCenterZ();
 
         double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-        double radius = getInnerRadius() - getCoatWidthTotal();
+        double radius = getInnerRadius() - getLayerWidthRemaining(0);
 
         if (distP2 < radius * radius) {
             return 0;
@@ -483,58 +422,126 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return -1;
     }
 
-    @Override
-    public void fillSurfaceLayer(FLayerCounter in) {
-        double unit = getDelta() * getDelta();
+    //--- Dimension
 
-        for (int i = 0 ; i < getLayerCount() ; i++) {
-            in.set(i, in.get(i) + (int) Math.round(getSurface(getLayerRadius(i)) / unit));
+    @Override
+    public double getLayerVolume(int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
         }
-    }
 
-    @Override
-    public void fillSurfaceLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
-
-        for (int i = 0 ; i < getLayerCount() ; i++) {
-            int layer = i;
-
-            getSurfaceElements(getLayerRadius(layer), (x, y, z) -> {
-                boolean isPartOf = true;
-
-                for (Shape shape : shapes) {
-
-                    if (this == shape) {
-                        continue;
-                    }
-
-                    if (shape.containsWithSurface(x, y, z, layer)) {
-                        isPartOf = false;
-
-                        break;
-                    }
-                }
-
-                if (isPartOf) {
-                    in.inc(layer);
-                }
-            });
+        if (index >= getLayerCount()) {
+            throw new IllegalArgumentException("The layer index is erroneous");
         }
+
+        if (index == 0) {
+            return factory.getFSphereHelper().getVolume(getRadius() - getLayerWidthRemaining(0));
+        }
+
+        double radiusMin = getRadius() - getLayerWidthRemaining(0);
+
+        for (int i = 0 ; i < index - 1 ; i++) {
+            radiusMin += getCoatWidth(i);
+        }
+
+        double radiusMax = radiusMin + getCoatWidth(index - 1);
+
+        return factory.getFSphereHelper().getVolumeRing(radiusMin, radiusMax);
     }
 
     @Override
-    public double getSurfaceDiscrete() {
-        double unit = getDelta() * getDelta();
+    public double getCoatVolume(int index) {
 
-        return unit * ((int) Math.round(getSurface(getRadius()) / unit));
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getCoatCount()) {
+            throw new IllegalArgumentException("The coat index is erroneous");
+        }
+
+        return getLayerVolume(index + 1);
     }
 
     @Override
-    public void fillSurfaceOverlapLayer(FLayerCounter in, Iterable<? extends Shape> shapes) {
+    public double getCoatVolume() {
+        double radiusMin = getRadius() - getLayerWidthRemaining(0);
+
+        return factory.getFSphereHelper().getVolumeRing(radiusMin, getRadius());
+    }
+
+    @Override
+    public double getLayerSurface(int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getLayerCount()) {
+            throw new IllegalArgumentException("The layer index is erroneous");
+        }
+
+        if (index == 0) {
+            return factory.getFSphereHelper().getSurface(getRadius() - getLayerWidthRemaining(0));
+        }
+
+        double radiusMin = getRadius() - getLayerWidthRemaining(0);
+
+        for (int i = 0 ; i < index - 1 ; i++) {
+            radiusMin += getCoatWidth(i);
+        }
+
+        double radiusMax = radiusMin + getCoatWidth(index - 1);
+
+        return factory.getFSphereHelper().getSurface(radiusMax);
+    }
+
+    @Override
+    public double getCoatSurface(int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getCoatCount()) {
+            throw new IllegalArgumentException("The coat index is erroneous");
+        }
+
+        return getLayerSurface(index + 1);
+    }
+
+    @Override
+    public double getCoatSurface() {
+        double surface = 0;
+
+        for (int i = 0 ; i < getCoatCount() ; i++) {
+            surface += getCoatSurface(i);
+        }
+
+        return surface;
+    }
+
+    @Override
+    public double getVolumeAlgebraic() {
+
+        return factory.getFSphereHelper().getVolume(getRadius());
+    }
+
+    @Override
+    public double getSurfaceAlgebraic() {
+
+        return factory.getFSphereHelper().getSurface(getRadius());
+    }
+
+    @Override
+    public double fillSurfaceLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field) {
+        double srfUnit = getDelta() * getDelta();
 
         getSurfaceElements(getRadius(), (x, y, z) -> {
             int layers = 0;
 
-            for (Shape shape : shapes) {
+            for (Shape shape : field) {
 
                 if (this == shape) {
                     continue;
@@ -547,35 +554,145 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
             in.inc(layers);
         });
+
+        return srfUnit;
     }
 
     @Override
-    public void fillSurfaceArray(FArray in) {
+    public double fillSurfaceLayer(FLayerCounter in) {
+        double srfUnit = getDelta() * getDelta();
 
-       getSurfaceElements(getRadius(), in::add);
+        for (int i = 0 ; i < getLayerCount() ; i++) {
+            in.set(i, in.get(i) + (int) Math.round(getSurface(getLayerRadius(i)) / srfUnit));
+        }
+
+        return srfUnit;
     }
 
     @Override
-    public void fillSurfaceArray(FArray in, Iterable<? extends Shape> shapes) {
+    public double fillSurfaceLayer(FLayerCounter in, List<? extends Shape> structure) {
+        int position = structure.indexOf(this);
 
-        getSurfaceElements(getRadius(), (x, y, z) -> {
-            boolean add = true;
+        if (position == -1) {
+            throw new IllegalArgumentException("The shape must be a part of the structure");
+        }
 
-            for (Shape shape : shapes) {
-                if (this == shape) {
-                    continue;
+        double srfUnit = getDelta() * getDelta();
+
+        for (int i = 0 ; i < getLayerCount() ; i++) {
+            int location = i;
+
+            getSurfaceElements(getLayerRadius(location), (x, y, z) -> {
+                boolean isPartOf = true;
+
+                for (Shape shape : structure) {
+
+                    if (this == shape) {
+                        continue;
+                    }
+
+                    if (shape.containsWithSurface(x, y, z, location)) {
+                        isPartOf = false;
+
+                        break;
+                    }
                 }
 
-                if (shape.contains(x, y, z)) {
-                    add = false;
+                if (isPartOf) {
+                    in.inc(location);
                 }
-            }
+            });
+        }
 
-            if (add) {
-                in.add(x, y, z);
-            }
-        });
+        return srfUnit;
     }
+
+    @Override
+    public double fillSurfaceArray(FArray<DipoleData> in) {
+        double srfUnit = getDelta() * getDelta();
+
+        DipoleData[] layer = new DipoleData[getLayerCount()];
+
+        for (int i = 0 ; i < layer.length ; i++) {
+            layer[i] = DipoleDataDef.crete(i, getTag());
+        }
+
+        for (int i = 0 ; i < getLayerCount() ; i++) {
+            int index = i;
+
+            getSurfaceElements(getLayerRadius(i), (d0, d1, d2) -> in.addWithMeta(d0, d1, d2, layer[index]));
+        }
+
+       return srfUnit;
+    }
+
+    @Override
+    public double fillSurfaceArray(FArray<DipoleData> in, List<? extends Shape> structure) {
+        int position = structure.indexOf(this);
+
+        if (position == -1) {
+            throw new IllegalArgumentException("The shape must be a part of the structure");
+        }
+
+        double srfUnit = getDelta() * getDelta();
+
+        DipoleData[] layer = new DipoleData[getLayerCount()];
+
+        for (int i = 0 ; i < layer.length ; i++) {
+            layer[i] = DipoleDataDef.crete(i, getTag());
+        }
+
+        for (int i = 0 ; i < getLayerCount() ; i++) {
+            int location = i;
+
+            getSurfaceElements(getLayerRadius(location), (x, y, z) -> {
+                boolean isPartOf = true;
+
+                for (Shape shape : structure) {
+
+                    if (this == shape) {
+                        continue;
+                    }
+
+                    if (shape.containsWithSurface(x, y, z, location)) {
+                        isPartOf = false;
+
+                        break;
+                    }
+                }
+
+                if (isPartOf) {
+                    in.addWithMeta(x, y, z, layer[location]);
+                }
+            });
+        }
+
+        return srfUnit;
+    }
+
+    private void getSurfaceElements(double radius, TriConsumer consumer) {
+        int points = (int) Math.round(getSurface(radius) / (getDelta() * getDelta()));
+
+        double offset = 2.0 / points;
+        double increment = Math.PI * (3.0 - Math.sqrt(5));
+
+        for (int i = 0; i < points; i++) {
+            double y = 1 - (i + 0.5) * offset;
+            double r = Math.sqrt(1 - y * y);
+            double phi = i * increment;
+
+            double x = Math.cos(phi) * r;
+            double z = Math.sin(phi) * r;
+
+            consumer.consume(
+                    getCenterX() + (x * radius),
+                    getCenterY() + (y * radius),
+                    getCenterZ() + (z * radius)
+            );
+        }
+    }
+
+    //---
 
     @Override
     public boolean containsWithSurface(double x, double y, double z, int layer) {
@@ -615,46 +732,10 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return distP2 <= radP2 + getEpsilon();
     }
 
-    private void getSurfaceElements(double radius, TriConsumer consumer) {
-        int points = (int) Math.round(getSurface(radius) / (getDelta() * getDelta()));
-
-        double offset = 2.0 / points;
-        double increment = Math.PI * (3.0 - Math.sqrt(5));
-
-        for (int i = 0; i < points; i++) {
-            double y = 1 - (i + 0.5) * offset;
-            double r = Math.sqrt(1 - y * y);
-            double phi = i * increment;
-
-            double x = Math.cos(phi) * r;
-            double z = Math.sin(phi) * r;
-
-            consumer.consume(
-                    getCenterX() + (x * radius),
-                    getCenterY() + (y * radius),
-                    getCenterZ() + (z * radius)
-            );
-        }
-    }
 
     private double getSurface(double radius) {
 
         return 4 * Math.PI * radius * radius;
-    }
-
-    private double getSurfaceRadius(double surface) {
-
-        return Math.pow(0.25 * surface / Math.PI, 0.5);
-    }
-
-    private double getVolume(double radius) {
-
-        return 4 * Math.PI * radius * radius * radius / 3;
-    }
-
-    private double getVolumeRadius(double volume) {
-
-        return Math.pow(0.75 * volume / Math.PI, 1.0 / 3);
     }
 
     private double getLayerRadius(int layer) {
@@ -739,7 +820,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public boolean attachLinearAndSpherical(Shape target, Iterable<? extends Shape> field, int corrections) {
+    public boolean attachLinearWithSphericalCorrection(Shape target, Iterable<? extends Shape> field, int corrections) {
         int repositions = 1;
 
         if (!attachLinear(target)) {
@@ -802,7 +883,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         List<Shape> candidates = new ArrayList<>();
 
         setCenter(ray.getRefOrigin().getRefBase());
-        getCollisionListDirectional(candidates, field, ray);
+        getCollisionListLinear(candidates, field, ray);
 
         sortByDistCenter(candidates);
 
@@ -868,7 +949,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void getCollisionListDirectional(List<Shape> in, Iterable<? extends Shape> field, FRay ray) {
+    public void getCollisionListLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray) {
         in.clear();
 
         this.setCenter(ray.getRefOrigin().getRefBase());
