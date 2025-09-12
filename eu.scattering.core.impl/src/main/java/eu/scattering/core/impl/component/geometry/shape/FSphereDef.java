@@ -78,47 +78,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return this;
     }
 
-    @Override
-    public double getCenterX() {
-
-        return getRefCenter().getX();
-    }
-
-    @Override
-    public double getCenterY() {
-
-        return getRefCenter().getY();
-    }
-
-    @Override
-    public double getCenterZ() {
-
-        return getRefCenter().getZ();
-    }
-
-    @Override
-    public Shape setCenterX(double x) {
-
-        getRefCenter().setX(x);
-
-        return this;
-    }
-
-    @Override
-    public Shape setCenterY(double y) {
-
-        getRefCenter().setY(y);
-
-        return this;
-    }
-
-    @Override
-    public Shape setCenterZ(double z) {
-
-        getRefCenter().setZ(z);
-
-        return this;
-    }
 
     // -------------------------------------------------------------------------------------------------
     // The following fields do not have to modified while extending the class.
@@ -341,17 +300,9 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     // -------------------------------------------------------------------------------------------------
 
-    @Override
-    public boolean contains(double x, double y, double z) {
-        double tX = x - getCenterX();
-        double tY = y - getCenterY();
-        double tZ = z - getCenterZ();
 
-        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-        double radP2 = getRadius() * getRadius();
 
-        return distP2 < radP2;
-    }
+    //--- Inclusion
 
     @Override
     public int locate(double x, double y, double z) {
@@ -380,6 +331,109 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         return -1;
+    }
+
+    @Override
+    public boolean contains(double x, double y, double z) {
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
+
+        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+        double radP2 = getRadius() * getRadius();
+
+        return distP2 < radP2;
+    }
+
+    @Override
+    public boolean containsWithSurface(double x, double y, double z, int layer) {
+
+        if (layer < 0) {
+            throw new IllegalArgumentException("The layer index cannot be lower than zero");
+        }
+
+        if (layer > getLayerCount()) {
+            throw new IllegalArgumentException("The layer index is erroneous");
+        }
+
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
+
+        double radius = getRadius();
+        for (int i = getLayerCount() - 1 ; i > layer ; i--) {
+            radius -= getCoatWidth(i - 1);
+        }
+
+        double radP2 = radius * radius;
+        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+
+        return distP2 <= radP2 + getEpsilon();
+    }
+
+    @Override
+    public boolean containsWithSurface(double x, double y, double z) {
+        double tX = x - getCenterX();
+        double tY = y - getCenterY();
+        double tZ = z - getCenterZ();
+
+        double radP2 = getRadius() * getRadius();
+        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
+
+        return distP2 <= radP2 + getEpsilon();
+    }
+
+    //--- Position
+
+    @Override
+    public double getCenterX() {
+
+        return getRefCenter().getX();
+    }
+
+    @Override
+    public double getCenterY() {
+
+        return getRefCenter().getY();
+    }
+
+    @Override
+    public double getCenterZ() {
+
+        return getRefCenter().getZ();
+    }
+
+    @Override
+    public Shape setCenterX(double x) {
+
+        getRefCenter().setX(x);
+
+        return this;
+    }
+
+    @Override
+    public Shape setCenterY(double y) {
+
+        getRefCenter().setY(y);
+
+        return this;
+    }
+
+    @Override
+    public Shape setCenterZ(double z) {
+
+        getRefCenter().setZ(z);
+
+        return this;
+    }
+
+    @Override
+    public void sortByDistSpace(List<? extends Shape> in) {
+        CmpDistSpace cmp = getCacheCmpDistSpace();
+
+        cmp.setRef(this);
+
+        in.sort(cmp);
     }
 
     //--- Dimension
@@ -688,45 +742,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     //---
 
-    @Override
-    public boolean containsWithSurface(double x, double y, double z, int layer) {
-
-        if (layer < 0) {
-            throw new IllegalArgumentException("The layer index cannot be lower than zero");
-        }
-
-        if (layer > getLayerCount()) {
-            throw new IllegalArgumentException("The layer index is erroneous");
-        }
-
-        double tX = x - getCenterX();
-        double tY = y - getCenterY();
-        double tZ = z - getCenterZ();
-
-        double radius = getRadius();
-        for (int i = getLayerCount() - 1 ; i > layer ; i--) {
-            radius -= getCoatWidth(i - 1);
-        }
-
-        double radP2 = radius * radius;
-        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-
-        return distP2 <= radP2 + getEpsilon();
-    }
-
-    @Override
-    public boolean containsWithSurface(double x, double y, double z) {
-        double tX = x - getCenterX();
-        double tY = y - getCenterY();
-        double tZ = z - getCenterZ();
-
-        double radP2 = getRadius() * getRadius();
-        double distP2 = (tX * tX) + (tY * tY) + (tZ * tZ);
-
-        return distP2 <= radP2 + getEpsilon();
-    }
-
-
     private double getSurface(double radius) {
 
         return 4 * Math.PI * radius * radius;
@@ -890,15 +905,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         return false;
-    }
-
-    @Override
-    public void sortByDistSpace(List<? extends Shape> in) {
-        CmpDistSpace cmp = getCacheCmpDistSpace();
-
-        cmp.setRef(this);
-
-        in.sort(cmp);
     }
 
     @Override

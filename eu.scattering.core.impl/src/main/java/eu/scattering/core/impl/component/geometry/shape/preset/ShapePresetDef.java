@@ -184,6 +184,75 @@ public abstract class ShapePresetDef implements Shape {
         return distanceX < EPSILON && distanceY < EPSILON && distanceZ < EPSILON;
     }
 
+
+
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected FPairPos3D getOperationRange(Shape shape) {
+        double opA, opB;
+
+        opA = this.getCenterX() - this.getRadius();
+        opB = shape.getCenterX() - shape.getRadius();
+
+        double bX = Math.max(opA, opB);
+
+        opA = this.getCenterX() + this.getRadius();
+        opB = shape.getCenterX() + shape.getRadius();
+
+        double hX = Math.min(opA, opB);
+
+        opA = this.getCenterY() - this.getRadius();
+        opB = shape.getCenterY() - shape.getRadius();
+
+        double bY = Math.max(opA, opB);
+
+        opA = this.getCenterY() + this.getRadius();
+        opB = shape.getCenterY() + shape.getRadius();
+
+        double hY = Math.min(opA, opB);
+
+        opA = this.getCenterZ() - this.getRadius();
+        opB = shape.getCenterZ() - shape.getRadius();
+
+        double bZ = Math.max(opA, opB);
+
+        opA = this.getCenterZ() + this.getRadius();
+        opB = shape.getCenterZ() + shape.getRadius();
+
+        double hZ = Math.min(opA, opB);
+
+        return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    //--- Inclusion
+
+    @Override
+    public boolean contains(FPoint fPoint) {
+
+        return contains(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
+
+    @Override
+    public boolean contains(FPos3D fPos3D) {
+
+        return contains(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+    }
+
+    @Override
+    public int locate(FPoint fPoint) {
+
+        return locate(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+    }
+
+    @Override
+    public int locate(FPos3D fPos3D) {
+
+        return locate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+    }
+
+    //--- Position
+
     @Override
     public FPos3D getCenter() {
 
@@ -222,58 +291,6 @@ public abstract class ShapePresetDef implements Shape {
         setCenter(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
 
         return this;
-    }
-
-    @Override
-    public Shape scaleSize(double factor) {
-
-        if (factor <= 0) {
-            throw new IllegalArgumentException("The factor must be a positive value");
-        }
-
-        setRadius(getRadius() * factor);
-
-        for (int i = 0; i < getCoatCount() ; i++) {
-            setCoatWidth(i, getCoatWidth(i) * factor);
-        }
-
-        return this;
-    }
-
-    @Override
-    public Shape scalePosition(double factor) {
-
-        setCenter(
-                getCenterX() * factor,
-                getCenterY() * factor,
-                getCenterZ() * factor
-        );
-
-        return this;
-    }
-
-    @Override
-    public Shape translate(double x, double y, double z) {
-
-        setCenter(
-                getCenterX() + x,
-                getCenterY() + y,
-                getCenterZ() + z
-        );
-
-        return this;
-    }
-
-    @Override
-    public Shape translate(FPoint fPoint) {
-
-        return translate(fPoint.getX(), fPoint.getY(), fPoint.getZ());
-    }
-
-    @Override
-    public Shape translate(FPos3D fPos3D) {
-
-        return translate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
     }
 
     @Override
@@ -355,65 +372,27 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public boolean contains(FPoint fPoint) {
+    public Shape translate(double x, double y, double z) {
 
-        return contains(fPoint.getX(), fPoint.getY(), fPoint.getZ());
+        setCenter(
+                getCenterX() + x,
+                getCenterY() + y,
+                getCenterZ() + z
+        );
+
+        return this;
     }
 
     @Override
-    public boolean contains(FPos3D fPos3D) {
+    public Shape translate(FPoint fPoint) {
 
-        return contains(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+        return translate(fPoint.getX(), fPoint.getY(), fPoint.getZ());
     }
 
     @Override
-    public int locate(FPoint fPoint) {
+    public Shape translate(FPos3D fPos3D) {
 
-        return locate(fPoint.getX(), fPoint.getY(), fPoint.getZ());
-    }
-
-    @Override
-    public int locate(FPos3D fPos3D) {
-
-        return locate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    protected FPairPos3D getOperationRange(Shape shape) {
-        double opA, opB;
-
-        opA = this.getCenterX() - this.getRadius();
-        opB = shape.getCenterX() - shape.getRadius();
-
-        double bX = Math.max(opA, opB);
-
-        opA = this.getCenterX() + this.getRadius();
-        opB = shape.getCenterX() + shape.getRadius();
-
-        double hX = Math.min(opA, opB);
-
-        opA = this.getCenterY() - this.getRadius();
-        opB = shape.getCenterY() - shape.getRadius();
-
-        double bY = Math.max(opA, opB);
-
-        opA = this.getCenterY() + this.getRadius();
-        opB = shape.getCenterY() + shape.getRadius();
-
-        double hY = Math.min(opA, opB);
-
-        opA = this.getCenterZ() - this.getRadius();
-        opB = shape.getCenterZ() - shape.getRadius();
-
-        double bZ = Math.max(opA, opB);
-
-        opA = this.getCenterZ() + this.getRadius();
-        opB = shape.getCenterZ() + shape.getRadius();
-
-        double hZ = Math.min(opA, opB);
-
-        return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
+        return translate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
     }
 
     @Override
@@ -423,6 +402,18 @@ public abstract class ShapePresetDef implements Shape {
         cmp.setRef(this);
 
         in.sort(cmp);
+    }
+
+    @Override
+    public Shape scalePosition(double factor) {
+
+        setCenter(
+                getCenterX() * factor,
+                getCenterY() * factor,
+                getCenterZ() * factor
+        );
+
+        return this;
     }
 
     //--- Relation
@@ -1138,6 +1129,22 @@ public abstract class ShapePresetDef implements Shape {
     public Shape removeCoats() {
 
         getCoating().clear();
+
+        return this;
+    }
+
+    @Override
+    public Shape scaleSize(double factor) {
+
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The factor must be a positive value");
+        }
+
+        setRadius(getRadius() * factor);
+
+        for (int i = 0; i < getCoatCount() ; i++) {
+            setCoatWidth(i, getCoatWidth(i) * factor);
+        }
 
         return this;
     }

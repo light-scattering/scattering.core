@@ -1,25 +1,16 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.util.annotation.Fragment;
-import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
-
-import java.util.List;
 
 public interface Shape extends Geometry,
-        ShapeModuleDimension, ShapeModuleAggregate, ShapeModuleRelation, ShapeModuleMesh, ShapeModulePosition {
+        ShapeModuleDimension, ShapeModuleAggregation, ShapeModuleRelation, ShapeModuleInclusion, ShapeModulePosition {
 
     boolean isExact(Shape arg);
     boolean isExactCenter(Shape arg);
 
     boolean isSimilar(Shape arg);
     boolean isSimilarCenter(Shape arg);
-
-
-
 
     //--------------------------------------------------
 
