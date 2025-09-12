@@ -245,7 +245,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
             int coats = this.getCoatCount();
 
-            if (arg.getCoatCount() != coats) {
+            if (arg.getLayerCount() - 1 != coats) {
                 return false;
             }
 

@@ -208,545 +208,6 @@ public class FSphereTest {
         }
 
         @Test
-        @DisplayName("Set center")
-        void setCenter() {
-            FPoint fPoint = TestHelper.getRandFPoint();
-            FSphere fSphere = factory.getRefFSphere(fPoint, 1);
-
-            FPoint fCenterA = TestHelper.getRandFPoint();
-
-            Shape results = fSphere.setRefCenter(fCenterA);
-
-            fCenterA.set(1, 2, 3);
-
-            FPoint fCenterB = fSphere.getRefCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, fCenterB.getX(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(2, fCenterB.getY(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(3, fCenterB.getZ(),
-                            "The Z value is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change"),
-                    () -> assertSame(fCenterA, fCenterB,
-                            "The FPoint reference should not change"),
-                    () -> assertNotSame(fPoint, fCenterA,
-                            "The FPoint reference should be different")
-            );
-        }
-
-        @Test
-        @DisplayName("Set position X")
-        void setPositionX() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setCenterX(1);
-            FPos3D position = fSphere.getCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, position.getD0(),
-                            "The X value is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set position Y")
-        void setPositionY() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setCenterY(1);
-            FPos3D position = fSphere.getCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, position.getD1(),
-                            "The Y value is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set position Z")
-        void setPositionZ() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setCenterZ(1);
-            FPos3D position = fSphere.getCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, position.getD2(),
-                            "The Z value is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set position with primitives")
-        void setPositionWithPrimitives() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setCenter(1, 2, 3);
-            FPos3D position = fSphere.getCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, position.getD0(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(2, position.getD1(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(3, position.getD2(),
-                            "The Z value is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set position with Shape")
-        void setPositionWithShape() {
-            FSphere fSphereRef = TestHelper.getRandFSphere();
-            FSphere fSphereArg = factory.getFSphere(1, 2, 3, 10);
-
-            Shape results = fSphereRef.setCenter(fSphereArg);
-            FPos3D position = fSphereRef.getCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, position.getD0(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(2, position.getD1(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(3, position.getD2(),
-                            "The Z value is incorrect"),
-                    () -> assertTrue(fSphereArg.isExact(factory.getFSphere(1, 2, 3, 10)),
-                            "The input FSphere values should not change"),
-                    () -> assertSame(fSphereRef, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set position with FPoint")
-        void setPositionWithFPoint() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            FPoint posSet = factory.getFPoint(1, 2, 3);
-
-            Shape results = fSphere.setCenter(posSet);
-            FPos3D position = fSphere.getCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, position.getD0(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(2, position.getD1(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(3, position.getD2(),
-                            "The Z value is incorrect"),
-                    () -> assertTrue(posSet.isExact(1, 2, 3),
-                            "The input FPoint values should not change"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set position with FPos3D")
-        void setPositionWithFPos3D() {
-            FSphere fSphere = TestHelper.getRandFSphere();
-
-            Shape results = fSphere.setCenter(factory.getFPos3D(1, 2, 3));
-            FPos3D position = fSphere.getCenter();
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(1, position.getD0(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(2, position.getD1(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(3, position.getD2(),
-                            "The Z value is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Translate")
-        void translate() {
-            FSphere fSphere = factory.getFSphere(1, 1, 1, 1);
-
-            Shape results = fSphere.translate(1, 2, 3);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(2, results.getCenterX(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(3, results.getCenterY(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(4, results.getCenterZ(),
-                            "The Z value is incorrect"),
-                    () -> assertEquals(1, results.getRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Translate with FPoint")
-        void translateWithFPoint() {
-            FSphere fSphere = factory.getFSphere(1, 1, 1, 1);
-
-            Shape results = fSphere.translate(factory.getFPoint(1, 2, 3));
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(2, results.getCenterX(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(3, results.getCenterY(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(4, results.getCenterZ(),
-                            "The Z value is incorrect"),
-                    () -> assertEquals(1, results.getRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Translate with FPos3D")
-        void translateWithFPos3D() {
-            FSphere fSphere = factory.getFSphere(1, 1, 1, 1);
-
-            Shape results = fSphere.translate(factory.getFPos3D(1, 2, 3));
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(2, results.getCenterX(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(3, results.getCenterY(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(4, results.getCenterZ(),
-                            "The Z value is incorrect"),
-                    () -> assertEquals(1, results.getRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Scale size")
-        void scaleSize() {
-            FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
-
-            assertThrows(IllegalArgumentException.class, () -> fSphere.scaleSize(-1),
-                    "The factor must be a positive value");
-
-            Shape results = fSphere.scaleSize(2);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(2, results.getCenterX(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(3, results.getCenterY(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(4, results.getCenterZ(),
-                            "The Z value is incorrect"),
-                    () -> assertEquals(2, results.getRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Scale position")
-        void scalePosition() {
-            FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
-
-            Shape results = fSphere.scalePosition(2);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(4, results.getCenterX(),
-                            "The X value is incorrect"),
-                    () -> assertEquals(6, results.getCenterY(),
-                            "The Y value is incorrect"),
-                    () -> assertEquals(8, results.getCenterZ(),
-                            "The Z value is incorrect"),
-                    () -> assertEquals(1, results.getRadius(),
-                            "The radius is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Scale size with coating")
-        void scaleSizeWithCoating() {
-            FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
-
-            fSphere.addCoat(3).addCoat(2).addCoat(1);
-
-            Shape results = fSphere.scaleSize(2);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(6, results.getCoatWidth(0),
-                            "Coat A width is incorrect"),
-                    () -> assertEquals(4, results.getCoatWidth(1),
-                            "Coat B width is incorrect"),
-                    () -> assertEquals(2, results.getCoatWidth(2),
-                            "Coat C width is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Scale position with coating")
-        void scalePositionWithCoating() {
-            FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
-
-            fSphere.addCoat(3).addCoat(2).addCoat(1);
-
-            Shape results = fSphere.scalePosition(2);
-
-            Assertions.assertAll("Validate FSphere values",
-                    () -> assertEquals(3, results.getCoatWidth(0),
-                            "Coat A width is incorrect"),
-                    () -> assertEquals(2, results.getCoatWidth(1),
-                            "Coat B width is incorrect"),
-                    () -> assertEquals(1, results.getCoatWidth(2),
-                            "Coat C width is incorrect"),
-                    () -> assertSame(fSphere, results,
-                            "The FSphere reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center with primitives")
-        void getDistCenterWithPrimitives() {
-            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
-
-            double dist = fSphere.getDistCenter(-2, -2, -2);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
-                            "The Shape should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center with FPoint")
-        void getDistCenterWithFPoint() {
-            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
-
-            double dist = fSphere.getDistCenter(factory.getFPoint(-2, -2, -2));
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
-                            "The Shape should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center with FPos3D")
-        void getDistCenterWithFPos3D() {
-            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
-
-            double dist = fSphere.getDistCenter(factory.getFPos3D(-2, -2, -2));
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
-                            "The Shape should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center with Shape")
-        void getDistCenterWithShape() {
-            FSphere fSphereA = factory.getFSphere(2, 2, 2, 1);
-            FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
-
-            double distA = fSphereA.getDistCenter(fSphereB);
-            double distB = fSphereB.getDistCenter(fSphereA);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), distA,
-                            epsilon, "The distance A is incorrect"),
-                    () -> assertEquals(4 * Math.sqrt(3), distB,
-                            epsilon, "The distance B is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphereA,
-                            "Shape A should not change"),
-                    () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
-                            "Shape B should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center P2 with primitives")
-        void getDistCenterP2WithPrimitives() {
-            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
-
-            double dist = fSphere.getDistCenterP2(-2, -2, -2);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * 4 * 3, dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
-                            "The shape should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center P2 with FPoint")
-        void getDistCenterP2WithFPoint() {
-            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
-
-            double dist = fSphere.getDistCenterP2(factory.getFPoint(-2, -2, -2));
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * 4 * 3, dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
-                            "The shape should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center P2 with FPos3D")
-        void getDistCenterP2WithFPos3D() {
-            FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
-
-            double dist = fSphere.getDistCenterP2(factory.getFPos3D(-2, -2, -2));
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * 4 * 3, dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
-                            "The shape should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get distance center P2 with Shape")
-        void getDistCenterP2WithShape() {
-            FSphere fSphereA = factory.getFSphere(2, 2, 2, 1);
-            FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
-
-            double distA = fSphereA.getDistCenterP2(fSphereB);
-            double distB = fSphereB.getDistCenterP2(fSphereA);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * 4 * 3, distA,
-                            epsilon, "Distance A is incorrect"),
-                    () -> assertEquals(4 * 4 * 3, distB,
-                            epsilon, "Distance B is incorrect"),
-                    () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphereA,
-                            "Shape A should not change"),
-                    () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
-                            "Shape B should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set distance center with primitives")
-        void setDistCenterWithPrimitives() {
-            FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
-
-            Shape results = fSphere.setDistCenter(-2, -2, -2, 4 * Math.sqrt(3));
-
-            double dist = fSphere.getDistCenter(-2, -2, -2);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
-                            "The position is not correct"),
-                    () -> assertSame(fSphere, results,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set distance center with FPoint")
-        void setDistCenterWithFPoint() {
-            FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
-
-            Shape results = fSphere.setDistCenter(factory.getFPoint(-2, -2, -2), 4 * Math.sqrt(3));
-
-            double dist = fSphere.getDistCenter(-2, -2, -2);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
-                            "The position is not correct"),
-                    () -> assertSame(fSphere, results,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set distance center with FPos3D")
-        void setDistCenterWithFPos3D() {
-            FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
-
-            Shape results = fSphere.setDistCenter(factory.getFPos3D(-2, -2, -2), 4 * Math.sqrt(3));
-
-            double dist = fSphere.getDistCenter(-2, -2, -2);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), dist,
-                            epsilon, "The distance is incorrect"),
-                    () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
-                            "The position is not correct"),
-                    () -> assertSame(fSphere, results,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set distance center with Shape")
-        void setDistCenterWithShape() {
-            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-            FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
-
-            Shape results = fSphereA.setDistCenter(fSphereB, 4 * Math.sqrt(3));
-
-            double distA = fSphereA.getDistCenter(fSphereB);
-            double distB = fSphereB.getDistCenter(fSphereA);
-
-            Assertions.assertAll("Validate distance values",
-                    () -> assertEquals(4 * Math.sqrt(3), distA,
-                            epsilon, "Distance A is incorrect"),
-                    () -> assertEquals(4 * Math.sqrt(3), distB,
-                            epsilon, "Distance B is incorrect"),
-                    () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphereA),
-                            "Shape A is not correct"),
-                    () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
-                            "Shape B should not change"),
-                    () -> assertSame(fSphereA, results,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Set distance center (exception)")
-        void setDistCenterException() {
-            FSphere fSphereA = factory.getFSphere(-2, -2, -2, 1);
-            FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
-
-            assertThrows(IllegalStateException.class, () -> fSphereA.setDistCenter(fSphereB, 1),
-                    "The operation can not be performed");
-        }
-
-        @Test
         @DisplayName("Set epsilon")
         void setEpsilon() {
             Shape fSphere = factory.getFSphere();
@@ -867,6 +328,506 @@ public class FSphereTest {
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FSphereAdvancedTest {
+
+        @Nested
+        @Tag("Module - Position")
+        @DisplayName("Functionality - Advanced (position)")
+        class FSphereModulePosition {
+
+            @Test
+            @DisplayName("Set center")
+            void setCenter() {
+                FPoint fPoint = TestHelper.getRandFPoint();
+                FSphere fSphere = factory.getRefFSphere(fPoint, 1);
+
+                FPoint fCenterA = TestHelper.getRandFPoint();
+
+                Shape results = fSphere.setRefCenter(fCenterA);
+
+                fCenterA.set(1, 2, 3);
+
+                FPoint fCenterB = fSphere.getRefCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, fCenterB.getX(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(2, fCenterB.getY(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(3, fCenterB.getZ(),
+                                "The Z value is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change"),
+                        () -> assertSame(fCenterA, fCenterB,
+                                "The FPoint reference should not change"),
+                        () -> assertNotSame(fPoint, fCenterA,
+                                "The FPoint reference should be different")
+                );
+            }
+
+            @Test
+            @DisplayName("Set position X")
+            void setPositionX() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                Shape results = fSphere.setCenterX(1);
+                FPos3D position = fSphere.getCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, position.getD0(),
+                                "The X value is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set position Y")
+            void setPositionY() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                Shape results = fSphere.setCenterY(1);
+                FPos3D position = fSphere.getCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, position.getD1(),
+                                "The Y value is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set position Z")
+            void setPositionZ() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                Shape results = fSphere.setCenterZ(1);
+                FPos3D position = fSphere.getCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, position.getD2(),
+                                "The Z value is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set position with primitives")
+            void setPositionWithPrimitives() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                Shape results = fSphere.setCenter(1, 2, 3);
+                FPos3D position = fSphere.getCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, position.getD0(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(2, position.getD1(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(3, position.getD2(),
+                                "The Z value is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set position with Shape")
+            void setPositionWithShape() {
+                FSphere fSphereRef = TestHelper.getRandFSphere();
+                FSphere fSphereArg = factory.getFSphere(1, 2, 3, 10);
+
+                Shape results = fSphereRef.setCenter(fSphereArg);
+                FPos3D position = fSphereRef.getCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, position.getD0(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(2, position.getD1(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(3, position.getD2(),
+                                "The Z value is incorrect"),
+                        () -> assertTrue(fSphereArg.isExact(factory.getFSphere(1, 2, 3, 10)),
+                                "The input FSphere values should not change"),
+                        () -> assertSame(fSphereRef, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set position with FPoint")
+            void setPositionWithFPoint() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                FPoint posSet = factory.getFPoint(1, 2, 3);
+
+                Shape results = fSphere.setCenter(posSet);
+                FPos3D position = fSphere.getCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, position.getD0(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(2, position.getD1(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(3, position.getD2(),
+                                "The Z value is incorrect"),
+                        () -> assertTrue(posSet.isExact(1, 2, 3),
+                                "The input FPoint values should not change"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set position with FPos3D")
+            void setPositionWithFPos3D() {
+                FSphere fSphere = TestHelper.getRandFSphere();
+
+                Shape results = fSphere.setCenter(factory.getFPos3D(1, 2, 3));
+                FPos3D position = fSphere.getCenter();
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(1, position.getD0(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(2, position.getD1(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(3, position.getD2(),
+                                "The Z value is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Translate")
+            void translate() {
+                FSphere fSphere = factory.getFSphere(1, 1, 1, 1);
+
+                Shape results = fSphere.translate(1, 2, 3);
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(2, results.getCenterX(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(3, results.getCenterY(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(4, results.getCenterZ(),
+                                "The Z value is incorrect"),
+                        () -> assertEquals(1, results.getRadius(),
+                                "The radius is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Translate with FPoint")
+            void translateWithFPoint() {
+                FSphere fSphere = factory.getFSphere(1, 1, 1, 1);
+
+                Shape results = fSphere.translate(factory.getFPoint(1, 2, 3));
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(2, results.getCenterX(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(3, results.getCenterY(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(4, results.getCenterZ(),
+                                "The Z value is incorrect"),
+                        () -> assertEquals(1, results.getRadius(),
+                                "The radius is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Translate with FPos3D")
+            void translateWithFPos3D() {
+                FSphere fSphere = factory.getFSphere(1, 1, 1, 1);
+
+                Shape results = fSphere.translate(factory.getFPos3D(1, 2, 3));
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(2, results.getCenterX(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(3, results.getCenterY(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(4, results.getCenterZ(),
+                                "The Z value is incorrect"),
+                        () -> assertEquals(1, results.getRadius(),
+                                "The radius is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center with primitives")
+            void getDistCenterWithPrimitives() {
+                FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+                double dist = fSphere.getDistCenter(-2, -2, -2);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                                "The Shape should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center with FPoint")
+            void getDistCenterWithFPoint() {
+                FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+                double dist = fSphere.getDistCenter(factory.getFPoint(-2, -2, -2));
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                                "The Shape should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center with FPos3D")
+            void getDistCenterWithFPos3D() {
+                FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+                double dist = fSphere.getDistCenter(factory.getFPos3D(-2, -2, -2));
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                                "The Shape should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center with Shape")
+            void getDistCenterWithShape() {
+                FSphere fSphereA = factory.getFSphere(2, 2, 2, 1);
+                FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
+
+                double distA = fSphereA.getDistCenter(fSphereB);
+                double distB = fSphereB.getDistCenter(fSphereA);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), distA,
+                                epsilon, "The distance A is incorrect"),
+                        () -> assertEquals(4 * Math.sqrt(3), distB,
+                                epsilon, "The distance B is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphereA,
+                                "Shape A should not change"),
+                        () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
+                                "Shape B should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center P2 with primitives")
+            void getDistCenterP2WithPrimitives() {
+                FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+                double dist = fSphere.getDistCenterP2(-2, -2, -2);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * 4 * 3, dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                                "The shape should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center P2 with FPoint")
+            void getDistCenterP2WithFPoint() {
+                FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+                double dist = fSphere.getDistCenterP2(factory.getFPoint(-2, -2, -2));
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * 4 * 3, dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                                "The shape should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center P2 with FPos3D")
+            void getDistCenterP2WithFPos3D() {
+                FSphere fSphere = factory.getFSphere(2, 2, 2, 1);
+
+                double dist = fSphere.getDistCenterP2(factory.getFPos3D(-2, -2, -2));
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * 4 * 3, dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                                "The shape should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Get distance center P2 with Shape")
+            void getDistCenterP2WithShape() {
+                FSphere fSphereA = factory.getFSphere(2, 2, 2, 1);
+                FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
+
+                double distA = fSphereA.getDistCenterP2(fSphereB);
+                double distB = fSphereB.getDistCenterP2(fSphereA);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * 4 * 3, distA,
+                                epsilon, "Distance A is incorrect"),
+                        () -> assertEquals(4 * 4 * 3, distB,
+                                epsilon, "Distance B is incorrect"),
+                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphereA,
+                                "Shape A should not change"),
+                        () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
+                                "Shape B should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set distance center with primitives")
+            void setDistCenterWithPrimitives() {
+                FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
+
+                Shape results = fSphere.setDistCenter(-2, -2, -2, 4 * Math.sqrt(3));
+
+                double dist = fSphere.getDistCenter(-2, -2, -2);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
+                                "The position is not correct"),
+                        () -> assertSame(fSphere, results,
+                                "The reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set distance center with FPoint")
+            void setDistCenterWithFPoint() {
+                FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
+
+                Shape results = fSphere.setDistCenter(factory.getFPoint(-2, -2, -2), 4 * Math.sqrt(3));
+
+                double dist = fSphere.getDistCenter(-2, -2, -2);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
+                                "The position is not correct"),
+                        () -> assertSame(fSphere, results,
+                                "The reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set distance center with FPos3D")
+            void setDistCenterWithFPos3D() {
+                FSphere fSphere = factory.getFSphere(0, 0, 0, 1);
+
+                Shape results = fSphere.setDistCenter(factory.getFPos3D(-2, -2, -2), 4 * Math.sqrt(3));
+
+                double dist = fSphere.getDistCenter(-2, -2, -2);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), dist,
+                                epsilon, "The distance is incorrect"),
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphere),
+                                "The position is not correct"),
+                        () -> assertSame(fSphere, results,
+                                "The reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set distance center with Shape")
+            void setDistCenterWithShape() {
+                FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+                FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
+
+                Shape results = fSphereA.setDistCenter(fSphereB, 4 * Math.sqrt(3));
+
+                double distA = fSphereA.getDistCenter(fSphereB);
+                double distB = fSphereB.getDistCenter(fSphereA);
+
+                Assertions.assertAll("Validate distance values",
+                        () -> assertEquals(4 * Math.sqrt(3), distA,
+                                epsilon, "Distance A is incorrect"),
+                        () -> assertEquals(4 * Math.sqrt(3), distB,
+                                epsilon, "Distance B is incorrect"),
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphereA),
+                                "Shape A is not correct"),
+                        () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
+                                "Shape B should not change"),
+                        () -> assertSame(fSphereA, results,
+                                "The reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Set distance center (exception)")
+            void setDistCenterException() {
+                FSphere fSphereA = factory.getFSphere(-2, -2, -2, 1);
+                FSphere fSphereB = factory.getFSphere(-2, -2, -2, 3);
+
+                assertThrows(IllegalStateException.class, () -> fSphereA.setDistCenter(fSphereB, 1),
+                        "The operation can not be performed");
+            }
+
+            @Test
+            @DisplayName("Scale position")
+            void scalePosition() {
+                FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
+
+                Shape results = fSphere.scalePosition(2);
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(4, results.getCenterX(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(6, results.getCenterY(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(8, results.getCenterZ(),
+                                "The Z value is incorrect"),
+                        () -> assertEquals(1, results.getRadius(),
+                                "The radius is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Scale position with coating")
+            void scalePositionWithCoating() {
+                FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
+
+                fSphere.addCoat(3).addCoat(2).addCoat(1);
+
+                Shape results = fSphere.scalePosition(2);
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(3, results.getCoatWidth(0),
+                                "Coat A width is incorrect"),
+                        () -> assertEquals(2, results.getCoatWidth(1),
+                                "Coat B width is incorrect"),
+                        () -> assertEquals(1, results.getCoatWidth(2),
+                                "Coat C width is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+        }
 
         @Nested
         @Tag("Module - Dimension")
@@ -1927,10 +1888,56 @@ public class FSphereTest {
                 assertThrows(IllegalArgumentException.class,
                         () -> fSphereRef.fillSurfaceArray(fArray, fAssembly.asList()));
             }
+
+            @Test
+            @DisplayName("Scale size")
+            void scaleSize() {
+                FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
+
+                assertThrows(IllegalArgumentException.class, () -> fSphere.scaleSize(-1),
+                        "The factor must be a positive value");
+
+                Shape results = fSphere.scaleSize(2);
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(2, results.getCenterX(),
+                                "The X value is incorrect"),
+                        () -> assertEquals(3, results.getCenterY(),
+                                "The Y value is incorrect"),
+                        () -> assertEquals(4, results.getCenterZ(),
+                                "The Z value is incorrect"),
+                        () -> assertEquals(2, results.getRadius(),
+                                "The radius is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
+
+            @Test
+            @DisplayName("Scale size with coating")
+            void scaleSizeWithCoating() {
+                FSphere fSphere = factory.getFSphere(2, 3, 4, 1);
+
+                fSphere.addCoat(3).addCoat(2).addCoat(1);
+
+                Shape results = fSphere.scaleSize(2);
+
+                Assertions.assertAll("Validate FSphere values",
+                        () -> assertEquals(6, results.getCoatWidth(0),
+                                "Coat A width is incorrect"),
+                        () -> assertEquals(4, results.getCoatWidth(1),
+                                "Coat B width is incorrect"),
+                        () -> assertEquals(2, results.getCoatWidth(2),
+                                "Coat C width is incorrect"),
+                        () -> assertSame(fSphere, results,
+                                "The FSphere reference should not change")
+                );
+            }
         }
 
         @Nested
         @Tag("Module - Relation")
+        @DisplayName("Functionality - Advanced (relation)")
         class FSphereModuleRelationTest {
 
             @Test

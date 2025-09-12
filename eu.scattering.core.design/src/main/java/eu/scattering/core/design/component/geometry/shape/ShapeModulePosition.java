@@ -1,31 +1,61 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
-import eu.scattering.core.design.util.annotation.Facade;
+import eu.scattering.core.design.util.annotation.Fragment;
+import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.List;
 
 public interface ShapeModulePosition {
 
-    boolean attachLinear(Shape target);
+    FPos3D getCenter();
 
-    boolean attachSpherical(Shape target, double x, double y, double z);
-    boolean attachSpherical(Shape target, FPoint center);
-    boolean attachSpherical(Shape target, FPos3D center);
+    Shape setCenter(double x, double y, double z);
+    Shape setCenter(Shape shape);
+    Shape setCenter(FPoint fPoint);
+    Shape setCenter(FPos3D fPos3D);
 
-    boolean project(Shape target, FRay ray);
-    boolean project(Iterable<? extends Shape> field, FRay ray);
+    double getCenterX();
+    double getCenterY();
+    double getCenterZ();
 
-    void getCollisionListLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
+    Shape setCenterX(double x);
+    Shape setCenterY(double y);
+    Shape setCenterZ(double z);
 
-    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
-    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint center);
-    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPos3D center);
+    double getDistCenter(double x, double y, double z);
+    double getDistCenter(Shape shape);
+    double getDistCenter(FPoint fPoint);
+    double getDistCenter(FPos3D fPos3D);
 
-    // -------------------------------------------------------------------------------------------------
+    Shape setDistCenter(double x, double y, double z, double dist);
+    Shape setDistCenter(Shape shape, double dist);
+    Shape setDistCenter(FPoint fPoint, double dist);
+    Shape setDistCenter(FPos3D fPos3D, double dist);
 
-    @Facade
-    boolean attachLinearWithSphericalCorrection(Shape target, Iterable<? extends Shape> field, int corrections);
+    Shape translate(double x, double y, double z);
+    Shape translate(FPoint fPoint);
+    Shape translate(FPos3D fPos3D);
+
+    void sortByDistCenter(List<? extends Shape> in);
+    void sortByDistSpace(List<? extends Shape> in);
+
+    Shape scalePosition(double factor);
+
+    //--------------------------------------------------
+
+    @Modificator
+    FPoint getRefCenter();
+    @Modificator
+    Shape setRefCenter(FPoint refCenter);
+
+    @Fragment
+    double getDistCenterP2(double x, double y, double z);
+    @Fragment
+    double getDistCenterP2(FPoint fPoint);
+    @Fragment
+    double getDistCenterP2(FPos3D fPos3D);
+    @Fragment
+    double getDistCenterP2(Shape shape);
 }

@@ -1063,7 +1063,7 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public int getLayerCount() {
 
-        return getCoatCount() + 1;
+        return this.coatWidth.size() + 1;
     }
 
     @Override
@@ -1077,7 +1077,7 @@ public abstract class ShapePresetDef implements Shape {
 
         removeCoats();
 
-        for (int i = 0; i < shape.getCoatCount() ; i++) {
+        for (int i = 0; i < shape.getLayerCount() - 1 ; i++) {
             addCoat(shape.getCoatWidth(i));
         }
 

@@ -31,6 +31,8 @@ public interface ShapeModuleDimension {
 
     Shape removeCoats();
 
+    Shape scaleSize(double factor);
+
     // -------------------------------------------------------------------------------------------------
 
     double getLayerVolume(int index);
