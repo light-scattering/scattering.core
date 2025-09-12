@@ -161,151 +161,6 @@ public abstract class ShapePresetDef implements Shape {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public Shape removeCoats() {
-
-        getCoating().clear();
-
-        return this;
-    }
-
-    @Override
-    public Shape addCoat(double width) {
-
-        if (width < 0) {
-            throw new IllegalArgumentException("The coat width cannot be lower than zero");
-        }
-
-        getCoating().add(width);
-
-        setRadius(getRadius() + width);
-
-        return this;
-    }
-
-    @Override
-    public Shape addCoat(double... width) {
-
-        for (double v : width) {
-            addCoat(v);
-        }
-
-        return this;
-    }
-
-    @Override
-    public Shape addCoatInternal(double width) {
-
-        if (width < 0) {
-            throw new IllegalArgumentException("The coat width cannot be lower than zero");
-        }
-
-        if (getLayerWidthRemaining(0) + width >= getRadius()) {
-            throw new IllegalArgumentException("The total coat width cannot be larger than the radius");
-        }
-
-        getCoating().add(width);
-
-        return this;
-    }
-
-    @Override
-    public Shape addCoatInternal(double... width) {
-
-        for (double v : width) {
-            addCoatInternal(v);
-        }
-
-        return this;
-    }
-
-    @Override
-    public Shape applyCoatsFrom(Shape shape) {
-
-        removeCoats();
-
-        for (int i = 0; i < shape.getCoatCount() ; i++) {
-            addCoat(shape.getCoatWidth(i));
-        }
-
-        return this;
-    }
-
-    @Override
-    public int getCoatCount() {
-
-        return this.coatWidth.size();
-    }
-
-    @Override
-    public int getLayerCount() {
-
-        return getCoatCount() + 1;
-    }
-
-    @Override
-    public double getCoatWidth(int index) {
-
-        if (getCoating().size() == 0) {
-            throw new IllegalArgumentException("The shape is not coated");
-        }
-
-        if (index < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
-        }
-
-        if (index >= getCoatCount()) {
-            throw new IllegalArgumentException("the coat index is erroneous");
-        }
-
-        return this.coatWidth.get(index);
-    }
-
-    @Override
-    public Shape setCoatWidth(int index, double width) {
-
-        if (getCoating().size() == 0) {
-            throw new IllegalArgumentException("The shape is not coated");
-        }
-
-        if (index < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
-        }
-
-        if (index >= getCoating().size()) {
-            throw new IllegalArgumentException("the coat index is erroneous");
-        }
-
-         this.coatWidth.set(index, width);
-
-        return this;
-    }
-
-    @Override
-    public double getLayerWidthRemaining(int index) {
-
-        if (index < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
-        }
-
-        if (index >= getLayerCount()) {
-            throw new IllegalArgumentException("the layer index is erroneous");
-        }
-
-        if (index == 0) {
-            return getCoating().stream().mapToDouble(Double::doubleValue).sum();
-        }
-
-        double width = 0;
-        for (int i = getLayerCount() - 1 ; i > index ; i--) {
-            width += getCoatWidth(i - 1);
-        }
-
-        return width;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    @Override
     public boolean isExactCenter(Shape arg) {
 
         if (this.getCenterX() != arg.getCenterX()) {
@@ -525,6 +380,53 @@ public abstract class ShapePresetDef implements Shape {
 
     // -------------------------------------------------------------------------------------------------
 
+    protected FPairPos3D getOperationRange(Shape shape) {
+        double opA, opB;
+
+        opA = this.getCenterX() - this.getRadius();
+        opB = shape.getCenterX() - shape.getRadius();
+
+        double bX = Math.max(opA, opB);
+
+        opA = this.getCenterX() + this.getRadius();
+        opB = shape.getCenterX() + shape.getRadius();
+
+        double hX = Math.min(opA, opB);
+
+        opA = this.getCenterY() - this.getRadius();
+        opB = shape.getCenterY() - shape.getRadius();
+
+        double bY = Math.max(opA, opB);
+
+        opA = this.getCenterY() + this.getRadius();
+        opB = shape.getCenterY() + shape.getRadius();
+
+        double hY = Math.min(opA, opB);
+
+        opA = this.getCenterZ() - this.getRadius();
+        opB = shape.getCenterZ() - shape.getRadius();
+
+        double bZ = Math.max(opA, opB);
+
+        opA = this.getCenterZ() + this.getRadius();
+        opB = shape.getCenterZ() + shape.getRadius();
+
+        double hZ = Math.min(opA, opB);
+
+        return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    @Override
+    public void sortByDistCenter(List<? extends Shape> in) {
+        CmpDistCenter cmp = getCacheCmpDistCenter();
+
+        cmp.setRef(this);
+
+        in.sort(cmp);
+    }
+
+    //--- Relation
+
     @Override
     public boolean repels(Shape shape) {
 
@@ -552,37 +454,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public int repels(Iterable<? extends Shape> shapes) {
+    public int repels(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
+        if (in != null) {
+            in.clear();
+        }
+
         for (Shape shape : shapes) {
+
             if (this == shape) {
                 continue;
             }
 
             if (repels(shape)) {
                 count++;
+
+                if (in != null) {
+                    in.add(shape);
+                }
             }
         }
 
         return count;
-    }
-
-    @Override
-    public int repels(Iterable<? extends Shape> shapes, List<Shape> in) {
-        in.clear();
-
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
-
-            if (repels(shape)) {
-                in.add(shape);
-            }
-        }
-
-        return in.size();
     }
 
     protected Relation repelsEpsilon(Shape shape) {
@@ -668,37 +562,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public int touches(Iterable<? extends Shape> shapes) {
+    public int touches(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
+        if (in != null) {
+            in.clear();
+        }
+
         for (Shape shape : shapes) {
+
             if (this == shape) {
                 continue;
             }
 
             if (touches(shape)) {
                 count++;
+
+                if (in != null) {
+                    in.add(shape);
+                }
             }
         }
 
         return count;
-    }
-
-    @Override
-    public int touches(Iterable<? extends Shape> shapes, List<Shape> in) {
-        in.clear();
-
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
-
-            if (touches(shape)) {
-                in.add(shape);
-            }
-        }
-
-        return in.size();
     }
 
     protected Relation touchesEpsilon(Shape shape) {
@@ -788,37 +674,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public int overlaps(Iterable<? extends Shape> shapes) {
+    public int overlaps(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
+        if (in != null) {
+            in.clear();
+        }
+
         for (Shape shape : shapes) {
+
             if (this == shape) {
                 continue;
             }
 
             if (overlaps(shape)) {
                 count++;
+
+                if (in != null) {
+                    in.add(shape);
+                }
             }
         }
 
         return count;
-    }
-
-    @Override
-    public int overlaps(Iterable<? extends Shape> shapes, List<Shape> in) {
-        in.clear();
-
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
-
-            if (overlaps(shape)) {
-                in.add(shape);
-            }
-        }
-
-        return in.size();
     }
 
     protected Relation overlapsEpsilon(Shape shape) {
@@ -885,37 +763,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public int encloses(Iterable<? extends Shape> shapes) {
+    public int encloses(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
+        if (in != null) {
+            in.clear();
+        }
+
         for (Shape shape : shapes) {
+
             if (this == shape) {
                 continue;
             }
 
             if (encloses(shape)) {
                 count++;
+
+                if (in != null) {
+                    in.add(shape);
+                }
             }
         }
 
         return count;
-    }
-
-    @Override
-    public int encloses(Iterable<? extends Shape> shapes, List<Shape> in) {
-        in.clear();
-
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
-
-            if (encloses(shape)) {
-                in.add(shape);
-            }
-        }
-
-        return in.size();
     }
 
     protected Relation enclosesEpsilon(Shape shape) {
@@ -999,37 +869,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public int intersects(Iterable<? extends Shape> shapes) {
+    public int intersects(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
+        if (in != null) {
+            in.clear();
+        }
+
         for (Shape shape : shapes) {
+
             if (this == shape) {
                 continue;
             }
 
             if (intersects(shape)) {
                 count++;
+
+                if (in != null) {
+                    in.add(shape);
+                }
             }
         }
 
         return count;
-    }
-
-    @Override
-    public int intersects(Iterable<? extends Shape> shapes, List<Shape> in) {
-        in.clear();
-
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
-
-            if (intersects(shape)) {
-                in.add(shape);
-            }
-        }
-
-        return in.size();
     }
 
     protected Relation intersectsEpsilon(Shape shape) {
@@ -1101,37 +963,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public int touchesOrRepels(Iterable<? extends Shape> shapes) {
+    public int touchesOrRepels(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
+        if (in != null) {
+            in.clear();
+        }
+
         for (Shape shape : shapes) {
+
             if (this == shape) {
                 continue;
             }
 
             if (!overlaps(shape)) {
                 count++;
+
+                if (in != null) {
+                    in.add(shape);
+                }
             }
         }
 
         return count;
-    }
-
-    @Override
-    public int touchesOrRepels(Iterable<? extends Shape> shapes, List<Shape> in) {
-        in.clear();
-
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
-
-            if (!overlaps(shape)) {
-                in.add(shape);
-            }
-        }
-
-        return in.size();
     }
 
     @Override
@@ -1141,87 +995,175 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public int touchesOrOverlaps(Iterable<? extends Shape> shapes) {
+    public int touchesOrOverlaps(Iterable<? extends Shape> shapes, List<Shape> in) {
         int count = 0;
 
+        if (in != null) {
+            in.clear();
+        }
+
         for (Shape shape : shapes) {
+
             if (this == shape) {
                 continue;
             }
 
             if (!repels(shape)) {
                 count++;
+
+                if (in != null) {
+                    in.add(shape);
+                }
             }
         }
 
         return count;
     }
 
+    //--- Dimension
+
     @Override
-    public int touchesOrOverlaps(Iterable<? extends Shape> shapes, List<Shape> in) {
-        in.clear();
+    public double getCoatWidth(int index) {
 
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
-
-            if (!repels(shape)) {
-                in.add(shape);
-            }
+        if (getCoating().size() == 0) {
+            throw new IllegalArgumentException("The shape is not coated");
         }
 
-        return in.size();
-    }
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
 
-    // -------------------------------------------------------------------------------------------------
+        if (index >= getCoatCount()) {
+            throw new IllegalArgumentException("the coat index is erroneous");
+        }
 
-    protected FPairPos3D getOperationRange(Shape shape) {
-        double opA, opB;
-
-        opA = this.getCenterX() - this.getRadius();
-        opB = shape.getCenterX() - shape.getRadius();
-
-        double bX = Math.max(opA, opB);
-
-        opA = this.getCenterX() + this.getRadius();
-        opB = shape.getCenterX() + shape.getRadius();
-
-        double hX = Math.min(opA, opB);
-
-        opA = this.getCenterY() - this.getRadius();
-        opB = shape.getCenterY() - shape.getRadius();
-
-        double bY = Math.max(opA, opB);
-
-        opA = this.getCenterY() + this.getRadius();
-        opB = shape.getCenterY() + shape.getRadius();
-
-        double hY = Math.min(opA, opB);
-
-        opA = this.getCenterZ() - this.getRadius();
-        opB = shape.getCenterZ() - shape.getRadius();
-
-        double bZ = Math.max(opA, opB);
-
-        opA = this.getCenterZ() + this.getRadius();
-        opB = shape.getCenterZ() + shape.getRadius();
-
-        double hZ = Math.min(opA, opB);
-
-        return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
+        return this.coatWidth.get(index);
     }
 
     @Override
-    public void sortByDistCenter(List<? extends Shape> in) {
-        CmpDistCenter cmp = getCacheCmpDistCenter();
+    public Shape setCoatWidth(int index, double width) {
 
-        cmp.setRef(this);
+        if (getCoating().size() == 0) {
+            throw new IllegalArgumentException("The shape is not coated");
+        }
 
-        in.sort(cmp);
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getCoating().size()) {
+            throw new IllegalArgumentException("the coat index is erroneous");
+        }
+
+        this.coatWidth.set(index, width);
+
+        return this;
     }
 
-    //--- Dimension
+    @Override
+    public int getLayerCount() {
+
+        return getCoatCount() + 1;
+    }
+
+    @Override
+    public int getCoatCount() {
+
+        return this.coatWidth.size();
+    }
+
+    @Override
+    public Shape applyCoatsFrom(Shape shape) {
+
+        removeCoats();
+
+        for (int i = 0; i < shape.getCoatCount() ; i++) {
+            addCoat(shape.getCoatWidth(i));
+        }
+
+        return this;
+    }
+
+    @Override
+    public Shape addCoat(double width) {
+
+        if (width < 0) {
+            throw new IllegalArgumentException("The coat width cannot be lower than zero");
+        }
+
+        getCoating().add(width);
+
+        setRadius(getRadius() + width);
+
+        return this;
+    }
+
+    @Override
+    public Shape addCoat(double... width) {
+
+        for (double v : width) {
+            addCoat(v);
+        }
+
+        return this;
+    }
+
+    @Override
+    public Shape addCoatInternal(double width) {
+
+        if (width < 0) {
+            throw new IllegalArgumentException("The coat width cannot be lower than zero");
+        }
+
+        if (getLayerWidthRemaining(0) + width >= getRadius()) {
+            throw new IllegalArgumentException("The total coat width cannot be larger than the radius");
+        }
+
+        getCoating().add(width);
+
+        return this;
+    }
+
+    @Override
+    public Shape addCoatInternal(double... width) {
+
+        for (double v : width) {
+            addCoatInternal(v);
+        }
+
+        return this;
+    }
+
+    @Override
+    public Shape removeCoats() {
+
+        getCoating().clear();
+
+        return this;
+    }
+
+    @Override
+    public double getLayerWidthRemaining(int index) {
+
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (index >= getLayerCount()) {
+            throw new IllegalArgumentException("the layer index is erroneous");
+        }
+
+        if (index == 0) {
+            return getCoating().stream().mapToDouble(Double::doubleValue).sum();
+        }
+
+        double width = 0;
+        for (int i = getLayerCount() - 1 ; i > index ; i--) {
+            width += getCoatWidth(i - 1);
+        }
+
+        return width;
+    }
 
     @Override
     public double fillVolumeLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field) {

@@ -79,12 +79,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double getRadius() {
-
-        return this.radius;
-    }
-
-    @Override
     public double getCenterX() {
 
         return getRefCenter().getX();
@@ -122,22 +116,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     public Shape setCenterZ(double z) {
 
         getRefCenter().setZ(z);
-
-        return this;
-    }
-
-    @Override
-    public Shape setRadius(double radius) {
-
-        if (radius <= 0) {
-            throw new IllegalArgumentException("The radius must be greater than zero");
-        }
-
-        if (radius <= getLayerWidthRemaining(0)) {
-            throw new IllegalArgumentException("The radius cannot be smaller than the width of the coating");
-        }
-
-        this.radius = radius;
 
         return this;
     }
@@ -364,24 +342,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public double getInnerRadius() {
-
-        return getRadius();
-    }
-
-    @Override
-    public Shape setInnerRadius(double radius) {
-
-        return setRadius(radius);
-    }
-
-
-
-
-
-
-
-    @Override
     public boolean contains(double x, double y, double z) {
         double tX = x - getCenterX();
         double tY = y - getCenterY();
@@ -423,6 +383,40 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     //--- Dimension
+
+    @Override
+    public double getRadius() {
+
+        return this.radius;
+    }
+
+    @Override
+    public Shape setRadius(double radius) {
+
+        if (radius <= 0) {
+            throw new IllegalArgumentException("The radius must be greater than zero");
+        }
+
+        if (radius <= getLayerWidthRemaining(0)) {
+            throw new IllegalArgumentException("The radius cannot be smaller than the width of the coating");
+        }
+
+        this.radius = radius;
+
+        return this;
+    }
+
+    @Override
+    public double getInnerRadius() {
+
+        return getRadius();
+    }
+
+    @Override
+    public Shape setInnerRadius(double radius) {
+
+        return setRadius(radius);
+    }
 
     @Override
     public double getLayerVolume(int index) {
