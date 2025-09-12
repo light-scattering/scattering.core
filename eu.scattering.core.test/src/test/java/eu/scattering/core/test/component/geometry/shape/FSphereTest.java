@@ -221,13 +221,6 @@ public class FSphereTest {
                     "The epsilon value is incorrect");
             assertSame(resultsA, fSphere,
                     "The reference should not change");
-
-            Shape resultsB = fSphere.resetEpsilon();
-
-            assertEquals(SHAPE_EPSILON, fSphere.getEpsilon(),
-                    "The epsilon value is incorrect");
-            assertSame(resultsB, fSphere,
-                    "The reference should not change");
         }
 
         @Test
@@ -243,13 +236,6 @@ public class FSphereTest {
             assertEquals(123, fSphere.getDelta(),
                     "The delta value is incorrect");
             assertSame(resultsA, fSphere,
-                    "The reference should not change");
-
-            Shape resultsB = fSphere.resetDelta();
-
-            assertEquals(SHAPE_DELTA, fSphere.getDelta(),
-                    "The delta value is incorrect");
-            assertSame(resultsB, fSphere,
                     "The reference should not change");
         }
 
@@ -267,13 +253,6 @@ public class FSphereTest {
                     "The index value is incorrect");
             assertSame(resultsA, fSphere,
                     "The reference should not change");
-
-            Shape resultsB = fSphere.resetIndex();
-
-            assertEquals(-1, fSphere.getIndex(),
-                    "The index value is incorrect");
-            assertSame(resultsB, fSphere,
-                    "The reference should not change");
         }
 
         @Test
@@ -289,13 +268,6 @@ public class FSphereTest {
             assertEquals("123", fSphere.getTag(),
                     "The tag value is incorrect");
             assertSame(resultsA, fSphere,
-                    "The reference should not change");
-
-            Shape resultsB = fSphere.resetTag();
-
-            assertEquals("", fSphere.getTag(),
-                    "The tag value is incorrect");
-            assertSame(resultsB, fSphere,
                     "The reference should not change");
         }
 
@@ -314,13 +286,6 @@ public class FSphereTest {
                     "The cache instance is incorrect");
             assertSame(resultsA, fSphere,
                     "The reference should not change");
-
-            Shape resultsB = fSphere.resetFCache();
-
-            assertNull(fSphere.getFCache(),
-                    "The cache value should be null");
-            assertSame(resultsB, fSphere,
-                    "The reference should not change");
         }
     }
 
@@ -332,7 +297,7 @@ public class FSphereTest {
         @Nested
         @Tag("Module - Position")
         @DisplayName("Functionality - Advanced (position)")
-        class FSphereModulePosition {
+        class FSphereModulePositionTest {
 
             @Test
             @DisplayName("Set center")
@@ -1484,9 +1449,7 @@ public class FSphereTest {
 
                 int[] volActual = new int[4];
 
-                fArray.forEach((i, d0, d1, d2, data) -> {
-                    volActual[data.getLayer()]++;
-                });
+                fArray.forEach((i, d0, d1, d2, data) -> volActual[data.getLayer()]++);
 
                 double volRelErr = factory.getFStatHelper().getRelErr(volExpected, fArray.size() * volUnit);
                 double volRelErr0 = factory.getFStatHelper().getRelErr(volExpected0, volActual[0] * volUnit);
@@ -1844,9 +1807,7 @@ public class FSphereTest {
 
                 int[] srfActual = new int[4];
 
-                fArray.forEach((i, d0, d1, d2, data) -> {
-                    srfActual[data.getLayer()]++;
-                });
+                fArray.forEach((i, d0, d1, d2, data) -> srfActual[data.getLayer()]++);
 
                 double srfRelErr0 = factory.getFStatHelper().getRelErr(srfExpected0, srfActual[0] * srfUnit);
                 double srfRelErr1 = factory.getFStatHelper().getRelErr(srfExpected1, srfActual[1] * srfUnit);
@@ -4142,7 +4103,7 @@ public class FSphereTest {
 
         @Nested
         @Tag("Module - Aggregation")
-        class FSphereModuleAggregation {
+        class FSphereModuleAggregationTest {
 
             @Test
             @DisplayName("Attach linear enclosed")

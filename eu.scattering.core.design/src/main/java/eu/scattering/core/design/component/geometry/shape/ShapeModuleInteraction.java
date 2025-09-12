@@ -7,7 +7,7 @@ import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.List;
 
-public interface ShapeModuleAggregation {
+public interface ShapeModuleInteraction {
 
     boolean attachLinear(Shape target);
 

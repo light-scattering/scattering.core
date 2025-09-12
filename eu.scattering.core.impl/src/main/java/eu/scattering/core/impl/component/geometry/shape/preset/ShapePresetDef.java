@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.util.container.DipoleData;
@@ -24,7 +25,9 @@ import static eu.scattering.core.impl.ConfigDef.*;
 public abstract class ShapePresetDef implements Shape {
     private final static double SHIFT_OFFSET = -0.25;
 
-    private final ScatFactory factory;
+    protected final ScatFactory factory;
+    protected final FSphereHelper fSphereHelper;
+
     private FCache cache;
 
     private double epsilon = SHAPE_EPSILON;
@@ -41,124 +44,8 @@ public abstract class ShapePresetDef implements Shape {
     public ShapePresetDef(ScatFactory factory) {
 
         this.factory = factory;
+        this.fSphereHelper = factory.getFSphereHelper();
     }
-
-    @Override
-    public FCache getFCache() {
-
-        return this.cache;
-    }
-
-    @Override
-    public Shape setFCache(FCache cache) {
-
-        this.cache = cache;
-
-        return this;
-    }
-
-    @Override
-    public Shape resetFCache() {
-
-        this.cache = null;
-
-        return this;
-    }
-
-    @Override
-    public double getEpsilon() {
-
-        return this.epsilon;
-    }
-
-    @Override
-    public Shape setEpsilon(double epsilon) {
-
-        this.epsilon = epsilon;
-
-        return this;
-    }
-
-    @Override
-    public Shape resetEpsilon() {
-
-        this.epsilon = SHAPE_EPSILON;
-
-        return this;
-    }
-
-    @Override
-    public double getDelta() {
-
-        return this.delta;
-    }
-
-    @Override
-    public Shape setDelta(double delta) {
-
-        this.delta = delta;
-
-        return this;
-    }
-
-    @Override
-    public Shape resetDelta() {
-
-        this.delta = SHAPE_DELTA;
-
-        return this;
-    }
-
-    @Override
-    public String getTag() {
-
-        return this.tag;
-    }
-
-    @Override
-    public Shape setTag(String tag) {
-
-        this.tag = tag;
-
-        return this;
-    }
-
-    @Override
-    public Shape resetTag() {
-
-        this.tag = "";
-
-        return this;
-    }
-
-    @Override
-    public double getIndex() {
-
-        return this.index;
-    }
-
-    @Override
-    public Shape setIndex(double index) {
-
-        this.index = index;
-
-        return this;
-    }
-
-    @Override
-    public Shape resetIndex() {
-
-        this.index = -1;
-
-        return this;
-    }
-
-    protected List<Double> getCoating() {
-
-        return this.coatWidth;
-    }
-
-    // -------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isExactCenter(Shape arg) {
@@ -184,48 +71,109 @@ public abstract class ShapePresetDef implements Shape {
         return distanceX < EPSILON && distanceY < EPSILON && distanceZ < EPSILON;
     }
 
+    @Override
+    public FCache getFCache() {
 
-
-
-    // -------------------------------------------------------------------------------------------------
-
-    protected FPairPos3D getOperationRange(Shape shape) {
-        double opA, opB;
-
-        opA = this.getCenterX() - this.getRadius();
-        opB = shape.getCenterX() - shape.getRadius();
-
-        double bX = Math.max(opA, opB);
-
-        opA = this.getCenterX() + this.getRadius();
-        opB = shape.getCenterX() + shape.getRadius();
-
-        double hX = Math.min(opA, opB);
-
-        opA = this.getCenterY() - this.getRadius();
-        opB = shape.getCenterY() - shape.getRadius();
-
-        double bY = Math.max(opA, opB);
-
-        opA = this.getCenterY() + this.getRadius();
-        opB = shape.getCenterY() + shape.getRadius();
-
-        double hY = Math.min(opA, opB);
-
-        opA = this.getCenterZ() - this.getRadius();
-        opB = shape.getCenterZ() - shape.getRadius();
-
-        double bZ = Math.max(opA, opB);
-
-        opA = this.getCenterZ() + this.getRadius();
-        opB = shape.getCenterZ() + shape.getRadius();
-
-        double hZ = Math.min(opA, opB);
-
-        return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
+        return this.cache;
     }
 
-    //--- Inclusion
+    @Override
+    public Shape setFCache(FCache cache) {
+
+        this.cache = cache;
+
+        return this;
+    }
+
+    @Override
+    public double getEpsilon() {
+
+        return this.epsilon;
+    }
+
+    @Override
+    public Shape setEpsilon(double epsilon) {
+
+        this.epsilon = epsilon;
+
+        return this;
+    }
+
+    @Override
+    public double getDelta() {
+
+        return this.delta;
+    }
+
+    @Override
+    public Shape setDelta(double delta) {
+
+        this.delta = delta;
+
+        return this;
+    }
+
+    @Override
+    public String getTag() {
+
+        return this.tag;
+    }
+
+    @Override
+    public Shape setTag(String tag) {
+
+        this.tag = tag;
+
+        return this;
+    }
+
+    @Override
+    public double getIndex() {
+
+        return this.index;
+    }
+
+    @Override
+    public Shape setIndex(double index) {
+
+        this.index = index;
+
+        return this;
+    }
+
+    //--- Module - Interaction
+
+    @Override
+    public Shape setRadiusMin(Iterable<? extends Shape> shapes) {
+        double minRadius = getRadius();
+
+        double dist;
+        for (Shape shape : shapes) {
+            if (this == shape) {
+                continue;
+            }
+
+            dist = getDistCenter(shape) + shape.getRadius();
+
+            if (dist > minRadius) {
+                minRadius = dist;
+            }
+        }
+
+        if (minRadius > getRadius()) {
+            double coatWidth = getLayerWidthRemaining(0);
+
+            if (minRadius + EPSILON <= coatWidth) {
+                setRadius(coatWidth + EPSILON);
+            } else {
+                setRadius(minRadius + EPSILON);
+            }
+        }
+
+        return this;
+    }
+
+    //--- Module - Composition
 
     @Override
     public boolean contains(FPoint fPoint) {
@@ -251,7 +199,7 @@ public abstract class ShapePresetDef implements Shape {
         return locate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
     }
 
-    //--- Position
+    //--- Module - Position
 
     @Override
     public FPos3D getCenter() {
@@ -416,7 +364,7 @@ public abstract class ShapePresetDef implements Shape {
         return this;
     }
 
-    //--- Relation
+    //--- Module - Relation
 
     @Override
     public boolean repels(Shape shape) {
@@ -1011,7 +959,7 @@ public abstract class ShapePresetDef implements Shape {
         return count;
     }
 
-    //--- Dimension
+    //--- Module - Dimension
 
     @Override
     public double getCoatWidth(int index) {
@@ -1435,36 +1383,47 @@ public abstract class ShapePresetDef implements Shape {
         return locArgMin;
     }
 
-    //---
+    // -------------------------------------------------------------------------------------------------
 
-    @Override
-    public Shape setRadiusMin(Iterable<? extends Shape> shapes) {
-        double minRadius = getRadius();
+    protected List<Double> getCoating() {
 
-        double dist;
-        for (Shape shape : shapes) {
-            if (this == shape) {
-                continue;
-            }
+        return this.coatWidth;
+    }
 
-            dist = getDistCenter(shape) + shape.getRadius();
+    protected FPairPos3D getOperationRange(Shape shape) {
+        double opA, opB;
 
-            if (dist > minRadius) {
-                minRadius = dist;
-            }
-        }
-        
-        if (minRadius > getRadius()) {
-            double coatWidth = getLayerWidthRemaining(0);
+        opA = this.getCenterX() - this.getRadius();
+        opB = shape.getCenterX() - shape.getRadius();
 
-            if (minRadius + EPSILON <= coatWidth) {
-                setRadius(coatWidth + EPSILON);
-            } else {
-                setRadius(minRadius + EPSILON);
-            }
-        }
+        double bX = Math.max(opA, opB);
 
-        return this;
+        opA = this.getCenterX() + this.getRadius();
+        opB = shape.getCenterX() + shape.getRadius();
+
+        double hX = Math.min(opA, opB);
+
+        opA = this.getCenterY() - this.getRadius();
+        opB = shape.getCenterY() - shape.getRadius();
+
+        double bY = Math.max(opA, opB);
+
+        opA = this.getCenterY() + this.getRadius();
+        opB = shape.getCenterY() + shape.getRadius();
+
+        double hY = Math.min(opA, opB);
+
+        opA = this.getCenterZ() - this.getRadius();
+        opB = shape.getCenterZ() - shape.getRadius();
+
+        double bZ = Math.max(opA, opB);
+
+        opA = this.getCenterZ() + this.getRadius();
+        opB = shape.getCenterZ() + shape.getRadius();
+
+        double hZ = Math.min(opA, opB);
+
+        return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
     }
 
     // -------------------------------------------------------------------------------------------------
