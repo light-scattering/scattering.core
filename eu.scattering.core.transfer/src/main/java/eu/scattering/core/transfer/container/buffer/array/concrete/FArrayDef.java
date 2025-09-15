@@ -7,9 +7,7 @@ import eu.scattering.core.transfer.container.buffer.array.utils.FArrayConsumer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
@@ -24,7 +22,7 @@ public class FArrayDef<T> implements FArray<T> {
     private final int capacity;
 
     private final double[][] value;
-    private final List<T> meta;
+    private final Object[] meta;
 
     private int index;
 
@@ -34,12 +32,7 @@ public class FArrayDef<T> implements FArray<T> {
         this.capacity = capacity;
 
         this.value = new double[3][this.capacity];
-
-        this.meta = new ArrayList<>(this.capacity);
-
-        while(this.meta.size() < this.capacity) {
-            this.meta.add(null);
-        }
+        this.meta = new Object[this.capacity];
     }
 
     public static <T> FArray<T> create(int capacity) {
@@ -58,7 +51,7 @@ public class FArrayDef<T> implements FArray<T> {
         this.value[1][index] = d1;
         this.value[2][index] = d2;
 
-        this.meta.set(index, null);
+        this.meta[index] = null;
 
         index++;
     }
@@ -80,7 +73,7 @@ public class FArrayDef<T> implements FArray<T> {
         this.value[1][index] = d1;
         this.value[2][index] = d2;
 
-        this.meta.set(index, meta);
+        this.meta[index] = meta;
 
         index++;
     }
@@ -134,13 +127,14 @@ public class FArrayDef<T> implements FArray<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public T getMeta(int index) {
 
         if (index >= this.index) {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.meta.get(index);
+        return (T) this.meta[index];
     }
 
     @Override
@@ -185,11 +179,12 @@ public class FArrayDef<T> implements FArray<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void forEach(FArrayConsumer<T> consumer) {
 
         for (int i = 0; i < index; i++) {
             consumer.apply(
-                    i, this.value[0][i], this.value[1][i], this.value[2][i], this.meta.get(i)
+                    i, this.value[0][i], this.value[1][i], this.value[2][i], (T) this.meta[i]
             );
         }
     }
@@ -209,7 +204,7 @@ public class FArrayDef<T> implements FArray<T> {
             boolean isUnique = elements.add(getFPos3D(i));
 
             if (isUnique) {
-                this.meta.set(j, this.meta.get(i));
+                this.meta[j] = this.meta[i];
 
                 this.value[0][j] = this.value[0][i];
                 this.value[1][j] = this.value[1][i];
@@ -229,6 +224,7 @@ public class FArrayDef<T> implements FArray<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public int deduplicate(BiFunction<T, T, Boolean> collision) {
         Set<FPos3D> elements = new HashSet<>();
 
@@ -238,7 +234,7 @@ public class FArrayDef<T> implements FArray<T> {
             boolean isPositionUnique = elements.add(position);
 
             if (isPositionUnique) {
-                this.meta.set(j, this.meta.get(i));
+                this.meta[j] = this.meta[i];
 
                 this.value[0][j] = this.value[0][i];
                 this.value[1][j] = this.value[1][i];
@@ -248,11 +244,11 @@ public class FArrayDef<T> implements FArray<T> {
             } else {
                 int indexOld = findIndex(position);
 
-                T metaNew = this.meta.get(i);
+                T metaNew = (T) this.meta[i];
                 T metaOld = getMeta(indexOld);
 
                 if (collision.apply(metaOld, metaNew)) {
-                    this.meta.set(indexOld, metaNew);
+                    this.meta[indexOld] = metaNew;
                 }
             }
 

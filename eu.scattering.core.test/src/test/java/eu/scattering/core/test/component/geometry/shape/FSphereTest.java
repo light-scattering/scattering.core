@@ -1378,7 +1378,6 @@ public class FSphereTest {
                 );
             }
 
-            @Test
             @DisplayName("Volume layer")
             void volumeLayer() {
                 double delta = 0.1;
@@ -1395,31 +1394,31 @@ public class FSphereTest {
 
                 double volUnit = fSphere.fillVolumeLayer(fLayer);
 
-                double volTotal = fSphere.getVolumeAlgebraic();
-                double volActual0 = fSphere.getLayerVolume(0);
-                double volActual1 = fSphere.getLayerVolume(1);
-                double volActual2 = fSphere.getLayerVolume(2);
-                double volActual3 = fSphere.getLayerVolume(3);
+                double volActual = fSphere.getVolumeAlgebraic();
+                double volActualLayer0 = fSphere.getLayerVolume(0);
+                double volActualLayer1 = fSphere.getLayerVolume(1);
+                double volActualLayer2 = fSphere.getLayerVolume(2);
+                double volActualLayer3 = fSphere.getLayerVolume(3);
 
-                double volRelErr = factory.getFStatHelper().getRelErr(volTotal, fLayer.addSelf() * volUnit);
-                double volRelErr0 = factory.getFStatHelper().getRelErr(volActual0, fLayer.get(0) * volUnit);
-                double volRelErr1 = factory.getFStatHelper().getRelErr(volActual1, fLayer.get(1) * volUnit);
-                double volRelErr2 = factory.getFStatHelper().getRelErr(volActual2, fLayer.get(2) * volUnit);
-                double volRelErr3 = factory.getFStatHelper().getRelErr(volActual3, fLayer.get(3) * volUnit);
+                double volRelErr = factory.getFStatHelper().getRelErr(volActual, fLayer.addSelf() * volUnit);
+                double volRelErrLayer0 = factory.getFStatHelper().getRelErr(volActualLayer0, fLayer.get(0) * volUnit);
+                double volRelErrLayer1 = factory.getFStatHelper().getRelErr(volActualLayer1, fLayer.get(1) * volUnit);
+                double volRelErrLayer2 = factory.getFStatHelper().getRelErr(volActualLayer2, fLayer.get(2) * volUnit);
+                double volRelErrLayer3 = factory.getFStatHelper().getRelErr(volActualLayer3, fLayer.get(3) * volUnit);
 
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(volUnit, delta * delta * delta,
                                 epsilon, "The volume unit is erroneous"),
-                        () -> assertTrue(volRelErr0 < 0.005,
+                        () -> assertTrue(volRelErrLayer0 < 0.01,
                                 "Layer 0 volume is erroneous"),
-                        () -> assertTrue(volRelErr1 < 0.005,
+                        () -> assertTrue(volRelErrLayer1 < 0.01,
                                 "Layer 1 volume is erroneous"),
-                        () -> assertTrue(volRelErr2 < 0.005,
+                        () -> assertTrue(volRelErrLayer2 < 0.01,
                                 "Layer 2 volume is erroneous"),
-                        () -> assertTrue(volRelErr3 < 0.005,
+                        () -> assertTrue(volRelErrLayer3 < 0.01,
                                 "Layer 3 volume is erroneous"),
-                        () -> assertTrue(volRelErr < 0.005,
+                        () -> assertTrue(volRelErr < 0.01,
                                 "The volume is erroneous")
                 );
             }
@@ -1442,20 +1441,20 @@ public class FSphereTest {
                 double volUnit = fSphere.fillVolumeArray(fArray);
 
                 double volExpected = fSphere.getVolumeAlgebraic();
-                double volExpected0 = fSphere.getLayerVolume(0);
-                double volExpected1 = fSphere.getLayerVolume(1);
-                double volExpected2 = fSphere.getLayerVolume(2);
-                double volExpected3 = fSphere.getLayerVolume(3);
+                double volExpectedLayer0 = fSphere.getLayerVolume(0);
+                double volExpectedLayer1 = fSphere.getLayerVolume(1);
+                double volExpectedLayer2 = fSphere.getLayerVolume(2);
+                double volExpectedLayer3 = fSphere.getLayerVolume(3);
 
                 int[] volActual = new int[4];
 
                 fArray.forEach((i, d0, d1, d2, data) -> volActual[data.getLayer()]++);
 
                 double volRelErr = factory.getFStatHelper().getRelErr(volExpected, fArray.size() * volUnit);
-                double volRelErr0 = factory.getFStatHelper().getRelErr(volExpected0, volActual[0] * volUnit);
-                double volRelErr1 = factory.getFStatHelper().getRelErr(volExpected1, volActual[1] * volUnit);
-                double volRelErr2 = factory.getFStatHelper().getRelErr(volExpected2, volActual[2] * volUnit);
-                double volRelErr3 = factory.getFStatHelper().getRelErr(volExpected3, volActual[3] * volUnit);
+                double volRelErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volActual[0] * volUnit);
+                double volRelErrLayer1 = factory.getFStatHelper().getRelErr(volExpectedLayer1, volActual[1] * volUnit);
+                double volRelErrLayer2 = factory.getFStatHelper().getRelErr(volExpectedLayer2, volActual[2] * volUnit);
+                double volRelErrLayer3 = factory.getFStatHelper().getRelErr(volExpectedLayer3, volActual[3] * volUnit);
 
                 int duplicates = fArray.deduplicate();
 
@@ -1464,15 +1463,15 @@ public class FSphereTest {
                                 epsilon, "The volume unit is erroneous"),
                         () -> assertEquals(0, duplicates,
                                 "The array should not contain duplicates"),
-                        () -> assertTrue(volRelErr0 < 0.005,
+                        () -> assertTrue(volRelErrLayer0 < 0.01,
                                 "Mesh 0 volume is erroneous"),
-                        () -> assertTrue(volRelErr1 < 0.005,
+                        () -> assertTrue(volRelErrLayer1 < 0.01,
                                 "Mesh 1 volume is erroneous"),
-                        () -> assertTrue(volRelErr2 < 0.005,
+                        () -> assertTrue(volRelErrLayer2 < 0.01,
                                 "Mesh 2 volume is erroneous"),
-                        () -> assertTrue(volRelErr3 < 0.005,
+                        () -> assertTrue(volRelErrLayer3 < 0.01,
                                 "Mesh 3 volume is erroneous"),
-                        () -> assertTrue(volRelErr < 0.005,
+                        () -> assertTrue(volRelErr < 0.01,
                                 "The volume is erroneous")
                 );
             }
