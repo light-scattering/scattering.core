@@ -1,6 +1,7 @@
 package eu.scattering.core.impl;
 
 import eu.scattering.core.design.ScatFactoryConcrete;
+import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -20,6 +21,7 @@ import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.ShapeProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
@@ -35,6 +37,7 @@ import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -348,6 +351,20 @@ public final class FactoryDef extends ScatFactoryConcrete {
     public <T extends Geometry> FAssembly<T> getFAssembly() {
 
         return FAssemblyDef.create(this, new ArrayList<>());
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FAggregate getFAggregate(FAssembly<Shape> particles) {
+
+        return FAggregateDef.create(particles);
+    }
+
+    @Override
+    public FAggregate getFAggregate() {
+
+        return FAggregateDef.create(getFAssembly());
     }
 
     //--------------------------------------------------

@@ -20,4 +20,5 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.component.geometry;
     opens eu.scattering.core.test.engine.randomize;
     opens eu.scattering.core.test.engine.randomize.module;
+    opens eu.scattering.core.test.component.aggregate;
 }

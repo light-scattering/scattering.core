@@ -3908,9 +3908,9 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module - Inclusion")
-        @DisplayName("Functionality - Advanced (inclusion)")
-        class FSphereModuleInclusionTest {
+        @Tag("Module - Composition")
+        @DisplayName("Functionality - Advanced (composition)")
+        class FSphereModuleCompositionTest {
 
             @Test
             @DisplayName("Contains with parameters")
@@ -4102,8 +4102,9 @@ public class FSphereTest {
         }
 
         @Nested
-        @Tag("Module - Aggregation")
-        class FSphereModuleAggregationTest {
+        @Tag("Module - Interaction")
+        @DisplayName("Functionality - Advanced (interaction)")
+        class FSphereModuleInteractionTest {
 
             @Test
             @DisplayName("Attach linear enclosed")

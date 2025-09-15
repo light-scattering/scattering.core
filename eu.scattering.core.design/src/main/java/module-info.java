@@ -44,4 +44,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.util.support;
     exports eu.scattering.core.design.util.annotation;
     exports eu.scattering.core.design.util.container;
+    exports eu.scattering.core.design.component.aggregate;
 }
