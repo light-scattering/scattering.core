@@ -24,7 +24,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     private final int capacity;
 
     private final int[][] value;
-    private final List<T> meta;
+    private final Object[] meta;
 
     private int index;
 
@@ -34,12 +34,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
         this.capacity = capacity;
 
         this.value = new int[3][this.capacity];
-
-        this.meta = new ArrayList<>(this.capacity);
-
-        while(this.meta.size() < this.capacity) {
-            this.meta.add(null);
-        }
+        this.meta = new Object[this.capacity];
     }
 
     public static <T> FArrayMesh<T> create(int capacity) {
@@ -58,7 +53,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
         this.value[1][index] = d1;
         this.value[2][index] = d2;
 
-        this.meta.set(index, null);
+        this.meta[index] = null;
 
         index++;
     }
@@ -80,7 +75,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
         this.value[1][index] = d1;
         this.value[2][index] = d2;
 
-        this.meta.set(index, meta);
+        this.meta[index] = meta;
 
         index++;
     }
@@ -134,13 +129,14 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public T getMeta(int index) {
 
         if (index >= this.index) {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return this.meta.get(index);
+        return (T) this.meta[index];
     }
 
     @Override
@@ -185,11 +181,12 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void forEach(FArrayMeshConsumer<T> consumer) {
 
         for (int i = 0; i < index; i++) {
             consumer.apply(
-                    i, this.value[0][i], this.value[1][i], this.value[2][i], this.meta.get(i)
+                    i, this.value[0][i], this.value[1][i], this.value[2][i], (T) this.meta[i]
             );
         }
     }
@@ -209,7 +206,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             boolean isUnique = elements.add(getFPos3DI(i));
 
             if (isUnique) {
-                this.meta.set(j, this.meta.get(i));
+                this.meta[j] = this.meta[i];
 
                 this.value[0][j] = this.value[0][i];
                 this.value[1][j] = this.value[1][i];
@@ -229,6 +226,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public int deduplicate(BiFunction<T, T, Boolean> collision) {
         Set<FPos3DI> elements = new HashSet<>();
 
@@ -238,7 +236,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             boolean isPositionUnique = elements.add(position);
 
             if (isPositionUnique) {
-                this.meta.set(j, this.meta.get(i));
+                this.meta[j] = this.meta[i];
 
                 this.value[0][j] = this.value[0][i];
                 this.value[1][j] = this.value[1][i];
@@ -248,11 +246,11 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             } else {
                 int indexOld = findIndex(position);
 
-                T metaNew = this.meta.get(i);
+                T metaNew = (T) this.meta[i];
                 T metaOld = getMeta(indexOld);
 
                 if (collision.apply(metaOld, metaNew)) {
-                    this.meta.set(indexOld, metaNew);
+                    this.meta[indexOld] = metaNew;
                 }
             }
 
