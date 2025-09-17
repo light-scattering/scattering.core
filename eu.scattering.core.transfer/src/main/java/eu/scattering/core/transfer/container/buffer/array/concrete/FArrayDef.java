@@ -3,10 +3,12 @@ package eu.scattering.core.transfer.container.buffer.array.concrete;
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
+import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.array.utils.FArrayConsumer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -260,6 +262,24 @@ public class FArrayDef<T> implements FArray<T> {
         this.index = j;
 
         return i - j;
+    }
+
+    @Override
+    public FArrayMesh<T> toFArrayMesh(double unit) {
+        FArrayMesh<T> fArrayMesh = FArrayMeshDef.create(size());
+
+        double factor = 1d / unit;
+
+        forEach((index, d0, d1, d2, meta) -> {
+            fArrayMesh.addWithMeta(
+                    (int) Math.round(d0 * factor),
+                    (int) Math.round(d1 * factor),
+                    (int) Math.round(d2 * factor),
+                    meta
+            );
+        });
+
+        return fArrayMesh;
     }
 
     //--------------------------------------------------

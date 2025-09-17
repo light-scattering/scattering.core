@@ -8,8 +8,9 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
-import eu.scattering.core.design.util.container.DipoleData;
-import eu.scattering.core.impl.util.DipoleDataDef;
+import eu.scattering.core.design.util.container.FMetaData;
+import eu.scattering.core.impl.util.FMetaDataDef;
+import eu.scattering.core.transfer.container.box.FBoxString.FBoxString;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
@@ -37,14 +38,17 @@ public abstract class ShapePresetDef implements Shape {
 
     private double index = -1;
 
-    private String tag = "";
+    private final FBoxString tag;
 
     protected List<Double> coatWidth = new ArrayList<>();
+    protected List<FMetaData> metaData = new ArrayList<>();
 
     public ShapePresetDef(ScatFactory factory) {
 
         this.factory = factory;
         this.fSphereHelper = factory.getFSphereHelper();
+
+        this.tag = factory.getFBoxString();
     }
 
     @Override
@@ -116,13 +120,13 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public String getTag() {
 
-        return this.tag;
+        return this.tag.getValue();
     }
 
     @Override
     public Shape setTag(String tag) {
 
-        this.tag = tag;
+        this.tag.setValue(tag);
 
         return this;
     }
@@ -197,6 +201,21 @@ public abstract class ShapePresetDef implements Shape {
     public int locate(FPos3D fPos3D) {
 
         return locate(fPos3D.getD0(), fPos3D.getD1(), fPos3D.getD2());
+    }
+
+    @Override
+    public List<FMetaData> getMetaData() {
+        int layerCount = getLayerCount();
+
+        if (this.metaData.size() >= layerCount) {
+            return this.metaData;
+        }
+
+        for (int i = this.metaData.size(); i < getLayerCount() ; i++) {
+            this.metaData.add(FMetaDataDef.crete(this.tag, i));
+        }
+
+        return this.metaData;
     }
 
     //--- Module - Position
@@ -1257,12 +1276,8 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeArray(FArray<DipoleData> in) {
-        DipoleData[] layer = new DipoleData[getLayerCount()];
-
-        for (int i = 0 ; i < layer.length ; i++) {
-            layer[i] = DipoleDataDef.crete(i, getTag());
-        }
+    public double fillVolumeArray(FArray<FMetaData> in) {
+        List<FMetaData> metaData = getMetaData();
 
         double factor = 1 / delta;
 
@@ -1286,7 +1301,7 @@ public abstract class ShapePresetDef implements Shape {
                     location = locate(x, y, z);
 
                     if (location >= 0) {
-                        in.addWithMeta(x, y, z, layer[location]);
+                        in.addWithMeta(x, y, z, metaData.get(location));
                     }
                 }
             }
@@ -1296,18 +1311,14 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeArray(FArray<DipoleData> in, List<? extends Shape> structure) {
+    public double fillVolumeArray(FArray<FMetaData> in, List<? extends Shape> structure) {
         int position = structure.indexOf(this);
 
         if (position == -1) {
             throw new IllegalArgumentException("The shape must be a part of the structure");
         }
 
-        DipoleData[] layer = new DipoleData[getLayerCount()];
-
-        for (int i = 0 ; i < layer.length ; i++) {
-            layer[i] = DipoleDataDef.crete(i, getTag());
-        }
+        List<FMetaData> metaData = getMetaData();
 
         double factor = 1 / delta;
 
@@ -1350,7 +1361,7 @@ public abstract class ShapePresetDef implements Shape {
                     }
 
                     if (location < locateInStructure(suffix, x, y, z)) {
-                        in.addWithMeta(x, y, z, layer[location]);
+                        in.addWithMeta(x, y, z, metaData.get(location));
                     }
                 }
             }

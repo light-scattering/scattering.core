@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.util.container.DipoleData;
+import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
@@ -1378,6 +1378,7 @@ public class FSphereTest {
                 );
             }
 
+            @Test
             @DisplayName("Volume layer")
             void volumeLayer() {
                 double delta = 0.1;
@@ -1428,7 +1429,7 @@ public class FSphereTest {
             void volumeArray() {
                 double delta = 0.1;
 
-                FArray<DipoleData> fArray = factory.getFArray(300000);
+                FArray<FMetaData> fArray = factory.getFArray(300000);
 
                 Shape fSphere = factory.getFSphere(1)
                         .addCoat(1, 1, 1)
@@ -1518,7 +1519,7 @@ public class FSphereTest {
             void volumeArrayVolumeUnit() {
                 double delta = 0.1;
 
-                FArray<DipoleData> fArray = factory.getFArray(1000);
+                FArray<FMetaData> fArray = factory.getFArray(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1537,7 +1538,7 @@ public class FSphereTest {
             void volumeArrayErroneousShape() {
                 double delta = 1;
 
-                FArray<DipoleData> fArray = factory.getFArray(1000);
+                FArray<FMetaData> fArray = factory.getFArray(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1787,7 +1788,7 @@ public class FSphereTest {
             void surfaceArray() {
                 double delta = 0.1;
 
-                FArray<DipoleData> fArray = factory.getFArray(300000);
+                FArray<FMetaData> fArray = factory.getFArray(300000);
 
                 Shape fSphere = factory.getFSphere(1)
                         .addCoat(1, 1, 1)
@@ -1873,7 +1874,7 @@ public class FSphereTest {
             void surfaceArraySurfaceUnit() {
                 double delta = 0.1;
 
-                FArray<DipoleData> fArray = factory.getFArray(1000);
+                FArray<FMetaData> fArray = factory.getFArray(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1892,7 +1893,7 @@ public class FSphereTest {
             void surfaceArrayErroneousShape() {
                 double delta = 1;
 
-                FArray<DipoleData> fArray = factory.getFArray(1000);
+                FArray<FMetaData> fArray = factory.getFArray(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1948,6 +1949,26 @@ public class FSphereTest {
                         () -> assertSame(fSphere, results,
                                 "The FSphere reference should not change")
                 );
+            }
+
+            @Test
+            @DisplayName("Validate meta data")
+            void validateMetaData() {
+                double delta = 0.1;
+
+                FArray<FMetaData> fArray = factory.getFArray(100000);
+
+                Shape fSphere = factory.getFSphere(1)
+                        .setTag("A")
+                        .setDelta(delta);
+
+                fSphere.fillVolumeArray(fArray);
+
+                assertEquals("A", fArray.getMeta(0).getTag(), "The tag is erroneous");
+
+                fSphere.setTag("B");
+
+                assertEquals("B", fArray.getMeta(0).getTag(), "The tag is erroneous");
             }
         }
 

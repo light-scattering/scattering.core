@@ -356,15 +356,9 @@ public final class FactoryDef extends ScatFactoryConcrete {
     //--------------------------------------------------
 
     @Override
-    public FAggregate getFAggregate(FAssembly<Shape> particles) {
+    public FAggregate getFAggregate(FAssembly<Shape> particles, int dipoles) {
 
-        return FAggregateDef.create(particles);
-    }
-
-    @Override
-    public FAggregate getFAggregate() {
-
-        return FAggregateDef.create(getFAssembly());
+        return FAggregateDef.create(particles, getFArray(dipoles));
     }
 
     //--------------------------------------------------

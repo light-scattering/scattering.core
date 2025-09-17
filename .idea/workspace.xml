@@ -24,8 +24,24 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregateFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregateFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeModuleComposition.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeModuleComposition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeModuleDimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeModuleDimension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/util/container/DipoleData.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/util/container/MetaData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/FSphereDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/geometry/shape/preset/ShapePresetDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/util/DipoleDataDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/util/MetaDataDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/geometry/shape/FSphereTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/ContainerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/ContainerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/FArray.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/FArray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayMeshDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/buffer/array/concrete/FArrayMeshDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/storage/FPos2D/FPos2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/container/storage/FPos2D/FPos2D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,30 +178,7 @@
       <recent name="eu.scattering.core.transfer.container.buffer.FStream3D" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
-    <configuration name="FAggregateTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.FSphereTest">
     <configuration name="FAggregateTest.getSurfaceArrayOverlapMixed" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -209,7 +202,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FAggregateTest.getSurfaceLayerOverlapMixed" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSphereModuleDimensionTest.surfaceArray" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -222,7 +215,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest.getSurfaceLayerOverlapMixed&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest$FSphereModuleDimensionTest.surfaceArray&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -232,7 +225,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FSphereModuleDimensionTest.volumeLayer" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FSphereModuleDimensionTest.validateMetaData" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -245,7 +238,30 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest$FSphereModuleDimensionTest.volumeLayer&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest$FSphereAdvancedTest$FSphereModuleDimensionTest.validateMetaData&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="FSphereTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.test:test" />
+            <option value="--tests" />
+            <option value="&quot;eu.scattering.core.test.component.geometry.shape.FSphereTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -278,11 +294,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.FSphereTest" />
+        <item itemvalue="Gradle.FSphereModuleDimensionTest.validateMetaData" />
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FSphereModuleDimensionTest.volumeLayer" />
-        <item itemvalue="Gradle.FAggregateTest" />
+        <item itemvalue="Gradle.FSphereModuleDimensionTest.surfaceArray" />
         <item itemvalue="Gradle.FAggregateTest.getSurfaceArrayOverlapMixed" />
-        <item itemvalue="Gradle.FAggregateTest.getSurfaceLayerOverlapMixed" />
       </list>
     </recent_temporary>
   </component>

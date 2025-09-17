@@ -73,8 +73,7 @@ public class FPos2D implements Storage<FPos2D> {
     @Override
     public boolean equals(Object object) {
 
-        if (object instanceof FPos2D) {
-            FPos2D fPosition = (FPos2D) object;
+        if (object instanceof FPos2D fPosition) {
 
             return d0 == fPosition.getD0() && d1 == fPosition.getD1();
         }

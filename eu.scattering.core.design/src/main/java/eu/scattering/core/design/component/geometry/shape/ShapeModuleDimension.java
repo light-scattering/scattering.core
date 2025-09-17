@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.util.annotation.Fragment;
-import eu.scattering.core.design.util.container.DipoleData;
+import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 
@@ -52,7 +52,7 @@ public interface ShapeModuleDimension {
     double fillVolumeLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field);
 
     double fillVolumeLayer(FLayerCounter in);
-    double fillVolumeArray(FArray<DipoleData> in);
+    double fillVolumeArray(FArray<FMetaData> in);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ public interface ShapeModuleDimension {
     double fillSurfaceLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field);
 
     double fillSurfaceLayer(FLayerCounter in);
-    double fillSurfaceArray(FArray<DipoleData> in);
+    double fillSurfaceArray(FArray<FMetaData> in);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -71,10 +71,10 @@ public interface ShapeModuleDimension {
     @Fragment
     double fillVolumeLayer(FLayerCounter in, List<? extends Shape> structure);
     @Fragment
-    double fillVolumeArray(FArray<DipoleData> in, List<? extends Shape> structure);
+    double fillVolumeArray(FArray<FMetaData> in, List<? extends Shape> structure);
 
     @Fragment
     double fillSurfaceLayer(FLayerCounter in, List<? extends Shape> structure);
     @Fragment
-    double fillSurfaceArray(FArray<DipoleData> in, List<? extends Shape> structure);
+    double fillSurfaceArray(FArray<FMetaData> in, List<? extends Shape> structure);
 }

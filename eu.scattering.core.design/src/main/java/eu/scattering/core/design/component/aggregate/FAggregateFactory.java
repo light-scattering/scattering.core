@@ -5,7 +5,12 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 
 public interface FAggregateFactory {
 
-    FAggregate getFAggregate();
+    FAggregate getFAggregate(FAssembly<Shape> particles, int dipoles);
 
-    FAggregate getFAggregate(FAssembly<Shape> particles);
+    //--------------------------------------------------
+
+    default FAggregate getFAggregate(FAssembly<Shape> particles) {
+
+        return getFAggregate(particles, 1_000_000);
+    }
 }

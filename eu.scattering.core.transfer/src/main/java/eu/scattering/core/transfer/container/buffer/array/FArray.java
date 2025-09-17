@@ -4,6 +4,7 @@ import eu.scattering.core.transfer.container.buffer.Buffer;
 import eu.scattering.core.transfer.container.buffer.array.utils.FArrayConsumer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
+import java.util.Set;
 import java.util.function.BiFunction;
 
 public interface FArray<T> extends Buffer<FArray<T>> {
@@ -32,6 +33,8 @@ public interface FArray<T> extends Buffer<FArray<T>> {
 
     int deduplicate();
     int deduplicate(BiFunction<T, T, Boolean> collision);
+
+    FArrayMesh<T> toFArrayMesh(double unit);
 
     void clear();
 }

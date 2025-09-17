@@ -7,9 +7,8 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.util.container.DipoleData;
+import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
-import eu.scattering.core.impl.util.DipoleDataDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -867,26 +866,24 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceArray(FArray<DipoleData> in) {
+    public double fillSurfaceArray(FArray<FMetaData> in) {
+        List<FMetaData> metaData = getMetaData();
+
         double srfUnit = getDelta() * getDelta();
-
-        DipoleData[] layer = new DipoleData[getLayerCount()];
-
-        for (int i = 0 ; i < layer.length ; i++) {
-            layer[i] = DipoleDataDef.crete(i, getTag());
-        }
 
         for (int i = 0 ; i < getLayerCount() ; i++) {
             int index = i;
 
-            getSurfaceElements(getLayerRadius(i), (d0, d1, d2) -> in.addWithMeta(d0, d1, d2, layer[index]));
+            getSurfaceElements(getLayerRadius(i), (d0, d1, d2) -> in.addWithMeta(d0, d1, d2, metaData.get(index)));
         }
 
        return srfUnit;
     }
 
     @Override
-    public double fillSurfaceArray(FArray<DipoleData> in, List<? extends Shape> structure) {
+    public double fillSurfaceArray(FArray<FMetaData> in, List<? extends Shape> structure) {
+        List<FMetaData> metaData = getMetaData();
+
         int position = structure.indexOf(this);
 
         if (position == -1) {
@@ -894,12 +891,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         double srfUnit = getDelta() * getDelta();
-
-        DipoleData[] layer = new DipoleData[getLayerCount()];
-
-        for (int i = 0 ; i < layer.length ; i++) {
-            layer[i] = DipoleDataDef.crete(i, getTag());
-        }
 
         for (int i = 0 ; i < getLayerCount() ; i++) {
             int location = i;
@@ -921,7 +912,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                 }
 
                 if (isPartOf) {
-                    in.addWithMeta(x, y, z, layer[location]);
+                    in.addWithMeta(x, y, z, metaData.get(location));
                 }
             });
         }

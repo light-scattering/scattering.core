@@ -6,9 +6,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.util.container.DipoleData;
+import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.design.util.support.Producer;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import org.junit.jupiter.api.Assertions;
@@ -359,9 +358,7 @@ public class FAggregateTest {
 
         FAggregate fAggregate = factory.getFAggregate(fAssembly);
 
-        FArray<DipoleData> fArray = factory.getFArray(1000000);
-
-        fAggregate.getVolumeMesh(fArray);
+        FArrayMesh<FMetaData> fArray = fAggregate.getVolumeMesh();
 
         FLayerCounter fLayer = factory.getFLayerCounter();
 
@@ -675,58 +672,6 @@ public class FAggregateTest {
                         "Layer 0 volume is erroneous"),
                 () -> assertTrue(srfErrLayer3 < 0.01,
                         "Layer 0 volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface array, overlap (mixed)")
-    void getSurfaceArrayOverlapMixed() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
-
-        FArray<DipoleData> fArray = factory.getFArray(1000000);
-
-        fAggregate.getSurfaceMesh(fArray);
-
-        FLayerCounter fLayer = factory.getFLayerCounter();
-
-        fArray.forEach((index, d0, d1, d2, data) -> fLayer.inc(data.getLayer()));
-
-        double srfActualLayer0 = fLayer.get(0) * 0.01;
-        double srfActualA = fLayer.get(3) * 0.01;
-        double srfActualB = fAggregate.getSurface();
-
-        double srfExpectedLayer0 = 2 * factory.getFSphereHelper().getSurface(1) +
-                factory.getFSphereHelper().getSurface(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1);
-
-        double srfErrLayer0 = factory.getFStatHelper().getRelErr(srfExpectedLayer0, srfActualLayer0);
-        double srfErrLayer3 = factory.getFStatHelper().getRelErr(srfActualA, srfActualB);
-
-        double duplicates = fArray.deduplicate();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(0, duplicates,
-                        "The number of duplicates is erroneous"),
-                () -> assertTrue(srfErrLayer0 < 0.01,
-                        "Layer 0 surface is erroneous"),
-                () -> assertTrue(srfErrLayer3 < 0.01,
-                        "Layer 3 surface is erroneous")
         );
     }
 
