@@ -11,10 +11,7 @@ import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -25,24 +22,42 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_MAIN = "aggregate";
     private static final String JSON_PARTICLES = "particles";
 
-    private FAssembly<Shape> particles;
-    private FArray<FMetaData> dipoles;
+    private final Map<String, double[]> materialDensity = new HashMap<>();
 
-    private FAggregateDef(FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
+    private FAssembly<Shape> particles;
+    private FArray<FMetaData> elements;
+
+    private FAggregateDef(FAssembly<Shape> particles, FArray<FMetaData> elements) {
 
         this.particles = particles;
-        this.dipoles = dipoles;
+        this.elements = elements;
     }
 
-    public static FAggregate create(FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
+    public static FAggregate create(FAssembly<Shape> particles, FArray<FMetaData> elements) {
 
-        return new FAggregateDef(particles, dipoles);
+        return new FAggregateDef(particles, elements);
     }
 
     @Override
     public FAssembly<Shape> getParticles() {
 
-        return this.particles;
+        return this.particles.copy();
+    }
+
+    @Override
+    public FAggregate setParticles(FAssembly<Shape> particles) {
+
+        this.particles = particles.copy();
+
+        return this;
+    }
+
+    @Override
+    public FAggregate setMaterialDensity(String tag, double... density) {
+
+        this.materialDensity.put(tag, density);
+
+        return this;
     }
 
     @Override
@@ -171,15 +186,15 @@ public class FAggregateDef implements FAggregate {
     public FArrayMesh<FMetaData> getVolumeMesh() {
         double unit = valDelta(this.particles);
 
-        this.dipoles.clear();
+        this.elements.clear();
 
         List<Shape> field = getUniqueShapes();
 
         for (Shape shape : field) {
-            shape.fillVolumeArray(this.dipoles, field);
+            shape.fillVolumeArray(this.elements, field);
         }
 
-        FArrayMesh<FMetaData> mesh = this.dipoles.toFArrayMesh(unit);
+        FArrayMesh<FMetaData> mesh = this.elements.toFArrayMesh(unit);
 
         mesh.deduplicate((a, b) -> b.getLayer() < a.getLayer());
 
@@ -312,16 +327,6 @@ public class FAggregateDef implements FAggregate {
         return oFacTotal / oFacCount;
     }
 
-    @Override
-    public double getRadiusOfGyrationMonodisperse() {
-        return 0;
-    }
-
-    @Override
-    public double getRadiusOfGyrationPolydisperse() {
-        return 0;
-    }
-
     private double getOFacLeg(Shape shapeA, Shape shapeB) {
 
         double dist = shapeA.getDistCenter(shapeB);
@@ -430,5 +435,35 @@ public class FAggregateDef implements FAggregate {
         }
 
         return delta;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FAssembly<Shape> getRefParticles() {
+
+        return this.particles;
+    }
+
+    @Override
+    public FAggregate setRefParticles(FAssembly<Shape> particles) {
+
+        this.particles = particles;
+
+        return this;
+    }
+
+    @Override
+    public FArray<FMetaData> getRefElements() {
+
+        return this.elements;
+    }
+
+    @Override
+    public FAggregate setRefElements(FArray<FMetaData> elements) {
+
+        this.elements = elements;
+
+        return this;
     }
 }

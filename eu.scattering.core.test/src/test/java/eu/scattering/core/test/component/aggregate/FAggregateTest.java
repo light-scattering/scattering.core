@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +26,223 @@ import static org.junit.jupiter.api.Assertions.*;
 public class FAggregateTest {
 
     @Test
+    @DisplayName("Construct")
+    void construct() {
+        FAggregate fAggregate = factory.getFAggregate();
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertEquals(1000000, fAggregate.getRefElements().capacity(),
+                        "The capacity is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Construct with capacity")
+    void constructWithCapacity() {
+        FAggregate fAggregate = factory.getFAggregate(100);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertEquals(100, fAggregate.getRefElements().capacity(),
+                        "The capacity is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Construct with particles")
+    void constructWithParticles() {
+        FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
+                        "The reference should change"),
+                () -> assertEquals(1000000, fAggregate.getRefElements().capacity(),
+                        "The capacity is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Construct with particles and capacity")
+    void constructWithParticlesAndCapacity() {
+        FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+        FAggregate fAggregate = factory.getFAggregate(fAssembly, 100);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
+                        "The reference should change"),
+                () -> assertEquals(100, fAggregate.getRefElements().capacity(),
+                        "The capacity is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Construct with reference particles")
+    void constructWithReferenceParticles() {
+        FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertSame(fAssembly, fAggregate.getRefParticles(),
+                        "The reference should not change"),
+                () -> assertEquals(1000000, fAggregate.getRefElements().capacity(),
+                        "The capacity is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Construct with reference particles and capacity")
+    void constructWithReferenceParticlesAndCapacity() {
+        FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 100);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertSame(fAssembly, fAggregate.getRefParticles(),
+                        "The reference should not change"),
+                () -> assertEquals(100, fAggregate.getRefElements().capacity(),
+                        "The capacity is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Construct with reference particles and reference elements")
+    void constructWithReferenceParticlesAndReferenceElements() {
+        FAssembly<Shape> fAssembly = factory.getFAssembly();
+        FArray<FMetaData> fArray = factory.getFArray(10);
+
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, fArray);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertSame(fAssembly, fAggregate.getRefParticles(),
+                        "The reference should not change"),
+                () -> assertSame(fArray, fAggregate.getRefElements(),
+                        "The reference should not change")
+        );
+    }
+
+    @Test
+    @DisplayName("Get particles")
+    void getParticles() {
+        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+        FAggregate fAggregate = factory.getRefFAggregate(fAssemblyA);
+
+        FAssembly<Shape> fAssemblyB = fAggregate.getParticles();
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertNotSame(fAssemblyA, fAssemblyB,
+                        "The reference should change"),
+                () -> assertEquals(fAssemblyA, fAssemblyB,
+                        "The geometry should be the same")
+        );
+
+        fSphereA.setRadius(10);
+
+        assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
+    }
+
+    @Test
+    @DisplayName("Set particles")
+    void setParticles() {
+        FAggregate fAggregateA = factory.getFAggregate();
+
+        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+        FAggregate fAggregateB = fAggregateA.setParticles(fAssemblyA);
+
+        FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertSame(fAggregateA, fAggregateB,
+                        "The reference not should change"),
+                () -> assertNotSame(fAssemblyA, fAssemblyB,
+                        "The reference should change"),
+                () -> assertEquals(fAssemblyA, fAssemblyB,
+                        "The geometry should be the same")
+        );
+
+        fSphereA.setRadius(10);
+
+        assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
+    }
+
+    @Test
+    @DisplayName("Get reference particles")
+    void getReferenceParticles() {
+        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+        FAggregate fAggregate = factory.getRefFAggregate(fAssemblyA);
+
+        FAssembly<Shape> fAssemblyB = fAggregate.getRefParticles();
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertSame(fAssemblyA, fAssemblyB,
+                        "The reference should not change")
+        );
+    }
+
+    @Test
+    @DisplayName("Set reference particles")
+    void setReferenceParticles() {
+        FAggregate fAggregateA = factory.getFAggregate();
+
+        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+        FAggregate fAggregateB = fAggregateA.setRefParticles(fAssemblyA);
+
+        FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertSame(fAggregateA, fAggregateB,
+                        "The reference not should change"),
+                () -> assertSame(fAssemblyA, fAssemblyB,
+                        "The reference should not change")
+        );
+    }
+
+    @Test
+    @DisplayName("Validate reference elements")
+    void validateReferenceElements() {
+        FArray<FMetaData> fArrayA = factory.getFArray(123);
+
+        FAggregate fAggregateA = factory.getFAggregate();
+
+        FAggregate fAggregateB = fAggregateA.setRefElements(fArrayA);
+
+        FArray<FMetaData> fArrayB = fAggregateA.getRefElements();
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertSame(fAggregateA, fAggregateB,
+                        "The reference should not change"),
+                () -> assertSame(fArrayA, fArrayB,
+                        "The reference should not change")
+        );
+    }
+
+    @Test
     @DisplayName("Get volume, point contact A")
     void getVolumePointContactA() {
         FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
@@ -34,7 +252,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double volActual = fAggregate.getVolume();
         double volExpected = 4 * (4  * Math.PI / 3);
@@ -55,7 +273,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double volActual = fAggregate.getVolume();
         double volExpected = 50 * (4  * Math.PI / 3);
@@ -78,7 +296,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double volActual = fAggregate.getVolume();
         double expected = 1 * (4  * Math.PI / 3);
@@ -101,7 +319,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double volActual = fAggregate.getVolume();
         double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
@@ -124,7 +342,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double volActual = fAggregate.getVolume();
         double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
@@ -147,7 +365,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double volActual = fAggregate.getVolume();
         double volExpected = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -180,7 +398,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double[] volLayers = new double[3];
         double volActual = fAggregate.getVolume(volLayers);
@@ -221,7 +439,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FSphere fSphereRef = fSphereProd.produce();
 
@@ -270,7 +488,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double[] volLayers = new double[3];
         double volActual = fAggregate.getVolume(volLayers);
@@ -317,7 +535,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double[] volLayers = new double[4];
         double volActualA = fAggregate.getVolume(volLayers);
@@ -356,7 +574,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FArrayMesh<FMetaData> fArray = fAggregate.getVolumeMesh();
 
@@ -395,7 +613,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double srfActual = fAggregate.getSurface();
         double srfExpected = 4 * (4  * Math.PI);
@@ -416,7 +634,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double srfActual = fAggregate.getSurface();
         double srfExpected = 50 * (4  * Math.PI);
@@ -439,7 +657,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double srfActual = fAggregate.getSurface();
         double srfExpected = 1 * (4  * Math.PI);
@@ -462,7 +680,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double srfActual = fAggregate.getSurface();
         double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
@@ -485,7 +703,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double srfActual = fAggregate.getSurface();
         double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
@@ -518,7 +736,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double[] srfLayers = new double[3];
         double srfActual = fAggregate.getSurface(srfLayers);
@@ -559,7 +777,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FSphere fSphereRef = fSphereProd.produce();
 
@@ -608,7 +826,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double[] srfLayers = new double[3];
         double srfActual = fAggregate.getSurface(srfLayers);
@@ -655,7 +873,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double[] srfLayers = new double[4];
         fAggregate.getSurface(srfLayers);
@@ -683,7 +901,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactor();
 
@@ -699,7 +917,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactor();
 
@@ -714,7 +932,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactor();
 
@@ -729,7 +947,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactor();
 
@@ -752,7 +970,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactor();
 
@@ -775,7 +993,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactorLegacy();
 
@@ -790,7 +1008,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactorLegacy();
 
@@ -805,7 +1023,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactorLegacy();
 
@@ -823,7 +1041,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         double overlap = fAggregate.getOverlapFactorLegacy();
 
@@ -843,7 +1061,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         assertTrue(fAggregate.isCompact());
     }
@@ -859,7 +1077,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         assertFalse(fAggregate.isCompact());
     }
@@ -869,7 +1087,7 @@ public class FAggregateTest {
     void isCompactEmpty() {
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         assertFalse(fAggregate.isCompact());
     }
@@ -885,7 +1103,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         AtomicInteger count = new AtomicInteger(0);
 
@@ -909,7 +1127,7 @@ public class FAggregateTest {
                 List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE, fSphereF, fSphereG)
         );
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         AtomicInteger count = new AtomicInteger(0);
 
@@ -929,7 +1147,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         AtomicInteger count = new AtomicInteger(0);
 
@@ -948,7 +1166,7 @@ public class FAggregateTest {
 
         FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         AtomicInteger count = new AtomicInteger(0);
 

@@ -37,6 +37,7 @@ import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
@@ -58,6 +59,7 @@ import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
+import eu.scattering.core.transfer.container.buffer.array.FArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -356,9 +358,45 @@ public final class FactoryDef extends ScatFactoryConcrete {
     //--------------------------------------------------
 
     @Override
-    public FAggregate getFAggregate(FAssembly<Shape> particles, int dipoles) {
+    public FAggregate getFAggregate() {
 
-        return FAggregateDef.create(particles, getFArray(dipoles));
+        return FAggregateDef.create(getFAssembly(), getFArray());
+    }
+
+    @Override
+    public FAggregate getFAggregate(int capacity) {
+
+        return FAggregateDef.create(getFAssembly(), getFArray(capacity));
+    }
+
+    @Override
+    public FAggregate getFAggregate(FAssembly<Shape> particles) {
+
+        return FAggregateDef.create(particles.copy(), getFArray());
+    }
+
+    @Override
+    public FAggregate getFAggregate(FAssembly<Shape> particles, int capacity) {
+
+        return FAggregateDef.create(particles.copy(), getFArray(capacity));
+    }
+
+    @Override
+    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles) {
+
+        return FAggregateDef.create(refParticles, getFArray());
+    }
+
+    @Override
+    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, int capacity) {
+
+        return FAggregateDef.create(refParticles, getFArray(capacity));
+    }
+
+    @Override
+    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FArray<FMetaData> refElements) {
+
+        return FAggregateDef.create(refParticles, refElements);
     }
 
     //--------------------------------------------------

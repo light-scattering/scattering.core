@@ -30,6 +30,19 @@ public class FArrayTest {
         }
 
         @Test
+        @DisplayName("Create (default)")
+        void createDefault() {
+            FArray<Double> fArray = factory.getFArray();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, fArray.size(),
+                            "The number of elements is incorrect"),
+                    () -> assertEquals(1000000, fArray.capacity(),
+                            "The capacity is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Increment")
         void increment() {
             FArray<Double> fArray = factory.getFArray(100);

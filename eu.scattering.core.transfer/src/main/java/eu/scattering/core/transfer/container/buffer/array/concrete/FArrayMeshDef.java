@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 public class FArrayMeshDef<T> implements FArrayMesh<T> {
+    private static final int DEF_CAPACITY = 1_000_000;
+
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
     private static final String JSON_MAIN = "array";
@@ -26,6 +28,11 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
 
     private int index;
 
+    private FArrayMeshDef() {
+
+        this(DEF_CAPACITY);
+    }
+
     private FArrayMeshDef(int capacity) {
         this.index = 0;
 
@@ -33,6 +40,11 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
 
         this.value = new int[3][this.capacity];
         this.meta = new Object[this.capacity];
+    }
+
+    public static <T> FArrayMesh<T> create() {
+
+        return new FArrayMeshDef<>();
     }
 
     public static <T> FArrayMesh<T> create(int capacity) {

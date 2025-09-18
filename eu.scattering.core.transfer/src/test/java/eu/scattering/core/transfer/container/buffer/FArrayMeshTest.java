@@ -30,6 +30,19 @@ public class FArrayMeshTest {
         }
 
         @Test
+        @DisplayName("Create (default)")
+        void createDefault() {
+            FArrayMesh<Double> fArray = factory.getFArrayMesh();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, fArray.size(),
+                            "The number of elements is incorrect"),
+                    () -> assertEquals(1000000, fArray.capacity(),
+                            "The capacity is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Increment")
         void increment() {
             FArrayMesh<Double> fArray = factory.getFArrayMesh(100);
