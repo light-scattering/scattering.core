@@ -28,6 +28,8 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
 
     private int index;
 
+    private double data;
+
     private FArrayMeshDef() {
 
         this(DEF_CAPACITY);
@@ -50,6 +52,18 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
     public static <T> FArrayMesh<T> create(int capacity) {
 
         return new FArrayMeshDef<>(capacity);
+    }
+
+    @Override
+    public double getData() {
+
+        return this.data;
+    }
+
+    @Override
+    public void setData(double data) {
+
+        this.data = data;
     }
 
     @Override

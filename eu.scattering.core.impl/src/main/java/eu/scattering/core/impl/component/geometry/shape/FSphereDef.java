@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
@@ -33,12 +34,15 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // The following fields must be redefined while extending the class.
     // -------------------------------------------------------------------------------------------------
 
+    private final FSphereHelper helper;
+
     private FPoint center;
     private double radius;
 
     private FSphereDef(ScatFactory factory) {
-
         super(factory);
+
+        this.helper = factory.getFSphereHelper();
     }
 
     public static FSphere create(ScatFactory factory, FPoint refCenter) {
@@ -92,7 +96,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         if (json.has(JSON_COATS)) {
             var coats = json.getJSONArray(JSON_COATS);
 
-            getCoating().clear();
+            getCoatWidth().clear();
             for (int i = 0 ; i < coats.length() ; i++) {
                 addCoatInternal(coats.getDouble(i));
             }
@@ -104,7 +108,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         if (json.has(JSON_META)) {
-            setTag(json.getString(JSON_META));
+            setMeta(json.getString(JSON_META));
         }
 
         return this;
@@ -116,7 +120,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         getRefCenter().applyStateFrom(arg.getRefCenter());
         setRadius(arg.getRadius());
 
-        this.getCoating().clear();
+        getCoatWidth().clear();
         for (int i = 0; i < arg.getCoatCount() ; i++) {
             this.addCoatInternal(arg.getCoatWidth(i));
         }
@@ -245,8 +249,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         json.put(JSON_CENTER, getRefCenter().toJSON());
         json.put(JSON_RADIUS, getRadius());
 
-        if (getCoating().size() > 0) {
-            for (int i = 0; i < getCoating().size() ; i++) {
+        if (getCoatWidth().size() > 0) {
+            for (int i = 0; i < getCoatWidth().size() ; i++) {
                 json.append(JSON_COATS, this.getCoatWidth(i));
             }
         }
@@ -255,8 +259,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             json.put(JSON_INDEX, getIndex());
         }
 
-        if (!getTag().equals("")) {
-            json.put(JSON_META, getTag());
+        if (!getMeta().equals("")) {
+            json.put(JSON_META, getMeta());
         }
 
         return json;
@@ -273,7 +277,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getRefCenter(), getRadius(), getCoating());
+        return Objects.hash(getRefCenter(), getRadius(), getCoatWidth());
     }
 
     @Override
@@ -596,24 +600,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     //--- Module - Position
 
     @Override
-    public double getCenterX() {
-
-        return getRefCenter().getX();
-    }
-
-    @Override
-    public double getCenterY() {
-
-        return getRefCenter().getY();
-    }
-
-    @Override
-    public double getCenterZ() {
-
-        return getRefCenter().getZ();
-    }
-
-    @Override
     public Shape setCenterX(double x) {
 
         getRefCenter().setX(x);
@@ -694,7 +680,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         if (index == 0) {
-            return fSphereHelper.getVolume(getRadius() - getLayerWidthRemaining(0));
+            return helper.getVolume(getRadius() - getLayerWidthRemaining(0));
         }
 
         double radiusMin = getRadius() - getLayerWidthRemaining(0);
@@ -705,7 +691,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         double radiusMax = radiusMin + getCoatWidth(index - 1);
 
-        return fSphereHelper.getVolumeRing(radiusMin, radiusMax);
+        return helper.getVolumeRing(radiusMin, radiusMax);
     }
 
     @Override
@@ -726,7 +712,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     public double getCoatVolume() {
         double radiusMin = getRadius() - getLayerWidthRemaining(0);
 
-        return fSphereHelper.getVolumeRing(radiusMin, getRadius());
+        return helper.getVolumeRing(radiusMin, getRadius());
     }
 
     @Override
@@ -741,7 +727,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
 
         if (index == 0) {
-            return fSphereHelper.getSurface(getRadius() - getLayerWidthRemaining(0));
+            return helper.getSurface(getRadius() - getLayerWidthRemaining(0));
         }
 
         double radiusMin = getRadius() - getLayerWidthRemaining(0);
@@ -752,7 +738,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         double radiusMax = radiusMin + getCoatWidth(index - 1);
 
-        return fSphereHelper.getSurface(radiusMax);
+        return helper.getSurface(radiusMax);
     }
 
     @Override
@@ -783,13 +769,13 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public double getVolumeAlgebraic() {
 
-        return fSphereHelper.getVolume(getRadius());
+        return helper.getVolume(getRadius());
     }
 
     @Override
     public double getSurfaceAlgebraic() {
 
-        return fSphereHelper.getSurface(getRadius());
+        return helper.getSurface(getRadius());
     }
 
     @Override
@@ -821,7 +807,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         double srfUnit = getDelta() * getDelta();
 
         for (int i = 0 ; i < getLayerCount() ; i++) {
-            in.set(i, in.get(i) + (int) Math.round(fSphereHelper.getSurface(getLayerRadius(i)) / srfUnit));
+            in.set(i, in.get(i) + (int) Math.round(helper.getSurface(getLayerRadius(i)) / srfUnit));
         }
 
         return srfUnit;
@@ -874,7 +860,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         for (int i = 0 ; i < getLayerCount() ; i++) {
             int index = i;
 
-            getSurfaceElements(getLayerRadius(i), (d0, d1, d2) -> in.addWithMeta(d0, d1, d2, metaData.get(index)));
+            getSurfaceElements(getLayerRadius(i), (d0, d1, d2) ->
+                    in.addWithDataAndMeta(d0, d1, d2, getDelta(), metaData.get(index)));
         }
 
        return srfUnit;
@@ -912,7 +899,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
                 }
 
                 if (isPartOf) {
-                    in.addWithMeta(x, y, z, metaData.get(location));
+                    in.addWithDataAndMeta(x, y, z, getDelta(), metaData.get(location));
                 }
             });
         }
@@ -921,7 +908,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     private void getSurfaceElements(double radius, TriConsumer consumer) {
-        int points = (int) Math.round(fSphereHelper.getSurface(radius) / (getDelta() * getDelta()));
+        int points = (int) Math.round(helper.getSurface(radius) / (getDelta() * getDelta()));
 
         double offset = 2.0 / points;
         double increment = Math.PI * (3.0 - Math.sqrt(5));
@@ -953,8 +940,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     private CmpDistSpace getCacheCmpDistSpace() {
 
-        if (super.getFCache() != null) {
-            return super.getFCache().get(CmpDistSpace.class, (cache) -> CmpDistSpace.create());
+        if (super.getCache() != null) {
+            return super.getCache().get(CmpDistSpace.class, (cache) -> CmpDistSpace.create());
         }
 
         return CmpDistSpace.create();

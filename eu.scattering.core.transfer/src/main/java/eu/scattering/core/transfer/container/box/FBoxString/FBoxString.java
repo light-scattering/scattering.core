@@ -37,7 +37,7 @@ public class FBoxString implements Box<FBoxString> {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
-        json.append(JSON_VAL, getValue());
+        json.put(JSON_VAL, getValue());
 
         return json;
     }

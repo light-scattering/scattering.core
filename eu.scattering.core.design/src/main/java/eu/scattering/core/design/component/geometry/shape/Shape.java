@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.Geometry;
+import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 
 public interface Shape extends Geometry,
@@ -14,9 +15,6 @@ public interface Shape extends Geometry,
 
     //--------------------------------------------------
 
-    FCache getFCache();
-    Shape setFCache(FCache cache);
-
     double getEpsilon();
     Shape setEpsilon(double epsilon);
 
@@ -26,10 +24,24 @@ public interface Shape extends Geometry,
     double getIndex();
     Shape setIndex(double index);
 
-    String getTag();
-    Shape setTag(String tag);
+    String getMeta(int index);
+    Shape setMeta(String... meta);
 
     //--------------------------------------------------
 
     Shape copy();
+
+    //--------------------------------------------------
+
+    @Modificator
+    FCache getCache();
+    @Modificator
+    Shape setCache(FCache cache);
+
+    //--------------------------------------------------
+
+    default String getMeta() {
+
+        return getMeta(0);
+    }
 }

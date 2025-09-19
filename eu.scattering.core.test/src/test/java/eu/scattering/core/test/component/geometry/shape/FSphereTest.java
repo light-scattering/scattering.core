@@ -260,12 +260,12 @@ public class FSphereTest {
         void setDesc() {
             Shape fSphere = factory.getFSphere();
 
-            assertEquals("", fSphere.getTag(),
+            assertEquals("", fSphere.getMeta(),
                     "The default tag value is incorrect");
 
-            Shape resultsA = fSphere.setTag("123");
+            Shape resultsA = fSphere.setMeta("123");
 
-            assertEquals("123", fSphere.getTag(),
+            assertEquals("123", fSphere.getMeta(),
                     "The tag value is incorrect");
             assertSame(resultsA, fSphere,
                     "The reference should not change");
@@ -276,13 +276,13 @@ public class FSphereTest {
         void setCache() {
             Shape fSphere = factory.getFSphere();
 
-            assertNull(fSphere.getFCache(),
+            assertNull(fSphere.getCache(),
                     "The cache value should be null");
 
             FCache cache = factory.getFCache();
-            Shape resultsA = fSphere.setFCache(cache);
+            Shape resultsA = fSphere.setCache(cache);
 
-            assertSame(cache, fSphere.getFCache(),
+            assertSame(cache, fSphere.getCache(),
                     "The cache instance is incorrect");
             assertSame(resultsA, fSphere,
                     "The reference should not change");
@@ -984,7 +984,7 @@ public class FSphereTest {
                         "The radius is incorrect");
                 assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
                         "The coat width cannot be negative");
-                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(10),
+                assertThrows(IllegalStateException.class, () -> fSphere.addCoatInternal(10),
                         "The coat width is too large");
             }
 
@@ -999,7 +999,7 @@ public class FSphereTest {
                         "The radius is incorrect");
                 assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(-1),
                         "The coat width cannot be negative");
-                assertThrows(IllegalArgumentException.class, () -> fSphere.addCoatInternal(10),
+                assertThrows(IllegalStateException.class, () -> fSphere.addCoatInternal(10),
                         "The coat width is too large");
                 assertSame(fSphere, results,
                         "The reference should not change");
@@ -1449,7 +1449,7 @@ public class FSphereTest {
 
                 int[] volActual = new int[4];
 
-                fArray.forEach((i, d0, d1, d2, data) -> volActual[data.getLayer()]++);
+                fArray.forEach((i, d0, d1, d2, _data, meta) -> volActual[meta.getLayerIndex()]++);
 
                 double volRelErr = factory.getFStatHelper().getRelErr(volExpected, fArray.size() * volUnit);
                 double volRelErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volActual[0] * volUnit);
@@ -1807,7 +1807,7 @@ public class FSphereTest {
 
                 int[] srfActual = new int[4];
 
-                fArray.forEach((i, d0, d1, d2, data) -> srfActual[data.getLayer()]++);
+                fArray.forEach((i, d0, d1, d2, _data, meta) -> srfActual[meta.getLayerIndex()]++);
 
                 double srfRelErr0 = factory.getFStatHelper().getRelErr(srfExpected0, srfActual[0] * srfUnit);
                 double srfRelErr1 = factory.getFStatHelper().getRelErr(srfExpected1, srfActual[1] * srfUnit);
@@ -1954,21 +1954,34 @@ public class FSphereTest {
             @Test
             @DisplayName("Validate meta data")
             void validateMetaData() {
-                double delta = 0.1;
+                FSphere fSphere = factory.getFSphere(1);
 
-                FArray<FMetaData> fArray = factory.getFArray(100000);
+                assertEquals("", fSphere.getMeta());
 
-                Shape fSphere = factory.getFSphere(1)
-                        .setTag("A")
-                        .setDelta(delta);
+                fSphere.setMeta("A", "B", "C");
+
+                assertEquals("A", fSphere.getMeta(0));
+                assertEquals("B", fSphere.getMeta(1));
+                assertEquals("C", fSphere.getMeta(2));
+
+                FArray<FMetaData> fArray = factory.getFArray(500);
+
+                fSphere.setDelta(0.25);
 
                 fSphere.fillVolumeArray(fArray);
 
-                assertEquals("A", fArray.getMeta(0).getTag(), "The tag is erroneous");
+                FMetaData meta1 = fArray.getMeta(0);
 
-                fSphere.setTag("B");
+                assertEquals(0.25, fArray.getData(0));
+                assertEquals("A", meta1.getMeta());
 
-                assertEquals("B", fArray.getMeta(0).getTag(), "The tag is erroneous");
+                fSphere.setMeta("X");
+
+                FMetaData meta2 = fArray.getMeta(0);
+
+                assertSame(meta1, meta2);
+                assertEquals(0.25, fArray.getData(0));
+                assertEquals("X", meta2.getMeta());
             }
         }
 

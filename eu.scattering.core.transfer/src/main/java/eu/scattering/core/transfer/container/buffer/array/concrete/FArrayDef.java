@@ -39,7 +39,7 @@ public class FArrayDef<T> implements FArray<T> {
 
         this.capacity = capacity;
 
-        this.value = new double[3][this.capacity];
+        this.value = new double[4][this.capacity];
         this.meta = new Object[this.capacity];
     }
 
@@ -98,6 +98,51 @@ public class FArrayDef<T> implements FArray<T> {
     }
 
     @Override
+    public void addWithData(double d0, double d1, double d2, double data) {
+
+        if (index > capacity) {
+            throw new IndexOutOfBoundsException("The index exceeded the size limit");
+        }
+
+        this.value[0][index] = d0;
+        this.value[1][index] = d1;
+        this.value[2][index] = d2;
+
+        this.value[3][index] = data;
+
+        index++;
+    }
+
+    @Override
+    public void addWithData(FPos3D pos, double data) {
+
+        addWithData(pos.getD0(), pos.getD1(), pos.getD2(), data);
+    }
+
+    @Override
+    public void addWithDataAndMeta(double d0, double d1, double d2, double data, T meta) {
+
+        if (index > capacity) {
+            throw new IndexOutOfBoundsException("The index exceeded the size limit");
+        }
+
+        this.value[0][index] = d0;
+        this.value[1][index] = d1;
+        this.value[2][index] = d2;
+        this.value[3][index] = data;
+
+        this.meta[index] = meta;
+
+        index++;
+    }
+
+    @Override
+    public void addWithDataAndMeta(FPos3D pos, double data, T meta) {
+
+        addWithDataAndMeta(pos.getD0(), pos.getD1(), pos.getD2(), data, meta);
+    }
+
+    @Override
     public FPos3D getFPos3D(int index) {
 
         if (index >= this.index) {
@@ -137,6 +182,16 @@ public class FArrayDef<T> implements FArray<T> {
         }
 
         return this.value[2][index];
+    }
+
+    @Override
+    public double getData(int index) {
+
+        if (index >= this.index) {
+            throw new IndexOutOfBoundsException("The index exceeded the current array size");
+        }
+
+        return this.value[3][index];
     }
 
     @Override
@@ -197,7 +252,7 @@ public class FArrayDef<T> implements FArray<T> {
 
         for (int i = 0; i < index; i++) {
             consumer.apply(
-                    i, this.value[0][i], this.value[1][i], this.value[2][i], (T) this.meta[i]
+                    i, this.value[0][i], this.value[1][i], this.value[2][i], this.value[3][i], (T) this.meta[i]
             );
         }
     }
@@ -276,19 +331,46 @@ public class FArrayDef<T> implements FArray<T> {
     }
 
     @Override
-    public FArrayMesh<T> toFArrayMesh(double unit) {
+    public FArrayMesh<T> toFArrayMesh() {
+        double dataGlobal = isDataUnique();
+
+        if (dataGlobal < 0) {
+            throw new IllegalStateException("The data value must be consistent for all elements");
+        }
+
         FArrayMesh<T> fArrayMesh = FArrayMeshDef.create(size());
 
-        double factor = 1d / unit;
+        double factor = 1d / dataGlobal;
 
-        forEach((index, d0, d1, d2, meta) -> fArrayMesh.addWithMeta(
+        forEach((index, d0, d1, d2, _dataLocal, meta) -> fArrayMesh.addWithMeta(
                 (int) Math.round(d0 * factor),
                 (int) Math.round(d1 * factor),
                 (int) Math.round(d2 * factor),
                 meta
         ));
 
+        fArrayMesh.setData(dataGlobal);
+
         return fArrayMesh;
+    }
+
+    //--------------------------------------------------
+
+    private double isDataUnique() {
+
+        if (size() == 0) {
+            throw new IllegalStateException("The array cannot be empty");
+        }
+
+        double data = getData(0);
+
+        for (int i = 1 ; i < size() ; i++) {
+            if (getData(i) != data) {
+                return -1;
+            }
+        }
+
+        return data;
     }
 
     //--------------------------------------------------
@@ -313,7 +395,7 @@ public class FArrayDef<T> implements FArray<T> {
         int hashCode = 1;
 
         for (int i = 0; i < this.index; i++) {
-            hashCode = 31 * hashCode + (int) (this.value[0][i] + this.value[1][i] + this.value[2][i]);
+            hashCode = 31 * hashCode + (int) (this.value[0][i] + this.value[1][i] + this.value[2][i] + this.value[3][i]);
         }
 
         return hashCode;
@@ -339,6 +421,10 @@ public class FArrayDef<T> implements FArray<T> {
                 }
 
                 if (this.value[2][i] != fArray.getD2(i)) {
+                    return false;
+                }
+
+                if (this.value[3][i] != fArray.getData(i)) {
                     return false;
                 }
             }

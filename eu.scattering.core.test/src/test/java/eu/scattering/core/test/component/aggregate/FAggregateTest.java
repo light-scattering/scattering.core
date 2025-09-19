@@ -580,7 +580,7 @@ public class FAggregateTest {
 
         FLayerCounter fLayer = factory.getFLayerCounter();
 
-        fArray.forEach((index, d0, d1, d2, data) -> fLayer.inc(data.getLayer()));
+        fArray.forEach((index, d0, d1, d2, data) -> fLayer.inc(data.getLayerIndex()));
 
         double volActualLayer0 = fLayer.get(0) * 0.001;
         double volActualA = fLayer.addSelf() * 0.001;

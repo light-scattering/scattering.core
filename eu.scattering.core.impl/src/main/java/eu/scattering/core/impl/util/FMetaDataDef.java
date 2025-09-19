@@ -1,32 +1,70 @@
 package eu.scattering.core.impl.util;
 
 import eu.scattering.core.design.util.container.FMetaData;
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
 import eu.scattering.core.transfer.container.box.FBoxString.FBoxString;
+import org.json.JSONObject;
+
+import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FMetaDataDef implements FMetaData {
+    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private static final String JSON_MAIN = "meta";
+    private static final String JSON_LAYER = "layer";
+    private static final String JSON_META = "tag";
+
     private final int layer;
-    private final FBoxString tag;
 
-    private FMetaDataDef(FBoxString tag, int layer) {
+    private final FBoxString meta = factoryExt.getFBoxString();
 
-        this.layer = layer;
-        this.tag = tag;
+    private FMetaDataDef(String meta, int layerIndex) {
+
+        this.layer = layerIndex;
+        this.meta.setValue(meta);
     }
 
-    public static FMetaData crete(FBoxString tag, int layer) {
+    public static FMetaData crete(String tag, int layer) {
 
         return new FMetaDataDef(tag, layer);
     }
 
     @Override
-    public String getTag() {
+    public int getLayerIndex() {
 
-        return this.tag.getValue();
+        return this.layer;
     }
 
     @Override
-    public int getLayer() {
+    public String getMeta() {
 
-        return this.layer;
+        return this.meta.getValue();
+    }
+
+    @Override
+    public void setMeta(String meta) {
+
+        this.meta.setValue(meta);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_LAYER, this.layer);
+        json.put(JSON_META, this.meta.toJSON());
+
+        return json;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public String toString() {
+
+        return toJSON().toString();
     }
 }

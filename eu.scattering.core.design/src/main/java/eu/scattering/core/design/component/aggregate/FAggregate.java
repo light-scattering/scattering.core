@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.component.Component;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.util.annotation.Modificator;
@@ -14,8 +15,6 @@ public interface FAggregate extends Component {
 
     FAssembly<Shape> getParticles();
     FAggregate setParticles(FAssembly<Shape> particles);
-
-    FAggregate setMaterialDensity(String tag, double... density);
 
     FArrayMesh<FMetaData> getVolumeMesh();
 
@@ -31,6 +30,12 @@ public interface FAggregate extends Component {
     boolean isCompact();
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
+
+    void setMassCenter(FPoint center);
+
+    //--------------------------------------------------
+
+    FAggregate setMaterialDensity(String material, double density);
 
     //--------------------------------------------------
 

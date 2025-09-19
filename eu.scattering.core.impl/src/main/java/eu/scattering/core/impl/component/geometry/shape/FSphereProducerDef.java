@@ -276,7 +276,7 @@ public class FSphereProducerDef implements FSphereProducer {
     private FSphere updateConfig(FSphere fSphere) {
 
         if (this.meta != null) {
-            fSphere.setTag(this.meta);
+            fSphere.setMeta(this.meta);
         }
 
         if (this.delta != null) {
@@ -288,7 +288,7 @@ public class FSphereProducerDef implements FSphereProducer {
         }
 
         if (this.cache != null) {
-            fSphere.setFCache(this.cache);
+            fSphere.setCache(this.cache);
         }
 
         return fSphere;

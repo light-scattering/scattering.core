@@ -8,6 +8,9 @@ import java.util.function.BiFunction;
 
 public interface FArrayMesh<T> extends Buffer<FArrayMesh<T>> {
 
+    double getData();
+    void setData(double data);
+
     void add(int d0, int d1, int d2);
     void add(FPos3DI pos);
 

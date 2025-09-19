@@ -72,12 +72,52 @@ public class FArrayTest {
                             "D1 (2) is erroneous"),
                     () -> assertEquals(9.9, fArray.getD2(2),
                             "D2 (2) is erroneous"),
+                    () -> assertEquals(0, fArray.getData(0),
+                            "Data (0) is erroneous"),
+                    () -> assertEquals(0, fArray.getData(1),
+                            "Data (0) is erroneous"),
+                    () -> assertEquals(0, fArray.getData(2),
+                            "Data (0) is erroneous"),
                     () -> assertNull(fArray.getMeta(0),
-                            "Value (0) is erroneous"),
+                            "Meta (0) is erroneous"),
                     () -> assertNull(fArray.getMeta(1),
-                            "The value (1) is erroneous"),
+                            "Meta (1) is erroneous"),
                     () -> assertNull(fArray.getMeta(2),
-                            "Value (2) is erroneous")
+                            "Meta (2) is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Increment with meta")
+        void incrementWithData() {
+            FArray<Double> fArray = factory.getFArray(100);
+
+            fArray.addWithData(1.5, 2.5, 3.5, 1.1);
+            fArray.addWithData(factory.getFPos3D(4.5, 5.5, 6.5), 2.2);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fArray.size(),
+                            "The number of elements is incorrect"),
+                    () -> assertEquals(1.5, fArray.getD0(0),
+                            "D0 (0) is erroneous"),
+                    () -> assertEquals(2.5, fArray.getD1(0),
+                            "D1 (0) is erroneous"),
+                    () -> assertEquals(3.5, fArray.getD2(0),
+                            "D2 (0) is erroneous"),
+                    () -> assertEquals(4.5, fArray.getD0(1),
+                            "D0 (1) is erroneous"),
+                    () -> assertEquals(5.5, fArray.getD1(1),
+                            "D1 (1) is erroneous"),
+                    () -> assertEquals(6.5, fArray.getD2(1),
+                            "D2 (1) is erroneous"),
+                    () -> assertEquals(1.1, fArray.getData(0),
+                            "Data (0) is erroneous"),
+                    () -> assertEquals(2.2, fArray.getData(1),
+                            "Data (1) is erroneous"),
+                    () -> assertNull(fArray.getMeta(0),
+                            "Meta (0) is erroneous"),
+                    () -> assertNull(fArray.getMeta(1),
+                            "Meta (1) is erroneous")
             );
         }
 
@@ -104,10 +144,48 @@ public class FArrayTest {
                             "D1 (1) is erroneous"),
                     () -> assertEquals(6.5, fArray.getD2(1),
                             "D2 (1) is erroneous"),
+                    () -> assertEquals(0, fArray.getData(0),
+                            "Data (0) is erroneous"),
+                    () -> assertEquals(0, fArray.getData(1),
+                            "Data (1) is erroneous"),
                     () -> assertEquals(1.1, fArray.getMeta(0),
-                            "Value (0) is erroneous"),
+                            "Meta (0) is erroneous"),
                     () -> assertEquals(2.2, fArray.getMeta(1),
-                            "Value (1) is erroneous")
+                            "Meta (1) is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Increment with data and meta")
+        void incrementWithDataMeta() {
+            FArray<Double> fArray = factory.getFArray(100);
+
+            fArray.addWithDataAndMeta(1.5, 2.5, 3.5, 1.1, 1.2);
+            fArray.addWithDataAndMeta(factory.getFPos3D(4.5, 5.5, 6.5), 2.1, 2.2);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fArray.size(),
+                            "The number of elements is incorrect"),
+                    () -> assertEquals(1.5, fArray.getD0(0),
+                            "D0 (0) is erroneous"),
+                    () -> assertEquals(2.5, fArray.getD1(0),
+                            "D1 (0) is erroneous"),
+                    () -> assertEquals(3.5, fArray.getD2(0),
+                            "D2 (0) is erroneous"),
+                    () -> assertEquals(4.5, fArray.getD0(1),
+                            "D0 (1) is erroneous"),
+                    () -> assertEquals(5.5, fArray.getD1(1),
+                            "D1 (1) is erroneous"),
+                    () -> assertEquals(6.5, fArray.getD2(1),
+                            "D2 (1) is erroneous"),
+                    () -> assertEquals(1.1, fArray.getData(0),
+                            "Data (0) is erroneous"),
+                    () -> assertEquals(2.1, fArray.getData(1),
+                            "Data (1) is erroneous"),
+                    () -> assertEquals(1.2, fArray.getMeta(0),
+                            "Meta (0) is erroneous"),
+                    () -> assertEquals(2.2, fArray.getMeta(1),
+                            "Meta (1) is erroneous")
             );
         }
 
@@ -184,17 +262,17 @@ public class FArrayTest {
             FArray<Double> fArray1 = factory.getFArray(10);
             FArray<Double> fArray2 = factory.getFArray(15);
 
-            fArray1.addWithMeta(4.1, 5.1, 6.1, 2.2);
-            fArray1.addWithMeta(7.1, 8.1, 9.1, 3.3);
+            fArray1.addWithDataAndMeta(4.1, 5.1, 6.1, -2.2, 2.2);
+            fArray1.addWithDataAndMeta(7.1, 8.1, 9.1, -3.3, 3.3);
 
-            fArray2.addWithMeta(3.1, 2.1, 1.1, 9.9);
-            fArray2.addWithMeta(6.1, 5.1, 4.1, 8.8);
-            fArray2.addWithMeta(9.1, 8.1, 7.1, 7.7);
+            fArray2.addWithDataAndMeta(3.1, 2.1, 1.1, -9.9, 9.9);
+            fArray2.addWithDataAndMeta(6.1, 5.1, 4.1, -8.8, 8.8);
+            fArray2.addWithDataAndMeta(9.1, 8.1, 7.1, -7.7, 7.7);
 
             fArray2.clear();
 
-            fArray2.addWithMeta(4.1, 5.1, 6.1, 4.4);
-            fArray2.addWithMeta(7.1, 8.1, 9.1, 5.5);
+            fArray2.addWithDataAndMeta(4.1, 5.1, 6.1, -2.2, 4.4);
+            fArray2.addWithDataAndMeta(7.1, 8.1, 9.1, -3.3, 5.5);
 
             Assertions.assertAll("Check equality",
                     () -> assertEquals(fArray1, fArray2,
@@ -212,11 +290,11 @@ public class FArrayTest {
             FArray<Double> fArray1 = factory.getFArray(10);
             FArray<Double> fArray2 = factory.getFArray(15);
 
-            fArray1.addWithMeta(4.1, 5.1, 6.1, 2.2);
-            fArray1.addWithMeta(7.1, 8.1, 9.1, 3.3);
+            fArray1.addWithDataAndMeta(4.1, 5.1, 6.1, -2.2, 2.2);
+            fArray1.addWithDataAndMeta(7.1, 8.1, 9.1, -3.3, 3.3);
 
-            fArray2.addWithMeta(4.0, 5.0, 6.0, 2.2);
-            fArray2.addWithMeta(7.0, 8.0, 9.0, 3.3);
+            fArray2.addWithDataAndMeta(4.0, 5.0, 6.0, -2.2, 2.2);
+            fArray2.addWithDataAndMeta(7.0, 8.0, 9.0, -3.3, 3.3);
 
             Assertions.assertAll("Check equality",
                     () -> assertNotEquals(fArray1, fArray2,
@@ -237,20 +315,20 @@ public class FArrayTest {
         void iterate() {
             FArray<Double> fArray = factory.getFArray(100);
 
-            fArray.addWithMeta(1.5, 2.5, 3.5, 1.1);
-            fArray.addWithMeta(4.5, 5.5, 6.5, 2.2);
-            fArray.addWithMeta(7.5, 8.5, 9.5, 3.3);
+            fArray.addWithDataAndMeta(1.5, 2.5, 3.5, 10, 1.1);
+            fArray.addWithDataAndMeta(4.5, 5.5, 6.5, 20, 2.2);
+            fArray.addWithDataAndMeta(7.5, 8.5, 9.5, 30, 3.3);
 
             double[] sum = new double[fArray.size()];
 
-            fArray.forEach((index, d0, d1, d2, value) -> sum[index] = d0 + d1 + d2 + value);
+            fArray.forEach((index, d0, d1, d2, data, meta) -> sum[index] = d0 + d1 + d2 + data + meta);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(8.6, sum[0],
+                    () -> assertEquals(18.6, sum[0],
                             "Index 0 value is erroneous"),
-                    () -> assertEquals(18.7, sum[1],
+                    () -> assertEquals(38.7, sum[1],
                             "Index 1 value is erroneous"),
-                    () -> assertEquals(28.8, sum[2],
+                    () -> assertEquals(58.8, sum[2],
                             "Index 2 value is erroneous")
             );
         }

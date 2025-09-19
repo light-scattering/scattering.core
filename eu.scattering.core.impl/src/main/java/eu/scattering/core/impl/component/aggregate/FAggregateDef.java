@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.util.container.FMetaData;
@@ -22,7 +23,7 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_MAIN = "aggregate";
     private static final String JSON_PARTICLES = "particles";
 
-    private final Map<String, double[]> materialDensity = new HashMap<>();
+    private final Map<String, Double> density = new HashMap<>();
 
     private FAssembly<Shape> particles;
     private FArray<FMetaData> elements;
@@ -48,14 +49,6 @@ public class FAggregateDef implements FAggregate {
     public FAggregate setParticles(FAssembly<Shape> particles) {
 
         this.particles = particles.copy();
-
-        return this;
-    }
-
-    @Override
-    public FAggregate setMaterialDensity(String tag, double... density) {
-
-        this.materialDensity.put(tag, density);
 
         return this;
     }
@@ -194,9 +187,9 @@ public class FAggregateDef implements FAggregate {
             shape.fillVolumeArray(this.elements, field);
         }
 
-        FArrayMesh<FMetaData> mesh = this.elements.toFArrayMesh(unit);
+        FArrayMesh<FMetaData> mesh = this.elements.toFArrayMesh();
 
-        mesh.deduplicate((a, b) -> b.getLayer() < a.getLayer());
+        mesh.deduplicate((a, b) -> b.getLayerIndex() < a.getLayerIndex());
 
         return mesh;
     }
@@ -390,6 +383,23 @@ public class FAggregateDef implements FAggregate {
 
             queue.poll();
         }
+    }
+
+    @Override
+    public void setMassCenter(FPoint center) {
+
+    }
+
+    @Override
+    public FAggregate setMaterialDensity(String material, double density) {
+
+        if (density <= 0) {
+            throw new IllegalArgumentException("The density cannot be lower than zero");
+        }
+
+        this.density.put(material, density);
+
+        return this;
     }
 
     private List<Shape> getUniqueShapes() {

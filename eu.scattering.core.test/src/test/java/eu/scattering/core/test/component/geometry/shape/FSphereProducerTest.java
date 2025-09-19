@@ -855,10 +855,10 @@ public class FSphereProducerTest {
         FSphere resultA = producerA.produce();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("", resultA.getTag()),
+                () -> assertEquals("", resultA.getMeta()),
                 () -> assertEquals(SHAPE_EPSILON, resultA.getEpsilon()),
                 () -> assertEquals(SHAPE_DELTA, resultA.getDelta()),
-                () -> assertNotNull(resultA.getFCache())
+                () -> assertNotNull(resultA.getCache())
         );
 
         FCache cache = factory.getFCache();
@@ -872,10 +872,10 @@ public class FSphereProducerTest {
         FSphere resultB = producerB.produce();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("123", resultB.getTag()),
+                () -> assertEquals("123", resultB.getMeta()),
                 () -> assertEquals(1, resultB.getEpsilon()),
                 () -> assertEquals(2, resultB.getDelta()),
-                () -> assertSame(cache, resultB.getFCache()),
+                () -> assertSame(cache, resultB.getCache()),
                 () -> assertSame(producerA, producerB)
         );
     }
@@ -895,28 +895,28 @@ public class FSphereProducerTest {
         FSphere fSphere = producer.getList().getFirst();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("123", fSphere.getTag()),
+                () -> assertEquals("123", fSphere.getMeta()),
                 () -> assertEquals(1, fSphere.getEpsilon()),
                 () -> assertEquals(2, fSphere.getDelta()),
-                () -> assertSame(cache, fSphere.getFCache())
+                () -> assertSame(cache, fSphere.getCache())
         );
 
         FSphere fSphereFixed = producer.getListFixed(1).getFirst();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("123", fSphereFixed.getTag()),
+                () -> assertEquals("123", fSphereFixed.getMeta()),
                 () -> assertEquals(1, fSphereFixed.getEpsilon()),
                 () -> assertEquals(2, fSphereFixed.getDelta()),
-                () -> assertSame(cache, fSphereFixed.getFCache())
+                () -> assertSame(cache, fSphereFixed.getCache())
         );
 
         FSphere fSphereRandomized = producer.getListRandomized(1).getFirst();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("123", fSphereRandomized.getTag()),
+                () -> assertEquals("123", fSphereRandomized.getMeta()),
                 () -> assertEquals(1, fSphereRandomized.getEpsilon()),
                 () -> assertEquals(2, fSphereRandomized.getDelta()),
-                () -> assertSame(cache, fSphereRandomized.getFCache())
+                () -> assertSame(cache, fSphereRandomized.getCache())
         );
     }
 
@@ -935,10 +935,10 @@ public class FSphereProducerTest {
         FSphere fSphere = producer.stream().limit(1).toList().getFirst();
 
         Assertions.assertAll("Validate FSphere values",
-                () -> assertEquals("123", fSphere.getTag()),
+                () -> assertEquals("123", fSphere.getMeta()),
                 () -> assertEquals(1, fSphere.getEpsilon()),
                 () -> assertEquals(2, fSphere.getDelta()),
-                () -> assertSame(cache, fSphere.getFCache())
+                () -> assertSame(cache, fSphere.getCache())
         );
     }
 
@@ -1174,14 +1174,14 @@ public class FSphereProducerTest {
 
         Producer<FSphere> producer = factory.getFSphereProducer(1)
                 .addCorrection((fSphere, randomizer) -> fSphere.setCenter(center))
-                .addCorrection((fSphere, randomizer) -> fSphere.setTag("TEST"));
+                .addCorrection((fSphere, randomizer) -> fSphere.setMeta("TEST"));
 
         center.set(1, 2, 3);
 
         FSphere fSphereA = producer.produce();
 
         Assertions.assertAll("Validate FSphere A",
-                () -> assertEquals("TEST", fSphereA.getTag(),
+                () -> assertEquals("TEST", fSphereA.getMeta(),
                         "The tag is erroneous"),
                 () -> assertTrue(fSphereA.isExact(factory.getFSphere(1, 2, 3, 1)),
                         "The position is erroneous")
@@ -1192,7 +1192,7 @@ public class FSphereProducerTest {
         FSphere fSphereB = producer.produce();
 
         Assertions.assertAll("Validate FSphere B",
-                () -> assertEquals("TEST", fSphereB.getTag(),
+                () -> assertEquals("TEST", fSphereB.getMeta(),
                         "The tag is erroneous"),
                 () -> assertTrue(fSphereB.isExact(factory.getFSphere(4, 5, 6, 1)),
                         "The position is erroneous"),
@@ -1205,17 +1205,17 @@ public class FSphereProducerTest {
     @DisplayName("Add mutation")
     void addMutation() {
         Producer<FSphere> producer = factory.getFSphereProducer(1)
-                .addMutation((list) -> list.forEach(e -> e.setTag("TEST")));
+                .addMutation((list) -> list.forEach(e -> e.setMeta("TEST")));
 
         List<FSphere> results = producer.getListFixed(2);
 
         Assertions.assertAll("Validate FSphere A",
-                () -> assertEquals("TEST", results.get(0).getTag(),
+                () -> assertEquals("TEST", results.get(0).getMeta(),
                         "The tag is erroneous")
         );
 
         Assertions.assertAll("Validate FSphere B",
-                () -> assertEquals("TEST", results.get(1).getTag(),
+                () -> assertEquals("TEST", results.get(1).getMeta(),
                         "The tag is erroneous"),
                 () -> assertNotSame(results.get(0), results.get(1),
                         "The reference should be different")

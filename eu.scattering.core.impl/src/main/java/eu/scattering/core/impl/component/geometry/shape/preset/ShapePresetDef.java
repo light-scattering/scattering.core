@@ -5,12 +5,10 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.impl.util.FMetaDataDef;
-import eu.scattering.core.transfer.container.box.FBoxString.FBoxString;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
@@ -24,31 +22,29 @@ import java.util.List;
 import static eu.scattering.core.impl.ConfigDef.*;
 
 public abstract class ShapePresetDef implements Shape {
-    private final static double SHIFT_OFFSET = -0.25;
+    private final static boolean SHIFT_GEOMETRY = true;
+    private final static double SHIFT_OFFSET = -1d / 3;
+    private final static int LAYER_LIMIT = 6;
 
     protected final ScatFactory factory;
-    protected final FSphereHelper fSphereHelper;
 
-    private FCache cache;
+    private final List<FMetaData> metaData = new ArrayList<>();
+    private final List<Double> coatData = new ArrayList<>();
 
     private double epsilon = SHAPE_EPSILON;
     private double delta = SHAPE_DELTA;
 
-    private final boolean shift = true;
-
     private double index = -1;
 
-    private final FBoxString tag;
-
-    protected List<Double> coatWidth = new ArrayList<>();
-    protected List<FMetaData> metaData = new ArrayList<>();
+    private FCache cache;
 
     public ShapePresetDef(ScatFactory factory) {
 
         this.factory = factory;
-        this.fSphereHelper = factory.getFSphereHelper();
 
-        this.tag = factory.getFBoxString();
+        for (int i = 0 ; i < LAYER_LIMIT ; i++) {
+            metaData.add(FMetaDataDef.crete("", i));
+        }
     }
 
     @Override
@@ -76,17 +72,17 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public FCache getFCache() {
-
-        return this.cache;
-    }
-
-    @Override
-    public Shape setFCache(FCache cache) {
+    public Shape setCache(FCache cache) {
 
         this.cache = cache;
 
         return this;
+    }
+
+    @Override
+    public FCache getCache() {
+
+        return this.cache;
     }
 
     @Override
@@ -118,15 +114,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public String getTag() {
+    public String getMeta(int index) {
 
-        return this.tag.getValue();
+        if (index < 0) {
+            throw new IllegalArgumentException("The index cannot be lower then zero");
+        }
+
+        if (index > LAYER_LIMIT) {
+            throw new IllegalArgumentException("The index cannot be greater than the number of layers");
+        }
+
+        return this.metaData.get(index).getMeta();
     }
 
     @Override
-    public Shape setTag(String tag) {
+    public Shape setMeta(String... meta) {
 
-        this.tag.setValue(tag);
+        if (meta.length > this.metaData.size()) {
+            throw new IllegalArgumentException("The number of layers cannot exceed the limit (" + LAYER_LIMIT + ")");
+        }
+
+        for (int i = 0; i < meta.length ; i++) {
+            this.metaData.get(i).setMeta(meta[i]);
+        }
 
         return this;
     }
@@ -205,15 +215,6 @@ public abstract class ShapePresetDef implements Shape {
 
     @Override
     public List<FMetaData> getMetaData() {
-        int layerCount = getLayerCount();
-
-        if (this.metaData.size() >= layerCount) {
-            return this.metaData;
-        }
-
-        for (int i = this.metaData.size(); i < getLayerCount() ; i++) {
-            this.metaData.add(FMetaDataDef.crete(this.tag, i));
-        }
 
         return this.metaData;
     }
@@ -223,7 +224,25 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public FPos3D getCenter() {
 
-        return factory.getFPos3D(getCenterX(), getCenterY(), getCenterZ());
+        return getRefCenter().toFPos3D();
+    }
+
+    @Override
+    public double getCenterX() {
+
+        return getRefCenter().getX();
+    }
+
+    @Override
+    public double getCenterY() {
+
+        return getRefCenter().getY();
+    }
+
+    @Override
+    public double getCenterZ() {
+
+        return getRefCenter().getZ();
     }
 
     @Override
@@ -460,7 +479,7 @@ public abstract class ShapePresetDef implements Shape {
     protected boolean repelsDelta(Shape shape) {
         FPairPos3D range = getOperationRange(shape);
 
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        double offset = SHIFT_GEOMETRY ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
             for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
                 for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
@@ -570,7 +589,7 @@ public abstract class ShapePresetDef implements Shape {
 
         boolean ruleTouch = false;
 
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        double offset = SHIFT_GEOMETRY ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
             for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
                 for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
@@ -680,7 +699,7 @@ public abstract class ShapePresetDef implements Shape {
     protected boolean overlapsDelta(Shape shape) {
         FPairPos3D range = getOperationRange(shape);
 
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        double offset = SHIFT_GEOMETRY ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
             for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
                 for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
@@ -786,7 +805,7 @@ public abstract class ShapePresetDef implements Shape {
             return false;
         }
 
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        double offset = SHIFT_GEOMETRY ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
             for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
                 for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
@@ -879,7 +898,7 @@ public abstract class ShapePresetDef implements Shape {
         boolean ruleShapeB = false;
         boolean ruleCommon = false;
 
-        double offset = shift ? delta * SHIFT_OFFSET : 0;
+        double offset = SHIFT_GEOMETRY ? delta * SHIFT_OFFSET : 0;
         for (double x = range.getPosA().getD0() + offset ; x < range.getPosB().getD0() ; x += delta) {
             for (double y = range.getPosA().getD1() + offset ; y < range.getPosB().getD1() ; y += delta) {
                 for (double z = range.getPosA().getD2() + offset ; z < range.getPosB().getD2() ; z += delta) {
@@ -983,37 +1002,29 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public double getCoatWidth(int index) {
 
-        if (getCoating().size() == 0) {
-            throw new IllegalArgumentException("The shape is not coated");
-        }
-
         if (index < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
+            throw new IllegalArgumentException("The coat index cannot be lower than zero");
         }
 
         if (index >= getCoatCount()) {
-            throw new IllegalArgumentException("the coat index is erroneous");
+            throw new IllegalArgumentException("The coat index is invalid");
         }
 
-        return this.coatWidth.get(index);
+        return getCoatWidth().get(index);
     }
 
     @Override
     public Shape setCoatWidth(int index, double width) {
 
-        if (getCoating().size() == 0) {
-            throw new IllegalArgumentException("The shape is not coated");
-        }
-
         if (index < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
+            throw new IllegalArgumentException("The coat index cannot be lower than zero");
         }
 
-        if (index >= getCoating().size()) {
-            throw new IllegalArgumentException("the coat index is erroneous");
+        if (index >= getCoatWidth().size()) {
+            throw new IllegalArgumentException("the coat index is invalid");
         }
 
-        this.coatWidth.set(index, width);
+        getCoatWidth().set(index, width);
 
         return this;
     }
@@ -1021,13 +1032,13 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public int getLayerCount() {
 
-        return this.coatWidth.size() + 1;
+        return getCoatWidth().size() + 1;
     }
 
     @Override
     public int getCoatCount() {
 
-        return this.coatWidth.size();
+        return getCoatWidth().size();
     }
 
     @Override
@@ -1049,7 +1060,11 @@ public abstract class ShapePresetDef implements Shape {
             throw new IllegalArgumentException("The coat width cannot be lower than zero");
         }
 
-        getCoating().add(width);
+        if (getLayerCount() >= LAYER_LIMIT) {
+            throw new IllegalStateException("The number of layers cannot exceed the limit (" + LAYER_LIMIT + ")");
+        }
+
+        getCoatWidth().add(width);
 
         setRadius(getRadius() + width);
 
@@ -1073,11 +1088,15 @@ public abstract class ShapePresetDef implements Shape {
             throw new IllegalArgumentException("The coat width cannot be lower than zero");
         }
 
-        if (getLayerWidthRemaining(0) + width >= getRadius()) {
-            throw new IllegalArgumentException("The total coat width cannot be larger than the radius");
+        if (getLayerCount() >= LAYER_LIMIT) {
+            throw new IllegalStateException("The number of layers cannot exceed the limit (" + LAYER_LIMIT + ")");
         }
 
-        getCoating().add(width);
+        if (getLayerWidthRemaining(0) + width >= getRadius()) {
+            throw new IllegalStateException("The total coat width cannot be larger than the radius");
+        }
+
+        getCoatWidth().add(width);
 
         return this;
     }
@@ -1095,7 +1114,7 @@ public abstract class ShapePresetDef implements Shape {
     @Override
     public Shape removeCoats() {
 
-        getCoating().clear();
+        getCoatWidth().clear();
 
         return this;
     }
@@ -1128,7 +1147,7 @@ public abstract class ShapePresetDef implements Shape {
         }
 
         if (index == 0) {
-            return getCoating().stream().mapToDouble(Double::doubleValue).sum();
+            return getCoatWidth().stream().mapToDouble(Double::doubleValue).sum();
         }
 
         double width = 0;
@@ -1301,7 +1320,7 @@ public abstract class ShapePresetDef implements Shape {
                     location = locate(x, y, z);
 
                     if (location >= 0) {
-                        in.addWithMeta(x, y, z, metaData.get(location));
+                        in.addWithDataAndMeta(x, y, z, delta, metaData.get(location));
                     }
                 }
             }
@@ -1361,7 +1380,7 @@ public abstract class ShapePresetDef implements Shape {
                     }
 
                     if (location < locateInStructure(suffix, x, y, z)) {
-                        in.addWithMeta(x, y, z, metaData.get(location));
+                        in.addWithDataAndMeta(x, y, z, delta, metaData.get(location));
                     }
                 }
             }
@@ -1395,11 +1414,6 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    protected List<Double> getCoating() {
-
-        return this.coatWidth;
-    }
 
     protected FPairPos3D getOperationRange(Shape shape) {
         double opA, opB;
@@ -1435,6 +1449,11 @@ public abstract class ShapePresetDef implements Shape {
         double hZ = Math.min(opA, opB);
 
         return factory.getFPairPos3D(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    protected List<Double> getCoatWidth() {
+
+        return this.coatData;
     }
 
     // -------------------------------------------------------------------------------------------------

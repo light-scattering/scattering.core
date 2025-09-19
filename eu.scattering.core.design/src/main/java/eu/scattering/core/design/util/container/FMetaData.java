@@ -1,19 +1,17 @@
 package eu.scattering.core.design.util.container;
 
+import org.json.JSONObject;
+
 public interface FMetaData {
 
-    String getTag();
+    //--- Immutable
 
-    int getLayer();
+    int getLayerIndex();
 
-    //--------------------------------------------------
+    //--- Mutable
 
-    //    double getDensity();
-//    void setDensity(double density);
+    String getMeta();
+    void setMeta(String meta);
 
-//    double getWavelength();
-//    void setWavelength(double wavelength);
-
-//    FComplex getRefractiveIndex();
-//    void setRefractiveIndex(FComplex refractiveIndex);
+    JSONObject toJSON();
 }

@@ -43,6 +43,18 @@ public class FArrayMeshTest {
         }
 
         @Test
+        @DisplayName("Set data")
+        void setData() {
+            FArrayMesh<Double> fArray = factory.getFArrayMesh();
+
+            assertEquals(0, fArray.getData(), "The default data value is incorrect");
+
+            fArray.setData(1);
+
+            assertEquals(1, fArray.getData(), "The data value is incorrect");
+        }
+
+        @Test
         @DisplayName("Increment")
         void increment() {
             FArrayMesh<Double> fArray = factory.getFArrayMesh(100);
