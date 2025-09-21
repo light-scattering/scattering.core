@@ -1,15 +1,16 @@
 package eu.scattering.core.impl.component.aggregate;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.util.container.FMetaData;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.transfer.container.box.FBoxDouble.FBoxDouble;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
+import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -18,25 +19,33 @@ import java.util.function.BiConsumer;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FAggregateDef implements FAggregate {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
-
     private static final String JSON_MAIN = "aggregate";
     private static final String JSON_PARTICLES = "particles";
+
+    private final ScatFactory factory;
+
+    private final FLayerCounter fLayer;
 
     private final Map<String, Double> density = new HashMap<>();
 
     private FAssembly<Shape> particles;
-    private FArray<FMetaData> elements;
+    private FArray<FMetaData> dipoles;
 
-    private FAggregateDef(FAssembly<Shape> particles, FArray<FMetaData> elements) {
+    private FAggregateDef(ScatFactory factory, FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
+
+        this.factory = factory;
+
+        this.fLayer = factory.getFLayerCounter();
 
         this.particles = particles;
-        this.elements = elements;
+        this.dipoles = dipoles;
+
+        this.density.put("", 1d);
     }
 
-    public static FAggregate create(FAssembly<Shape> particles, FArray<FMetaData> elements) {
+    public static FAggregate create(ScatFactory factory, FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
 
-        return new FAggregateDef(particles, elements);
+        return new FAggregateDef(factory, particles, dipoles);
     }
 
     @Override
@@ -65,22 +74,19 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getSurface() {
-        FLayerCounter fLayer = factoryExt.getFLayerCounter();
-
         List<Shape> field = getUniqueShapes();
 
         double surface = 0;
-        double surfaceUnit;
         for (Shape element : field) {
 
             if (element.overlaps(field) == 0) {
                 surface += element.getSurfaceAlgebraic();
             } else {
-                fLayer.reset();
+                this.fLayer.reset();
 
-                surfaceUnit = element.fillSurfaceLayerOverlap(fLayer, field);
+                double surfaceUnit = element.fillSurfaceLayerOverlap(this.fLayer, field);
 
-                surface += fLayer.get(0) * surfaceUnit;
+                surface += this.fLayer.get(0) * surfaceUnit;
             }
         }
 
@@ -89,14 +95,12 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getSurface(double[] layers) {
-        int layerCount = valLayerCount(getParticles());
+        double surface = 0;
 
-        FLayerCounter fLayer = factoryExt.getFLayerCounter();
+        Arrays.fill(layers, 0);
 
         List<Shape> field = getUniqueShapes();
 
-        double surface = 0;
-        double surfaceUnit;
         for (Shape element : field) {
 
             if (element.overlaps(field) == 0) {
@@ -104,45 +108,53 @@ public class FAggregateDef implements FAggregate {
                     layers[i] += element.getLayerSurface(i);
                 }
             } else {
-                fLayer.reset();
+                this.fLayer.reset();
 
-                surfaceUnit = element.fillSurfaceLayer(fLayer, field);
+                double surfaceUnit = element.fillSurfaceLayer(this.fLayer, field);
 
                 for (int i = 0 ; i < element.getLayerCount() ; i++) {
-                    layers[i] += fLayer.get(i) * surfaceUnit;
+                    layers[i] += this.fLayer.get(i) * surfaceUnit;
                 }
             }
         }
 
-        for (int i = 0 ; i < layerCount ; i++) {
-            surface += layers[i];
+        for (double layer : layers) {
+            surface += layer;
         }
 
         return surface;
     }
 
     @Override
+    public double getSurfaceRadius(double[] layers) {
+        double resSurface = getSurface(layers);
+
+        int i = 0;
+        for (; i < layers.length ; i++) {
+            layers[i] = factory.getFSphereHelper().getSurfaceRadius(layers[i]);
+        }
+
+        return factory.getFSphereHelper().getSurfaceRadius(resSurface);
+    }
+
+    @Override
     public double getVolume() {
-        FLayerCounter fLayer = factoryExt.getFLayerCounter();
+        double volume = 0;
 
-        List<Shape> field = getUniqueShapes();
-
-        Queue<Shape> queue = new LinkedList<>(field);
+        Queue<Shape> queue = new LinkedList<>(this.particles.asList());
 
         queue.poll();
 
-        double volume = 0;
-        double volumeUnit;
-        for (Shape element : field) {
+        for (Shape element : this.particles.asList()) {
 
             if (element.overlaps(queue) == 0) {
                 volume += element.getVolumeAlgebraic();
             } else {
-                fLayer.reset();
+                this.fLayer.reset();
 
-                volumeUnit = element.fillVolumeLayerOverlap(fLayer, queue);
+                double volumeUnit = element.fillVolumeLayerOverlap(fLayer, queue);
 
-                volume += fLayer.get() * volumeUnit;
+                volume += this.fLayer.get() * volumeUnit;
             }
 
             queue.poll();
@@ -153,100 +165,258 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getVolume(double[] layers) {
-        FLayerCounter fLayer = factoryExt.getFLayerCounter();
+        double volume = 0;
 
-        List<Shape> field = getUniqueShapes();
+        Arrays.fill(layers, 0);
 
-        int layerCountMax = Integer.MIN_VALUE;
-        for (Shape shape : field) {
-            int layerCount = getVol(fLayer, field, shape, layers);
-
-            if (layerCount > layerCountMax) {
-                layerCountMax = layerCount;
-            }
+        for (Shape shape : this.particles.asList()) {
+            getVolumeSwitch(shape, layers);
         }
 
-        double volTotal = 0;
-
-        for (int i = 0 ; i < layerCountMax ; i++) {
-            volTotal += layers[i];
+        for (double layer : layers) {
+            volume += layer;
         }
 
-        return volTotal;
+        return volume;
+    }
+
+    @Override
+    public double getVolumeRadius() {
+        return 0;
+    }
+
+    @Override
+    public double getVolumeRadius(double[] layers) {
+        double volume = 0;
+
+        double resVolume = getVolume(layers);
+
+        int i = 0;
+        for (; i < layers.length ; i++) {
+            volume += layers[i];
+            layers[i] = factory.getFSphereHelper().getVolumeRadius(volume);
+        }
+
+        return factory.getFSphereHelper().getVolumeRadius(resVolume);
     }
 
     @Override
     public FArrayMesh<FMetaData> getVolumeMesh() {
-        double unit = valDelta(this.particles);
+        this.dipoles.clear();
 
-        this.elements.clear();
-
-        List<Shape> field = getUniqueShapes();
-
-        for (Shape shape : field) {
-            shape.fillVolumeArray(this.elements, field);
+        for (Shape shape : this.particles.asList()) {
+            shape.fillVolumeArray(this.dipoles, this.particles.asList());
         }
 
-        FArrayMesh<FMetaData> mesh = this.elements.toFArrayMesh();
+        FArrayMesh<FMetaData> mesh = this.dipoles.toFArrayMesh();
 
         mesh.deduplicate((a, b) -> b.getLayerIndex() < a.getLayerIndex());
 
         return mesh;
     }
 
-    private int getVol(FLayerCounter fLayer, List<? extends Shape> field, Shape shape, double[] volume) {
+    private void getVolumeSwitch(Shape shape, double[] volume) {
 
-        if (shape.overlaps(field) == 0) {
-            return getVolAlg(shape, volume);
+        if (shape.overlaps(this.particles.asList()) != 0) {
+            getVolumeApproximate(shape, volume);
+        } else {
+            getVolumePrecise(shape, volume);
         }
-
-        return getVolMsh(fLayer, field, shape, volume);
     }
 
-    private int getVolAlg(Shape shape, double[] volume) {
+    private void getVolumePrecise(Shape shape, double[] volume) {
 
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
             volume[i] += shape.getLayerVolume(i);
         }
-
-        return shape.getLayerCount();
     }
 
-    private int getVolMsh(FLayerCounter fLayer, List<? extends Shape> field, Shape shape, double[] volume) {
-        fLayer.reset();
+    private void getVolumeApproximate(Shape shape, double[] volume) {
+        this.fLayer.reset();
 
-        shape.fillVolumeLayer(fLayer, field);
+        shape.fillVolumeLayer(this.fLayer, this.particles.asList());
         double volUnit = Math.pow(shape.getDelta(), 3);
 
-        for (int i = 0 ; i < fLayer.size() ; i++) {
+        for (int i = 0 ; i < this.fLayer.size() ; i++) {
             volume[i] += fLayer.get(i) * volUnit;
         }
+    }
 
-        return fLayer.size();
+    @Override
+    public FPairPos3D getRange() {
+
+        return this.particles.getRange();
+    }
+
+    @Override
+    public void getSpatialCenter(FPoint center) {
+
+        this.particles.getSpatialCenter(center);
+    }
+
+    @Override
+    public void getSphericalCenter(FPoint center) {
+
+        this.particles.getSphericalCenter(center);
+    }
+
+    @Override
+    public void getMassCenter(FPoint center) {
+        double volume = 0;
+
+        center.set(0, 0, 0);
+
+        for (Shape shape : this.particles.asList()) {
+            volume += getMassCenterSwitch(center, shape);
+        }
+
+        center.setX(center.getX() / volume);
+        center.setY(center.getY() / volume);
+        center.setZ(center.getZ() / volume);
+    }
+
+    private double getMassCenterSwitch(FPoint center, Shape shape) {
+
+        if (shape.overlaps(this.particles.asList()) == 0) {
+            return getMassCenterPrecise(center, shape);
+        }
+
+        return getMassCenterApproximate(center, shape);
+    }
+
+    private double getMassCenterPrecise(FPoint center, Shape shape) {
+        double mass = 0;
+
+        for (int i = 0 ; i < shape.getLayerCount() ; i++) {
+            String meta = shape.getMetaData().get(i).getMeta();
+
+            if (!this.density.containsKey(shape.getMetaData().get(i).getMeta())) {
+                throw new IllegalStateException("The density of '" + meta + "' is not defined");
+            }
+
+            mass += shape.getLayerVolume(i) * this.density.get(meta);
+        }
+
+        center.setX(center.getX() + (shape.getCenterX() * mass));
+        center.setY(center.getY() + (shape.getCenterY() * mass));
+        center.setZ(center.getZ() + (shape.getCenterZ() * mass));
+
+        return mass;
+    }
+
+    private double getMassCenterApproximate(FPoint center, Shape shape) {
+        this.dipoles.clear();
+
+        double unitVolume = shape.fillVolumeArray(this.dipoles, this.particles.asList());
+
+        FBoxDouble mass = factory.getFBoxDouble();
+
+        this.dipoles.forEach((index, d0, d1, d2, data, meta) -> {
+
+            if (!this.density.containsKey(meta.getMeta())) {
+                throw new IllegalStateException("The density of '" + meta.getMeta() + "' is not defined");
+            }
+
+            double unitMass = unitVolume * this.density.get(meta.getMeta());
+
+            center.setX(center.getX() + (d0 * unitMass));
+            center.setY(center.getY() + (d1 * unitMass));
+            center.setZ(center.getZ() + (d2 * unitMass));
+
+            mass.setValue(mass.getValue() + unitMass);
+        });
+
+        return mass.getValue();
+    }
+
+    @Override
+    public void positionCenter(FPoint center) {
+
+        this.particles.translate(-center.getX(), -center.getY(), -center.getZ());
+    }
+
+    @Override
+    public double getRadiusFrom(FPoint center) {
+        double maxRadius = -1;
+
+        for (Shape shape : this.particles) {
+            double radius = shape.getDistCenter(center) + shape.getRadius();
+
+            if (radius > maxRadius) {
+                maxRadius = radius;
+            }
+        }
+        return maxRadius;
+    }
+
+    @Override
+    public double getRadiusFromZero() {
+        double maxRadius = -1;
+
+        for (Shape shape : this.particles) {
+            double radius = shape.getDistCenter(0, 0, 0) + shape.getRadius();
+
+            if (radius > maxRadius) {
+                maxRadius = radius;
+            }
+        }
+        return maxRadius;
+    }
+
+    @Override
+    public double getRadiusOfGyration() {
+        FPoint center = factory.getFPoint();
+        FBoxDouble numerator = factory.getFBoxDouble();
+        FBoxDouble denominator = factory.getFBoxDouble();
+
+        getMassCenter(center);
+
+        for (Shape shape : this.particles.asList()) {
+            getRadiusOfGyrationShape(numerator, denominator, center, shape);
+        }
+
+        return Math.sqrt(numerator.getValue() / denominator.getValue());
+    }
+
+    private void getRadiusOfGyrationShape(FBoxDouble numerator, FBoxDouble denominator, FPoint center, Shape shape) {
+        this.dipoles.clear();
+
+        double unitVolume = shape.fillVolumeArray(this.dipoles, this.particles.asList());
+
+        this.dipoles.forEach((index, d0, d1, d2, data, meta) -> {
+
+            if (!this.density.containsKey(meta.getMeta())) {
+                throw new IllegalStateException("The density of '" + meta.getMeta() + "' is not defined");
+            }
+
+            double mass = unitVolume * this.density.get(meta.getMeta());
+
+            numerator.setValue(numerator.getValue() + (mass * Math.pow(center.getDistance(d0, d1, d2), 2)));
+            denominator.setValue(denominator.getValue() + mass);
+        });
     }
 
     @Override
     public double getOverlapFactor() {
-        FLayerCounter fLayer = factoryExt.getFLayerCounter();
         List<Double> layer = new ArrayList<>();
 
         for (Shape shape : this.particles) {
-            getOFac(fLayer, this.particles, shape, layer);
+            getOverlapFactorSwitch(shape, layer);
         }
 
-        return getOFacPost(layer);
+        return getOverlapFactorProcess(layer);
     }
 
-    private void getOFac(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, List<Double> volume) {
+    private void getOverlapFactorSwitch(Shape shape, List<Double> volume) {
 
-        if (shape.overlaps(field) == 0) {
-            getOFacAlg(shape, volume);
+        if (shape.overlaps(this.particles.asList()) == 0) {
+            getOverlapFactorPrecise(shape, volume);
         } else {
-            getOFacMsh(fLayer, field, shape, volume);
+            getOverlapFactorApproximate(shape, volume);
         }
     }
 
-    private void getOFacAlg(Shape shape, List<Double> layer) {
+    private void getOverlapFactorPrecise(Shape shape, List<Double> layer) {
 
         if (layer.size() < 1) {
             layer.add(0d);
@@ -255,10 +425,10 @@ public class FAggregateDef implements FAggregate {
         layer.set(0, layer.get(0) + shape.getVolumeAlgebraic());
     }
 
-    private void getOFacMsh(FLayerCounter fLayer, Iterable<? extends Shape> field, Shape shape, List<Double> volume) {
-        fLayer.reset();
+    private void getOverlapFactorApproximate(Shape shape, List<Double> volume) {
+        this.fLayer.reset();
 
-        shape.fillVolumeLayerOverlap(fLayer, field);
+        shape.fillVolumeLayerOverlap(this.fLayer, this.particles.asList());
 
         double volUnit = Math.pow(shape.getDelta(), 3);
 
@@ -267,11 +437,11 @@ public class FAggregateDef implements FAggregate {
         }
 
         for (int i = 0 ; i < fLayer.size() ; i++) {
-            volume.set(i, volume.get(i) + (fLayer.get(i) * volUnit));
+            volume.set(i, volume.get(i) + (this.fLayer.get(i) * volUnit));
         }
     }
 
-    private double getOFacPost(List<Double> volume) {
+    private double getOverlapFactorProcess(List<Double> volume) {
         double volTmp;
         double volTotal = 0;
         double volOverlap = 0;
@@ -308,7 +478,7 @@ public class FAggregateDef implements FAggregate {
                     continue;
                 }
 
-                oFacTotal += getOFacLeg(shapeA, shapeB);
+                oFacTotal += getOverlapFactorLegacyPair(shapeA, shapeB);
                 oFacCount += 1;
             }
         }
@@ -320,7 +490,7 @@ public class FAggregateDef implements FAggregate {
         return oFacTotal / oFacCount;
     }
 
-    private double getOFacLeg(Shape shapeA, Shape shapeB) {
+    private double getOverlapFactorLegacyPair(Shape shapeA, Shape shapeB) {
 
         double dist = shapeA.getDistCenter(shapeB);
         double oFacRaw = 1 - (dist / (shapeA.getRadius() + shapeB.getRadius()));
@@ -338,19 +508,19 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public boolean isCompact() {
-        List<Shape> field = getUniqueShapes();
-        List<Shape> processed = new ArrayList<>();
 
-        if (field.size() == 0) {
+        if (this.particles.size() == 0) {
             return false;
         }
 
-        isCompactCheck(field.get(0), field, processed);
+        List<Shape> processed = new ArrayList<>();
 
-        return field.size() == processed.size();
+        isCompactRecurrence(this.particles.asList().get(0), processed);
+
+        return this.particles.asList().size() == processed.size();
     }
 
-    private void isCompactCheck(Shape shape, List<Shape> field, List<Shape> processed) {
+    private void isCompactRecurrence(Shape shape, List<Shape> processed) {
 
         if (processed.contains(shape)) {
             return;
@@ -359,11 +529,29 @@ public class FAggregateDef implements FAggregate {
         processed.add(shape);
 
         List<Shape> candidates = new ArrayList<>();
-        shape.touchesOrOverlaps(field, candidates);
+        shape.touchesOrOverlaps(this.particles.asList(), candidates);
 
         for (Shape candidate : candidates) {
-            isCompactCheck(candidate, field, processed);
+            isCompactRecurrence(candidate, processed);
         }
+    }
+
+    @Override
+    public boolean isSparse() {
+
+        if (this.particles.size() == 0) {
+            return false;
+        }
+
+        Queue<Shape> queue = new LinkedList<>(this.particles.asList());
+
+        while (!queue.isEmpty()) {
+            if (queue.poll().overlaps(queue) != 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -386,11 +574,6 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void setMassCenter(FPoint center) {
-
-    }
-
-    @Override
     public FAggregate setMaterialDensity(String material, double density) {
 
         if (density <= 0) {
@@ -407,44 +590,6 @@ public class FAggregateDef implements FAggregate {
         return this.particles.asList().stream()
                 .distinct()
                 .toList();
-    }
-
-    private int valLayerCount(FAssembly<? extends Shape> fAssembly) {
-        List<? extends Shape> particles = fAssembly.asList();
-
-        if (particles.size() == 0) {
-            return -1;
-        }
-
-        int layerCount = particles.get(0).getLayerCount();
-
-        for (Shape shape : particles) {
-
-            if (shape.getLayerCount() != layerCount) {
-                throw new IllegalStateException("The number of layers must be equal for all particles");
-            }
-        }
-
-        return layerCount;
-    }
-
-    private double valDelta(FAssembly<? extends Shape> fAssembly) {
-        List<? extends Shape> particles = fAssembly.asList();
-
-        if (particles.size() == 0) {
-            return -1;
-        }
-
-        double delta = particles.get(0).getDelta();
-
-        for (Shape shape : particles) {
-
-            if (shape.getDelta() != delta) {
-                throw new IllegalStateException("The value of delta must be equal for all particles");
-            }
-        }
-
-        return delta;
     }
 
     //--------------------------------------------------
@@ -464,16 +609,18 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FArray<FMetaData> getRefElements() {
+    public FArray<FMetaData> getRefDipoles() {
 
-        return this.elements;
+        return this.dipoles;
     }
 
     @Override
-    public FAggregate setRefElements(FArray<FMetaData> elements) {
+    public FAggregate setRefDipoles(FArray<FMetaData> dipoles) {
 
-        this.elements = elements;
+        this.dipoles = dipoles;
 
         return this;
     }
 }
+
+// https://charmm-gui.org/?doc=lecture&module=scientific&lesson=10

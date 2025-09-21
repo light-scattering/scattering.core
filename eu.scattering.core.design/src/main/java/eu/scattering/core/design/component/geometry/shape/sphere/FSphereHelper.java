@@ -17,4 +17,6 @@ public interface FSphereHelper {
     double getSurfaceCommon(FPos3D posA, FPos3D posB, double rA, double rB);
 
     double getVolumeRing(double r1, double r2);
+
+    double getRadiusOfGyration(double r);
 }

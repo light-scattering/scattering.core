@@ -40,7 +40,8 @@ public class FSphereProducerDef implements FSphereProducer {
 
     private FCache cache;
 
-    private String meta = null;
+    private String[] meta = null;
+
     private Double delta = null;
     private Double epsilon = null;
 
@@ -167,7 +168,7 @@ public class FSphereProducerDef implements FSphereProducer {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public FSphereProducer setMeta(String meta) {
+    public FSphereProducer setMeta(String... meta) {
         this.meta = meta;
 
         return this;

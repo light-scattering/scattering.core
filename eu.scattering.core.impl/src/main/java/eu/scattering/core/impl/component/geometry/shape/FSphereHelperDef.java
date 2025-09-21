@@ -92,6 +92,12 @@ public class FSphereHelperDef implements FSphereHelper {
 
         return getVolume(r2) - getVolume(r1);
     }
+
+    @Override
+    public double getRadiusOfGyration(double r) {
+
+        return Math.sqrt(0.6) * r;
+    }
 }
 
 // https://mathworld.wolfram.com/Sphere-SphereIntersection.html

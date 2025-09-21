@@ -515,7 +515,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public void setSpatialCenter(FPoint center) {
+    public void getSpatialCenter(FPoint center) {
         FPairPos3D dimension = getRange();
 
         double x = (dimension.getPosA().getD0() + dimension.getPosB().getD0()) * 0.5;
@@ -526,8 +526,8 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public void setSphericalCenter(FPoint center) {
-        setSpatialCenter(center);
+    public void getSphericalCenter(FPoint center) {
+        getSpatialCenter(center);
 
         double learningRate = 0.1;
         double learningRateChange = 0.9;

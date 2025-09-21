@@ -1379,7 +1379,7 @@ public class FAssemblyTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
             FPoint center = factory.getFPoint();
-            fAssembly.setSpatialCenter(center);
+            fAssembly.getSpatialCenter(center);
 
             assertTrue(center.isSimilar(0, 0, 0),
                     "The range center is erroneous");
@@ -1388,7 +1388,7 @@ public class FAssemblyTest {
 
             fAssembly.translate(offset);
 
-            fAssembly.setSpatialCenter(center);
+            fAssembly.getSpatialCenter(center);
 
             assertTrue(center.isSimilar(1, 2, 3),
                     "The range center is erroneous");
@@ -1409,7 +1409,7 @@ public class FAssemblyTest {
             fAssembly.translate(offset);
 
             FPoint center = factory.getFPoint();
-            fAssembly.setSphericalCenter(center);
+            fAssembly.getSphericalCenter(center);
 
             double relErrX = factory.getFStatHelper().getRelErr(offset.getD0(), center.getX());
             double relErrY = factory.getFStatHelper().getRelErr(offset.getD1(), center.getY());
@@ -1436,7 +1436,7 @@ public class FAssemblyTest {
             fAssembly.translate(offset);
 
             FPoint center = factory.getFPoint();
-            fAssembly.setSphericalCenter(center);
+            fAssembly.getSphericalCenter(center);
 
             double relErrX = factory.getFStatHelper().getRelErr(offset.getD0(), center.getX());
             double relErrY = factory.getFStatHelper().getRelErr(offset.getD1() + (0.5 * Math.sqrt(3)), center.getY());

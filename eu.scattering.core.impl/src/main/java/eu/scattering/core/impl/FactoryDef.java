@@ -360,43 +360,43 @@ public final class FactoryDef extends ScatFactoryConcrete {
     @Override
     public FAggregate getFAggregate() {
 
-        return FAggregateDef.create(getFAssembly(), getFArray());
+        return FAggregateDef.create(this, getFAssembly(), getFArray());
     }
 
     @Override
     public FAggregate getFAggregate(int capacity) {
 
-        return FAggregateDef.create(getFAssembly(), getFArray(capacity));
+        return FAggregateDef.create(this, getFAssembly(), getFArray(capacity));
     }
 
     @Override
     public FAggregate getFAggregate(FAssembly<Shape> particles) {
 
-        return FAggregateDef.create(particles.copy(), getFArray());
+        return FAggregateDef.create(this, particles.copy(), getFArray());
     }
 
     @Override
     public FAggregate getFAggregate(FAssembly<Shape> particles, int capacity) {
 
-        return FAggregateDef.create(particles.copy(), getFArray(capacity));
+        return FAggregateDef.create(this, particles.copy(), getFArray(capacity));
     }
 
     @Override
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles) {
 
-        return FAggregateDef.create(refParticles, getFArray());
+        return FAggregateDef.create(this, refParticles, getFArray());
     }
 
     @Override
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, int capacity) {
 
-        return FAggregateDef.create(refParticles, getFArray(capacity));
+        return FAggregateDef.create(this, refParticles, getFArray(capacity));
     }
 
     @Override
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FArray<FMetaData> refElements) {
 
-        return FAggregateDef.create(refParticles, refElements);
+        return FAggregateDef.create(this, refParticles, refElements);
     }
 
     //--------------------------------------------------
