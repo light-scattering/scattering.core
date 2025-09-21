@@ -10,6 +10,7 @@ import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.BiConsumer;
 
@@ -27,15 +28,22 @@ public interface FAggregate extends Component {
 
     double getSurface();
     double getSurface(double[] layers);
+    double getSurfaceRadius();
     double getSurfaceRadius(double[] layers);
 
     FPairPos3D getRange();
 
     void getMassCenter(FPoint center);
+    FPos3D getMassCenter();
+
     void getSpatialCenter(FPoint center);
+    FPos3D getSpatialCenter();
+
     void getSphericalCenter(FPoint center);
+    FPos3D getSphericalCenter();
 
     void positionCenter(FPoint center);
+    void positionCenter(FPos3D center);
 
     double getRadiusFrom(FPoint center);
     double getRadiusFromZero();
@@ -57,6 +65,10 @@ public interface FAggregate extends Component {
 
     @Outdated
     double getOverlapFactorLegacy();
+    @Outdated
+    double getRadiusOfGyrationMonodisperse();
+    @Outdated
+    double getRadiusOfGyrationPolydisperse();
 
     @Modificator
     FAssembly<Shape> getRefParticles();
