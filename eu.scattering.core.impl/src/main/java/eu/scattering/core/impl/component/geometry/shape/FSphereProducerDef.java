@@ -10,9 +10,6 @@ import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.buffer.cache.FCache;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -22,8 +19,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class FSphereProducerDef implements FSphereProducer {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
-
     private static final Consumer<List<FSphere>> MUTATION_ITERATION;
 
     static {
@@ -38,16 +33,12 @@ public class FSphereProducerDef implements FSphereProducer {
     private final ProducerCoreDef<FSphere> processor;
     private final FRandEngine randomizer;
 
-    private FCache cache;
-
     private String[] meta = null;
 
     private Double delta = null;
     private Double epsilon = null;
 
     private FSphereProducerDef(FSphereFactory factory, FRandEngine randomizer) {
-
-        this.cache = factoryExt.getFCache();
 
         this.factory = factory;
         this.randomizer = randomizer;
@@ -189,13 +180,6 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer setCache(FCache cache) {
-        this.cache = cache;
-
-        return this;
-    }
-
-    @Override
     public FSphereProducer mutateAddCoat(double... width) {
         this.processor.addMutation((results) -> results.forEach(e -> e.addCoat(width)));
 
@@ -286,10 +270,6 @@ public class FSphereProducerDef implements FSphereProducer {
 
         if (this.epsilon != null) {
             fSphere.setEpsilon(this.epsilon);
-        }
-
-        if (this.cache != null) {
-            fSphere.setCache(this.cache);
         }
 
         return fSphere;

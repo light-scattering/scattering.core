@@ -39,6 +39,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     private FPoint center;
     private double radius;
 
+    private CmpDistSpace cmpDistSpace;
+
     private FSphereDef(ScatFactory factory) {
         super(factory);
 
@@ -923,11 +925,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     private CmpDistSpace getCacheCmpDistSpace() {
 
-        if (super.getCache() != null) {
-            return super.getCache().get(CmpDistSpace.class, (cache) -> CmpDistSpace.create());
+        if (this.cmpDistSpace == null) {
+            this.cmpDistSpace = CmpDistSpace.create();
         }
 
-        return CmpDistSpace.create();
+        return this.cmpDistSpace;
     }
 
     // -------------------------------------------------------------------------------------------------

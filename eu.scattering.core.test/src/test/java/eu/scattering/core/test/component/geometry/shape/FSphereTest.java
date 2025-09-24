@@ -12,7 +12,6 @@ import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
-import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
@@ -267,23 +266,6 @@ public class FSphereTest {
 
             assertEquals("123", fSphere.getMeta(),
                     "The tag value is incorrect");
-            assertSame(resultsA, fSphere,
-                    "The reference should not change");
-        }
-
-        @Test
-        @DisplayName("Set cache")
-        void setCache() {
-            Shape fSphere = factory.getFSphere();
-
-            assertNull(fSphere.getCache(),
-                    "The cache value should be null");
-
-            FCache cache = factory.getFCache();
-            Shape resultsA = fSphere.setCache(cache);
-
-            assertSame(cache, fSphere.getCache(),
-                    "The cache instance is incorrect");
             assertSame(resultsA, fSphere,
                     "The reference should not change");
         }

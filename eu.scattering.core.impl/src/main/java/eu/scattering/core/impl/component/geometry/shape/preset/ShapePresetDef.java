@@ -10,7 +10,6 @@ import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.impl.util.FMetaDataDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
-import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
@@ -36,7 +35,7 @@ public abstract class ShapePresetDef implements Shape {
 
     private double index = -1;
 
-    private FCache cache;
+    private CmpDistCenter cmpDistCenter;
 
     public ShapePresetDef(ScatFactory factory) {
 
@@ -69,20 +68,6 @@ public abstract class ShapePresetDef implements Shape {
         double distanceZ = Math.abs(this.getCenterZ() - arg.getCenterZ());
 
         return distanceX < EPSILON && distanceY < EPSILON && distanceZ < EPSILON;
-    }
-
-    @Override
-    public Shape setCache(FCache cache) {
-
-        this.cache = cache;
-
-        return this;
-    }
-
-    @Override
-    public FCache getCache() {
-
-        return this.cache;
     }
 
     @Override
@@ -1475,11 +1460,11 @@ public abstract class ShapePresetDef implements Shape {
 
     protected CmpDistCenter getCacheCmpDistCenter() {
 
-        if (cache != null) {
-            return cache.get(CmpDistCenter.class, (cache) -> CmpDistCenter.create());
+        if (this.cmpDistCenter == null) {
+            this.cmpDistCenter = CmpDistCenter.create();
         }
 
-        return CmpDistCenter.create();
+        return this.cmpDistCenter;
     }
 
     // -------------------------------------------------------------------------------------------------

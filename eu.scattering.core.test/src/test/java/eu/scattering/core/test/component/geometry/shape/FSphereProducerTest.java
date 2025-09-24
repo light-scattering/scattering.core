@@ -9,9 +9,11 @@ import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.FactoryDef;
-import eu.scattering.core.transfer.container.buffer.cache.FCache;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -857,17 +859,13 @@ public class FSphereProducerTest {
         Assertions.assertAll("Validate FSphere values",
                 () -> assertEquals("", resultA.getMeta()),
                 () -> assertEquals(SHAPE_EPSILON, resultA.getEpsilon()),
-                () -> assertEquals(SHAPE_DELTA, resultA.getDelta()),
-                () -> assertNotNull(resultA.getCache())
+                () -> assertEquals(SHAPE_DELTA, resultA.getDelta())
         );
-
-        FCache cache = factory.getFCache();
 
         FSphereProducer producerB = producerA
                 .setMeta("123")
                 .setEpsilon(1)
-                .setDelta(2)
-                .setCache(cache);
+                .setDelta(2);
 
         FSphere resultB = producerB.produce();
 
@@ -875,7 +873,6 @@ public class FSphereProducerTest {
                 () -> assertEquals("123", resultB.getMeta()),
                 () -> assertEquals(1, resultB.getEpsilon()),
                 () -> assertEquals(2, resultB.getDelta()),
-                () -> assertSame(cache, resultB.getCache()),
                 () -> assertSame(producerA, producerB)
         );
     }
@@ -883,11 +880,8 @@ public class FSphereProducerTest {
     @Test
     @DisplayName("Setters with list")
     void settersWithList() {
-        FCache cache = factory.getFCache();
-
         FSphereProducer producer = factory.getFSphereProducer()
                 .withFixRadius(1)
-                .setCache(cache)
                 .setMeta("123")
                 .setEpsilon(1)
                 .setDelta(2);
@@ -897,8 +891,7 @@ public class FSphereProducerTest {
         Assertions.assertAll("Validate FSphere values",
                 () -> assertEquals("123", fSphere.getMeta()),
                 () -> assertEquals(1, fSphere.getEpsilon()),
-                () -> assertEquals(2, fSphere.getDelta()),
-                () -> assertSame(cache, fSphere.getCache())
+                () -> assertEquals(2, fSphere.getDelta())
         );
 
         FSphere fSphereFixed = producer.getListFixed(1).getFirst();
@@ -906,8 +899,7 @@ public class FSphereProducerTest {
         Assertions.assertAll("Validate FSphere values",
                 () -> assertEquals("123", fSphereFixed.getMeta()),
                 () -> assertEquals(1, fSphereFixed.getEpsilon()),
-                () -> assertEquals(2, fSphereFixed.getDelta()),
-                () -> assertSame(cache, fSphereFixed.getCache())
+                () -> assertEquals(2, fSphereFixed.getDelta())
         );
 
         FSphere fSphereRandomized = producer.getListRandomized(1).getFirst();
@@ -915,19 +907,15 @@ public class FSphereProducerTest {
         Assertions.assertAll("Validate FSphere values",
                 () -> assertEquals("123", fSphereRandomized.getMeta()),
                 () -> assertEquals(1, fSphereRandomized.getEpsilon()),
-                () -> assertEquals(2, fSphereRandomized.getDelta()),
-                () -> assertSame(cache, fSphereRandomized.getCache())
+                () -> assertEquals(2, fSphereRandomized.getDelta())
         );
     }
 
     @Test
     @DisplayName("Setters with stream")
     void settersWithStream() {
-        FCache cache = factory.getFCache();
-
         FSphereProducer producer = factory.getFSphereProducer()
                 .withFixRadius(1)
-                .setCache(cache)
                 .setMeta("123")
                 .setEpsilon(1)
                 .setDelta(2);
@@ -937,8 +925,7 @@ public class FSphereProducerTest {
         Assertions.assertAll("Validate FSphere values",
                 () -> assertEquals("123", fSphere.getMeta()),
                 () -> assertEquals(1, fSphere.getEpsilon()),
-                () -> assertEquals(2, fSphere.getDelta()),
-                () -> assertSame(cache, fSphere.getCache())
+                () -> assertEquals(2, fSphere.getDelta())
         );
     }
 
