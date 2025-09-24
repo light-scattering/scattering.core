@@ -14,6 +14,7 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
+import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.ArrayList;
@@ -330,6 +331,22 @@ public class FRandEngineDef implements FRandEngine {
         }
 
         in.setCenter(this.core.nextDoubleOnSphere((in.getRadius() + target.getRadius() * 2)));
+        in.translate(target.getCenterX(), target.getCenterY(), target.getCenterZ());
+
+        return in.attachLinear(target);
+    }
+
+    @Override
+    public boolean attachLinear2D(Shape in, Shape target) {
+
+        if (in == target) {
+            return false;
+        }
+
+        FPos2D position = this.core.nextDoubleOnCircle((in.getRadius() + target.getRadius() * 2));
+
+        in.setCenter(position.getD0(), position.getD1(), 0);
+        in.translate(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
         return in.attachLinear(target);
     }
@@ -345,6 +362,30 @@ public class FRandEngineDef implements FRandEngine {
 
         while (iterations++ <= corrections) {
             boolean results = attachLinear(in, target);
+
+            if (!results) {
+                continue;
+            }
+
+            if (in.overlaps(field) == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean attachLinear2D(Shape in, Shape target, Iterable<? extends Shape> field, int corrections) {
+
+        if (in == target) {
+            return false;
+        }
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            boolean results = attachLinear2D(in, target);
 
             if (!results) {
                 continue;

@@ -2,6 +2,7 @@ package eu.scattering.core.impl;
 
 import eu.scattering.core.design.ScatFactoryConcrete;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -39,6 +40,8 @@ import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
+import eu.scattering.core.impl.component.aggregate.model.FModelRLA3D;
+import eu.scattering.core.impl.component.aggregate.model.FModelRLA2D;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -397,6 +400,18 @@ public final class FactoryDef extends ScatFactoryConcrete {
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FArray<FMetaData> refElements) {
 
         return FAggregateDef.create(this, refParticles, refElements);
+    }
+
+    @Override
+    public FModel createFModelRLA3D(FAggregate aggregate) {
+
+        return FModelRLA3D.create(aggregate, this.fRandEngine);
+    }
+
+    @Override
+    public FModel createFModelRLA2D(FAggregate aggregate) {
+
+        return FModelRLA2D.create(aggregate, this.fRandEngine);
     }
 
     //--------------------------------------------------

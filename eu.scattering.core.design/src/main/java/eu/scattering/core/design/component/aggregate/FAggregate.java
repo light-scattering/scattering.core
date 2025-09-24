@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.component.Component;
+import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
