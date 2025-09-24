@@ -945,28 +945,28 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     interface TriConsumer {
         void consume(double x, double y, double z);
     }
-}
 
-class CmpDistSpace implements Comparator<Shape> {
-    private Shape ref;
+    static class CmpDistSpace implements Comparator<Shape> {
+        private Shape ref;
 
-    private CmpDistSpace() {}
+        private CmpDistSpace() {}
 
-    public static CmpDistSpace create() {
+        public static CmpDistSpace create() {
 
-        return new CmpDistSpace();
-    }
+            return new CmpDistSpace();
+        }
 
-    public void setRef(Shape ref) {
+        public void setRef(Shape ref) {
 
-        this.ref = ref;
-    }
+            this.ref = ref;
+        }
 
-    @Override
-    public int compare(Shape s1, Shape s2) {
-        double distS1 = this.ref.getDistCenter(s1) - this.ref.getRadius() - s1.getRadius();
-        double distS2 = this.ref.getDistCenter(s2) - this.ref.getRadius() - s2.getRadius();
+        @Override
+        public int compare(Shape s1, Shape s2) {
+            double distS1 = this.ref.getDistCenter(s1) - this.ref.getRadius() - s1.getRadius();
+            double distS2 = this.ref.getDistCenter(s2) - this.ref.getRadius() - s2.getRadius();
 
-        return Double.compare(distS1, distS2);
+            return Double.compare(distS1, distS2);
+        }
     }
 }
