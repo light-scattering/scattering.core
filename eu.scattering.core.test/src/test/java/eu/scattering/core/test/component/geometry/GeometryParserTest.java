@@ -40,7 +40,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fPointParsed instanceof FVector,
                         "The element type is erroneous"),
-                () -> assertEquals(fPoint, fPointParsed,
+                () -> assertTrue(fPoint.isExact(fPointParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fPoint, fPointParsed,
                         "Elements should not be the same object")
@@ -62,7 +62,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fVectorParsed instanceof FPoint,
                         "The element type is erroneous"),
-                () -> assertEquals(fVector, fVectorParsed,
+                () -> assertTrue(fVector.isExact(fVectorParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fVector, fVectorParsed,
                         "Elements should not be the same object")
@@ -84,7 +84,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fDraftParsed instanceof FPoint,
                         "The element type is erroneous"),
-                () -> assertEquals(fDraft, fDraftParsed,
+                () -> assertTrue(fDraft.isExact(fDraftParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fDraft, fDraftParsed,
                         "Elements should not be the same object")
@@ -106,7 +106,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fLineParsed instanceof FPoint,
                         "The element type is erroneous"),
-                () -> assertEquals(fLine, fLineParsed,
+                () -> assertTrue(fLine.isExact(fLineParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fLine, fLineParsed,
                         "Elements should not be the same object")
@@ -128,7 +128,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fPlaneParsed instanceof FPoint,
                         "The element type is erroneous"),
-                () -> assertEquals(fPlane, fPlaneParsed,
+                () -> assertTrue(fPlane.isExact(fPlaneParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fPlane, fPlaneParsed,
                         "Elements should not be the same object")
@@ -150,7 +150,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fRayParsed instanceof FPoint,
                         "The element type is erroneous"),
-                () -> assertEquals(fRay, fRayParsed,
+                () -> assertTrue(fRay.isExact(fRayParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fRay, fRayParsed,
                         "Elements should not be the same object")
@@ -172,7 +172,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fSegmentParsed instanceof FPoint,
                         "The element type is erroneous"),
-                () -> assertEquals(fSegment, fSegmentParsed,
+                () -> assertTrue(fSegment.isExact(fSegmentParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fSegment, fSegmentParsed,
                         "Elements should not be the same object")
@@ -194,7 +194,7 @@ public class GeometryParserTest {
                         "The element type is erroneous"),
                 () -> assertFalse(fSphereParsed instanceof FPoint,
                         "The element type is erroneous"),
-                () -> assertEquals(fSphere, fSphereParsed,
+                () -> assertTrue(fSphere.isExact(fSphereParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fSphere, fSphereParsed,
                         "Elements should not be the same object")
@@ -233,7 +233,7 @@ public class GeometryParserTest {
         Assertions.assertAll("Validate parser results",
                 () -> assertTrue(fAssemblyParsed instanceof FAssembly,
                         "The element type is erroneous"),
-                () -> assertEquals(fAssembly, fAssemblyParsed,
+                () -> assertTrue(fAssembly.isExact(fAssemblyParsed),
                         "Elements should be equal"),
                 () -> assertNotSame(fAssembly, fAssemblyParsed,
                         "Elements should not be the same object")

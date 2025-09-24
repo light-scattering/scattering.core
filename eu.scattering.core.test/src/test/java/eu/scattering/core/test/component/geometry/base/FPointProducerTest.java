@@ -536,8 +536,7 @@ public class FPointProducerTest {
             var valA = producerA.produce();
             var valB = producerB.produce();
 
-            assertEquals(valA, valB,
-                    "Elements must be equal");
+            assertTrue(valA.isExact(valB), "Elements must be equal");
         }
     }
 
@@ -570,8 +569,7 @@ public class FPointProducerTest {
             var valA = producerA.produce();
             var valB = producerB.produce();
 
-            assertEquals(valA, valB,
-                    "Elements must be equal");
+            assertTrue(valA.isExact(valB), "Elements must be equal");
         }
     }
 
@@ -594,8 +592,7 @@ public class FPointProducerTest {
             var valA = producerA.produce();
             var valB = producerB.produce();
 
-            assertEquals(valA, valB,
-                    "Elements must be equal");
+            assertTrue(valA.isExact(valB), "Elements must be equal");
         }
     }
 
@@ -617,8 +614,7 @@ public class FPointProducerTest {
             var valA = producerA.produce();
             var valB = producerB.produce();
 
-            assertEquals(valA, valB,
-                    "Elements must be equal");
+            assertTrue(valA.isExact(valB), "Elements must be equal");
         }
     }
 
@@ -638,8 +634,7 @@ public class FPointProducerTest {
             var valA = producerA.produce();
             var valB = producerB.produce();
 
-            assertEquals(valA, valB,
-                    "Elements must be equal");
+            assertTrue(valA.isExact(valB), "Elements must be equal");
         }
     }
 
@@ -659,8 +654,7 @@ public class FPointProducerTest {
             var valA = producerA.produce();
             var valB = producerB.produce();
 
-            assertEquals(valA, valB,
-                    "Elements must be equal");
+            assertTrue(valA.isExact(valB), "Elements must be equal");
         }
     }
 
@@ -680,8 +674,7 @@ public class FPointProducerTest {
             var valA = producerA.produce();
             var valB = producerB.produce();
 
-            assertEquals(valA, valB,
-                    "Elements must be equal");
+            assertTrue(valA.isExact(valB), "Elements must be equal");
         }
     }
 

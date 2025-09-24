@@ -359,27 +359,6 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public int hashCode() {
-        int code = 0;
-
-        for (Geometry geo : asList()) {
-            code += geo.hashCode();
-        }
-
-        return code;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (!(object instanceof Geometry)) {
-            return false;
-        }
-
-        return isExact((Geometry) object);
-    }
-
-    @Override
     public String toString() {
 
         return toJSON().toString();

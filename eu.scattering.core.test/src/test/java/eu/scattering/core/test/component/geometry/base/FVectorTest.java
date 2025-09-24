@@ -5455,19 +5455,6 @@ public class FVectorTest {
         }
 
         @Test
-        @DisplayName("Get hash code")
-        void getHashCode() {
-            FPoint fPointBase = TestHelper.getRandFPoint();
-            FPoint fPointHead = TestHelper.getRandFPoint();
-
-            FVector fVectorRef = factory.getFVector(fPointBase, fPointHead);
-            FVector fVectorArg = factory.getFVector(fPointBase, fPointHead);
-
-            assertEquals(fVectorRef.hashCode(), fVectorArg.hashCode(),
-                    "Two identical FVectors should have the same hash code");
-        }
-
-        @Test
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
             FPoint fPointBase = TestHelper.getRandFPoint();
@@ -5546,7 +5533,7 @@ public class FVectorTest {
             FVector results = fVector.scale(2);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertEquals(factory.getFVector(2, 4, 6, 8, 10, 12), fVector,
+                    () -> assertTrue(factory.getFVector(2, 4, 6, 8, 10, 12).isExact(fVector),
                             "The value is erroneous"),
                     () -> assertSame(fVector, results,
                             "The reference should not change")
@@ -5561,7 +5548,7 @@ public class FVectorTest {
             FVector results = fVector.translate(1, 2, 3);
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertEquals(factory.getFVector(2, 4, 6, 5, 7, 9), fVector,
+                    () -> assertTrue(factory.getFVector(2, 4, 6, 5, 7, 9).isExact(fVector),
                             "The value is erroneous"),
                     () -> assertSame(fVector, results,
                             "The reference should not change")
@@ -5576,7 +5563,7 @@ public class FVectorTest {
             FVector results = fVector.translate(factory.getFPoint(1, 2, 3));
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertEquals(factory.getFVector(2, 4, 6, 5, 7, 9), fVector,
+                    () -> assertTrue(factory.getFVector(2, 4, 6, 5, 7, 9).isExact(fVector),
                             "The value is erroneous"),
                     () -> assertSame(fVector, results,
                             "The reference should not change")
@@ -5591,7 +5578,7 @@ public class FVectorTest {
             FVector results = fVector.translate(factory.getFPos3D(1, 2, 3));
 
             Assertions.assertAll("Validate FVector",
-                    () -> assertEquals(factory.getFVector(2, 4, 6, 5, 7, 9), fVector,
+                    () -> assertTrue(factory.getFVector(2, 4, 6, 5, 7, 9).isExact(fVector),
                             "The value is erroneous"),
                     () -> assertSame(fVector, results,
                             "The reference should not change")

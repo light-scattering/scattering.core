@@ -143,7 +143,7 @@ public class FAggregateTest {
         Assertions.assertAll("Validate FAggregate",
                 () -> assertNotSame(fAssemblyA, fAssemblyB,
                         "The reference should change"),
-                () -> assertEquals(fAssemblyA, fAssemblyB,
+                () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
                         "The geometry should be the same")
         );
 
@@ -173,7 +173,7 @@ public class FAggregateTest {
                         "The reference not should change"),
                 () -> assertNotSame(fAssemblyA, fAssemblyB,
                         "The reference should change"),
-                () -> assertEquals(fAssemblyA, fAssemblyB,
+                () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
                         "The geometry should be the same")
         );
 

@@ -275,23 +275,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public int hashCode() {
-
-        return Objects.hash(getRefCenter(), getRadius(), getCoatWidth());
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FSphere ref) {
-
-            return isExact(ref);
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString() {
 
         return toJSON().toString();

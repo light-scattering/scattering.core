@@ -508,23 +508,6 @@ public class FVectorDef implements FVector {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public int hashCode() {
-
-        return Objects.hash(getBaseX(), getBaseY(), getBaseZ(), getHeadX(), getHeadY(), getHeadZ());
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FVector ref) {
-
-            return getRefBase().equals(ref.getRefBase()) && getRefHead().equals(ref.getRefHead());
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString() {
 
         return toJSON().toString();
@@ -990,7 +973,7 @@ public class FVectorDef implements FVector {
     @Override
     public boolean isZeroLength() {
 
-        return getRefBase().equals(getRefHead());
+        return getRefBase().isExact(getRefHead());
     }
 
     @Override

@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -241,23 +240,6 @@ public class FPointDef implements FPoint {
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getX(), getY(), getZ());
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPoint fPoint) {
-
-            return getX() == fPoint.getX() && getY() == fPoint.getY() && getZ() == fPoint.getZ();
-        }
-
-        return false;
-    }
 
     @Override
     public String toString() {

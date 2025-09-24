@@ -151,8 +151,6 @@ public class FAssemblyTest {
                             "The number of geometries is incorrect"),
                     () -> assertEquals(14, fAssembly.toFPoints().size(),
                             "The number of elements is incorrect"),
-                    () -> assertEquals(fAssembly, fAssemblyCopy,
-                            "FAssemblies should contain same values"),
                     () -> assertTrue(fAssembly.isExact(fAssemblyCopy),
                             "FAssemblies should be equal"),
                     () -> assertTrue(fAssemblyCopy.isExact(fAssembly),
@@ -202,7 +200,7 @@ public class FAssemblyTest {
             fAssemblyCopy.set(json);
 
             Assertions.assertAll("Validate FAssembly values",
-                    () -> assertEquals(fAssemblyA, fAssemblyCopy,
+                    () -> assertTrue(fAssemblyA.isExact(fAssemblyCopy),
                             "FAssemblies should contain same values"),
                     () -> assertTrue(fAssemblyA.isExact(fAssemblyCopy),
                             "FAssemblies should be equal"),
@@ -491,29 +489,6 @@ public class FAssemblyTest {
 
         @Test
         @DisplayName("Get hash code")
-        void getHashCode() {
-            FAssembly<Base<?>> fAssemblyA = factory.getFAssembly();
-
-            FPoint fPointA = factory.getFPoint(1, 2, 3);
-            FVector fVectorA = factory.getFVector(4, 5, 6, 7, 8, 9);
-
-            fAssemblyA.registerWithCheck(fPointA);
-            fAssemblyA.registerWithCheck(fVectorA);
-
-            FAssembly<Geometry> fAssemblyB = factory.getFAssembly();
-
-            FPoint fPointB = factory.getFPoint(1, 2, 3);
-            FVector fVectorB = factory.getFVector(4, 5, 6, 7, 8, 9);
-
-            fAssemblyB.registerWithCheck(fVectorB);
-            fAssemblyB.registerWithCheck(fPointB);
-
-            assertEquals(fAssemblyA.hashCode(), fAssemblyB.hashCode(),
-                    "Two identical FAssemblies should have the same hash code");
-        }
-
-        @Test
-        @DisplayName("Get hash code")
         void getHashCodeFail() {
             FAssembly<Base<?>> fAssemblyA = factory.getFAssembly();
 
@@ -574,8 +549,6 @@ public class FAssemblyTest {
             FAssembly<Geometry> fAssemblyCopy = fAssemblyA.copy();
 
             Assertions.assertAll("Validate FAssembly values",
-                    () -> assertEquals(fAssemblyA, fAssemblyCopy,
-                            "FAssemblies should contain same values"),
                     () -> assertNotSame(fAssemblyA, fAssemblyCopy,
                             "FAssemblies should point to different instances"),
                     () -> assertTrue(fAssemblyA.isExact(fAssemblyCopy),
@@ -624,8 +597,6 @@ public class FAssemblyTest {
             Geometry fAssemblyCopy = fAssemblyA.copyGeometry();
 
             Assertions.assertAll("Validate FAssembly values",
-                    () -> assertEquals(fAssemblyA, fAssemblyCopy,
-                            "FAssemblies should contain same values"),
                     () -> assertNotSame(fAssemblyA, fAssemblyCopy,
                             "FAssemblies should point to different instances"),
                     () -> assertTrue(fAssemblyA.isExact(fAssemblyCopy),

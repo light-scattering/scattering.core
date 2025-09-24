@@ -1238,7 +1238,7 @@ public abstract class ShapePresetDef implements Shape {
 
     @Override
     public double fillVolumeLayer(FLayerCounter in, List<? extends Shape> structure) {
-        int position = getIndexOf(structure);
+        int position = structure.indexOf(this);
 
         if (position == -1) {
             throw new IllegalArgumentException("The shape must be a part of the structure");
@@ -1454,18 +1454,6 @@ public abstract class ShapePresetDef implements Shape {
     protected List<Double> getCoatWidth() {
 
         return this.coatData;
-    }
-
-    protected int getIndexOf(List<? extends Shape> structure) {
-
-        for (int i = 0 ; i < structure.size() ; i++) {
-
-            if (this == structure.get(i)) {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
     // -------------------------------------------------------------------------------------------------

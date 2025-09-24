@@ -166,23 +166,6 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public int hashCode() {
-
-        return getRefOrigin().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FLine fLine) {
-
-            return getRefOrigin().equals(fLine.getRefOrigin());
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString() {
 
         return toJSON().toString();

@@ -8,7 +8,6 @@ import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -176,24 +175,6 @@ public class FQuaternionDef implements FQuaternion {
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getRe(), getI(), getJ(), getK());
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FQuaternion) {
-            FQuaternion ref = (FQuaternion) object;
-
-            return getRe() == ref.getRe() && getI() == ref.getI() && getJ() == ref.getJ() && getK() == ref.getK();
-        }
-
-        return false;
-    }
 
     @Override
     public String toString() {

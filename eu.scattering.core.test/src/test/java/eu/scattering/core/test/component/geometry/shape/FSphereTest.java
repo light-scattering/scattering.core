@@ -537,7 +537,7 @@ public class FSphereTest {
                 Assertions.assertAll("Validate distance values",
                         () -> assertEquals(4 * Math.sqrt(3), dist,
                                 epsilon, "The distance is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphere),
                                 "The Shape should not change")
                 );
             }
@@ -552,7 +552,7 @@ public class FSphereTest {
                 Assertions.assertAll("Validate distance values",
                         () -> assertEquals(4 * Math.sqrt(3), dist,
                                 epsilon, "The distance is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphere),
                                 "The Shape should not change")
                 );
             }
@@ -567,7 +567,7 @@ public class FSphereTest {
                 Assertions.assertAll("Validate distance values",
                         () -> assertEquals(4 * Math.sqrt(3), dist,
                                 epsilon, "The distance is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphere),
                                 "The Shape should not change")
                 );
             }
@@ -586,9 +586,9 @@ public class FSphereTest {
                                 epsilon, "The distance A is incorrect"),
                         () -> assertEquals(4 * Math.sqrt(3), distB,
                                 epsilon, "The distance B is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphereA,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphereA),
                                 "Shape A should not change"),
-                        () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
+                        () -> assertTrue(factory.getFSphere(-2, -2, -2, 3).isExact(fSphereB),
                                 "Shape B should not change")
                 );
             }
@@ -603,7 +603,7 @@ public class FSphereTest {
                 Assertions.assertAll("Validate distance values",
                         () -> assertEquals(4 * 4 * 3, dist,
                                 epsilon, "The distance is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphere),
                                 "The shape should not change")
                 );
             }
@@ -618,7 +618,7 @@ public class FSphereTest {
                 Assertions.assertAll("Validate distance values",
                         () -> assertEquals(4 * 4 * 3, dist,
                                 epsilon, "The distance is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphere),
                                 "The shape should not change")
                 );
             }
@@ -633,7 +633,7 @@ public class FSphereTest {
                 Assertions.assertAll("Validate distance values",
                         () -> assertEquals(4 * 4 * 3, dist,
                                 epsilon, "The distance is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphere,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphere),
                                 "The shape should not change")
                 );
             }
@@ -652,9 +652,9 @@ public class FSphereTest {
                                 epsilon, "Distance A is incorrect"),
                         () -> assertEquals(4 * 4 * 3, distB,
                                 epsilon, "Distance B is incorrect"),
-                        () -> assertEquals(factory.getFSphere(2, 2, 2, 1), fSphereA,
+                        () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isExact(fSphereA),
                                 "Shape A should not change"),
-                        () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
+                        () -> assertTrue(factory.getFSphere(-2, -2, -2, 3).isExact(fSphereB),
                                 "Shape B should not change")
                 );
             }
@@ -734,7 +734,7 @@ public class FSphereTest {
                                 epsilon, "Distance B is incorrect"),
                         () -> assertTrue(factory.getFSphere(2, 2, 2, 1).isSimilar(fSphereA),
                                 "Shape A is not correct"),
-                        () -> assertEquals(factory.getFSphere(-2, -2, -2, 3), fSphereB,
+                        () -> assertTrue(factory.getFSphere(-2, -2, -2, 3).isExact(fSphereB),
                                 "Shape B should not change"),
                         () -> assertSame(fSphereA, results,
                                 "The reference should not change")
@@ -5041,7 +5041,7 @@ public class FSphereTest {
             fSphereRef.applyStateFrom(fSphereArg);
 
             Assertions.assertAll("Validate geometry",
-                    () -> assertEquals(fSphereRef, fSphereArg,
+                    () -> assertTrue(fSphereRef.isExact(fSphereArg),
                             "FSpheres should be identical")
             );
         }
@@ -5058,7 +5058,7 @@ public class FSphereTest {
             fSphereArg.applyStateTo(fSphereRef);
 
             Assertions.assertAll("Validate geometry",
-                    () -> assertEquals(fSphereRef, fSphereArg,
+                    () -> assertTrue(fSphereRef.isExact(fSphereArg),
                             "FSpheres should be identical")
             );
         }
@@ -5311,28 +5311,6 @@ public class FSphereTest {
             FSphere fSphereArg = factory.getFSphere(1, 2, 3 + (epsilon * 2), 2);
 
             assertFalse((fSphereRef.isSimilarCenter(fSphereArg)), "FSphere centers should not be similar");
-        }
-
-        @Test
-        @DisplayName("Get hash code")
-        void getHashCode() {
-            FSphere fSphereRef = factory.getFSphere(1, 2, 3, 4);
-            FSphere fSphereArg = factory.getFSphere(1, 2, 3, 4);
-
-            assertEquals(fSphereRef.hashCode(), fSphereArg.hashCode(),
-                    "Two identical FSpheres should have the same hash code");
-        }
-
-        @Test
-        @DisplayName("Get hash code with coating")
-        void getHashCodeWithCoating() {
-            Shape fSphereRef = factory.getFSphere(1, 2, 3, 10)
-                    .addCoatInternal(3).addCoatInternal(2).addCoatInternal(1);
-            Shape fSphereArg = factory.getFSphere(1, 2, 3, 10)
-                    .addCoatInternal(3).addCoatInternal(2).addCoatInternal(1);
-
-            assertEquals(fSphereRef.hashCode(), fSphereArg.hashCode(),
-                    "Two identical FSpheres should have the same hash code");
         }
 
         @Test

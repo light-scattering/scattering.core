@@ -1385,33 +1385,6 @@ public class FQuaternionTest {
         }
 
         @Test
-        @DisplayName("Get hash code")
-        void getHashCode() {
-            FQuaternion fQuaternionRefA = factory.getFQuaternion(refRe, refI, refJ, refK);
-            FQuaternion fQuaternionRefB = factory.getFQuaternion(refRe, refI, refJ, refK);
-
-            assertEquals(fQuaternionRefA.hashCode(), fQuaternionRefB.hashCode(),
-                    "Two identical FQuaternion values should have the same hash code");
-        }
-
-        @Test
-        @DisplayName("Get hash code (fail)")
-        void getHashCodeFail() {
-            FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);
-
-            assertNotEquals(fQuaternionRef.hashCode(), factory.getFQuaternion().hashCode(),
-                    "Two different FQuaternion values should not have the same hash code");
-        }
-
-        @Test
-        @DisplayName("Get hash code (validate)")
-        void getHashCodeValidate() {
-            FQuaternion fQuaternion = factory.getFQuaternion();
-
-            FQuaternionTestHelper.testValue(FQuaternion::hashCode, fQuaternion);
-        }
-
-        @Test
         @DisplayName("Copy")
         void copy() {
             FQuaternion fQuaternionRef = factory.getFQuaternion(refRe, refI, refJ, refK);

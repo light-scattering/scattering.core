@@ -164,23 +164,6 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public int hashCode() {
-
-        return getRefOrigin().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FRay fRay) {
-
-            return getRefOrigin().equals(fRay.getRefOrigin());
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString() {
 
         return toJSON().toString();

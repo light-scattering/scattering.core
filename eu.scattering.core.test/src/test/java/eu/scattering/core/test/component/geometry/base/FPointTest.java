@@ -2438,16 +2438,6 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Get hash code")
-        void getHashCode() {
-            FPoint fPointRefA = factory.getFPoint(refX, refY, refZ);
-            FPoint fPointRefB = factory.getFPoint(refX, refY, refZ);
-
-            assertEquals(fPointRefA.hashCode(), fPointRefB.hashCode(),
-                    "Two identical FPoints should have the same hash code");
-        }
-
-        @Test
         @DisplayName("Get hash code (fail)")
         void getHashCodeFail() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);

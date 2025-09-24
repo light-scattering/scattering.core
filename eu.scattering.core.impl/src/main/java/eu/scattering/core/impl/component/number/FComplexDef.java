@@ -8,7 +8,6 @@ import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -144,24 +143,6 @@ public class FComplexDef implements FComplex {
     }
 
     // -------------------------------------------------------------------------------------------------
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getRe(), getIm());
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FComplex) {
-            FComplex ref = (FComplex) object;
-
-            return getRe() == ref.getRe() && getIm() == ref.getIm();
-        }
-
-        return false;
-    }
 
     @Override
     public String toString() {

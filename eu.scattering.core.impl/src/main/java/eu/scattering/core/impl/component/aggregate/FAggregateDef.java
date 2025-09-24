@@ -694,10 +694,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     private List<Shape> getUniqueShapes() {
+        ArrayList<Shape> results = new ArrayList<>();
 
-        return this.particles.asList().stream()
-                .distinct()
-                .toList();
+        this.particles.forEach(e -> {
+            if (results.stream().noneMatch(e::isExact)) {
+                results.add(e);
+            }
+        });
+
+        return results;
     }
 
     private double getParticleMass(Shape shape) {

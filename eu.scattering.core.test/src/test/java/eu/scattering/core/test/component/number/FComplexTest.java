@@ -926,31 +926,6 @@ public class FComplexTest {
         }
 
         @Test
-        @DisplayName("Get hash code")
-        void getHashCode() {
-            FComplex fComplexOp = factory.getFComplex(refRe, refIm);
-
-            assertEquals(refFComplex.hashCode(), fComplexOp.hashCode(),
-                    "Two identical FComplex values should have the same hash code");
-        }
-
-        @Test
-        @DisplayName("Get hash code (fail)")
-        void getHashCodeFail() {
-
-            assertNotEquals(refFComplex.hashCode(), factory.getFComplex().hashCode(),
-                    "Two different FComplex values should not have the same hash code");
-        }
-
-        @Test
-        @DisplayName("Get hash code (validate)")
-        void getHashCodeValidate() {
-            FComplex fComplexRef = factory.getFComplex();
-
-            FComplexTestHelper.testValue(FComplex::hashCode, fComplexRef);
-        }
-
-        @Test
         @DisplayName("Copy")
         void copy() {
             FComplex fComplex = refFComplex.copy();

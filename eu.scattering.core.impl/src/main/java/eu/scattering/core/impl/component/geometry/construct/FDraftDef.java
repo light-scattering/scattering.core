@@ -174,23 +174,6 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public int hashCode() {
-
-        return getRefOrigin().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FDraft fDraft) {
-
-            return getRefOrigin().equals(fDraft.getRefOrigin());
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString() {
 
         return toJSON().toString();

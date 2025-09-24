@@ -184,23 +184,6 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public int hashCode() {
-
-        return getRefOrigin().hashCode();
-    }
-
-    @Override
-    public boolean equals(Object object) {
-
-        if (object instanceof FPlane fPlane) {
-
-            return getRefOrigin().equals(fPlane.getRefOrigin());
-        }
-
-        return false;
-    }
-
-    @Override
     public String toString() {
 
         return toJSON().toString();
