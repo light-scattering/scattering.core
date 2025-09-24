@@ -26,7 +26,6 @@ public class FAggregateDef implements FAggregate {
     private final Map<String, Double> density = new HashMap<>();
 
     private final ScatFactory factory;
-    private final FLayerCounter layer;
 
     private FAssembly<Shape> particles;
     private FArray<FMetaData> dipoles;
@@ -34,7 +33,6 @@ public class FAggregateDef implements FAggregate {
     private FAggregateDef(ScatFactory factory, FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
 
         this.factory = factory;
-        this.layer = factory.getFLayerCounter();
 
         this.particles = particles;
         this.dipoles = dipoles;
@@ -73,19 +71,21 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getSurface() {
+        FLayerCounter fLayer = factory.getFLayerCounter();
+
         List<Shape> field = getUniqueShapes();
 
         double surface = 0;
-        for (Shape element : field) {
+        for (Shape shape : field) {
 
-            if (element.overlaps(field) == 0) {
-                surface += element.getSurfaceAlgebraic();
+            if (shape.overlaps(field) == 0) {
+                surface += shape.getSurfaceAlgebraic();
             } else {
-                this.layer.reset();
+                fLayer.reset();
 
-                double surfaceUnit = element.fillSurfaceLayerOverlap(this.layer, field);
+                double surfaceUnit = shape.fillSurfaceLayerOverlap(fLayer, field);
 
-                surface += this.layer.get(0) * surfaceUnit;
+                surface += fLayer.get(0) * surfaceUnit;
             }
         }
 
@@ -94,25 +94,26 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getSurface(double[] layers) {
+        FLayerCounter fLayer = factory.getFLayerCounter();
         double surface = 0;
 
         Arrays.fill(layers, 0);
 
         List<Shape> field = getUniqueShapes();
 
-        for (Shape element : field) {
+        for (Shape shape : field) {
 
-            if (element.overlaps(field) == 0) {
-                for (int i = 0 ; i < element.getLayerCount() ; i++) {
-                    layers[i] += element.getLayerSurface(i);
+            if (shape.overlaps(field) == 0) {
+                for (int i = 0 ; i < shape.getLayerCount() ; i++) {
+                    layers[i] += shape.getLayerSurface(i);
                 }
             } else {
-                this.layer.reset();
+                fLayer.reset();
 
-                double surfaceUnit = element.fillSurfaceLayer(this.layer, field);
+                double surfaceUnit = shape.fillSurfaceLayer(fLayer, field);
 
-                for (int i = 0 ; i < element.getLayerCount() ; i++) {
-                    layers[i] += this.layer.get(i) * surfaceUnit;
+                for (int i = 0 ; i < shape.getLayerCount() ; i++) {
+                    layers[i] += fLayer.get(i) * surfaceUnit;
                 }
             }
         }
@@ -144,22 +145,23 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getVolume() {
+        FLayerCounter fLayer = factory.getFLayerCounter();
         double volume = 0;
 
         Queue<Shape> queue = new LinkedList<>(this.particles.asList());
 
         queue.poll();
 
-        for (Shape element : this.particles.asList()) {
+        for (Shape shape : this.particles.asList()) {
 
-            if (element.overlaps(queue) == 0) {
-                volume += element.getVolumeAlgebraic();
+            if (shape.overlaps(queue) == 0) {
+                volume += shape.getVolumeAlgebraic();
             } else {
-                this.layer.reset();
+                fLayer.reset();
 
-                double volumeUnit = element.fillVolumeLayerOverlap(layer, queue);
+                double volumeUnit = shape.fillVolumeLayerOverlap(fLayer, queue);
 
-                volume += this.layer.get() * volumeUnit;
+                volume += fLayer.get() * volumeUnit;
             }
 
             queue.poll();
@@ -238,13 +240,13 @@ public class FAggregateDef implements FAggregate {
     }
 
     private void getVolumeApproximate(Shape shape, double[] volume) {
-        this.layer.reset();
+        FLayerCounter fLayer = factory.getFLayerCounter();
 
-        shape.fillVolumeLayer(this.layer, this.particles.asList());
+        shape.fillVolumeLayer(fLayer, this.particles.asList());
         double volUnit = Math.pow(shape.getDelta(), 3);
 
-        for (int i = 0; i < this.layer.size() ; i++) {
-            volume[i] += layer.get(i) * volUnit;
+        for (int i = 0; i < fLayer.size() ; i++) {
+            volume[i] += fLayer.get(i) * volUnit;
         }
     }
 
@@ -375,7 +377,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getRadiusFrom(FPoint center) {
+    public double getRadius(FPoint center) {
         double maxRadius = -1;
 
         for (Shape shape : this.particles) {
@@ -389,7 +391,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getRadiusFromZero() {
+    public double getRadiusFromOrigin() {
         double maxRadius = -1;
 
         for (Shape shape : this.particles) {
@@ -532,18 +534,18 @@ public class FAggregateDef implements FAggregate {
     }
 
     private void getOverlapFactorApproximate(Shape shape, List<Double> volume) {
-        this.layer.reset();
+        FLayerCounter fLayer = factory.getFLayerCounter();
 
-        shape.fillVolumeLayerOverlap(this.layer, this.particles.asList());
+        shape.fillVolumeLayerOverlap(fLayer, this.particles.asList());
 
         double volUnit = Math.pow(shape.getDelta(), 3);
 
-        while (layer.size() > volume.size()) {
+        while (fLayer.size() > volume.size()) {
             volume.add(0d);
         }
 
-        for (int i = 0; i < layer.size() ; i++) {
-            volume.set(i, volume.get(i) + (this.layer.get(i) * volUnit));
+        for (int i = 0; i < fLayer.size() ; i++) {
+            volume.set(i, volume.get(i) + (fLayer.get(i) * volUnit));
         }
     }
 
@@ -566,7 +568,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getOverlapFactorLegacy() {
+    public double getOverlapFactorLinear() {
         int oFacCount = 0;
         double oFacTotal = 0;
         Shape shapeA, shapeB;

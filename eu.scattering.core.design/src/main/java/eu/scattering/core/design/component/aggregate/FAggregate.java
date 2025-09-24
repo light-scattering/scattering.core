@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.util.annotation.Modificator;
-import eu.scattering.core.design.util.annotation.Outdated;
+import eu.scattering.core.design.util.annotation.Legacy;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
@@ -45,8 +45,8 @@ public interface FAggregate extends Component {
     void positionCenter(FPoint center);
     void positionCenter(FPos3D center);
 
-    double getRadiusFrom(FPoint center);
-    double getRadiusFromZero();
+    double getRadius(FPoint center);
+    double getRadiusFromOrigin();
 
     double getRadiusOfGyration();
 
@@ -63,11 +63,11 @@ public interface FAggregate extends Component {
 
     //--------------------------------------------------
 
-    @Outdated
-    double getOverlapFactorLegacy();
-    @Outdated
+    @Legacy
+    double getOverlapFactorLinear();
+    @Legacy
     double getRadiusOfGyrationMonodisperse();
-    @Outdated
+    @Legacy
     double getRadiusOfGyrationPolydisperse();
 
     @Modificator

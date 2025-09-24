@@ -998,7 +998,7 @@ public class FAggregateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        double overlap = fAggregate.getOverlapFactorLegacy();
+        double overlap = fAggregate.getOverlapFactorLinear();
 
         assertEquals(1, overlap, epsilon);
     }
@@ -1013,7 +1013,7 @@ public class FAggregateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        double overlap = fAggregate.getOverlapFactorLegacy();
+        double overlap = fAggregate.getOverlapFactorLinear();
 
         assertEquals(0, overlap, epsilon);
     }
@@ -1028,7 +1028,7 @@ public class FAggregateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        double overlap = fAggregate.getOverlapFactorLegacy();
+        double overlap = fAggregate.getOverlapFactorLinear();
 
         assertEquals(0.5, overlap, epsilon);
     }
@@ -1046,7 +1046,7 @@ public class FAggregateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        double overlap = fAggregate.getOverlapFactorLegacy();
+        double overlap = fAggregate.getOverlapFactorLinear();
 
         double relError = factory.getFStatHelper().getRelErr(0.5, overlap);
 
@@ -1507,8 +1507,8 @@ public class FAggregateTest {
 
         assertTrue(massCenter.isSimilar(3, 3, 3));
 
-        double radiusA = fAggregate.getRadiusFrom(massCenter);
-        double radiusB = fAggregate.getRadiusFromZero();
+        double radiusA = fAggregate.getRadius(massCenter);
+        double radiusB = fAggregate.getRadiusFromOrigin();
 
         assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
         assertNotEquals(radiusA, radiusB);
@@ -1518,8 +1518,8 @@ public class FAggregateTest {
 
         assertTrue(massCenter.isSimilar(0, 0, 0));
 
-        radiusA = fAggregate.getRadiusFrom(massCenter);
-        radiusB = fAggregate.getRadiusFromZero();
+        radiusA = fAggregate.getRadius(massCenter);
+        radiusB = fAggregate.getRadiusFromOrigin();
 
         assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
         assertEquals(radiusA, radiusB, 1E-6);
