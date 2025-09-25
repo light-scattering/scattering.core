@@ -7,4 +7,7 @@ public interface FModelPCFactory {
 
     FModel createFModelRLA3D(FAggregate aggregate);
     FModel createFModelRLA2D(FAggregate aggregate);
+
+    FModel createFModelBallistic3D(FAggregate aggregate);
+    FModel createFModelBallistic2D(FAggregate aggregate);
 }

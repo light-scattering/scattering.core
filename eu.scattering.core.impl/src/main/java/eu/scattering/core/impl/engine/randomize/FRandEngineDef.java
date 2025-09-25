@@ -522,4 +522,29 @@ public class FRandEngineDef implements FRandEngine {
 
         return false;
     }
+
+    @Override
+    public boolean project2D(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
+        FRay ray = factory.getFRay();
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            FPos2D posBase = core.nextDoubleOnCircle(10 * range.getRadius());
+            FPos2D posHead = core.nextDoubleInCircle(range.getRadius());
+
+            ray.getRefOrigin()
+                    .setBase(posBase.getD0(), posBase.getD1(), 0)
+                    .setHead(posHead.getD0(), posHead.getD1(), 0)
+                    .translate(range.getCenter());
+
+            boolean isPositioned = in.project(field, ray);
+
+            if (isPositioned) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

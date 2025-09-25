@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FExportTest {
 
     @Test
-    @DisplayName("Export FLAGE")
-    void exportFLAGE() {
-        int quantity = 25;
+    @DisplayName("Export FLAGE RLA 3D")
+    void exportFLAGERLA3D() {
+        int quantity = 10;
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
@@ -43,10 +43,39 @@ public class FExportTest {
         );
     }
 
+    //--------------------------------------------------
+
     @Test
-    @DisplayName("Export NGSolve")
-    void exportNGSolve() {
-        int quantity = 25;
+    @DisplayName("Export NGSolve RLA 3D")
+    void exportNGSolveRLA3D() {
+        int quantity = 10;
+
+        Producer<FSphere> fProducer = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+
+        FModel modelRLA = factory.createFModelRLA3D(fAggregate);
+
+        modelRLA.build();
+
+        StringBuilder builder = new StringBuilder();
+        factory.getFExportEngine().exportNGSolve(fAggregate, builder);
+
+        String model = builder.toString();
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("particle_0"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    @Test
+    @DisplayName("Export NGSolve RLA 2D")
+    void exportNGSolveRLA2D() {
+        int quantity = 10;
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
@@ -55,6 +84,60 @@ public class FExportTest {
         FModel modelRLA = factory.createFModelRLA2D(fAggregate);
 
         modelRLA.build();
+
+        StringBuilder builder = new StringBuilder();
+        factory.getFExportEngine().exportNGSolve(fAggregate, builder);
+
+        String model = builder.toString();
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("particle_0"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    @Test
+    @DisplayName("Export NGSolve PC ballistic 3D")
+    void exportNGSolvePCBallistic3D() {
+        int quantity = 10;
+
+        Producer<FSphere> fProducer = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+
+        FModel modelBallistic = factory.createFModelBallistic3D(fAggregate);
+
+        modelBallistic.build();
+
+        StringBuilder builder = new StringBuilder();
+        factory.getFExportEngine().exportNGSolve(fAggregate, builder);
+
+        String model = builder.toString();
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("particle_0"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    @Test
+    @DisplayName("Export NGSolve PC ballistic 2D")
+    void exportNGSolvePCBallistic2D() {
+        int quantity = 1000;
+
+        Producer<FSphere> fProducer = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+
+        FModel modelBallistic = factory.createFModelBallistic2D(fAggregate);
+
+        modelBallistic.build();
 
         StringBuilder builder = new StringBuilder();
         factory.getFExportEngine().exportNGSolve(fAggregate, builder);
