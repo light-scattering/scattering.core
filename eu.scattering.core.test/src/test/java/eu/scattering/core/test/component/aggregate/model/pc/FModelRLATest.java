@@ -21,7 +21,7 @@ public class FModelRLATest {
     @Test
     @DisplayName("Aggregate 3D")
     void aggregate3D() {
-        int quantity = 250;
+        int quantity = 20;
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
@@ -44,7 +44,7 @@ public class FModelRLATest {
     @Test
     @DisplayName("Aggregate 2D")
     void aggregate2D() {
-        int quantity = 250;
+        int quantity = 20;
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));

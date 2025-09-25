@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.util.annotation.Modificator;
 import eu.scattering.core.design.util.annotation.Legacy;
 import eu.scattering.core.design.util.container.FMetaData;
@@ -61,6 +62,10 @@ public interface FAggregate extends Component {
     //--------------------------------------------------
 
     FAggregate setMaterialDensity(String material, double density);
+    double getMaterialDensity(String material);
+
+    FAggregate setMaterialRefIndex(String material, FComplex refIndex);
+    FComplex getMaterialRefIndex(String material);
 
     //--------------------------------------------------
 

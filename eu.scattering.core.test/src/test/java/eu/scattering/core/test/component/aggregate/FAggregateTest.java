@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
+import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
@@ -1707,5 +1708,32 @@ public class FAggregateTest {
 
         assertTrue(rgErrMono < 0.05);
         assertTrue(rgErrPoly < 0.05);
+    }
+
+    @Test
+    @DisplayName("Set material density")
+    void setMaterialDensity() {
+        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+        FAggregate results = fAggregate.setMaterialDensity("X", 5);
+
+        assertSame(fAggregate, results);
+        assertEquals(5, fAggregate.getMaterialDensity("X"));
+    }
+
+    @Test
+    @DisplayName("Set material refractive index")
+    void setMaterialRefractiveIndex() {
+        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+        FAggregate results = fAggregate.setMaterialRefIndex("X", factory.getFComplex(2, 3));
+
+        FComplex refIndex = fAggregate.getMaterialRefIndex("X");
+
+        assertSame(fAggregate, results);
+        assertEquals(2, refIndex.getRe());
+        assertEquals(3, refIndex.getIm());
     }
 }

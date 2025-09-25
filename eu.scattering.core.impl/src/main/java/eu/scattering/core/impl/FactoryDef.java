@@ -31,6 +31,7 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
+import eu.scattering.core.design.engine.export.FExportEngine;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
@@ -55,6 +56,7 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
+import eu.scattering.core.impl.engine.export.FExportEngineDef;
 import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandGeneratorDef;
@@ -73,6 +75,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private final FRandGenerator fRandGenerator;
     private final FRotGenerator fRotGenerator;
 
+    private final FExportEngine fExportEngine;
     private final FProtoEngine fProtoEngine;
     private final FRandEngine fRandEngine;
     private final FRotEngine fRotEngine;
@@ -86,6 +89,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
 
+        this.fExportEngine = FExportEngineDef.get();
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
         this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
@@ -104,6 +108,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private FactoryDef(long seed) {
         this.fRandGenerator = FRandGeneratorDef.create(seed);
 
+        this.fExportEngine = FExportEngineDef.get();
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
         this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
@@ -429,6 +434,12 @@ public final class FactoryDef extends ScatFactoryConcrete {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public FExportEngine getFExportEngine() {
+
+        return this.fExportEngine;
+    }
 
     @Override
     public FProtoEngine getFProtoEngine() {

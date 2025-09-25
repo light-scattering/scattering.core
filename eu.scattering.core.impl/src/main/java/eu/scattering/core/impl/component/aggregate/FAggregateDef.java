@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.transfer.container.box.FBoxDouble.FBoxDouble;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
@@ -24,6 +25,7 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_PARTICLES = "particles";
 
     private final Map<String, Double> density = new HashMap<>();
+    private final Map<String, FComplex> refIndex = new HashMap<>();
 
     private final ScatFactory factory;
 
@@ -38,6 +40,7 @@ public class FAggregateDef implements FAggregate {
         this.dipoles = dipoles;
 
         this.density.put("", 1d);
+        this.refIndex.put("", factory.getFComplex());
     }
 
     public static FAggregate create(ScatFactory factory, FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
@@ -691,6 +694,30 @@ public class FAggregateDef implements FAggregate {
         this.density.put(material, density);
 
         return this;
+    }
+
+    @Override
+    public FAggregate setMaterialRefIndex(String material, FComplex refIndex) {
+
+        if (refIndex.getRe() < 0 || refIndex.getIm() < 0) {
+            throw new IllegalArgumentException("The refractive index cannot be lower than zero");
+        }
+
+        this.refIndex.put(material, refIndex);
+
+        return this;
+    }
+
+    @Override
+    public double getMaterialDensity(String material) {
+
+        return this.density.get(material);
+    }
+
+    @Override
+    public FComplex getMaterialRefIndex(String material) {
+
+        return this.refIndex.get(material);
     }
 
     private List<Shape> getUniqueShapes() {

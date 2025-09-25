@@ -662,9 +662,29 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     protected Relation overlapsEpsilon(Shape shape) {
-        double distP2 = getDistCenterP2(shape);
+        double distMax = this.getRadius() + shape.getRadius();
 
-        double reqDist = this.getRadius() + shape.getRadius() - epsilon;
+        double distX = Math.abs(this.getCenterX() - shape.getCenterX());
+
+        if (distX > distMax + epsilon) {
+            return Relation.FALSE;
+        }
+
+        double distY = Math.abs(this.getCenterY() - shape.getCenterY());
+
+        if (distY > distMax + epsilon) {
+            return Relation.FALSE;
+        }
+
+        double distZ = Math.abs(this.getCenterZ() - shape.getCenterZ());
+
+        if (distZ > distMax + epsilon) {
+            return Relation.FALSE;
+        }
+
+        double distP2 = (distX * distX) + (distY * distY) + (distZ * distZ);
+
+        double reqDist = distMax - epsilon;
         double reqDistP2 = reqDist < 0 ? 0 : reqDist * reqDist;
 
         if (distP2 > reqDistP2) {
