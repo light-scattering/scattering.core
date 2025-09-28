@@ -3,6 +3,9 @@ package eu.scattering.core.impl;
 import eu.scattering.core.design.ScatFactoryConcrete;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
+import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
+import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
+import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -41,10 +44,7 @@ import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
-import eu.scattering.core.impl.component.aggregate.model.FModelBallistic2DDef;
-import eu.scattering.core.impl.component.aggregate.model.FModelBallistic3DDef;
-import eu.scattering.core.impl.component.aggregate.model.FModelRLA3DDef;
-import eu.scattering.core.impl.component.aggregate.model.FModelRLA2DDef;
+import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -410,27 +410,39 @@ public final class FactoryDef extends ScatFactoryConcrete {
     }
 
     @Override
-    public FModel createFModelRLA3D(FAggregate aggregate) {
+    public FModelRLA createFModelRLA3D(FAggregate aggregate) {
 
         return FModelRLA3DDef.create(aggregate, this.fRandEngine);
     }
 
     @Override
-    public FModel createFModelRLA2D(FAggregate aggregate) {
+    public FModelRLA createFModelRLA2D(FAggregate aggregate) {
 
         return FModelRLA2DDef.create(aggregate, this.fRandEngine);
     }
 
     @Override
-    public FModel createFModelBallistic3D(FAggregate aggregate) {
+    public FModelPCBallistic createFModelBallistic3D(FAggregate aggregate) {
 
-        return FModelBallistic3DDef.create(aggregate, this);
+        return FModelPCBallistic3DDef.create(aggregate, this);
     }
 
     @Override
-    public FModel createFModelBallistic2D(FAggregate aggregate) {
+    public FModelPCBallistic createFModelBallistic2D(FAggregate aggregate) {
 
-        return FModelBallistic2DDef.create(aggregate, this);
+        return FModelPCBallistic2DDef.create(aggregate, this);
+    }
+
+    @Override
+    public FModelPCTunable createFModelFilippov3D(FAggregate aggregate, double df, double kf) {
+
+        return FModelPCFilippov3DDef.create(aggregate, this, df, kf);
+    }
+
+    @Override
+    public FModelPCTunable createFModelFilippov2D(FAggregate aggregate, double df, double kf) {
+
+        return FModelPCFilippov2DDef.create(aggregate, this, df, kf);
     }
 
     //--------------------------------------------------

@@ -1,13 +1,8 @@
 package eu.scattering.core.design.component.aggregate.model.pc;
 
-import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.FModel;
+import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallisticFactory;
+import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLAFactory;
+import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunableFactory;
 
-public interface FModelPCFactory {
-
-    FModel createFModelRLA3D(FAggregate aggregate);
-    FModel createFModelRLA2D(FAggregate aggregate);
-
-    FModel createFModelBallistic3D(FAggregate aggregate);
-    FModel createFModelBallistic2D(FAggregate aggregate);
+public interface FModelPCFactory extends FModelPCTunableFactory, FModelRLAFactory, FModelPCBallisticFactory {
 }

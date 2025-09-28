@@ -415,6 +415,23 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
+    public boolean attachSpherical2D(Shape in, Shape target, double x, double y, double z) {
+
+        if (in == target) {
+            return false;
+        }
+
+        double dist = in.getDistCenter(x, y, z);
+
+        FPos2D position = this.core.nextDoubleOnCircle(dist);
+
+        in.setCenter(position.getD0(), position.getD1(), 0);
+        in.translate(x, y, z);
+
+        return in.attachSpherical(target, x, y, z);
+    }
+
+    @Override
     public boolean attachSpherical(Shape in, Shape target, FPoint center) {
 
         return attachSpherical(in, target, center.getX(), center.getY(), center.getZ());
@@ -437,6 +454,30 @@ public class FRandEngineDef implements FRandEngine {
 
         while (iterations++ <= corrections) {
             boolean results = attachSpherical(in, target, x, y, z);
+
+            if (!results) {
+                continue;
+            }
+
+            if (in.overlaps(field) == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean attachSpherical2D(Shape in, Shape target, double x, double y, double z, Iterable<? extends Shape> field, int corrections) {
+
+        if (in == target) {
+            return false;
+        }
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            boolean results = attachSpherical2D(in, target, x, y, z);
 
             if (!results) {
                 continue;

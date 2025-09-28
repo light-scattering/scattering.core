@@ -23,12 +23,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/FModelPCFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/FModelPCFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeEngineRand.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeEngineRand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/sphere/FSphereEngineRand.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/sphere/FSphereEngineRand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA2DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA3D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA3DDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelBallistic2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCBallistic2DDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelBallistic3DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCBallistic3DDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA2DDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA3DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA3DDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandEngineDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandEngineDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/engine/FExportTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/engine/FExportTest.java" afterDir="false" />
     </list>
@@ -86,8 +91,8 @@
         <option value="module-info" />
         <option value="Enum" />
         <option value="AnnotationType" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -160,15 +165,15 @@
       <recent name="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="eu.scattering.core.impl.component.aggregate.model" />
+      <recent name="eu.scattering.core.test.component.aggregate.model.pc" />
       <recent name="eu.scattering.core.impl.component.support" />
       <recent name="eu.scattering.core.transfer.container.buffer" />
       <recent name="eu.scattering.core.transfer.container.buffer.FCache" />
-      <recent name="eu.scattering.core.transfer.containers.buffer" />
-      <recent name="eu.scattering.core.transfer.container.buffer.FStream3D" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FExportTest.exportNGSolvePCBallistic2D">
-    <configuration name="FExportTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
+    <configuration name="FExportTest.exportNGSolvePCTunableFilippov2D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -181,7 +186,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.engine.FExportTest&quot;" />
+            <option value="&quot;eu.scattering.core.test.engine.FExportTest.exportNGSolvePCTunableFilippov2D&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -191,7 +196,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FExportTest.exportNGSolvePCBallistic2D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FExportTest.exportNGSolvePCTunableFilippov3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -204,7 +209,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.engine.FExportTest.exportNGSolvePCBallistic2D&quot;" />
+            <option value="&quot;eu.scattering.core.test.engine.FExportTest.exportNGSolvePCTunableFilippov3D&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -214,7 +219,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FModelBallisticTest.aggregate2D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FModelTunableTest.aggregate2D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -227,7 +232,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.model.pc.FModelBallisticTest.aggregate2D&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.model.pc.FModelTunableTest.aggregate2D&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -237,7 +242,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FModelBallisticTest.aggregate3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FModelTunableTest.aggregate3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -250,7 +255,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.model.pc.FModelBallisticTest.aggregate3D&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.model.pc.FModelTunableTest.aggregate3D&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -283,11 +288,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FExportTest.exportNGSolvePCBallistic2D" />
-        <item itemvalue="Gradle.FModelBallisticTest.aggregate2D" />
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FExportTest" />
-        <item itemvalue="Gradle.FModelBallisticTest.aggregate3D" />
+        <item itemvalue="Gradle.FExportTest.exportNGSolvePCTunableFilippov2D" />
+        <item itemvalue="Gradle.FModelTunableTest.aggregate2D" />
+        <item itemvalue="Gradle.FExportTest.exportNGSolvePCTunableFilippov3D" />
+        <item itemvalue="Gradle.FModelTunableTest.aggregate3D" />
       </list>
     </recent_temporary>
   </component>
@@ -532,14 +537,14 @@
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelBallisticTest.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="58" />
+          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelTunableTest.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelBallisticTest.java</url>
-          <line>63</line>
-          <option name="timeStamp" value="61" />
+          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/engine/FExportTest.java</url>
+          <line>176</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

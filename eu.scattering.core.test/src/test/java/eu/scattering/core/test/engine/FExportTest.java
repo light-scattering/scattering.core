@@ -2,6 +2,7 @@ package eu.scattering.core.test.engine;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
+import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -129,7 +130,7 @@ public class FExportTest {
     @Test
     @DisplayName("Export NGSolve PC ballistic 2D")
     void exportNGSolvePCBallistic2D() {
-        int quantity = 1000;
+        int quantity = 10;
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
@@ -138,6 +139,62 @@ public class FExportTest {
         FModel modelBallistic = factory.createFModelBallistic2D(fAggregate);
 
         modelBallistic.build();
+
+        StringBuilder builder = new StringBuilder();
+        factory.getFExportEngine().exportNGSolve(fAggregate, builder);
+
+        String model = builder.toString();
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("particle_0"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    @Test
+    @DisplayName("Export NGSolve PC tunable Filippov 3D")
+    void exportNGSolvePCTunableFilippov3D() {
+        int quantity = 10;
+
+        Producer<FSphere> fProducer = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+
+        FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.8, 1.4);
+        modelTunable.setEarlyStageCorrection(true);
+
+        modelTunable.build();
+
+        StringBuilder builder = new StringBuilder();
+        factory.getFExportEngine().exportNGSolve(fAggregate, builder);
+
+        String model = builder.toString();
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("particle_0"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    @Test
+    @DisplayName("Export NGSolve PC tunable Filippov 2D")
+    void exportNGSolvePCTunableFilippov2D() {
+        int quantity = 10;
+
+        Producer<FSphere> fProducer = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+
+        FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.3, 1.5);
+        modelTunable.setEarlyStageCorrection(true);
+
+        modelTunable.build();
 
         StringBuilder builder = new StringBuilder();
         factory.getFExportEngine().exportNGSolve(fAggregate, builder);

@@ -1,21 +1,27 @@
 package eu.scattering.core.impl.component.aggregate.model;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
+import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.function.BiConsumer;
 
-public class FModelRLA3DDef implements FModelPC {
+public class FModelRLA3DDef implements FModelRLA {
     private static final int ITERATIONS = 100;
+    private static final int MIN_SIZE = 5;
+
+    private BiConsumer<Shape, Integer> monitor;
 
     private final FRandEngine random;
     private final FAggregate aggregate;
 
     private final List<Shape> bases;
     private final List<Shape> attached;
-
     private final Queue<Shape> detached;
 
     private FModelRLA3DDef(FAggregate aggregate, FRandEngine random) {
@@ -36,13 +42,18 @@ public class FModelRLA3DDef implements FModelPC {
         this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
     }
 
-    public static FModelPC create(FAggregate aggregate, FRandEngine random) {
+    public static FModelRLA create(FAggregate aggregate, FRandEngine random) {
 
         return new FModelRLA3DDef(aggregate, random);
     }
 
     @Override
     public void build() {
+
+        if (this.aggregate.getRefParticles().size() < 5) {
+            throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
+        }
+
         init();
 
         while (this.detached.size() != 0) {
@@ -61,10 +72,7 @@ public class FModelRLA3DDef implements FModelPC {
         this.detached.addAll(this.aggregate.getRefParticles().asList());
 
         Shape element = detached.poll();
-
-        if (element == null) {
-            throw new IllegalStateException("The aggregate must consist of at least one particle");
-        }
+        assert element != null;
 
         element.setCenter(0, 0, 0);
 
@@ -87,6 +95,10 @@ public class FModelRLA3DDef implements FModelPC {
                 continue;
             }
 
+            if (this.monitor != null) {
+                this.monitor.accept(particle, this.attached.size());
+            }
+
             this.bases.add(particle);
             this.attached.add(particle);
 
@@ -94,5 +106,13 @@ public class FModelRLA3DDef implements FModelPC {
         }
 
         return false;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public void addMonitor(BiConsumer<Shape, Integer> monitor) {
+
+        this.monitor = monitor;
     }
 }

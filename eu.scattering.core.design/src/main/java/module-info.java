@@ -48,4 +48,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.model.pc;
     exports eu.scattering.core.design.component.aggregate.model;
     exports eu.scattering.core.design.engine.export;
+    exports eu.scattering.core.design.component.aggregate.model.pc.tunable;
+    exports eu.scattering.core.design.component.aggregate.model.pc.rla;
+    exports eu.scattering.core.design.component.aggregate.model.pc.ballistic;
 }
