@@ -51,4 +51,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.model.pc.tunable;
     exports eu.scattering.core.design.component.aggregate.model.pc.rla;
     exports eu.scattering.core.design.component.aggregate.model.pc.ballistic;
+    exports eu.scattering.core.design.component.aggregate.model.pc.dla;
+    exports eu.scattering.core.design.util.lambda;
 }

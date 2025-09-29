@@ -1,6 +1,5 @@
 package eu.scattering.core.impl.engine.randomize;
 
-import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.GeometryFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;

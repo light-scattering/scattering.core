@@ -210,6 +210,15 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return this;
     }
 
+    @Override
+    public FAssembly<T> clear() {
+
+        this.elements.clear();
+        this.fPoints.clear();
+
+        return this;
+    }
+
     private boolean registerGeometry(T candidate) {
 
         return register(this.elements, candidate);

@@ -32,6 +32,8 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     FAssembly<T> deregister(T element);
     FAssembly<T> deregister(Collection<T> elements);
 
+    FAssembly<T> clear();
+
     //--------------------------------------------------
 
     <U extends T> FAssembly<T> mutate(Class<U> type, Consumer<U> action);

@@ -2,8 +2,8 @@ package eu.scattering.core.impl;
 
 import eu.scattering.core.design.ScatFactoryConcrete;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
+import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.Geometry;
@@ -443,6 +443,18 @@ public final class FactoryDef extends ScatFactoryConcrete {
     public FModelPCTunable createFModelFilippov2D(FAggregate aggregate, double df, double kf) {
 
         return FModelPCFilippov2DDef.create(aggregate, this, df, kf);
+    }
+
+    @Override
+    public FModelDLA createFModelDLA3D(FAggregate aggregate) {
+
+        return FModelDLA3DDef.create(aggregate, this);
+    }
+
+    @Override
+    public FModelDLA createFModelDLA2D(FAggregate aggregate) {
+
+        return FModelDLA2DDef.create(aggregate, this);
     }
 
     //--------------------------------------------------

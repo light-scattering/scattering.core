@@ -18,5 +18,6 @@ public interface FSegment extends Construct<FSegment> {
     void setDistance(FPoint in, double distance);
     void setDistance(Geometry in, double distance);
 
+    double getDistance(double x, double y, double z);
     double getDistance(FPoint arg);
 }

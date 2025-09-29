@@ -18,6 +18,9 @@ public interface ShapeModuleInteraction {
     boolean project(Shape target, FRay ray);
     boolean project(Iterable<? extends Shape> field, FRay ray);
 
+    boolean project(Shape target, FRay segment, double limit);
+    boolean project(Iterable<? extends Shape> field, FRay segment, double limit);
+
     void getCollisionListLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
 
     void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);

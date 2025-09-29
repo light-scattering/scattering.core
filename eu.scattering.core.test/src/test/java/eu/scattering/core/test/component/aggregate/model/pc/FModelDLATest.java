@@ -1,7 +1,7 @@
 package eu.scattering.core.test.component.aggregate.model.pc;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
+import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -15,8 +15,8 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("FModel PC ballistic")
-public class FModelTunableTest {
+@DisplayName("FModel DLA")
+public class FModelDLATest {
 
     @Test
     @DisplayName("Aggregate 3D")
@@ -27,10 +27,8 @@ public class FModelTunableTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.8, 1.5);
-        modelTunable.setEarlyStageCorrection(true);
-
-        modelTunable.build();
+        FModelDLA modelDLA = factory.createFModelDLA3D(fAggregate);
+        modelDLA.build();
 
         double overlap = fAggregate.getOverlapFactorLinear();
 
@@ -51,16 +49,14 @@ public class FModelTunableTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.8, 1.5);
-        modelTunable.setEarlyStageCorrection(true);
-
-        modelTunable.build();
+        FModelDLA modelDLA = factory.createFModelDLA2D(fAggregate);
+        modelDLA.build();
 
         double overlap = fAggregate.getOverlapFactorLinear();
 
         for (Shape shape : fAssembly) {
             assertEquals(0, shape.getCenterZ(),
-                    epsilon, "At least one particle has a non-zero Z value");
+                    "At least one particle has a non-zero Z value");
         }
 
         Assertions.assertAll("Validate FAggregate",

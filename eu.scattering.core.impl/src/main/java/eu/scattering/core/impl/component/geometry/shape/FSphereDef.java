@@ -15,7 +15,10 @@ import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
@@ -395,7 +398,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     @Override
     public boolean project(Shape target, FRay ray) {
-
         FPos3D projection = ray.project(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
         if (projection == null) {
@@ -421,13 +423,60 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     public boolean project(Iterable<? extends Shape> field, FRay ray) {
         List<Shape> candidates = new ArrayList<>();
 
-        setCenter(ray.getRefOrigin().getRefBase());
         getCollisionListLinear(candidates, field, ray);
 
         sortByDistCenter(candidates);
 
         for (Shape candidate : candidates) {
             if (project(candidate, ray)) {
+                if (overlaps(field) <= 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean project(Shape target, FRay ray, double limit) {
+        FPos3D projection = ray.project(target.getCenterX(), target.getCenterY(), target.getCenterZ());
+
+        if (projection == null) {
+            return false;
+        }
+
+        if (target.getDistCenter(projection) > this.getRadius() + target.getRadius()) {
+            return false;
+        }
+
+        double sideA = target.getDistCenter(projection);
+        double sideC = this.getRadius() + target.getRadius();
+        double sideB = Math.sqrt((sideC * sideC) - (sideA * sideA));
+
+        FPos3D center = getFPointHelper().setDistance(projection, ray.getRefOrigin().getRefBase().toFPos3D(), sideB);
+
+        double shift = this.getDistCenter(center);
+
+        if (shift > limit) {
+            return false;
+        }
+
+        this.setCenter(center);
+
+        return true;
+    }
+
+    @Override
+    public boolean project(Iterable<? extends Shape> field, FRay ray, double limit) {
+        List<Shape> candidates = new ArrayList<>();
+
+        getCollisionListLinear(candidates, field, ray);
+
+        sortByDistCenter(candidates);
+
+        for (Shape candidate : candidates) {
+            if (project(candidate, ray, limit)) {
                 if (overlaps(field) <= 0) {
                     return true;
                 }
@@ -484,7 +533,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         this.setCenter(ray.getRefOrigin().getRefBase());
 
-        double distShape, distTarget, distRadius;
+        double distProjection, distShape, distRadius;
         for (Shape shape : field) {
 
             if (this == shape) {
@@ -492,10 +541,10 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             }
 
             distRadius = this.getRadius() + shape.getRadius();
-            distShape = ray.getDistance(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
-            distTarget = shape.getDistCenter(ray.getRefOrigin().getRefBase()) - distRadius;
+            distProjection = ray.getDistance(shape.getCenterX(), shape.getCenterY(), shape.getCenterZ());
+            distShape = this.getDistCenter(shape) - distRadius;
 
-            if (distShape >= 0 && distShape < distRadius && distTarget > distRadius) {
+            if (distProjection >= 0 && distProjection < distRadius && distShape >= 0) {
                 in.add(shape);
             }
         }
@@ -943,6 +992,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     @FunctionalInterface
     interface TriConsumer {
+
         void consume(double x, double y, double z);
     }
 

@@ -178,7 +178,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return getUnitDistance(arg) > -1;
+        return getUnitDistance(arg.getX(), arg.getY(), arg.getZ()) > -1;
     }
 
     // TODO - Not optimized
@@ -286,13 +286,23 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     }
 
     @Override
+    public double getDistance(double x, double y, double z) {
+
+        if (getRefOrigin().isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        return getUnitDistance(x, y, z);
+    }
+
+    @Override
     public double getDistance(FPoint arg) {
 
         if (getRefOrigin().isNearZeroLength()) {
             throw new IllegalStateException("The origin is a non-directional FVector");
         }
 
-        return getUnitDistance(arg);
+        return getUnitDistance(arg.getX(), arg.getY(), arg.getZ());
     }
 
     @Override
@@ -319,13 +329,13 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     // -------------------------------------------------------------------------------------------------
 
     private boolean isUnitPartOf(FPoint arg) {
-        double dist = getUnitDistance(arg);
+        double dist = getUnitDistance(arg.getX(), arg.getY(), arg.getZ());
 
         return dist != -1 && dist < EPSILON;
     }
 
     private boolean isUnitPartOf(FPoint arg, double epsilon) {
-        double dist = getUnitDistance(arg);
+        double dist = getUnitDistance(arg.getX(), arg.getY(), arg.getZ());
 
         return dist != -1 && dist < epsilon;
     }
@@ -342,13 +352,13 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         return Math.abs(distBase + distHead - oMagnitude) < EPSILON;
     }
 
-    private double getUnitDistance(FPoint arg) {
+    private double getUnitDistance(double x, double y, double z) {
         FVector origin = getRefOrigin();
         double originMag = origin.getMagnitude();
 
-        double headX = arg.getX() - origin.getBaseX();
-        double headY = arg.getY() - origin.getBaseY();
-        double headZ = arg.getZ() - origin.getBaseZ();
+        double headX = x - origin.getBaseX();
+        double headY = y - origin.getBaseY();
+        double headZ = z - origin.getBaseZ();
 
         double opX = (origin.getHeadX() - origin.getBaseX()) / originMag;
         double opY = (origin.getHeadY() - origin.getBaseY()) / originMag;
@@ -370,9 +380,9 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
             return -1;
         }
 
-        double distX = arg.getX() - opX;
-        double distY = arg.getY() - opY;
-        double distZ = arg.getZ() - opZ;
+        double distX = x - opX;
+        double distY = y - opY;
+        double distZ = z - opZ;
 
         return Math.sqrt((distX * distX) + (distY * distY) + (distZ * distZ));
     }
