@@ -4,6 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
@@ -21,11 +22,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
     private BiConsumer<Shape, Integer> monitor;
 
-    private final FRandEngine random;
+    private final FRandEngine rndEng;
+
     private final FAggregate aggregate;
 
     private final List<Shape> bases;
-    private final List<Shape> attached;
+
+    private final FAssembly<Shape> attached;
     private final Queue<Shape> detached;
 
     private final FPoint massCenter;
@@ -55,12 +58,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         this.df = df;
         this.kf = kf;
 
-        this.random = factory.getFRandEngine();
+        this.rndEng = factory.getFRandEngine();
+
         this.aggregate = aggregate;
 
         this.bases = new ArrayList<>();
 
-        this.attached = new ArrayList<>(this.aggregate.getRefParticles().size());
+        this.attached = factory.getFAssembly();
         this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
 
         this.massCenter = factory.getFPoint();
@@ -74,7 +78,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     @Override
     public void build() {
 
-        if (this.aggregate.getRefParticles().size() < 5) {
+        if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
@@ -90,7 +94,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     private void init() {
         this.rp = getAveragedParticleRadius();
 
-        this.random.getFRand().shuffle(this.aggregate.getRefParticles().asList());
+        this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
 
         this.attached.clear();
 
@@ -102,14 +106,14 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
         elementA.setCenter(0, 0, 0);
 
-        this.attached.add(elementA);
+        this.attached.register(elementA);
 
         Shape elementB = this.detached.poll();
         assert elementB != null;
 
-        elementB.setCenter(this.random.getFRand().nextDoubleOnSphere(elementA.getRadius() + elementB.getRadius()));
+        elementB.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(elementA.getRadius() + elementB.getRadius()));
 
-        this.attached.add(elementB);
+        this.attached.register(elementB);
     }
 
     private boolean buildStep() {
@@ -128,7 +132,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         }
 
         for (int i = 0 ; i < ITERATIONS ; i++) {
-            particle.setCenter(this.random.getFRand().nextDoubleOnSphere(radius));
+            particle.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(radius));
 
             double distMin = Double.MAX_VALUE;
             Shape target = null;
@@ -142,7 +146,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 }
             }
 
-            boolean isPositioned = this.random.attachSpherical(particle, target, 0, 0, 0, this.attached, ITERATIONS);
+            boolean isPositioned = this.rndEng.attachSpherical(particle, target, 0, 0, 0, this.attached, ITERATIONS);
 
             if (!isPositioned) {
                 if (this.correctionEarlyStage && this.attached.size() <= MIN_SIZE) {
@@ -156,7 +160,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 this.monitor.accept(particle, this.attached.size());
             }
 
-            this.attached.add(particle);
+            this.attached.register(particle);
 
             return true;
         }

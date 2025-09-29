@@ -1,7 +1,9 @@
 package eu.scattering.core.impl.component.aggregate.model;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 
@@ -17,40 +19,44 @@ public class FModelRLA2DDef implements FModelRLA {
 
     private BiConsumer<Shape, Integer> monitor;
 
-    private final FRandEngine random;
+    private final FRandEngine rndEng;
+
     private final FAggregate aggregate;
 
     private final List<Shape> bases;
-    private final List<Shape> attached;
+
+    private final FAssembly<Shape> attached;
     private final Queue<Shape> detached;
 
-    private FModelRLA2DDef(FAggregate aggregate, FRandEngine random) {
+    private FModelRLA2DDef(FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
         }
 
-        if (random == null) {
-            throw new IllegalArgumentException("The randomization engine is not defined");
+        if (factory == null) {
+            throw new IllegalArgumentException("The factory is not defined");
         }
 
-        this.random = random;
+        this.rndEng = factory.getFRandEngine();
+
         this.aggregate = aggregate;
 
         this.bases = new ArrayList<>(this.aggregate.getRefParticles().size());
-        this.attached = new ArrayList<>(this.aggregate.getRefParticles().size());
+
+        this.attached = factory.getFAssembly();
         this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
     }
 
-    public static FModelRLA create(FAggregate aggregate, FRandEngine random) {
+    public static FModelRLA create(FAggregate aggregate, ScatFactory factory) {
 
-        return new FModelRLA2DDef(aggregate, random);
+        return new FModelRLA2DDef(aggregate, factory);
     }
 
     @Override
     public void build() {
 
-        if (this.aggregate.getRefParticles().size() < 5) {
+        if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
@@ -64,7 +70,7 @@ public class FModelRLA2DDef implements FModelRLA {
     }
 
     private void init() {
-        this.random.getFRand().shuffle(this.aggregate.getRefParticles().asList());
+        this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
 
         this.bases.clear();
 
@@ -79,17 +85,17 @@ public class FModelRLA2DDef implements FModelRLA {
         element.setCenter(0, 0, 0);
 
         this.bases.add(element);
-        this.attached.add(element);
+        this.attached.register(element);
     }
 
     private boolean buildStep() {
         Shape particle = detached.poll();
 
         while (this.bases.size() != 0) {
-            int baseIndex = random.getFRand().nextInteger(0, this.bases.size());
+            int baseIndex = rndEng.getFRand().nextInteger(0, this.bases.size());
             Shape base = this.bases.get(baseIndex);
 
-            boolean isPositioned = random.attachLinear2D(particle, base, this.attached, ITERATIONS);
+            boolean isPositioned = rndEng.attachLinear2D(particle, base, this.attached, ITERATIONS);
 
             if (!isPositioned) {
                 this.bases.remove(base);
@@ -102,7 +108,7 @@ public class FModelRLA2DDef implements FModelRLA {
             }
 
             this.bases.add(particle);
-            this.attached.add(particle);
+            this.attached.register(particle);
 
             return true;
         }

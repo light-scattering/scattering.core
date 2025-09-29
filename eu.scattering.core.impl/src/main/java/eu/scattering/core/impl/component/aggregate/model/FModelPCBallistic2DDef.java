@@ -3,13 +3,12 @@ package eu.scattering.core.impl.component.aggregate.model;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
+import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.function.BiConsumer;
 
@@ -19,12 +18,13 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
 
     private BiConsumer<Shape, Integer> monitor;
 
-    private final FRandEngine random;
+    private final FRandEngine rndEng;
+
     private final FAggregate aggregate;
 
     private final FSphere range;
 
-    private final List<Shape> attached;
+    private final FAssembly<Shape> attached;
     private final Queue<Shape> detached;
 
     private FModelPCBallistic2DDef(FAggregate aggregate, ScatFactory factory) {
@@ -37,12 +37,13 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
             throw new IllegalArgumentException("The factory is not defined");
         }
 
-        this.random = factory.getFRandEngine();
+        this.rndEng = factory.getFRandEngine();
+
         this.aggregate = aggregate;
 
         this.range = factory.getFSphere();
 
-        this.attached = new ArrayList<>(this.aggregate.getRefParticles().size());
+        this.attached = factory.getFAssembly();
         this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
     }
 
@@ -54,7 +55,7 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
     @Override
     public void build() {
 
-        if (this.aggregate.getRefParticles().size() < 5) {
+        if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
@@ -68,7 +69,7 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
     }
 
     private void init() {
-        this.random.getFRand().shuffle(this.aggregate.getRefParticles().asList());
+        this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
 
         this.detached.clear();
         this.detached.addAll(this.aggregate.getRefParticles().asList());
@@ -80,20 +81,20 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
 
         element.setCenter(0, 0, 0);
 
-        this.attached.add(element);
+        this.attached.register(element);
     }
 
     private boolean buildStep() {
         Shape particle = detached.poll();
 
         while (true) {
-            int targetIndex = random.getFRand().nextInteger(0, this.attached.size());
-            Shape target = this.attached.get(targetIndex);
+            int targetIndex = rndEng.getFRand().nextInteger(0, this.attached.size());
+            Shape target = this.attached.asList().get(targetIndex);
 
             this.range.setCenter(target.getRefCenter());
             this.range.setRadius(this.aggregate.getRadius(target.getRefCenter()));
 
-            boolean isPositioned = random.project2D(particle, this.range, this.attached, ITERATIONS);
+            boolean isPositioned = rndEng.project2D(particle, this.range, this.attached, ITERATIONS);
 
             if (!isPositioned) {
                 continue;
@@ -103,7 +104,7 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
                 this.monitor.accept(particle, this.attached.size());
             }
 
-            this.attached.add(particle);
+            this.attached.register(particle);
 
             return true;
         }

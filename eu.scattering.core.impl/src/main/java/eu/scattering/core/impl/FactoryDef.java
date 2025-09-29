@@ -412,13 +412,13 @@ public final class FactoryDef extends ScatFactoryConcrete {
     @Override
     public FModelRLA createFModelRLA3D(FAggregate aggregate) {
 
-        return FModelRLA3DDef.create(aggregate, this.fRandEngine);
+        return FModelRLA3DDef.create(aggregate, this);
     }
 
     @Override
     public FModelRLA createFModelRLA2D(FAggregate aggregate) {
 
-        return FModelRLA2DDef.create(aggregate, this.fRandEngine);
+        return FModelRLA2DDef.create(aggregate, this);
     }
 
     @Override
