@@ -27,4 +27,10 @@ public interface FAggregateFactory extends FModelFactory {
 
     @Modificator
     FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FArray<FMetaData> refElements);
+
+    //--------------------------------------------------
+
+    FAggregate getFAggregateMono(int count, double radius);
+
+    FAggregate getFAggregateMono(int count, double radius, int capacity);
 }

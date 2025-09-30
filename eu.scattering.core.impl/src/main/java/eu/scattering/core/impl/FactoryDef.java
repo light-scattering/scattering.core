@@ -43,6 +43,7 @@ import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.util.container.FMetaData;
+import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
@@ -410,6 +411,22 @@ public final class FactoryDef extends ScatFactoryConcrete {
     }
 
     @Override
+    public FAggregate getFAggregateMono(int count, double radius) {
+        Producer<FSphere> fProducer = getFSphereProducer(radius);
+        FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(count));
+
+        return FAggregateDef.create(this, fAssembly, getFArray());
+    }
+
+    @Override
+    public FAggregate getFAggregateMono(int count, double radius, int capacity) {
+        Producer<FSphere> fProducer = getFSphereProducer(radius);
+        FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(count));
+
+        return FAggregateDef.create(this, fAssembly, getFArray(capacity));
+    }
+
+    @Override
     public FModelRLA createFModelRLA3D(FAggregate aggregate) {
 
         return FModelRLA3DDef.create(aggregate, this);
@@ -431,6 +448,18 @@ public final class FactoryDef extends ScatFactoryConcrete {
     public FModelPCBallistic createFModelBallistic2D(FAggregate aggregate) {
 
         return FModelPCBallistic2DDef.create(aggregate, this);
+    }
+
+    @Override
+    public FModelPCTunable createFModelFilippov3D(FAggregate aggregate) {
+
+        return FModelPCFilippov3DDef.create(aggregate, this);
+    }
+
+    @Override
+    public FModelPCTunable createFModelFilippov2D(FAggregate aggregate) {
+
+        return FModelPCFilippov2DDef.create(aggregate, this);
     }
 
     @Override

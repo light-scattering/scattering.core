@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.util.lambda.TriFunction;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,6 +19,7 @@ public class FModelRLA2DDef implements FModelRLA {
     private static final int MIN_SIZE = 5;
 
     private BiConsumer<Shape, Integer> monitor;
+    private TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator;
 
     private final FRandEngine rndEng;
 
@@ -79,13 +81,17 @@ public class FModelRLA2DDef implements FModelRLA {
 
         this.detached.forEach(e -> e.setCenterZ(0));
 
-        Shape element = detached.poll();
-        assert element != null;
+        Shape particle = detached.poll();
+        assert particle != null;
 
-        element.setCenter(0, 0, 0);
+        particle.setCenter(0, 0, 0);
 
-        this.bases.add(element);
-        this.attached.register(element);
+        if (this.monitor != null) {
+            this.monitor.accept(particle, this.attached.size());
+        }
+
+        this.bases.add(particle);
+        this.attached.register(particle);
     }
 
     private boolean buildStep() {
@@ -101,6 +107,13 @@ public class FModelRLA2DDef implements FModelRLA {
                 this.bases.remove(base);
 
                 continue;
+            }
+
+            if (this.validator != null) {
+                if (!this.validator.accept(this.attached, this.rndEng, particle)) {
+
+                    continue;
+                }
             }
 
             if (this.monitor != null) {
@@ -119,8 +132,14 @@ public class FModelRLA2DDef implements FModelRLA {
     //--------------------------------------------------
 
     @Override
-    public void addMonitor(BiConsumer<Shape, Integer> monitor) {
+    public void setMonitor(BiConsumer<Shape, Integer> monitor) {
 
         this.monitor = monitor;
+    }
+
+    @Override
+    public void setValidator(TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation) {
+
+        this.validator = validation;
     }
 }

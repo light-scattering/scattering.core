@@ -29,6 +29,7 @@ public interface ShapeEngineRand extends FSphereEngineRand {
     boolean attachSpherical2D(Shape in, Shape target, double x, double y, double z);
 
     boolean attachSpherical2D(Shape in, Shape target, double x, double y, double z, Iterable<? extends Shape> field, int corrections);
+    boolean attachSpherical2D(Shape in, Shape target, FPoint center, Iterable<? extends Shape> field, int corrections);
 
     boolean project2D(Shape in, Shape range, Iterable<? extends Shape> field, int corrections);
 }

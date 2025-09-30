@@ -20,9 +20,8 @@ public class FModelDLA3DDef implements FModelDLA {
     private static final int MIN_SIZE = 5;
 
     private BiConsumer<Shape, Integer> monitor;
-
     private TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement;
-    private TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation;
+    private TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator;
 
     private final FRandGenerator rndGen;
     private final FRandEngine rndEng;
@@ -102,19 +101,27 @@ public class FModelDLA3DDef implements FModelDLA {
         this.detached.clear();
         this.detached.addAll(this.aggregate.getRefParticles().asList());
 
-        Shape elementA = this.detached.poll();
-        assert elementA != null;
+        Shape particleA = this.detached.poll();
+        assert particleA != null;
 
-        elementA.setCenter(0, 0, 0);
+        particleA.setCenter(0, 0, 0);
 
-        this.attached.register(elementA);
+        if (this.monitor != null) {
+            this.monitor.accept(particleA, this.attached.size());
+        }
 
-        Shape elementB = this.detached.poll();
-        assert elementB != null;
+        this.attached.register(particleA);
 
-        elementB.setCenter(this.rndGen.nextDoubleOnSphere(elementA.getRadius() + elementB.getRadius()));
+        Shape particleB = this.detached.poll();
+        assert particleB != null;
 
-        this.attached.register(elementB);
+        particleB.setCenter(this.rndGen.nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+
+        if (this.monitor != null) {
+            this.monitor.accept(particleB, this.attached.size());
+        }
+
+        this.attached.register(particleB);
     }
 
     private boolean buildStep() {
@@ -126,7 +133,7 @@ public class FModelDLA3DDef implements FModelDLA {
 
         main:
         while (true) {
-            particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn));
+            particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn)).translate(this.cMass);
 
             while (true) {
                 this.dirBase.applyStateFrom(particle.getRefCenter());
@@ -134,13 +141,13 @@ public class FModelDLA3DDef implements FModelDLA {
 
                 this.movement.accept(this.attached, this.rndEng, this.dirHead);
 
-                if (this.dirHead.getDistance(0, 0, 0) > this.rExile + particle.getRadius()) {
+                if (this.dirHead.getDistance(this.cMass) > this.rExile + particle.getRadius()) {
                     continue main;
                 }
 
                 particle.setCenter(this.dirHead);
 
-                if (this.dirHead.getDistance(0, 0, 0) > this.rAggregate + particle.getRadius()) {
+                if (this.dirHead.getDistance(this.cMass) > this.rAggregate + particle.getRadius()) {
                     continue;
                 }
 
@@ -154,8 +161,8 @@ public class FModelDLA3DDef implements FModelDLA {
                     continue;
                 }
 
-                if (this.validation != null) {
-                    if (!this.validation.accept(this.attached, this.rndEng, particle)) {
+                if (this.validator != null) {
+                    if (!this.validator.accept(this.attached, this.rndEng, particle)) {
                         particle.setCenter(this.dirBase);
 
                         continue;
@@ -189,8 +196,6 @@ public class FModelDLA3DDef implements FModelDLA {
         }
 
         this.cMass.divFactor(this.attached.size());
-
-        this.attached.forEach(e -> e.translate(-cMass.getX(), -cMass.getY(), -cMass.getZ()));
     }
 
     private void resetDimension() {
@@ -202,9 +207,27 @@ public class FModelDLA3DDef implements FModelDLA {
     //--------------------------------------------------
 
     @Override
-    public void addMonitor(BiConsumer<Shape, Integer> monitor) {
+    public void setMonitor(BiConsumer<Shape, Integer> monitor) {
 
         this.monitor = monitor;
+    }
+
+    @Override
+    public void setMovement(TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement) {
+
+        this.movement = movement;
+    }
+
+    @Override
+    public void setValidator(TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation) {
+
+        this.validator = validation;
+    }
+
+    @Override
+    public double getStep() {
+
+        return this.step;
     }
 
     @Override
@@ -215,6 +238,12 @@ public class FModelDLA3DDef implements FModelDLA {
         }
 
         this.step = step;
+    }
+
+    @Override
+    public double getSpawnFactor() {
+
+        return this.fSpawn;
     }
 
     @Override
@@ -232,6 +261,12 @@ public class FModelDLA3DDef implements FModelDLA {
     }
 
     @Override
+    public double getExileFactor() {
+
+        return this.fExile;
+    }
+
+    @Override
     public void setExileFactor(double factor) {
 
         if (factor <= this.fSpawn) {
@@ -242,14 +277,8 @@ public class FModelDLA3DDef implements FModelDLA {
     }
 
     @Override
-    public void setMovement(TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement) {
+    public TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> getMovement() {
 
-        this.movement = movement;
-    }
-
-    @Override
-    public void setValidation(TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation) {
-
-        this.validation = validation;
+        return this.movement;
     }
 }

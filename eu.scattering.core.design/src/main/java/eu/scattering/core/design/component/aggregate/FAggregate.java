@@ -47,7 +47,9 @@ public interface FAggregate extends Component {
     void positionCenter(FPoint center);
     void positionCenter(FPos3D center);
 
+    double getRadius(double x, double y, double z);
     double getRadius(FPoint center);
+    double getRadius(FPos3D center);
     double getRadiusFromOrigin();
 
     double getRadiusOfGyration();

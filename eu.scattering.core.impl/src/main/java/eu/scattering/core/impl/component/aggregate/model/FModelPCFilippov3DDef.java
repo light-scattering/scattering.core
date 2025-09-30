@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.util.lambda.TriFunction;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     private static final int MIN_SIZE = 5;
 
     private BiConsumer<Shape, Integer> monitor;
+    private TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator;
 
     private final FRandEngine rndEng;
 
@@ -31,13 +33,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     private final FAssembly<Shape> attached;
     private final Queue<Shape> detached;
 
-    private final FPoint massCenter;
+    private final FPoint cMass;
 
     private boolean correctionEarlyStage;
     private double df, kf, rp;
 
 
-    private FModelPCFilippov3DDef(FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    private FModelPCFilippov3DDef(FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -46,17 +48,6 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
-
-        if (df <= 0) {
-            throw new IllegalArgumentException("The fractal dimension must be larger than zero");
-        }
-
-        if (kf <= 0) {
-            throw new IllegalArgumentException("The fractal prefactor must be larger than zero");
-        }
-
-        this.df = df;
-        this.kf = kf;
 
         this.rndEng = factory.getFRandEngine();
 
@@ -67,16 +58,36 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         this.attached = factory.getFAssembly();
         this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
 
-        this.massCenter = factory.getFPoint();
+        this.cMass = factory.getFPoint();
+
+        this.df = -1;
+        this.kf = -1;
+    }
+
+    public static FModelPCTunable create(FAggregate aggregate, ScatFactory factory) {
+
+        return new FModelPCFilippov3DDef(aggregate, factory);
     }
 
     public static FModelPCTunable create(FAggregate aggregate, ScatFactory factory, double df, double kf) {
+        FModelPCTunable model = new FModelPCFilippov3DDef(aggregate, factory);
 
-        return new FModelPCFilippov3DDef(aggregate, factory, df, kf);
+        model.setDf(df);
+        model.setKf(kf);
+
+        return model;
     }
 
     @Override
     public void build() {
+
+        if (this.df < 0) {
+            throw new IllegalStateException("The fractal dimension is not defined");
+        }
+
+        if (this.kf < 0) {
+            throw new IllegalStateException("The fractal prefactor is not defined");
+        }
 
         if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
@@ -101,19 +112,27 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         this.detached.clear();
         this.detached.addAll(this.aggregate.getRefParticles().asList());
 
-        Shape elementA = this.detached.poll();
-        assert elementA != null;
+        Shape particleA = this.detached.poll();
+        assert particleA != null;
 
-        elementA.setCenter(0, 0, 0);
+        particleA.setCenter(0, 0, 0);
 
-        this.attached.register(elementA);
+        if (this.monitor != null) {
+            this.monitor.accept(particleA, this.attached.size());
+        }
 
-        Shape elementB = this.detached.poll();
-        assert elementB != null;
+        this.attached.register(particleA);
 
-        elementB.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(elementA.getRadius() + elementB.getRadius()));
+        Shape particleB = this.detached.poll();
+        assert particleB != null;
 
-        this.attached.register(elementB);
+        particleB.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+
+        if (this.monitor != null) {
+            this.monitor.accept(particleB, this.attached.size());
+        }
+
+        this.attached.register(particleB);
     }
 
     private boolean buildStep() {
@@ -124,15 +143,15 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
         double radius = getExpectedParticleDistance();
 
-        particle.setCenter(radius, 0, 0);
-        particle.getCollisionListSpherical(this.bases, this.attached, this.massCenter);
+        particle.setCenter(radius, 0, 0).translate(this.cMass);
+        particle.getCollisionListSpherical(this.bases, this.attached, this.cMass);
 
         if (this.bases.size() == 0) {
             throw new IllegalStateException("The particle cannot be attached to the aggregate");
         }
 
         for (int i = 0 ; i < ITERATIONS ; i++) {
-            particle.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(radius));
+            particle.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(radius)).translate(this.cMass);
 
             double distMin = Double.MAX_VALUE;
             Shape target = null;
@@ -146,7 +165,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 }
             }
 
-            boolean isPositioned = this.rndEng.attachSpherical(particle, target, 0, 0, 0, this.attached, ITERATIONS);
+            boolean isPositioned = this.rndEng.attachSpherical(particle, target, this.cMass, this.attached, ITERATIONS);
 
             if (!isPositioned) {
                 if (this.correctionEarlyStage && this.attached.size() <= MIN_SIZE) {
@@ -154,6 +173,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 }
 
                 continue;
+            }
+
+            if (this.validator != null) {
+                if (!this.validator.accept(this.attached, this.rndEng, particle)) {
+
+                    continue;
+                }
             }
 
             if (this.monitor != null) {
@@ -187,29 +213,45 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     }
 
     private void resetMassCenter() {
-        this.massCenter.set(0, 0, 0);
+        this.cMass.set(0, 0, 0);
 
         for (Shape shape : this.attached) {
-            this.massCenter.add(shape.getRefCenter());
+            this.cMass.add(shape.getRefCenter());
         }
 
-        this.massCenter.divFactor(this.attached.size());
-
-        this.attached.forEach(e -> e.translate(-massCenter.getX(), -massCenter.getY(), -massCenter.getZ()));
+        this.cMass.divFactor(this.attached.size());
     }
 
     //--------------------------------------------------
 
     @Override
-    public void addMonitor(BiConsumer<Shape, Integer> monitor) {
+    public void setMonitor(BiConsumer<Shape, Integer> monitor) {
 
         this.monitor = monitor;
+    }
+
+    @Override
+    public void setValidator(TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation) {
+
+        this.validator = validation;
+    }
+
+    @Override
+    public boolean getEarlyStateCorrection() {
+
+        return this.correctionEarlyStage;
     }
 
     @Override
     public void setEarlyStageCorrection(boolean correction) {
 
         this.correctionEarlyStage = correction;
+    }
+
+    @Override
+    public double getDf() {
+
+        return this.df;
     }
 
     @Override
@@ -223,6 +265,12 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     }
 
     @Override
+    public double getKf() {
+
+        return this.kf;
+    }
+
+    @Override
     public void setKf(double kf) {
 
         if (kf <= 0) {
@@ -231,4 +279,6 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
         this.kf = kf;
     }
+
+
 }

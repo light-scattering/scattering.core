@@ -3,6 +3,7 @@ package eu.scattering.core.test.component.aggregate.model.pc;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
+import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -22,8 +23,8 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("FModel PC ballistic")
-public class FModelBallisticTest {
+@DisplayName("FModel PC Filippov")
+public class FModelFilippovTest {
 
     @Test
     @DisplayName("Aggregate 3D")
@@ -42,10 +43,11 @@ public class FModelBallisticTest {
         TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator = (assembly, random, shape) ->
                 shape.getCenterX() < 2 && shape.getCenterX() > -2;
 
-        FModelPC modelBallistic = factory.createFModelBallistic3D(fAggregate);
-        modelBallistic.setMonitor(monitor);
-        modelBallistic.setValidator(validator);
-        modelBallistic.build();
+        FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.8, 1.4);
+        modelTunable.setEarlyStageCorrection(true);
+        modelTunable.setMonitor(monitor);
+        modelTunable.setValidator(validator);
+        modelTunable.build();
 
         double overlap = fAggregate.getOverlapFactorLinear();
 
@@ -83,17 +85,13 @@ public class FModelBallisticTest {
         TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator = (assembly, random, shape) ->
                 shape.getCenterX() < 2 && shape.getCenterX() > -2;
 
-        FModelPC modelBallistic = factory.createFModelBallistic2D(fAggregate);
-        modelBallistic.setMonitor(monitor);
-        modelBallistic.setValidator(validator);
-        modelBallistic.build();
+        FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.4, 1.4);
+        modelTunable.setEarlyStageCorrection(true);
+        modelTunable.setMonitor(monitor);
+        modelTunable.setValidator(validator);
+        modelTunable.build();
 
         double overlap = fAggregate.getOverlapFactorLinear();
-
-        for (Shape shape : fAggregate.getRefParticles()) {
-            assertEquals(0, shape.getCenterZ(),
-                    "At least one particle has a non-zero Z value");
-        }
 
         for (Shape shape : fAggregate.getRefParticles()) {
             assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2,
@@ -124,14 +122,14 @@ public class FModelBallisticTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA, 0);
 
-        FModelPC modelA = factoryA.createFModelBallistic3D(fAggregateA);
+        FModelPC modelA = factoryA.createFModelFilippov3D(fAggregateA, 1.4, 1.4);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB, 0);
 
-        FModelPC modelB = factoryB.createFModelBallistic3D(fAggregateB);
+        FModelPC modelB = factoryB.createFModelFilippov3D(fAggregateB, 1.4, 1.4);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -153,14 +151,14 @@ public class FModelBallisticTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA, 0);
 
-        FModelPC modelA = factoryA.createFModelBallistic2D(fAggregateA);
+        FModelPC modelA = factoryA.createFModelFilippov2D(fAggregateA, 1.4, 1.4);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB, 0);
 
-        FModelPC modelB = factoryB.createFModelBallistic2D(fAggregateB);
+        FModelPC modelB = factoryB.createFModelFilippov2D(fAggregateB, 1.4, 1.4);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -168,5 +166,97 @@ public class FModelBallisticTest {
         for (int i = 0 ; i < fAssemblyA.size() ; i++) {
             assertTrue(fAssemblyA.asList().get(i).isExact(fAssemblyB.asList().get(i)));
         }
+    }
+
+    @Test
+    @DisplayName("Tunability - Aggregate 3D")
+    void tunability3D() {
+        int quantity = 10;
+
+        Producer<FSphere> fProducerA = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
+        FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA, 0);
+
+        FModelPCTunable modelA = factory.createFModelFilippov3D(fAggregateA);
+        modelA.setEarlyStageCorrection(true);
+        modelA.setDf(2.6);
+        modelA.setKf(1.2);
+        modelA.build();
+
+        Producer<FSphere> fProducerB = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
+        FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB, 0);
+
+        FModelPCTunable modelB = factory.createFModelFilippov3D(fAggregateB);
+        modelB.setEarlyStageCorrection(true);
+        modelB.setDf(1.4);
+        modelB.setKf(1.8);
+        modelB.build();
+
+        double rangeA = fAggregateA.getRadius(fAggregateA.getMassCenter());
+        double rangeB = fAggregateB.getRadius(fAggregateB.getMassCenter());
+
+        assertTrue(rangeA < rangeB);
+    }
+
+    @Test
+    @DisplayName("Tunability - Aggregate 2D")
+    void tunability2D() {
+        int quantity = 10;
+
+        Producer<FSphere> fProducerA = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
+        FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA, 0);
+
+        FModelPCTunable modelA = factory.createFModelFilippov2D(fAggregateA);
+        modelA.setEarlyStageCorrection(true);
+        modelA.setDf(1.8);
+        modelA.setKf(1.2);
+        modelA.build();
+
+        Producer<FSphere> fProducerB = factory.getFSphereProducer(1);
+        FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
+        FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB, 0);
+
+        FModelPCTunable modelB = factory.createFModelFilippov2D(fAggregateB);
+        modelB.setEarlyStageCorrection(true);
+        modelB.setDf(1.2);
+        modelB.setKf(1.8);
+        modelB.build();
+
+        double rangeA = fAggregateA.getRadius(fAggregateA.getMassCenter());
+        double rangeB = fAggregateB.getRadius(fAggregateB.getMassCenter());
+
+        assertTrue(rangeA < rangeB);
+    }
+
+    @Test
+    @DisplayName("Configuration - Aggregate 3D")
+    void configuration3D() {
+        FAggregate fAggregate = factory.getFAggregateMono(10, 1, 0);
+        FModelPCTunable model = factory.createFModelFilippov3D(fAggregate);
+
+        model.setDf(2.2);
+        model.setKf(1.1);
+        model.setEarlyStageCorrection(true);
+
+        assertEquals(2.2, model.getDf());
+        assertEquals(1.1, model.getKf());
+        assertTrue(model.getEarlyStateCorrection());
+    }
+
+    @Test
+    @DisplayName("Configuration - Aggregate 2D")
+    void configuration2D() {
+        FAggregate fAggregate = factory.getFAggregateMono(10, 1, 0);
+        FModelPCTunable model = factory.createFModelFilippov2D(fAggregate);
+
+        model.setDf(2.2);
+        model.setKf(1.1);
+        model.setEarlyStageCorrection(true);
+
+        assertEquals(2.2, model.getDf());
+        assertEquals(1.1, model.getKf());
+        assertTrue(model.getEarlyStateCorrection());
     }
 }

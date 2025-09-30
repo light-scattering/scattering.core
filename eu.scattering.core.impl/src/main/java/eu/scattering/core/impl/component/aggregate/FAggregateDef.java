@@ -380,17 +380,31 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getRadius(FPoint center) {
+    public double getRadius(double x, double y, double z) {
+
         double maxRadius = -1;
 
         for (Shape shape : this.particles) {
-            double radius = shape.getDistCenter(center) + shape.getRadius();
+            double radius = shape.getDistCenter(x, y, z) + shape.getRadius();
 
             if (radius > maxRadius) {
                 maxRadius = radius;
             }
         }
+
         return maxRadius;
+    }
+
+    @Override
+    public double getRadius(FPoint center) {
+
+        return getRadius(center.getX(), center.getY(), center.getZ());
+    }
+
+    @Override
+    public double getRadius(FPos3D center) {
+
+        return getRadius(center.getD0(), center.getD1(), center.getD2());
     }
 
     @Override

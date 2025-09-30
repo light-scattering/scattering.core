@@ -491,6 +491,12 @@ public class FRandEngineDef implements FRandEngine {
     }
 
     @Override
+    public boolean attachSpherical2D(Shape in, Shape target, FPoint center, Iterable<? extends Shape> field, int corrections) {
+
+        return attachSpherical2D(in, target, center.getX(), center.getY(), center.getZ(), field, corrections);
+    }
+
+    @Override
     public boolean attachSpherical(Shape in, Shape target, FPoint center, Iterable<? extends Shape> field, int corrections) {
 
         return attachSpherical(in, target, center.getX(), center.getY(), center.getZ(), field, corrections);

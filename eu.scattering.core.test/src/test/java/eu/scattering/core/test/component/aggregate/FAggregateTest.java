@@ -112,6 +112,34 @@ public class FAggregateTest {
     }
 
     @Test
+    @DisplayName("Construct mono")
+    void constructMono() {
+        FAggregate fAggregate = factory.getFAggregateMono(10, 1);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertEquals(10, fAggregate.getRefParticles().size(),
+                        "The number of particles is incorrect"),
+                () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
+                        epsilon, "The particle radius is erroneous")
+        );
+    }
+
+    @Test
+    @DisplayName("Construct mono with capacity")
+    void constructMonoWithCapacity() {
+        FAggregate fAggregate = factory.getFAggregateMono(10, 1, 100);
+
+        Assertions.assertAll("Validate FAggregate",
+                () -> assertEquals(10, fAggregate.getRefParticles().size(),
+                        "The number of particles is incorrect"),
+                () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
+                        epsilon, "The particle radius is erroneous"),
+                () -> assertEquals(100, fAggregate.getRefDipoles().capacity(),
+                        "The capacity is erroneous")
+        );
+    }
+
+    @Test
     @DisplayName("Construct with reference particles and reference elements")
     void constructWithReferenceParticlesAndReferenceElements() {
         FAssembly<Shape> fAssembly = factory.getFAssembly();
@@ -1492,8 +1520,43 @@ public class FAggregateTest {
     }
 
     @Test
-    @DisplayName("Get radius from")
-    void getRadiusFrom() {
+    @DisplayName("Get radius with primitives")
+    void getRadiusWithPrimitives() {
+        Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
+        Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
+        Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+        FPoint massCenter = factory.getFPoint();
+
+        fAggregate.getMassCenter(massCenter);
+
+        assertTrue(massCenter.isSimilar(3, 3, 3));
+
+        double radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
+        double radiusB = fAggregate.getRadiusFromOrigin();
+
+        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+        assertNotEquals(radiusA, radiusB);
+
+        fAggregate.positionCenter(massCenter);
+        fAggregate.getMassCenter(massCenter);
+
+        assertTrue(massCenter.isSimilar(0, 0, 0));
+
+        radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
+        radiusB = fAggregate.getRadiusFromOrigin();
+
+        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+        assertEquals(radiusA, radiusB, 1E-6);
+    }
+
+    @Test
+    @DisplayName("Get radius with FPoint")
+    void getRadiusWithFPoint() {
         Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
         Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
         Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
@@ -1520,6 +1583,41 @@ public class FAggregateTest {
         assertTrue(massCenter.isSimilar(0, 0, 0));
 
         radiusA = fAggregate.getRadius(massCenter);
+        radiusB = fAggregate.getRadiusFromOrigin();
+
+        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+        assertEquals(radiusA, radiusB, 1E-6);
+    }
+
+    @Test
+    @DisplayName("Get radius with FPos3D")
+    void getRadiusWithFPos3D() {
+        Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
+        Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
+        Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+        FPoint massCenter = factory.getFPoint();
+
+        fAggregate.getMassCenter(massCenter);
+
+        assertTrue(massCenter.isSimilar(3, 3, 3));
+
+        double radiusA = fAggregate.getRadius(massCenter.toFPos3D());
+        double radiusB = fAggregate.getRadiusFromOrigin();
+
+        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+        assertNotEquals(radiusA, radiusB);
+
+        fAggregate.positionCenter(massCenter);
+        fAggregate.getMassCenter(massCenter);
+
+        assertTrue(massCenter.isSimilar(0, 0, 0));
+
+        radiusA = fAggregate.getRadius(massCenter.toFPos3D());
         radiusB = fAggregate.getRadiusFromOrigin();
 
         assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
