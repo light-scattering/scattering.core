@@ -25,29 +25,7 @@
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregateFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregateFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/FModelPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/FModelPC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/dla/FModelDLA.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/dla/FModelDLA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/tunable/FModelPCTunable.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/tunable/FModelPCTunable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/tunable/FModelPCTunableFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/model/pc/tunable/FModelPCTunableFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeEngineRand.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/geometry/shape/ShapeEngineRand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelDLA2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelDLA2DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelDLA3DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelDLA3DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCBallistic2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCBallistic2DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCBallistic3DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCBallistic3DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCFilippov2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCFilippov2DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCFilippov3DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelPCFilippov3DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA2DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA3DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/model/FModelRLA3DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandEngineDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/engine/randomize/FRandEngineDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelBallisticTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelBallisticTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelDLATest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelDLATest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelRLATest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelRLATest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelTunableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelFilippovTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/TransferFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/TransferFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,8 +162,8 @@
       <recent name="eu.scattering.core.transfer.container.buffer.FCache" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
-    <configuration name="FAggregateTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.FPlot2DTest">
+    <configuration name="FPlot2DTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -196,9 +174,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.test:test" />
+            <option value=":eu.scattering.core.transfer:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest&quot;" />
+            <option value="&quot;eu.scattering.core.transfer.container.statistics.FPlot2DTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -208,7 +186,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FAggregateTest.constructMonoWithCapacity" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FStat1DAdvancedTest.filterX" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -219,9 +197,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.test:test" />
+            <option value=":eu.scattering.core.transfer:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest.constructMonoWithCapacity&quot;" />
+            <option value="&quot;eu.scattering.core.transfer.container.statistics.FPlot2DTest$FStat1DAdvancedTest.filterX&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -231,7 +209,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FModelDLATest.configuration3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FStat1DAdvancedTest.filterY" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -242,9 +220,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.test:test" />
+            <option value=":eu.scattering.core.transfer:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.model.pc.FModelDLATest.configuration3D&quot;" />
+            <option value="&quot;eu.scattering.core.transfer.container.statistics.FPlot2DTest$FStat1DAdvancedTest.filterY&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -254,7 +232,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FModelFilippovTest.tunability3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FStat1DAdvancedTest.getIndexRandom" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -265,9 +243,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.test:test" />
+            <option value=":eu.scattering.core.transfer:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.model.pc.FModelFilippovTest.tunability3D&quot;" />
+            <option value="&quot;eu.scattering.core.transfer.container.statistics.FPlot2DTest$FStat1DAdvancedTest.getIndexRandom&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -277,7 +255,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FStat1DAdvancedTest.getIndexSorted" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -288,7 +266,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.test:test" />
+            <option value=":eu.scattering.core.transfer:test" />
+            <option value="--tests" />
+            <option value="&quot;eu.scattering.core.transfer.container.statistics.FPlot2DTest$FStat1DAdvancedTest.getIndexSorted&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -300,11 +280,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FModelFilippovTest.tunability3D" />
-        <item itemvalue="Gradle.FAggregateTest" />
-        <item itemvalue="Gradle.FAggregateTest.constructMonoWithCapacity" />
-        <item itemvalue="Gradle.FModelDLATest.configuration3D" />
+        <item itemvalue="Gradle.FPlot2DTest" />
+        <item itemvalue="Gradle.FStat1DAdvancedTest.filterY" />
+        <item itemvalue="Gradle.FStat1DAdvancedTest.filterX" />
+        <item itemvalue="Gradle.FStat1DAdvancedTest.getIndexRandom" />
+        <item itemvalue="Gradle.FStat1DAdvancedTest.getIndexSorted" />
       </list>
     </recent_temporary>
   </component>
@@ -547,6 +527,11 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
           <line>865</line>
           <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat2DExporterTest.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="64" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
