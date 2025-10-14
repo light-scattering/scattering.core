@@ -1,8 +1,10 @@
 package eu.scattering.core.transfer.statistics.FPlot2D;
 
+import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
 import eu.scattering.core.transfer.statistics.Statistics;
 
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public interface FPlot2D extends Statistics<FPlot2D> {
@@ -51,34 +53,19 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     void sortX(boolean ascending);
     void sortY(boolean ascending);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    Approx getApproxMethod();
-    void setApproxMethod(Approx approx);
-
-    double getApproxHermiteBias();
-    void setApproxHermiteBias(double bias);
-
-    double getApproxHermiteTension();
-    void setApproxHermiteTension(double tension);
+    FPos2D simpleLinearRegression();
 
     // -------------------------------------------------------------------------------------------------
 
-    enum Approx { HERMITE, CATMULL_ROM, LINEAR, COSINE, CUBIC }
-
-    // -------------------------------------------------------------------------------------------------
+    void forEach(BiConsumer<Double, Double> consumer);
 
     double[][] toArray();
+
+    FPlot2DRecord getRecord(int index);
+    FPlot2DInterpolator getInterpolator();
+
+    // -------------------------------------------------------------------------------------------------
+
+    String getName();
+    void setName(String name);
 }

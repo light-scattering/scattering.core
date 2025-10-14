@@ -1253,4 +1253,20 @@ public class FStat1DTest {
             assertEquals(0, fPlot.getY(4));
         }
     }
+
+    @Nested
+    @Tag("Meta")
+    @DisplayName("Meta")
+    class FStat1DMetaTest {
+
+        @Test
+        @DisplayName("Set name")
+        void setName() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.setName("test");
+
+            assertEquals("test", fStat.getName());
+        }
+    }
 }

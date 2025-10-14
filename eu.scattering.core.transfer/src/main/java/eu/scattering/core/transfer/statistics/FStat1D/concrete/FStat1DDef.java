@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,8 @@ public class FStat1DDef implements FStat1D {
     private static final String JSON_DATA = "data";
 
     private List<Double> data = new ArrayList<>();
+
+    private String name = "";
 
     private FStat1DDef() {}
 
@@ -561,6 +564,11 @@ public class FStat1DDef implements FStat1D {
 
     @Override
     public FPlot2D toFPlot2DLinear() {
+
+        if (size() == 0) {
+            throw new IllegalStateException("The number of elements must be greater than zero");
+        }
+
         FPlot2D fPlot = factory.getFPlot2D();
 
         for (int i = 0 ; i < size() ; i++) {
@@ -591,22 +599,22 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FPlot2D toFPlot2DHistogram(double min, double max, int groups) {
+    public FPlot2D toFPlot2DHistogram(double min, double max, int divisions) {
 
-        if (groups < 1) {
-            throw new IllegalArgumentException("The number of groups must be greater then zero");
+        if (divisions < 2) {
+            throw new IllegalArgumentException("The number of groups must be greater then one");
         }
 
         if (min >= max) {
-            throw new IllegalArgumentException("The min value must be smaller than the max value");
+            throw new IllegalArgumentException("The minimum value must be smaller than the maximum value");
         }
 
         FPlot2D fPlot = factory.getFPlot2D();
 
         double range = max - min;
-        double step = range / groups;
+        double step = range / divisions;
 
-        for (int i = 0 ; i < groups ; i++) {
+        for (int i = 0; i < divisions; i++) {
             fPlot.add(min + (i * step));
         }
 
@@ -617,7 +625,7 @@ public class FStat1DDef implements FStat1D {
                 continue;
             }
 
-            for (int i = 0 ; i < groups ; i++) {
+            for (int i = 0; i < divisions; i++) {
                 if (value < fPlot.getX(i) + step) {
                     fPlot.add((y1, y2) -> y1 + 1, fPlot.getX(i));
 
@@ -761,6 +769,18 @@ public class FStat1DDef implements FStat1D {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public String getName() {
+
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+
+        this.name = name;
+    }
 
     @Override
     public List<Double> getData() {

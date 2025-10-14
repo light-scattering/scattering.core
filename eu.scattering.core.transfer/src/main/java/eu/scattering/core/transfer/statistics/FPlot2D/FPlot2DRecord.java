@@ -10,5 +10,7 @@ public interface FPlot2DRecord {
     double getY();
     void setY(double y);
 
+    // -------------------------------------------------------------------------------------------------
+
     JSONObject toJSON();
 }

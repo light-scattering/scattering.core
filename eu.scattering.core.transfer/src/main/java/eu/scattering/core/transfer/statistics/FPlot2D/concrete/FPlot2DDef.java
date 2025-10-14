@@ -1,68 +1,73 @@
 package eu.scattering.core.transfer.statistics.FPlot2D.concrete;
 
+import eu.scattering.core.transfer.TransferFactory;
+import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
+import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DInterpolator;
+import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DRecord;
 import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
-import eu.scattering.core.transfer.statistics.StatisticsFactory;
-import eu.scattering.core.transfer.statistics.StatisticsFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FPlot2DDef implements FPlot2D {
-    private static final StatisticsFactory factory = StatisticsFactoryConcrete.create();
-    private static final String JSON_MAIN = "chart2D";
-    private static final String JSON_DATA = "data";
-    private static final String JSON_APX = "apx_method";
-    private static final String JSON_H_BIAS = "h_bias";
-    private static final String JSON_H_TENSION = "h_tension";
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
+    private static final String JSON_MAIN = "plot2D";
+    private static final String JSON_DATA = "records";
+    private static final String JSON_INT = "interpolator";
 
-    private List<Record> data = new ArrayList<>();
-    private Approx apx = Approx.HERMITE;
+    private List<FPlot2DRecord> data;
+    private FPlot2DInterpolator interpolator;
 
-    private double hTension = 0;
-    private double hBias = 0;
+    private String name = "";
 
     private FPlot2DDef() {}
 
     public static FPlot2D create() {
+        FPlot2DDef fPlot = new FPlot2DDef();
 
-        return new FPlot2DDef();
+        fPlot.data = new ArrayList<>();
+        fPlot.interpolator = FPlot2DInterpolatorDef.create();
+
+        return fPlot;
     }
 
     public static FPlot2D create(JSONObject json) {
-        FPlot2DDef chart = new FPlot2DDef();
+        FPlot2DDef fPlot = new FPlot2DDef();
+
+        fPlot.data = new ArrayList<>();
 
         JSONArray data = json.getJSONArray(JSON_DATA);
         for (int i = 0 ; i < data.length() ; i++) {
-            chart.add(Record.create(data.getJSONObject(i)));
+            fPlot.add(FPlot2DRecordDef.create(data.getJSONObject(i)));
         }
 
-        chart.setApproxHermiteTension(json.getDouble(JSON_H_TENSION));
-        chart.setApproxHermiteBias(json.getDouble(JSON_H_BIAS));
-        chart.setApproxMethod(json.getEnum(Approx.class, JSON_APX));
+        fPlot.interpolator = FPlot2DInterpolatorDef.create(json.getJSONObject(JSON_INT));
 
-        return chart;
+        return fPlot;
     }
 
     @Override
     public FPlot2D copy() {
-        FPlot2D results = factory.getFPlot2D();
+        FPlot2D fPlot = factory.getFPlot2D();
 
-        results.setApproxMethod(this.getApproxMethod());
-        results.setApproxHermiteBias(this.getApproxHermiteBias());
-        results.setApproxHermiteTension(this.getApproxHermiteTension());
+        fPlot.getInterpolator().setMethod(getInterpolator().getMethod());
+        fPlot.getInterpolator().setHermiteBias(getInterpolator().getHermiteBias());
+        fPlot.getInterpolator().setHermiteTension(getInterpolator().getHermiteTension());
 
-        for (Record record : getData()) {
-            results.add(record.getX(), record.getY());
+        for (FPlot2DRecord record : getData()) {
+            fPlot.add(record.getX(), record.getY());
         }
 
-        return results;
+        return fPlot;
     }
 
     @Override
@@ -84,7 +89,7 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalStateException("The x value already exists");
         }
 
-        getData().add(Record.create(x, 0));
+        getData().add(FPlot2DRecordDef.create(x, 0));
     }
 
     @Override
@@ -100,7 +105,7 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalStateException("The x value already exists");
         }
 
-        getData().add(Record.create(x, y));
+        getData().add(FPlot2DRecordDef.create(x, y));
     }
 
     @Override
@@ -108,9 +113,9 @@ public class FPlot2DDef implements FPlot2D {
         int position = position(x);
 
         if (position < 0) {
-            getData().add(Record.create(x, y));
+            getData().add(FPlot2DRecordDef.create(x, y));
         } else {
-            Record record = getData().get(position);
+            FPlot2DRecord record = getData().get(position);
 
             record.setY(collision.apply(record.getY(), y));
         }
@@ -145,7 +150,7 @@ public class FPlot2DDef implements FPlot2D {
     public FStat1D getStatX() {
         FStat1D fStat = factory.getFStat1D();
 
-        for (Record record : getData()) {
+        for (FPlot2DRecord record : getData()) {
             fStat.add(record.getX());
         }
 
@@ -163,7 +168,7 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalArgumentException("The number of elements is erroneous");
         }
 
-        List<Record> results = new ArrayList<>();
+        List<FPlot2DRecord> results = new ArrayList<>();
 
         for (int i = 0 ; i < statX.size() ; i++) {
 
@@ -171,7 +176,7 @@ public class FPlot2DDef implements FPlot2D {
                 continue;
             }
 
-            results.add(Record.create(statX.get(i), getY(i)));
+            results.add(FPlot2DRecordDef.create(statX.get(i), getY(i)));
         }
 
         setData(results);
@@ -181,7 +186,7 @@ public class FPlot2DDef implements FPlot2D {
     public FStat1D getStatY() {
         FStat1D fStat = factory.getFStat1D();
 
-        for (Record record : getData()) {
+        for (FPlot2DRecord record : getData()) {
             fStat.add(record.getY());
         }
 
@@ -195,7 +200,7 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalArgumentException("The number of elements is erroneous");
         }
 
-        List<Record> results = new ArrayList<>();
+        List<FPlot2DRecord> results = new ArrayList<>();
 
         for (int i = 0 ; i < statY.size() ; i++) {
 
@@ -203,7 +208,7 @@ public class FPlot2DDef implements FPlot2D {
                 continue;
             }
 
-            results.add(Record.create(getX(i), statY.get(i)));
+            results.add(FPlot2DRecordDef.create(getX(i), statY.get(i)));
         }
 
         setData(results);
@@ -265,7 +270,7 @@ public class FPlot2DDef implements FPlot2D {
     public double minX() {
         double valueMin = Double.POSITIVE_INFINITY;
 
-        for (Record record : getData()) {
+        for (FPlot2DRecord record : getData()) {
             if (record.getX() < valueMin) {
                 valueMin = record.getX();
             }
@@ -278,7 +283,7 @@ public class FPlot2DDef implements FPlot2D {
     public double minY() {
         double valueMin = Double.POSITIVE_INFINITY;
 
-        for (Record record : getData()) {
+        for (FPlot2DRecord record : getData()) {
             if (record.getY() < valueMin) {
                 valueMin = record.getY();
             }
@@ -291,7 +296,7 @@ public class FPlot2DDef implements FPlot2D {
     public double maxX() {
         double valueMax = Double.NEGATIVE_INFINITY;
 
-        for (Record record : getData()) {
+        for (FPlot2DRecord record : getData()) {
             if (record.getX() > valueMax) {
                 valueMax = record.getX();
             }
@@ -304,7 +309,7 @@ public class FPlot2DDef implements FPlot2D {
     public double maxY() {
         double valueMax = Double.NEGATIVE_INFINITY;
 
-        for (Record record : getData()) {
+        for (FPlot2DRecord record : getData()) {
             if (record.getY() > valueMax) {
                 valueMax = record.getY();
             }
@@ -316,13 +321,7 @@ public class FPlot2DDef implements FPlot2D {
     @Override
     public double approximate(double x) {
 
-        return switch (this.apx) {
-            case LINEAR -> apxLinear(x);
-            case COSINE -> apxCosine(x);
-            case CUBIC -> apxCubic(x);
-            case CATMULL_ROM -> apxCatmullRom(x);
-            case HERMITE -> apxHermite(x);
-        };
+        return getInterpolator().apx(this, x);
     }
 
     @Override
@@ -339,7 +338,7 @@ public class FPlot2DDef implements FPlot2D {
     @Override
     public void mutateX(BiFunction<Double, Double, Double> function) {
 
-        for (Record record : this.data) {
+        for (FPlot2DRecord record : this.data) {
             record.setX(function.apply(record.getX(), record.getY()));
         }
     }
@@ -347,7 +346,7 @@ public class FPlot2DDef implements FPlot2D {
     @Override
     public void mutateY(BiFunction<Double, Double, Double> function) {
 
-        for (Record record : this.data) {
+        for (FPlot2DRecord record : this.data) {
             record.setY(function.apply(record.getX(), record.getY()));
         }
     }
@@ -362,16 +361,16 @@ public class FPlot2DDef implements FPlot2D {
         double minX = minX();
         double maxX = maxX();
 
-        List<Record> list = new ArrayList<>();
+        List<FPlot2DRecord> list = new ArrayList<>();
 
         double value = minX;
         while (value < maxX) {
-            list.add(Record.create(value, approximate(value)));
+            list.add(FPlot2DRecordDef.create(value, approximate(value)));
             value += step;
         }
 
         if (overflow) {
-            list.add(Record.create(value, approximate(maxX)));
+            list.add(FPlot2DRecordDef.create(value, approximate(maxX)));
         }
 
         setData(list);
@@ -389,15 +388,15 @@ public class FPlot2DDef implements FPlot2D {
 
         double step = (maxX - minX) / divisions;
 
-        List<Record> list = new ArrayList<>();
+        List<FPlot2DRecord> list = new ArrayList<>();
 
         double value = minX;
         while (value < maxX) {
-            list.add(Record.create(value, approximate(value)));
+            list.add(FPlot2DRecordDef.create(value, approximate(value)));
             value += step;
         }
 
-        list.add(Record.create(value, approximate(value)));
+        list.add(FPlot2DRecordDef.create(value, approximate(value)));
 
         setData(list);
     }
@@ -422,47 +421,42 @@ public class FPlot2DDef implements FPlot2D {
         }
     }
 
-
-
-
-
-
-
-
     @Override
-    public Approx getApproxMethod() {
+    public FPos2D simpleLinearRegression() {
+        FStat1D sx = getStatX();
+        FStat1D sy = getStatY();
 
-        return this.apx;
+        double mx = sx.mean();
+        double my = sy.mean();
+
+        double numerator = 0;
+        double denominator = 0;
+
+        for (int i = 0 ; i < size() ; i++) {
+            numerator += (getX(i) - mx) * (getY(i) - my);
+            denominator += Math.pow(getX(i) - mx, 2);
+        }
+
+        double a = numerator / denominator;
+        double b = my - (a * mx);
+
+        mutateY((x, y) -> (a * x) + b);
+
+        return factory.getFPos2D(a, b);
     }
 
     @Override
-    public void setApproxMethod(Approx approx) {
+    public void forEach(BiConsumer<Double, Double> consumer) {
 
-        this.apx = approx;
+        for (FPlot2DRecord record : getData()) {
+            consumer.accept(record.getX(), record.getY());
+        }
     }
 
     @Override
-    public double getApproxHermiteBias() {
+    public FPlot2DInterpolator getInterpolator() {
 
-        return this.hBias;
-    }
-
-    @Override
-    public void setApproxHermiteBias(double bias) {
-
-        this.hBias = bias;
-    }
-
-    @Override
-    public double getApproxHermiteTension() {
-
-        return this.hTension;
-    }
-
-    @Override
-    public void setApproxHermiteTension(double tension) {
-
-        this.hTension = tension;
+        return this.interpolator;
     }
 
     @Override
@@ -479,7 +473,7 @@ public class FPlot2DDef implements FPlot2D {
 
     // -------------------------------------------------------------------------------------------------
 
-    private void add(Record record) {
+    private void add(FPlot2DRecord record) {
 
         getData().add(record);
     }
@@ -515,213 +509,12 @@ public class FPlot2DDef implements FPlot2D {
         this.data.sort((a, b) -> a.getY() - b.getY() < 0 ? 1 : a.getY() == b.getY() ? 0 : -1);
     }
 
-    private double apxLinear(double x) {
-        int indexL = getIndexFloor(x);
-
-        if (indexL == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        int indexR = getIndexCeil(x);
-
-        if (indexR == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        if (indexL == indexR) {
-            return this.data.get(indexL).getY();
-        }
-
-        Record recordL = this.data.get(indexL);
-        Record recordR = this.data.get(indexR);
-
-        double tmp = (x - recordL.getX()) / (recordR.getX() - recordL.getX());
-
-        return recordL.getY() * (1 - tmp) + (recordR.getY() * tmp);
-    }
-
-    private double apxCosine(double x) {
-        int indexL = getIndexFloor(x);
-
-        if (indexL == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        int indexR = getIndexCeil(x);
-
-        if (indexR == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        if (indexL == indexR) {
-            return this.data.get(indexL).getY();
-        }
-
-        Record record = this.data.get(indexL);
-        Record recordR = this.data.get(indexR);
-
-        double tmp1 = (x - record.getX()) / (recordR.getX() - record.getX());
-        double tmp2 = (1 - Math.cos(tmp1 * Math.PI)) / 2;
-
-        return record.getY() * (1 - tmp2) + (recordR.getY() * tmp2);
-    }
-
-    private double apxCubic(double x) {
-        int indexL1 = getIndexFloor(x);
-
-        if (indexL1 == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        int indexR1 = getIndexCeil(x);
-
-        if (indexR1 == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        if (indexL1 == indexR1) {
-            return this.data.get(indexL1).getY();
-        }
-
-        int indexL2 = indexL1 - 1;
-
-        if (indexL2 < 0) {
-            indexL2 = 0;
-        }
-
-        int indexR2 = indexR1 + 1;
-
-        if (indexR2 > this.data.size() - 1) {
-            indexR2 = this.data.size() - 1;
-        }
-
-        Record recordL2 = this.data.get(indexL2);
-        Record recordL1 = this.data.get(indexL1);
-        Record recordR1 = this.data.get(indexR1);
-        Record recordR2 = this.data.get(indexR2);
-
-        double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
-        double tmp2 = tmp1 * tmp1;
-
-        double a0 = recordR2.getY() - recordR1.getY() - recordL2.getY() + recordR1.getY();
-        double a1 = recordL2.getY() - recordL1.getY() - a0;
-        double a2 = recordR1.getY() - recordL2.getY();
-        double a3 = recordL1.getY();
-
-        return (a0 * tmp1 * tmp2) + (a1 * tmp2) + (a2 * tmp1) + a3;
-    }
-
-    private double apxCatmullRom(double x) {
-        int indexL1 = getIndexFloor(x);
-
-        if (indexL1 == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        int indexR1 = getIndexCeil(x);
-
-        if (indexR1 == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        if (indexL1 == indexR1) {
-            return this.data.get(indexL1).getY();
-        }
-
-        int indexL2 = indexL1 - 1;
-
-        if (indexL2 < 0) {
-            indexL2 = 0;
-        }
-
-        int indexR2 = indexR1 + 1;
-
-        if (indexR2 > this.data.size() - 1) {
-            indexR2 = this.data.size() - 1;
-        }
-
-        Record recordL2 = this.data.get(indexL2);
-        Record recordL1 = this.data.get(indexL1);
-        Record recordR1 = this.data.get(indexR1);
-        Record recordR2 = this.data.get(indexR2);
-
-        double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
-        double tmp2 = tmp1 * tmp1;
-
-        double a0 = (-0.5 * recordL2.getY()) + (1.5 * recordL1.getY()) - (1.5 * recordR1.getY()) + (0.5 * recordR2.getY());
-        double a1 = recordL2.getY() - (2.5 * recordL1.getY()) + (2 * recordR1.getY()) - (0.5 * recordR2.getY());
-        double a2 = (-0.5 * recordL2.getY()) + (0.5 * recordR1.getY());
-        double a3 = recordL1.getY();
-
-        return (a0 * tmp1 * tmp2) + (a1 * tmp2) + (a2 * tmp1) + a3;
-    }
-
-    private double apxHermite(double x) {
-        int indexL1 = getIndexFloor(x);
-
-        if (indexL1 == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        int indexR1 = getIndexCeil(x);
-
-        if (indexR1 == -1) {
-            throw new IllegalArgumentException("The provided value is out of range");
-        }
-
-        if (indexL1 == indexR1) {
-            return this.data.get(indexL1).getY();
-        }
-
-        int indexL2 = indexL1 - 1;
-
-        if (indexL2 < 0) {
-            indexL2 = 0;
-        }
-
-        int indexR2 = indexR1 + 1;
-
-        if (indexR2 > this.data.size() - 1) {
-            indexR2 = this.data.size() - 1;
-        }
-
-        Record recordL2 = this.data.get(indexL2);
-        Record recordL1 = this.data.get(indexL1);
-        Record recordR1 = this.data.get(indexR1);
-        Record recordR2 = this.data.get(indexR2);
-
-        double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
-        double tmp2 = tmp1 * tmp1;
-        double tmp3 = tmp2 * tmp1;
-
-        double m0 = (recordL1.getY() - recordL2.getY()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
-        m0 += (recordR1.getY() - recordL1.getY()) * (1 - this.hBias) * ((1 - this.hTension) / 2);
-        double m1 = (recordR1.getY() - recordL1.getY()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
-        m1 += (recordR2.getY() - recordR1.getY()) * ( 1 - this.hBias) * ((1 - this.hTension) / 2);
-
-
-        double a0 = (2 * tmp3) - (3 * tmp2) + 1;
-        double a1 = tmp3 - (2 * tmp2) + tmp1;
-        double a2 = tmp3 - tmp2;
-        double a3 = (-2 * tmp3) + (3 * tmp2);
-
-        return (a0 * recordL1.getY()) + (a1 * m0) + (a2 * m1) + (a3 * recordR1.getY());
-    }
-
     //--------------------------------------------------
 
     @Override
     public boolean isEqual(FPlot2D fPlot2D) {
 
-        if (this.getApproxMethod() != fPlot2D.getApproxMethod()) {
-            return false;
-        }
-
-        if (this.getApproxHermiteBias() != fPlot2D.getApproxHermiteBias()) {
-            return false;
-        }
-
-        if (this.getApproxHermiteTension() != fPlot2D.getApproxHermiteTension()) {
+        if (!getInterpolator().isEqual(fPlot2D.getInterpolator())) {
             return false;
         }
 
@@ -759,12 +552,9 @@ public class FPlot2DDef implements FPlot2D {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_INT, getInterpolator().toJSON());
 
-        json.put(JSON_H_TENSION, this.hTension);
-        json.put(JSON_H_BIAS, this.hBias);
-        json.put(JSON_APX, this.apx);
-
-        for (Record record : this.data) {
+        for (FPlot2DRecord record : this.data) {
             json.append(JSON_DATA, record.toJSON());
         }
 
@@ -778,78 +568,37 @@ public class FPlot2DDef implements FPlot2D {
 
     //--------------------------------------------------
 
-    private List<Record> getData() {
+    @Override
+    public String getName() {
+
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+
+        this.name = name;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FPlot2DRecord getRecord(int index) {
+
+        return getData().get(index);
+    }
+
+    private List<FPlot2DRecord> getData() {
 
         return this.data;
     }
 
-    private void setData(List<Record> data) {
+    private void setData(List<FPlot2DRecord> data) {
 
         this.data = data;
     }
 
-    private static class Record {
-        private static final String JSON_MAIN = "rec";
-        private static final String JSON_X = "x";
-        private static final String JSON_Y = "y";
 
-        private double x;
-        private double y;
-
-        private Record(double x, double y) {
-
-            this.x = x;
-            this.y = y;
-        }
-
-        public static Record create(double x, double y) {
-
-            return new Record(x, y);
-        }
-
-        public static Record create(JSONObject json) {
-
-            return new Record(json.getDouble(JSON_X), json.getDouble(JSON_Y));
-        }
-
-        public double getX() {
-
-            return this.x;
-        }
-
-        public void setX(double x) {
-
-            this.x = x;
-        }
-
-        public double getY() {
-
-            return this.y;
-        }
-
-        public void setY(double y) {
-
-            this.y = y;
-        }
-
-        //--------------------------------------------------
-
-        public JSONObject toJSON() {
-            JSONObject json = new JSONObject();
-
-            json.put(JSON_TYPE, JSON_MAIN);
-            json.put(JSON_X, this.x);
-            json.put(JSON_Y, this.y);
-
-            return json;
-        }
-
-        @Override
-        public String toString() {
-
-            return toJSON().toString();
-        }
-    }
 }
 
 // https://paulbourke.net/miscellaneous/interpolation/

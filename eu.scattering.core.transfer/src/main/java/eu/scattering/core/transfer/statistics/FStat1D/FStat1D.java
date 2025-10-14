@@ -88,7 +88,7 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     FPlot2D toFPlot2DLinear();
     FPlot2D toFPlot2DPieChart();
-    FPlot2D toFPlot2DHistogram(double min, double max, int groups);
+    FPlot2D toFPlot2DHistogram(double min, double max, int divisions);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -99,4 +99,9 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     List<Double> getData();
     void setData(List<Double> data);
+
+    // -------------------------------------------------------------------------------------------------
+
+    String getName();
+    void setName(String name);
 }

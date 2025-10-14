@@ -2,12 +2,15 @@
   <dictionary name="kskor">
     <words>
       <w>antiparallel</w>
+      <w>barmode</w>
       <w>filippov</w>
       <w>flage</w>
       <w>hanning</w>
+      <w>hoverinfo</w>
       <w>interquartile</w>
       <w>midspread</w>
       <w>monodisperse</w>
+      <w>numpy</w>
       <w>polydisperse</w>
       <w>prefactor</w>
       <w>prot</w>
@@ -15,6 +18,8 @@
       <w>stdp</w>
       <w>tunability</w>
       <w>varp</w>
+      <w>xaxis</w>
+      <w>xbins</w>
     </words>
   </dictionary>
 </component>

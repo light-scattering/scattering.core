@@ -3,10 +3,7 @@ package eu.scattering.core.transfer.statistics.FPlot2D.concrete;
 import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DRecord;
 import org.json.JSONObject;
 
-import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
-
 public class FPlot2DRecordDef implements FPlot2DRecord {
-    private static final String JSON_MAIN = "rec";
     private static final String JSON_X = "x";
     private static final String JSON_Y = "y";
 
@@ -19,12 +16,12 @@ public class FPlot2DRecordDef implements FPlot2DRecord {
         this.y = y;
     }
 
-    public static FPlot2DRecord create(double x, double y) {
+    protected static FPlot2DRecord create(double x, double y) {
 
         return new FPlot2DRecordDef(x, y);
     }
 
-    public static FPlot2DRecord create(JSONObject json) {
+    protected static FPlot2DRecord create(JSONObject json) {
 
         return new FPlot2DRecordDef(json.getDouble(JSON_X), json.getDouble(JSON_Y));
     }
@@ -57,7 +54,6 @@ public class FPlot2DRecordDef implements FPlot2DRecord {
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 
-        json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_X, this.x);
         json.put(JSON_Y, this.y);
 

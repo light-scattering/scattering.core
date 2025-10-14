@@ -2,10 +2,14 @@ package eu.scattering.core.transfer.container.statistics;
 
 import eu.scattering.core.transfer.TransferFactory;
 import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
+import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DInterpolator;
 import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -219,9 +223,120 @@ public class FPlot2DTest {
     }
 
     @Nested
+    @Tag("Core")
+    @DisplayName("Core")
+    class FPlot2DCoreTest {
+
+        @Test
+        @DisplayName("Is equal")
+        void isEqual() {
+            FPlot2D fPlotA = factory.getFPlot2D();
+
+            fPlotA.getInterpolator().setMethod(FPlot2DInterpolator.Method.CUBIC);
+            fPlotA.getInterpolator().setHermiteTension(2);
+            fPlotA.getInterpolator().setHermiteBias(3);
+
+            fPlotA.add(0, 0);
+            fPlotA.add(1, 1);
+            fPlotA.add(2, 2);
+
+            FPlot2D fPlotB = factory.getFPlot2D();
+
+            fPlotB.getInterpolator().setMethod(FPlot2DInterpolator.Method.CUBIC);
+            fPlotB.getInterpolator().setHermiteTension(2);
+            fPlotB.getInterpolator().setHermiteBias(3);
+
+            fPlotB.add(0, 0);
+            fPlotB.add(1, 1);
+            fPlotB.add(2, 2);
+
+            assertTrue(fPlotA.isEqual(fPlotB));
+            assertTrue(fPlotB.isEqual(fPlotA));
+            assertTrue(fPlotA.isEqualData(fPlotB));
+            assertTrue(fPlotB.isEqualData(fPlotA));
+
+            fPlotA.getInterpolator().setHermiteTension(3);
+
+            assertFalse(fPlotA.isEqual(fPlotB));
+            assertFalse(fPlotB.isEqual(fPlotA));
+            assertTrue(fPlotA.isEqualData(fPlotB));
+            assertTrue(fPlotB.isEqualData(fPlotA));
+
+            fPlotA.getInterpolator().setHermiteTension(2);
+            fPlotA.add(10, 10);
+
+            assertFalse(fPlotA.isEqual(fPlotB));
+            assertFalse(fPlotB.isEqual(fPlotA));
+            assertFalse(fPlotA.isEqualData(fPlotB));
+            assertFalse(fPlotB.isEqualData(fPlotA));
+        }
+
+        @Test
+        @DisplayName("To JSON")
+        void toJSON() {
+            FPlot2D fPlotA = factory.getFPlot2D();
+
+            fPlotA.getInterpolator().setMethod(FPlot2DInterpolator.Method.CUBIC);
+            fPlotA.getInterpolator().setHermiteTension(2);
+            fPlotA.getInterpolator().setHermiteBias(3);
+
+            fPlotA.add(-2, 2);
+            fPlotA.add(-1, 1);
+            fPlotA.add(0, 0);
+            fPlotA.add(1, 1);
+            fPlotA.add(2, 2);
+
+            JSONObject json = fPlotA.toJSON();
+
+            FPlot2D fPlotB = factory.getFPlot2D(json);
+
+            assertTrue(fPlotA.isEqual(fPlotB));
+            assertTrue(fPlotB.isEqual(fPlotA));
+        }
+
+        @Test
+        @DisplayName("Configure")
+        void configure() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.getInterpolator().setHermiteBias(2);
+
+            assertEquals(2, fPlot.getInterpolator().getHermiteBias());
+
+            fPlot.getInterpolator().setHermiteTension(3);
+
+            assertEquals(3, fPlot.getInterpolator().getHermiteTension());
+
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.COSINE);
+
+            assertEquals(FPlot2DInterpolator.Method.COSINE, fPlot.getInterpolator().getMethod());
+        }
+
+        @Test
+        @DisplayName("Copy")
+        void copy() {
+            FPlot2D fPlotA = factory.getFPlot2D();
+
+            fPlotA.getInterpolator().setMethod(FPlot2DInterpolator.Method.CUBIC);
+            fPlotA.getInterpolator().setHermiteTension(2);
+            fPlotA.getInterpolator().setHermiteBias(3);
+
+            fPlotA.add(0, 0);
+            fPlotA.add(1, 1);
+            fPlotA.add(2, 2);
+
+            FPlot2D fPlotB = fPlotA.copy();
+
+            assertNotSame(fPlotA, fPlotB);
+            assertTrue(fPlotA.isEqual(fPlotB));
+            assertTrue(fPlotB.isEqual(fPlotA));
+        }
+    }
+
+    @Nested
     @Tag("Advanced")
     @DisplayName("Advanced")
-    class FStat1DAdvancedTest {
+    class FPlot2DAdvancedTest {
 
         @Test
         @DisplayName("Get stat X")
@@ -469,19 +584,19 @@ public class FPlot2DTest {
         @Test
         @DisplayName("Get min/max value")
         void getMinMaxValue() {
-            FPlot2D chart = factory.getFPlot2D();
+            FPlot2D fPlot = factory.getFPlot2D();
 
-            chart.add(1, -1);
-            chart.add(0, 0);
-            chart.add(-2, 2);
-            chart.add(2, -1);
-            chart.add(-1, 5);
+            fPlot.add(1, -1);
+            fPlot.add(0, 0);
+            fPlot.add(-2, 2);
+            fPlot.add(2, -1);
+            fPlot.add(-1, 5);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(-2, chart.minX()),
-                    () -> assertEquals(2, chart.maxX()),
-                    () -> assertEquals(-1, chart.minY()),
-                    () -> assertEquals(5, chart.maxY())
+                    () -> assertEquals(-2, fPlot.minX()),
+                    () -> assertEquals(2, fPlot.maxX()),
+                    () -> assertEquals(-1, fPlot.minY()),
+                    () -> assertEquals(5, fPlot.maxY())
             );
         }
 
@@ -490,7 +605,7 @@ public class FPlot2DTest {
         void approxLinear() {
             FPlot2D fPlot = factory.getFPlot2D();
 
-            fPlot.setApproxMethod(FPlot2D.Approx.LINEAR);
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.LINEAR);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -522,7 +637,7 @@ public class FPlot2DTest {
         void approxCosine() {
             FPlot2D fPlot = factory.getFPlot2D();
 
-            fPlot.setApproxMethod(FPlot2D.Approx.COSINE);
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.COSINE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -554,7 +669,7 @@ public class FPlot2DTest {
         void approxCubic() {
             FPlot2D fPlot = factory.getFPlot2D();
 
-            fPlot.setApproxMethod(FPlot2D.Approx.CUBIC);
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.CUBIC);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -588,7 +703,7 @@ public class FPlot2DTest {
         void approxCatmullRom() {
             FPlot2D fPlot = factory.getFPlot2D();
 
-            fPlot.setApproxMethod(FPlot2D.Approx.CATMULL_ROM);
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.CATMULL_ROM);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -622,7 +737,7 @@ public class FPlot2DTest {
         void approxHermite() {
             FPlot2D fPlot = factory.getFPlot2D();
 
-            fPlot.setApproxMethod(FPlot2D.Approx.HERMITE);
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.HERMITE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -649,6 +764,29 @@ public class FPlot2DTest {
                     () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(-2.5)),
                     () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(2.5))
             );
+        }
+
+        @Test
+        @DisplayName("Regression - Simple linear")
+        void regressionSimpleLinear() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 2.1);
+            fPlot.add(-1, 0.9);
+            fPlot.add(0, 0.2);
+            fPlot.add(1, -1.5);
+            fPlot.add(2, -2.3);
+
+            FPos2D parameters = fPlot.simpleLinearRegression();
+
+            assertEquals(-1.12, parameters.getD0(), 1E-4);
+            assertEquals(-0.12, parameters.getD1(), 1E-4);
+
+            assertEquals(2.12, fPlot.getY(0), 1E-4);
+            assertEquals(1, fPlot.getY(1), 1E-4);
+            assertEquals(-0.12, fPlot.getY(2), 1E-4);
+            assertEquals(-1.24, fPlot.getY(3), 1E-4);
+            assertEquals(-2.36, fPlot.getY(4), 1E-4);
         }
 
         @Test
@@ -746,7 +884,7 @@ public class FPlot2DTest {
         void interpolate() {
             FPlot2D fPlot = factory.getFPlot2D();
 
-            fPlot.setApproxMethod(FPlot2D.Approx.HERMITE);
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.HERMITE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -773,7 +911,7 @@ public class FPlot2DTest {
         void interpolateWithDivisions() {
             FPlot2D fPlot = factory.getFPlot2D();
 
-            fPlot.setApproxMethod(FPlot2D.Approx.HERMITE);
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.HERMITE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -791,228 +929,150 @@ public class FPlot2DTest {
         @Test
         @DisplayName("Sort asc X")
         void sortAscX() {
-            FPlot2D chart = factory.getFPlot2D();
+            FPlot2D fPlot = factory.getFPlot2D();
 
-            chart.add(2, -2);
-            chart.add(5, -5);
-            chart.add(1, -1);
-            chart.add(4, -4);
-            chart.add(3, -3);
+            fPlot.add(2, -2);
+            fPlot.add(5, -5);
+            fPlot.add(1, -1);
+            fPlot.add(4, -4);
+            fPlot.add(3, -3);
 
-            chart.sortX(true);
+            fPlot.sortX(true);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, chart.getX(0)),
-                    () -> assertEquals(-1, chart.getY(0)),
-                    () -> assertEquals(2, chart.getX(1)),
-                    () -> assertEquals(-2, chart.getY(1)),
-                    () -> assertEquals(3, chart.getX(2)),
-                    () -> assertEquals(-3, chart.getY(2)),
-                    () -> assertEquals(4, chart.getX(3)),
-                    () -> assertEquals(-4, chart.getY(3)),
-                    () -> assertEquals(5, chart.getX(4)),
-                    () -> assertEquals(-5, chart.getY(4))
+                    () -> assertEquals(1, fPlot.getX(0)),
+                    () -> assertEquals(-1, fPlot.getY(0)),
+                    () -> assertEquals(2, fPlot.getX(1)),
+                    () -> assertEquals(-2, fPlot.getY(1)),
+                    () -> assertEquals(3, fPlot.getX(2)),
+                    () -> assertEquals(-3, fPlot.getY(2)),
+                    () -> assertEquals(4, fPlot.getX(3)),
+                    () -> assertEquals(-4, fPlot.getY(3)),
+                    () -> assertEquals(5, fPlot.getX(4)),
+                    () -> assertEquals(-5, fPlot.getY(4))
             );
         }
 
         @Test
         @DisplayName("Sort dsc X")
         void sortDscX() {
-            FPlot2D chart = factory.getFPlot2D();
+            FPlot2D fPlot = factory.getFPlot2D();
 
-            chart.add(2, -2);
-            chart.add(5, -5);
-            chart.add(1, -1);
-            chart.add(4, -4);
-            chart.add(3, -3);
+            fPlot.add(2, -2);
+            fPlot.add(5, -5);
+            fPlot.add(1, -1);
+            fPlot.add(4, -4);
+            fPlot.add(3, -3);
 
-            chart.sortX(false);
+            fPlot.sortX(false);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(5, chart.getX(0)),
-                    () -> assertEquals(-5, chart.getY(0)),
-                    () -> assertEquals(4, chart.getX(1)),
-                    () -> assertEquals(-4, chart.getY(1)),
-                    () -> assertEquals(3, chart.getX(2)),
-                    () -> assertEquals(-3, chart.getY(2)),
-                    () -> assertEquals(2, chart.getX(3)),
-                    () -> assertEquals(-2, chart.getY(3)),
-                    () -> assertEquals(1, chart.getX(4)),
-                    () -> assertEquals(-1, chart.getY(4))
+                    () -> assertEquals(5, fPlot.getX(0)),
+                    () -> assertEquals(-5, fPlot.getY(0)),
+                    () -> assertEquals(4, fPlot.getX(1)),
+                    () -> assertEquals(-4, fPlot.getY(1)),
+                    () -> assertEquals(3, fPlot.getX(2)),
+                    () -> assertEquals(-3, fPlot.getY(2)),
+                    () -> assertEquals(2, fPlot.getX(3)),
+                    () -> assertEquals(-2, fPlot.getY(3)),
+                    () -> assertEquals(1, fPlot.getX(4)),
+                    () -> assertEquals(-1, fPlot.getY(4))
             );
         }
 
         @Test
         @DisplayName("Sort asc Y")
         void sortAscY() {
-            FPlot2D chart = factory.getFPlot2D();
+            FPlot2D fPlot = factory.getFPlot2D();
 
-            chart.add(2, -2);
-            chart.add(5, -5);
-            chart.add(1, -1);
-            chart.add(4, -4);
-            chart.add(3, -3);
+            fPlot.add(2, -2);
+            fPlot.add(5, -5);
+            fPlot.add(1, -1);
+            fPlot.add(4, -4);
+            fPlot.add(3, -3);
 
-            chart.sortY(true);
+            fPlot.sortY(true);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(5, chart.getX(0)),
-                    () -> assertEquals(-5, chart.getY(0)),
-                    () -> assertEquals(4, chart.getX(1)),
-                    () -> assertEquals(-4, chart.getY(1)),
-                    () -> assertEquals(3, chart.getX(2)),
-                    () -> assertEquals(-3, chart.getY(2)),
-                    () -> assertEquals(2, chart.getX(3)),
-                    () -> assertEquals(-2, chart.getY(3)),
-                    () -> assertEquals(1, chart.getX(4)),
-                    () -> assertEquals(-1, chart.getY(4))
+                    () -> assertEquals(5, fPlot.getX(0)),
+                    () -> assertEquals(-5, fPlot.getY(0)),
+                    () -> assertEquals(4, fPlot.getX(1)),
+                    () -> assertEquals(-4, fPlot.getY(1)),
+                    () -> assertEquals(3, fPlot.getX(2)),
+                    () -> assertEquals(-3, fPlot.getY(2)),
+                    () -> assertEquals(2, fPlot.getX(3)),
+                    () -> assertEquals(-2, fPlot.getY(3)),
+                    () -> assertEquals(1, fPlot.getX(4)),
+                    () -> assertEquals(-1, fPlot.getY(4))
             );
         }
 
         @Test
         @DisplayName("Sort dsc Y")
         void sortDsc() {
-            FPlot2D chart = factory.getFPlot2D();
+            FPlot2D fPlot = factory.getFPlot2D();
 
-            chart.add(2, -2);
-            chart.add(5, -5);
-            chart.add(1, -1);
-            chart.add(4, -4);
-            chart.add(3, -3);
+            fPlot.add(2, -2);
+            fPlot.add(5, -5);
+            fPlot.add(1, -1);
+            fPlot.add(4, -4);
+            fPlot.add(3, -3);
 
-            chart.sortY(false);
+            fPlot.sortY(false);
 
             Assertions.assertAll("Check values",
-                    () -> assertEquals(1, chart.getX(0)),
-                    () -> assertEquals(-1, chart.getY(0)),
-                    () -> assertEquals(2, chart.getX(1)),
-                    () -> assertEquals(-2, chart.getY(1)),
-                    () -> assertEquals(3, chart.getX(2)),
-                    () -> assertEquals(-3, chart.getY(2)),
-                    () -> assertEquals(4, chart.getX(3)),
-                    () -> assertEquals(-4, chart.getY(3)),
-                    () -> assertEquals(5, chart.getX(4)),
-                    () -> assertEquals(-5, chart.getY(4))
+                    () -> assertEquals(1, fPlot.getX(0)),
+                    () -> assertEquals(-1, fPlot.getY(0)),
+                    () -> assertEquals(2, fPlot.getX(1)),
+                    () -> assertEquals(-2, fPlot.getY(1)),
+                    () -> assertEquals(3, fPlot.getX(2)),
+                    () -> assertEquals(-3, fPlot.getY(2)),
+                    () -> assertEquals(4, fPlot.getX(3)),
+                    () -> assertEquals(-4, fPlot.getY(3)),
+                    () -> assertEquals(5, fPlot.getX(4)),
+                    () -> assertEquals(-5, fPlot.getY(4))
             );
+        }
+
+        @Test
+        @DisplayName("For each")
+        void forEach() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(2, -2);
+            fPlot.add(5, -5);
+            fPlot.add(1, -1);
+            fPlot.add(4, -4);
+            fPlot.add(3, -3);
+
+            AtomicInteger sumX = new AtomicInteger();
+            AtomicInteger sumY = new AtomicInteger();
+
+            fPlot.forEach((x, y) -> {
+                sumX.addAndGet((int) Math.round(x));
+                sumY.addAndGet((int) Math.round(y));
+            });
+
+            assertEquals(15, sumX.get());
+            assertEquals(-15, sumY.get());
         }
     }
 
+    @Nested
+    @Tag("Meta")
+    @DisplayName("Meta")
+    class FPlot2DMetaTest {
 
+        @Test
+        @DisplayName("Set name")
+        void setName() {
+            FPlot2D fPlot = factory.getFPlot2D();
 
+            fPlot.setName("test");
 
-
-
-
-
-
-
-
-
-
-
-
-    @Test
-    @DisplayName("Configure")
-    void configure() {
-        FPlot2D chart = factory.getFPlot2D();
-
-        chart.setApproxHermiteBias(2);
-
-        assertEquals(2, chart.getApproxHermiteBias());
-
-        chart.setApproxHermiteTension(3);
-
-        assertEquals(3, chart.getApproxHermiteTension());
-
-        chart.setApproxMethod(FPlot2D.Approx.COSINE);
-
-        assertEquals(FPlot2D.Approx.COSINE, chart.getApproxMethod());
-    }
-
-    @Test
-    @DisplayName("Compare")
-    void compare() {
-        FPlot2D chartA = factory.getFPlot2D();
-
-        chartA.setApproxMethod(FPlot2D.Approx.CUBIC);
-        chartA.setApproxHermiteTension(2);
-        chartA.setApproxHermiteBias(3);
-
-        chartA.add(0, 0);
-        chartA.add(1, 1);
-        chartA.add(2, 2);
-
-        FPlot2D chartB = factory.getFPlot2D();
-
-        chartB.setApproxMethod(FPlot2D.Approx.CUBIC);
-        chartB.setApproxHermiteTension(2);
-        chartB.setApproxHermiteBias(3);
-
-        chartB.add(0, 0);
-        chartB.add(1, 1);
-        chartB.add(2, 2);
-
-        assertTrue(chartA.isEqual(chartB));
-        assertTrue(chartB.isEqual(chartA));
-        assertTrue(chartA.isEqualData(chartB));
-        assertTrue(chartB.isEqualData(chartA));
-
-        chartA.setApproxHermiteTension(3);
-
-        assertFalse(chartA.isEqual(chartB));
-        assertFalse(chartB.isEqual(chartA));
-        assertTrue(chartA.isEqualData(chartB));
-        assertTrue(chartB.isEqualData(chartA));
-
-        chartA.setApproxHermiteTension(2);
-        chartA.add(10, 10);
-
-        assertFalse(chartA.isEqual(chartB));
-        assertFalse(chartB.isEqual(chartA));
-        assertFalse(chartA.isEqualData(chartB));
-        assertFalse(chartB.isEqualData(chartA));
-    }
-
-    @Test
-    @DisplayName("Copy")
-    void copy() {
-        FPlot2D chartA = factory.getFPlot2D();
-
-        chartA.setApproxMethod(FPlot2D.Approx.CUBIC);
-        chartA.setApproxHermiteTension(2);
-        chartA.setApproxHermiteBias(3);
-
-        chartA.add(0, 0);
-        chartA.add(1, 1);
-        chartA.add(2, 2);
-
-        FPlot2D chartB = chartA.copy();
-
-        assertNotSame(chartA, chartB);
-        assertTrue(chartA.isEqual(chartB));
-        assertTrue(chartB.isEqual(chartA));
-    }
-
-    @Test
-    @DisplayName("To JSON")
-    void toJSON() {
-        FPlot2D chartA = factory.getFPlot2D();
-
-        chartA.setApproxMethod(FPlot2D.Approx.CUBIC);
-        chartA.setApproxHermiteTension(2);
-        chartA.setApproxHermiteBias(3);
-
-        chartA.add(-2, 2);
-        chartA.add(-1, 1);
-        chartA.add(0, 0);
-        chartA.add(1, 1);
-        chartA.add(2, 2);
-
-        JSONObject json = chartA.toJSON();
-
-        FPlot2D chartB = factory.getFPlot2D(json);
-
-        assertTrue(chartA.isEqual(chartB));
-        assertTrue(chartB.isEqual(chartA));
+            assertEquals("test", fPlot.getName());
+        }
     }
 }
+
+//  https://www.statskingdom.com/linear-regression-calculator.html
