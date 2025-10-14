@@ -3,8 +3,8 @@ package eu.scattering.core.design.component.aggregate;
 import eu.scattering.core.design.component.aggregate.model.FModelFactory;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.util.annotation.Modificator;
-import eu.scattering.core.design.util.container.FMetaData;
+import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.component.storage.FMetaData;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 
 public interface FAggregateFactory extends FModelFactory {

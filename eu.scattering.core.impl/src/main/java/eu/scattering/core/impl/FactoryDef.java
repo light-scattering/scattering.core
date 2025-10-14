@@ -40,13 +40,13 @@ import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
-import eu.scattering.core.design.helper.statistics.FStatHelper;
+import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
-import eu.scattering.core.design.statistics.StatisticsExport;
+import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.util.container.FMetaData;
-import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.design.component.storage.FMetaData;
+import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
@@ -92,7 +92,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     private final FRotEngine fRotEngine;
 
     private final FTrigHelper fTrigHelper;
-    private final FStatHelper fStatHelper;
+    private final StatisticsHelper fStatHelper;
 
     private final FPointHelper fPointHelper;
     private final FSphereHelper fSphereHelper;
@@ -537,7 +537,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     //--------------------------------------------------
 
     @Override
-    public FStatHelper getFStatHelper() {
+    public StatisticsHelper getStatisticsHelper() {
 
         return this.fStatHelper;
     }
@@ -559,7 +559,7 @@ public final class FactoryDef extends ScatFactoryConcrete {
     //--------------------------------------------------
 
     @Override
-    public StatisticsExport getStatisticsExport() {
+    public StatisticsExporter getStatisticsExporter() {
 
         return StatisticsExporterDef.create();
     }

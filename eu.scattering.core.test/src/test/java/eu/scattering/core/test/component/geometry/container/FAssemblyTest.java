@@ -1382,9 +1382,9 @@ public class FAssemblyTest {
             FPoint center = factory.getFPoint();
             fAssembly.getSphericalCenter(center);
 
-            double relErrX = factory.getFStatHelper().getRelErr(offset.getD0(), center.getX());
-            double relErrY = factory.getFStatHelper().getRelErr(offset.getD1(), center.getY());
-            double relErrZ = factory.getFStatHelper().getRelErr(offset.getD2(), center.getZ());
+            double relErrX = factory.getStatisticsHelper().getRelErr(offset.getD0(), center.getX());
+            double relErrY = factory.getStatisticsHelper().getRelErr(offset.getD1(), center.getY());
+            double relErrZ = factory.getStatisticsHelper().getRelErr(offset.getD2(), center.getZ());
 
             Assertions.assertAll("Validate position",
                     () -> assertTrue(relErrX < 0.01),
@@ -1409,9 +1409,9 @@ public class FAssemblyTest {
             FPoint center = factory.getFPoint();
             fAssembly.getSphericalCenter(center);
 
-            double relErrX = factory.getFStatHelper().getRelErr(offset.getD0(), center.getX());
-            double relErrY = factory.getFStatHelper().getRelErr(offset.getD1() + (0.5 * Math.sqrt(3)), center.getY());
-            double relErrZ = factory.getFStatHelper().getRelErr(offset.getD2(), center.getZ());
+            double relErrX = factory.getStatisticsHelper().getRelErr(offset.getD0(), center.getX());
+            double relErrY = factory.getStatisticsHelper().getRelErr(offset.getD1() + (0.5 * Math.sqrt(3)), center.getY());
+            double relErrZ = factory.getStatisticsHelper().getRelErr(offset.getD2(), center.getZ());
 
             Assertions.assertAll("Validate position",
                     () -> assertTrue(relErrX < 0.01),

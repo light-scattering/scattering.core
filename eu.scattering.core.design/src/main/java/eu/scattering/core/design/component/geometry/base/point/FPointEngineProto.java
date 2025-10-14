@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
-import eu.scattering.core.design.util.annotation.Facade;
+import eu.scattering.core.design.annotation.Facade;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

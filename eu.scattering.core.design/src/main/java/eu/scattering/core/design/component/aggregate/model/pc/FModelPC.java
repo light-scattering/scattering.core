@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.util.lambda.TriFunction;
+import eu.scattering.core.design.lambda.TriFunction;
 
 import java.util.function.BiConsumer;
 

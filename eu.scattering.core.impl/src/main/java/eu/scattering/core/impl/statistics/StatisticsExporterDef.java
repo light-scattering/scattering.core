@@ -1,20 +1,20 @@
 package eu.scattering.core.impl.statistics;
 
-import eu.scattering.core.design.statistics.StatisticsExport;
+import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.base.FStat1D;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatisticsExporterDef implements StatisticsExport {
+public class StatisticsExporterDef implements StatisticsExporter {
     private String name = "";
     private String nameX = "";
     private String nameY = "";
 
     private StatisticsExporterDef() {}
 
-    public static StatisticsExport create() {
+    public static StatisticsExporter create() {
 
         return new StatisticsExporterDef();
     }

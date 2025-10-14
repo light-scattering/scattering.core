@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry;
 
-import eu.scattering.core.design.util.annotation.Fragment;
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 

@@ -3,7 +3,7 @@ package eu.scattering.core.design.component.geometry.container.assembly;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.Container;
-import eu.scattering.core.design.util.annotation.Modificator;
+import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 

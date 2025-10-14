@@ -1,13 +1,13 @@
 package eu.scattering.core.impl.helper;
 
-import eu.scattering.core.design.helper.statistics.FStatHelper;
+import eu.scattering.core.design.statistics.StatisticsHelper;
 
-public class FStatHelperDef implements FStatHelper {
+public class FStatHelperDef implements StatisticsHelper {
     private static FStatHelperDef self;
 
     private FStatHelperDef() { }
 
-    public static FStatHelper get() {
+    public static StatisticsHelper get() {
 
         if (FStatHelperDef.self == null) {
             FStatHelperDef.self = new FStatHelperDef();

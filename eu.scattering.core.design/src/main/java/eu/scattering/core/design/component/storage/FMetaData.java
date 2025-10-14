@@ -1,14 +1,10 @@
-package eu.scattering.core.design.util.container;
+package eu.scattering.core.design.component.storage;
 
 import org.json.JSONObject;
 
 public interface FMetaData {
 
-    //--- Immutable
-
     int getLayerIndex();
-
-    //--- Mutable
 
     String getMeta();
     void setMeta(String meta);

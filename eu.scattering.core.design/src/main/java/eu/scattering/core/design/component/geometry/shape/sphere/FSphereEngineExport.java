@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
-import eu.scattering.core.design.util.annotation.Legacy;
+import eu.scattering.core.design.annotation.Legacy;
 
 public interface FSphereEngineExport {
 

@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.util.lambda.TriConsumer;
+import eu.scattering.core.design.lambda.TriConsumer;
 
 public interface FModelDLA extends FModelPC {
 

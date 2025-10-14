@@ -1,6 +1,6 @@
 package eu.scattering.core.test.statistics;
 
-import eu.scattering.core.design.statistics.StatisticsExport;
+import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import org.junit.jupiter.api.*;
@@ -16,7 +16,7 @@ public class FStat2DExporterTest {
     @DisplayName("Plotly FPlot2D linear")
     void plotlyFPlot2DLinear() {
         FPlot2D fPlot = factory.getFPlot2D();
-        StatisticsExport fPlotExporter = factory.getStatisticsExport();
+        StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
@@ -51,7 +51,7 @@ public class FStat2DExporterTest {
     @Test
     @DisplayName("Plotly FStat1D histogram")
     void plotlyFStat1DHistogram() {
-        StatisticsExport fPlotExporter = factory.getStatisticsExport();
+        StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
@@ -76,7 +76,7 @@ public class FStat2DExporterTest {
     @Test
     @DisplayName("Plotly FPlot2D histogram")
     void plotlyFPlot2DHistogram() {
-        StatisticsExport fPlotExporter = factory.getStatisticsExport();
+        StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
@@ -119,7 +119,7 @@ public class FStat2DExporterTest {
         @Test
         @DisplayName("Set name")
         void setName() {
-            StatisticsExport fPlotExporter = factory.getStatisticsExport();
+            StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
 
             fPlotExporter.setName("a");
             fPlotExporter.setNameX("b");

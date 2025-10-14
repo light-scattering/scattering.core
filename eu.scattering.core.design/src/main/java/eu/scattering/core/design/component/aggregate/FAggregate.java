@@ -1,14 +1,13 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.component.Component;
-import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.util.annotation.Modificator;
-import eu.scattering.core.design.util.annotation.Legacy;
-import eu.scattering.core.design.util.container.FMetaData;
+import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.annotation.Legacy;
+import eu.scattering.core.design.component.storage.FMetaData;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;

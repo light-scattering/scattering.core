@@ -1,4 +1,4 @@
-package eu.scattering.core.design.util.lambda;
+package eu.scattering.core.design.lambda;
 
 @FunctionalInterface
 public interface TriConsumer<T, S, U> {

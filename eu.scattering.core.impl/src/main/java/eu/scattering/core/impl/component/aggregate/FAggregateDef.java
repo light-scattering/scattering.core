@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.util.container.FMetaData;
+import eu.scattering.core.design.component.storage.FMetaData;
 import eu.scattering.core.transfer.container.box.FBoxDouble.FBoxDouble;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;

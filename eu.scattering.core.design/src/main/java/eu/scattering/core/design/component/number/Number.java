@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number;
 
-import eu.scattering.core.design.util.annotation.Fragment;
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.Component;
 import org.json.JSONObject;
 

@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.util.container.FMetaData;
-import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.design.component.storage.FMetaData;
+import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
@@ -289,7 +289,7 @@ public class FAggregateTest {
         double volActual = fAggregate.getVolume();
         double volExpected = 4 * (4  * Math.PI / 3);
 
-        double relError = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -310,7 +310,7 @@ public class FAggregateTest {
         double volActual = fAggregate.getVolume();
         double volExpected = 50 * (4  * Math.PI / 3);
 
-        double relError = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -333,7 +333,7 @@ public class FAggregateTest {
         double volActual = fAggregate.getVolume();
         double expected = 1 * (4  * Math.PI / 3);
 
-        double relError = factory.getFStatHelper().getRelErr(expected, volActual);
+        double relError = factory.getStatisticsHelper().getRelErr(expected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -356,7 +356,7 @@ public class FAggregateTest {
         double volActual = fAggregate.getVolume();
         double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
 
-        double relError = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -379,7 +379,7 @@ public class FAggregateTest {
         double volActual = fAggregate.getVolume();
         double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
 
-        double relError = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -402,7 +402,7 @@ public class FAggregateTest {
         double volActual = fAggregate.getVolume();
         double volExpected = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
-        double relError = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -440,10 +440,10 @@ public class FAggregateTest {
         double volExpectedLayer2 = 4 * fSphereA.getLayerVolume(2);
         double volExpected = 4 * fSphereA.getVolumeAlgebraic();
 
-        double volErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErrLayer1 = factory.getFStatHelper().getRelErr(volExpectedLayer1, volLayers[1]);
-        double volErrLayer2 = factory.getFStatHelper().getRelErr(volExpectedLayer2, volLayers[2]);
-        double volErr = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+        double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
+        double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
+        double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(volErrLayer0 < 0.01,
@@ -483,10 +483,10 @@ public class FAggregateTest {
         double volExpectedLayer2 = quantity * fSphereRef.getLayerVolume(2);
         double volExpected = quantity * fSphereRef.getVolumeAlgebraic();
 
-        double volErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErrLayer1 = factory.getFStatHelper().getRelErr(volExpectedLayer1, volLayers[1]);
-        double volErrLayer2 = factory.getFStatHelper().getRelErr(volExpectedLayer2, volLayers[2]);
-        double volErr = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+        double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
+        double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
+        double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(volErrLayer0 < 0.01,
@@ -530,10 +530,10 @@ public class FAggregateTest {
         double volExpectedLayer2 = fSphereA.getLayerVolume(2);
         double volExpected = fSphereA.getVolumeAlgebraic();
 
-        double volErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErrLayer1 = factory.getFStatHelper().getRelErr(volExpectedLayer1, volLayers[1]);
-        double volErrLayer2 = factory.getFStatHelper().getRelErr(volExpectedLayer2, volLayers[2]);
-        double volErr = factory.getFStatHelper().getRelErr(volExpected, volActual);
+        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+        double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
+        double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
+        double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(volErrLayer0 < 0.01,
@@ -575,8 +575,8 @@ public class FAggregateTest {
 
         double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
-        double volErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErr = factory.getFStatHelper().getRelErr(volActualB, volActualA);
+        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+        double volErr = factory.getStatisticsHelper().getRelErr(volActualB, volActualA);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(volErrLayer0 < 0.01,
@@ -620,8 +620,8 @@ public class FAggregateTest {
 
         double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
-        double volErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volActualLayer0);
-        double volErr = factory.getFStatHelper().getRelErr(volActualA, volActualB);
+        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volActualLayer0);
+        double volErr = factory.getStatisticsHelper().getRelErr(volActualA, volActualB);
 
         double duplicates = fArray.deduplicate();
 
@@ -650,7 +650,7 @@ public class FAggregateTest {
         double srfActual = fAggregate.getSurface();
         double srfExpected = 4 * (4  * Math.PI);
 
-        double relError = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -671,7 +671,7 @@ public class FAggregateTest {
         double srfActual = fAggregate.getSurface();
         double srfExpected = 50 * (4  * Math.PI);
 
-        double relError = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -694,7 +694,7 @@ public class FAggregateTest {
         double srfActual = fAggregate.getSurface();
         double srfExpected = 1 * (4  * Math.PI);
 
-        double relError = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -717,7 +717,7 @@ public class FAggregateTest {
         double srfActual = fAggregate.getSurface();
         double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
 
-        double relError = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -740,7 +740,7 @@ public class FAggregateTest {
         double srfActual = fAggregate.getSurface();
         double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
 
-        double relError = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(relError < 0.01,
@@ -778,10 +778,10 @@ public class FAggregateTest {
         double srfExpectedLayer2 = 4 * fSphereA.getLayerSurface(2);
         double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
 
-        double srfErrLayer0 = factory.getFStatHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer1 = factory.getFStatHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
-        double srfErrLayer2 = factory.getFStatHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
-        double srfErr = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+        double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
+        double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
+        double srfErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(srfErrLayer0 < 0.01,
@@ -821,10 +821,10 @@ public class FAggregateTest {
         double srfExpectedLayer2 = quantity * fSphereRef.getLayerSurface(2);
         double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
 
-        double srfErrLayer0 = factory.getFStatHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer1 = factory.getFStatHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
-        double srfErrLayer2 = factory.getFStatHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
-        double srfErr = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+        double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
+        double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
+        double srfErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(srfErrLayer0 < 0.01,
@@ -868,10 +868,10 @@ public class FAggregateTest {
         double srfExpectedLayer2 = fSphereA.getLayerSurface(2);
         double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
 
-        double srfErrLayer0 = factory.getFStatHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer1 = factory.getFStatHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
-        double srfErrLayer2 = factory.getFStatHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
-        double srfErrTotal = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+        double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
+        double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
+        double srfErrTotal = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(srfErrLayer0 < 0.01,
@@ -914,8 +914,8 @@ public class FAggregateTest {
         double srfExpectedLayer0 = 2 * factory.getFSphereHelper().getSurface(1) +
                 factory.getFSphereHelper().getSurface(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1);
 
-        double srfErrLayer0 = factory.getFStatHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer3 = factory.getFStatHelper().getRelErr(srfActualLayer3, srfLayers[3]);
+        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+        double srfErrLayer3 = factory.getStatisticsHelper().getRelErr(srfActualLayer3, srfLayers[3]);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(srfErrLayer0 < 0.01,
@@ -986,7 +986,7 @@ public class FAggregateTest {
         double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
         double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
-        double relError = factory.getFStatHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+        double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
 
         assertTrue(relError < 0.01);
     }
@@ -1012,7 +1012,7 @@ public class FAggregateTest {
                 3 * (4  * Math.PI / 3) -
                 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
-        double relError = factory.getFStatHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+        double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
 
         assertTrue(relError < 0.01);
     }
@@ -1077,7 +1077,7 @@ public class FAggregateTest {
 
         double overlap = fAggregate.getOverlapFactorLinear();
 
-        double relError = factory.getFStatHelper().getRelErr(0.5, overlap);
+        double relError = factory.getStatisticsHelper().getRelErr(0.5, overlap);
 
         assertTrue(relError < 0.01);
     }
@@ -1641,7 +1641,7 @@ public class FAggregateTest {
         double rExpected = factory.getFSphereHelper().getVolumeRadius(fAggregate.getVolume());
         double rActual = fAggregate.getVolumeRadius();
 
-        double rErr = factory.getFStatHelper().getRelErr(rExpected, rActual);
+        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
          assertTrue(rErr < 0.01);
     }
@@ -1672,10 +1672,10 @@ public class FAggregateTest {
 
         double rActual = fAggregate.getVolumeRadius(layers);
 
-        double rErrLayer0 = factory.getFStatHelper().getRelErr(rExpectedLayer0, layers[0]);
-        double rErrLayer1 = factory.getFStatHelper().getRelErr(rExpectedLayer1, layers[1]);
-        double rErrLayer2 = factory.getFStatHelper().getRelErr(rExpectedLayer2, layers[2]);
-        double rErr = factory.getFStatHelper().getRelErr(rExpected, rActual);
+        double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
+        double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);
+        double rErrLayer2 = factory.getStatisticsHelper().getRelErr(rExpectedLayer2, layers[2]);
+        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(rErrLayer0 < 0.01,
@@ -1708,7 +1708,7 @@ public class FAggregateTest {
         double rExpected = factory.getFSphereHelper().getSurfaceRadius(srfExpected);
         double rActual = fAggregate.getSurfaceRadius();
 
-        double rErr = factory.getFStatHelper().getRelErr(rExpected, rActual);
+        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
         assertTrue(rErr < 0.01);
     }
@@ -1739,10 +1739,10 @@ public class FAggregateTest {
 
         double rActual = fAggregate.getSurfaceRadius(layers);
 
-        double rErrLayer0 = factory.getFStatHelper().getRelErr(rExpectedLayer0, layers[0]);
-        double rErrLayer1 = factory.getFStatHelper().getRelErr(rExpectedLayer1, layers[1]);
-        double rErrLayer2 = factory.getFStatHelper().getRelErr(rExpectedLayer2, layers[2]);
-        double rErr = factory.getFStatHelper().getRelErr(rExpected, rActual);
+        double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
+        double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);
+        double rErrLayer2 = factory.getStatisticsHelper().getRelErr(rExpectedLayer2, layers[2]);
+        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(rErrLayer0 < 0.01,
@@ -1777,7 +1777,7 @@ public class FAggregateTest {
         double rgExpected = factory.getFSphereHelper().getRadiusOfGyration(radius);
         double rgActual = fAggregate.getRadiusOfGyration();
 
-        double rgErr = factory.getFStatHelper().getRelErr(rgExpected, rgActual);
+        double rgErr = factory.getStatisticsHelper().getRelErr(rgExpected, rgActual);
 
         assertTrue(rgErr < 0.005);
     }
@@ -1801,8 +1801,8 @@ public class FAggregateTest {
         double rgLegacyMono = fAggregate.getRadiusOfGyrationMonodisperse();
         double rgLegacyPoly = fAggregate.getRadiusOfGyrationPolydisperse();
 
-        double rgErrMono = factory.getFStatHelper().getRelErr(rgDefault, rgLegacyMono);
-        double rgErrPoly = factory.getFStatHelper().getRelErr(rgDefault, rgLegacyPoly);
+        double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
+        double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
 
         assertTrue(rgErrMono < 0.05);
         assertTrue(rgErrPoly < 0.05);

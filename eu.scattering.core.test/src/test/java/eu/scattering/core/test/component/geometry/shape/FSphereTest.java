@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.util.container.FMetaData;
-import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.design.component.storage.FMetaData;
+import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
@@ -1275,7 +1275,7 @@ public class FSphereTest {
                 double volActual = fLayer.get() * volUnit;
                 double volExpected = fSphereRef.getVolumeAlgebraic();
 
-                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, volActual);
+                double volRelErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(volUnit, delta * delta * delta,
@@ -1310,8 +1310,8 @@ public class FSphereTest {
                         factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1
                 );
 
-                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, fLayer.addSelf() * volUnit);
-                double volRelErrCommon = factory.getFStatHelper().getRelErr(volExpectedCommon, fLayer.get(1) * volUnit);
+                double volRelErr = factory.getStatisticsHelper().getRelErr(volExpected, fLayer.addSelf() * volUnit);
+                double volRelErrCommon = factory.getStatisticsHelper().getRelErr(volExpectedCommon, fLayer.get(1) * volUnit);
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(volUnit, delta * delta * delta,
@@ -1350,7 +1350,7 @@ public class FSphereTest {
                 double volActual = fLayer.addSelf() * volUnit;
                 double volExpected = fSphereRef.getVolumeAlgebraic();
 
-                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, volActual);
+                double volRelErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(volUnit, delta * delta * delta,
@@ -1383,11 +1383,11 @@ public class FSphereTest {
                 double volActualLayer2 = fSphere.getLayerVolume(2);
                 double volActualLayer3 = fSphere.getLayerVolume(3);
 
-                double volRelErr = factory.getFStatHelper().getRelErr(volActual, fLayer.addSelf() * volUnit);
-                double volRelErrLayer0 = factory.getFStatHelper().getRelErr(volActualLayer0, fLayer.get(0) * volUnit);
-                double volRelErrLayer1 = factory.getFStatHelper().getRelErr(volActualLayer1, fLayer.get(1) * volUnit);
-                double volRelErrLayer2 = factory.getFStatHelper().getRelErr(volActualLayer2, fLayer.get(2) * volUnit);
-                double volRelErrLayer3 = factory.getFStatHelper().getRelErr(volActualLayer3, fLayer.get(3) * volUnit);
+                double volRelErr = factory.getStatisticsHelper().getRelErr(volActual, fLayer.addSelf() * volUnit);
+                double volRelErrLayer0 = factory.getStatisticsHelper().getRelErr(volActualLayer0, fLayer.get(0) * volUnit);
+                double volRelErrLayer1 = factory.getStatisticsHelper().getRelErr(volActualLayer1, fLayer.get(1) * volUnit);
+                double volRelErrLayer2 = factory.getStatisticsHelper().getRelErr(volActualLayer2, fLayer.get(2) * volUnit);
+                double volRelErrLayer3 = factory.getStatisticsHelper().getRelErr(volActualLayer3, fLayer.get(3) * volUnit);
 
 
                 Assertions.assertAll("Validate results",
@@ -1433,11 +1433,11 @@ public class FSphereTest {
 
                 fArray.forEach((i, d0, d1, d2, _data, meta) -> volActual[meta.getLayerIndex()]++);
 
-                double volRelErr = factory.getFStatHelper().getRelErr(volExpected, fArray.size() * volUnit);
-                double volRelErrLayer0 = factory.getFStatHelper().getRelErr(volExpectedLayer0, volActual[0] * volUnit);
-                double volRelErrLayer1 = factory.getFStatHelper().getRelErr(volExpectedLayer1, volActual[1] * volUnit);
-                double volRelErrLayer2 = factory.getFStatHelper().getRelErr(volExpectedLayer2, volActual[2] * volUnit);
-                double volRelErrLayer3 = factory.getFStatHelper().getRelErr(volExpectedLayer3, volActual[3] * volUnit);
+                double volRelErr = factory.getStatisticsHelper().getRelErr(volExpected, fArray.size() * volUnit);
+                double volRelErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volActual[0] * volUnit);
+                double volRelErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volActual[1] * volUnit);
+                double volRelErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volActual[2] * volUnit);
+                double volRelErrLayer3 = factory.getStatisticsHelper().getRelErr(volExpectedLayer3, volActual[3] * volUnit);
 
                 int duplicates = fArray.deduplicate();
 
@@ -1639,7 +1639,7 @@ public class FSphereTest {
                 double srfActual = fLayer.get() * srfUnit;
                 double srfExpected = fSphereRef.getSurfaceAlgebraic();
 
-                double srfRelErr = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+                double srfRelErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(srfUnit, delta * delta,
@@ -1674,8 +1674,8 @@ public class FSphereTest {
                         factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1
                 );
 
-                double srfRelErr = factory.getFStatHelper().getRelErr(srfExpected, fLayer.addSelf() * srfUnit);
-                double srfRelErrCommon = factory.getFStatHelper().getRelErr(srfExpectedCommon, fLayer.get(1) * srfUnit);
+                double srfRelErr = factory.getStatisticsHelper().getRelErr(srfExpected, fLayer.addSelf() * srfUnit);
+                double srfRelErrCommon = factory.getStatisticsHelper().getRelErr(srfExpectedCommon, fLayer.get(1) * srfUnit);
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(srfUnit, delta * delta,
@@ -1714,7 +1714,7 @@ public class FSphereTest {
                 double srfActual = fLayer.addSelf() * srfUnit;
                 double srfExpected = fSphereRef.getSurfaceAlgebraic();
 
-                double srfRelErr = factory.getFStatHelper().getRelErr(srfExpected, srfActual);
+                double srfRelErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(srfUnit, delta * delta,
@@ -1746,10 +1746,10 @@ public class FSphereTest {
                 double srfActual2 = fSphere.getLayerSurface(2);
                 double srfActual3 = fSphere.getLayerSurface(3);
 
-                double srfRelErr0 = factory.getFStatHelper().getRelErr(srfActual0, fLayer.get(0) * srfUnit);
-                double srfRelErr1 = factory.getFStatHelper().getRelErr(srfActual1, fLayer.get(1) * srfUnit);
-                double srfRelErr2 = factory.getFStatHelper().getRelErr(srfActual2, fLayer.get(2) * srfUnit);
-                double srfRelErr3 = factory.getFStatHelper().getRelErr(srfActual3, fLayer.get(3) * srfUnit);
+                double srfRelErr0 = factory.getStatisticsHelper().getRelErr(srfActual0, fLayer.get(0) * srfUnit);
+                double srfRelErr1 = factory.getStatisticsHelper().getRelErr(srfActual1, fLayer.get(1) * srfUnit);
+                double srfRelErr2 = factory.getStatisticsHelper().getRelErr(srfActual2, fLayer.get(2) * srfUnit);
+                double srfRelErr3 = factory.getStatisticsHelper().getRelErr(srfActual3, fLayer.get(3) * srfUnit);
 
                 Assertions.assertAll("Validate results",
                         () -> assertEquals(srfUnit, delta * delta,
@@ -1791,10 +1791,10 @@ public class FSphereTest {
 
                 fArray.forEach((i, d0, d1, d2, _data, meta) -> srfActual[meta.getLayerIndex()]++);
 
-                double srfRelErr0 = factory.getFStatHelper().getRelErr(srfExpected0, srfActual[0] * srfUnit);
-                double srfRelErr1 = factory.getFStatHelper().getRelErr(srfExpected1, srfActual[1] * srfUnit);
-                double srfRelErr2 = factory.getFStatHelper().getRelErr(srfExpected2, srfActual[2] * srfUnit);
-                double srfRelErr3 = factory.getFStatHelper().getRelErr(srfExpected3, srfActual[3] * srfUnit);
+                double srfRelErr0 = factory.getStatisticsHelper().getRelErr(srfExpected0, srfActual[0] * srfUnit);
+                double srfRelErr1 = factory.getStatisticsHelper().getRelErr(srfExpected1, srfActual[1] * srfUnit);
+                double srfRelErr2 = factory.getStatisticsHelper().getRelErr(srfExpected2, srfActual[2] * srfUnit);
+                double srfRelErr3 = factory.getStatisticsHelper().getRelErr(srfExpected3, srfActual[3] * srfUnit);
 
                 int duplicates = fArray.deduplicate();
 

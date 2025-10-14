@@ -3,9 +3,9 @@ package eu.scattering.core.design.component.geometry.shape.sphere;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
-import eu.scattering.core.design.util.annotation.Modificator;
+import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.util.support.Producer;
+import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 
 import java.util.function.BiFunction;

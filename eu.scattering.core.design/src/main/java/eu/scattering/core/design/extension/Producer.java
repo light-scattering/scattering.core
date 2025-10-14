@@ -1,4 +1,4 @@
-package eu.scattering.core.design.util.support;
+package eu.scattering.core.design.extension;
 
 import java.util.List;
 import java.util.stream.Stream;

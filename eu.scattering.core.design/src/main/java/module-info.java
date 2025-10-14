@@ -23,7 +23,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.geometry.construct.segment;
     exports eu.scattering.core.design.component;
     exports eu.scattering.core.design.engine.prototype;
-    exports eu.scattering.core.design.helper.statistics;
     exports eu.scattering.core.design.component.geometry.container.assembly;
     exports eu.scattering.core.design.component.geometry.construct.draft;
     exports eu.scattering.core.design.component.geometry.container;
@@ -42,7 +41,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.engine.randomize.generator.module.dist2d.custom;
     exports eu.scattering.core.design.engine.randomize.generator.module.dist3d.custom;
     exports eu.scattering.core.design.util.support;
-    exports eu.scattering.core.design.util.annotation;
+    exports eu.scattering.core.design.annotation;
     exports eu.scattering.core.design.util.container;
     exports eu.scattering.core.design.component.aggregate;
     exports eu.scattering.core.design.component.aggregate.model.pc;
@@ -52,9 +51,12 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.model.pc.rla;
     exports eu.scattering.core.design.component.aggregate.model.pc.ballistic;
     exports eu.scattering.core.design.component.aggregate.model.pc.dla;
-    exports eu.scattering.core.design.util.lambda;
+    exports eu.scattering.core.design.lambda;
     exports eu.scattering.core.design.statistics.base;
     exports eu.scattering.core.design.statistics.construct;
     exports eu.scattering.core.design.statistics;
     exports eu.scattering.core.design.statistics.construct.utils;
+    exports eu.scattering.core.design.extension;
+    exports eu.scattering.core.design.storage.internal;
+    exports eu.scattering.core.design.component.storage;
 }

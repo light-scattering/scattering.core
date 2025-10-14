@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
-import eu.scattering.core.design.util.container.FMetaData;
+import eu.scattering.core.design.component.storage.FMetaData;
 import eu.scattering.core.impl.util.FMetaDataDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
 import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
