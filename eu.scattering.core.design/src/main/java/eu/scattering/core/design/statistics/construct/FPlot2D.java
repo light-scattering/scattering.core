@@ -1,8 +1,11 @@
-package eu.scattering.core.transfer.statistics.FPlot2D;
+package eu.scattering.core.design.statistics.construct;
 
+
+import eu.scattering.core.design.statistics.Statistics;
+import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
+import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
-import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
-import eu.scattering.core.transfer.statistics.Statistics;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;

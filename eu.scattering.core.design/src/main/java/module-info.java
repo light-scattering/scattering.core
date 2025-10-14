@@ -53,4 +53,8 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.model.pc.ballistic;
     exports eu.scattering.core.design.component.aggregate.model.pc.dla;
     exports eu.scattering.core.design.util.lambda;
+    exports eu.scattering.core.design.statistics.base;
+    exports eu.scattering.core.design.statistics.construct;
+    exports eu.scattering.core.design.statistics;
+    exports eu.scattering.core.design.statistics.construct.utils;
 }

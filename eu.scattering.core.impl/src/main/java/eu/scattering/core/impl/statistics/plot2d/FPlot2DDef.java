@@ -1,12 +1,11 @@
-package eu.scattering.core.transfer.statistics.FPlot2D.concrete;
+package eu.scattering.core.impl.statistics.plot2d;
 
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
+import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DInterpolator;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DRecord;
-import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,23 +15,27 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
+import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FPlot2DDef implements FPlot2D {
-    private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static final String JSON_MAIN = "plot2D";
     private static final String JSON_DATA = "records";
     private static final String JSON_INT = "interpolator";
+
+    private final ScatFactory factory;
 
     private List<FPlot2DRecord> data;
     private FPlot2DInterpolator interpolator;
 
     private String name = "";
 
-    private FPlot2DDef() {}
+    private FPlot2DDef(ScatFactory factory) {
 
-    public static FPlot2D create() {
-        FPlot2DDef fPlot = new FPlot2DDef();
+        this.factory = factory;
+    }
+
+    public static FPlot2D create(ScatFactory factory) {
+        FPlot2DDef fPlot = new FPlot2DDef(factory);
 
         fPlot.data = new ArrayList<>();
         fPlot.interpolator = FPlot2DInterpolatorDef.create();
@@ -40,8 +43,8 @@ public class FPlot2DDef implements FPlot2D {
         return fPlot;
     }
 
-    public static FPlot2D create(JSONObject json) {
-        FPlot2DDef fPlot = new FPlot2DDef();
+    public static FPlot2D create(ScatFactory factory, JSONObject json) {
+        FPlot2DDef fPlot = new FPlot2DDef(factory);
 
         fPlot.data = new ArrayList<>();
 

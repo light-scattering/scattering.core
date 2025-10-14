@@ -1,4 +1,4 @@
-package eu.scattering.core.transfer.statistics.FPlot2D;
+package eu.scattering.core.design.statistics.construct.utils;
 
 import org.json.JSONObject;
 

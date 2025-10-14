@@ -1,7 +1,7 @@
-package eu.scattering.core.transfer.statistics.FStat1D;
+package eu.scattering.core.design.statistics.base;
 
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
-import eu.scattering.core.transfer.statistics.Statistics;
+import eu.scattering.core.design.statistics.Statistics;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
 
 import java.util.List;
 import java.util.function.Function;

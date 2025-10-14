@@ -1,20 +1,18 @@
-package eu.scattering.core.transfer.container.statistics;
+package eu.scattering.core.test.statistics;
 
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
-import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FStat1D")
 public class FStat1DTest {
-    private final TransferFactory factory = TransferFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

@@ -1,4 +1,4 @@
-package eu.scattering.core.transfer.statistics;
+package eu.scattering.core.design.statistics;
 
 import org.json.JSONObject;
 

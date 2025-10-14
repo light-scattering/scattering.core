@@ -1,24 +1,22 @@
-package eu.scattering.core.transfer.container.statistics;
+package eu.scattering.core.test.statistics;
 
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DExporter;
-import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
+import eu.scattering.core.design.statistics.StatisticsExport;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import org.junit.jupiter.api.*;
 
+import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("FChartLine")
 public class FStat2DExporterTest {
-    private final TransferFactory factory = TransferFactoryConcrete.create();
 
     @Test
     @DisplayName("Plotly FPlot2D linear")
     void plotlyFPlot2DLinear() {
         FPlot2D fPlot = factory.getFPlot2D();
-        FPlot2DExporter fPlotExporter = factory.getFPlotExporter();
+        StatisticsExport fPlotExporter = factory.getStatisticsExport();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
@@ -53,7 +51,7 @@ public class FStat2DExporterTest {
     @Test
     @DisplayName("Plotly FStat1D histogram")
     void plotlyFStat1DHistogram() {
-        FPlot2DExporter fPlotExporter = factory.getFPlotExporter();
+        StatisticsExport fPlotExporter = factory.getStatisticsExport();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
@@ -78,7 +76,7 @@ public class FStat2DExporterTest {
     @Test
     @DisplayName("Plotly FPlot2D histogram")
     void plotlyFPlot2DHistogram() {
-        FPlot2DExporter fPlotExporter = factory.getFPlotExporter();
+        StatisticsExport fPlotExporter = factory.getStatisticsExport();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
@@ -121,7 +119,7 @@ public class FStat2DExporterTest {
         @Test
         @DisplayName("Set name")
         void setName() {
-            FPlot2DExporter fPlotExporter = factory.getFPlotExporter();
+            StatisticsExport fPlotExporter = factory.getStatisticsExport();
 
             fPlotExporter.setName("a");
             fPlotExporter.setNameX("b");

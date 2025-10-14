@@ -1,37 +1,39 @@
-package eu.scattering.core.transfer.statistics.FStat1D.concrete;
+package eu.scattering.core.impl.statistics.stat1d;
 
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
-import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
-import eu.scattering.core.transfer.statistics.StatisticsFactory;
-import eu.scattering.core.transfer.statistics.StatisticsFactoryConcrete;
+import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
+import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FStat1DDef implements FStat1D {
-    private static final StatisticsFactory factory = StatisticsFactoryConcrete.create();
     private static final String JSON_MAIN = "stat1D";
     private static final String JSON_DATA = "data";
+
+    private final ScatFactory factory;
 
     private List<Double> data = new ArrayList<>();
 
     private String name = "";
 
-    private FStat1DDef() {}
+    private FStat1DDef(ScatFactory factory) {
 
-    public static FStat1D create() {
-
-        return new FStat1DDef();
+        this.factory = factory;
     }
 
-    public static FStat1D create(int[] values) {
-        FStat1D fStat = FStat1DDef.create();
+    public static FStat1D create(ScatFactory factory) {
+
+        return new FStat1DDef(factory);
+    }
+
+    public static FStat1D create(ScatFactory factory, int[] values) {
+        FStat1D fStat = FStat1DDef.create(factory);
 
         for (double item : values) {
             fStat.add(item);
@@ -40,8 +42,8 @@ public class FStat1DDef implements FStat1D {
         return fStat;
     }
 
-    public static FStat1D create(double[] values) {
-        FStat1D fStat = FStat1DDef.create();
+    public static FStat1D create(ScatFactory factory, double[] values) {
+        FStat1D fStat = FStat1DDef.create(factory);
 
         for (double item : values) {
             fStat.add(item);
@@ -50,8 +52,8 @@ public class FStat1DDef implements FStat1D {
         return fStat;
     }
 
-    public static FStat1D create(Collection<Double> values) {
-        FStat1D fStat = FStat1DDef.create();
+    public static FStat1D create(ScatFactory factory, Collection<Double> values) {
+        FStat1D fStat = FStat1DDef.create(factory);
 
         for (Double item : values) {
             fStat.add(item);
@@ -60,8 +62,8 @@ public class FStat1DDef implements FStat1D {
         return fStat;
     }
 
-    public static FStat1D create(JSONObject json) {
-        FStat1D fStat1D = FStat1DDef.create();
+    public static FStat1D create(ScatFactory factory, JSONObject json) {
+        FStat1D fStat1D = FStat1DDef.create(factory);
 
         JSONArray data = json.getJSONArray(JSON_DATA);
         for (int i = 0 ; i < data.length() ; i++) {
@@ -281,7 +283,7 @@ public class FStat1DDef implements FStat1D {
             }
         }
 
-        FStat1D fStat1D = FStat1DDef.create();
+        FStat1D fStat1D = factory.getFStat1D();
 
         for (int j = 0 ; j < i ; j++) {
             fStat1D.add(fPlot.getX(j));

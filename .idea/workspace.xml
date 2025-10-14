@@ -23,19 +23,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/kskor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DExporter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DExporterDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DExporterDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DRecordDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DRecordDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FStat1D/FStat1D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FStat1D/FStat1D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FStat1D/concrete/FStat1DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FStat1D/concrete/FStat1DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FPlot2DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FPlot2DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat1DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat1DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat2DExporterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat2DExporterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/ScatFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/ScatFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/StatisticsExport.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/StatisticsExport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/plot2d/module/FPlot2DInterpolator.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/plot2d/module/FPlot2DInterpolator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/plot2d/module/FPlot2DRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/plot2d/module/FPlot2DRecord.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/TransferFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/TransferFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2D.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DExporter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DInterpolator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/FPlot2DRecord.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DDef.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DExporterDef.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DInterpolatorDef.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FPlot2D/concrete/FPlot2DRecordDef.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FStat1D/FStat1D.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FStat1D/FStat1DFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/FStat1D/concrete/FStat1DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/statistics/stat1d/FStat1DDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/Statistics.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/StatisticsFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer/statistics/StatisticsFactoryConcrete.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FPlot2DTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat1DTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat2DExporterTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,8 +105,8 @@
         <option value="module-info" />
         <option value="Enum" />
         <option value="AnnotationType" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -144,7 +158,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="add_unversioned_files" value="true&#10;/home/krzysztof/Desktop/git/scattering.core/build/reports/tests/test/index.html" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/eu.scattering.core.transfer/src/main/java/eu/scattering/core/transfer" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/mutables/geometry/construct/segment" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/statistics" />
     <property name="memory.settings.postsync.last.time.stamp" value="1592602420832" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -155,25 +169,25 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\mutables\geometry\construct\segment" />
-      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\mutables\geometry\construct\ray" />
-      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\mutables\geometry\construct" />
-      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.transfer\src\main\java" />
-      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\transfers" />
+      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.test\src\test\java\eu\scattering\core\test\statistics" />
+      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.impl\src\main\java\eu\scattering\core\impl\statistics\plot2d" />
+      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\statistics\stat1d" />
+      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\statistics\plot2d" />
+      <recent name="C:\Users\kskor\Desktop\git-dev\development\source\scattering\scattering.core\eu.scattering.core.design\src\main\java\eu\scattering\core\design\statistics" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/eu.scattering.core.impl.production/src/main/resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="eu.scattering.core.impl.statistics" />
       <recent name="eu.scattering.core.impl.component.aggregate.model" />
       <recent name="eu.scattering.core.test.component.aggregate.model.pc" />
       <recent name="eu.scattering.core.impl.component.support" />
       <recent name="eu.scattering.core.transfer.container.buffer" />
-      <recent name="eu.scattering.core.transfer.container.buffer.FCache" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FStat2DExporterTest.plotlyFPlot2DHistogram">
-    <configuration name="FStat2DExporterTest.plotlyFPlot2DHistogram" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
+    <configuration name="FPlot2DTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -184,9 +198,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
+            <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.statistics.FStat2DExporterTest.plotlyFPlot2DHistogram&quot;" />
+            <option value="&quot;eu.scattering.core.test.statistics.FPlot2DTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -196,7 +210,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FStat2DExporterTest.plotlyFPlot2DLinear" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FStat1DTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -207,9 +221,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
+            <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.statistics.FStat2DExporterTest.plotlyFPlot2DLinear&quot;" />
+            <option value="&quot;eu.scattering.core.test.statistics.FStat1DTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -219,7 +233,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FStat2DExporterTest.plotlyFStat1DHistogram" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FStat2DExporterTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -230,9 +244,9 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
+            <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.statistics.FStat2DExporterTest.plotlyFStat1DHistogram&quot;" />
+            <option value="&quot;eu.scattering.core.test.statistics.FStat2DExporterTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -242,7 +256,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FStat2DExporterTest.plotlyHistogram" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -253,9 +267,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value=":eu.scattering.core.transfer:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.transfer.container.statistics.FStat2DExporterTest.plotlyHistogram&quot;" />
+            <option value=":eu.scattering.core.test:test" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -288,10 +300,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FStat2DExporterTest.plotlyFPlot2DHistogram" />
-        <item itemvalue="Gradle.FStat2DExporterTest.plotlyFStat1DHistogram" />
-        <item itemvalue="Gradle.FStat2DExporterTest.plotlyFPlot2DLinear" />
-        <item itemvalue="Gradle.FStat2DExporterTest.plotlyHistogram" />
+        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
+        <item itemvalue="Gradle.FStat2DExporterTest" />
+        <item itemvalue="Gradle.FStat1DTest" />
+        <item itemvalue="Gradle.FPlot2DTest" />
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.transfer'" />
       </list>
     </recent_temporary>
@@ -535,11 +547,6 @@
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
           <line>865</line>
           <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat2DExporterTest.java</url>
-          <line>112</line>
-          <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.transfer/src/test/java/eu/scattering/core/transfer/container/statistics/FStat2DExporterTest.java</url>

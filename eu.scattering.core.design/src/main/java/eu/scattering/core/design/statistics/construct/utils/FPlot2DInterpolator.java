@@ -1,5 +1,6 @@
-package eu.scattering.core.transfer.statistics.FPlot2D;
+package eu.scattering.core.design.statistics.construct.utils;
 
+import eu.scattering.core.design.statistics.construct.FPlot2D;
 import org.json.JSONObject;
 
 public interface FPlot2DInterpolator {

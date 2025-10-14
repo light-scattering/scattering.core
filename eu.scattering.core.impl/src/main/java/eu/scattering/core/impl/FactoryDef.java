@@ -42,6 +42,9 @@ import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.statistics.FStatHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.design.statistics.StatisticsExport;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.util.container.FMetaData;
 import eu.scattering.core.design.util.support.Producer;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
@@ -67,9 +70,14 @@ import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
+import eu.scattering.core.impl.statistics.StatisticsExporterDef;
+import eu.scattering.core.impl.statistics.plot2d.FPlot2DDef;
+import eu.scattering.core.impl.statistics.stat1d.FStat1DDef;
 import eu.scattering.core.transfer.container.buffer.array.FArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public final class FactoryDef extends ScatFactoryConcrete {
@@ -546,5 +554,55 @@ public final class FactoryDef extends ScatFactoryConcrete {
     public GeometryParser getGeometryParser() {
 
         return this.fGeometryParser;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public StatisticsExport getStatisticsExport() {
+
+        return StatisticsExporterDef.create();
+    }
+
+    @Override
+    public FPlot2D getFPlot2D() {
+
+        return FPlot2DDef.create(this);
+    }
+
+    @Override
+    public FPlot2D getFPlot2D(JSONObject json) {
+
+        return FPlot2DDef.create(this, json);
+    }
+
+    @Override
+    public FStat1D getFStat1D() {
+
+        return FStat1DDef.create(this);
+    }
+
+    @Override
+    public FStat1D getFStat1D(int[] values) {
+
+        return FStat1DDef.create(this, values);
+    }
+
+    @Override
+    public FStat1D getFStat1D(double[] values) {
+
+        return FStat1DDef.create(this, values);
+    }
+
+    @Override
+    public FStat1D getFStat1D(Collection<Double> values) {
+
+        return FStat1DDef.create(this, values);
+    }
+
+    @Override
+    public FStat1D getFStat1D(JSONObject json) {
+
+        return FStat1DDef.create(this, json);
     }
 }

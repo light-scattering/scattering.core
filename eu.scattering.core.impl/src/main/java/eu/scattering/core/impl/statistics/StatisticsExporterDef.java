@@ -1,22 +1,22 @@
-package eu.scattering.core.transfer.statistics.FPlot2D.concrete;
+package eu.scattering.core.impl.statistics;
 
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DExporter;
-import eu.scattering.core.transfer.statistics.FStat1D.FStat1D;
+import eu.scattering.core.design.statistics.StatisticsExport;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat1D;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FPlot2DExporterDef implements FPlot2DExporter {
+public class StatisticsExporterDef implements StatisticsExport {
     private String name = "";
     private String nameX = "";
     private String nameY = "";
 
-    private FPlot2DExporterDef() {}
+    private StatisticsExporterDef() {}
 
-    public static FPlot2DExporter crete() {
+    public static StatisticsExport create() {
 
-        return new FPlot2DExporterDef();
+        return new StatisticsExporterDef();
     }
 
     @Override

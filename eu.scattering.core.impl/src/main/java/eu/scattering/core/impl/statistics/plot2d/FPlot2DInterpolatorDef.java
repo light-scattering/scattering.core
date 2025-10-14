@@ -1,8 +1,8 @@
-package eu.scattering.core.transfer.statistics.FPlot2D.concrete;
+package eu.scattering.core.impl.statistics.plot2d;
 
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2D;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DInterpolator;
-import eu.scattering.core.transfer.statistics.FPlot2D.FPlot2DRecord;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
+import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
 import org.json.JSONObject;
 
 public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
