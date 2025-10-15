@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
 
 public interface FAggregateFactory extends FModelFactory {
 

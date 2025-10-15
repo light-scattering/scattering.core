@@ -2,8 +2,8 @@ package eu.scattering.core.transfer.container.storage.FPos3DI;
 
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.Storage;
-import eu.scattering.core.transfer.container.storage.StorageFactory;
-import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.XXXFactory;
+import eu.scattering.core.transfer.container.storage.XXXFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FPos3DI implements Storage<FPos3DI> {
-    private static final StorageFactory factory = StorageFactoryConcrete.create();
+    private static final XXXFactory factory = XXXFactoryConcrete.create();
     private static final String JSON_MAIN = "pos3DI";
     private static final String JSON_VAL = "val";
 

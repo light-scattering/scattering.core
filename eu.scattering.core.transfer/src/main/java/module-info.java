@@ -17,12 +17,5 @@ module eu.scattering.core.transfer {
     exports eu.scattering.core.transfer.helper.transfer;
     exports eu.scattering.core.transfer.container.storage.FRotQt;
     exports eu.scattering.core.transfer.container.storage.FMatrix3x3D;
-    exports eu.scattering.core.transfer.container.buffer.array;
-    exports eu.scattering.core.transfer.container.buffer.cache;
-    exports eu.scattering.core.transfer.container.buffer.array.utils;
-    exports eu.scattering.core.transfer.container.buffer.array.concrete;
-    exports eu.scattering.core.transfer.container.buffer.cache.concrete;
-    exports eu.scattering.core.transfer.container.buffer.layer;
-    exports eu.scattering.core.transfer.container.box.FBoxString;
-    exports eu.scattering.core.transfer.container.box.FBoxDouble;
+    exports eu.scattering.core.transfer.container.storage;
 }

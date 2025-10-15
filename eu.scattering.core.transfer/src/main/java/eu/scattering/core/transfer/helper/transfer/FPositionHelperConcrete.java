@@ -6,11 +6,11 @@ import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
-import eu.scattering.core.transfer.container.storage.StorageFactory;
-import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.XXXFactory;
+import eu.scattering.core.transfer.container.storage.XXXFactoryConcrete;
 
 public class FPositionHelperConcrete implements FPositionHelper {
-    private static final StorageFactory factory = StorageFactoryConcrete.create();
+    private static final XXXFactory factory = XXXFactoryConcrete.create();
 
     private FPositionHelperConcrete() {}
 

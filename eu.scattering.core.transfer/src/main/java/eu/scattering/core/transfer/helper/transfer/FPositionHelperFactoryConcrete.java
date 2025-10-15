@@ -13,9 +13,9 @@ public class FPositionHelperFactoryConcrete implements FPositionHelperFactory {
         return new FPositionHelperFactoryConcrete();
     }
 
-    @Override
-    public FPositionHelper getFPositionHelper() {
-
-        return this.positionHelper;
-    }
+//    @Override
+//    public FPositionHelper getFPositionHelper() {
+//
+//        return this.positionHelper;
+//    }
 }

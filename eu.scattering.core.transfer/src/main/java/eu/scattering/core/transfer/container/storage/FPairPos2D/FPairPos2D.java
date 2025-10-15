@@ -2,8 +2,8 @@ package eu.scattering.core.transfer.container.storage.FPairPos2D;
 
 import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import eu.scattering.core.transfer.container.storage.Storage;
-import eu.scattering.core.transfer.container.storage.StorageFactory;
-import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.XXXFactory;
+import eu.scattering.core.transfer.container.storage.XXXFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FPairPos2D implements Storage<FPairPos2D> {
-    private static final StorageFactory factory = StorageFactoryConcrete.create();
+    private static final XXXFactory factory = XXXFactoryConcrete.create();
     private static final String JSON_MAIN = "pairPos2D";
     private static final String JSON_VAL = "val";
 

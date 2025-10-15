@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @Timeout(1)
 @DisplayName("FPairPos4D")
 public class FPairPos4DTest {
-    private static final StorageFactory factory = StorageFactoryConcrete.create();
+    private static final XXXFactory factory = XXXFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

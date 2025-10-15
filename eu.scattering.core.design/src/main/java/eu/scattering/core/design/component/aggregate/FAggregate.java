@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.annotation.Legacy;
 import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
-import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArrayMesh;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 

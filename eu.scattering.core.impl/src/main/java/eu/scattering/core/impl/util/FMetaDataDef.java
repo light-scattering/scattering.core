@@ -1,15 +1,14 @@
 package eu.scattering.core.impl.util;
 
 import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.box.FBoxString.FBoxString;
+import eu.scattering.core.design.storage.StorageFactoryConcrete;
+import eu.scattering.core.design.storage.mutable.box.item.FBoxString;
 import org.json.JSONObject;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FMetaDataDef implements FMetaData {
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private static final StorageFactoryConcrete factoryExt = StorageFactoryConcrete.create();
     private static final String JSON_MAIN = "meta";
     private static final String JSON_LAYER = "layer";
     private static final String JSON_META = "tag";

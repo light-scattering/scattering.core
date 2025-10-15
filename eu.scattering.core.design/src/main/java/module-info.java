@@ -40,9 +40,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.engine.randomize.generator.module.dist1d.custom;
     exports eu.scattering.core.design.engine.randomize.generator.module.dist2d.custom;
     exports eu.scattering.core.design.engine.randomize.generator.module.dist3d.custom;
-    exports eu.scattering.core.design.util.support;
     exports eu.scattering.core.design.annotation;
-    exports eu.scattering.core.design.util.container;
     exports eu.scattering.core.design.component.aggregate;
     exports eu.scattering.core.design.component.aggregate.model.pc;
     exports eu.scattering.core.design.component.aggregate.model;
@@ -57,6 +55,11 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.statistics;
     exports eu.scattering.core.design.statistics.construct.utils;
     exports eu.scattering.core.design.extension;
-    exports eu.scattering.core.design.storage.internal;
     exports eu.scattering.core.design.component.storage;
+    exports eu.scattering.core.design.storage.mutable.buffer.cache;
+    exports eu.scattering.core.design.storage.mutable.buffer.array;
+    exports eu.scattering.core.design.storage.mutable.buffer.array.utils;
+    exports eu.scattering.core.design.storage.mutable.buffer.layer;
+    exports eu.scattering.core.design.storage.mutable.box.item;
+    exports eu.scattering.core.design.storage;
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @Timeout(1)
 @DisplayName("FMatrix3x3D")
 public class FMatrix3x3DTest {
-    private StorageFactory factory = StorageFactoryConcrete.create();
+    private XXXFactory factory = XXXFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

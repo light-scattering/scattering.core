@@ -4,7 +4,7 @@ public class BoxFactoryConcrete implements BoxFactory {
 
     private BoxFactoryConcrete() {}
 
-    public static BoxFactory create() {
+    public static BoxFactoryConcrete create() {
 
         return new BoxFactoryConcrete();
     }

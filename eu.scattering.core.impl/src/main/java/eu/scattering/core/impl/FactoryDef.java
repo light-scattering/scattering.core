@@ -1,6 +1,6 @@
 package eu.scattering.core.impl;
 
-import eu.scattering.core.design.ScatFactoryConcrete;
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
@@ -34,19 +34,24 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
+import eu.scattering.core.design.component.storage.FMetaData;
 import eu.scattering.core.design.engine.export.FExportEngine;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
-import eu.scattering.core.design.statistics.StatisticsHelper;
+import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.statistics.StatisticsExporter;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArrayMesh;
+import eu.scattering.core.design.storage.mutable.buffer.cache.FCache;
+import eu.scattering.core.design.storage.mutable.buffer.cache.FCacheThread;
+import eu.scattering.core.design.storage.mutable.buffer.layer.FLayerCounter;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
@@ -73,14 +78,14 @@ import eu.scattering.core.impl.helper.FTrigHelperDef;
 import eu.scattering.core.impl.statistics.StatisticsExporterDef;
 import eu.scattering.core.impl.statistics.plot2d.FPlot2DDef;
 import eu.scattering.core.impl.statistics.stat1d.FStat1DDef;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
+import eu.scattering.core.impl.storage.mutable.buffer.*;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class FactoryDef extends ScatFactoryConcrete {
+public final class FactoryDef implements ScatFactory {
     private final GeometryParser fGeometryParser;
 
     private final FRandGenerator fRandGenerator;
@@ -135,12 +140,12 @@ public final class FactoryDef extends ScatFactoryConcrete {
         this.fSphereHelper = FSphereHelperDef.get(this.fPointHelper);
     }
 
-    public static ScatFactoryConcrete create() {
+    public static ScatFactory create() {
 
         return new FactoryDef();
     }
 
-    public static ScatFactoryConcrete create(long seed) {
+    public static ScatFactory create(long seed) {
 
         return new FactoryDef(seed);
     }
@@ -604,5 +609,67 @@ public final class FactoryDef extends ScatFactoryConcrete {
     public FStat1D getFStat1D(JSONObject json) {
 
         return FStat1DDef.create(this, json);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public <T> FArray<T> getFArray() {
+
+        return FArrayDef.create();
+    }
+
+    @Override
+    public <T> FArray<T> getFArray(int capacity) {
+
+        return FArrayDef.create(capacity);
+    }
+
+    @Override
+    public <T> FArrayMesh<T> getFArrayMesh() {
+
+        return FArrayMeshDef.create();
+    }
+
+    @Override
+    public <T> FArrayMesh<T> getFArrayMesh(int capacity) {
+
+        return FArrayMeshDef.create(capacity);
+    }
+
+    @Override
+    public FCache getFCache() {
+
+        return FCacheDef.create();
+    }
+
+    @Override
+    public FCache getFCache(JSONObject json) {
+
+        return FCacheDef.create(json);
+    }
+
+    @Override
+    public FCacheThread getFCacheThread() {
+
+        return FCacheThreadDef.create();
+    }
+
+    @Override
+    public FCacheThread getFCacheThread(JSONObject json) {
+
+        return FCacheThreadDef.create(json);
+    }
+
+    @Override
+    public FLayerCounter getFLayerCounter() {
+
+        return FLayerCounterDef.create();
+    }
+
+    @Override
+    public FLayerCounter getFLayerCounter(JSONObject json) {
+
+        return FLayerCounterDef.create(json);
     }
 }

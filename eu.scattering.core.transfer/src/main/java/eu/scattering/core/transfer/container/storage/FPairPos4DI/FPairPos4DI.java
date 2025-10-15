@@ -3,8 +3,8 @@ package eu.scattering.core.transfer.container.storage.FPairPos4DI;
 import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
 import eu.scattering.core.transfer.container.storage.FPos4DI.FPos4DI;
 import eu.scattering.core.transfer.container.storage.Storage;
-import eu.scattering.core.transfer.container.storage.StorageFactory;
-import eu.scattering.core.transfer.container.storage.StorageFactoryConcrete;
+import eu.scattering.core.transfer.container.storage.XXXFactory;
+import eu.scattering.core.transfer.container.storage.XXXFactoryConcrete;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +13,7 @@ import java.util.Objects;
 import static eu.scattering.core.transfer.configuration.NameConfig.JSON_TYPE;
 
 public class FPairPos4DI implements Storage<FPairPos4DI> {
-    private static final StorageFactory factory = StorageFactoryConcrete.create();
+    private static final XXXFactory factory = XXXFactoryConcrete.create();
     private static final String JSON_MAIN = "pairPos4DI";
     private static final String JSON_VAL = "val";
 

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Timeout(1)
 @DisplayName("FPos4DI")
 public class FPos4DITest {
-    private static final StorageFactory factory = StorageFactoryConcrete.create();
+    private static final XXXFactory factory = XXXFactoryConcrete.create();
 
     @Nested
     @Tag("Basic")

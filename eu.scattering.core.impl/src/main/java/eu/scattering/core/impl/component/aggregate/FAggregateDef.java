@@ -7,10 +7,10 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.transfer.container.box.FBoxDouble.FBoxDouble;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
-import eu.scattering.core.transfer.container.buffer.array.FArrayMesh;
-import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
+import eu.scattering.core.design.storage.mutable.box.item.FBoxDouble;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArrayMesh;
+import eu.scattering.core.design.storage.mutable.buffer.layer.FLayerCounter;
 import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;

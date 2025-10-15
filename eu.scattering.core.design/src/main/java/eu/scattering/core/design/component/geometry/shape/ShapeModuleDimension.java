@@ -2,8 +2,8 @@ package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.transfer.container.buffer.array.FArray;
-import eu.scattering.core.transfer.container.buffer.layer.FLayerCounter;
+import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
+import eu.scattering.core.design.storage.mutable.buffer.layer.FLayerCounter;
 
 import java.util.List;
 
