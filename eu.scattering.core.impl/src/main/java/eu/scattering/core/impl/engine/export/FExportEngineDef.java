@@ -1,9 +1,7 @@
 package eu.scattering.core.impl.engine.export;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.engine.export.FExportEngine;
 
 import java.util.ArrayList;

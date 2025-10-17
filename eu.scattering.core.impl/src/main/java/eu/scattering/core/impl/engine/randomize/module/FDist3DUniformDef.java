@@ -2,10 +2,10 @@ package eu.scattering.core.impl.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.uniform.FDist3DUniform;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 public class FDist3DUniformDef implements FDist3DUniform {
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();

@@ -3,13 +3,8 @@ package eu.scattering.core.test.engine.randomize;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.transfer.primitive.*;
 import eu.scattering.core.impl.FactoryDef;
-import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;

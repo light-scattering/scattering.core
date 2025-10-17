@@ -11,7 +11,7 @@ import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.lambda.TriFunction;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 
 import java.util.LinkedList;
 import java.util.Queue;

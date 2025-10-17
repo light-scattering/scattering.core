@@ -14,17 +14,12 @@ import eu.scattering.core.design.engine.randomize.generator.module.dist3d.joint.
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.fixed.FDist3DFixed;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.custom.FDist3DCustom;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.uniform.FDist3DUniform;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.*;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreOptimizedDef;
 import eu.scattering.core.impl.engine.randomize.core.FRandCoreSimpleDef;
 import eu.scattering.core.impl.engine.randomize.module.*;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
-import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 
 import java.util.List;
 import java.util.Optional;

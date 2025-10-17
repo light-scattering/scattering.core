@@ -1,10 +1,10 @@
 package eu.scattering.core.impl.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.mutable.buffer.array.FArrayMesh;
-import eu.scattering.core.design.storage.mutable.buffer.array.utils.FArrayMeshConsumer;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPos3DI.FPos3DI;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.FPos3DI;
+import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
+import eu.scattering.core.design.storage.buffer.mesh.utils.FArrayMeshConsumer;
 import org.json.JSONObject;
 
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import java.util.function.BiFunction;
 public class FArrayMeshDef<T> implements FArrayMesh<T> {
     private static final int DEF_CAPACITY = 1_000_000;
 
-    private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
+    private static final TransferFactory factory = TransferFactoryConcrete.create();
 
     private static final String JSON_MAIN = "array";
     private static final String JSON_TYPE = "type";
@@ -117,7 +117,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
             throw new IndexOutOfBoundsException("The index exceeded the current array size");
         }
 
-        return factoryExt.getFPos3DI(
+        return factory.getFPos3DI(
                 this.value[0][index], this.value[1][index], this.value[2][index]
         );
     }

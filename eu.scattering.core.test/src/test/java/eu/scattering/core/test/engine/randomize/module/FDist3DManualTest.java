@@ -2,7 +2,7 @@ package eu.scattering.core.test.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;

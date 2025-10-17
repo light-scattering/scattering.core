@@ -2,7 +2,7 @@ package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereEngineRand;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 public interface ShapeEngineRand extends FSphereEngineRand {
 

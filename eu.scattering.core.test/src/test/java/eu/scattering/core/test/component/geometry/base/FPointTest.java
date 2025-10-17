@@ -4,10 +4,10 @@ import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.Base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.geometry.base.support.FPointTestHelper;
-import eu.scattering.core.transfer.container.storage.FMatrix3x3D.FMatrix3x3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.junit.jupiter.api.*;
 
 import java.util.Collection;

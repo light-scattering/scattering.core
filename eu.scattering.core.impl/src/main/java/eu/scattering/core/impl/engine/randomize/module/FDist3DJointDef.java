@@ -2,9 +2,9 @@ package eu.scattering.core.impl.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.joint.FDist3DJoint;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 public class FDist3DJointDef implements FDist3DJoint {
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();

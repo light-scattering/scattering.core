@@ -10,11 +10,7 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.primitive.*;
 
 import java.util.ArrayList;
 import java.util.List;

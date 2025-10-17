@@ -1,6 +1,6 @@
 package eu.scattering.core.test.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
+import eu.scattering.core.design.storage.buffer.universal.FArray;
 import org.junit.jupiter.api.*;
 
 import java.util.function.BiFunction;

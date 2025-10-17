@@ -1,8 +1,8 @@
 package eu.scattering.core.design.engine.rotate.generator;
 
-import eu.scattering.core.transfer.container.storage.FRotQt.FRotQt;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.transfer.complex.FRotQt;
 
 public interface FRotGenerator {
 

@@ -12,8 +12,8 @@ import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

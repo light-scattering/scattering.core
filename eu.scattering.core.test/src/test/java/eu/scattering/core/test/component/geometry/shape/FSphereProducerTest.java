@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.impl.FactoryDef;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

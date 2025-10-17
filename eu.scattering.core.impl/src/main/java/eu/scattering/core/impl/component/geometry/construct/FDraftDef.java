@@ -10,9 +10,9 @@ import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPresetDef;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.json.JSONObject;
 
 import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;

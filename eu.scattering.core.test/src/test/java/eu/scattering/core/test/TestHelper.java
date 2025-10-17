@@ -5,9 +5,9 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPairPos4D.FPairPos4D;
+import eu.scattering.core.design.transfer.primitive.FPairPos2D;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPairPos4D;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.test.Config.factory;

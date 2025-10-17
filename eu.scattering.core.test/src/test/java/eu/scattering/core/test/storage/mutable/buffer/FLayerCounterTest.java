@@ -1,6 +1,6 @@
 package eu.scattering.core.test.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.mutable.buffer.layer.FLayerCounter;
+import eu.scattering.core.design.storage.layer.FLayerCounter;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

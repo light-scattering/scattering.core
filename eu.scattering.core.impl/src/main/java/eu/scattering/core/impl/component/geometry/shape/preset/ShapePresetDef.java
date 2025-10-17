@@ -7,12 +7,12 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
-import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
-import eu.scattering.core.design.storage.mutable.buffer.layer.FLayerCounter;
+import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.storage.buffer.universal.FArray;
+import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.impl.util.FMetaDataDef;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.ArrayList;
 import java.util.Comparator;

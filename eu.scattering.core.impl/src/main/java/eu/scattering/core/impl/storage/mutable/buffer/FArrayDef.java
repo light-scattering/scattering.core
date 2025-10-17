@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
-import eu.scattering.core.design.storage.mutable.buffer.array.FArrayMesh;
-import eu.scattering.core.design.storage.mutable.buffer.array.utils.FArrayConsumer;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.storage.buffer.universal.FArray;
+import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
+import eu.scattering.core.design.storage.buffer.universal.utils.FArrayConsumer;
 import org.json.JSONObject;
 
 import java.util.HashSet;

@@ -3,7 +3,7 @@ package eu.scattering.core.design.component.geometry.construct.ray;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.Construct;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 
 public interface FRayFactory {
 

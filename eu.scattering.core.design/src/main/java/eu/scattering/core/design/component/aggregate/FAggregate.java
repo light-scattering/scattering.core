@@ -7,11 +7,11 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.annotation.Legacy;
-import eu.scattering.core.design.component.storage.FMetaData;
-import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
-import eu.scattering.core.design.storage.mutable.buffer.array.FArrayMesh;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.storage.buffer.universal.FArray;
+import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.function.BiConsumer;
 

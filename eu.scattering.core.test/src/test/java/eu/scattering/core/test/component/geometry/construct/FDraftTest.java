@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

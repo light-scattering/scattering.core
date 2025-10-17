@@ -1,9 +1,9 @@
 package eu.scattering.core.test.component.number;
 
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
+import eu.scattering.core.design.transfer.primitive.FPos4D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.number.support.FQuaternionTestHelper;
-import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

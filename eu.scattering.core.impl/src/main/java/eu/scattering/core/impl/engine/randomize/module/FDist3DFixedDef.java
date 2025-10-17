@@ -1,9 +1,9 @@
 package eu.scattering.core.impl.engine.randomize.module;
 
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.fixed.FDist3DFixed;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 public class FDist3DFixedDef implements FDist3DFixed {
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();

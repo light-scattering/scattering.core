@@ -2,8 +2,8 @@ package eu.scattering.core.design.component.geometry.base.point;
 
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

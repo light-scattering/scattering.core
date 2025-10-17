@@ -34,7 +34,7 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.component.storage.FMetaData;
+import eu.scattering.core.design.transfer.complex.FMetaData;
 import eu.scattering.core.design.engine.export.FExportEngine;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
@@ -42,16 +42,17 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.helper.transfer.FPositionHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.storage.mutable.buffer.array.FArray;
-import eu.scattering.core.design.storage.mutable.buffer.array.FArrayMesh;
-import eu.scattering.core.design.storage.mutable.buffer.cache.FCache;
-import eu.scattering.core.design.storage.mutable.buffer.cache.FCacheThread;
-import eu.scattering.core.design.storage.mutable.buffer.layer.FLayerCounter;
+import eu.scattering.core.design.storage.buffer.universal.FArray;
+import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
+import eu.scattering.core.design.storage.cache.serial.FCache;
+import eu.scattering.core.design.storage.cache.concurrent.FCacheThread;
+import eu.scattering.core.design.storage.layer.FLayerCounter;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
@@ -73,6 +74,7 @@ import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
 import eu.scattering.core.impl.engine.randomize.FRandGeneratorDef;
 import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
+import eu.scattering.core.impl.helper.FPositionHelperDef;
 import eu.scattering.core.impl.helper.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
 import eu.scattering.core.impl.statistics.StatisticsExporterDef;
@@ -98,6 +100,7 @@ public final class FactoryDef implements ScatFactory {
 
     private final FTrigHelper fTrigHelper;
     private final StatisticsHelper fStatHelper;
+    private final FPositionHelper fPosHelper;
 
     private final FPointHelper fPointHelper;
     private final FSphereHelper fSphereHelper;
@@ -114,6 +117,7 @@ public final class FactoryDef implements ScatFactory {
 
         this.fTrigHelper = FTrigHelperDef.get();
         this.fStatHelper = FStatHelperDef.get();
+        this.fPosHelper = FPositionHelperDef.get();
 
         this.fGeometryParser = GeometryParserDef.get(this);
 
@@ -133,6 +137,7 @@ public final class FactoryDef implements ScatFactory {
 
         this.fTrigHelper = FTrigHelperDef.get();
         this.fStatHelper = FStatHelperDef.get();
+        this.fPosHelper = FPositionHelperDef.get();
 
         this.fGeometryParser = GeometryParserDef.get(this);
 
@@ -551,6 +556,12 @@ public final class FactoryDef implements ScatFactory {
     public FTrigHelper getFTrigHelper() {
 
         return this.fTrigHelper;
+    }
+
+    @Override
+    public FPositionHelper getFPositionHelper() {
+
+        return this.fPosHelper;
     }
 
     //--------------------------------------------------

@@ -5,8 +5,8 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.test.TestHelper;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

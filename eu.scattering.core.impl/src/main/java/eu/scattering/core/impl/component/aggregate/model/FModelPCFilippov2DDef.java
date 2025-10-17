@@ -9,7 +9,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.lambda.TriFunction;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -56,10 +56,17 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.statistics.construct.utils;
     exports eu.scattering.core.design.extension;
     exports eu.scattering.core.design.component.storage;
-    exports eu.scattering.core.design.storage.mutable.buffer.cache;
-    exports eu.scattering.core.design.storage.mutable.buffer.array;
-    exports eu.scattering.core.design.storage.mutable.buffer.array.utils;
-    exports eu.scattering.core.design.storage.mutable.buffer.layer;
-    exports eu.scattering.core.design.storage.mutable.box.item;
+    exports eu.scattering.core.design.storage.layer;
     exports eu.scattering.core.design.storage;
+    exports eu.scattering.core.design.transfer.box;
+    exports eu.scattering.core.design.storage.cache.serial;
+    exports eu.scattering.core.design.storage.cache.concurrent;
+    exports eu.scattering.core.design.storage.buffer.universal;
+    exports eu.scattering.core.design.storage.buffer.mesh;
+    exports eu.scattering.core.design.storage.buffer.universal.utils;
+    exports eu.scattering.core.design.storage.buffer.mesh.utils;
+    exports eu.scattering.core.design.transfer.primitive;
+    exports eu.scattering.core.design.transfer.complex;
+    exports eu.scattering.core.design.transfer;
+    exports eu.scattering.core.design.helper.transfer;
 }

@@ -1,9 +1,9 @@
 package eu.scattering.core.test.component.number;
 
 import eu.scattering.core.design.component.number.complex.FComplex;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.test.TestHelper;
 import eu.scattering.core.test.component.number.support.FComplexTestHelper;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

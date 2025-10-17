@@ -1,6 +1,6 @@
 package eu.scattering.core.design.engine.randomize.generator.module.dist2d.fixed;
 
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 
 public interface FDist2DFixedFactory {
 

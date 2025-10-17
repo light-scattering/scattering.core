@@ -1,6 +1,6 @@
 package eu.scattering.core.design.engine.randomize.generator.module.dist2d.uniform;
 
-import eu.scattering.core.transfer.container.storage.FPairPos2D.FPairPos2D;
+import eu.scattering.core.design.transfer.primitive.FPairPos2D;
 
 public interface FDist2DUniformFactory {
 

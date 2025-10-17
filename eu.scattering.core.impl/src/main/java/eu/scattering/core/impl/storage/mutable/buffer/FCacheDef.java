@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.mutable.buffer.cache.FCache;
+import eu.scattering.core.design.storage.cache.serial.FCache;
 import org.json.JSONObject;
 
 import java.util.HashMap;

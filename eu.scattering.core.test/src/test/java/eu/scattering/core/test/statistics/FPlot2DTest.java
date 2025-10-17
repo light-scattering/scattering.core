@@ -2,7 +2,7 @@ package eu.scattering.core.test.statistics;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.transfer.container.storage.FPos2D.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

@@ -1,9 +1,9 @@
 package eu.scattering.core.impl.component.geometry.base;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPos3D.FPos3D;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 

@@ -2,9 +2,9 @@ package eu.scattering.core.impl.component.number;
 
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
-import eu.scattering.core.transfer.TransferFactory;
-import eu.scattering.core.transfer.TransferFactoryConcrete;
-import eu.scattering.core.transfer.container.storage.FPos4D.FPos4D;
+import eu.scattering.core.design.transfer.TransferFactory;
+import eu.scattering.core.design.transfer.TransferFactoryConcrete;
+import eu.scattering.core.design.transfer.primitive.FPos4D;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -6,8 +6,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
-import eu.scattering.core.transfer.container.storage.FPairPos3D.FPairPos3D;
 
 import java.util.List;
 import java.util.function.BiConsumer;
