@@ -3,16 +3,16 @@ package eu.scattering.core.impl.storage.mutable.buffer;
 import eu.scattering.core.design.transfer.TransferFactory;
 import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
-import eu.scattering.core.design.storage.buffer.universal.utils.FArrayConsumer;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.buffer.utils.FBufferConsumer;
 import org.json.JSONObject;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-public class FArrayDef<T> implements FArray<T> {
+public class FArrayDef<T> implements FBuffer<T> {
     private static final int DEF_CAPACITY = 1_000_000;
 
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
@@ -43,12 +43,12 @@ public class FArrayDef<T> implements FArray<T> {
         this.meta = new Object[this.capacity];
     }
 
-    public static <T> FArray<T> create() {
+    public static <T> FBuffer<T> create() {
 
         return new FArrayDef<>();
     }
 
-    public static <T> FArray<T> create(int capacity) {
+    public static <T> FBuffer<T> create(int capacity) {
 
         return new FArrayDef<>(capacity);
     }
@@ -248,7 +248,7 @@ public class FArrayDef<T> implements FArray<T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void forEach(FArrayConsumer<T> consumer) {
+    public void forEach(FBufferConsumer<T> consumer) {
 
         for (int i = 0; i < index; i++) {
             consumer.apply(
@@ -331,14 +331,14 @@ public class FArrayDef<T> implements FArray<T> {
     }
 
     @Override
-    public FArrayMesh<T> toFArrayMesh() {
+    public FMesh<T> toFArrayMesh() {
         double dataGlobal = isDataUnique();
 
         if (dataGlobal < 0) {
             throw new IllegalStateException("The data value must be consistent for all elements");
         }
 
-        FArrayMesh<T> fArrayMesh = FArrayMeshDef.create(size());
+        FMesh<T> fArrayMesh = FArrayMeshDef.create(size());
 
         double factor = 1d / dataGlobal;
 

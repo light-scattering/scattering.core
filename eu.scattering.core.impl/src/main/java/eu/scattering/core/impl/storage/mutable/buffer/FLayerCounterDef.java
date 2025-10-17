@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.storage.layer.FLayer;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class FLayerCounterDef implements FLayerCounter {
+public class FLayerCounterDef implements FLayer {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "layer";
     private static final String JSON_SIZE = "size";
@@ -24,18 +24,18 @@ public class FLayerCounterDef implements FLayerCounter {
         this.layers.add(FLayerUnit.create());
     }
 
-    public static FLayerCounter create() {
+    public static FLayer create() {
 
         return new FLayerCounterDef();
     }
 
-    public static FLayerCounter create(JSONObject json) {
+    public static FLayer create(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
-        FLayerCounter fLayer = new FLayerCounterDef();
+        FLayer fLayer = new FLayerCounterDef();
 
         fLayer.set(json.getInt(JSON_SIZE) - 1, 0);
 
@@ -111,10 +111,10 @@ public class FLayerCounterDef implements FLayerCounter {
     }
 
     @Override
-    public void add(FLayerCounter... fLayers) {
+    public void add(FLayer... fLayers) {
         int index = size();
 
-        for (FLayerCounter fLayer : fLayers) {
+        for (FLayer fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -123,7 +123,7 @@ public class FLayerCounterDef implements FLayerCounter {
         for (int i = 0 ; i < index ; i++) {
             int sum = get(i);
 
-            for (FLayerCounter fLayer : fLayers) {
+            for (FLayer fLayer : fLayers) {
                 sum += fLayer.get(i);
             }
 
@@ -132,10 +132,10 @@ public class FLayerCounterDef implements FLayerCounter {
     }
 
     @Override
-    public void avg(FLayerCounter... fLayers) {
+    public void avg(FLayer... fLayers) {
         int index = size();
 
-        for (FLayerCounter fLayer : fLayers) {
+        for (FLayer fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -144,7 +144,7 @@ public class FLayerCounterDef implements FLayerCounter {
         for (int i = 0 ; i < index ; i++) {
             int sum = get(i);
 
-            for (FLayerCounter fLayer : fLayers) {
+            for (FLayer fLayer : fLayers) {
                 sum += fLayer.get(i);
             }
 
@@ -153,10 +153,10 @@ public class FLayerCounterDef implements FLayerCounter {
     }
 
     @Override
-    public void max(FLayerCounter... fLayers) {
+    public void max(FLayer... fLayers) {
         int index = size();
 
-        for (FLayerCounter fLayer : fLayers) {
+        for (FLayer fLayer : fLayers) {
             if (fLayer.size() > index) {
                 index = fLayer.size();
             }
@@ -165,7 +165,7 @@ public class FLayerCounterDef implements FLayerCounter {
         for (int i = 0 ; i < index ; i++) {
             int max = get(i);
 
-            for (FLayerCounter fLayer : fLayers) {
+            for (FLayer fLayer : fLayers) {
                 if (fLayer.get(i) > max) {
                     max = fLayer.get(i);
                 }

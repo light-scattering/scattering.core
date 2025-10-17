@@ -1,6 +1,6 @@
 package eu.scattering.core.test.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
+import eu.scattering.core.design.storage.mesh.FMesh;
 import org.junit.jupiter.api.*;
 
 import java.util.function.BiFunction;
@@ -19,7 +19,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Create")
         void create() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(10);
+            FMesh<Double> fArray = factory.getFMesh(10);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fArray.size(),
@@ -30,7 +30,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Create (default)")
         void createDefault() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh();
+            FMesh<Double> fArray = factory.getFMesh();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fArray.size(),
@@ -43,7 +43,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Set data")
         void setData() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh();
+            FMesh<Double> fArray = factory.getFMesh();
 
             assertEquals(0, fArray.getData(), "The default data value is incorrect");
 
@@ -55,7 +55,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Increment")
         void increment() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(100);
+            FMesh<Double> fArray = factory.getFMesh(100);
 
             fArray.add(1, 2, 3);
             fArray.add(factory.getFPos3DI(4, 5, 6));
@@ -94,7 +94,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Increment with meta")
         void incrementWithMeta() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(100);
+            FMesh<Double> fArray = factory.getFMesh(100);
 
             fArray.addWithMeta(1, 2, 3, 1.1);
             fArray.addWithMeta(factory.getFPos3DI(4, 5, 6), 2.2);
@@ -124,7 +124,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Get FPos3DI")
         void getFPos3DI() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(100);
+            FMesh<Double> fArray = factory.getFMesh(100);
 
             fArray.addWithMeta(1, 2, 3, 1.1);
 
@@ -137,7 +137,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Clear")
         void clear() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(100);
+            FMesh<Double> fArray = factory.getFMesh(100);
 
             fArray.addWithMeta(1, 2, 3, 1.1);
             fArray.addWithMeta(4, 5, 6, 2.2);
@@ -167,7 +167,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Out of bounds exception")
         void outOfBoundsException() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(3);
+            FMesh<Double> fArray = factory.getFMesh(3);
 
             fArray.addWithMeta(1, 2, 3, 1.1);
             fArray.addWithMeta(4, 5, 6, 2.2);
@@ -192,8 +192,8 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Equals")
         void equals() {
-            FArrayMesh<Double> fArray1 = factory.getFArrayMesh(10);
-            FArrayMesh<Double> fArray2 = factory.getFArrayMesh(15);
+            FMesh<Double> fArray1 = factory.getFMesh(10);
+            FMesh<Double> fArray2 = factory.getFMesh(15);
 
             fArray1.addWithMeta(4, 5, 6, 2.2);
             fArray1.addWithMeta(7, 8, 9, 3.3);
@@ -220,8 +220,8 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Equals (fail)")
         void equalsFail() {
-            FArrayMesh<Double> fArray1 = factory.getFArrayMesh(10);
-            FArrayMesh<Double> fArray2 = factory.getFArrayMesh(15);
+            FMesh<Double> fArray1 = factory.getFMesh(10);
+            FMesh<Double> fArray2 = factory.getFMesh(15);
 
             fArray1.addWithMeta(4, 5, 6, 2.2);
             fArray1.addWithMeta(7, 8, 9, 3.3);
@@ -247,7 +247,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Iterate")
         void iterate() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(100);
+            FMesh<Double> fArray = factory.getFMesh(100);
 
             fArray.addWithMeta(1, 2, 3, 1.1);
             fArray.addWithMeta(4, 5, 6, 2.2);
@@ -272,7 +272,7 @@ public class FArrayMeshTest {
         void deduplicateSingle() {
             int size = 10;
 
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(size);
+            FMesh<Double> fArray = factory.getFMesh(size);
 
             for (int i = 0 ; i < fArray.capacity() ; i++) {
                 fArray.addWithMeta(i, i, i, i * 1.1);
@@ -291,7 +291,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Deduplicate - Multiple")
         void deduplicateMultiple() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(20);
+            FMesh<Double> fArray = factory.getFMesh(20);
 
             fArray.addWithMeta(1, 1, 1, -1.1);
             fArray.addWithMeta(1, 2, 3, 1.1);
@@ -344,7 +344,7 @@ public class FArrayMeshTest {
         @Test
         @DisplayName("Deduplicate with collision - Multiple")
         void deduplicateWithCollisionMultiple() {
-            FArrayMesh<Double> fArray = factory.getFArrayMesh(20);
+            FMesh<Double> fArray = factory.getFMesh(20);
 
             fArray.addWithMeta(1, 1, 1, -1.1);
             fArray.addWithMeta(1, 2, 3, 1.1);

@@ -2,15 +2,15 @@ package eu.scattering.core.design.storage.layer;
 
 import eu.scattering.core.design.storage.Storage;
 
-public interface FLayerCounter extends Storage<FLayerCounter>, Iterable<Integer> {
+public interface FLayer extends Storage<FLayer>, Iterable<Integer> {
 
     int get(int layer);
     int inc(int layer);
     int set(int layer, int value);
 
-    void add(FLayerCounter... fLayer);
-    void avg(FLayerCounter... fLayer);
-    void max(FLayerCounter... fLayer);
+    void add(FLayer... fLayer);
+    void avg(FLayer... fLayer);
+    void max(FLayer... fLayer);
 
     double addSelf();
     double avgSelf();

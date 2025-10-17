@@ -10,9 +10,9 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.transfer.complex.FMetaData;
 import eu.scattering.core.design.extension.Producer;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
-import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.junit.jupiter.api.Assertions;
@@ -143,7 +143,7 @@ public class FAggregateTest {
     @DisplayName("Construct with reference particles and reference elements")
     void constructWithReferenceParticlesAndReferenceElements() {
         FAssembly<Shape> fAssembly = factory.getFAssembly();
-        FArray<FMetaData> fArray = factory.getFArray(10);
+        FBuffer<FMetaData> fArray = factory.getFBuffer(10);
 
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly, fArray);
 
@@ -258,13 +258,13 @@ public class FAggregateTest {
     @Test
     @DisplayName("Validate reference elements")
     void validateReferenceElements() {
-        FArray<FMetaData> fArrayA = factory.getFArray(123);
+        FBuffer<FMetaData> fArrayA = factory.getFBuffer(123);
 
         FAggregate fAggregateA = factory.getFAggregate();
 
         FAggregate fAggregateB = fAggregateA.setRefDipoles(fArrayA);
 
-        FArray<FMetaData> fArrayB = fAggregateA.getRefDipoles();
+        FBuffer<FMetaData> fArrayB = fAggregateA.getRefDipoles();
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertSame(fAggregateA, fAggregateB,
@@ -608,9 +608,9 @@ public class FAggregateTest {
 
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FArrayMesh<FMetaData> fArray = fAggregate.getVolumeMesh();
+        FMesh<FMetaData> fArray = fAggregate.getVolumeMesh();
 
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayer fLayer = factory.getFLayerCounter();
 
         fArray.forEach((index, d0, d1, d2, data) -> fLayer.inc(data.getLayerIndex()));
 

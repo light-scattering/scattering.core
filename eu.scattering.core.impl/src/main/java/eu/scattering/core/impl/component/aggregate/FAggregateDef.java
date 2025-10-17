@@ -10,9 +10,9 @@ import eu.scattering.core.design.transfer.complex.FMetaData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.transfer.box.FBoxDouble;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
-import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.layer.FLayer;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -30,9 +30,9 @@ public class FAggregateDef implements FAggregate {
     private final ScatFactory factory;
 
     private FAssembly<Shape> particles;
-    private FArray<FMetaData> dipoles;
+    private FBuffer<FMetaData> dipoles;
 
-    private FAggregateDef(ScatFactory factory, FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
+    private FAggregateDef(ScatFactory factory, FAssembly<Shape> particles, FBuffer<FMetaData> dipoles) {
 
         this.factory = factory;
 
@@ -43,7 +43,7 @@ public class FAggregateDef implements FAggregate {
         this.refIndex.put("", factory.getFComplex());
     }
 
-    public static FAggregate create(ScatFactory factory, FAssembly<Shape> particles, FArray<FMetaData> dipoles) {
+    public static FAggregate create(ScatFactory factory, FAssembly<Shape> particles, FBuffer<FMetaData> dipoles) {
 
         return new FAggregateDef(factory, particles, dipoles);
     }
@@ -74,7 +74,7 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getSurface() {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayer fLayer = factory.getFLayerCounter();
 
         List<Shape> field = getUniqueShapes();
 
@@ -97,7 +97,7 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getSurface(double[] layers) {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayer fLayer = factory.getFLayerCounter();
         double surface = 0;
 
         Arrays.fill(layers, 0);
@@ -148,7 +148,7 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getVolume() {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayer fLayer = factory.getFLayerCounter();
         double volume = 0;
 
         Queue<Shape> queue = new LinkedList<>(this.particles.asList());
@@ -212,14 +212,14 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FArrayMesh<FMetaData> getVolumeMesh() {
+    public FMesh<FMetaData> getVolumeMesh() {
         this.dipoles.clear();
 
         for (Shape shape : this.particles.asList()) {
             shape.fillVolumeArray(this.dipoles, this.particles.asList());
         }
 
-        FArrayMesh<FMetaData> mesh = this.dipoles.toFArrayMesh();
+        FMesh<FMetaData> mesh = this.dipoles.toFArrayMesh();
 
         mesh.deduplicate((a, b) -> b.getLayerIndex() < a.getLayerIndex());
 
@@ -243,7 +243,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     private void getVolumeApproximate(Shape shape, double[] volume) {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayer fLayer = factory.getFLayerCounter();
 
         shape.fillVolumeLayer(fLayer, this.particles.asList());
         double volUnit = Math.pow(shape.getDelta(), 3);
@@ -551,7 +551,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     private void getOverlapFactorApproximate(Shape shape, List<Double> volume) {
-        FLayerCounter fLayer = factory.getFLayerCounter();
+        FLayer fLayer = factory.getFLayerCounter();
 
         shape.fillVolumeLayerOverlap(fLayer, this.particles.asList());
 
@@ -779,13 +779,13 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FArray<FMetaData> getRefDipoles() {
+    public FBuffer<FMetaData> getRefDipoles() {
 
         return this.dipoles;
     }
 
     @Override
-    public FAggregate setRefDipoles(FArray<FMetaData> dipoles) {
+    public FAggregate setRefDipoles(FBuffer<FMetaData> dipoles) {
 
         this.dipoles = dipoles;
 

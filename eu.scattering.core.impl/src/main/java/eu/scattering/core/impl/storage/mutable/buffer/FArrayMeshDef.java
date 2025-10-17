@@ -3,15 +3,15 @@ package eu.scattering.core.impl.storage.mutable.buffer;
 import eu.scattering.core.design.transfer.TransferFactory;
 import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import eu.scattering.core.design.transfer.primitive.FPos3DI;
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
-import eu.scattering.core.design.storage.buffer.mesh.utils.FArrayMeshConsumer;
+import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.mesh.utils.FMeshConsumer;
 import org.json.JSONObject;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-public class FArrayMeshDef<T> implements FArrayMesh<T> {
+public class FArrayMeshDef<T> implements FMesh<T> {
     private static final int DEF_CAPACITY = 1_000_000;
 
     private static final TransferFactory factory = TransferFactoryConcrete.create();
@@ -44,12 +44,12 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
         this.meta = new Object[this.capacity];
     }
 
-    public static <T> FArrayMesh<T> create() {
+    public static <T> FMesh<T> create() {
 
         return new FArrayMeshDef<>();
     }
 
-    public static <T> FArrayMesh<T> create(int capacity) {
+    public static <T> FMesh<T> create(int capacity) {
 
         return new FArrayMeshDef<>(capacity);
     }
@@ -206,7 +206,7 @@ public class FArrayMeshDef<T> implements FArrayMesh<T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void forEach(FArrayMeshConsumer<T> consumer) {
+    public void forEach(FMeshConsumer<T> consumer) {
 
         for (int i = 0; i < index; i++) {
             consumer.apply(

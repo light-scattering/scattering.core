@@ -3,7 +3,6 @@ module eu.scattering.core.test {
     requires org.assertj.core;
     requires org.json;
     requires eu.scattering.core.design;
-    requires eu.scattering.core.transfer;
     requires eu.scattering.core.impl.def;
     opens eu.scattering.core.test.component.geometry.base;
     opens eu.scattering.core.test.component.geometry.construct;

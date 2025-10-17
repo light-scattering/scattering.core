@@ -48,11 +48,11 @@ import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.cache.serial.FCache;
 import eu.scattering.core.design.storage.cache.concurrent.FCacheThread;
-import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
@@ -389,41 +389,41 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FAggregate getFAggregate() {
 
-        return FAggregateDef.create(this, getFAssembly(), getFArray());
+        return FAggregateDef.create(this, getFAssembly(), getFBuffer());
     }
 
     @Override
     public FAggregate getFAggregate(int capacity) {
 
-        return FAggregateDef.create(this, getFAssembly(), getFArray(capacity));
+        return FAggregateDef.create(this, getFAssembly(), getFBuffer(capacity));
     }
 
     @Override
     public FAggregate getFAggregate(FAssembly<Shape> particles) {
 
-        return FAggregateDef.create(this, particles.copy(), getFArray());
+        return FAggregateDef.create(this, particles.copy(), getFBuffer());
     }
 
     @Override
     public FAggregate getFAggregate(FAssembly<Shape> particles, int capacity) {
 
-        return FAggregateDef.create(this, particles.copy(), getFArray(capacity));
+        return FAggregateDef.create(this, particles.copy(), getFBuffer(capacity));
     }
 
     @Override
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles) {
 
-        return FAggregateDef.create(this, refParticles, getFArray());
+        return FAggregateDef.create(this, refParticles, getFBuffer());
     }
 
     @Override
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, int capacity) {
 
-        return FAggregateDef.create(this, refParticles, getFArray(capacity));
+        return FAggregateDef.create(this, refParticles, getFBuffer(capacity));
     }
 
     @Override
-    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FArray<FMetaData> refElements) {
+    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FBuffer<FMetaData> refElements) {
 
         return FAggregateDef.create(this, refParticles, refElements);
     }
@@ -433,7 +433,7 @@ public final class FactoryDef implements ScatFactory {
         Producer<FSphere> fProducer = getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(count));
 
-        return FAggregateDef.create(this, fAssembly, getFArray());
+        return FAggregateDef.create(this, fAssembly, getFBuffer());
     }
 
     @Override
@@ -441,7 +441,7 @@ public final class FactoryDef implements ScatFactory {
         Producer<FSphere> fProducer = getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(count));
 
-        return FAggregateDef.create(this, fAssembly, getFArray(capacity));
+        return FAggregateDef.create(this, fAssembly, getFBuffer(capacity));
     }
 
     @Override
@@ -625,25 +625,25 @@ public final class FactoryDef implements ScatFactory {
     //--------------------------------------------------
 
     @Override
-    public <T> FArray<T> getFArray() {
+    public <T> FBuffer<T> getFBuffer() {
 
         return FArrayDef.create();
     }
 
     @Override
-    public <T> FArray<T> getFArray(int capacity) {
+    public <T> FBuffer<T> getFBuffer(int capacity) {
 
         return FArrayDef.create(capacity);
     }
 
     @Override
-    public <T> FArrayMesh<T> getFArrayMesh() {
+    public <T> FMesh<T> getFMesh() {
 
         return FArrayMeshDef.create();
     }
 
     @Override
-    public <T> FArrayMesh<T> getFArrayMesh(int capacity) {
+    public <T> FMesh<T> getFMesh(int capacity) {
 
         return FArrayMeshDef.create(capacity);
     }
@@ -673,13 +673,13 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FLayerCounter getFLayerCounter() {
+    public FLayer getFLayerCounter() {
 
         return FLayerCounterDef.create();
     }
 
     @Override
-    public FLayerCounter getFLayerCounter(JSONObject json) {
+    public FLayer getFLayerCounter(JSONObject json) {
 
         return FLayerCounterDef.create(json);
     }

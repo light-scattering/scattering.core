@@ -8,8 +8,8 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.annotation.Legacy;
 import eu.scattering.core.design.transfer.complex.FMetaData;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
@@ -20,7 +20,7 @@ public interface FAggregate extends Component {
     FAssembly<Shape> getParticles();
     FAggregate setParticles(FAssembly<Shape> particles);
 
-    FArrayMesh<FMetaData> getVolumeMesh();
+    FMesh<FMetaData> getVolumeMesh();
 
     double getVolume();
     double getVolume(double[] layers);
@@ -83,7 +83,7 @@ public interface FAggregate extends Component {
     FAggregate setRefParticles(FAssembly<Shape> particles);
 
     @Modificator
-    FArray<FMetaData> getRefDipoles();
+    FBuffer<FMetaData> getRefDipoles();
     @Modificator
-    FAggregate setRefDipoles(FArray<FMetaData> dipoles);
+    FAggregate setRefDipoles(FBuffer<FMetaData> dipoles);
 }

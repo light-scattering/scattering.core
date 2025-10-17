@@ -1,6 +1,5 @@
 module eu.scattering.core.design {
     requires org.json;
-    requires eu.scattering.core.transfer;
     exports eu.scattering.core.design;
     exports eu.scattering.core.design.component.geometry;
     exports eu.scattering.core.design.component.geometry.base;
@@ -55,16 +54,15 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.statistics;
     exports eu.scattering.core.design.statistics.construct.utils;
     exports eu.scattering.core.design.extension;
-    exports eu.scattering.core.design.component.storage;
     exports eu.scattering.core.design.storage.layer;
     exports eu.scattering.core.design.storage;
     exports eu.scattering.core.design.transfer.box;
     exports eu.scattering.core.design.storage.cache.serial;
     exports eu.scattering.core.design.storage.cache.concurrent;
-    exports eu.scattering.core.design.storage.buffer.universal;
-    exports eu.scattering.core.design.storage.buffer.mesh;
-    exports eu.scattering.core.design.storage.buffer.universal.utils;
-    exports eu.scattering.core.design.storage.buffer.mesh.utils;
+    exports eu.scattering.core.design.storage.buffer;
+    exports eu.scattering.core.design.storage.mesh;
+    exports eu.scattering.core.design.storage.buffer.utils;
+    exports eu.scattering.core.design.storage.mesh.utils;
     exports eu.scattering.core.design.transfer.primitive;
     exports eu.scattering.core.design.transfer.complex;
     exports eu.scattering.core.design.transfer;

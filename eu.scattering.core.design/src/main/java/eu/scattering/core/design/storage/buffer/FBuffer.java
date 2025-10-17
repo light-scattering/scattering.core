@@ -1,13 +1,13 @@
-package eu.scattering.core.design.storage.buffer.universal;
+package eu.scattering.core.design.storage.buffer;
 
 import eu.scattering.core.design.storage.Storage;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMesh;
-import eu.scattering.core.design.storage.buffer.universal.utils.FArrayConsumer;
+import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.storage.buffer.utils.FBufferConsumer;
 
 import java.util.function.BiFunction;
 
-public interface FArray<T> extends Storage<FArray<T>> {
+public interface FBuffer<T> extends Storage<FBuffer<T>> {
 
     void add(double d0, double d1, double d2);
     void add(FPos3D pos);
@@ -34,7 +34,7 @@ public interface FArray<T> extends Storage<FArray<T>> {
     int findIndex(double d0, double d1, double d2);
     int findIndex(FPos3D pos);
 
-    void forEach(FArrayConsumer<T> consumer);
+    void forEach(FBufferConsumer<T> consumer);
 
     int size();
     int capacity();
@@ -42,7 +42,7 @@ public interface FArray<T> extends Storage<FArray<T>> {
     int deduplicate();
     int deduplicate(BiFunction<T, T, Boolean> collision);
 
-    FArrayMesh<T> toFArrayMesh();
+    FMesh<T> toFArrayMesh();
 
     void clear();
 }

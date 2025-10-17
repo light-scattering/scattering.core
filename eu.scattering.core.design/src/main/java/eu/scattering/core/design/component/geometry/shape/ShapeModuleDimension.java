@@ -2,8 +2,8 @@ package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.transfer.complex.FMetaData;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.layer.FLayer;
 
 import java.util.List;
 
@@ -49,19 +49,19 @@ public interface ShapeModuleDimension {
 
     double getVolumeAlgebraic();
 
-    double fillVolumeLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field);
+    double fillVolumeLayerOverlap(FLayer in, Iterable<? extends Shape> field);
 
-    double fillVolumeLayer(FLayerCounter in);
-    double fillVolumeArray(FArray<FMetaData> in);
+    double fillVolumeLayer(FLayer in);
+    double fillVolumeArray(FBuffer<FMetaData> in);
 
     // -------------------------------------------------------------------------------------------------
 
     double getSurfaceAlgebraic();
 
-    double fillSurfaceLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field);
+    double fillSurfaceLayerOverlap(FLayer in, Iterable<? extends Shape> field);
 
-    double fillSurfaceLayer(FLayerCounter in);
-    double fillSurfaceArray(FArray<FMetaData> in);
+    double fillSurfaceLayer(FLayer in);
+    double fillSurfaceArray(FBuffer<FMetaData> in);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -69,12 +69,12 @@ public interface ShapeModuleDimension {
     double getLayerWidthRemaining(int index);
 
     @Fragment
-    double fillVolumeLayer(FLayerCounter in, List<? extends Shape> structure);
+    double fillVolumeLayer(FLayer in, List<? extends Shape> structure);
     @Fragment
-    double fillVolumeArray(FArray<FMetaData> in, List<? extends Shape> structure);
+    double fillVolumeArray(FBuffer<FMetaData> in, List<? extends Shape> structure);
 
     @Fragment
-    double fillSurfaceLayer(FLayerCounter in, List<? extends Shape> structure);
+    double fillSurfaceLayer(FLayer in, List<? extends Shape> structure);
     @Fragment
-    double fillSurfaceArray(FArray<FMetaData> in, List<? extends Shape> structure);
+    double fillSurfaceArray(FBuffer<FMetaData> in, List<? extends Shape> structure);
 }

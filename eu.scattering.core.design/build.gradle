@@ -1,4 +1,3 @@
 dependencies {
-    implementation project(':eu.scattering.core.transfer')
     api 'org.json:json:20200518'
 }

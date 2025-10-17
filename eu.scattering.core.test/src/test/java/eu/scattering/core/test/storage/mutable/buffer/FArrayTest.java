@@ -1,6 +1,6 @@
 package eu.scattering.core.test.storage.mutable.buffer;
 
-import eu.scattering.core.design.storage.buffer.universal.FArray;
+import eu.scattering.core.design.storage.buffer.FBuffer;
 import org.junit.jupiter.api.*;
 
 import java.util.function.BiFunction;
@@ -19,7 +19,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Create")
         void create() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fArray.size(),
@@ -30,7 +30,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Create (default)")
         void createDefault() {
-            FArray<Double> fArray = factory.getFArray();
+            FBuffer<Double> fArray = factory.getFBuffer();
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(0, fArray.size(),
@@ -43,7 +43,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Increment")
         void increment() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             fArray.add(1.1, 2.2, 3.3);
             fArray.add(factory.getFPos3D(4.4, 5.5, 6.6));
@@ -88,7 +88,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Increment with meta")
         void incrementWithData() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             fArray.addWithData(1.5, 2.5, 3.5, 1.1);
             fArray.addWithData(factory.getFPos3D(4.5, 5.5, 6.5), 2.2);
@@ -122,7 +122,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Increment with meta")
         void incrementWithMeta() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             fArray.addWithMeta(1.5, 2.5, 3.5, 1.1);
             fArray.addWithMeta(factory.getFPos3D(4.5, 5.5, 6.5), 2.2);
@@ -156,7 +156,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Increment with data and meta")
         void incrementWithDataMeta() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             fArray.addWithDataAndMeta(1.5, 2.5, 3.5, 1.1, 1.2);
             fArray.addWithDataAndMeta(factory.getFPos3D(4.5, 5.5, 6.5), 2.1, 2.2);
@@ -190,7 +190,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Get FPos3D")
         void getFPos3D() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             fArray.addWithMeta(1, 2, 3, 1.1);
 
@@ -203,7 +203,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Clear")
         void clear() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             fArray.addWithMeta(1.5, 2.5, 3.5, 1.1);
             fArray.addWithMeta(4.5, 5.5, 6.5, 2.2);
@@ -233,7 +233,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Out of bounds exception")
         void outOfBoundsException() {
-            FArray<Double> fArray = factory.getFArray(2);
+            FBuffer<Double> fArray = factory.getFBuffer(2);
 
             fArray.addWithMeta(1, 2, 3, 1.1);
             fArray.addWithMeta(factory.getFPos3D(4, 5, 6), 2.2);
@@ -257,8 +257,8 @@ public class FArrayTest {
         @Test
         @DisplayName("Equals")
         void equals() {
-            FArray<Double> fArray1 = factory.getFArray(10);
-            FArray<Double> fArray2 = factory.getFArray(15);
+            FBuffer<Double> fArray1 = factory.getFBuffer(10);
+            FBuffer<Double> fArray2 = factory.getFBuffer(15);
 
             fArray1.addWithDataAndMeta(4.1, 5.1, 6.1, -2.2, 2.2);
             fArray1.addWithDataAndMeta(7.1, 8.1, 9.1, -3.3, 3.3);
@@ -285,8 +285,8 @@ public class FArrayTest {
         @Test
         @DisplayName("Equals (fail)")
         void equalsFail() {
-            FArray<Double> fArray1 = factory.getFArray(10);
-            FArray<Double> fArray2 = factory.getFArray(15);
+            FBuffer<Double> fArray1 = factory.getFBuffer(10);
+            FBuffer<Double> fArray2 = factory.getFBuffer(15);
 
             fArray1.addWithDataAndMeta(4.1, 5.1, 6.1, -2.2, 2.2);
             fArray1.addWithDataAndMeta(7.1, 8.1, 9.1, -3.3, 3.3);
@@ -311,7 +311,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Iterate")
         void iterate() {
-            FArray<Double> fArray = factory.getFArray(100);
+            FBuffer<Double> fArray = factory.getFBuffer(100);
 
             fArray.addWithDataAndMeta(1.5, 2.5, 3.5, 10, 1.1);
             fArray.addWithDataAndMeta(4.5, 5.5, 6.5, 20, 2.2);
@@ -336,7 +336,7 @@ public class FArrayTest {
         void deduplicateSingle() {
             int size = 10;
 
-            FArray<Double> fArray = factory.getFArray(size);
+            FBuffer<Double> fArray = factory.getFBuffer(size);
 
             for (int i = 0 ; i < fArray.capacity() ; i++) {
                 fArray.addWithMeta(i, i, i, i * 1.1);
@@ -355,7 +355,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Deduplicate - Multiple")
         void deduplicateMultiple() {
-            FArray<Double> fArray = factory.getFArray(20);
+            FBuffer<Double> fArray = factory.getFBuffer(20);
 
             fArray.addWithMeta(1.1, 1.1, 1.1, -1.1);
             fArray.addWithMeta(1.1, 2.1, 3.1, 1.1);
@@ -408,7 +408,7 @@ public class FArrayTest {
         @Test
         @DisplayName("Deduplicate with collision - Multiple")
         void deduplicateWithCollisionMultiple() {
-            FArray<Double> fArray = factory.getFArray(20);
+            FBuffer<Double> fArray = factory.getFBuffer(20);
 
             fArray.addWithMeta(1.1, 1.1, 1.1, -1.1);
             fArray.addWithMeta(1.1, 2.1, 3.1, 1.1);

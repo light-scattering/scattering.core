@@ -1,12 +1,12 @@
 package eu.scattering.core.design.storage;
 
-import eu.scattering.core.design.storage.buffer.mesh.FArrayMeshFactory;
-import eu.scattering.core.design.storage.buffer.universal.FArrayFactory;
+import eu.scattering.core.design.storage.mesh.FMeshFactory;
+import eu.scattering.core.design.storage.buffer.FBufferFactory;
 import eu.scattering.core.design.storage.cache.concurrent.FCacheThreadFactory;
 import eu.scattering.core.design.storage.cache.serial.FCacheFactory;
-import eu.scattering.core.design.storage.layer.FLayerCounterFactory;
+import eu.scattering.core.design.storage.layer.FLayerFactory;
 
-public interface StorageFactory extends FArrayFactory, FArrayMeshFactory,
+public interface StorageFactory extends FBufferFactory, FMeshFactory,
         FCacheFactory, FCacheThreadFactory,
-        FLayerCounterFactory {
+        FLayerFactory {
 }

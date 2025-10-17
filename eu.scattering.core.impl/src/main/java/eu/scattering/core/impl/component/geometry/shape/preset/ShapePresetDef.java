@@ -8,10 +8,9 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.transfer.complex.FMetaData;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.impl.util.FMetaDataDef;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public abstract class ShapePresetDef implements Shape {
         this.factory = factory;
 
         for (int i = 0 ; i < LAYER_LIMIT ; i++) {
-            metaData.add(FMetaDataDef.crete("", i));
+            metaData.add(FMetaData.crete("", i));
         }
     }
 
@@ -1164,7 +1163,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field) {
+    public double fillVolumeLayerOverlap(FLayer in, Iterable<? extends Shape> field) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -1209,7 +1208,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeLayer(FLayerCounter in) {
+    public double fillVolumeLayer(FLayer in) {
         double factor = 1 / delta;
 
         double radiusParsed = factor * getRadius();
@@ -1242,7 +1241,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeLayer(FLayerCounter in, List<? extends Shape> structure) {
+    public double fillVolumeLayer(FLayer in, List<? extends Shape> structure) {
         int position = structure.indexOf(this);
 
         if (position == -1) {
@@ -1300,7 +1299,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeArray(FArray<FMetaData> in) {
+    public double fillVolumeArray(FBuffer<FMetaData> in) {
         List<FMetaData> metaData = getMetaData();
 
         double factor = 1 / delta;
@@ -1335,7 +1334,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeArray(FArray<FMetaData> in, List<? extends Shape> structure) {
+    public double fillVolumeArray(FBuffer<FMetaData> in, List<? extends Shape> structure) {
         int position = structure.indexOf(this);
 
         if (position == -1) {

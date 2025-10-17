@@ -10,8 +10,8 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.transfer.complex.FMetaData;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.storage.buffer.universal.FArray;
-import eu.scattering.core.design.storage.layer.FLayerCounter;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import org.json.JSONObject;
 
@@ -813,7 +813,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceLayerOverlap(FLayerCounter in, Iterable<? extends Shape> field) {
+    public double fillSurfaceLayerOverlap(FLayer in, Iterable<? extends Shape> field) {
         double srfUnit = getDelta() * getDelta();
 
         getSurfaceElements(getRadius(), (x, y, z) -> {
@@ -837,7 +837,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceLayer(FLayerCounter in) {
+    public double fillSurfaceLayer(FLayer in) {
         double srfUnit = getDelta() * getDelta();
 
         for (int i = 0 ; i < getLayerCount() ; i++) {
@@ -848,7 +848,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceLayer(FLayerCounter in, List<? extends Shape> structure) {
+    public double fillSurfaceLayer(FLayer in, List<? extends Shape> structure) {
         int position = structure.indexOf(this);
 
         if (position == -1) {
@@ -886,7 +886,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceArray(FArray<FMetaData> in) {
+    public double fillSurfaceArray(FBuffer<FMetaData> in) {
         List<FMetaData> metaData = getMetaData();
 
         double srfUnit = getDelta() * getDelta();
@@ -902,7 +902,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceArray(FArray<FMetaData> in, List<? extends Shape> structure) {
+    public double fillSurfaceArray(FBuffer<FMetaData> in, List<? extends Shape> structure) {
         List<FMetaData> metaData = getMetaData();
 
         int position = structure.indexOf(this);

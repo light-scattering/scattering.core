@@ -1,12 +1,12 @@
-package eu.scattering.core.design.storage.buffer.mesh;
+package eu.scattering.core.design.storage.mesh;
 
 import eu.scattering.core.design.storage.Storage;
-import eu.scattering.core.design.storage.buffer.mesh.utils.FArrayMeshConsumer;
+import eu.scattering.core.design.storage.mesh.utils.FMeshConsumer;
 import eu.scattering.core.design.transfer.primitive.FPos3DI;
 
 import java.util.function.BiFunction;
 
-public interface FArrayMesh<T> extends Storage<FArrayMesh<T>> {
+public interface FMesh<T> extends Storage<FMesh<T>> {
 
     double getData();
     void setData(double data);
@@ -28,7 +28,7 @@ public interface FArrayMesh<T> extends Storage<FArrayMesh<T>> {
     int findIndex(int d0, int d1, int d2);
     int findIndex(FPos3DI pos);
 
-    void forEach(FArrayMeshConsumer<T> consumer);
+    void forEach(FMeshConsumer<T> consumer);
 
     int size();
     int capacity();
