@@ -21,9 +21,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FSphereDef extends ShapePresetDef implements FSphere {
+    private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "sphere";
     private static final String JSON_RADIUS = "radius";
     private static final String JSON_CENTER = "center";

@@ -42,7 +42,7 @@ import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.extension.Producer;
-import eu.scattering.core.design.helper.transfer.FPositionHelper;
+import eu.scattering.core.design.helper.transfer.FTransferHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.StatisticsHelper;
@@ -50,8 +50,7 @@ import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.storage.cache.serial.FCache;
-import eu.scattering.core.design.storage.cache.concurrent.FCacheThread;
+import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
@@ -75,12 +74,15 @@ import eu.scattering.core.impl.engine.randomize.FRandGeneratorDef;
 import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FPositionHelperDef;
-import eu.scattering.core.impl.helper.FStatHelperDef;
+import eu.scattering.core.impl.statistics.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
 import eu.scattering.core.impl.statistics.StatisticsExporterDef;
-import eu.scattering.core.impl.statistics.plot2d.FPlot2DDef;
-import eu.scattering.core.impl.statistics.stat1d.FStat1DDef;
-import eu.scattering.core.impl.storage.mutable.buffer.*;
+import eu.scattering.core.impl.statistics.construct.FPlot2DDef;
+import eu.scattering.core.impl.statistics.base.FStat1DDef;
+import eu.scattering.core.impl.storage.FBufferDef;
+import eu.scattering.core.impl.storage.FMeshDef;
+import eu.scattering.core.impl.storage.FCacheDef;
+import eu.scattering.core.impl.storage.FLayerDef;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -100,7 +102,7 @@ public final class FactoryDef implements ScatFactory {
 
     private final FTrigHelper fTrigHelper;
     private final StatisticsHelper fStatHelper;
-    private final FPositionHelper fPosHelper;
+    private final FTransferHelper fPosHelper;
 
     private final FPointHelper fPointHelper;
     private final FSphereHelper fSphereHelper;
@@ -553,15 +555,15 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FTrigHelper getFTrigHelper() {
+    public FTransferHelper getFTransferHelper() {
 
-        return this.fTrigHelper;
+        return this.fPosHelper;
     }
 
     @Override
-    public FPositionHelper getFPositionHelper() {
+    public FTrigHelper getFTrigHelper() {
 
-        return this.fPosHelper;
+        return this.fTrigHelper;
     }
 
     //--------------------------------------------------
@@ -627,31 +629,31 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public <T> FBuffer<T> getFBuffer() {
 
-        return FArrayDef.create();
+        return FBufferDef.create();
     }
 
     @Override
     public <T> FBuffer<T> getFBuffer(int capacity) {
 
-        return FArrayDef.create(capacity);
+        return FBufferDef.create(capacity);
     }
 
     @Override
     public <T> FMesh<T> getFMesh() {
 
-        return FArrayMeshDef.create();
+        return FMeshDef.create();
     }
 
     @Override
     public <T> FMesh<T> getFMesh(int capacity) {
 
-        return FArrayMeshDef.create(capacity);
+        return FMeshDef.create(capacity);
     }
 
     @Override
-    public FCache getFCache() {
+    public FCache getFCache(boolean multi) {
 
-        return FCacheDef.create();
+        return FCacheDef.create(multi);
     }
 
     @Override
@@ -661,26 +663,14 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FCacheThread getFCacheThread() {
-
-        return FCacheThreadDef.create();
-    }
-
-    @Override
-    public FCacheThread getFCacheThread(JSONObject json) {
-
-        return FCacheThreadDef.create(json);
-    }
-
-    @Override
     public FLayer getFLayerCounter() {
 
-        return FLayerCounterDef.create();
+        return FLayerDef.create();
     }
 
     @Override
     public FLayer getFLayerCounter(JSONObject json) {
 
-        return FLayerCounterDef.create(json);
+        return FLayerDef.create(json);
     }
 }

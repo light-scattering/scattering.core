@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
+    private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "plane";
     private static final String JSON_VAL = "val";
 

@@ -5,9 +5,8 @@ import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import org.json.JSONObject;
 
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
-
 public class FPointParserDef implements GeometryParser {
+    private static final String JSON_TYPE = "type";
 
     private static GeometryParser self;
 

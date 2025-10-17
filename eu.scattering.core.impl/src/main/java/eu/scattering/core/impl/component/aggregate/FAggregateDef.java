@@ -18,9 +18,8 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.function.BiConsumer;
 
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
-
 public class FAggregateDef implements FAggregate {
+    private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "aggregate";
     private static final String JSON_PARTICLES = "particles";
 

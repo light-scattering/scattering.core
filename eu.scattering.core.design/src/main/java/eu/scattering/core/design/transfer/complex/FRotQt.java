@@ -30,12 +30,12 @@ public class FRotQt implements Transfer {
         this.matrix = matrix;
     }
 
-    protected static FRotQt create(FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
+    public static FRotQt create(FPos4D qt, FPos3D offset, FMatrix3x3D matrix) {
 
         return new FRotQt(qt, offset, matrix);
     }
 
-    protected static FRotQt create(JSONObject json) {
+    public static FRotQt create(JSONObject json) {
 
         if (json.get(JSON_TYPE) != JSON_MAIN) {
            throw new IllegalArgumentException("The object type is incorrect");

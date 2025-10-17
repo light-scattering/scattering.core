@@ -57,7 +57,7 @@ public class FRotProcessorDef implements FRotGenerator {
         FPos3D offset = getOffset(axis);
         FMatrix3x3D matrix = getMatrix(quaternion);
 
-        return factoryExt.getFRotQt(quaternion, offset, matrix);
+        return FRotQt.create(quaternion, offset, matrix);
     }
 
     private FPos4D getQuaternion(FPairPos3D axis, double angle) {

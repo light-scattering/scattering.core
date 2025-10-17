@@ -22,11 +22,11 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
+    private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "assembly";
     private static final String JSON_VAL = "val";
 

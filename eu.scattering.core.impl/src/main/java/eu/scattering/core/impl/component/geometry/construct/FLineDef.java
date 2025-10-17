@@ -14,9 +14,9 @@ import org.json.JSONObject;
 import java.util.Optional;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
+    private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "line";
     private static final String JSON_VAL = "val";
 

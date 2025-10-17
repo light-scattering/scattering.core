@@ -12,9 +12,9 @@ import eu.scattering.core.impl.component.geometry.construct.preset.ConstructPres
 import org.json.JSONObject;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
+    private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "ray";
     private static final String JSON_VAL = "val";
 

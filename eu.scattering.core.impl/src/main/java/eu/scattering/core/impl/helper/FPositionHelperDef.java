@@ -1,17 +1,17 @@
 package eu.scattering.core.impl.helper;
 
-import eu.scattering.core.design.helper.transfer.FPositionHelper;
+import eu.scattering.core.design.helper.transfer.FTransferHelper;
 import eu.scattering.core.design.transfer.TransferFactory;
 import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import eu.scattering.core.design.transfer.primitive.*;
 
-public class FPositionHelperDef implements FPositionHelper {
+public class FPositionHelperDef implements FTransferHelper {
     private static final TransferFactory factory = TransferFactoryConcrete.create();
     private static FPositionHelperDef self;
 
     private FPositionHelperDef() { }
 
-    public static FPositionHelper get() {
+    public static FTransferHelper get() {
 
         if (FPositionHelperDef.self == null) {
             FPositionHelperDef.self = new FPositionHelperDef();

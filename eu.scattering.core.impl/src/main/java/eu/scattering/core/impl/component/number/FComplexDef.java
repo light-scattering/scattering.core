@@ -12,11 +12,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
-import static eu.scattering.core.impl.config.NameConfigDef.JSON_TYPE;
 
 public class FComplexDef implements FComplex {
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
+    private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "cpx";
     private static final String JSON_VAL = "val";
 

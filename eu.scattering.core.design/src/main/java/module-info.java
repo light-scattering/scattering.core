@@ -57,8 +57,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.storage.layer;
     exports eu.scattering.core.design.storage;
     exports eu.scattering.core.design.transfer.box;
-    exports eu.scattering.core.design.storage.cache.serial;
-    exports eu.scattering.core.design.storage.cache.concurrent;
     exports eu.scattering.core.design.storage.buffer;
     exports eu.scattering.core.design.storage.mesh;
     exports eu.scattering.core.design.storage.buffer.utils;
@@ -67,4 +65,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.transfer.complex;
     exports eu.scattering.core.design.transfer;
     exports eu.scattering.core.design.helper.transfer;
+    exports eu.scattering.core.design.storage.cache;
 }

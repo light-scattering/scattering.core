@@ -15,9 +15,9 @@ import static eu.scattering.core.test.Config.factory;
 public class TestHelper {
 
     public static final double range = 10000;
-    public static final FPairPos4D range4D = factory.getFPositionHelper().getFPairPos4DWithRange(range);
-    public static final FPairPos3D range3D = factory.getFPositionHelper().getFPairPos3DWithRange(range);
-    public static final FPairPos2D range2D = factory.getFPositionHelper().getFPairPos2DWithRange(range);
+    public static final FPairPos4D range4D = factory.getFTransferHelper().getFPairPos4DWithRange(range);
+    public static final FPairPos3D range3D = factory.getFTransferHelper().getFPairPos3DWithRange(range);
+    public static final FPairPos2D range2D = factory.getFTransferHelper().getFPairPos2DWithRange(range);
 
     public static FPoint getRandFPoint(FPoint... exc) {
 
