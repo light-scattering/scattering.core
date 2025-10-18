@@ -18,5 +18,11 @@ public interface FRandCore {
     int nextInteger();
     int nextInteger(int origin, int bound);
 
+    // -------------------------------------------------------------------------------------------------
+
+    double nextGaussian(double mean, double std);
+
+    // -------------------------------------------------------------------------------------------------
+
     <T> void shuffle(List<T> in);
 }

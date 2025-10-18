@@ -77,7 +77,7 @@ public class FRandCoreSimpleDef implements FRandCore {
     @Override
     public int nextInteger() {
 
-        return random.nextInt();
+        return this.random.nextInt();
     }
 
     @Override
@@ -92,6 +92,12 @@ public class FRandCoreSimpleDef implements FRandCore {
         }
 
         return this.random.nextInt(bound, origin);
+    }
+
+    @Override
+    public double nextGaussian(double mean, double std) {
+
+        return this.random.nextGaussian(mean, std);
     }
 
     @Override

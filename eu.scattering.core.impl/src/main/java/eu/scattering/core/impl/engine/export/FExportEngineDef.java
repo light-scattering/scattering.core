@@ -88,7 +88,9 @@ public class FExportEngineDef implements FExportEngine {
         builder.append(shape.getCenterY() / 1000);
         builder.append(",");
         builder.append(shape.getCenterZ() / 1000);
-        builder.append(";0.001);\n");
+        builder.append(";");
+        builder.append(shape.getRadius() / 1000);
+        builder.append(");\n");
 
         return "particle_" + (int) shape.getIndex();
     }

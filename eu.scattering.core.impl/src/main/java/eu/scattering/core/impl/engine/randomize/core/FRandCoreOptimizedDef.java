@@ -93,6 +93,12 @@ public class FRandCoreOptimizedDef implements FRandCore {
     }
 
     @Override
+    public double nextGaussian(double mean, double std) {
+
+        return this.random.nextGaussian(mean, std);
+    }
+
+    @Override
     public <T> void shuffle(List<T> in) {
 
         Collections.shuffle(in, this.random);

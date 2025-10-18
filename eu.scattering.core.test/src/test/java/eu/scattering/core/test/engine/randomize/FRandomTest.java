@@ -3,6 +3,7 @@ package eu.scattering.core.test.engine.randomize;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.transfer.primitive.*;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.*;
@@ -13,6 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static eu.scattering.core.test.Config.epsilon;
+import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FEngine")
@@ -695,6 +697,65 @@ public class FRandomTest {
                             "The list should be empty"),
                     () -> assertEquals(0, list.size(),
                             "The list should be empty"));
+        }
+    }
+
+    @Nested
+    @Tag("Distribution")
+    @DisplayName("Functionality - Distribution")
+    class FEngineDistributionTest {
+
+        @Test
+        @DisplayName("Normal distribution - Seed enabled")
+        void normalDistributionWithSeed() {
+            long seed = 12345;
+
+            double mean = 10;
+            double std = 1;
+
+            FRandGenerator fRandomA = FactoryDef.create(seed).getFRand();
+            FRandGenerator fRandomB = FactoryDef.create(seed).getFRand();
+
+            FStat1D fStatA = factory.getFStat1D();
+            FStat1D fStatB = factory.getFStat1D();
+
+            for (int i = 0 ; i < 2500 ; i++) {
+                fStatA.add(fRandomA.nextGaussian(mean, std));
+                fStatB.add(fRandomB.nextGaussian(mean, std));
+            }
+
+            assertTrue(fStatA.isEqual(fStatB));
+
+            double fStatMean = fStatA.mean();
+            assertEquals(mean, fStatMean, 1E-1);
+            assertEquals(std, fStatA.std(true, mean), 1E-1);
+        }
+
+        @Test
+        @DisplayName("Normal distribution - Seed disabled")
+        void normalDistributionWithoutSeed() {
+            double mean = 10;
+            double std = 1;
+
+            FRandGenerator fRandomA = FactoryDef.create().getFRand();
+            FRandGenerator fRandomB = FactoryDef.create().getFRand();
+
+            FStat1D fStatA = factory.getFStat1D();
+            FStat1D fStatB = factory.getFStat1D();
+
+            for (int i = 0 ; i < 2500 ; i++) {
+                fStatA.add(fRandomA.nextGaussian(mean, std));
+                fStatB.add(fRandomB.nextGaussian(mean, std));
+            }
+
+            assertFalse(fStatA.isEqual(fStatB));
+
+            double fStatAMean = fStatA.mean();
+            double fStatBMean = fStatB.mean();
+            assertEquals(mean, fStatAMean, 1E-1);
+            assertEquals(mean, fStatBMean, 1E-1);
+            assertEquals(std, fStatA.std(true, fStatAMean), 1E-1);
+            assertEquals(std, fStatB.std(true, fStatBMean), 1E-1);
         }
     }
 }

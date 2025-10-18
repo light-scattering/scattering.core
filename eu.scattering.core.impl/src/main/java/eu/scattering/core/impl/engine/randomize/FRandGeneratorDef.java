@@ -5,6 +5,7 @@ import eu.scattering.core.design.engine.randomize.generator.core.FRandCore;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.custom.FDist1DCustom;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.fixed.FDist1DFixed;
+import eu.scattering.core.design.engine.randomize.generator.module.dist1d.normal.FDist1DNormal;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.uniform.FDist1DUniform;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.joint.FDist2DJoint;
 import eu.scattering.core.design.engine.randomize.generator.module.dist2d.fixed.FDist2DFixed;
@@ -105,6 +106,12 @@ public class FRandGeneratorDef implements FRandGenerator {
     public int nextInteger(int origin, int bound) {
 
         return this.core.nextInteger(origin, bound);
+    }
+
+    @Override
+    public double nextGaussian(double mean, double std) {
+
+        return this.core.nextGaussian(mean, std);
     }
 
     @Override
@@ -303,6 +310,12 @@ public class FRandGeneratorDef implements FRandGenerator {
     public FDist1DFixed getFDist1DFixed(double x) {
 
         return FDist1DFixedDef.get(x);
+    }
+
+    @Override
+    public FDist1DNormal getFDist1DNormal(double mean, double std) {
+
+        return FDist1DNormalDef.get(this, mean, std);
     }
 
     @Override
