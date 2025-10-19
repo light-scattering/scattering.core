@@ -870,7 +870,7 @@ public class FStat1DTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.invertOrder();
+            fStat.invert();
 
             assertEquals(4, fStat.get(0), 1E-6);
             assertEquals(2, fStat.get(1), 1E-6);
@@ -888,7 +888,7 @@ public class FStat1DTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.invertValues();
+            fStat.mirror();
 
             assertEquals(-1, fStat.get(0), 1E-6);
             assertEquals(-7, fStat.get(1), 1E-6);

@@ -476,10 +476,10 @@ public class FPlot2DTest {
             fPlot.add(2, -1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(4, fPlot.getIndexRound(1.8)),
-                    () -> assertEquals(1, fPlot.getIndexRound(-1.1)),
-                    () -> assertEquals(4, fPlot.getIndexRound(100)),
-                    () -> assertEquals(0, fPlot.getIndexRound(-100))
+                    () -> assertEquals(4, fPlot.getIndex(1.8)),
+                    () -> assertEquals(1, fPlot.getIndex(-1.1)),
+                    () -> assertEquals(4, fPlot.getIndex(100)),
+                    () -> assertEquals(0, fPlot.getIndex(-100))
             );
         }
 
@@ -495,10 +495,10 @@ public class FPlot2DTest {
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlot.getIndexRound(1.8)),
-                    () -> assertEquals(4, fPlot.getIndexRound(-1.1)),
-                    () -> assertEquals(3, fPlot.getIndexRound(100)),
-                    () -> assertEquals(2, fPlot.getIndexRound(-100))
+                    () -> assertEquals(3, fPlot.getIndex(1.8)),
+                    () -> assertEquals(4, fPlot.getIndex(-1.1)),
+                    () -> assertEquals(3, fPlot.getIndex(100)),
+                    () -> assertEquals(2, fPlot.getIndex(-100))
             );
         }
 
@@ -595,6 +595,43 @@ public class FPlot2DTest {
                     () -> assertEquals(-1, fPlot.minY()),
                     () -> assertEquals(5, fPlot.maxY())
             );
+        }
+
+        @Test
+        @DisplayName("Integrate - A")
+        void integrateA() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 0);
+            fPlot.add(2, 5);
+
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.LINEAR);
+            fPlot.interpolate(100);
+
+            double area = 10;
+            double results = fPlot.integrate();
+
+            assertEquals(area, results, 1E-4);
+        }
+
+        @Test
+        @DisplayName("Integrate - B")
+        void integrateB() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            double step = Math.PI / 10;
+            double x = -Math.PI;
+            while (x <= Math.PI) {
+                fPlot.add(x, Math.sin(x));
+                x += step;
+            }
+
+            fPlot.interpolate(100);
+
+            double area = 4;
+            double results = fPlot.integrate();
+
+            assertEquals(area, results, 1E-1);
         }
 
         @Test
@@ -784,6 +821,26 @@ public class FPlot2DTest {
             assertEquals(-0.12, fPlot.getY(2), 1E-4);
             assertEquals(-1.24, fPlot.getY(3), 1E-4);
             assertEquals(-2.36, fPlot.getY(4), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Absolute")
+        void absolute() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            fPlot.absolute();
+
+            assertEquals(2, fPlot.getY(0), 1E-4);
+            assertEquals(1, fPlot.getY(1), 1E-4);
+            assertEquals(0, fPlot.getY(2), 1E-4);
+            assertEquals(1, fPlot.getY(3), 1E-4);
+            assertEquals(2, fPlot.getY(4), 1E-4);
         }
 
         @Test

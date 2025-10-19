@@ -1,5 +1,7 @@
 package eu.scattering.core.design.statistics.base;
 
+import eu.scattering.core.design.annotation.Fragment;
+import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 
@@ -73,8 +75,8 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     void sort(boolean ascending);
 
-    void invertOrder();
-    void invertValues();
+    void invert();
+    void mirror();
 
     void normalize(boolean sample);
     void normalize(double mean, double std);
@@ -92,16 +94,20 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     // -------------------------------------------------------------------------------------------------
 
-    void replaceWithNaN(Function<Double, Boolean> function);
-
-    void replaceOutliersWithNaN(boolean sample, double factor);
-    void replaceOutliersWithNaN(double mean, double std, double factor);
-
-    List<Double> getData();
-    void setData(List<Double> data);
+    String getName();
+    void setName(String name);
 
     // -------------------------------------------------------------------------------------------------
 
-    String getName();
-    void setName(String name);
+    @Fragment
+    void replaceWithNaN(Function<Double, Boolean> function);
+    @Fragment
+    void replaceOutliersWithNaN(boolean sample, double factor);
+    @Fragment
+    void replaceOutliersWithNaN(double mean, double std, double factor);
+
+    @Modificator
+    List<Double> getData();
+    @Modificator
+    void setData(List<Double> data);
 }

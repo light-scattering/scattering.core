@@ -98,15 +98,15 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
 
     @Override
     public double apxCosine(FPlot2D data, double x) {
-        int indexL = getIndexL1(data, x);
-        int indexR = getIndexR1(data, x);
+        int indexL1 = getIndexL1(data, x);
+        int indexR2 = getIndexR1(data, x);
 
-        if (indexL == indexR) {
-            return data.getRecord(indexL).getY();
+        if (indexL1 == indexR2) {
+            return data.getRecord(indexL1).getY();
         }
 
-        FPlot2DRecord recordL1 = data.getRecord(indexL);
-        FPlot2DRecord recordR1 = data.getRecord(indexR);
+        FPlot2DRecord recordL1 = data.getRecord(indexL1);
+        FPlot2DRecord recordR1 = data.getRecord(indexR2);
 
         double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
         double tmp2 = (1 - Math.cos(tmp1 * Math.PI)) / 2;

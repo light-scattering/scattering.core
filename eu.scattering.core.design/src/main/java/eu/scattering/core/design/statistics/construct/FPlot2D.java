@@ -1,6 +1,7 @@
 package eu.scattering.core.design.statistics.construct;
 
 
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
@@ -29,9 +30,7 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     FStat1D getStatY();
     void setStatY(FStat1D statY);
 
-    int getIndexCeil(double x);
-    int getIndexFloor(double x);
-    int getIndexRound(double x);
+    int getIndex(double x);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -40,6 +39,8 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     double minY();
     double maxY();
+
+    double integrate();
 
     double approximate(double x);
 
@@ -56,6 +57,8 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     void sortX(boolean ascending);
     void sortY(boolean ascending);
 
+    void absolute();
+
     FPos2D simpleLinearRegression();
 
     // -------------------------------------------------------------------------------------------------
@@ -71,4 +74,11 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     String getName();
     void setName(String name);
+
+    // -------------------------------------------------------------------------------------------------
+
+    @Fragment
+    int getIndexCeil(double x);
+    @Fragment
+    int getIndexFloor(double x);
 }

@@ -217,7 +217,7 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public int getIndexRound(double x) {
+    public int getIndex(double x) {
         double valueMin = Double.POSITIVE_INFINITY;
         int index = -1;
 
@@ -321,6 +321,24 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
+    public double integrate() {
+
+        if (size() < 1) {
+            throw new IllegalArgumentException("The number of elements must be greater then one");
+        }
+
+        double area = 0;
+        for (int i = 0 ; i < size() - 1 ; i++) {
+            double avgY = (Math.abs(getY(i)) + Math.abs(getY(i + 1))) * 0.5;
+            double stepX = getX(i + 1) - getX(i);
+
+            area += (stepX * avgY);
+        }
+
+        return area;
+    }
+
+    @Override
     public double approximate(double x) {
 
         return getInterpolator().apx(this, x);
@@ -398,7 +416,7 @@ public class FPlot2DDef implements FPlot2D {
             value += step;
         }
 
-        list.add(FPlot2DRecordDef.create(value, approximate(value)));
+        list.add(FPlot2DRecordDef.create(maxX, approximate(maxX)));
 
         setData(list);
     }
@@ -421,6 +439,12 @@ public class FPlot2DDef implements FPlot2D {
         } else {
             sortDscY();
         }
+    }
+
+    @Override
+    public void absolute() {
+
+        mutateY((x, y) -> Math.abs(y));
     }
 
     @Override

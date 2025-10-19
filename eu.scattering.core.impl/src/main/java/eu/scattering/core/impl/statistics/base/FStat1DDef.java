@@ -510,13 +510,13 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public void invertOrder() {
+    public void invert() {
 
         setData(getData().reversed());
     }
 
     @Override
-    public void invertValues() {
+    public void mirror() {
 
         mutate(val -> -val);
     }
