@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.rotate.FRotEngine;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
@@ -26,7 +26,7 @@ public abstract class ShapePresetDef implements Shape {
 
     protected final ScatFactory factory;
 
-    private final List<FMetaData> metaData = new ArrayList<>();
+    private final List<FBufferData> metaData = new ArrayList<>();
     private final List<Double> coatData = new ArrayList<>();
 
     private double epsilon = SHAPE_EPSILON;
@@ -41,7 +41,7 @@ public abstract class ShapePresetDef implements Shape {
         this.factory = factory;
 
         for (int i = 0 ; i < LAYER_LIMIT ; i++) {
-            metaData.add(FMetaData.crete("", i));
+            metaData.add(FBufferData.crete("", i));
         }
     }
 
@@ -198,7 +198,7 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public List<FMetaData> getMetaData() {
+    public List<FBufferData> getMetaData() {
 
         return this.metaData;
     }
@@ -1299,8 +1299,8 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeArray(FBuffer<FMetaData> in) {
-        List<FMetaData> metaData = getMetaData();
+    public double fillVolumeArray(FBuffer<FBufferData> in) {
+        List<FBufferData> metaData = getMetaData();
 
         double factor = 1 / delta;
 
@@ -1334,14 +1334,14 @@ public abstract class ShapePresetDef implements Shape {
     }
 
     @Override
-    public double fillVolumeArray(FBuffer<FMetaData> in, List<? extends Shape> structure) {
+    public double fillVolumeArray(FBuffer<FBufferData> in, List<? extends Shape> structure) {
         int position = structure.indexOf(this);
 
         if (position == -1) {
             throw new IllegalArgumentException("The shape must be a part of the structure");
         }
 
-        List<FMetaData> metaData = getMetaData();
+        List<FBufferData> metaData = getMetaData();
 
         double factor = 1 / delta;
 

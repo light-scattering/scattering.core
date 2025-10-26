@@ -34,7 +34,7 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.engine.export.FExportEngine;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
@@ -413,6 +413,18 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
+    public FAggregate getFAggregate(String json) {
+
+        return FAggregateDef.create(this, json);
+    }
+
+    @Override
+    public FAggregate getFAggregate(JSONObject json) {
+
+        return FAggregateDef.create(this, json);
+    }
+
+    @Override
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles) {
 
         return FAggregateDef.create(this, refParticles, getFBuffer());
@@ -425,7 +437,7 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FBuffer<FMetaData> refElements) {
+    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FBuffer<FBufferData> refElements) {
 
         return FAggregateDef.create(this, refParticles, refElements);
     }

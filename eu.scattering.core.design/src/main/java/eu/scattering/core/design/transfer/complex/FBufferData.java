@@ -6,7 +6,7 @@ import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import eu.scattering.core.design.transfer.box.FBoxString;
 import org.json.JSONObject;
 
-public class FMetaData implements Transfer {
+public class FBufferData implements Transfer {
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
     private static final String JSON_TYPE = "type";
@@ -18,15 +18,15 @@ public class FMetaData implements Transfer {
 
     private final FBoxString meta = factoryExt.getFBoxString();
 
-    private FMetaData(String meta, int layerIndex) {
+    private FBufferData(String meta, int layerIndex) {
 
         this.layer = layerIndex;
         this.meta.setValue(meta);
     }
 
-    public static FMetaData crete(String tag, int layer) {
+    public static FBufferData crete(String tag, int layer) {
 
-        return new FMetaData(tag, layer);
+        return new FBufferData(tag, layer);
     }
 
     public int getLayerIndex() {

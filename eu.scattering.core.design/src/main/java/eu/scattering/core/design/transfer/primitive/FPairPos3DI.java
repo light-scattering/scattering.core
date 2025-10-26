@@ -39,7 +39,7 @@ public class FPairPos3DI implements Transfer {
 
     protected static FPairPos3DI create(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
+        if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 

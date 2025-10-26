@@ -1,5 +1,6 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 public interface FSphereHelper {
@@ -19,4 +20,6 @@ public interface FSphereHelper {
     double getVolumeRing(double r1, double r2);
 
     double getRadiusOfGyration(double r);
+
+    boolean isIntersecting(Shape shape, double cSqX, double cSqY, double cSqZ, double size);
 }

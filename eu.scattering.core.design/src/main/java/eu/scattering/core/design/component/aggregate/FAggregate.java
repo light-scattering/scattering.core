@@ -4,12 +4,12 @@ import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.annotation.Legacy;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.transfer.complex.FMaterial;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
@@ -20,7 +20,7 @@ public interface FAggregate extends Component {
     FAssembly<Shape> getParticles();
     FAggregate setParticles(FAssembly<Shape> particles);
 
-    FMesh<FMetaData> getVolumeMesh();
+    FMesh<FBufferData> getVolumeMesh();
 
     double getVolume();
     double getVolume(double[] layers);
@@ -55,6 +55,8 @@ public interface FAggregate extends Component {
 
     double getOverlapFactor();
 
+    double getBoxDimension();
+
     boolean isCompact();
     boolean isSparse();
 
@@ -62,11 +64,10 @@ public interface FAggregate extends Component {
 
     //--------------------------------------------------
 
-    FAggregate setMaterialDensity(String material, double density);
-    double getMaterialDensity(String material);
+    FAggregate copy();
 
-    FAggregate setMaterialRefIndex(String material, FComplex refIndex);
-    FComplex getMaterialRefIndex(String material);
+    boolean isExact(FAggregate aggregate);
+    boolean isExactData(FAggregate aggregate);
 
     //--------------------------------------------------
 
@@ -78,12 +79,17 @@ public interface FAggregate extends Component {
     double getRadiusOfGyrationPolydisperse();
 
     @Modificator
+    FBuffer<FBufferData> getRefBuffer();
+    @Modificator
+    FAggregate setRefBuffer(FBuffer<FBufferData> dipoles);
+
+    @Modificator
     FAssembly<Shape> getRefParticles();
     @Modificator
     FAggregate setRefParticles(FAssembly<Shape> particles);
 
     @Modificator
-    FBuffer<FMetaData> getRefDipoles();
+    FMaterial getRefMaterial();
     @Modificator
-    FAggregate setRefDipoles(FBuffer<FMetaData> dipoles);
+    FAggregate setRefMaterial(FMaterial material);
 }

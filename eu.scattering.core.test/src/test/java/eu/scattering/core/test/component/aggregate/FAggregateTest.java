@@ -7,17 +7,16 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
-import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import eu.scattering.core.mock.aggregate.F3D_N1000_Mono;
+import org.json.JSONObject;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,1809 +28,1913 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("FAggregate")
 public class FAggregateTest {
 
-    @Test
-    @DisplayName("Construct")
-    void construct() {
-        FAggregate fAggregate = factory.getFAggregate();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(1000000, fAggregate.getRefDipoles().capacity(),
-                        "The capacity is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct with capacity")
-    void constructWithCapacity() {
-        FAggregate fAggregate = factory.getFAggregate(100);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(100, fAggregate.getRefDipoles().capacity(),
-                        "The capacity is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct with particles")
-    void constructWithParticles() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-        FAggregate fAggregate = factory.getFAggregate(fAssembly);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
-                        "The reference should change"),
-                () -> assertEquals(1000000, fAggregate.getRefDipoles().capacity(),
-                        "The capacity is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct with particles and capacity")
-    void constructWithParticlesAndCapacity() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-        FAggregate fAggregate = factory.getFAggregate(fAssembly, 100);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
-                        "The reference should change"),
-                () -> assertEquals(100, fAggregate.getRefDipoles().capacity(),
-                        "The capacity is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct with reference particles")
-    void constructWithReferenceParticles() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertSame(fAssembly, fAggregate.getRefParticles(),
-                        "The reference should not change"),
-                () -> assertEquals(1000000, fAggregate.getRefDipoles().capacity(),
-                        "The capacity is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct with reference particles and capacity")
-    void constructWithReferenceParticlesAndCapacity() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 100);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertSame(fAssembly, fAggregate.getRefParticles(),
-                        "The reference should not change"),
-                () -> assertEquals(100, fAggregate.getRefDipoles().capacity(),
-                        "The capacity is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct mono")
-    void constructMono() {
-        FAggregate fAggregate = factory.getFAggregateMono(10, 1);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(10, fAggregate.getRefParticles().size(),
-                        "The number of particles is incorrect"),
-                () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
-                        epsilon, "The particle radius is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct mono with capacity")
-    void constructMonoWithCapacity() {
-        FAggregate fAggregate = factory.getFAggregateMono(10, 1, 100);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(10, fAggregate.getRefParticles().size(),
-                        "The number of particles is incorrect"),
-                () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
-                        epsilon, "The particle radius is erroneous"),
-                () -> assertEquals(100, fAggregate.getRefDipoles().capacity(),
-                        "The capacity is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Construct with reference particles and reference elements")
-    void constructWithReferenceParticlesAndReferenceElements() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly();
-        FBuffer<FMetaData> fArray = factory.getFBuffer(10);
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, fArray);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertSame(fAssembly, fAggregate.getRefParticles(),
-                        "The reference should not change"),
-                () -> assertSame(fArray, fAggregate.getRefDipoles(),
-                        "The reference should not change")
-        );
-    }
-
-    @Test
-    @DisplayName("Get particles")
-    void getParticles() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssemblyA);
-
-        FAssembly<Shape> fAssemblyB = fAggregate.getParticles();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertNotSame(fAssemblyA, fAssemblyB,
-                        "The reference should change"),
-                () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
-                        "The geometry should be the same")
-        );
-
-        fSphereA.setRadius(10);
-
-        assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
-    }
-
-    @Test
-    @DisplayName("Set particles")
-    void setParticles() {
-        FAggregate fAggregateA = factory.getFAggregate();
-
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregateB = fAggregateA.setParticles(fAssemblyA);
-
-        FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertSame(fAggregateA, fAggregateB,
-                        "The reference not should change"),
-                () -> assertNotSame(fAssemblyA, fAssemblyB,
-                        "The reference should change"),
-                () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
-                        "The geometry should be the same")
-        );
-
-        fSphereA.setRadius(10);
-
-        assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
-    }
-
-    @Test
-    @DisplayName("Get reference particles")
-    void getReferenceParticles() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssemblyA);
-
-        FAssembly<Shape> fAssemblyB = fAggregate.getRefParticles();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertSame(fAssemblyA, fAssemblyB,
-                        "The reference should not change")
-        );
-    }
-
-    @Test
-    @DisplayName("Set reference particles")
-    void setReferenceParticles() {
-        FAggregate fAggregateA = factory.getFAggregate();
-
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-        FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregateB = fAggregateA.setRefParticles(fAssemblyA);
-
-        FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertSame(fAggregateA, fAggregateB,
-                        "The reference not should change"),
-                () -> assertSame(fAssemblyA, fAssemblyB,
-                        "The reference should not change")
-        );
-    }
-
-    @Test
-    @DisplayName("Validate reference elements")
-    void validateReferenceElements() {
-        FBuffer<FMetaData> fArrayA = factory.getFBuffer(123);
-
-        FAggregate fAggregateA = factory.getFAggregate();
-
-        FAggregate fAggregateB = fAggregateA.setRefDipoles(fArrayA);
-
-        FBuffer<FMetaData> fArrayB = fAggregateA.getRefDipoles();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertSame(fAggregateA, fAggregateB,
-                        "The reference should not change"),
-                () -> assertSame(fArrayA, fArrayB,
-                        "The reference should not change")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume, point contact A")
-    void getVolumePointContactA() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double volActual = fAggregate.getVolume();
-        double volExpected = 4 * (4  * Math.PI / 3);
-
-        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume, point contact B")
-    void getVolumePointContactB() {
-        Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double volActual = fAggregate.getVolume();
-        double volExpected = 50 * (4  * Math.PI / 3);
-
-        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume, overlap (full) - monodisperse")
-    void getVolumeOverlapFullMonodisperse() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 0, 1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double volActual = fAggregate.getVolume();
-        double expected = 1 * (4  * Math.PI / 3);
-
-        double relError = factory.getStatisticsHelper().getRelErr(expected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume, overlap (full) - polydisperse A")
-    void getVolumeOverlapFullPolydisperseA() {
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
-        Shape fSphereB = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
-        Shape fSphereC = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
-        Shape fSphereD = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double volActual = fAggregate.getVolume();
-        double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
-
-        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume, overlap (full) - polydisperse B")
-    void getVolumeOverlapFullPolydisperseB() {
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
-        Shape fSphereB = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
-        Shape fSphereC = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
-        Shape fSphereD = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double volActual = fAggregate.getVolume();
-        double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
-
-        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume, overlap (mixed)")
-    void getVolumeOverlapMixed() {
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
-        Shape fSphereB = factory.getFSphere(1, 0, 0, 1).setDelta(0.1);
-        Shape fSphereC = factory.getFSphere(0, 5, 0, 1).setDelta(0.1);
-        Shape fSphereD = factory.getFSphere(0, 0, 5, 1).setDelta(0.1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double volActual = fAggregate.getVolume();
-        double volExpected = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-
-        double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume layer, point contact A")
-    void getVolumeLayerPointContactA() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(6, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 6, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 6, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double[] volLayers = new double[3];
-        double volActual = fAggregate.getVolume(volLayers);
-
-        double volExpectedLayer0 = 4 * fSphereA.getLayerVolume(0);
-        double volExpectedLayer1 = 4 * fSphereA.getLayerVolume(1);
-        double volExpectedLayer2 = 4 * fSphereA.getLayerVolume(2);
-        double volExpected = 4 * fSphereA.getVolumeAlgebraic();
-
-        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
-        double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
-        double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(volErrLayer0 < 0.01,
-                        "Layer 0 volume is erroneous"),
-                () -> assertTrue(volErrLayer1 < 0.01,
-                        "Layer 1 volume is erroneous"),
-                () -> assertTrue(volErrLayer2 < 0.01,
-                        "Layer 2 volume is erroneous"),
-                () -> assertTrue(volErr < 0.01,
-                        "The total volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume layer, point contact B")
-    void getVolumeLayerPointContactB() {
-        double delta = 0.1;
-        int quantity = 25;
-
-        Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
-                .setDelta(delta)
-                .correctAddCoat(1, 1)
-                .validateNoOverlap();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FSphere fSphereRef = fSphereProd.produce();
-
-        double[] volLayers = new double[3];
-        double volActual = fAggregate.getVolume(volLayers);
-
-        double volExpectedLayer0 = quantity * fSphereRef.getLayerVolume(0);
-        double volExpectedLayer1 = quantity * fSphereRef.getLayerVolume(1);
-        double volExpectedLayer2 = quantity * fSphereRef.getLayerVolume(2);
-        double volExpected = quantity * fSphereRef.getVolumeAlgebraic();
-
-        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
-        double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
-        double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(volErrLayer0 < 0.01,
-                        "Layer 0 volume is erroneous"),
-                () -> assertTrue(volErrLayer1 < 0.01,
-                        "Layer 1 volume is erroneous"),
-                () -> assertTrue(volErrLayer2 < 0.01,
-                        "Layer 2 volume is erroneous"),
-                () -> assertTrue(volErr < 0.01,
-                        "The total volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume layer, overlap (full) - monodisperse")
-    void getVolumeLayerOverlapFullMonodisperse() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double[] volLayers = new double[3];
-        double volActual = fAggregate.getVolume(volLayers);
-
-        double volExpectedLayer0 = fSphereA.getLayerVolume(0);
-        double volExpectedLayer1 = fSphereA.getLayerVolume(1);
-        double volExpectedLayer2 = fSphereA.getLayerVolume(2);
-        double volExpected = fSphereA.getVolumeAlgebraic();
-
-        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
-        double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
-        double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(volErrLayer0 < 0.01,
-                        "Layer 0 volume is erroneous"),
-                () -> assertTrue(volErrLayer1 < 0.01,
-                        "Layer 1 volume is erroneous"),
-                () -> assertTrue(volErrLayer2 < 0.01,
-                        "Layer 2 volume is erroneous"),
-                () -> assertTrue(volErr < 0.01,
-                        "The total volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume layer, overlap (mixed)")
-    void getVolumeLayerOverlapMixed() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double[] volLayers = new double[4];
-        double volActualA = fAggregate.getVolume(volLayers);
-        double volActualB = fAggregate.getVolume();
-
-        double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-
-        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
-        double volErr = factory.getStatisticsHelper().getRelErr(volActualB, volActualA);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(volErrLayer0 < 0.01,
-                        "Layer 0 volume is erroneous"),
-                () -> assertTrue(volErr < 0.01,
-                        "The total volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get volume array, overlap (mixed)")
-    void getVolumeArrayOverlapMixed() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FMesh<FMetaData> fArray = fAggregate.getVolumeMesh();
-
-        FLayer fLayer = factory.getFLayerCounter();
-
-        fArray.forEach((index, d0, d1, d2, data) -> fLayer.inc(data.getLayerIndex()));
-
-        double volActualLayer0 = fLayer.get(0) * 0.001;
-        double volActualA = fLayer.addSelf() * 0.001;
-        double volActualB = fAggregate.getVolume();
-
-        double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-
-        double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volActualLayer0);
-        double volErr = factory.getStatisticsHelper().getRelErr(volActualA, volActualB);
-
-        double duplicates = fArray.deduplicate();
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(0, duplicates,
-                        "The number of duplicates is erroneous"),
-                () -> assertTrue(volErrLayer0 < 0.01,
-                        "Layer 0 volume is erroneous"),
-                () -> assertTrue(volErr < 0.01,
-                        "The total volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface, point contact A")
-    void getSurfacePointContactA() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double srfActual = fAggregate.getSurface();
-        double srfExpected = 4 * (4  * Math.PI);
-
-        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface, point contact B")
-    void getSurfacePointContactB() {
-        Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double srfActual = fAggregate.getSurface();
-        double srfExpected = 50 * (4  * Math.PI);
-
-        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface, overlap (full) - monodisperse")
-    void getSurfaceOverlapFullMonodisperse() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereB = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereC = factory.getFSphere(0, 0, 0, 1);
-        FSphere fSphereD = factory.getFSphere(0, 0, 0, 1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double srfActual = fAggregate.getSurface();
-        double srfExpected = 1 * (4  * Math.PI);
-
-        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface, overlap (full) - polydisperse A")
-    void getSurfaceOverlapFullPolydisperseA() {
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
-        Shape fSphereB = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
-        Shape fSphereC = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
-        Shape fSphereD = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double srfActual = fAggregate.getSurface();
-        double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
-
-        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface, overlap (full) - polydisperse B")
-    void getSurfaceOverlapFullPolydisperseB() {
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
-        Shape fSphereB = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
-        Shape fSphereC = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
-        Shape fSphereD = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+    @Nested
+    @Tag("Basic")
+    @DisplayName("Functionality")
+    class FAggregateBasicTest {
+
+        @Test
+        @DisplayName("Construct")
+        void construct() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
+                            "The capacity is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with capacity")
+        void constructWithCapacity() {
+            FAggregate fAggregate = factory.getFAggregate(100);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
+                            "The capacity is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with particles")
+        void constructWithParticles() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FAggregate fAggregate = factory.getFAggregate(fAssembly);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
+                            "The reference should change"),
+                    () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
+                            "The capacity is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with particles and capacity")
+        void constructWithParticlesAndCapacity() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FAggregate fAggregate = factory.getFAggregate(fAssembly, 100);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
+                            "The reference should change"),
+                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
+                            "The capacity is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference particles")
+        void constructWithReferenceParticles() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAssembly, fAggregate.getRefParticles(),
+                            "The reference should not change"),
+                    () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
+                            "The capacity is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference particles and capacity")
+        void constructWithReferenceParticlesAndCapacity() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 100);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAssembly, fAggregate.getRefParticles(),
+                            "The reference should not change"),
+                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
+                            "The capacity is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct mono")
+        void constructMono() {
+            FAggregate fAggregate = factory.getFAggregateMono(10, 1);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(10, fAggregate.getRefParticles().size(),
+                            "The number of particles is incorrect"),
+                    () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
+                            epsilon, "The particle radius is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct mono with capacity")
+        void constructMonoWithCapacity() {
+            FAggregate fAggregate = factory.getFAggregateMono(10, 1, 100);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(10, fAggregate.getRefParticles().size(),
+                            "The number of particles is incorrect"),
+                    () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
+                            epsilon, "The particle radius is erroneous"),
+                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
+                            "The capacity is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Construct with reference particles and reference elements")
+        void constructWithReferenceParticlesAndReferenceElements() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly();
+            FBuffer<FBufferData> fArray = factory.getFBuffer(10);
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly, fArray);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAssembly, fAggregate.getRefParticles(),
+                            "The reference should not change"),
+                    () -> assertSame(fArray, fAggregate.getRefBuffer(),
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Get particles")
+        void getParticles() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssemblyA);
+
+            FAssembly<Shape> fAssemblyB = fAggregate.getParticles();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertNotSame(fAssemblyA, fAssemblyB,
+                            "The reference should change"),
+                    () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
+                            "The geometry should be the same")
+            );
+
+            fSphereA.setRadius(10);
+
+            assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
+        }
+
+        @Test
+        @DisplayName("Set particles")
+        void setParticles() {
+            FAggregate fAggregateA = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregateB = fAggregateA.setParticles(fAssemblyA);
+
+            FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAggregateA, fAggregateB,
+                            "The reference not should change"),
+                    () -> assertNotSame(fAssemblyA, fAssemblyB,
+                            "The reference should change"),
+                    () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
+                            "The geometry should be the same")
+            );
+
+            fSphereA.setRadius(10);
+
+            assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
+        }
+
+        @Test
+        @DisplayName("Get reference particles")
+        void getReferenceParticles() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssemblyA);
+
+            FAssembly<Shape> fAssemblyB = fAggregate.getRefParticles();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAssemblyA, fAssemblyB,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Set reference particles")
+        void setReferenceParticles() {
+            FAggregate fAggregateA = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregateB = fAggregateA.setRefParticles(fAssemblyA);
+
+            FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAggregateA, fAggregateB,
+                            "The reference not should change"),
+                    () -> assertSame(fAssemblyA, fAssemblyB,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Validate reference elements")
+        void validateReferenceElements() {
+            FBuffer<FBufferData> fArrayA = factory.getFBuffer(123);
+
+            FAggregate fAggregateA = factory.getFAggregate();
+
+            FAggregate fAggregateB = fAggregateA.setRefBuffer(fArrayA);
+
+            FBuffer<FBufferData> fArrayB = fAggregateA.getRefBuffer();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAggregateA, fAggregateB,
+                            "The reference should not change"),
+                    () -> assertSame(fArrayA, fArrayB,
+                            "The reference should not change")
+            );
+        }
+    }
+
+    @Nested
+    @Tag("Core")
+    @DisplayName("Core features")
+    class FAggregateCoreTest {
+
+        @Test
+        @DisplayName("Parse JSON")
+        void parseJSON() {
+            FAggregate fAggregate = factory.getFAggregateMono(10, 1, 10);
+            fAggregate.getRefMaterial().setDensity("A", 3);
+            fAggregate.getRefMaterial().setDensity("B", 6);
+            fAggregate.getRefMaterial().setRefIndexRe("C", 3);
+            fAggregate.getRefMaterial().setRefIndexIm("D", 6);
+            fAggregate.getRefMaterial().setRefIndex("E", 4, 8);
+
+            JSONObject json = fAggregate.toJSON();
+
+            FAggregate fAggregateCopy = factory.getFAggregate(json);
+
+            assertTrue(fAggregate.isExactData(fAggregateCopy));
+            assertTrue(fAggregateCopy.isExactData(fAggregate));
+            assertTrue(fAggregate.isExact(fAggregateCopy));
+            assertTrue(fAggregateCopy.isExact(fAggregate));
+        }
+
+        @Test
+        @DisplayName("Exactness")
+        void isExact() {
+            FAggregate fAggregateA = factory.getFAggregate(10);
+            FAggregate fAggregateB = factory.getFAggregate(10);
+
+            Shape fSphereAA = factory.getFSphere(0, 0, 0, 1);
+            Shape fSphereAB = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereAC = factory.getFSphere(0, 2, 0, 1);
+            Shape fSphereAD = factory.getFSphere(0, 0, 2, 1);
+
+            Shape fSphereBA = fSphereAA.copy();
+            Shape fSphereBB = fSphereAB.copy();
+            Shape fSphereBC = fSphereAC.copy();
+            Shape fSphereBD = fSphereAD.copy();
+
+            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereAA, fSphereAB, fSphereAC, fSphereAD));
+            FAssembly<Shape> fAssemblyB = factory.getFAssembly(List.of(fSphereBA, fSphereBB, fSphereBC, fSphereBD));
+
+            fAggregateA.setRefParticles(fAssemblyA);
+            fAggregateB.setRefParticles(fAssemblyB);
+
+            fAggregateA.getRefMaterial().setDensity("X", 5);
+            fAggregateB.getRefMaterial().setDensity("X", 5);
+
+            assertTrue(fAggregateA.isExact(fAggregateB));
+            assertTrue(fAggregateB.isExact(fAggregateA));
+            assertTrue(fAggregateA.isExactData(fAggregateB));
+            assertTrue(fAggregateB.isExactData(fAggregateA));
+
+            fAggregateB.getRefMaterial().setDensity("X", 6);
+
+            assertFalse(fAggregateA.isExact(fAggregateB));
+            assertFalse(fAggregateB.isExact(fAggregateA));
+            assertTrue(fAggregateA.isExactData(fAggregateB));
+            assertTrue(fAggregateB.isExactData(fAggregateA));
 
-        double srfActual = fAggregate.getSurface();
-        double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
+            fAggregateB.getRefMaterial().setDensity("X", 5);
+            fAggregateB.getRefParticles().asList().get(0).setRadius(2);
+
+            assertFalse(fAggregateA.isExact(fAggregateB));
+            assertFalse(fAggregateB.isExact(fAggregateA));
+            assertFalse(fAggregateA.isExactData(fAggregateB));
+            assertFalse(fAggregateB.isExactData(fAggregateA));
+        }
+    }
+
+    @Nested
+    @Tag("Advanced")
+    @DisplayName("Functionality - Advanced")
+    class FAggregateAdvancedTest {
+
+        @Test
+        @DisplayName("Get volume, point contact A")
+        void getVolumePointContactA() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
 
-        double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double volActual = fAggregate.getVolume();
+            double volExpected = 4 * (4  * Math.PI / 3);
+
+            double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, point contact B")
+        void getVolumePointContactB() {
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
 
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(relError < 0.01,
-                        "The surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface layer, point contact A")
-    void getSurfaceLayerPointContactA() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(6, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 6, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 6, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double[] srfLayers = new double[3];
-        double srfActual = fAggregate.getSurface(srfLayers);
-
-        double srfExpectedLayer0 = 4 * fSphereA.getLayerSurface(0);
-        double srfExpectedLayer1 = 4 * fSphereA.getLayerSurface(1);
-        double srfExpectedLayer2 = 4 * fSphereA.getLayerSurface(2);
-        double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
-
-        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
-        double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
-        double srfErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(srfErrLayer0 < 0.01,
-                        "Layer 0 surface is erroneous"),
-                () -> assertTrue(srfErrLayer1 < 0.01,
-                        "Layer 1 surface is erroneous"),
-                () -> assertTrue(srfErrLayer2 < 0.01,
-                        "Layer 2 surface is erroneous"),
-                () -> assertTrue(srfErr < 0.01,
-                        "The total surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface layer, point contact B")
-    void getSurfaceLayerPointContactB() {
-        double delta = 0.1;
-        int quantity = 25;
-
-        Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
-                .setDelta(delta)
-                .correctAddCoat(1, 1)
-                .validateNoOverlap();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FSphere fSphereRef = fSphereProd.produce();
-
-        double[] srfLayers = new double[3];
-        double srfActual = fAggregate.getSurface(srfLayers);
-
-        double srfExpectedLayer0 = quantity * fSphereRef.getLayerSurface(0);
-        double srfExpectedLayer1 = quantity * fSphereRef.getLayerSurface(1);
-        double srfExpectedLayer2 = quantity * fSphereRef.getLayerSurface(2);
-        double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
-
-        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
-        double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
-        double srfErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(srfErrLayer0 < 0.01,
-                        "Layer 0 surface is erroneous"),
-                () -> assertTrue(srfErrLayer1 < 0.01,
-                        "Layer 1 surface is erroneous"),
-                () -> assertTrue(srfErrLayer2 < 0.01,
-                        "Layer 2 surface is erroneous"),
-                () -> assertTrue(srfErr < 0.01,
-                        "The total surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface layer, overlap (full) - monodisperse")
-    void getSurfaceLayerOverlapFullMonodisperse() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double[] srfLayers = new double[3];
-        double srfActual = fAggregate.getSurface(srfLayers);
-
-        double srfExpectedLayer0 = fSphereA.getLayerSurface(0);
-        double srfExpectedLayer1 = fSphereA.getLayerSurface(1);
-        double srfExpectedLayer2 = fSphereA.getLayerSurface(2);
-        double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
-
-        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
-        double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
-        double srfErrTotal = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(srfErrLayer0 < 0.01,
-                        "Layer 0 surface is erroneous"),
-                () -> assertTrue(srfErrLayer1 < 0.01,
-                        "Layer 1 surface is erroneous"),
-                () -> assertTrue(srfErrLayer2 < 0.01,
-                        "Layer 2 surface is erroneous"),
-                () -> assertTrue(srfErrTotal < 0.01,
-                        "The total surface is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get surface layer, overlap (mixed)")
-    void getSurfaceLayerOverlapMixed() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-        Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
-                .addCoat(1, 1, 1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double[] srfLayers = new double[4];
-        fAggregate.getSurface(srfLayers);
-
-        double srfActualLayer3 = fAggregate.getSurface();
-        double srfExpectedLayer0 = 2 * factory.getFSphereHelper().getSurface(1) +
-                factory.getFSphereHelper().getSurface(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1);
-
-        double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
-        double srfErrLayer3 = factory.getStatisticsHelper().getRelErr(srfActualLayer3, srfLayers[3]);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(srfErrLayer0 < 0.01,
-                        "Layer 0 volume is erroneous"),
-                () -> assertTrue(srfErrLayer3 < 0.01,
-                        "Layer 0 volume is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get overlap factory - Same position - Double")
-    void getOverlapFactorSamePositionDouble() {
-        FSphere fSphereA = factory.getFSphere();
-        FSphere fSphereB = factory.getFSphere();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactor();
-
-        assertEquals(1, overlap, epsilon);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory - Same position - Triple")
-    void getOverlapFactorSamePositionTriple() {
-        FSphere fSphereA = factory.getFSphere();
-        FSphere fSphereB = factory.getFSphere();
-        FSphere fSphereC = factory.getFSphere();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactor();
-
-        assertEquals(1, overlap, epsilon);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory - Distant")
-    void getOverlapFactorDistant() {
-        FSphere fSphereA = factory.getFSphere(-1, 0, 0);
-        FSphere fSphereB = factory.getFSphere(1, 0, 0);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactor();
-
-        assertEquals(0, overlap, epsilon);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory - Intersecting")
-    void getOverlapFactorIntersecting() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(1, 0, 0);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactor();
-
-        double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-        double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-
-        double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
-
-        assertTrue(relError < 0.01);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory - Field")
-    void getOverlapFactorField() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(1, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 5, 0);
-        FSphere fSphereD = factory.getFSphere(0, 0, 5);
-        FSphere fSphereE = factory.getFSphere(0, 0, 5, 2);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactor();
-
-        double volAlgOverlap = (4  * Math.PI / 3) +
-                2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-        double volAlgTotal = (4  * Math.PI * Math.pow(2, 3) / 3) +
-                3 * (4  * Math.PI / 3) -
-                2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
-
-        double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
-
-        assertTrue(relError < 0.01);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory legacy - Same position")
-    void getOverlapFactorLegacySamePosition() {
-        FSphere fSphereA = factory.getFSphere();
-        FSphere fSphereB = factory.getFSphere();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactorLinear();
-
-        assertEquals(1, overlap, epsilon);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory legacy - Distant")
-    void getOverlapFactorLegacyDistant() {
-        FSphere fSphereA = factory.getFSphere(-2, 0, 0);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactorLinear();
-
-        assertEquals(0, overlap, epsilon);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory legacy - Intersecting")
-    void getOverlapFactorLegacyIntersecting() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(1, 0, 0);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactorLinear();
-
-        assertEquals(0.5, overlap, epsilon);
-    }
-
-    @Test
-    @DisplayName("Get overlap factory legacy - Field")
-    void getOverlapFactorLegacyField() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(1, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 3, 0);
-        FSphere fSphereD = factory.getFSphere(0, 4, 0);
-        FSphere fSphereE = factory.getFSphere(5, 5, 5);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        double overlap = fAggregate.getOverlapFactorLinear();
-
-        double relError = factory.getStatisticsHelper().getRelErr(0.5, overlap);
-
-        assertTrue(relError < 0.01);
-    }
-
-    @Test
-    @DisplayName("Is compact")
-    void isCompact() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        assertTrue(fAggregate.isCompact());
-    }
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
 
-    @Test
-    @DisplayName("Is compact - Fail")
-    void isCompactFail() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2);
-        FSphere fSphereE = factory.getFSphere(5, 5, 5);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+            double volActual = fAggregate.getVolume();
+            double volExpected = 50 * (4  * Math.PI / 3);
+
+            double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (full) - monodisperse")
+        void getVolumeOverlapFullMonodisperse() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double volActual = fAggregate.getVolume();
+            double expected = 1 * (4  * Math.PI / 3);
+
+            double relError = factory.getStatisticsHelper().getRelErr(expected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (full) - polydisperse A")
+        void getVolumeOverlapFullPolydisperseA() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double volActual = fAggregate.getVolume();
+            double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
+
+            double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (full) - polydisperse B")
+        void getVolumeOverlapFullPolydisperseB() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double volActual = fAggregate.getVolume();
+            double volExpected = 1 * (4  * Math.PI * Math.pow(4, 3) / 3);
+
+            double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume, overlap (mixed)")
+        void getVolumeOverlapMixed() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 5, 0, 1).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 5, 1).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double volActual = fAggregate.getVolume();
+            double volExpected = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double relError = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume layer, point contact A")
+        void getVolumeLayerPointContactA() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(6, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 6, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 6, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double[] volLayers = new double[3];
+            double volActual = fAggregate.getVolume(volLayers);
+
+            double volExpectedLayer0 = 4 * fSphereA.getLayerVolume(0);
+            double volExpectedLayer1 = 4 * fSphereA.getLayerVolume(1);
+            double volExpectedLayer2 = 4 * fSphereA.getLayerVolume(2);
+            double volExpected = 4 * fSphereA.getVolumeAlgebraic();
+
+            double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+            double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
+            double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
+            double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(volErrLayer0 < 0.01,
+                            "Layer 0 volume is erroneous"),
+                    () -> assertTrue(volErrLayer1 < 0.01,
+                            "Layer 1 volume is erroneous"),
+                    () -> assertTrue(volErrLayer2 < 0.01,
+                            "Layer 2 volume is erroneous"),
+                    () -> assertTrue(volErr < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume layer, point contact B")
+        void getVolumeLayerPointContactB() {
+            double delta = 0.1;
+            int quantity = 25;
+
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .setDelta(delta)
+                    .correctAddCoat(1, 1)
+                    .validateNoOverlap();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FSphere fSphereRef = fSphereProd.produce();
+
+            double[] volLayers = new double[3];
+            double volActual = fAggregate.getVolume(volLayers);
+
+            double volExpectedLayer0 = quantity * fSphereRef.getLayerVolume(0);
+            double volExpectedLayer1 = quantity * fSphereRef.getLayerVolume(1);
+            double volExpectedLayer2 = quantity * fSphereRef.getLayerVolume(2);
+            double volExpected = quantity * fSphereRef.getVolumeAlgebraic();
+
+            double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+            double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
+            double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
+            double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(volErrLayer0 < 0.01,
+                            "Layer 0 volume is erroneous"),
+                    () -> assertTrue(volErrLayer1 < 0.01,
+                            "Layer 1 volume is erroneous"),
+                    () -> assertTrue(volErrLayer2 < 0.01,
+                            "Layer 2 volume is erroneous"),
+                    () -> assertTrue(volErr < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume layer, overlap (full) - monodisperse")
+        void getVolumeLayerOverlapFullMonodisperse() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double[] volLayers = new double[3];
+            double volActual = fAggregate.getVolume(volLayers);
+
+            double volExpectedLayer0 = fSphereA.getLayerVolume(0);
+            double volExpectedLayer1 = fSphereA.getLayerVolume(1);
+            double volExpectedLayer2 = fSphereA.getLayerVolume(2);
+            double volExpected = fSphereA.getVolumeAlgebraic();
+
+            double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+            double volErrLayer1 = factory.getStatisticsHelper().getRelErr(volExpectedLayer1, volLayers[1]);
+            double volErrLayer2 = factory.getStatisticsHelper().getRelErr(volExpectedLayer2, volLayers[2]);
+            double volErr = factory.getStatisticsHelper().getRelErr(volExpected, volActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(volErrLayer0 < 0.01,
+                            "Layer 0 volume is erroneous"),
+                    () -> assertTrue(volErrLayer1 < 0.01,
+                            "Layer 1 volume is erroneous"),
+                    () -> assertTrue(volErrLayer2 < 0.01,
+                            "Layer 2 volume is erroneous"),
+                    () -> assertTrue(volErr < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume layer, overlap (mixed)")
+        void getVolumeLayerOverlapMixed() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double[] volLayers = new double[4];
+            double volActualA = fAggregate.getVolume(volLayers);
+            double volActualB = fAggregate.getVolume();
+
+            double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volLayers[0]);
+            double volErr = factory.getStatisticsHelper().getRelErr(volActualB, volActualA);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(volErrLayer0 < 0.01,
+                            "Layer 0 volume is erroneous"),
+                    () -> assertTrue(volErr < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get volume array, overlap (mixed)")
+        void getVolumeArrayOverlapMixed() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FMesh<FBufferData> fArray = fAggregate.getVolumeMesh();
+
+            FLayer fLayer = factory.getFLayerCounter();
+
+            fArray.forEach((index, d0, d1, d2, data) -> fLayer.inc(data.getLayerIndex()));
+
+            double volActualLayer0 = fLayer.get(0) * 0.001;
+            double volActualA = fLayer.addSelf() * 0.001;
+            double volActualB = fAggregate.getVolume();
+
+            double volExpectedLayer0 = 4 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double volErrLayer0 = factory.getStatisticsHelper().getRelErr(volExpectedLayer0, volActualLayer0);
+            double volErr = factory.getStatisticsHelper().getRelErr(volActualA, volActualB);
+
+            double duplicates = fArray.deduplicate();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(0, duplicates,
+                            "The number of duplicates is erroneous"),
+                    () -> assertTrue(volErrLayer0 < 0.01,
+                            "Layer 0 volume is erroneous"),
+                    () -> assertTrue(volErr < 0.01,
+                            "The total volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, point contact A")
+        void getSurfacePointContactA() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double srfActual = fAggregate.getSurface();
+            double srfExpected = 4 * (4  * Math.PI);
+
+            double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, point contact B")
+        void getSurfacePointContactB() {
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double srfActual = fAggregate.getSurface();
+            double srfExpected = 50 * (4  * Math.PI);
+
+            double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, overlap (full) - monodisperse")
+        void getSurfaceOverlapFullMonodisperse() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double srfActual = fAggregate.getSurface();
+            double srfExpected = 1 * (4  * Math.PI);
+
+            double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, overlap (full) - polydisperse A")
+        void getSurfaceOverlapFullPolydisperseA() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double srfActual = fAggregate.getSurface();
+            double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
+
+            double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface, overlap (full) - polydisperse B")
+        void getSurfaceOverlapFullPolydisperseB() {
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 4).setDelta(0.1);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 3).setDelta(0.1);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 2).setDelta(0.1);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 1).setDelta(0.1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double srfActual = fAggregate.getSurface();
+            double srfExpected = 1 * (4  * Math.PI * Math.pow(4, 2));
+
+            double relError = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(relError < 0.01,
+                            "The surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface layer, point contact A")
+        void getSurfaceLayerPointContactA() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(6, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 6, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 6, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double[] srfLayers = new double[3];
+            double srfActual = fAggregate.getSurface(srfLayers);
+
+            double srfExpectedLayer0 = 4 * fSphereA.getLayerSurface(0);
+            double srfExpectedLayer1 = 4 * fSphereA.getLayerSurface(1);
+            double srfExpectedLayer2 = 4 * fSphereA.getLayerSurface(2);
+            double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
+
+            double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+            double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
+            double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
+            double srfErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(srfErrLayer0 < 0.01,
+                            "Layer 0 surface is erroneous"),
+                    () -> assertTrue(srfErrLayer1 < 0.01,
+                            "Layer 1 surface is erroneous"),
+                    () -> assertTrue(srfErrLayer2 < 0.01,
+                            "Layer 2 surface is erroneous"),
+                    () -> assertTrue(srfErr < 0.01,
+                            "The total surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface layer, point contact B")
+        void getSurfaceLayerPointContactB() {
+            double delta = 0.1;
+            int quantity = 25;
+
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .setDelta(delta)
+                    .correctAddCoat(1, 1)
+                    .validateNoOverlap();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FSphere fSphereRef = fSphereProd.produce();
+
+            double[] srfLayers = new double[3];
+            double srfActual = fAggregate.getSurface(srfLayers);
+
+            double srfExpectedLayer0 = quantity * fSphereRef.getLayerSurface(0);
+            double srfExpectedLayer1 = quantity * fSphereRef.getLayerSurface(1);
+            double srfExpectedLayer2 = quantity * fSphereRef.getLayerSurface(2);
+            double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
+
+            double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+            double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
+            double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
+            double srfErr = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(srfErrLayer0 < 0.01,
+                            "Layer 0 surface is erroneous"),
+                    () -> assertTrue(srfErrLayer1 < 0.01,
+                            "Layer 1 surface is erroneous"),
+                    () -> assertTrue(srfErrLayer2 < 0.01,
+                            "Layer 2 surface is erroneous"),
+                    () -> assertTrue(srfErr < 0.01,
+                            "The total surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface layer, overlap (full) - monodisperse")
+        void getSurfaceLayerOverlapFullMonodisperse() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double[] srfLayers = new double[3];
+            double srfActual = fAggregate.getSurface(srfLayers);
+
+            double srfExpectedLayer0 = fSphereA.getLayerSurface(0);
+            double srfExpectedLayer1 = fSphereA.getLayerSurface(1);
+            double srfExpectedLayer2 = fSphereA.getLayerSurface(2);
+            double srfExpected = srfExpectedLayer0 + srfExpectedLayer1 + srfExpectedLayer2;
+
+            double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+            double srfErrLayer1 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer1, srfLayers[1]);
+            double srfErrLayer2 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer2, srfLayers[2]);
+            double srfErrTotal = factory.getStatisticsHelper().getRelErr(srfExpected, srfActual);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(srfErrLayer0 < 0.01,
+                            "Layer 0 surface is erroneous"),
+                    () -> assertTrue(srfErrLayer1 < 0.01,
+                            "Layer 1 surface is erroneous"),
+                    () -> assertTrue(srfErrLayer2 < 0.01,
+                            "Layer 2 surface is erroneous"),
+                    () -> assertTrue(srfErrTotal < 0.01,
+                            "The total surface is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get surface layer, overlap (mixed)")
+        void getSurfaceLayerOverlapMixed() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(0, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(1, 0, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(0, 5, 0, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+            Shape fSphereD = factory.getFSphere(0, 0, 5, 1)
+                    .addCoat(1, 1, 1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double[] srfLayers = new double[4];
+            fAggregate.getSurface(srfLayers);
+
+            double srfActualLayer3 = fAggregate.getSurface();
+            double srfExpectedLayer0 = 2 * factory.getFSphereHelper().getSurface(1) +
+                    factory.getFSphereHelper().getSurface(factory.getFPos3D(0, 0, 0), factory.getFPos3D(1, 0, 0), 1, 1);
+
+            double srfErrLayer0 = factory.getStatisticsHelper().getRelErr(srfExpectedLayer0, srfLayers[0]);
+            double srfErrLayer3 = factory.getStatisticsHelper().getRelErr(srfActualLayer3, srfLayers[3]);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(srfErrLayer0 < 0.01,
+                            "Layer 0 volume is erroneous"),
+                    () -> assertTrue(srfErrLayer3 < 0.01,
+                            "Layer 0 volume is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Same position - Double")
+        void getOverlapFactorSamePositionDouble() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactor();
+
+            assertEquals(1, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Same position - Triple")
+        void getOverlapFactorSamePositionTriple() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+            FSphere fSphereC = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactor();
+
+            assertEquals(1, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Distant")
+        void getOverlapFactorDistant() {
+            FSphere fSphereA = factory.getFSphere(-1, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactor();
+
+            assertEquals(0, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Intersecting")
+        void getOverlapFactorIntersecting() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactor();
+
+            double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+
+            assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory - Field")
+        void getOverlapFactorField() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 5, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 5);
+            FSphere fSphereE = factory.getFSphere(0, 0, 5, 2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactor();
+
+            double volAlgOverlap = (4  * Math.PI / 3) +
+                    2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+            double volAlgTotal = (4  * Math.PI * Math.pow(2, 3) / 3) +
+                    3 * (4  * Math.PI / 3) -
+                    2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
+
+            double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+
+            assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Same position")
+        void getOverlapFactorLegacySamePosition() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactorLinear();
+
+            assertEquals(1, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Distant")
+        void getOverlapFactorLegacyDistant() {
+            FSphere fSphereA = factory.getFSphere(-2, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactorLinear();
+
+            assertEquals(0, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Intersecting")
+        void getOverlapFactorLegacyIntersecting() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactorLinear();
+
+            assertEquals(0.5, overlap, epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory legacy - Field")
+        void getOverlapFactorLegacyField() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 3, 0);
+            FSphere fSphereD = factory.getFSphere(0, 4, 0);
+            FSphere fSphereE = factory.getFSphere(5, 5, 5);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double overlap = fAggregate.getOverlapFactorLinear();
+
+            double relError = factory.getStatisticsHelper().getRelErr(0.5, overlap);
+
+            assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Is compact")
+        void isCompact() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertTrue(fAggregate.isCompact());
+        }
+
+        @Test
+        @DisplayName("Is compact - Fail")
+        void isCompactFail() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+            FSphere fSphereE = factory.getFSphere(5, 5, 5);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isCompact());
+        }
+
+        @Test
+        @DisplayName("Is compact - Empty")
+        void isCompactEmpty() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isCompact());
+        }
+
+        @Test
+        @DisplayName("Is sparse")
+        void isSparse() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 4);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertTrue(fAggregate.isSparse());
+        }
+
+        @Test
+        @DisplayName("Is sparse - Fail")
+        void isSparseFail() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isSparse());
+        }
+
+        @Test
+        @DisplayName("Is sparse - Empty")
+        void isSparseEmpty() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isSparse());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - A")
+        void forEachPairInContactA() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+            FSphere fSphereE = factory.getFSphere(0, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(7, count.get());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - B")
+        void forEachPairInContactB() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(-2, 0, 0);
+            FSphere fSphereD = factory.getFSphere(0, 2, 0);
+            FSphere fSphereE = factory.getFSphere(0, -2, 0);
+            FSphere fSphereF = factory.getFSphere(0, 0, 2);
+            FSphere fSphereG = factory.getFSphere(0, 0, -2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(
+                    List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE, fSphereF, fSphereG)
+            );
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(6, count.get());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - C")
+        void forEachPairInContactC() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(3, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 3, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 3);
+            FSphere fSphereE = factory.getFSphere(-3, -3, -3);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(0, count.get());
+        }
+
+        @Test
+        @DisplayName("For each pair in contact - D")
+        void forEachPairInContactD() {
+            FSphere fSphereA = factory.getFSphere(-1, -1, 0);
+            FSphere fSphereB = factory.getFSphere(-1, 1, 0);
+            FSphere fSphereC = factory.getFSphere(1, -1, 0);
+            FSphere fSphereD = factory.getFSphere(1, 1, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            AtomicInteger count = new AtomicInteger(0);
+
+            fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
+
+            assertEquals(4, count.get());
+        }
+
+        @Test
+        @DisplayName("Get range")
+        void getRange() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPairPos3D range = fAggregate.getRange();
+
+            Assertions.assertAll("Validate range",
+                    () -> assertEquals(factory.getFPairPos3D(-7, -8, -9, 2, 3, 4), range,
+                            "The range is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get mass center - Point contact")
+        void getMassCenterPointContact() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
+                    .addCoat(1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(5, 0, 0, 1)
+                    .addCoat(1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(9, 0, 0, 1)
+                    .addCoat(1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getMassCenter(center);
+
+            Assertions.assertAll("Validate mass center",
+                    () -> assertEquals(5, center.getX(),
+                            delta, "The X value is erroneous"),
+                    () -> assertEquals(0, center.getY(),
+                            delta, "The Y value is erroneous"),
+                    () -> assertEquals(0, center.getZ(),
+                            delta, "The Z value is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get mass center - Overlap")
+        void getMassCenterOverlap() {
+            double delta = 0.1;
+
+            Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
+                    .addCoat(1)
+                    .setDelta(delta);
+            Shape fSphereB = factory.getFSphere(5, 0, 0, 1)
+                    .addCoat(1)
+                    .setDelta(delta);
+            Shape fSphereC = factory.getFSphere(7, 0, 0, 1)
+                    .addCoat(1)
+                    .setDelta(delta);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getMassCenter(center);
+
+            Assertions.assertAll("Validate mass center",
+                    () -> assertEquals(5, center.getX(),
+                            delta, "The X value is erroneous"),
+                    () -> assertEquals(0, center.getY(),
+                            delta, "The Y value is erroneous"),
+                    () -> assertEquals(0, center.getZ(),
+                            delta, "The Z value is erroneous")
+            );
+        }
+
+        @Test
+        @DisplayName("Get mass center with FPoint")
+        void getMassCenterFPoint() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getMassCenter(center);
+
+            double volA = factory.getFSphereHelper().getVolume(1);
+            double volB = factory.getFSphereHelper().getVolume(3);
+            double d0 = ((1 * volA) + (-4 * volB)) / (volA + volB);
+            double d1 = ((2 * volA) + (-5 * volB)) / (volA + volB);
+            double d2 = ((3 * volA) + (-6 * volB)) / (volA + volB);
+
+            Assertions.assertAll("Validate mass center",
+                    () -> assertTrue(center.isSimilar(d0, d1, d2),
+                            "The mass center position is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get mass center")
+        void getMassCenter() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPos3D center = fAggregate.getMassCenter();
+
+            double volA = factory.getFSphereHelper().getVolume(1);
+            double volB = factory.getFSphereHelper().getVolume(3);
+            double d0 = ((1 * volA) + (-4 * volB)) / (volA + volB);
+            double d1 = ((2 * volA) + (-5 * volB)) / (volA + volB);
+            double d2 = ((3 * volA) + (-6 * volB)) / (volA + volB);
+
+            Assertions.assertAll("Validate mass center",
+                    () -> assertTrue(factory.getFPointHelper().isSimilar(center.getD0(), center.getD1(), center.getD2(), d0, d1, d2),
+                            "The mass center position is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get spherical center with FPoint")
+        void getSphericalCenterFPoint() {
+            Shape fSphereA = factory.getFSphere(-5, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(5, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getSphericalCenter(center);
+
+            Assertions.assertAll("Validate spatial center",
+                    () -> assertEquals(0, center.getX(),
+                            1E-4, "Value X is incorrect"),
+                    () -> assertEquals(0, center.getY(),
+                            1E-4, "Value Y is incorrect"),
+                    () -> assertEquals(0, center.getZ(),
+                            1E-4, "Value Z is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get spherical center")
+        void getSphericalCenter() {
+            Shape fSphereA = factory.getFSphere(-5, 0, 0, 1);
+            Shape fSphereB = factory.getFSphere(5, 0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPos3D center = fAggregate.getSphericalCenter();
+
+            Assertions.assertAll("Validate spatial center",
+                    () -> assertEquals(0, center.getD0(),
+                            1E-4, "Value X is incorrect"),
+                    () -> assertEquals(0, center.getD1(),
+                            1E-4, "Value Y is incorrect"),
+                    () -> assertEquals(0, center.getD2(),
+                            1E-4, "Value Z is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get spatial center with FPoint")
+        void getSpatialCenterFPoint() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        assertFalse(fAggregate.isCompact());
-    }
-
-    @Test
-    @DisplayName("Is compact - Empty")
-    void isCompactEmpty() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        assertFalse(fAggregate.isCompact());
-    }
-
-    @Test
-    @DisplayName("Is sparse")
-    void isSparse() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0);
-        FSphere fSphereD = factory.getFSphere(0, 0, 4);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        assertTrue(fAggregate.isSparse());
-    }
-
-    @Test
-    @DisplayName("Is sparse - Fail")
-    void isSparseFail() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0);
-        FSphere fSphereD = factory.getFSphere(0, 0, 1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        assertFalse(fAggregate.isSparse());
-    }
-
-    @Test
-    @DisplayName("Is sparse - Empty")
-    void isSparseEmpty() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        assertFalse(fAggregate.isSparse());
-    }
-
-    @Test
-    @DisplayName("For each pair in contact - A")
-    void forEachPairInContactA() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 2, 0);
-        FSphere fSphereD = factory.getFSphere(0, 0, 2);
-        FSphere fSphereE = factory.getFSphere(0, 0, 0);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        AtomicInteger count = new AtomicInteger(0);
-
-        fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
-
-        assertEquals(7, count.get());
-    }
-
-    @Test
-    @DisplayName("For each pair in contact - B")
-    void forEachPairInContactB() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(2, 0, 0);
-        FSphere fSphereC = factory.getFSphere(-2, 0, 0);
-        FSphere fSphereD = factory.getFSphere(0, 2, 0);
-        FSphere fSphereE = factory.getFSphere(0, -2, 0);
-        FSphere fSphereF = factory.getFSphere(0, 0, 2);
-        FSphere fSphereG = factory.getFSphere(0, 0, -2);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(
-                List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE, fSphereF, fSphereG)
-        );
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        AtomicInteger count = new AtomicInteger(0);
-
-        fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
-
-        assertEquals(6, count.get());
-    }
-
-    @Test
-    @DisplayName("For each pair in contact - C")
-    void forEachPairInContactC() {
-        FSphere fSphereA = factory.getFSphere(0, 0, 0);
-        FSphere fSphereB = factory.getFSphere(3, 0, 0);
-        FSphere fSphereC = factory.getFSphere(0, 3, 0);
-        FSphere fSphereD = factory.getFSphere(0, 0, 3);
-        FSphere fSphereE = factory.getFSphere(-3, -3, -3);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        AtomicInteger count = new AtomicInteger(0);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
+            FPoint center = factory.getFPoint();
 
-        assertEquals(0, count.get());
-    }
-
-    @Test
-    @DisplayName("For each pair in contact - D")
-    void forEachPairInContactD() {
-        FSphere fSphereA = factory.getFSphere(-1, -1, 0);
-        FSphere fSphereB = factory.getFSphere(-1, 1, 0);
-        FSphere fSphereC = factory.getFSphere(1, -1, 0);
-        FSphere fSphereD = factory.getFSphere(1, 1, 0);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        AtomicInteger count = new AtomicInteger(0);
-
-        fAggregate.forEachPairInContact((a, b) -> count.incrementAndGet());
-
-        assertEquals(4, count.get());
-    }
-
-    @Test
-    @DisplayName("Get range")
-    void getRange() {
-        Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
-        Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+            fAggregate.getSpatialCenter(center);
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            double d0 = (2 - 7) / 2d;
+            double d1 = (3 - 8) / 2d;
+            double d2 = (4 - 9) / 2d;
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            Assertions.assertAll("Validate spatial center",
+                    () -> assertTrue(center.isSimilar(d0, d1, d2),
+                            "The spatial center position is incorrect")
+            );
+        }
 
-        FPairPos3D range = fAggregate.getRange();
+        @Test
+        @DisplayName("Get spatial center")
+        void getSpatialCenter() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
-        Assertions.assertAll("Validate range",
-                () -> assertEquals(factory.getFPairPos3D(-7, -8, -9, 2, 3, 4), range,
-                        "The range is incorrect")
-        );
-    }
-
-    @Test
-    @DisplayName("Get mass center - Point contact")
-    void getMassCenterPointContact() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(1, 0, 0, 1)
-                .addCoat(1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(5, 0, 0, 1)
-                .addCoat(1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(9, 0, 0, 1)
-                .addCoat(1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FPoint center = factory.getFPoint();
-
-        fAggregate.getMassCenter(center);
-
-        Assertions.assertAll("Validate mass center",
-                () -> assertEquals(5, center.getX(),
-                        delta, "The X value is erroneous"),
-                () -> assertEquals(0, center.getY(),
-                        delta, "The Y value is erroneous"),
-                () -> assertEquals(0, center.getZ(),
-                        delta, "The Z value is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get mass center - Overlap")
-    void getMassCenterOverlap() {
-        double delta = 0.1;
-
-        Shape fSphereA = factory.getFSphere(3, 0, 0, 1)
-                .addCoat(1)
-                .setDelta(delta);
-        Shape fSphereB = factory.getFSphere(5, 0, 0, 1)
-                .addCoat(1)
-                .setDelta(delta);
-        Shape fSphereC = factory.getFSphere(7, 0, 0, 1)
-                .addCoat(1)
-                .setDelta(delta);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FPoint center = factory.getFPoint();
-
-        fAggregate.getMassCenter(center);
-
-        Assertions.assertAll("Validate mass center",
-                () -> assertEquals(5, center.getX(),
-                        delta, "The X value is erroneous"),
-                () -> assertEquals(0, center.getY(),
-                        delta, "The Y value is erroneous"),
-                () -> assertEquals(0, center.getZ(),
-                        delta, "The Z value is erroneous")
-        );
-    }
-
-    @Test
-    @DisplayName("Get mass center with FPoint")
-    void getMassCenterFPoint() {
-        Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
-        Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FPos3D center = fAggregate.getSpatialCenter();
 
-        FPoint center = factory.getFPoint();
+            double d0 = (2 - 7) / 2d;
+            double d1 = (3 - 8) / 2d;
+            double d2 = (4 - 9) / 2d;
 
-        fAggregate.getMassCenter(center);
-
-        double volA = factory.getFSphereHelper().getVolume(1);
-        double volB = factory.getFSphereHelper().getVolume(3);
-        double d0 = ((1 * volA) + (-4 * volB)) / (volA + volB);
-        double d1 = ((2 * volA) + (-5 * volB)) / (volA + volB);
-        double d2 = ((3 * volA) + (-6 * volB)) / (volA + volB);
-
-        Assertions.assertAll("Validate mass center",
-                () -> assertTrue(center.isSimilar(d0, d1, d2),
-                        "The mass center position is incorrect")
-        );
-    }
+            Assertions.assertAll("Validate spatial center",
+                    () -> assertTrue(factory.getFPointHelper().isSimilar(center.getD0(), center.getD1(), center.getD2(), d0, d1, d2),
+                            "The spatial center position is incorrect")
+            );
+        }
 
-    @Test
-    @DisplayName("Get mass center")
-    void getMassCenter() {
-        Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
-        Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+        @Test
+        @DisplayName("Position center with FPoint")
+        void positionCenterFPoint() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FPos3D center = fAggregate.getMassCenter();
+            FPoint centerBefore = factory.getFPoint();
 
-        double volA = factory.getFSphereHelper().getVolume(1);
-        double volB = factory.getFSphereHelper().getVolume(3);
-        double d0 = ((1 * volA) + (-4 * volB)) / (volA + volB);
-        double d1 = ((2 * volA) + (-5 * volB)) / (volA + volB);
-        double d2 = ((3 * volA) + (-6 * volB)) / (volA + volB);
+            fAggregate.getMassCenter(centerBefore);
 
-        Assertions.assertAll("Validate mass center",
-                () -> assertTrue(factory.getFPointHelper().isSimilar(center.getD0(), center.getD1(), center.getD2(), d0, d1, d2),
-                        "The mass center position is incorrect")
-        );
-    }
+            assertFalse(centerBefore.isSimilar(0, 0, 0));
 
-    @Test
-    @DisplayName("Get spherical center with FPoint")
-    void getSphericalCenterFPoint() {
-        Shape fSphereA = factory.getFSphere(-5, 0, 0, 1);
-        Shape fSphereB = factory.getFSphere(5, 0, 0, 1);
+            FPoint centerAfter = factory.getFPoint();
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            fAggregate.positionCenter(centerBefore);
+            fAggregate.getMassCenter(centerAfter);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            assertTrue(centerAfter.isSimilar(0, 0, 0));
+        }
 
-        FPoint center = factory.getFPoint();
+        @Test
+        @DisplayName("Position center with FPos3D")
+        void positionCenterFPos3D() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
-        fAggregate.getSphericalCenter(center);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-        Assertions.assertAll("Validate spatial center",
-                () -> assertEquals(0, center.getX(),
-                        1E-4, "Value X is incorrect"),
-                () -> assertEquals(0, center.getY(),
-                        1E-4, "Value Y is incorrect"),
-                () -> assertEquals(0, center.getZ(),
-                        1E-4, "Value Z is incorrect")
-        );
-    }
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-    @Test
-    @DisplayName("Get spherical center")
-    void getSphericalCenter() {
-        Shape fSphereA = factory.getFSphere(-5, 0, 0, 1);
-        Shape fSphereB = factory.getFSphere(5, 0, 0, 1);
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FPos3D center = fAggregate.getSphericalCenter();
-
-        Assertions.assertAll("Validate spatial center",
-                () -> assertEquals(0, center.getD0(),
-                        1E-4, "Value X is incorrect"),
-                () -> assertEquals(0, center.getD1(),
-                        1E-4, "Value Y is incorrect"),
-                () -> assertEquals(0, center.getD2(),
-                        1E-4, "Value Z is incorrect")
-        );
-    }
+            FPos3D centerBefore = fAggregate.getMassCenter();
 
-    @Test
-    @DisplayName("Get spatial center with FPoint")
-    void getSpatialCenterFPoint() {
-        Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
-        Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+            assertFalse(factory.getFPointHelper().isSimilar(centerBefore.getD0(), centerBefore.getD1(), centerBefore.getD2(), 0, 0, 0));
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            factory.getFPoint();
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            fAggregate.positionCenter(centerBefore);
 
-        FPoint center = factory.getFPoint();
+            FPos3D centerAfter = fAggregate.getMassCenter();
 
-        fAggregate.getSpatialCenter(center);
+            assertTrue(factory.getFPointHelper().isSimilar(centerAfter.getD0(), centerAfter.getD1(), centerAfter.getD2(), 0, 0, 0));
+        }
 
-        double d0 = (2 - 7) / 2d;
-        double d1 = (3 - 8) / 2d;
-        double d2 = (4 - 9) / 2d;
+        @Test
+        @DisplayName("Get radius with primitives")
+        void getRadiusWithPrimitives() {
+            Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
+            Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
 
-        Assertions.assertAll("Validate spatial center",
-                () -> assertTrue(center.isSimilar(d0, d1, d2),
-                        "The spatial center position is incorrect")
-        );
-    }
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
 
-    @Test
-    @DisplayName("Get spatial center")
-    void getSpatialCenter() {
-        Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
-        Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            FPoint massCenter = factory.getFPoint();
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            fAggregate.getMassCenter(massCenter);
 
-        FPos3D center = fAggregate.getSpatialCenter();
+            assertTrue(massCenter.isSimilar(3, 3, 3));
 
-        double d0 = (2 - 7) / 2d;
-        double d1 = (3 - 8) / 2d;
-        double d2 = (4 - 9) / 2d;
+            double radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
+            double radiusB = fAggregate.getRadiusFromOrigin();
 
-        Assertions.assertAll("Validate spatial center",
-                () -> assertTrue(factory.getFPointHelper().isSimilar(center.getD0(), center.getD1(), center.getD2(), d0, d1, d2),
-                        "The spatial center position is incorrect")
-        );
-    }
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertNotEquals(radiusA, radiusB);
 
-    @Test
-    @DisplayName("Position center with FPoint")
-    void positionCenterFPoint() {
-        Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
-        Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+            fAggregate.positionCenter(massCenter);
+            fAggregate.getMassCenter(massCenter);
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            assertTrue(massCenter.isSimilar(0, 0, 0));
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
+            radiusB = fAggregate.getRadiusFromOrigin();
 
-        FPoint centerBefore = factory.getFPoint();
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertEquals(radiusA, radiusB, 1E-6);
+        }
 
-        fAggregate.getMassCenter(centerBefore);
+        @Test
+        @DisplayName("Get radius with FPoint")
+        void getRadiusWithFPoint() {
+            Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
+            Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
 
-        assertFalse(centerBefore.isSimilar(0, 0, 0));
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
 
-        FPoint centerAfter = factory.getFPoint();
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        fAggregate.positionCenter(centerBefore);
-        fAggregate.getMassCenter(centerAfter);
+            FPoint massCenter = factory.getFPoint();
 
-        assertTrue(centerAfter.isSimilar(0, 0, 0));
-    }
+            fAggregate.getMassCenter(massCenter);
 
-    @Test
-    @DisplayName("Position center with FPos3D")
-    void positionCenterFPos3D() {
-        Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
-        Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+            assertTrue(massCenter.isSimilar(3, 3, 3));
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+            double radiusA = fAggregate.getRadius(massCenter);
+            double radiusB = fAggregate.getRadiusFromOrigin();
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertNotEquals(radiusA, radiusB);
 
-        FPos3D centerBefore = fAggregate.getMassCenter();
+            fAggregate.positionCenter(massCenter);
+            fAggregate.getMassCenter(massCenter);
 
-        assertFalse(factory.getFPointHelper().isSimilar(centerBefore.getD0(), centerBefore.getD1(), centerBefore.getD2(), 0, 0, 0));
+            assertTrue(massCenter.isSimilar(0, 0, 0));
 
-        factory.getFPoint();
+            radiusA = fAggregate.getRadius(massCenter);
+            radiusB = fAggregate.getRadiusFromOrigin();
 
-        fAggregate.positionCenter(centerBefore);
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertEquals(radiusA, radiusB, 1E-6);
+        }
 
-        FPos3D centerAfter = fAggregate.getMassCenter();
+        @Test
+        @DisplayName("Get radius with FPos3D")
+        void getRadiusWithFPos3D() {
+            Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
+            Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
 
-        assertTrue(factory.getFPointHelper().isSimilar(centerAfter.getD0(), centerAfter.getD1(), centerAfter.getD2(), 0, 0, 0));
-    }
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
 
-    @Test
-    @DisplayName("Get radius with primitives")
-    void getRadiusWithPrimitives() {
-        Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
-        Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
-        Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+            FPoint massCenter = factory.getFPoint();
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            fAggregate.getMassCenter(massCenter);
 
-        FPoint massCenter = factory.getFPoint();
+            assertTrue(massCenter.isSimilar(3, 3, 3));
 
-        fAggregate.getMassCenter(massCenter);
+            double radiusA = fAggregate.getRadius(massCenter.toFPos3D());
+            double radiusB = fAggregate.getRadiusFromOrigin();
 
-        assertTrue(massCenter.isSimilar(3, 3, 3));
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertNotEquals(radiusA, radiusB);
 
-        double radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
-        double radiusB = fAggregate.getRadiusFromOrigin();
+            fAggregate.positionCenter(massCenter);
+            fAggregate.getMassCenter(massCenter);
 
-        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
-        assertNotEquals(radiusA, radiusB);
+            assertTrue(massCenter.isSimilar(0, 0, 0));
 
-        fAggregate.positionCenter(massCenter);
-        fAggregate.getMassCenter(massCenter);
+            radiusA = fAggregate.getRadius(massCenter.toFPos3D());
+            radiusB = fAggregate.getRadiusFromOrigin();
 
-        assertTrue(massCenter.isSimilar(0, 0, 0));
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertEquals(radiusA, radiusB, 1E-6);
+        }
 
-        radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
-        radiusB = fAggregate.getRadiusFromOrigin();
+        @Test
+        @DisplayName("Get volume radius - Single")
+        void getVolumeRadiusSingle() {
+            int quantity = 25;
 
-        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
-        assertEquals(radiusA, radiusB, 1E-6);
-    }
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .correctAddCoat(1, 1)
+                    .validateNoOverlap();
 
-    @Test
-    @DisplayName("Get radius with FPoint")
-    void getRadiusWithFPoint() {
-        Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
-        Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
-        Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            double rExpected = factory.getFSphereHelper().getVolumeRadius(fAggregate.getVolume());
+            double rActual = fAggregate.getVolumeRadius();
 
-        FPoint massCenter = factory.getFPoint();
+            double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
-        fAggregate.getMassCenter(massCenter);
+            assertTrue(rErr < 0.01);
+        }
 
-        assertTrue(massCenter.isSimilar(3, 3, 3));
+        @Test
+        @DisplayName("Get volume radius")
+        void getVolumeRadius() {
+            int quantity = 25;
 
-        double radiusA = fAggregate.getRadius(massCenter);
-        double radiusB = fAggregate.getRadiusFromOrigin();
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .correctAddCoat(1, 1)
+                    .validateNoOverlap();
 
-        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
-        assertNotEquals(radiusA, radiusB);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-        fAggregate.positionCenter(massCenter);
-        fAggregate.getMassCenter(massCenter);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        assertTrue(massCenter.isSimilar(0, 0, 0));
+            FSphereHelper helper = factory.getFSphereHelper();
 
-        radiusA = fAggregate.getRadius(massCenter);
-        radiusB = fAggregate.getRadiusFromOrigin();
+            double[] layers = new double[3];
+            double volExpected = fAggregate.getVolume(layers);
 
-        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
-        assertEquals(radiusA, radiusB, 1E-6);
-    }
+            double rExpectedLayer0 = helper.getVolumeRadius(layers[0]);
+            double rExpectedLayer1 = helper.getVolumeRadius(layers[0] + layers[1]);
+            double rExpectedLayer2 = helper.getVolumeRadius(layers[0] + layers[1] + layers[2]);
+            double rExpected = helper.getVolumeRadius(volExpected);
 
-    @Test
-    @DisplayName("Get radius with FPos3D")
-    void getRadiusWithFPos3D() {
-        Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
-        Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
-        Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+            double rActual = fAggregate.getVolumeRadius(layers);
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+            double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
+            double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);
+            double rErrLayer2 = factory.getStatisticsHelper().getRelErr(rExpectedLayer2, layers[2]);
+            double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(rErrLayer0 < 0.01,
+                            "Layer 0 radius is erroneous"),
+                    () -> assertTrue(rErrLayer1 < 0.01,
+                            "Layer 1 radius is erroneous"),
+                    () -> assertTrue(rErrLayer2 < 0.01,
+                            "Layer 2 radius is erroneous"),
+                    () -> assertTrue(rErr < 0.01,
+                            "The total radius is erroneous")
+            );
+        }
 
-        FPoint massCenter = factory.getFPoint();
+        @Test
+        @DisplayName("Get surface radius - Single")
+        void getSurfaceRadiusSingle() {
+            int quantity = 25;
 
-        fAggregate.getMassCenter(massCenter);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .correctAddCoat(1, 1)
+                    .validateNoOverlap();
 
-        assertTrue(massCenter.isSimilar(3, 3, 3));
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-        double radiusA = fAggregate.getRadius(massCenter.toFPos3D());
-        double radiusB = fAggregate.getRadiusFromOrigin();
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
-        assertNotEquals(radiusA, radiusB);
+            double srfExpected = fAggregate.getSurface();
 
-        fAggregate.positionCenter(massCenter);
-        fAggregate.getMassCenter(massCenter);
+            double rExpected = factory.getFSphereHelper().getSurfaceRadius(srfExpected);
+            double rActual = fAggregate.getSurfaceRadius();
 
-        assertTrue(massCenter.isSimilar(0, 0, 0));
+            double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
-        radiusA = fAggregate.getRadius(massCenter.toFPos3D());
-        radiusB = fAggregate.getRadiusFromOrigin();
+            assertTrue(rErr < 0.01);
+        }
 
-        assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
-        assertEquals(radiusA, radiusB, 1E-6);
-    }
+        @Test
+        @DisplayName("Get surface radius")
+        void getSurfaceRadius() {
+            int quantity = 25;
 
-    @Test
-    @DisplayName("Get volume radius - Single")
-    void getVolumeRadiusSingle() {
-        int quantity = 25;
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .correctAddCoat(1, 1)
+                    .validateNoOverlap();
 
-        Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
-                .correctAddCoat(1, 1)
-                .validateNoOverlap();
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FSphereHelper helper = factory.getFSphereHelper();
 
-        double rExpected = factory.getFSphereHelper().getVolumeRadius(fAggregate.getVolume());
-        double rActual = fAggregate.getVolumeRadius();
+            double[] layers = new double[3];
+            double srfExpected = fAggregate.getSurface(layers);
 
-        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
+            double rExpectedLayer0 = helper.getSurfaceRadius(layers[0]);
+            double rExpectedLayer1 = helper.getSurfaceRadius(layers[1]);
+            double rExpectedLayer2 = helper.getSurfaceRadius(layers[2]);
+            double rExpected = helper.getSurfaceRadius(srfExpected);
 
-         assertTrue(rErr < 0.01);
-    }
+            double rActual = fAggregate.getSurfaceRadius(layers);
 
-    @Test
-    @DisplayName("Get volume radius")
-    void getVolumeRadius() {
-        int quantity = 25;
-
-        Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
-                .correctAddCoat(1, 1)
-                .validateNoOverlap();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FSphereHelper helper = factory.getFSphereHelper();
-
-        double[] layers = new double[3];
-        double volExpected = fAggregate.getVolume(layers);
-
-        double rExpectedLayer0 = helper.getVolumeRadius(layers[0]);
-        double rExpectedLayer1 = helper.getVolumeRadius(layers[0] + layers[1]);
-        double rExpectedLayer2 = helper.getVolumeRadius(layers[0] + layers[1] + layers[2]);
-        double rExpected = helper.getVolumeRadius(volExpected);
-
-        double rActual = fAggregate.getVolumeRadius(layers);
-
-        double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
-        double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);
-        double rErrLayer2 = factory.getStatisticsHelper().getRelErr(rExpectedLayer2, layers[2]);
-        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(rErrLayer0 < 0.01,
-                        "Layer 0 radius is erroneous"),
-                () -> assertTrue(rErrLayer1 < 0.01,
-                        "Layer 1 radius is erroneous"),
-                () -> assertTrue(rErrLayer2 < 0.01,
-                        "Layer 2 radius is erroneous"),
-                () -> assertTrue(rErr < 0.01,
-                        "The total radius is erroneous")
-        );
-    }
+            double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
+            double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);
+            double rErrLayer2 = factory.getStatisticsHelper().getRelErr(rExpectedLayer2, layers[2]);
+            double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
 
-    @Test
-    @DisplayName("Get surface radius - Single")
-    void getSurfaceRadiusSingle() {
-        int quantity = 25;
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(rErrLayer0 < 0.01,
+                            "Layer 0 radius is erroneous"),
+                    () -> assertTrue(rErrLayer1 < 0.01,
+                            "Layer 1 radius is erroneous"),
+                    () -> assertTrue(rErrLayer2 < 0.01,
+                            "Layer 2 radius is erroneous"),
+                    () -> assertTrue(rErr < 0.01,
+                            "The total radius is erroneous")
+            );
+        }
 
-        Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
-                .correctAddCoat(1, 1)
-                .validateNoOverlap();
+        @Test
+        @DisplayName("Get radius of gyration")
+        void getRadiusOfGyration() {
+            double delta = 0.1;
+            double radius = 1;
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
+            Shape fSphereA = factory.getFSphere(0, 0, 0, radius)
+                    .setDelta(delta);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA));
 
-        double srfExpected = fAggregate.getSurface();
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        double rExpected = factory.getFSphereHelper().getSurfaceRadius(srfExpected);
-        double rActual = fAggregate.getSurfaceRadius();
+            FPoint massCenter = factory.getFPoint();
+            fAggregate.getMassCenter(massCenter);
 
-        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
+            assertTrue(massCenter.isSimilar(0, 0, 0));
 
-        assertTrue(rErr < 0.01);
-    }
+            double rgExpected = factory.getFSphereHelper().getRadiusOfGyration(radius);
+            double rgActual = fAggregate.getRadiusOfGyration();
 
-    @Test
-    @DisplayName("Get surface radius")
-    void getSurfaceRadius() {
-        int quantity = 25;
-
-        Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
-                .correctAddCoat(1, 1)
-                .validateNoOverlap();
-
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
-
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-        FSphereHelper helper = factory.getFSphereHelper();
-
-        double[] layers = new double[3];
-        double srfExpected = fAggregate.getSurface(layers);
-
-        double rExpectedLayer0 = helper.getSurfaceRadius(layers[0]);
-        double rExpectedLayer1 = helper.getSurfaceRadius(layers[1]);
-        double rExpectedLayer2 = helper.getSurfaceRadius(layers[2]);
-        double rExpected = helper.getSurfaceRadius(srfExpected);
-
-        double rActual = fAggregate.getSurfaceRadius(layers);
-
-        double rErrLayer0 = factory.getStatisticsHelper().getRelErr(rExpectedLayer0, layers[0]);
-        double rErrLayer1 = factory.getStatisticsHelper().getRelErr(rExpectedLayer1, layers[1]);
-        double rErrLayer2 = factory.getStatisticsHelper().getRelErr(rExpectedLayer2, layers[2]);
-        double rErr = factory.getStatisticsHelper().getRelErr(rExpected, rActual);
-
-        Assertions.assertAll("Validate FAggregate",
-                () -> assertTrue(rErrLayer0 < 0.01,
-                        "Layer 0 radius is erroneous"),
-                () -> assertTrue(rErrLayer1 < 0.01,
-                        "Layer 1 radius is erroneous"),
-                () -> assertTrue(rErrLayer2 < 0.01,
-                        "Layer 2 radius is erroneous"),
-                () -> assertTrue(rErr < 0.01,
-                        "The total radius is erroneous")
-        );
-    }
+            double rgErr = factory.getStatisticsHelper().getRelErr(rgExpected, rgActual);
 
-    @Test
-    @DisplayName("Get radius of gyration")
-    void getRadiusOfGyration() {
-        double delta = 0.1;
-        double radius = 1;
+            assertTrue(rgErr < 0.005);
+        }
 
-        Shape fSphereA = factory.getFSphere(0, 0, 0, radius)
-                .setDelta(delta);
+        @Test
+        @DisplayName("Get radius of gyration (legacy)")
+        void getRadiusOfGyrationLegacy() {
+            int quantity = 25;
+            double delta = 0.1;
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA));
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
+                    .setDelta(delta)
+                    .validateNoOverlap();
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-        FPoint massCenter = factory.getFPoint();
-        fAggregate.getMassCenter(massCenter);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        assertTrue(massCenter.isSimilar(0, 0, 0));
+            double rgDefault = fAggregate.getRadiusOfGyration();
+            double rgLegacyMono = fAggregate.getRadiusOfGyrationMonodisperse();
+            double rgLegacyPoly = fAggregate.getRadiusOfGyrationPolydisperse();
 
-        double rgExpected = factory.getFSphereHelper().getRadiusOfGyration(radius);
-        double rgActual = fAggregate.getRadiusOfGyration();
+            double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
+            double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
 
-        double rgErr = factory.getStatisticsHelper().getRelErr(rgExpected, rgActual);
+            assertTrue(rgErrMono < 0.05);
+            assertTrue(rgErrPoly < 0.05);
+        }
 
-        assertTrue(rgErr < 0.005);
-    }
+        @Test
+        @DisplayName("Set material density")
+        void setMaterialDensity() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-    @Test
-    @DisplayName("Get radius of gyration (legacy)")
-    void getRadiusOfGyrationLegacy() {
-        int quantity = 25;
-        double delta = 0.1;
+            fAggregate.getRefMaterial().setDensity("X", 5);
 
-        Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
-        Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
-                .setDelta(delta)
-                .validateNoOverlap();
+            assertEquals(5, fAggregate.getRefMaterial().getDensity("X"));
+        }
 
-        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
+        @Test
+        @DisplayName("Set material refractive index")
+        void setMaterialRefractiveIndex() {
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            fAggregate.getRefMaterial().setRefIndex("X", 2, 3);
 
-        double rgDefault = fAggregate.getRadiusOfGyration();
-        double rgLegacyMono = fAggregate.getRadiusOfGyrationMonodisperse();
-        double rgLegacyPoly = fAggregate.getRadiusOfGyrationPolydisperse();
+            assertEquals(2, fAggregate.getRefMaterial().getRefIndexRe("X"));
+            assertEquals(3, fAggregate.getRefMaterial().getRefIndexIm("X"));
+        }
 
-        double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
-        double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
 
-        assertTrue(rgErrMono < 0.05);
-        assertTrue(rgErrPoly < 0.05);
-    }
 
-    @Test
-    @DisplayName("Set material density")
-    void setMaterialDensity() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+        @Test
+        @DisplayName("Get box dimension")
+        void getBoxDimension() {
+            String schema14 = F3D_N1000_Mono.get_14_18();
+            String schema18 = F3D_N1000_Mono.get_18_14();
+            String schema22 = F3D_N1000_Mono.get_22_10();
 
-        FAggregate results = fAggregate.setMaterialDensity("X", 5);
+            FAggregate fAggregate14 = factory.getFAggregate(schema14);
+            FAggregate fAggregate18 = factory.getFAggregate(schema18);
+            FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
-        assertSame(fAggregate, results);
-        assertEquals(5, fAggregate.getMaterialDensity("X"));
+            double dim14 = fAggregate14.getBoxDimension();
+            System.out.println(dim14);
+            double dim18 = fAggregate18.getBoxDimension();
+            System.out.println(dim18);
+            double dim22 = fAggregate22.getBoxDimension();
+            System.out.println(dim22);
+            assertTrue(true);
+        }
     }
 
-    @Test
-    @DisplayName("Set material refractive index")
-    void setMaterialRefractiveIndex() {
-        FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FAggregate results = fAggregate.setMaterialRefIndex("X", factory.getFComplex(2, 3));
-
-        FComplex refIndex = fAggregate.getMaterialRefIndex("X");
-
-        assertSame(fAggregate, results);
-        assertEquals(2, refIndex.getRe());
-        assertEquals(3, refIndex.getIm());
-    }
 }

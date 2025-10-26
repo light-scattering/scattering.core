@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
@@ -91,7 +91,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public FSphere set(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
+        if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 
@@ -886,8 +886,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceArray(FBuffer<FMetaData> in) {
-        List<FMetaData> metaData = getMetaData();
+    public double fillSurfaceArray(FBuffer<FBufferData> in) {
+        List<FBufferData> metaData = getMetaData();
 
         double srfUnit = getDelta() * getDelta();
 
@@ -902,8 +902,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double fillSurfaceArray(FBuffer<FMetaData> in, List<? extends Shape> structure) {
-        List<FMetaData> metaData = getMetaData();
+    public double fillSurfaceArray(FBuffer<FBufferData> in, List<? extends Shape> structure) {
+        List<FBufferData> metaData = getMetaData();
 
         int position = structure.indexOf(this);
 

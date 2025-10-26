@@ -92,7 +92,7 @@ public class FComplexDef implements FComplex {
     @Override
     public FComplex set(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
+        if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 

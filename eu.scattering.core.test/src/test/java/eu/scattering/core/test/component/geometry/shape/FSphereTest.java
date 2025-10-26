@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
@@ -1411,7 +1411,7 @@ public class FSphereTest {
             void volumeArray() {
                 double delta = 0.1;
 
-                FBuffer<FMetaData> fArray = factory.getFBuffer(300000);
+                FBuffer<FBufferData> fArray = factory.getFBuffer(300000);
 
                 Shape fSphere = factory.getFSphere(1)
                         .addCoat(1, 1, 1)
@@ -1501,7 +1501,7 @@ public class FSphereTest {
             void volumeArrayVolumeUnit() {
                 double delta = 0.1;
 
-                FBuffer<FMetaData> fArray = factory.getFBuffer(1000);
+                FBuffer<FBufferData> fArray = factory.getFBuffer(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1520,7 +1520,7 @@ public class FSphereTest {
             void volumeArrayErroneousShape() {
                 double delta = 1;
 
-                FBuffer<FMetaData> fArray = factory.getFBuffer(1000);
+                FBuffer<FBufferData> fArray = factory.getFBuffer(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1770,7 +1770,7 @@ public class FSphereTest {
             void surfaceArray() {
                 double delta = 0.1;
 
-                FBuffer<FMetaData> fArray = factory.getFBuffer(300000);
+                FBuffer<FBufferData> fArray = factory.getFBuffer(300000);
 
                 Shape fSphere = factory.getFSphere(1)
                         .addCoat(1, 1, 1)
@@ -1856,7 +1856,7 @@ public class FSphereTest {
             void surfaceArraySurfaceUnit() {
                 double delta = 0.1;
 
-                FBuffer<FMetaData> fArray = factory.getFBuffer(1000);
+                FBuffer<FBufferData> fArray = factory.getFBuffer(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1875,7 +1875,7 @@ public class FSphereTest {
             void surfaceArrayErroneousShape() {
                 double delta = 1;
 
-                FBuffer<FMetaData> fArray = factory.getFBuffer(1000);
+                FBuffer<FBufferData> fArray = factory.getFBuffer(1000);
 
                 Shape fSphereRef = factory.getFSphere( 0.5)
                         .setDelta(delta);
@@ -1946,20 +1946,20 @@ public class FSphereTest {
                 assertEquals("B", fSphere.getMeta(1));
                 assertEquals("C", fSphere.getMeta(2));
 
-                FBuffer<FMetaData> fArray = factory.getFBuffer(500);
+                FBuffer<FBufferData> fArray = factory.getFBuffer(500);
 
                 fSphere.setDelta(0.25);
 
                 fSphere.fillVolumeArray(fArray);
 
-                FMetaData meta1 = fArray.getMeta(0);
+                FBufferData meta1 = fArray.getMeta(0);
 
                 assertEquals(0.25, fArray.getData(0));
                 assertEquals("A", meta1.getMeta());
 
                 fSphere.setMeta("X");
 
-                FMetaData meta2 = fArray.getMeta(0);
+                FBufferData meta2 = fArray.getMeta(0);
 
                 assertSame(meta1, meta2);
                 assertEquals(0.25, fArray.getData(0));

@@ -37,7 +37,7 @@ public class FRotQt implements Transfer {
 
     public static FRotQt create(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
+        if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
            throw new IllegalArgumentException("The object type is incorrect");
         }
 

@@ -385,7 +385,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     @SuppressWarnings("unchecked")
     public FAssembly<T> set(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
+        if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 

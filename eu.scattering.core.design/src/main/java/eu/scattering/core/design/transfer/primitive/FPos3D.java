@@ -29,7 +29,7 @@ public class FPos3D implements Transfer {
 
     protected static FPos3D create(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
+        if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 

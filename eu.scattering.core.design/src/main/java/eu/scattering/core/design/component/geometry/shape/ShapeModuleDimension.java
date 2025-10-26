@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.annotation.Fragment;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
 
@@ -52,7 +52,7 @@ public interface ShapeModuleDimension {
     double fillVolumeLayerOverlap(FLayer in, Iterable<? extends Shape> field);
 
     double fillVolumeLayer(FLayer in);
-    double fillVolumeArray(FBuffer<FMetaData> in);
+    double fillVolumeArray(FBuffer<FBufferData> in);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ public interface ShapeModuleDimension {
     double fillSurfaceLayerOverlap(FLayer in, Iterable<? extends Shape> field);
 
     double fillSurfaceLayer(FLayer in);
-    double fillSurfaceArray(FBuffer<FMetaData> in);
+    double fillSurfaceArray(FBuffer<FBufferData> in);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -71,10 +71,10 @@ public interface ShapeModuleDimension {
     @Fragment
     double fillVolumeLayer(FLayer in, List<? extends Shape> structure);
     @Fragment
-    double fillVolumeArray(FBuffer<FMetaData> in, List<? extends Shape> structure);
+    double fillVolumeArray(FBuffer<FBufferData> in, List<? extends Shape> structure);
 
     @Fragment
     double fillSurfaceLayer(FLayer in, List<? extends Shape> structure);
     @Fragment
-    double fillSurfaceArray(FBuffer<FMetaData> in, List<? extends Shape> structure);
+    double fillSurfaceArray(FBuffer<FBufferData> in, List<? extends Shape> structure);
 }

@@ -2,7 +2,7 @@ package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.annotation.Fragment;
-import eu.scattering.core.design.transfer.complex.FMetaData;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public interface ShapeModuleComposition {
     int locate(FPoint fPoint);
     int locate(FPos3D fPos3D);
 
-    List<FMetaData> getMetaData();
+    List<FBufferData> getMetaData();
 
     //--------------------------------------------------
 

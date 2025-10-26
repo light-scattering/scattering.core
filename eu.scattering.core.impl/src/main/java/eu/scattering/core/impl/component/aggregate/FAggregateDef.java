@@ -5,14 +5,20 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.component.number.complex.FComplex;
-import eu.scattering.core.design.transfer.complex.FMetaData;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.transfer.box.FBoxDouble;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
+import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.storage.buffer.FBuffer;
-import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.transfer.box.FBoxDouble;
+import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.transfer.complex.FMaterial;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -22,29 +28,58 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "aggregate";
     private static final String JSON_PARTICLES = "particles";
-
-    private final Map<String, Double> density = new HashMap<>();
-    private final Map<String, FComplex> refIndex = new HashMap<>();
+    private static final String JSON_CAPACITY = "capacity";
+    private static final String JSON_MATERIAL = "material";
 
     private final ScatFactory factory;
 
-    private FAssembly<Shape> particles;
-    private FBuffer<FMetaData> dipoles;
+    private FMaterial material;
 
-    private FAggregateDef(ScatFactory factory, FAssembly<Shape> particles, FBuffer<FMetaData> dipoles) {
+    private FAssembly<Shape> particles;
+    private FBuffer<FBufferData> buffer;
+
+    private FAggregateDef(ScatFactory factory, FAssembly<Shape> particles, FBuffer<FBufferData> buffer) {
 
         this.factory = factory;
 
         this.particles = particles;
-        this.dipoles = dipoles;
+        this.buffer = buffer;
 
-        this.density.put("", 1d);
-        this.refIndex.put("", factory.getFComplex());
+        this.material = FMaterial.create();
     }
 
-    public static FAggregate create(ScatFactory factory, FAssembly<Shape> particles, FBuffer<FMetaData> dipoles) {
+    public static FAggregate create(ScatFactory factory, FAssembly<Shape> particles, FBuffer<FBufferData> buffer) {
 
-        return new FAggregateDef(factory, particles, dipoles);
+        return new FAggregateDef(factory, particles, buffer);
+    }
+
+    public static FAggregate create(ScatFactory factory, String json) {
+
+        try {
+            return FAggregateDef.create(factory, new JSONObject(json));
+        } catch (JSONException err){
+            throw new IllegalArgumentException("Invalid json type");
+        }
+    }
+
+    public static FAggregate create(ScatFactory factory, JSONObject json) {
+
+        if (!json.getString(JSON_TYPE).equals(JSON_MAIN)) {
+            throw new IllegalArgumentException("Invalid json header");
+        }
+
+        int capacity = json.getInt(JSON_CAPACITY);
+
+        FBuffer<FBufferData> dipoles = factory.getFBuffer(capacity);
+        FAssembly<Shape> particles = factory.getFAssembly();
+
+        particles.set(json.getJSONObject(JSON_PARTICLES));
+
+        FAggregate fAggregate = new FAggregateDef(factory, particles, dipoles);
+
+        fAggregate.setRefMaterial(FMaterial.create(json.getJSONObject(JSON_MATERIAL)));
+
+        return fAggregate;
     }
 
     @Override
@@ -66,6 +101,8 @@ public class FAggregateDef implements FAggregate {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_CAPACITY, this.buffer.capacity());
+        json.put(JSON_MATERIAL, this.material.toJSON());
         json.put(JSON_PARTICLES, this.particles.toJSON());
 
         return json;
@@ -211,14 +248,14 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FMesh<FMetaData> getVolumeMesh() {
-        this.dipoles.clear();
+    public FMesh<FBufferData> getVolumeMesh() {
+        this.buffer.clear();
 
         for (Shape shape : this.particles.asList()) {
-            shape.fillVolumeArray(this.dipoles, this.particles.asList());
+            shape.fillVolumeArray(this.buffer, this.particles.asList());
         }
 
-        FMesh<FMetaData> mesh = this.dipoles.toFArrayMesh();
+        FMesh<FBufferData> mesh = this.buffer.toFArrayMesh();
 
         mesh.deduplicate((a, b) -> b.getLayerIndex() < a.getLayerIndex());
 
@@ -327,11 +364,7 @@ public class FAggregateDef implements FAggregate {
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
             String meta = shape.getMetaData().get(i).getMeta();
 
-            if (!this.density.containsKey(shape.getMetaData().get(i).getMeta())) {
-                throw new IllegalStateException("The density of '" + meta + "' is not defined");
-            }
-
-            mass += shape.getLayerVolume(i) * this.density.get(meta);
+            mass += shape.getLayerVolume(i) * this.material.getDensity(meta);
         }
 
         center.setX(center.getX() + (shape.getCenterX() * mass));
@@ -342,19 +375,14 @@ public class FAggregateDef implements FAggregate {
     }
 
     private double getMassCenterApproximate(FPoint center, Shape shape) {
-        this.dipoles.clear();
+        this.buffer.clear();
 
-        double unitVolume = shape.fillVolumeArray(this.dipoles, this.particles.asList());
+        double unitVolume = shape.fillVolumeArray(this.buffer, this.particles.asList());
 
         FBoxDouble mass = factory.getFBoxDouble();
 
-        this.dipoles.forEach((index, d0, d1, d2, data, meta) -> {
-
-            if (!this.density.containsKey(meta.getMeta())) {
-                throw new IllegalStateException("The density of '" + meta.getMeta() + "' is not defined");
-            }
-
-            double unitMass = unitVolume * this.density.get(meta.getMeta());
+        this.buffer.forEach((index, d0, d1, d2, data, meta) -> {
+            double unitMass = unitVolume * this.material.getDensity(meta.getMeta());
 
             center.setX(center.getX() + (d0 * unitMass));
             center.setY(center.getY() + (d1 * unitMass));
@@ -436,17 +464,12 @@ public class FAggregateDef implements FAggregate {
     }
 
     private void getRadiusOfGyrationShape(FBoxDouble numerator, FBoxDouble denominator, FPoint center, Shape shape) {
-        this.dipoles.clear();
+        this.buffer.clear();
 
-        double unitVolume = shape.fillVolumeArray(this.dipoles, this.particles.asList());
+        double unitVolume = shape.fillVolumeArray(this.buffer, this.particles.asList());
 
-        this.dipoles.forEach((index, d0, d1, d2, data, meta) -> {
-
-            if (!this.density.containsKey(meta.getMeta())) {
-                throw new IllegalStateException("The density of '" + meta.getMeta() + "' is not defined");
-            }
-
-            double mass = unitVolume * this.density.get(meta.getMeta());
+        this.buffer.forEach((index, d0, d1, d2, data, meta) -> {
+            double mass = unitVolume * this.material.getDensity(meta.getMeta());
 
             numerator.setValue(numerator.getValue() + (mass * Math.pow(center.getDistance(d0, d1, d2), 2)));
             denominator.setValue(denominator.getValue() + mass);
@@ -614,6 +637,91 @@ public class FAggregateDef implements FAggregate {
         return oFacTotal / oFacCount;
     }
 
+    @Override
+    public double getBoxDimension() {
+        FPairPos3D range = getRange();
+
+        FPlot2D sData = factory.getFPlot2D();
+        FStat1D sParticles = factory.getFStat1D();
+
+        getParticles().forEach(e -> sParticles.add(e.getRadius()));
+
+        FPos3D center = getSpatialCenter();
+
+        double cutoffOuter = getRadius(center) * 2;
+        double cutoffInner = sParticles.min() * 0.25;
+
+        double maxRadius = sParticles.max();
+
+        double step = sParticles.min() * 0.25;
+
+        double size = cutoffOuter;
+        while (size >= cutoffInner) {
+            getBDimStep(sData, range, maxRadius, size);
+            size *= 0.5;
+        }
+        return getBDimAnalyze(sData);
+    }
+
+    private void getBDimStep(FPlot2D data, FPairPos3D range, double rMax, double step) {
+        FSphereHelper helper = factory.getFSphereHelper();
+
+        double hStep = step * 0.5;
+        double cutoff = Math.pow((hStep * Math.cbrt(3)) + rMax, 2);
+
+        double initX = Math.ceil(range.getPosA().getD0() / step) * step;
+        double initY = Math.ceil(range.getPosA().getD1() / step) * step;
+        double initZ = Math.ceil(range.getPosA().getD2() / step) * step;
+
+//        double initX = range.getPosA().getD0();
+//        double initY = range.getPosA().getD1();
+//        double initZ = range.getPosA().getD2();
+
+        int sum = 0;
+        for (double x = initX + hStep; x <= range.getPosB().getD0() + hStep ; x += step) {
+            for (double y = initY + hStep; y <= range.getPosB().getD1() + hStep ; y += step) {
+                for (double z = initZ + hStep; z <= range.getPosB().getD2() + hStep ; z += step) {
+                    for (Shape shape : getRefParticles()) {
+                        if (shape.getDistCenterP2(x, y, z) > cutoff) {
+                            continue;
+                        }
+                        if (helper.isIntersecting(shape, x, y, z, step)) {
+                            sum++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+//        if (data.size() > 1 && data.getY(data.size() - 1) > sum) {
+//            data.add(step, data.getY(data.size() - 1));
+//        } else {
+            data.add(step, sum);
+//        }
+    }
+
+    private double getBDimAnalyze(FPlot2D data) {
+
+
+
+        data.mutateY((x, y) -> Math.log(y));
+        data.mutateX((x, y) -> Math.log(1 / x));
+
+//        data.filter((x, y) -> y > 1);
+
+//        data.getInterpolator().setMethod(FPlot2DInterpolator.Method.LINEAR);
+//        data.interpolate(data.size());
+
+
+        FPlot2D ref = data.copy();
+        FPos2D reg = ref.simpleLinearRegression();
+
+        String plot = factory.getStatisticsExporter().toPythonPlotlyLinear(data, ref);
+        return reg.getD0();
+
+    }
+
     private double getOverlapFactorLegacyPair(Shape shapeA, Shape shapeB) {
 
         double dist = shapeA.getDistCenter(shapeB);
@@ -697,42 +805,6 @@ public class FAggregateDef implements FAggregate {
         }
     }
 
-    @Override
-    public FAggregate setMaterialDensity(String material, double density) {
-
-        if (density <= 0) {
-            throw new IllegalArgumentException("The density cannot be lower than zero");
-        }
-
-        this.density.put(material, density);
-
-        return this;
-    }
-
-    @Override
-    public FAggregate setMaterialRefIndex(String material, FComplex refIndex) {
-
-        if (refIndex.getRe() < 0 || refIndex.getIm() < 0) {
-            throw new IllegalArgumentException("The refractive index cannot be lower than zero");
-        }
-
-        this.refIndex.put(material, refIndex);
-
-        return this;
-    }
-
-    @Override
-    public double getMaterialDensity(String material) {
-
-        return this.density.get(material);
-    }
-
-    @Override
-    public FComplex getMaterialRefIndex(String material) {
-
-        return this.refIndex.get(material);
-    }
-
     private List<Shape> getUniqueShapes() {
         ArrayList<Shape> results = new ArrayList<>();
 
@@ -749,16 +821,44 @@ public class FAggregateDef implements FAggregate {
         double mass = 0;
 
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
-            FMetaData meta = shape.getMetaData().get(i);
+            FBufferData meta = shape.getMetaData().get(i);
 
-            if (!this.density.containsKey(meta.getMeta())) {
-                throw new IllegalStateException("The density of '" + meta.getMeta() + "' is not defined");
-            }
-
-            mass += shape.getLayerVolume(i) * this.density.get(meta.getMeta());
+            mass += shape.getLayerVolume(i) * this.material.getDensity(meta.getMeta());
         }
 
         return mass;
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FAggregate copy() {
+        FAggregate copy = factory.getFAggregate(getRefBuffer().capacity());
+
+        copy.setRefParticles(getRefParticles().copy());
+        copy.setRefMaterial(getRefMaterial().copy());
+
+        return null;
+    }
+
+    @Override
+    public boolean isExact(FAggregate aggregate) {
+
+        if (!isExactData(aggregate)) {
+            return false;
+        }
+
+        if (!getRefMaterial().isEqual(aggregate.getRefMaterial())) {
+            return false;
+        }
+
+        return getRefBuffer().capacity() == aggregate.getRefBuffer().capacity();
+    }
+
+    @Override
+    public boolean isExactData(FAggregate aggregate) {
+
+        return getRefParticles().isExact(aggregate.getRefParticles());
     }
 
     //--------------------------------------------------
@@ -778,15 +878,29 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FBuffer<FMetaData> getRefDipoles() {
+    public FBuffer<FBufferData> getRefBuffer() {
 
-        return this.dipoles;
+        return this.buffer;
     }
 
     @Override
-    public FAggregate setRefDipoles(FBuffer<FMetaData> dipoles) {
+    public FAggregate setRefBuffer(FBuffer<FBufferData> dipoles) {
 
-        this.dipoles = dipoles;
+        this.buffer = dipoles;
+
+        return this;
+    }
+
+    @Override
+    public FMaterial getRefMaterial() {
+
+        return this.material;
+    }
+
+    @Override
+    public FAggregate setRefMaterial(FMaterial material) {
+
+        this.material = material;
 
         return this;
     }

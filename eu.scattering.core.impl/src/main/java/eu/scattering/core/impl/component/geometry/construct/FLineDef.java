@@ -94,7 +94,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine set(JSONObject json) {
 
-        if (json.get(JSON_TYPE) != JSON_MAIN) {
+        if (!json.get(JSON_TYPE).equals(JSON_MAIN)) {
             throw new IllegalArgumentException("The object type is incorrect");
         }
 

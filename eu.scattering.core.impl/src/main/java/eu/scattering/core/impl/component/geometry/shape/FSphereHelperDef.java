@@ -1,6 +1,7 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
@@ -97,6 +98,37 @@ public class FSphereHelperDef implements FSphereHelper {
     public double getRadiusOfGyration(double r) {
 
         return Math.sqrt(0.6) * r;
+    }
+
+    @Override
+    public boolean isIntersecting(Shape shape, double cSqX, double cSqY, double cSqZ, double size) {
+
+        if (size <= 0) {
+            throw new IllegalArgumentException("The box size must be greater than zero");
+        }
+
+        double sHalf = size * 0.5;
+
+        double x = shape.getCenterX();
+        double y = shape.getCenterY();
+        double z = shape.getCenterZ();
+
+        double xMin = cSqX - sHalf;
+        double xMax = cSqX + sHalf;
+        double yMin = cSqY - sHalf;
+        double yMax = cSqY + sHalf;
+        double zMin = cSqZ - sHalf;
+        double zMax = cSqZ + sHalf;
+
+        double pX = Math.max(xMin, Math.min(x, xMax));
+        double pY = Math.max(yMin, Math.min(y, yMax));
+        double pZ = Math.max(zMin, Math.min(z, zMax));
+
+        double dX = pX - x;
+        double dY = pY - y;
+        double dZ = pZ - z;
+
+        return (dX * dX) + (dY * dY) + (dZ * dZ) <= Math.pow(shape.getRadius(), 2);
     }
 }
 
