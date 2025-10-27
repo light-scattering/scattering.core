@@ -8,7 +8,6 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
@@ -293,6 +292,24 @@ public class FAggregateDef implements FAggregate {
     public FPairPos3D getRange() {
 
         return this.particles.getRange();
+    }
+
+    @Override
+    public FPos3D getLength() {
+        FPairPos3D range = getRange();
+
+        double lengthX = range.getPosB().getD0() - range.getPosA().getD0();
+        double lengthY = range.getPosB().getD1() - range.getPosA().getD1();
+        double lengthZ = range.getPosB().getD2() - range.getPosA().getD2();
+
+        return factory.getFPos3D(lengthX, lengthY, lengthZ);
+    }
+
+    @Override
+    public double getMaxLength() {
+        FPos3D length = getLength();
+
+        return Math.max(length.getD0(), Math.max(length.getD1(), length.getD2()));
     }
 
     @Override
@@ -639,87 +656,94 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getBoxDimension() {
-        FPairPos3D range = getRange();
+        FPlot2D results = factory.getFPlot2D();
 
-        FPlot2D sData = factory.getFPlot2D();
-        FStat1D sParticles = factory.getFStat1D();
+        double cutoffInner = getStatRadius().min();
+        double cutoffOuter = cutoffInner;
 
-        getParticles().forEach(e -> sParticles.add(e.getRadius()));
-
-        FPos3D center = getSpatialCenter();
-
-        double cutoffOuter = getRadius(center) * 2;
-        double cutoffInner = sParticles.min() * 0.25;
-
-        double maxRadius = sParticles.max();
-
-        double step = sParticles.min() * 0.25;
-
-        double size = cutoffOuter;
-        while (size >= cutoffInner) {
-            getBDimStep(sData, range, maxRadius, size);
-            size *= 0.5;
+        while (cutoffOuter < getMaxLength()) {
+//            cutoffOuter += cutoffInner * 0.5;
+            cutoffOuter *= 2;
         }
-        return getBDimAnalyze(sData);
+
+        double box = cutoffOuter;
+        while (box >= cutoffInner) {
+            getBDimStep(results, box);
+            box -= cutoffInner * 0.5;
+//            box *= 0.5;
+        }
+
+        return getBDimAnalyze(results);
     }
 
-    private void getBDimStep(FPlot2D data, FPairPos3D range, double rMax, double step) {
+    private void getBDimStep(FPlot2D data, double step) {
         FSphereHelper helper = factory.getFSphereHelper();
 
-        double hStep = step * 0.5;
-        double cutoff = Math.pow((hStep * Math.cbrt(3)) + rMax, 2);
+        double scale = 1 / step;
 
-        double initX = Math.ceil(range.getPosA().getD0() / step) * step;
-        double initY = Math.ceil(range.getPosA().getD1() / step) * step;
-        double initZ = Math.ceil(range.getPosA().getD2() / step) * step;
-
-//        double initX = range.getPosA().getD0();
-//        double initY = range.getPosA().getD1();
-//        double initZ = range.getPosA().getD2();
-
+        Queue<Shape> particles = new LinkedList<>(getParticles().asList());
+        particles.forEach(e -> e.scalePosition(scale).scaleSize(scale));
+        
         int sum = 0;
-        for (double x = initX + hStep; x <= range.getPosB().getD0() + hStep ; x += step) {
-            for (double y = initY + hStep; y <= range.getPosB().getD1() + hStep ; y += step) {
-                for (double z = initZ + hStep; z <= range.getPosB().getD2() + hStep ; z += step) {
-                    for (Shape shape : getRefParticles()) {
-                        if (shape.getDistCenterP2(x, y, z) > cutoff) {
-                            continue;
-                        }
-                        if (helper.isIntersecting(shape, x, y, z, step)) {
-                            sum++;
-                            break;
+        while (particles.size() > 0) {
+            Shape particle = particles.poll();
+
+            List<Shape> neighbours = new ArrayList<>(particles.size());
+
+            particles.forEach(e -> {
+                if (e.getDistCenterP2(particle) < Math.pow(e.getRadius() + particle.getRadius() + 2, 2)) {
+                    neighbours.add(e);
+                }
+            });
+            
+            int minX = (int) Math.floor(particle.getCenterX() - particle.getRadius());
+            int minY = (int) Math.floor(particle.getCenterY() - particle.getRadius());
+            int minZ = (int) Math.floor(particle.getCenterZ() - particle.getRadius());
+
+            int maxX = (int) Math.ceil(particle.getCenterX() + particle.getRadius());
+            int maxY = (int) Math.ceil(particle.getCenterY() + particle.getRadius());
+            int maxZ = (int) Math.ceil(particle.getCenterZ() + particle.getRadius());
+
+            for (int x = minX ; x <= maxX ; x++) {
+                for (int y = minY ; y <= maxY ; y++) {
+
+                    next:
+                    for (int z = minZ ; z <= maxZ ; z++) {
+                        if (helper.intersectsCube(particle, x, y, z, 1)) {
+                            for (Shape neighbour : neighbours) {
+                                if (helper.intersectsCube(neighbour, x, y, z, 1)) {
+                                    continue next;
+                                }
+                            }
+
+                            sum ++;
                         }
                     }
                 }
             }
         }
 
-//        if (data.size() > 1 && data.getY(data.size() - 1) > sum) {
-//            data.add(step, data.getY(data.size() - 1));
-//        } else {
-            data.add(step, sum);
-//        }
+        data.add(step, sum);
     }
 
     private double getBDimAnalyze(FPlot2D data) {
-
-
-
         data.mutateY((x, y) -> Math.log(y));
         data.mutateX((x, y) -> Math.log(1 / x));
 
-//        data.filter((x, y) -> y > 1);
+//        data.filter((x, y) -> y > 0);
 
-//        data.getInterpolator().setMethod(FPlot2DInterpolator.Method.LINEAR);
-//        data.interpolate(data.size());
+//        data.interpolate(100);
 
+        data.setStatY(data.getStatY()
+                .replaceDecreasingWithNaN()
+//                .replaceSameWithNaN()
+        );
 
-        FPlot2D ref = data.copy();
-        FPos2D reg = ref.simpleLinearRegression();
+        FPlot2D reference = data.copy();
+        FPos2D regression = reference.simpleLinearRegression();
 
-        String plot = factory.getStatisticsExporter().toPythonPlotlyLinear(data, ref);
-        return reg.getD0();
-
+        String plot = factory.getStatisticsExporter().toPythonPlotlyLinear(data, reference);
+        return regression.getD0();
     }
 
     private double getOverlapFactorLegacyPair(Shape shapeA, Shape shapeB) {
@@ -803,6 +827,15 @@ public class FAggregateDef implements FAggregate {
 
             queue.poll();
         }
+    }
+
+    @Override
+    public FStat1D getStatRadius() {
+        FStat1D particles = factory.getFStat1D();
+
+        getRefParticles().forEach(e -> particles.add(e.getRadius()));
+
+        return particles;
     }
 
     private List<Shape> getUniqueShapes() {

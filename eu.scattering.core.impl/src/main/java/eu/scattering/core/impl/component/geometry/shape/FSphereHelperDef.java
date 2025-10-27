@@ -101,7 +101,7 @@ public class FSphereHelperDef implements FSphereHelper {
     }
 
     @Override
-    public boolean isIntersecting(Shape shape, double cSqX, double cSqY, double cSqZ, double size) {
+    public boolean intersectsCube(Shape shape, double cSqX, double cSqY, double cSqZ, double size) {
 
         if (size <= 0) {
             throw new IllegalArgumentException("The box size must be greater than zero");

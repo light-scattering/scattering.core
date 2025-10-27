@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -431,6 +432,21 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
+    public int filter(boolean dynamic, BiFunction<Double, Double, Boolean> function) {
+
+        if (size() < 2) {
+            throw new IllegalStateException("The set must contain at least two elements");
+        }
+
+        List<Double> results = dynamic ? filterDynamic(function) : filterStatic(function);
+        int count = size() - results.size();
+
+        setData(results);
+
+        return count;
+    }
+
+    @Override
     public int removeOutliers(boolean sample, double factor) {
 
         if (factor < 0) {
@@ -456,17 +472,43 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public void replaceWithNaN(Function<Double, Boolean> function) {
+    public FStat1D removeNaN() {
+
+        filter((x) -> !Double.isNaN(x));
+
+        return this;
+    }
+
+    @Override
+    public FStat1D replaceWithNaN(Function<Double, Boolean> function) {
 
         for (int i = 0 ; i < size() ; i++) {
             if (!function.apply(get(i))) {
                 set(i, Double.NaN);
             }
         }
+
+        return this;
     }
 
     @Override
-    public void replaceOutliersWithNaN(boolean sample, double factor) {
+    public FStat1D replaceWithNaN(boolean dynamic, BiFunction<Double, Double, Boolean> function) {
+
+        if (size() < 2) {
+            throw new IllegalStateException("The set must contain at least two elements");
+        }
+
+        if (dynamic) {
+            replaceWithNaNDynamic(function);
+        } else {
+            replaceWithNaNStatic(function);
+        }
+
+        return this;
+    }
+
+    @Override
+    public FStat1D replaceOutliersWithNaN(boolean sample, double factor) {
 
         if (factor < 0) {
             throw new IllegalArgumentException("The multiplication factor cannot be lower then zero");
@@ -476,10 +518,12 @@ public class FStat1DDef implements FStat1D {
         double std = std(sample);
 
         replaceOutliersWithNaN(mean, std, factor);
+
+        return this;
     }
 
     @Override
-    public void replaceOutliersWithNaN(double mean, double std, double factor) {
+    public FStat1D replaceOutliersWithNaN(double mean, double std, double factor) {
 
         if (factor < 0) {
             throw new IllegalArgumentException("The multiplication factor cannot be lower then zero");
@@ -488,6 +532,32 @@ public class FStat1DDef implements FStat1D {
         double dist = std * factor;
 
         replaceWithNaN(val -> Math.abs(val - mean) < dist);
+
+        return this;
+    }
+
+    @Override
+    public FStat1D replaceSameWithNaN() {
+
+        replaceWithNaN(true, (x0, x1) -> !Objects.equals(x0, x1));
+
+        return this;
+    }
+
+    @Override
+    public FStat1D replaceDecreasingWithNaN() {
+
+        replaceWithNaN(true, (x0, x1) -> x1 >= x0);
+
+        return this;
+    }
+
+    @Override
+    public FStat1D replaceIncreasingWithNaN() {
+
+        replaceWithNaN(true, (x0, x1) -> x1 <= x0);
+
+        return this;
     }
 
     @Override
@@ -496,6 +566,20 @@ public class FStat1DDef implements FStat1D {
         for (int i = 0 ; i < size() ; i++) {
 
             getData().set(i, function.apply(getData().get(i)));
+        }
+    }
+
+    @Override
+    public void mutate(boolean dynamic, BiFunction<Double, Double, Double> function) {
+
+        if (size() < 2) {
+            throw new IllegalStateException("The set must contain at least two elements");
+        }
+
+        if (dynamic) {
+            mutateDynamic(function);
+        } else {
+            mutateStatic(function);
         }
     }
 
@@ -641,6 +725,88 @@ public class FStat1DDef implements FStat1D {
     }
 
     //--------------------------------------------------
+
+    private void replaceWithNaNDynamic(BiFunction<Double, Double, Boolean> function) {
+        double previous = get(0);
+
+        for (int i = 1 ; i < size() ; i++) {
+            double current = get(i);
+
+            if (function.apply(previous, current)) {
+                previous = current;
+            } else {
+                set(i, Double.NaN);
+            }
+        }
+    }
+
+    private void replaceWithNaNStatic(BiFunction<Double, Double, Boolean> function) {
+        double previous = get(0);
+
+        for (int i = 1 ; i < size() ; i++) {
+            double current = get(i);
+
+            boolean results = function.apply(previous, current);
+
+            previous = current;
+
+            if (!results) {
+                set(i, Double.NaN);
+            }
+        }
+    }
+
+    private List<Double> filterDynamic(BiFunction<Double, Double, Boolean> function) {
+        List<Double> results = new ArrayList<>(size());
+        double previous = get(0);
+
+        results.add(previous);
+
+        for (int i = 1 ; i < size() ; i++) {
+            double current = get(i);
+
+            if (function.apply(previous, current)) {
+                results.add(current);
+                previous = current;
+            }
+        }
+
+        return results;
+    }
+
+    private List<Double> filterStatic(BiFunction<Double, Double, Boolean> function) {
+        List<Double> results = new ArrayList<>(size());
+
+        results.add(get(0));
+
+        for (int i = 1 ; i < size() ; i++) {
+            double previous = get(i - 1);
+            double current = get(i);
+
+            if (function.apply(previous, current)) {
+                results.add(current);
+            }
+        }
+
+        return results;
+    }
+
+    private void mutateDynamic(BiFunction<Double, Double, Double> function) {
+
+        for (int i = 1 ; i < size() ; i++) {
+            set(i, function.apply(get(i - 1), get(i)));
+        }
+    }
+
+    private void mutateStatic(BiFunction<Double, Double, Double> function) {
+        double reference = get(0);
+
+        for (int i = 1 ; i < size() ; i++) {
+            double updated = function.apply(reference, get(i));
+            reference = get(i);
+            set(i, updated);
+        }
+    }
 
     private void sortAsc() {
 

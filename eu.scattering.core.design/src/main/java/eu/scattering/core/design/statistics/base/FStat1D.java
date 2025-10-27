@@ -6,6 +6,7 @@ import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
@@ -65,6 +66,7 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     // -------------------------------------------------------------------------------------------------
 
     int filter(Function<Double, Boolean> function);
+    int filter(boolean dynamic, BiFunction<Double, Double, Boolean> function);
 
     int removeOutliers(boolean sample, double factor);
     int removeOutliers(double mean, double std, double factor);
@@ -72,6 +74,7 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     // -------------------------------------------------------------------------------------------------
 
     void mutate(Function<Double, Double> function);
+    void mutate(boolean dynamic, BiFunction<Double, Double, Double> function);
 
     void sort(boolean ascending);
 
@@ -100,11 +103,21 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     // -------------------------------------------------------------------------------------------------
 
     @Fragment
-    void replaceWithNaN(Function<Double, Boolean> function);
+    FStat1D removeNaN();
     @Fragment
-    void replaceOutliersWithNaN(boolean sample, double factor);
+    FStat1D replaceWithNaN(Function<Double, Boolean> function);
     @Fragment
-    void replaceOutliersWithNaN(double mean, double std, double factor);
+    FStat1D replaceWithNaN(boolean dynamic, BiFunction<Double, Double, Boolean> function);
+    @Fragment
+    FStat1D replaceOutliersWithNaN(boolean sample, double factor);
+    @Fragment
+    FStat1D replaceOutliersWithNaN(double mean, double std, double factor);
+    @Fragment
+    FStat1D replaceSameWithNaN();
+    @Fragment
+    FStat1D replaceDecreasingWithNaN();
+    @Fragment
+    FStat1D replaceIncreasingWithNaN();
 
     @Modificator
     List<Double> getData();

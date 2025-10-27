@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.annotation.Legacy;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
@@ -33,6 +34,9 @@ public interface FAggregate extends Component {
     double getSurfaceRadius(double[] layers);
 
     FPairPos3D getRange();
+    FPos3D getLength();
+
+    double getMaxLength();
 
     void getMassCenter(FPoint center);
     FPos3D getMassCenter();
@@ -61,6 +65,8 @@ public interface FAggregate extends Component {
     boolean isSparse();
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
+
+    FStat1D getStatRadius();
 
     //--------------------------------------------------
 

@@ -51,6 +51,8 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     void mutateX(BiFunction<Double, Double, Double> function);
     void mutateY(BiFunction<Double, Double, Double> function);
 
+    void mutateYWithPolynomial(BiFunction<Double, Double, Double> function, double... polynomial);
+
     void interpolate(double step, boolean overflow);
     void interpolate(double divisions);
 

@@ -934,6 +934,54 @@ public class FPlot2DTest {
         }
 
         @Test
+        @DisplayName("Mutate with polynomial - A")
+        void mutateWithPolynomialA() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 1);
+            fPlot.add(2, 1);
+            fPlot.add(4, 1);
+            fPlot.add(5, 1);
+
+            fPlot.mutateYWithPolynomial((x, p) -> x - p, 1, 1);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(1, fPlot.getX(0)),
+                    () -> assertEquals(2, fPlot.getX(1)),
+                    () -> assertEquals(4, fPlot.getX(2)),
+                    () -> assertEquals(5, fPlot.getX(3)),
+                    () -> assertEquals(-1, fPlot.getY(0)),
+                    () -> assertEquals(-2, fPlot.getY(1)),
+                    () -> assertEquals(-4, fPlot.getY(2)),
+                    () -> assertEquals(-5, fPlot.getY(3))
+            );
+        }
+
+        @Test
+        @DisplayName("Mutate with polynomial - B")
+        void mutateWithPolynomialB() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, -2);
+            fPlot.add(2, -1);
+            fPlot.add(4, 1);
+            fPlot.add(5, 2);
+
+            fPlot.mutateYWithPolynomial((x, p) -> x - p, 1);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(1, fPlot.getX(0)),
+                    () -> assertEquals(2, fPlot.getX(1)),
+                    () -> assertEquals(4, fPlot.getX(2)),
+                    () -> assertEquals(5, fPlot.getX(3)),
+                    () -> assertEquals(-3, fPlot.getY(0)),
+                    () -> assertEquals(-2, fPlot.getY(1)),
+                    () -> assertEquals(0, fPlot.getY(2)),
+                    () -> assertEquals(1, fPlot.getY(3))
+            );
+        }
+
+        @Test
         @DisplayName("Interpolate")
         void interpolate() {
             FPlot2D fPlot = factory.getFPlot2D();

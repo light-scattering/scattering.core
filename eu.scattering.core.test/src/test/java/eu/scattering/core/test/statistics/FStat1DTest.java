@@ -388,20 +388,220 @@ public class FStat1DTest {
         }
 
         @Test
+        @DisplayName("Filter - History (static)")
+        void filterHistoryStatic() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-2);
+            fStat.add(3);
+            fStat.add(-4);
+            fStat.add(5);
+
+            int count = fStat.filter(false, (x0, x1) -> x0 > 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(2, count),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(-2, fStat.get(1)),
+                    () -> assertEquals(-4, fStat.get(2))
+            );
+        }
+
+        @Test
+        @DisplayName("Filter - History (dynamic)")
+        void filterHistoryDynamic() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-2);
+            fStat.add(3);
+            fStat.add(-4);
+            fStat.add(5);
+
+            int count = fStat.filter(true, (x0, x1) -> x0 > 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(3, count),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(-2, fStat.get(1))
+            );
+        }
+
+        @Test
+        @DisplayName("Remove NaN")
+        void removeNaN() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-2);
+            fStat.add(3);
+            fStat.add(-4);
+            fStat.add(5);
+
+            fStat.set(1, Double.NaN);
+            fStat.set(4, Double.NaN);
+
+            var results = fStat.removeNaN();
+
+            Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(3, fStat.size()),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(3, fStat.get(1)),
+                    () -> assertEquals(-4, fStat.get(2))
+            );
+        }
+
+        @Test
         @DisplayName("Replace with NaN")
         void replaceWithNaN() {
             FStat1D fStat = factory.getFStat1D();
 
             fStat.add(1, -2, 5, 3, -2);
 
-            fStat.replaceWithNaN(e -> e != 3);
+            var results = fStat.replaceWithNaN(e -> e != 3);
 
             Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
                     () -> assertEquals(1, fStat.get(0)),
                     () -> assertEquals(-2, fStat.get(1)),
                     () -> assertEquals(5, fStat.get(2)),
                     () -> assertEquals(Double.NaN, fStat.get(3)),
                     () -> assertEquals(-2, fStat.get(4))
+            );
+        }
+
+        @Test
+        @DisplayName("Replace with NaN - History (static)")
+        void replaceWithNaNHistoryStatic() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-2);
+            fStat.add(3);
+            fStat.add(-4);
+            fStat.add(5);
+
+            var results = fStat.replaceWithNaN(false, (x0, x1) -> x0 > 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(-2, fStat.get(1)),
+                    () -> assertEquals(Double.NaN, fStat.get(2)),
+                    () -> assertEquals(-4, fStat.get(3)),
+                    () -> assertEquals(Double.NaN, fStat.get(4))
+            );
+        }
+
+        @Test
+        @DisplayName("Replace with NaN - History (dynamic)")
+        void replaceWithNaNHistoryDynamic() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-2);
+            fStat.add(3);
+            fStat.add(-4);
+            fStat.add(5);
+
+            var results = fStat.replaceWithNaN(true, (x0, x1) -> x0 > 0);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(-2, fStat.get(1)),
+                    () -> assertEquals(Double.NaN, fStat.get(2)),
+                    () -> assertEquals(Double.NaN, fStat.get(3)),
+                    () -> assertEquals(Double.NaN, fStat.get(4))
+            );
+        }
+
+        @Test
+        @DisplayName("Replace same with NaN")
+        void replaceSameWithNaN() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-2);
+            fStat.add(-2);
+            fStat.add(-2);
+            fStat.add(3);
+            fStat.add(4);
+            fStat.add(1);
+            fStat.add(1);
+
+            var results = fStat.replaceSameWithNaN();
+
+            Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(-2, fStat.get(1)),
+                    () -> assertEquals(Double.NaN, fStat.get(2)),
+                    () -> assertEquals(Double.NaN, fStat.get(3)),
+                    () -> assertEquals(3, fStat.get(4)),
+                    () -> assertEquals(4, fStat.get(5)),
+                    () -> assertEquals(1, fStat.get(6)),
+                    () -> assertEquals(Double.NaN, fStat.get(7))
+            );
+        }
+
+        @Test
+        @DisplayName("Replace decreasing with NaN")
+        void replaceDecreasingWithNaN() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-4);
+            fStat.add(-2);
+            fStat.add(-2);
+            fStat.add(1);
+            fStat.add(4);
+            fStat.add(3);
+            fStat.add(5);
+
+            var results = fStat.replaceDecreasingWithNaN();
+
+            Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(Double.NaN, fStat.get(1)),
+                    () -> assertEquals(Double.NaN, fStat.get(2)),
+                    () -> assertEquals(Double.NaN, fStat.get(3)),
+                    () -> assertEquals(1, fStat.get(4)),
+                    () -> assertEquals(4, fStat.get(5)),
+                    () -> assertEquals(Double.NaN, fStat.get(6)),
+                    () -> assertEquals(5, fStat.get(7))
+            );
+        }
+
+        @Test
+        @DisplayName("Replace increasing with NaN")
+        void replaceIncreasingWithNaN() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(-2);
+            fStat.add(-4);
+            fStat.add(-2);
+            fStat.add(-5);
+            fStat.add(4);
+            fStat.add(-5);
+            fStat.add(-6);
+
+            var results = fStat.replaceIncreasingWithNaN();
+
+            Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(-2, fStat.get(1)),
+                    () -> assertEquals(-4, fStat.get(2)),
+                    () -> assertEquals(Double.NaN, fStat.get(3)),
+                    () -> assertEquals(-5, fStat.get(4)),
+                    () -> assertEquals(Double.NaN, fStat.get(5)),
+                    () -> assertEquals(-5, fStat.get(6)),
+                    () -> assertEquals(-6, fStat.get(7))
             );
         }
 
@@ -424,6 +624,50 @@ public class FStat1DTest {
                     () -> assertEquals(10, fStat.get(2)),
                     () -> assertEquals(6, fStat.get(3)),
                     () -> assertEquals(-4, fStat.get(4))
+            );
+        }
+
+        @Test
+        @DisplayName("Mutate - History (static)")
+        void mutateHistoryStatic() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(2);
+            fStat.add(3);
+            fStat.add(4);
+            fStat.add(5);
+
+            fStat.mutate(false, Double::sum);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(3, fStat.get(1)),
+                    () -> assertEquals(5, fStat.get(2)),
+                    () -> assertEquals(7, fStat.get(3)),
+                    () -> assertEquals(9, fStat.get(4))
+            );
+        }
+
+        @Test
+        @DisplayName("Mutate - History (dynamic)")
+        void mutateHistoryDynamic() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1);
+            fStat.add(2);
+            fStat.add(3);
+            fStat.add(4);
+            fStat.add(5);
+
+            fStat.mutate(true, Double::sum);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(3, fStat.get(1)),
+                    () -> assertEquals(6, fStat.get(2)),
+                    () -> assertEquals(10, fStat.get(3)),
+                    () -> assertEquals(15, fStat.get(4))
             );
         }
 
@@ -969,10 +1213,11 @@ public class FStat1DTest {
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
-            fStat.replaceOutliersWithNaN(true, 1.5);
+            var results = fStat.replaceOutliersWithNaN(true, 1.5);
 
             long count = fStat.getData().stream().filter(e -> Double.isNaN(e)).toList().size();
 
+            assertSame(fStat, results);
             assertEquals(2, count);
             assertEquals(9, fStat.size());
         }
@@ -984,10 +1229,11 @@ public class FStat1DTest {
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
-            fStat.replaceOutliersWithNaN(2.55555556, 10.9099852, 1.5);
+            var results = fStat.replaceOutliersWithNaN(2.55555556, 10.9099852, 1.5);
 
             long count = fStat.getData().stream().filter(e -> Double.isNaN(e)).toList().size();
 
+            assertSame(fStat, results);
             assertEquals(2, count);
             assertEquals(9, fStat.size());
         }

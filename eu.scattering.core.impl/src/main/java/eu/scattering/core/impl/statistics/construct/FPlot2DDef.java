@@ -372,6 +372,24 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
+    public void mutateYWithPolynomial(BiFunction<Double, Double, Double> function, double... polynomial) {
+
+        for (FPlot2DRecord record : getData()) {
+            record.setY(function.apply(record.getY(), getPolynomialValue(record.getX(), polynomial)));
+        }
+    }
+
+    private double getPolynomialValue(double x, double[] polynomial) {
+        double value = 0;
+
+        for (int i = 0 ; i < polynomial.length ; i++) {
+            value += polynomial[i] * Math.pow(x, polynomial.length - 1 - i);
+        }
+
+        return value;
+    }
+
+    @Override
     public void interpolate(double step, boolean overflow) {
 
         if (step <= 0) {

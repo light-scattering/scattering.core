@@ -21,5 +21,5 @@ public interface FSphereHelper {
 
     double getRadiusOfGyration(double r);
 
-    boolean isIntersecting(Shape shape, double cSqX, double cSqY, double cSqZ, double size);
+    boolean intersectsCube(Shape shape, double cSqX, double cSqY, double cSqZ, double size);
 }

@@ -1927,12 +1927,15 @@ public class FAggregateTest {
             FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
             double dim14 = fAggregate14.getBoxDimension();
-            System.out.println(dim14);
             double dim18 = fAggregate18.getBoxDimension();
-            System.out.println(dim18);
             double dim22 = fAggregate22.getBoxDimension();
+
+            System.out.println(dim14);
+            System.out.println(dim18);
             System.out.println(dim22);
-            assertTrue(true);
+//            assertEquals(1.4, dim14, 0.15);
+//            assertEquals(1.8, dim18, 0.15);
+//            assertEquals(2.2, dim22, 0.15);
         }
     }
 

@@ -1,6 +1,5 @@
 package eu.scattering.core.test.component.geometry.shape;
 
-import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -37,23 +36,23 @@ public class FSphereHelperTest {
         FSphereHelper helper = factory.getFSphereHelper();
 
         Assertions.assertAll("Validate intersection",
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(0, 0, 0, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(1, 1, 1, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(-1, 1, 1, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(1, -1, 1, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(1, 1, -1, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(-1, -1, 1, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(-1, 1, -1, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(1, -1, -1, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(1, -1, -1, 1), 0, 0, 0, 2))
         );
     }
@@ -64,17 +63,17 @@ public class FSphereHelperTest {
         FSphereHelper helper = factory.getFSphereHelper();
 
         Assertions.assertAll("Validate intersection",
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(2 - epsilon, 0, 0, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(-2 + epsilon, 0, 0, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(0, 2 - epsilon, 0, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(0, -2 + epsilon, 0, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(0, 0, 2 - epsilon, 1), 0, 0, 0, 2)),
-                () -> assertTrue(helper.isIntersecting(
+                () -> assertTrue(helper.intersectsCube(
                         factory.getFSphere(0, 0, -2 + epsilon, 1), 0, 0, 0, 2))
         );
     }
@@ -85,17 +84,17 @@ public class FSphereHelperTest {
         FSphereHelper helper = factory.getFSphereHelper();
 
         Assertions.assertAll("Validate intersection",
-                () -> assertFalse(helper.isIntersecting(
+                () -> assertFalse(helper.intersectsCube(
                         factory.getFSphere(2 + epsilon, 0, 0, 1), 0, 0, 0, 2)),
-                () -> assertFalse(helper.isIntersecting(
+                () -> assertFalse(helper.intersectsCube(
                         factory.getFSphere(-2 - epsilon, 0, 0, 1), 0, 0, 0, 2)),
-                () -> assertFalse(helper.isIntersecting(
+                () -> assertFalse(helper.intersectsCube(
                         factory.getFSphere(0, 2 + epsilon, 0, 1), 0, 0, 0, 2)),
-                () -> assertFalse(helper.isIntersecting(
+                () -> assertFalse(helper.intersectsCube(
                         factory.getFSphere(0, -2 - epsilon, 0, 1), 0, 0, 0, 2)),
-                () -> assertFalse(helper.isIntersecting(
+                () -> assertFalse(helper.intersectsCube(
                         factory.getFSphere(0, 0, 2 + epsilon, 1), 0, 0, 0, 2)),
-                () -> assertFalse(helper.isIntersecting(
+                () -> assertFalse(helper.intersectsCube(
                         factory.getFSphere(0, 0, -2 - epsilon, 1), 0, 0, 0, 2))
         );
     }
