@@ -19,9 +19,9 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
     private static final int ITERATIONS = 100;
     private static final int MIN_SIZE = 5;
 
-    private final List<BiConsumer<FAssembly<Shape>, Shape>> monitor;
-    private final List<BiFunction<FAssembly<Shape>, Shape, Boolean>> validator;
+    private final List<BiConsumer<FAggregate, Shape>> monitor;
     private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
+    private final List<BiFunction<FAggregate, Shape, Boolean>> validator;
 
     private final FRandEngine rndEng;
 
@@ -43,8 +43,8 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
         }
 
         this.monitor = new ArrayList<>();
-        this.validator = new ArrayList<>();
         this.acceptor = new ArrayList<>();
+        this.validator = new ArrayList<>();
 
         this.rndEng = factory.getFRandEngine();
 
@@ -52,8 +52,8 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
 
         this.range = factory.getFSphere();
 
-        this.attached = factory.getFAssembly();
-        this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
+        this.attached = this.aggregate.getRefParticles();
+        this.detached = new LinkedList<>();
     }
 
     public static FModelPCBallistic create(FAggregate aggregate, ScatFactory factory) {
@@ -82,7 +82,7 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.attached, null));
+            this.monitor.forEach(e -> e.accept(this.aggregate, null));
 
             for (var acceptor : this.acceptor) {
                 if (acceptor.apply(this.aggregate, iteration)) {
@@ -101,17 +101,17 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
     private void init() {
         this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
 
-        this.attached.clear();
-
         this.detached.clear();
-        this.detached.addAll(this.aggregate.getRefParticles().asList());
+        this.detached.addAll(this.attached.asList());
+
+        this.attached.clear();
 
         Shape particle = detached.poll();
         assert particle != null;
 
         particle.setCenter(0, 0, 0);
 
-        this.monitor.forEach(e -> e.accept(this.attached, particle));
+        this.monitor.forEach(e -> e.accept(this.aggregate, particle));
 
         this.attached.register(particle);
     }
@@ -134,13 +134,13 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
             }
 
             for (var validator : this.validator) {
-                if (!validator.apply(this.attached, particle)) {
+                if (!validator.apply(this.aggregate, particle)) {
 
                     continue step;
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.attached, particle));
+            this.monitor.forEach(e -> e.accept(this.aggregate, particle));
 
             this.attached.register(particle);
 
@@ -151,13 +151,13 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
     //--------------------------------------------------
 
     @Override
-    public void addStepMonitor(BiConsumer<FAssembly<Shape>, Shape> monitor) {
+    public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
 
         this.monitor.add(monitor);
     }
 
     @Override
-    public void addStepValidator(BiFunction<FAssembly<Shape>, Shape, Boolean> validator) {
+    public void addStepValidator(BiFunction<FAggregate, Shape, Boolean> validator) {
 
         this.validator.add(validator);
     }

@@ -22,9 +22,9 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
     private static final int ITERATIONS = 100;
     private static final int MIN_SIZE = 5;
 
-    private final List<BiConsumer<FAssembly<Shape>, Shape>> monitor;
-    private final List<BiFunction<FAssembly<Shape>, Shape, Boolean>> validator;
+    private final List<BiConsumer<FAggregate, Shape>> monitor;
     private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
+    private final List<BiFunction<FAggregate, Shape, Boolean>> validator;
 
     private final FRandEngine rndEng;
 
@@ -51,8 +51,8 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
         }
 
         this.monitor = new ArrayList<>();
-        this.validator = new ArrayList<>();
         this.acceptor = new ArrayList<>();
+        this.validator = new ArrayList<>();
 
         this.rndEng = factory.getFRandEngine();
 
@@ -60,8 +60,8 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
 
         this.bases = new ArrayList<>();
 
-        this.attached = factory.getFAssembly();
-        this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
+        this.attached = this.aggregate.getRefParticles();
+        this.detached = new LinkedList<>();
 
         this.cMass = factory.getFPoint();
 
@@ -113,7 +113,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.attached, null));
+            this.monitor.forEach(e -> e.accept(this.aggregate, null));
 
             for (var acceptor : this.acceptor) {
                 if (acceptor.apply(this.aggregate, iteration)) {
@@ -134,10 +134,10 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
 
         this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
 
-        this.attached.clear();
-
         this.detached.clear();
-        this.detached.addAll(this.aggregate.getRefParticles().asList());
+        this.detached.addAll(this.attached.asList());
+
+        this.attached.clear();
 
         this.detached.forEach(e -> e.setCenterZ(0));
 
@@ -146,7 +146,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
 
         particleA.setCenter(0, 0, 0);
 
-        this.monitor.forEach(e -> e.accept(this.attached, particleA));
+        this.monitor.forEach(e -> e.accept(this.aggregate, particleA));
 
         this.attached.register(particleA);
 
@@ -155,7 +155,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
 
         FPos2D position = this.rndEng.getFRand().nextDoubleOnCircle(particleA.getRadius() + particleB.getRadius());
 
-        this.monitor.forEach(e -> e.accept(this.attached, particleB));
+        this.monitor.forEach(e -> e.accept(this.aggregate, particleB));
 
         particleB.setCenter(position.getD0(), position.getD1(), 0);
 
@@ -206,13 +206,13 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
             }
 
             for (var validator : this.validator) {
-                if (!validator.apply(this.attached, particle)) {
+                if (!validator.apply(this.aggregate, particle)) {
 
                     continue step;
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.attached, particle));
+            this.monitor.forEach(e -> e.accept(this.aggregate, particle));
 
             this.attached.register(particle);
 
@@ -253,13 +253,13 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
     //--------------------------------------------------
 
     @Override
-    public void addStepMonitor(BiConsumer<FAssembly<Shape>, Shape> monitor) {
+    public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
 
         this.monitor.add(monitor);
     }
 
     @Override
-    public void addStepValidator(BiFunction<FAssembly<Shape>, Shape, Boolean> validator) {
+    public void addStepValidator(BiFunction<FAggregate, Shape, Boolean> validator) {
 
         this.validator.add(validator);
     }

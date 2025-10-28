@@ -33,14 +33,14 @@ public class FModelRLATest {
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
-        BiConsumer<FAssembly<Shape>, Shape> monitor = (assembly, shape) -> {
+        BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
             if (shape != null) {
                 monitorAssembly.register(shape);
-                monitorIndex.addAndGet(assembly.size());
+                monitorIndex.addAndGet(aggregate.getRefParticles().size());
             }
         };
 
-        BiFunction<FAssembly<Shape>, Shape, Boolean> validator = (assembly, shape) ->
+        BiFunction<FAggregate, Shape, Boolean> validator = (aggregate, shape) ->
                 shape.getCenterX() < 2 && shape.getCenterX() > -2;
 
         AtomicInteger acceptorIndex = new AtomicInteger(0);
@@ -93,14 +93,14 @@ public class FModelRLATest {
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
-        BiConsumer<FAssembly<Shape>, Shape> monitor = (assembly, shape) -> {
+        BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
             if (shape != null) {
                 monitorAssembly.register(shape);
-                monitorIndex.addAndGet(assembly.size());
+                monitorIndex.addAndGet(aggregate.getRefParticles().size());
             }
         };
 
-        BiFunction<FAssembly<Shape>, Shape, Boolean> validator = (assembly, shape) ->
+        BiFunction<FAggregate, Shape, Boolean> validator = (aggregate, shape) ->
                 shape.getCenterX() < 2 && shape.getCenterX() > -2;
 
         AtomicInteger acceptorIndex = new AtomicInteger(0);

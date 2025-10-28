@@ -22,9 +22,9 @@ import java.util.function.BiFunction;
 public class FModelDLA2DDef implements FModelDLA {
     private static final int MIN_SIZE = 5;
 
-    private final List<BiConsumer<FAssembly<Shape>, Shape>> monitor;
-    private final List<BiFunction<FAssembly<Shape>, Shape, Boolean>> validator;
+    private final List<BiConsumer<FAggregate, Shape>> monitor;
     private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
+    private final List<BiFunction<FAggregate, Shape, Boolean>> validator;
 
     private TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement;
 
@@ -64,8 +64,8 @@ public class FModelDLA2DDef implements FModelDLA {
 
         this.aggregate = aggregate;
 
-        this.attached = factory.getFAssembly();
-        this.detached = new LinkedList<>(this.aggregate.getRefParticles().asList());
+        this.attached = this.aggregate.getRefParticles();
+        this.detached = new LinkedList<>();
 
         this.cMass = factory.getFPoint();
 
@@ -107,7 +107,7 @@ public class FModelDLA2DDef implements FModelDLA {
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.attached, null));
+            this.monitor.forEach(e -> e.accept(this.aggregate, null));
 
             for (var acceptor : this.acceptor) {
                 if (acceptor.apply(this.aggregate, iteration)) {
@@ -126,10 +126,12 @@ public class FModelDLA2DDef implements FModelDLA {
     private void init() {
         this.rndGen.shuffle(this.aggregate.getRefParticles().asList());
 
-        this.attached.clear();
+
 
         this.detached.clear();
-        this.detached.addAll(this.aggregate.getRefParticles().asList());
+        this.detached.addAll(this.attached.asList());
+
+        this.attached.clear();
 
         this.detached.forEach(e -> e.setCenterZ(0));
 
@@ -138,7 +140,7 @@ public class FModelDLA2DDef implements FModelDLA {
 
         particleA.setCenter(0, 0, 0);
 
-        this.monitor.forEach(e -> e.accept(this.attached, particleA));
+        this.monitor.forEach(e -> e.accept(this.aggregate, particleA));
 
         this.attached.register(particleA);
 
@@ -149,7 +151,7 @@ public class FModelDLA2DDef implements FModelDLA {
 
         particleB.setCenter(position.getD0(), position.getD1(), 0);
 
-        this.monitor.forEach(e -> e.accept(this.attached, particleB));
+        this.monitor.forEach(e -> e.accept(this.aggregate, particleB));
 
         this.attached.register(particleB);
     }
@@ -199,14 +201,14 @@ public class FModelDLA2DDef implements FModelDLA {
                 }
 
                 for (var validator : this.validator) {
-                    if (!validator.apply(this.attached, particle)) {
+                    if (!validator.apply(this.aggregate, particle)) {
                         particle.setCenter(this.dirBase);
 
                         continue step;
                     }
                 }
 
-                this.monitor.forEach(e -> e.accept(this.attached, particle));
+                this.monitor.forEach(e -> e.accept(this.aggregate, particle));
 
                 this.attached.register(particle);
 
@@ -245,7 +247,7 @@ public class FModelDLA2DDef implements FModelDLA {
     //--------------------------------------------------
 
     @Override
-    public void addStepMonitor(BiConsumer<FAssembly<Shape>, Shape> monitor) {
+    public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
 
         this.monitor.add(monitor);
     }
@@ -315,7 +317,7 @@ public class FModelDLA2DDef implements FModelDLA {
     }
 
     @Override
-    public void addStepValidator(BiFunction<FAssembly<Shape>, Shape, Boolean> validator) {
+    public void addStepValidator(BiFunction<FAggregate, Shape, Boolean> validator) {
 
         this.validator.add(validator);
     }
