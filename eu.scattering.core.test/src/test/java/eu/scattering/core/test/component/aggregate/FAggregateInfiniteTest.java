@@ -17,7 +17,7 @@ public class FAggregateInfiniteTest {
     void infinitePCTunableFilippov3D() {
         FAggregate fAggregate = factory.getFAggregateMono(250, 1);
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.4, 1.8);
+        FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 2.2, 1);
         modelTunable.setEarlyStageCorrection(true);
 
         FStat1D data = factory.getFStat1D();

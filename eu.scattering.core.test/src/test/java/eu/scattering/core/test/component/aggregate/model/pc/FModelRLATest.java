@@ -6,8 +6,6 @@ import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.lambda.TriFunction;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
@@ -34,17 +33,34 @@ public class FModelRLATest {
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
-        BiConsumer<Shape, Integer> monitor = (shape, index) -> {
-            monitorAssembly.register(shape);
-            monitorIndex.addAndGet(index);
+        BiConsumer<FAssembly<Shape>, Shape> monitor = (assembly, shape) -> {
+            if (shape != null) {
+                monitorAssembly.register(shape);
+                monitorIndex.addAndGet(assembly.size());
+            }
         };
 
-        TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator = (assembly, random, shape) ->
+        BiFunction<FAssembly<Shape>, Shape, Boolean> validator = (assembly, shape) ->
                 shape.getCenterX() < 2 && shape.getCenterX() > -2;
 
+        AtomicInteger acceptorIndex = new AtomicInteger(0);
+        BiFunction<FAggregate, Integer, Boolean> acceptor = (aggregate, iteration) -> {
+            acceptorIndex.addAndGet(1);
+
+            if (iteration > 0) {
+                return true;
+            } else {
+                monitorAssembly.clear();
+                monitorIndex.set(0);
+
+                return false;
+            }
+        };
+
         FModelPC modelRLA = factory.createFModelRLA3D(fAggregate);
-        modelRLA.setMonitor(monitor);
-        modelRLA.setValidator(validator);
+        modelRLA.addStepMonitor(monitor);
+        modelRLA.addStepValidator(validator);
+        modelRLA.addCompletionValidator(acceptor);
         modelRLA.build();
 
         double overlap = fAggregate.getOverlapFactorLinear();
@@ -61,6 +77,8 @@ public class FModelRLATest {
                         "Particle assemblies should be equal (monitor)"),
                 () -> assertEquals(45, monitorIndex.get(),
                         "The sum of particle indexes is incorrect (monitor)"),
+                () -> assertEquals(2, acceptorIndex.get(),
+                        "The number of builds is incorrect"),
                 () -> assertEquals(0, overlap,
                         epsilon, "Particles should not overlap")
         );
@@ -75,17 +93,34 @@ public class FModelRLATest {
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
-        BiConsumer<Shape, Integer> monitor = (shape, index) -> {
-            monitorAssembly.register(shape);
-            monitorIndex.addAndGet(index);
+        BiConsumer<FAssembly<Shape>, Shape> monitor = (assembly, shape) -> {
+            if (shape != null) {
+                monitorAssembly.register(shape);
+                monitorIndex.addAndGet(assembly.size());
+            }
         };
 
-        TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator = (assembly, random, shape) ->
+        BiFunction<FAssembly<Shape>, Shape, Boolean> validator = (assembly, shape) ->
                 shape.getCenterX() < 2 && shape.getCenterX() > -2;
 
+        AtomicInteger acceptorIndex = new AtomicInteger(0);
+        BiFunction<FAggregate, Integer, Boolean> acceptor = (aggregate, iteration) -> {
+            acceptorIndex.addAndGet(1);
+
+            if (iteration > 0) {
+                return true;
+            } else {
+                monitorAssembly.clear();
+                monitorIndex.set(0);
+
+                return false;
+            }
+        };
+
         FModelPC modelRLA = factory.createFModelRLA2D(fAggregate);
-        modelRLA.setMonitor(monitor);
-        modelRLA.setValidator(validator);
+        modelRLA.addStepMonitor(monitor);
+        modelRLA.addStepValidator(validator);
+        modelRLA.addCompletionValidator(acceptor);
         modelRLA.build();
 
         double overlap = fAggregate.getOverlapFactorLinear();
@@ -107,6 +142,8 @@ public class FModelRLATest {
                         "Particle assemblies should be equal (monitor)"),
                 () -> assertEquals(45, monitorIndex.get(),
                         "The sum of particle indexes is incorrect (monitor)"),
+                () -> assertEquals(2, acceptorIndex.get(),
+                        "The number of builds is incorrect"),
                 () -> assertEquals(0, overlap,
                         epsilon, "Particles should not overlap")
         );

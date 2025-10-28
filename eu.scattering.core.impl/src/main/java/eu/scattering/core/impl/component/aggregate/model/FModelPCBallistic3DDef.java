@@ -7,18 +7,21 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.lambda.TriFunction;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 public class FModelPCBallistic3DDef implements FModelPCBallistic {
     private static final int ITERATIONS = 100;
     private static final int MIN_SIZE = 5;
 
-    private BiConsumer<Shape, Integer> monitor;
-    private TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator;
+    private final List<BiConsumer<FAssembly<Shape>, Shape>> monitor;
+    private final List<BiFunction<FAssembly<Shape>, Shape, Boolean>> validator;
+    private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
 
     private final FRandEngine rndEng;
 
@@ -38,6 +41,10 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
+
+        this.monitor = new ArrayList<>();
+        this.validator = new ArrayList<>();
+        this.acceptor = new ArrayList<>();
 
         this.rndEng = factory.getFRandEngine();
 
@@ -61,13 +68,34 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
-        init();
+        boolean loop;
+        int iteration = 0;
 
-        while (this.detached.size() != 0) {
-            if (!buildStep()) {
-                throw new RuntimeException("The aggregate could not be built");
+        do {
+            loop = false;
+
+            init();
+
+            while (this.detached.size() != 0) {
+                if (!buildStep()) {
+                    throw new RuntimeException("The aggregate could not be built");
+                }
             }
-        }
+
+            this.monitor.forEach(e -> e.accept(this.attached, null));
+
+            for (var acceptor : this.acceptor) {
+                if (acceptor.apply(this.aggregate, iteration)) {
+                    continue;
+                }
+
+                iteration++;
+                loop = true;
+
+                break;
+            }
+
+        } while (loop);
     }
 
     private void init() {
@@ -83,9 +111,7 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
 
         particle.setCenter(0, 0, 0);
 
-        if (this.monitor != null) {
-            this.monitor.accept(particle, this.attached.size());
-        }
+        this.monitor.forEach(e -> e.accept(this.attached, particle));
 
         this.attached.register(particle);
     }
@@ -93,6 +119,7 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
     private boolean buildStep() {
         Shape particle = detached.poll();
 
+        step:
         while (true) {
             int targetIndex = rndEng.getFRand().nextInteger(0, this.attached.size());
             Shape target = this.attached.asList().get(targetIndex);
@@ -106,16 +133,14 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
                 continue;
             }
 
-            if (this.validator != null) {
-                if (!this.validator.accept(this.attached, this.rndEng, particle)) {
+            for (var validator : this.validator) {
+                if (!validator.apply(this.attached, particle)) {
 
-                    continue;
+                    continue step;
                 }
             }
 
-            if (this.monitor != null) {
-                this.monitor.accept(particle, this.attached.size());
-            }
+            this.monitor.forEach(e -> e.accept(this.attached, particle));
 
             this.attached.register(particle);
 
@@ -126,14 +151,20 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
     //--------------------------------------------------
 
     @Override
-    public void setMonitor(BiConsumer<Shape, Integer> monitor) {
+    public void addStepMonitor(BiConsumer<FAssembly<Shape>, Shape> monitor) {
 
-        this.monitor = monitor;
+        this.monitor.add(monitor);
     }
 
     @Override
-    public void setValidator(TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation) {
+    public void addStepValidator(BiFunction<FAssembly<Shape>, Shape, Boolean> validator) {
 
-        this.validator = validation;
+        this.validator.add(validator);
+    }
+
+    @Override
+    public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
+
+        this.acceptor.add(validator);
     }
 }

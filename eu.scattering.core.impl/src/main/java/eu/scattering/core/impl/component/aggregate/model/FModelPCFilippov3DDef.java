@@ -8,21 +8,22 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.lambda.TriFunction;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class FModelPCFilippov3DDef implements FModelPCTunable {
     private static final int ITERATIONS = 100;
     private static final int MIN_SIZE = 5;
 
-    private BiConsumer<Shape, Integer> monitor;
-    private TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator;
+    private final List<BiConsumer<FAssembly<Shape>, Shape>> monitor;
+    private final List<BiFunction<FAssembly<Shape>, Shape, Boolean>> validator;
+    private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
 
     private final FRandEngine rndEng;
 
@@ -48,6 +49,10 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
+
+        this.monitor = new ArrayList<>();
+        this.validator = new ArrayList<>();
+        this.acceptor = new ArrayList<>();
 
         this.rndEng = factory.getFRandEngine();
 
@@ -93,13 +98,35 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
-        init();
 
-        while (this.detached.size() != 0) {
-            if (!buildStep()) {
-                throw new RuntimeException("The aggregate could not be built");
+        boolean loop;
+        int iteration = 0;
+
+        do {
+            loop = false;
+
+            init();
+
+            while (this.detached.size() != 0) {
+                if (!buildStep()) {
+                    throw new RuntimeException("The aggregate could not be built");
+                }
             }
-        }
+
+            this.monitor.forEach(e -> e.accept(this.attached, null));
+
+            for (var acceptor : this.acceptor) {
+                if (acceptor.apply(this.aggregate, iteration)) {
+                    continue;
+                }
+
+                iteration++;
+                loop = true;
+
+                break;
+            }
+
+        } while (loop);
     }
 
     private void init() {
@@ -117,9 +144,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
         particleA.setCenter(0, 0, 0);
 
-        if (this.monitor != null) {
-            this.monitor.accept(particleA, this.attached.size());
-        }
+        this.monitor.forEach(e -> e.accept(this.attached, particleA));
 
         this.attached.register(particleA);
 
@@ -128,9 +153,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
         particleB.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
 
-        if (this.monitor != null) {
-            this.monitor.accept(particleB, this.attached.size());
-        }
+        this.monitor.forEach(e -> e.accept(this.attached, particleB));
 
         this.attached.register(particleB);
     }
@@ -150,6 +173,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
             throw new IllegalStateException("The particle cannot be attached to the aggregate");
         }
 
+        step:
         for (int i = 0 ; i < ITERATIONS ; i++) {
             particle.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(radius)).translate(this.cMass);
 
@@ -175,16 +199,14 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 continue;
             }
 
-            if (this.validator != null) {
-                if (!this.validator.accept(this.attached, this.rndEng, particle)) {
+            for (var validator : this.validator) {
+                if (!validator.apply(this.attached, particle)) {
 
-                    continue;
+                    continue step;
                 }
             }
 
-            if (this.monitor != null) {
-                this.monitor.accept(particle, this.attached.size());
-            }
+            this.monitor.forEach(e -> e.accept(this.attached, particle));
 
             this.attached.register(particle);
 
@@ -225,15 +247,21 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     //--------------------------------------------------
 
     @Override
-    public void setMonitor(BiConsumer<Shape, Integer> monitor) {
+    public void addStepMonitor(BiConsumer<FAssembly<Shape>, Shape> monitor) {
 
-        this.monitor = monitor;
+        this.monitor.add(monitor);
     }
 
     @Override
-    public void setValidator(TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation) {
+    public void addStepValidator(BiFunction<FAssembly<Shape>, Shape, Boolean> validator) {
 
-        this.validator = validation;
+        this.validator.add(validator);
+    }
+
+    @Override
+    public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
+
+        this.acceptor.add(validator);
     }
 
     @Override

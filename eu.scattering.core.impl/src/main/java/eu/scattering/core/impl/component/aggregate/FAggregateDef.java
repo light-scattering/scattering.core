@@ -658,7 +658,7 @@ public class FAggregateDef implements FAggregate {
     public double getBoxDimension() {
         FPlot2D results = factory.getFPlot2D();
 
-        double cutoffInner = getStatRadius().min();
+        double cutoffInner = getStatRadius().min() * 2;
         double cutoffOuter = cutoffInner;
 
         while (cutoffOuter < getMaxLength()) {
@@ -669,8 +669,8 @@ public class FAggregateDef implements FAggregate {
         double box = cutoffOuter;
         while (box >= cutoffInner) {
             getBDimStep(results, box);
-            box -= cutoffInner * 0.5;
-//            box *= 0.5;
+//            box -= cutoffInner * 0.5;
+            box *= 0.96875;
         }
 
         return getBDimAnalyze(results);
@@ -734,10 +734,10 @@ public class FAggregateDef implements FAggregate {
 
 //        data.interpolate(100);
 
-        data.setStatY(data.getStatY()
-                .replaceDecreasingWithNaN()
+//        data.setStatY(data.getStatY()
+//                .replaceDecreasingWithNaN()
 //                .replaceSameWithNaN()
-        );
+//        );
 
         FPlot2D reference = data.copy();
         FPos2D regression = reference.simpleLinearRegression();

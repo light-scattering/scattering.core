@@ -6,20 +6,21 @@ import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.lambda.TriFunction;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 public class FModelRLA2DDef implements FModelRLA {
     private static final int ITERATIONS = 100;
     private static final int MIN_SIZE = 5;
 
-    private BiConsumer<Shape, Integer> monitor;
-    private TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validator;
+    private final List<BiConsumer<FAssembly<Shape>, Shape>> monitor;
+    private final List<BiFunction<FAssembly<Shape>, Shape, Boolean>> validator;
+    private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
 
     private final FRandEngine rndEng;
 
@@ -39,6 +40,10 @@ public class FModelRLA2DDef implements FModelRLA {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
+
+        this.monitor = new ArrayList<>();
+        this.validator = new ArrayList<>();
+        this.acceptor = new ArrayList<>();
 
         this.rndEng = factory.getFRandEngine();
 
@@ -62,19 +67,42 @@ public class FModelRLA2DDef implements FModelRLA {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
-        init();
 
-        while (this.detached.size() != 0) {
-            if (!buildStep()) {
-                throw new RuntimeException("The aggregate could not be built");
+        boolean loop;
+        int iteration = 0;
+
+        do {
+            loop = false;
+
+            init();
+
+            while (this.detached.size() != 0) {
+                if (!buildStep()) {
+                    throw new RuntimeException("The aggregate could not be built");
+                }
             }
-        }
+
+            this.monitor.forEach(e -> e.accept(this.attached, null));
+
+            for (var acceptor : this.acceptor) {
+                if (acceptor.apply(this.aggregate, iteration)) {
+                    continue;
+                }
+
+                iteration++;
+                loop = true;
+
+                break;
+            }
+
+        } while (loop);
     }
 
     private void init() {
         this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
 
         this.bases.clear();
+        this.attached.clear();
 
         this.detached.clear();
         this.detached.addAll(this.aggregate.getRefParticles().asList());
@@ -86,9 +114,7 @@ public class FModelRLA2DDef implements FModelRLA {
 
         particle.setCenter(0, 0, 0);
 
-        if (this.monitor != null) {
-            this.monitor.accept(particle, this.attached.size());
-        }
+        this.monitor.forEach(e -> e.accept(this.attached, particle));
 
         this.bases.add(particle);
         this.attached.register(particle);
@@ -97,6 +123,7 @@ public class FModelRLA2DDef implements FModelRLA {
     private boolean buildStep() {
         Shape particle = detached.poll();
 
+        step:
         while (this.bases.size() != 0) {
             int baseIndex = rndEng.getFRand().nextInteger(0, this.bases.size());
             Shape base = this.bases.get(baseIndex);
@@ -109,16 +136,14 @@ public class FModelRLA2DDef implements FModelRLA {
                 continue;
             }
 
-            if (this.validator != null) {
-                if (!this.validator.accept(this.attached, this.rndEng, particle)) {
+            for (var validator : this.validator) {
+                if (!validator.apply(this.attached, particle)) {
 
-                    continue;
+                    continue step;
                 }
             }
 
-            if (this.monitor != null) {
-                this.monitor.accept(particle, this.attached.size());
-            }
+            this.monitor.forEach(e -> e.accept(this.attached, particle));
 
             this.bases.add(particle);
             this.attached.register(particle);
@@ -132,14 +157,20 @@ public class FModelRLA2DDef implements FModelRLA {
     //--------------------------------------------------
 
     @Override
-    public void setMonitor(BiConsumer<Shape, Integer> monitor) {
+    public void addStepMonitor(BiConsumer<FAssembly<Shape>, Shape> monitor) {
 
-        this.monitor = monitor;
+        this.monitor.add(monitor);
     }
 
     @Override
-    public void setValidator(TriFunction<FAssembly<Shape>, FRandEngine, Shape, Boolean> validation) {
+    public void addStepValidator(BiFunction<FAssembly<Shape>, Shape, Boolean> validator) {
 
-        this.validator = validation;
+        this.validator.add(validator);
+    }
+
+    @Override
+    public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
+
+        this.acceptor.add(validator);
     }
 }
