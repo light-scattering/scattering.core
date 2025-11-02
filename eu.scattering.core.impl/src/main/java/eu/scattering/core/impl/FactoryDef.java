@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPC
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
+import eu.scattering.core.design.component.aggregate.monitor.construct.FMonitorConstruct;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -54,6 +55,9 @@ import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
+import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGDef;
+import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGMonoDef;
+import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGPolyDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -437,9 +441,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FBuffer<FBufferData> refElements) {
+    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FBuffer<FBufferData> refBuffer) {
 
-        return FAggregateDef.create(this, refParticles, refElements);
+        return FAggregateDef.create(this, refParticles, refBuffer);
     }
 
     @Override
@@ -516,6 +520,24 @@ public final class FactoryDef implements ScatFactory {
     public FModelDLA createFModelDLA2D(FAggregate aggregate) {
 
         return FModelDLA2DDef.create(aggregate, this);
+    }
+
+    @Override
+    public FMonitorConstruct getFMonitorRoG(int skip) {
+
+        return FMonitorRoGDef.create(this, skip);
+    }
+
+    @Override
+    public FMonitorConstruct getFMonitorRoGMono(int skip) {
+
+        return FMonitorRoGMonoDef.create(this, skip);
+    }
+
+    @Override
+    public FMonitorConstruct getFMonitorRoGPoly(int skip) {
+
+        return FMonitorRoGPolyDef.create(this, skip);
     }
 
     //--------------------------------------------------

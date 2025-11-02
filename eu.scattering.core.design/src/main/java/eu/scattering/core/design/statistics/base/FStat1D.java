@@ -71,6 +71,8 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     int removeOutliers(boolean sample, double factor);
     int removeOutliers(double mean, double std, double factor);
 
+    int removeDuplicates();
+
     // -------------------------------------------------------------------------------------------------
 
     void mutate(Function<Double, Double> function);
@@ -86,6 +88,9 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     void removeBias();
     void removeBias(double mean);
+
+    boolean isSimilarAbs(double threshold, FStat1D... comparison);
+    boolean isSimilarRel(double threshold, FStat1D... comparison);
 
     // -------------------------------------------------------------------------------------------------
 

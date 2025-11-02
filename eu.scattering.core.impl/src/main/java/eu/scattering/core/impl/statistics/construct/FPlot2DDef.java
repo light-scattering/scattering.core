@@ -490,6 +490,30 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
+    public void swapXY() {
+        double swap;
+
+        for (FPlot2DRecord record : getData()) {
+            swap = record.getX();
+            record.setX(record.getY());
+            record.setY(swap);
+        }
+    }
+
+    @Override
+    public void log(double base, boolean x, boolean y) {
+        double denominator = Math.log(base);
+
+        if (x) {
+            mutateX((dx, dy) -> Math.log(dx) / denominator);
+        }
+
+        if (y) {
+            mutateY((dx, dy) -> Math.log(dy) / denominator);
+        }
+    }
+
+    @Override
     public void forEach(BiConsumer<Double, Double> consumer) {
 
         for (FPlot2DRecord record : getData()) {

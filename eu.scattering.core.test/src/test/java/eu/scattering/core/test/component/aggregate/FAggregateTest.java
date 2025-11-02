@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.storage.buffer.FBuffer;
@@ -1913,7 +1914,83 @@ public class FAggregateTest {
             assertEquals(3, fAggregate.getRefMaterial().getRefIndexIm("X"));
         }
 
+        @Test
+        @DisplayName("Pair distance - A")
+        void getPairDistanceA() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate(0);
+
+            fAggregate.setRefParticles(core);
+
+            FStat1D results = fAggregate.getPairDistance();
+
+            results.sort(true);
+
+            assertEquals(21, results.size());
+            assertEquals(2, results.get(0), 1E-4);
+            assertEquals(4, results.get(results.size() - 1), 1E-4);
+
+            results.removeDuplicates();
+
+            assertEquals(3, results.size());
+        }
+
+        @Test
+        @DisplayName("Pair distance - B")
+        void getPairDistanceB() {
+            FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
+
+            FStat1D results = fAggregate.getPairDistance();
+
+            assertTrue(results.size() > 100000);
+        }
+
+        @Test
+        @DisplayName("Triplet angle function - A")
+        void getTripletAngleA() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate(0);
+
+            fAggregate.setRefParticles(core);
+
+            FStat1D results = fAggregate.getTripletAngle();
+
+            results.sort(true);
+
+            assertEquals(15, results.size());
+            assertEquals(Math.PI * 0.5, results.get(0), 1E-4);
+            assertEquals(Math.PI, results.get(results.size() - 1), 1E-4);
+
+            results.removeDuplicates();
+
+            assertEquals(2, results.size());
+        }
+
+        @Test
+        @DisplayName("Triplet angle function - B")
+        void getTripletAngleB() {
+            FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
+
+            FStat1D results = fAggregate.getTripletAngle();
+
+            assertTrue(results.size() > 1000);
+        }
 
         @Test
         @DisplayName("Get box dimension")
@@ -1938,6 +2015,4 @@ public class FAggregateTest {
 //            assertEquals(2.2, dim22, 0.15);
         }
     }
-
-
 }

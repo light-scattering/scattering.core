@@ -472,6 +472,19 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
+    public int removeDuplicates() {
+        Set<Double> values = new HashSet<>();
+
+        for (int i = 0 ; i < size() ; i++) {
+            if (!values.add(get(i))) {
+                set(i, Double.NaN);
+            }
+        }
+
+        return filter(e -> !Double.isNaN(e));
+    }
+
+    @Override
     public FStat1D removeNaN() {
 
         filter((x) -> !Double.isNaN(x));
@@ -634,6 +647,66 @@ public class FStat1DDef implements FStat1D {
     public void removeBias(double mean) {
 
         mutate((val -> val - mean));
+    }
+
+    @Override
+    public boolean isSimilarAbs(double threshold, FStat1D... comparison) {
+
+        if (threshold < 0) {
+            throw new IllegalArgumentException("The threshold value cannot be negative");
+        }
+
+        if (comparison.length == 0) {
+            throw new IllegalArgumentException("At least one set must be provided for comparison");
+        }
+
+        for (FStat1D fStat : comparison) {
+            if (size() != fStat.size()) {
+                throw new IllegalArgumentException("All sets must have the same size");
+            }
+        }
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = get(i);
+
+            for (FStat1D fStat : comparison) {
+                if (Math.abs(value - fStat.get(i)) > threshold) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isSimilarRel(double threshold, FStat1D... comparison) {
+
+        if (threshold < 0) {
+            throw new IllegalArgumentException("The threshold value cannot be negative");
+        }
+
+        if (comparison.length == 0) {
+            throw new IllegalArgumentException("At least one set must be provided for comparison");
+        }
+
+        for (FStat1D fStat : comparison) {
+            if (size() != fStat.size()) {
+                throw new IllegalArgumentException("All sets must have the same size");
+            }
+        }
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = get(i);
+
+            for (FStat1D fStat : comparison) {
+                if (Math.abs((fStat.get(i) - value) / value) > threshold) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     @Override

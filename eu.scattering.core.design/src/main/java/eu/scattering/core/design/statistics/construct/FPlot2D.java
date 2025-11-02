@@ -63,6 +63,10 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     FPos2D simpleLinearRegression();
 
+    void swapXY();
+
+    void log(double base, boolean x, boolean y);
+
     // -------------------------------------------------------------------------------------------------
 
     void forEach(BiConsumer<Double, Double> consumer);

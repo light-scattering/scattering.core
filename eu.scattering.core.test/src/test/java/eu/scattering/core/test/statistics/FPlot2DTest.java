@@ -1158,6 +1158,153 @@ public class FPlot2DTest {
             assertEquals(15, sumX.get());
             assertEquals(-15, sumY.get());
         }
+
+        @Test
+        @DisplayName("Log X")
+        void logX() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.log(Math.E, true, false);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
+                    () -> assertEquals(Math.log(2), fPlot.getX(1), 1E-4),
+                    () -> assertEquals(Math.log(3), fPlot.getX(2), 1E-4),
+                    () -> assertEquals(4, fPlot.getY(0), 1E-4),
+                    () -> assertEquals(5, fPlot.getY(1), 1E-4),
+                    () -> assertEquals(6, fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Log Y")
+        void logY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.log(Math.E, false, true);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(1, fPlot.getX(0), 1E-4),
+                    () -> assertEquals(2, fPlot.getX(1), 1E-4),
+                    () -> assertEquals(3, fPlot.getX(2), 1E-4),
+                    () -> assertEquals(Math.log(4), fPlot.getY(0), 1E-4),
+                    () -> assertEquals(Math.log(5), fPlot.getY(1), 1E-4),
+                    () -> assertEquals(Math.log(6), fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Log XY")
+        void logXY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.log(Math.E, true, true);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
+                    () -> assertEquals(Math.log(2), fPlot.getX(1), 1E-4),
+                    () -> assertEquals(Math.log(3), fPlot.getX(2), 1E-4),
+                    () -> assertEquals(Math.log(4), fPlot.getY(0), 1E-4),
+                    () -> assertEquals(Math.log(5), fPlot.getY(1), 1E-4),
+                    () -> assertEquals(Math.log(6), fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Log10 X")
+        void log10X() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.log(10, true, false);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(Math.log10(1), fPlot.getX(0), 1E-4),
+                    () -> assertEquals(Math.log10(2), fPlot.getX(1), 1E-4),
+                    () -> assertEquals(Math.log10(3), fPlot.getX(2), 1E-4),
+                    () -> assertEquals(4, fPlot.getY(0), 1E-4),
+                    () -> assertEquals(5, fPlot.getY(1), 1E-4),
+                    () -> assertEquals(6, fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Log10 Y")
+        void log10Y() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.log(10, false, true);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(1, fPlot.getX(0), 1E-4),
+                    () -> assertEquals(2, fPlot.getX(1), 1E-4),
+                    () -> assertEquals(3, fPlot.getX(2), 1E-4),
+                    () -> assertEquals(Math.log10(4), fPlot.getY(0), 1E-4),
+                    () -> assertEquals(Math.log10(5), fPlot.getY(1), 1E-4),
+                    () -> assertEquals(Math.log10(6), fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Log10 XY")
+        void log10XY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.log(10, true, true);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(Math.log10(1), fPlot.getX(0), 1E-4),
+                    () -> assertEquals(Math.log10(2), fPlot.getX(1), 1E-4),
+                    () -> assertEquals(Math.log10(3), fPlot.getX(2), 1E-4),
+                    () -> assertEquals(Math.log10(4), fPlot.getY(0), 1E-4),
+                    () -> assertEquals(Math.log10(5), fPlot.getY(1), 1E-4),
+                    () -> assertEquals(Math.log10(6), fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Swap XY")
+        void swapXY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.swapXY();
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(4, fPlot.getX(0)),
+                    () -> assertEquals(5, fPlot.getX(1)),
+                    () -> assertEquals(6, fPlot.getX(2)),
+                    () -> assertEquals(1, fPlot.getY(0)),
+                    () -> assertEquals(2, fPlot.getY(1)),
+                    () -> assertEquals(3, fPlot.getY(2))
+            );
+        }
     }
 
     @Nested

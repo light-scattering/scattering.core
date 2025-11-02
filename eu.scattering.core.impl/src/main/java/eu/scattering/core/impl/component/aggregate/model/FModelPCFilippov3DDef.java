@@ -224,7 +224,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     }
 
     private double getExpectedParticleDistance() {
-        int np = this.attached.size();
+        int np = this.attached.size() + 1;
 
         double stepA = Math.pow(np / kf, 2 / df) * (np * np * rp * rp) / (np - 1);
         double stepB = (np * rp * rp) / (np - 1);

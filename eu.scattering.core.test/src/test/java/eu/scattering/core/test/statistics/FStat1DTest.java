@@ -1496,6 +1496,163 @@ public class FStat1DTest {
             assertEquals(1, fPlot.getY(3));
             assertEquals(0, fPlot.getY(4));
         }
+
+        @Test
+        @DisplayName("Is similar (absolute)")
+        void isSimilarAbs() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2, 3.2, 3.9, 5);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(0.9, 2, 3, 4.1, 5);
+
+            assertTrue(fStat.isSimilarAbs(0.25, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (absolute) - Fail")
+        void isSimilarAbsFail() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2, 3.3, 3.9, 5);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(0.9, 2, 3, 4.1, 5);
+
+            assertFalse(fStat.isSimilarAbs(0.25, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (absolute) - Wrong length")
+        void isSimilarAbsWrongLength() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2, 3.3, 3.9, 5, 6);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(0.9, 2, 3, 4.1, 5);
+
+            assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarAbs(0.25, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (absolute) - Negative threshold")
+        void isSimilarAbsNegativeThreshold() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2, 3.2, 3.9, 5);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(0.9, 2, 3, 4.1, 5);
+
+            assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarAbs(-1, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (absolute) - Empty set")
+        void isSimilarAbsEmptySet() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarAbs(1));
+        }
+
+        @Test
+        @DisplayName("Is similar (relative)")
+        void isSimilarRel() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2.1, 3.2, 3.9, 5);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(1, 2, 3, 4.1, 5.4);
+
+            assertTrue(fStat.isSimilarRel(0.1, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (relative) - Fail")
+        void isSimilarRelFail() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2.1, 3.2, 3.9, 5);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(1.2, 2, 3, 4.1, 5.4);
+
+            assertFalse(fStat.isSimilarRel(0.1, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (relative) - Wrong length")
+        void isSimilarRelWrongLength() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2, 3.3, 3.9, 5, 6);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(0.9, 2, 3, 4.1, 5);
+
+            assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarRel(0.25, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (relative) - Negative threshold")
+        void isSimilarRelNegativeThreshold() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            FStat1D fStatA = factory.getFStat1D();
+            fStatA.add(1, 2, 3.2, 3.9, 5);
+
+            FStat1D fStatB = factory.getFStat1D();
+            fStatB.add(0.9, 2, 3, 4.1, 5);
+
+            assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarRel(-1, fStatA, fStatB));
+        }
+
+        @Test
+        @DisplayName("Is similar (relative) - Empty set")
+        void isSimilarRelEmptySet() {
+            FStat1D fStat = factory.getFStat1D();
+            fStat.add(1, 2, 3, 4, 5);
+
+            assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarRel(1));
+        }
+
+        @Test
+        @DisplayName("Deduplicate")
+        void deduplicate() {
+            FStat1D data = factory.getFStat1D();
+
+            data.add(1, 2, 3, 1, 1, 5, 2, 3);
+
+            int count = data.removeDuplicates();
+
+            data.sort(false);
+
+            assertEquals(4, count);
+            assertEquals(4, data.size());
+            assertEquals(5, data.get(0));
+            assertEquals(3, data.get(1));
+            assertEquals(2, data.get(2));
+            assertEquals(1, data.get(3));
+        }
     }
 
     @Nested

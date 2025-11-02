@@ -6,19 +6,19 @@ import eu.scattering.core.design.component.aggregate.monitor.construct.FMonitorC
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 
-public class FMonitorRoGMonoDef implements FMonitorConstruct {
+public class FMonitorRoGDef implements FMonitorConstruct {
     private final FPlot2D fPlot2D;
     private double skip = -1;
 
-    private FMonitorRoGMonoDef(ScatFactory factory) {
+    private FMonitorRoGDef(ScatFactory factory) {
 
         this.fPlot2D = factory.getFPlot2D();
 
-        this.fPlot2D.setName("Radius of gyration - Monodisperse");
+        this.fPlot2D.setName("Radius of gyration");
     }
 
     public static FMonitorConstruct create(ScatFactory factory, int skip) {
-        FMonitorConstruct results = new FMonitorRoGMonoDef(factory);
+        FMonitorConstruct results = new FMonitorRoGDef(factory);
 
         results.setSkip(skip);
 
@@ -44,7 +44,7 @@ public class FMonitorRoGMonoDef implements FMonitorConstruct {
             fPlot2D.clear();
         } else {
             if (fAggregate.getRefParticles().size() > this.skip) {
-                fPlot2D.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyrationMonodisperse());
+                fPlot2D.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyration());
             }
         }
     }

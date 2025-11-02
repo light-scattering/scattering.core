@@ -56,10 +56,11 @@ public interface FAggregate extends Component {
     double getRadiusFromOrigin();
 
     double getRadiusOfGyration();
-
     double getOverlapFactor();
-
     double getBoxDimension();
+
+    FStat1D getPairDistance();
+    FStat1D getTripletAngle();
 
     boolean isCompact();
     boolean isSparse();

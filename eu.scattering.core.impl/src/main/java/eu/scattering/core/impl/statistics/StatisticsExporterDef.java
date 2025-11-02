@@ -33,7 +33,7 @@ public class StatisticsExporterDef implements StatisticsExporter {
         for (int i = 0 ; i < plot.length ; i++) {
             List<String> x = new ArrayList<>();
             List<String> y = new ArrayList<>();
-            String name = plot[i].getName().isEmpty() ? "" + i : plot[i].getName();
+            String name = plot[i].getName().isEmpty() ? "data " + i : plot[i].getName();
 
             for (int j = 0; j < plot[i].size() ; j++) {
                 x.add("" + plot[i].getX(j));
@@ -73,7 +73,7 @@ public class StatisticsExporterDef implements StatisticsExporter {
 
         for (int i = 0 ; i < stat.length ; i++) {
             List<String> x = stat[i].getData().stream().map(e -> "" + e).toList();
-            String name = stat[i].getName().isEmpty() ? "" + i : stat[i].getName();
+            String name = stat[i].getName().isEmpty() ? "data " + i : stat[i].getName();
 
             builder.append("fig.add_trace(go.Histogram(");
             builder.append("x=[" + String.join(",", x) + "], ");

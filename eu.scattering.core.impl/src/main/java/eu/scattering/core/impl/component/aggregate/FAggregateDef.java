@@ -3,6 +3,7 @@ package eu.scattering.core.impl.component.aggregate;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
@@ -41,8 +42,8 @@ public class FAggregateDef implements FAggregate {
 
         this.factory = factory;
 
-        this.particles = particles;
         this.buffer = buffer;
+        this.particles = particles;
 
         this.material = FMaterial.create();
     }
@@ -662,15 +663,13 @@ public class FAggregateDef implements FAggregate {
         double cutoffOuter = cutoffInner;
 
         while (cutoffOuter < getMaxLength()) {
-//            cutoffOuter += cutoffInner * 0.5;
             cutoffOuter *= 2;
         }
 
         double box = cutoffOuter;
         while (box >= cutoffInner) {
             getBDimStep(results, box);
-//            box -= cutoffInner * 0.5;
-            box *= 0.96875;
+            box *= 0.5;
         }
 
         return getBDimAnalyze(results);
@@ -760,6 +759,51 @@ public class FAggregateDef implements FAggregate {
         }
 
         return oFacRaw;
+    }
+
+    @Override
+    public FStat1D getPairDistance() {
+        FStat1D distance = factory.getFStat1D();
+        List<Shape> particles = getRefParticles().asList();
+
+        for (int i = 0 ; i < getRefParticles().size() - 1 ; i++) {
+            for (int j = i + 1 ; j < getRefParticles().size() ; j++) {
+                distance.add(particles.get(i).getDistCenter(particles.get(j)));
+            }
+        }
+
+        return distance;
+    }
+
+    @Override
+    public FStat1D getTripletAngle() {
+        FStat1D angle = factory.getFStat1D();
+
+        List<Shape> neighbours = new LinkedList<>();
+        FVector vecA = factory.getFVector();
+        FVector vecB = factory.getFVector();
+
+        for (Shape shape : getRefParticles()) {
+            shape.touchesOrOverlaps(particles, neighbours);
+
+            if (neighbours.size() < 2) {
+                continue;
+            }
+
+            for (int i = 0 ; i < neighbours.size() - 1 ; i++) {
+                for (int j = i + 1 ; j < neighbours.size() ; j++) {
+                    vecA.setBase(shape.getRefCenter());
+                    vecB.setBase(shape.getRefCenter());
+
+                    vecA.setHead(neighbours.get(i).getRefCenter());
+                    vecB.setHead(neighbours.get(j).getRefCenter());
+
+                    angle.add(vecA.getAngle(vecB));
+                }
+            }
+        }
+
+        return angle;
     }
 
     @Override
