@@ -1,16 +1,16 @@
 package eu.scattering.core.design.component.aggregate;
 
+import eu.scattering.core.design.annotation.Legacy;
+import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.annotation.Modificator;
-import eu.scattering.core.design.annotation.Legacy;
+import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.transfer.complex.FMaterial;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
@@ -18,8 +18,8 @@ import java.util.function.BiConsumer;
 
 public interface FAggregate extends Component {
 
-    FAssembly<Shape> getParticles();
-    FAggregate setParticles(FAssembly<Shape> particles);
+    FAggregate addFBuffer(int capacity);
+    FAggregate addFMaterial();
 
     FMesh<FBufferData> getVolumeMesh();
 
@@ -34,17 +34,17 @@ public interface FAggregate extends Component {
     double getSurfaceRadius(double[] layers);
 
     FPairPos3D getRange();
+
     FPos3D getLength();
+    double getLengthMax();
 
-    double getMaxLength();
-
-    void getMassCenter(FPoint center);
+    void getMassCenter(FPoint in);
     FPos3D getMassCenter();
 
-    void getSpatialCenter(FPoint center);
+    void getSpatialCenter(FPoint in);
     FPos3D getSpatialCenter();
 
-    void getSphericalCenter(FPoint center);
+    void getSphericalCenter(FPoint in);
     FPos3D getSphericalCenter();
 
     void positionCenter(FPoint center);
@@ -88,7 +88,7 @@ public interface FAggregate extends Component {
     @Modificator
     FBuffer<FBufferData> getRefBuffer();
     @Modificator
-    FAggregate setRefBuffer(FBuffer<FBufferData> dipoles);
+    FAggregate setRefBuffer(FBuffer<FBufferData> buffer);
 
     @Modificator
     FAssembly<Shape> getRefParticles();

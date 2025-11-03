@@ -35,7 +35,6 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.engine.export.FExportEngine;
 import eu.scattering.core.design.engine.prototype.FProtoEngine;
 import eu.scattering.core.design.engine.randomize.FRandEngine;
@@ -45,14 +44,16 @@ import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.helper.transfer.FTransferHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
+import eu.scattering.core.design.physics.material.FMaterial;
+import eu.scattering.core.design.physics.material.data.FMaterialData;
 import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
-import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGDef;
@@ -78,15 +79,17 @@ import eu.scattering.core.impl.engine.randomize.FRandGeneratorDef;
 import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
 import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FPositionHelperDef;
-import eu.scattering.core.impl.statistics.FStatHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
+import eu.scattering.core.impl.physics.FMaterialDataDef;
+import eu.scattering.core.impl.physics.FMaterialDef;
+import eu.scattering.core.impl.statistics.FStatHelperDef;
 import eu.scattering.core.impl.statistics.StatisticsExporterDef;
-import eu.scattering.core.impl.statistics.construct.FPlot2DDef;
 import eu.scattering.core.impl.statistics.base.FStat1DDef;
+import eu.scattering.core.impl.statistics.construct.FPlot2DDef;
 import eu.scattering.core.impl.storage.FBufferDef;
-import eu.scattering.core.impl.storage.FMeshDef;
 import eu.scattering.core.impl.storage.FCacheDef;
 import eu.scattering.core.impl.storage.FLayerDef;
+import eu.scattering.core.impl.storage.FMeshDef;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -390,36 +393,18 @@ public final class FactoryDef implements ScatFactory {
         return FAssemblyDef.create(this, new ArrayList<>());
     }
 
+    @Override
+    public <T extends Geometry> FAssembly<T> getFAssembly(JSONObject json) {
+
+        return FAssemblyDef.create(this, json);
+    }
+
     //--------------------------------------------------
 
     @Override
     public FAggregate getFAggregate() {
 
-        return FAggregateDef.create(this, getFAssembly(), getFBuffer());
-    }
-
-    @Override
-    public FAggregate getFAggregate(int capacity) {
-
-        return FAggregateDef.create(this, getFAssembly(), getFBuffer(capacity));
-    }
-
-    @Override
-    public FAggregate getFAggregate(FAssembly<Shape> particles) {
-
-        return FAggregateDef.create(this, particles.copy(), getFBuffer());
-    }
-
-    @Override
-    public FAggregate getFAggregate(FAssembly<Shape> particles, int capacity) {
-
-        return FAggregateDef.create(this, particles.copy(), getFBuffer(capacity));
-    }
-
-    @Override
-    public FAggregate getFAggregate(String json) {
-
-        return FAggregateDef.create(this, json);
+        return FAggregateDef.create(this, getFAssembly());
     }
 
     @Override
@@ -431,19 +416,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FAggregate getRefFAggregate(FAssembly<Shape> refParticles) {
 
-        return FAggregateDef.create(this, refParticles, getFBuffer());
-    }
-
-    @Override
-    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, int capacity) {
-
-        return FAggregateDef.create(this, refParticles, getFBuffer(capacity));
-    }
-
-    @Override
-    public FAggregate getRefFAggregate(FAssembly<Shape> refParticles, FBuffer<FBufferData> refBuffer) {
-
-        return FAggregateDef.create(this, refParticles, refBuffer);
+        return FAggregateDef.create(this, refParticles);
     }
 
     @Override
@@ -451,15 +424,7 @@ public final class FactoryDef implements ScatFactory {
         Producer<FSphere> fProducer = getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(count));
 
-        return FAggregateDef.create(this, fAssembly, getFBuffer());
-    }
-
-    @Override
-    public FAggregate getFAggregateMono(int count, double radius, int capacity) {
-        Producer<FSphere> fProducer = getFSphereProducer(radius);
-        FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(count));
-
-        return FAggregateDef.create(this, fAssembly, getFBuffer(capacity));
+        return FAggregateDef.create(this, fAssembly);
     }
 
     @Override
@@ -706,5 +671,31 @@ public final class FactoryDef implements ScatFactory {
     public FLayer getFLayerCounter(JSONObject json) {
 
         return FLayerDef.create(json);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public FMaterial getFMaterial() {
+
+        return FMaterialDef.create(this);
+    }
+
+    @Override
+    public FMaterial getFMaterial(JSONObject json) {
+
+        return FMaterialDef.create(this, json);
+    }
+
+    @Override
+    public FMaterialData getFMaterialData() {
+
+        return FMaterialDataDef.create();
+    }
+
+    @Override
+    public FMaterialData getFMaterialData(JSONObject json) {
+
+        return FMaterialDataDef.create(json);
     }
 }

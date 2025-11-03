@@ -30,7 +30,7 @@ public class FModelFilippovTest {
     void aggregate3D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1, 0);
+        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -91,7 +91,7 @@ public class FModelFilippovTest {
     void aggregate2D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1, 0);
+        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -157,14 +157,14 @@ public class FModelFilippovTest {
 
         Producer<FSphere> fProducerA = factoryA.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
-        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA, 0);
+        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
         FModelPC modelA = factoryA.createFModelFilippov3D(fAggregateA, 1.4, 1.4);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB);
 
         FModelPC modelB = factoryB.createFModelFilippov3D(fAggregateB, 1.4, 1.4);
         modelB.build();
@@ -186,14 +186,14 @@ public class FModelFilippovTest {
 
         Producer<FSphere> fProducerA = factoryA.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
-        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA, 0);
+        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
         FModelPC modelA = factoryA.createFModelFilippov2D(fAggregateA, 1.4, 1.4);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB);
 
         FModelPC modelB = factoryB.createFModelFilippov2D(fAggregateB, 1.4, 1.4);
         modelB.build();
@@ -212,7 +212,7 @@ public class FModelFilippovTest {
 
         Producer<FSphere> fProducerA = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
-        FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA, 0);
+        FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA);
 
         FModelPCTunable modelA = factory.createFModelFilippov3D(fAggregateA);
         modelA.setEarlyStageCorrection(true);
@@ -222,7 +222,7 @@ public class FModelFilippovTest {
 
         Producer<FSphere> fProducerB = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB);
 
         FModelPCTunable modelB = factory.createFModelFilippov3D(fAggregateB);
         modelB.setEarlyStageCorrection(true);
@@ -243,7 +243,7 @@ public class FModelFilippovTest {
 
         Producer<FSphere> fProducerA = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
-        FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA, 0);
+        FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA);
 
         FModelPCTunable modelA = factory.createFModelFilippov2D(fAggregateA);
         modelA.setEarlyStageCorrection(true);
@@ -253,7 +253,7 @@ public class FModelFilippovTest {
 
         Producer<FSphere> fProducerB = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB);
 
         FModelPCTunable modelB = factory.createFModelFilippov2D(fAggregateB);
         modelB.setEarlyStageCorrection(true);
@@ -270,7 +270,7 @@ public class FModelFilippovTest {
     @Test
     @DisplayName("Configuration - Aggregate 3D")
     void configuration3D() {
-        FAggregate fAggregate = factory.getFAggregateMono(10, 1, 0);
+        FAggregate fAggregate = factory.getFAggregateMono(10, 1);
         FModelPCTunable model = factory.createFModelFilippov3D(fAggregate);
 
         model.setDf(2.2);
@@ -285,7 +285,7 @@ public class FModelFilippovTest {
     @Test
     @DisplayName("Configuration - Aggregate 2D")
     void configuration2D() {
-        FAggregate fAggregate = factory.getFAggregateMono(10, 1, 0);
+        FAggregate fAggregate = factory.getFAggregateMono(10, 1);
         FModelPCTunable model = factory.createFModelFilippov2D(fAggregate);
 
         model.setDf(2.2);

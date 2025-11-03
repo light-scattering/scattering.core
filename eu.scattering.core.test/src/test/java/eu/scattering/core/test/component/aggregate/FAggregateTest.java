@@ -37,51 +37,10 @@ public class FAggregateTest {
         @Test
         @DisplayName("Construct")
         void construct() {
-            FAggregate fAggregate = factory.getFAggregate();
+            FAggregate fAggregate = factory.getFAggregate().addFBuffer(1_000_000);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
-                            "The capacity is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with capacity")
-        void constructWithCapacity() {
-            FAggregate fAggregate = factory.getFAggregate(100);
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
-                            "The capacity is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with particles")
-        void constructWithParticles() {
-            FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-            FAggregate fAggregate = factory.getFAggregate(fAssembly);
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
-                            "The reference should change"),
-                    () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
-                            "The capacity is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with particles and capacity")
-        void constructWithParticlesAndCapacity() {
-            FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-            FAggregate fAggregate = factory.getFAggregate(fAssembly, 100);
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertNotSame(fAssembly, fAggregate.getRefParticles(),
-                            "The reference should change"),
-                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
                             "The capacity is erroneous")
             );
         }
@@ -91,27 +50,12 @@ public class FAggregateTest {
         void constructWithReferenceParticles() {
             FAssembly<Shape> fAssembly = factory.getFAssembly();
 
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertSame(fAssembly, fAggregate.getRefParticles(),
                             "The reference should not change"),
                     () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
-                            "The capacity is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with reference particles and capacity")
-        void constructWithReferenceParticlesAndCapacity() {
-            FAssembly<Shape> fAssembly = factory.getFAssembly();
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 100);
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertSame(fAssembly, fAggregate.getRefParticles(),
-                            "The reference should not change"),
-                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
                             "The capacity is erroneous")
             );
         }
@@ -127,93 +71,6 @@ public class FAggregateTest {
                     () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
                             epsilon, "The particle radius is erroneous")
             );
-        }
-
-        @Test
-        @DisplayName("Construct mono with capacity")
-        void constructMonoWithCapacity() {
-            FAggregate fAggregate = factory.getFAggregateMono(10, 1, 100);
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertEquals(10, fAggregate.getRefParticles().size(),
-                            "The number of particles is incorrect"),
-                    () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
-                            epsilon, "The particle radius is erroneous"),
-                    () -> assertEquals(100, fAggregate.getRefBuffer().capacity(),
-                            "The capacity is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct with reference particles and reference elements")
-        void constructWithReferenceParticlesAndReferenceElements() {
-            FAssembly<Shape> fAssembly = factory.getFAssembly();
-            FBuffer<FBufferData> fArray = factory.getFBuffer(10);
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly, fArray);
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertSame(fAssembly, fAggregate.getRefParticles(),
-                            "The reference should not change"),
-                    () -> assertSame(fArray, fAggregate.getRefBuffer(),
-                            "The reference should not change")
-            );
-        }
-
-        @Test
-        @DisplayName("Get particles")
-        void getParticles() {
-            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssemblyA);
-
-            FAssembly<Shape> fAssemblyB = fAggregate.getParticles();
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertNotSame(fAssemblyA, fAssemblyB,
-                            "The reference should change"),
-                    () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
-                            "The geometry should be the same")
-            );
-
-            fSphereA.setRadius(10);
-
-            assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
-        }
-
-        @Test
-        @DisplayName("Set particles")
-        void setParticles() {
-            FAggregate fAggregateA = factory.getFAggregate();
-
-            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-            FAggregate fAggregateB = fAggregateA.setParticles(fAssemblyA);
-
-            FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertSame(fAggregateA, fAggregateB,
-                            "The reference not should change"),
-                    () -> assertNotSame(fAssemblyA, fAssemblyB,
-                            "The reference should change"),
-                    () -> assertTrue(fAssemblyA.isExact(fAssemblyB),
-                            "The geometry should be the same")
-            );
-
-            fSphereA.setRadius(10);
-
-            assertNotEquals(fAssemblyA, fAssemblyB, "The geometry should not be the same");
         }
 
         @Test
@@ -288,7 +145,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Parse JSON")
         void parseJSON() {
-            FAggregate fAggregate = factory.getFAggregateMono(10, 1, 10);
+            FAggregate fAggregate = factory.getFAggregateMono(10, 1).addFBuffer(10).addFMaterial();
             fAggregate.getRefMaterial().setDensity("A", 3);
             fAggregate.getRefMaterial().setDensity("B", 6);
             fAggregate.getRefMaterial().setRefIndexRe("C", 3);
@@ -308,8 +165,8 @@ public class FAggregateTest {
         @Test
         @DisplayName("Exactness")
         void isExact() {
-            FAggregate fAggregateA = factory.getFAggregate(10);
-            FAggregate fAggregateB = factory.getFAggregate(10);
+            FAggregate fAggregateA = factory.getFAggregate().addFBuffer(10).addFMaterial();
+            FAggregate fAggregateB = factory.getFAggregate().addFBuffer(10).addFMaterial();
 
             Shape fSphereAA = factory.getFSphere(0, 0, 0, 1);
             Shape fSphereAB = factory.getFSphere(2, 0, 0, 1);
@@ -689,7 +546,7 @@ public class FAggregateTest {
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
 
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000);
 
             FMesh<FBufferData> fArray = fAggregate.getVolumeMesh();
 
@@ -1397,7 +1254,7 @@ public class FAggregateTest {
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
 
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000);
 
             FPoint center = factory.getFPoint();
 
@@ -1850,7 +1707,7 @@ public class FAggregateTest {
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA));
 
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000);
 
             FPoint massCenter = factory.getFPoint();
             fAggregate.getMassCenter(massCenter);
@@ -1878,7 +1735,7 @@ public class FAggregateTest {
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(quantity));
 
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000).addFMaterial();
 
             double rgDefault = fAggregate.getRadiusOfGyration();
             double rgLegacyMono = fAggregate.getRadiusOfGyrationMonodisperse();
@@ -1895,7 +1752,7 @@ public class FAggregateTest {
         @DisplayName("Set material density")
         void setMaterialDensity() {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFMaterial();
 
             fAggregate.getRefMaterial().setDensity("X", 5);
 
@@ -1906,7 +1763,7 @@ public class FAggregateTest {
         @DisplayName("Set material refractive index")
         void setMaterialRefractiveIndex() {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFMaterial();
 
             fAggregate.getRefMaterial().setRefIndex("X", 2, 3);
 
@@ -1926,7 +1783,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate(0);
+            FAggregate fAggregate = factory.getFAggregate();
 
             fAggregate.setRefParticles(core);
 
@@ -1965,7 +1822,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate(0);
+            FAggregate fAggregate = factory.getFAggregate();
 
             fAggregate.setRefParticles(core);
 

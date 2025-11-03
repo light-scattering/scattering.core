@@ -29,7 +29,7 @@ public class FModelRLATest {
     void aggregate3D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1, 0);
+        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -89,7 +89,7 @@ public class FModelRLATest {
     void aggregate2D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1, 0);
+        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -159,14 +159,14 @@ public class FModelRLATest {
 
         Producer<FSphere> fProducerA = factoryA.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
-        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA, 0);
+        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
         FModelPC modelA = factoryA.createFModelRLA3D(fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
         FModelPC modelB = factoryB.createFModelRLA3D(fAggregateB);
         modelB.build();
@@ -188,14 +188,14 @@ public class FModelRLATest {
 
         Producer<FSphere> fProducerA = factoryA.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
-        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA, 0);
+        FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
         FModelPC modelA = factoryA.createFModelRLA2D(fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
-        FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB, 0);
+        FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
         FModelPC modelB = factoryB.createFModelRLA2D(fAggregateB);
         modelB.build();

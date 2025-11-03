@@ -25,7 +25,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModel modelRLA = factory.createFModelRLA2D(fAggregate);
 
@@ -54,7 +54,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModel modelRLA = factory.createFModelRLA3D(fAggregate);
 
@@ -81,7 +81,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModel modelRLA = factory.createFModelRLA2D(fAggregate);
 
@@ -108,7 +108,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModel modelBallistic = factory.createFModelBallistic3D(fAggregate);
 
@@ -135,7 +135,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModel modelBallistic = factory.createFModelBallistic2D(fAggregate);
 
@@ -162,7 +162,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.8, 1.4);
         modelTunable.setEarlyStageCorrection(true);
@@ -190,7 +190,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.3, 1.5);
         modelTunable.setEarlyStageCorrection(true);
@@ -218,7 +218,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModelDLA modelDLA = factory.createFModelDLA3D(fAggregate);
         modelDLA.build();
@@ -244,7 +244,7 @@ public class FExportTest {
 
         Producer<FSphere> fProducer = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
-        FAggregate fAggregate = factory.getRefFAggregate(fAssembly, 0);
+        FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
         FModelDLA modelDLA = factory.createFModelDLA2D(fAggregate);
         modelDLA.build();

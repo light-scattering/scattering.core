@@ -1,9 +1,9 @@
-package eu.scattering.core.design.transfer.complex;
+package eu.scattering.core.impl.physics;
 
-import eu.scattering.core.design.transfer.Transfer;
+import eu.scattering.core.design.physics.material.data.FMaterialData;
 import org.json.JSONObject;
 
-public class FMaterialData implements Transfer {
+public class FMaterialDataDef implements FMaterialData {
     private static final String JSON_DENSITY = "rho";
     private static final String JSON_REF_INDEX_RE = "re";
     private static final String JSON_REF_INDEX_IM = "im";
@@ -12,15 +12,15 @@ public class FMaterialData implements Transfer {
     private double refIndexRe = 1;
     private double refIndexIm = 0;
 
-    private FMaterialData() {}
+    private FMaterialDataDef() {}
 
     public static FMaterialData create() {
 
-        return new FMaterialData();
+        return new FMaterialDataDef();
     }
 
     public static FMaterialData create(JSONObject json) {
-        FMaterialData material = new FMaterialData();
+        FMaterialData material = new FMaterialDataDef();
 
         material.setDensity(json.getDouble(JSON_DENSITY));
         material.setRefIndexRe(json.getDouble(JSON_REF_INDEX_RE));
@@ -62,7 +62,7 @@ public class FMaterialData implements Transfer {
     //--------------------------------------------------
 
     public FMaterialData copy() {
-        FMaterialData results = FMaterialData.create();
+        FMaterialData results = FMaterialDataDef.create();
 
         results.setDensity(getDensity());
         results.setRefIndexRe(getRefIndexRe());

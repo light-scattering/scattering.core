@@ -50,6 +50,14 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
         return new FAssemblyDef<>(factorySelf, new ArrayList<>(elements));
     }
 
+    public static <T extends Geometry> FAssembly<T> create(GeometryFactory factorySelf, JSONObject json) {
+        FAssembly<T> assembly = new FAssemblyDef<>(factorySelf, new ArrayList<>());
+
+        assembly.set(json);
+
+        return assembly;
+    }
+
     protected static boolean isParsable(String tag) {
 
         return tag.equals(JSON_MAIN);

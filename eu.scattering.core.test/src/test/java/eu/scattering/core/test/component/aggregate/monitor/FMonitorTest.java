@@ -119,7 +119,7 @@ public class FMonitorTest {
             int quantity = 100;
             double delta = 0.25;
 
-            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1).addFBuffer(1_000_000);
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
@@ -147,7 +147,7 @@ public class FMonitorTest {
             int skip = 0;
             double delta = 0.25;
 
-            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1).addFBuffer(1_000_000);
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
