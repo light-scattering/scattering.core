@@ -29,7 +29,7 @@ public class FModelBallisticTest {
     void aggregate3D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
+        FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -89,7 +89,7 @@ public class FModelBallisticTest {
     void aggregate2D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
+        FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);

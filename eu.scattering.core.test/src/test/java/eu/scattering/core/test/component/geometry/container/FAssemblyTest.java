@@ -1194,7 +1194,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPoint));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(1, 2, 3, 1, 2, 3), range,
                             "The dimension is erroneous");
@@ -1208,7 +1208,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPointA, fPointB));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-3, -5, 1, 2, -1, 5), range,
                     "The dimension is erroneous");
@@ -1223,7 +1223,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fPointA, fPointB, fPointC));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-3, -5, 1, 2, -1, 5), range,
                     "The dimension is erroneous");
@@ -1236,7 +1236,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fVector));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-1, -3, -5, 5, 4, 3), range,
                     "The dimension is erroneous");
@@ -1249,7 +1249,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fSphere));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-1, 0, 1, 3, 4, 5), range,
                     "The dimension is erroneous");
@@ -1263,7 +1263,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-5, -6, -7, 6, 7, 8), range,
                     "The dimension is erroneous");
@@ -1277,7 +1277,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-2, -3, -4, 2, 3, 4), range,
                     "The dimension is erroneous");
@@ -1293,22 +1293,22 @@ public class FAssemblyTest {
 
             fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFDraft(fVector)));
 
-            assertThrows(IllegalStateException.class, fAssembly::getRange,
+            assertThrows(IllegalStateException.class, fAssembly::getBoundary,
                     "The FAssembly cannot contain FDraft");
 
             fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFLine(fVector)));
 
-            assertThrows(IllegalStateException.class, fAssembly::getRange,
+            assertThrows(IllegalStateException.class, fAssembly::getBoundary,
                     "The FAssembly cannot contain FLine");
 
             fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFPlane(fVector)));
 
-            assertThrows(IllegalStateException.class, fAssembly::getRange,
+            assertThrows(IllegalStateException.class, fAssembly::getBoundary,
                     "The FAssembly cannot contain FPlane");
 
             fAssembly = factory.getFAssembly(List.of(fPoint, factory.getRefFRay(fVector)));
 
-            assertThrows(IllegalStateException.class, fAssembly::getRange,
+            assertThrows(IllegalStateException.class, fAssembly::getBoundary,
                     "The FAssembly cannot contain FRay");
         }
 
@@ -1319,7 +1319,7 @@ public class FAssemblyTest {
 
             FAssembly<Geometry> fAssembly = factory.getFAssembly(List.of(factory.getRefFSegment(fVector)));
 
-            FPairPos3D range = fAssembly.getRange();
+            FPairPos3D range = fAssembly.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-1, -3, -5, 5, 4, 3), range,
                     "The dimension is erroneous");
@@ -1335,7 +1335,7 @@ public class FAssemblyTest {
             FAssembly<Geometry> fAssemblyA = factory.getFAssembly(List.of(fPointA, fPointB, fPointC));
             FAssembly<Geometry> fAssemblyB = factory.getFAssembly(List.of(fAssemblyA));
 
-            FPairPos3D range = fAssemblyB.getRange();
+            FPairPos3D range = fAssemblyB.getBoundary();
 
             assertEquals(factory.getFPairPos3D(-3, -5, 1, 2, -1, 5), range,
                     "The dimension is erroneous");

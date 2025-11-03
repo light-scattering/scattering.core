@@ -33,11 +33,6 @@ public interface FAggregate extends Component {
     double getSurfaceRadius();
     double getSurfaceRadius(double[] layers);
 
-    FPairPos3D getRange();
-
-    FPos3D getLength();
-    double getLengthMax();
-
     void getMassCenter(FPoint in);
     FPos3D getMassCenter();
 
@@ -50,22 +45,35 @@ public interface FAggregate extends Component {
     void positionCenter(FPoint center);
     void positionCenter(FPos3D center);
 
+    FPairPos3D getBoundary();
+
+    FPos3D getLength();
+    double getLengthMax();
+
     double getRadius(double x, double y, double z);
     double getRadius(FPoint center);
     double getRadius(FPos3D center);
     double getRadiusFromOrigin();
 
     double getRadiusOfGyration();
+    double getRadiusOfGyration(RoG type);
+
     double getOverlapFactor();
     double getBoxDimension();
 
     FStat1D getPairDistance();
+//    FStat2D getPairDistanceDistribution();
+
     FStat1D getTripletAngle();
+//    FStat2D getTripletAngleDistribution(boolean deg);
 
     boolean isCompact();
     boolean isSparse();
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
+
+//    void setEpsilon(double epsilon);
+//    void setDelta(double delta);
 
     FStat1D getStatRadius();
 
@@ -80,15 +88,6 @@ public interface FAggregate extends Component {
 
     @Legacy
     double getOverlapFactorLinear();
-    @Legacy
-    double getRadiusOfGyrationMonodisperse();
-    @Legacy
-    double getRadiusOfGyrationPolydisperse();
-
-    @Modificator
-    FBuffer<FBufferData> getRefBuffer();
-    @Modificator
-    FAggregate setRefBuffer(FBuffer<FBufferData> buffer);
 
     @Modificator
     FAssembly<Shape> getRefParticles();
@@ -96,7 +95,16 @@ public interface FAggregate extends Component {
     FAggregate setRefParticles(FAssembly<Shape> particles);
 
     @Modificator
-    FMaterial getRefMaterial();
+    FBuffer<FBufferData> getRefFBuffer();
     @Modificator
-    FAggregate setRefMaterial(FMaterial material);
+    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
+
+    @Modificator
+    FMaterial getRefFMaterial();
+    @Modificator
+    FAggregate setRefFMaterial(FMaterial refMaterial);
+
+    //--------------------------------------------------
+
+    enum RoG { COMPLEX, SIMPLE_FILIPPOV, SIMPLE_MONO, SIMPLE_POLY }
 }

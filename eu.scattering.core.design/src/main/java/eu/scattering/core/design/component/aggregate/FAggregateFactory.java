@@ -17,7 +17,17 @@ public interface FAggregateFactory extends FModelFactory, FMonitorFactory {
 
     //--------------------------------------------------
 
-    FAggregate getFAggregateMono(int count, double radius);
+    FAggregate getFAggregatePreMono(int quantity, double radius);
+//    FAggregate getFAggregatePrePoly(int quantity, double avg, double std, double cutoff, double radius);
+
+    //--------------------------------------------------
+
+//    FAggregate getFAggregateGeo1d(int d1, double radius);
+//    FAggregate getFAggregateGeo2d(int d1, int d2, double radius);
+//    FAggregate getFAggregateGeo3d(int d1, int d2, int d3, double radius);
+
+//    FAggregate getFAggregateGeoFullCircle(int layers, double radius);
+//    FAggregate getFAggregateGeoFullSphere(int layers, double radius);
 
     //--------------------------------------------------
 

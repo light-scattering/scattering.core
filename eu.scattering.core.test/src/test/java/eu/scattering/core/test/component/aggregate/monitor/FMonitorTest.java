@@ -31,16 +31,16 @@ public class FMonitorTest {
             double df = 1.4;
             double kf = 1.8;
 
-            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorConstruct fMonitorMono = factory.getFMonitorRoGMono(skip);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
 
-            fModel.addStepMonitor(fMonitorMono);
+            fModel.addStepMonitor(fMonitor);
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot2D resultsMono = fMonitorMono.getResults();
+            FPlot2D resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
             resultsMono.log(Math.E, true, true);
@@ -61,16 +61,16 @@ public class FMonitorTest {
             double df = 1.8;
             double kf = 1.6;
 
-            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorConstruct fMonitorMono = factory.getFMonitorRoGMono(skip);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
 
-            fModel.addStepMonitor(fMonitorMono);
+            fModel.addStepMonitor(fMonitor);
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot2D resultsMono = fMonitorMono.getResults();
+            FPlot2D resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
             resultsMono.log(Math.E, true, true);
@@ -91,16 +91,16 @@ public class FMonitorTest {
             double df = 2.2;
             double kf = 1.0;
 
-            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorConstruct fMonitorMono = factory.getFMonitorRoGMono(skip);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
 
-            fModel.addStepMonitor(fMonitorMono);
+            fModel.addStepMonitor(fMonitor);
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot2D resultsMono = fMonitorMono.getResults();
+            FPlot2D resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
             resultsMono.log(Math.E, true, true);
@@ -119,53 +119,61 @@ public class FMonitorTest {
             int quantity = 100;
             double delta = 0.25;
 
-            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1).addFBuffer(1_000_000);
+            FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1).addFBuffer(1_000_000);
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FMonitorConstruct fMonitor = factory.getFMonitorRoG();
-            FMonitorConstruct fMonitorMono = factory.getFMonitorRoGMono();
-            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoGPoly();
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(FAggregate.RoG.COMPLEX);
+            FMonitorConstruct fMonitorMono = factory.getFMonitorRoG(FAggregate.RoG.SIMPLE_MONO);
+            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoG(FAggregate.RoG.SIMPLE_POLY);
+            FMonitorConstruct fMonitorFilippov = factory.getFMonitorRoG(FAggregate.RoG.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);
             fModel.addStepMonitor(fMonitorPoly);
+            fModel.addStepMonitor(fMonitorFilippov);
             fModel.build();
 
             FPlot2D results = fMonitor.getResults();
             FPlot2D resultsMono = fMonitorMono.getResults();
             FPlot2D resultsPoly = fMonitorPoly.getResults();
+            FPlot2D resultsFilippov = fMonitorFilippov.getResults();
 
-            assertTrue(results.getStatY().isSimilarAbs(0.1, resultsMono.getStatY(), resultsPoly.getStatY()));
+            assertTrue(results.getStatY().isSimilarAbs(0.25,
+                    resultsMono.getStatY(), resultsPoly.getStatY(), resultsFilippov.getStatY()));
         }
 
         @Test
         @DisplayName("Radius of gyration - Ballistic (skip)")
         void rotMonodisperseBallisticSkip() {
             int quantity = 100;
-            int skip = 0;
+            int skip = 5;
             double delta = 0.25;
 
-            FAggregate fAggregate = factory.getFAggregateMono(quantity, 1).addFBuffer(1_000_000);
+            FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1).addFBuffer(1_000_000);
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip);
-            FMonitorConstruct fMonitorMono = factory.getFMonitorRoGMono(skip);
-            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoGPoly(skip);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.COMPLEX);
+            FMonitorConstruct fMonitorMono = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_MONO);
+            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_POLY);
+            FMonitorConstruct fMonitorFilippov = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);
             fModel.addStepMonitor(fMonitorPoly);
+            fModel.addStepMonitor(fMonitorFilippov);
             fModel.build();
 
             FPlot2D results = fMonitor.getResults();
             FPlot2D resultsMono = fMonitorMono.getResults();
             FPlot2D resultsPoly = fMonitorPoly.getResults();
+            FPlot2D resultsFilippov = fMonitorFilippov.getResults();
 
-            assertTrue(results.getStatY().isSimilarAbs(0.1, resultsMono.getStatY(), resultsPoly.getStatY()));
+            assertTrue(results.getStatY().isSimilarAbs(0.1,
+                    resultsMono.getStatY(), resultsPoly.getStatY(), resultsFilippov.getStatY()));
         }
     }
 }

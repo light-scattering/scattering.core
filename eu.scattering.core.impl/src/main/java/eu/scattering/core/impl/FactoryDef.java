@@ -57,8 +57,6 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGDef;
-import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGMonoDef;
-import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGPolyDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -420,9 +418,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FAggregate getFAggregateMono(int count, double radius) {
+    public FAggregate getFAggregatePreMono(int quantity, double radius) {
         Producer<FSphere> fProducer = getFSphereProducer(radius);
-        FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(count));
+        FAssembly<Shape> fAssembly = getFAssembly(fProducer.getListRandomized(quantity));
 
         return FAggregateDef.create(this, fAssembly);
     }
@@ -488,21 +486,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FMonitorConstruct getFMonitorRoG(int skip) {
+    public FMonitorConstruct getFMonitorRoG(int skip, FAggregate.RoG type) {
 
-        return FMonitorRoGDef.create(this, skip);
-    }
-
-    @Override
-    public FMonitorConstruct getFMonitorRoGMono(int skip) {
-
-        return FMonitorRoGMonoDef.create(this, skip);
-    }
-
-    @Override
-    public FMonitorConstruct getFMonitorRoGPoly(int skip) {
-
-        return FMonitorRoGPolyDef.create(this, skip);
+        return FMonitorRoGDef.create(this, skip, type);
     }
 
     //--------------------------------------------------
@@ -624,12 +610,6 @@ public final class FactoryDef implements ScatFactory {
     }
 
     //--------------------------------------------------
-
-    @Override
-    public <T> FBuffer<T> getFBuffer() {
-
-        return FBufferDef.create();
-    }
 
     @Override
     public <T> FBuffer<T> getFBuffer(int capacity) {

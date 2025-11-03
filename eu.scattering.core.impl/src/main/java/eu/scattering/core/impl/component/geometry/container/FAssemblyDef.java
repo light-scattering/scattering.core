@@ -448,7 +448,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public FPairPos3D getRange() {
+    public FPairPos3D getBoundary() {
         double minX = Double.MAX_VALUE;
         double maxX = -Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
@@ -512,7 +512,7 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
 
     @Override
     public void getSpatialCenter(FPoint center) {
-        FPairPos3D dimension = getRange();
+        FPairPos3D dimension = getBoundary();
 
         double x = (dimension.getPosA().getD0() + dimension.getPosB().getD0()) * 0.5;
         double y = (dimension.getPosA().getD1() + dimension.getPosB().getD1()) * 0.5;

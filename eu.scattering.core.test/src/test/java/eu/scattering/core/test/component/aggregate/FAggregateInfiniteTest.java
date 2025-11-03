@@ -15,7 +15,7 @@ public class FAggregateInfiniteTest {
     @Disabled
     @DisplayName("Infinite PC tunable Filippov 3D")
     void infinitePCTunableFilippov3D() {
-        FAggregate fAggregate = factory.getFAggregateMono(250, 1);
+        FAggregate fAggregate = factory.getFAggregatePreMono(250, 1);
 
         FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 2.2, 1);
         modelTunable.setEarlyStageCorrection(true);

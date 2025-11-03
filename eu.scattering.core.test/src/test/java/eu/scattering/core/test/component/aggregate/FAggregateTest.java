@@ -40,7 +40,7 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getFAggregate().addFBuffer(1_000_000);
 
             Assertions.assertAll("Validate FAggregate",
-                    () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
+                    () -> assertEquals(1000000, fAggregate.getRefFBuffer().capacity(),
                             "The capacity is erroneous")
             );
         }
@@ -55,7 +55,7 @@ public class FAggregateTest {
             Assertions.assertAll("Validate FAggregate",
                     () -> assertSame(fAssembly, fAggregate.getRefParticles(),
                             "The reference should not change"),
-                    () -> assertEquals(1000000, fAggregate.getRefBuffer().capacity(),
+                    () -> assertEquals(1000000, fAggregate.getRefFBuffer().capacity(),
                             "The capacity is erroneous")
             );
         }
@@ -63,7 +63,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Construct mono")
         void constructMono() {
-            FAggregate fAggregate = factory.getFAggregateMono(10, 1);
+            FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(10, fAggregate.getRefParticles().size(),
@@ -124,9 +124,9 @@ public class FAggregateTest {
 
             FAggregate fAggregateA = factory.getFAggregate();
 
-            FAggregate fAggregateB = fAggregateA.setRefBuffer(fArrayA);
+            FAggregate fAggregateB = fAggregateA.setRefFBuffer(fArrayA);
 
-            FBuffer<FBufferData> fArrayB = fAggregateA.getRefBuffer();
+            FBuffer<FBufferData> fArrayB = fAggregateA.getRefFBuffer();
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertSame(fAggregateA, fAggregateB,
@@ -145,12 +145,12 @@ public class FAggregateTest {
         @Test
         @DisplayName("Parse JSON")
         void parseJSON() {
-            FAggregate fAggregate = factory.getFAggregateMono(10, 1).addFBuffer(10).addFMaterial();
-            fAggregate.getRefMaterial().setDensity("A", 3);
-            fAggregate.getRefMaterial().setDensity("B", 6);
-            fAggregate.getRefMaterial().setRefIndexRe("C", 3);
-            fAggregate.getRefMaterial().setRefIndexIm("D", 6);
-            fAggregate.getRefMaterial().setRefIndex("E", 4, 8);
+            FAggregate fAggregate = factory.getFAggregatePreMono(10, 1).addFBuffer(10).addFMaterial();
+            fAggregate.getRefFMaterial().setDensity("A", 3);
+            fAggregate.getRefFMaterial().setDensity("B", 6);
+            fAggregate.getRefFMaterial().setRefIndexRe("C", 3);
+            fAggregate.getRefFMaterial().setRefIndexIm("D", 6);
+            fAggregate.getRefFMaterial().setRefIndex("E", 4, 8);
 
             JSONObject json = fAggregate.toJSON();
 
@@ -184,22 +184,22 @@ public class FAggregateTest {
             fAggregateA.setRefParticles(fAssemblyA);
             fAggregateB.setRefParticles(fAssemblyB);
 
-            fAggregateA.getRefMaterial().setDensity("X", 5);
-            fAggregateB.getRefMaterial().setDensity("X", 5);
+            fAggregateA.getRefFMaterial().setDensity("X", 5);
+            fAggregateB.getRefFMaterial().setDensity("X", 5);
 
             assertTrue(fAggregateA.isExact(fAggregateB));
             assertTrue(fAggregateB.isExact(fAggregateA));
             assertTrue(fAggregateA.isExactData(fAggregateB));
             assertTrue(fAggregateB.isExactData(fAggregateA));
 
-            fAggregateB.getRefMaterial().setDensity("X", 6);
+            fAggregateB.getRefFMaterial().setDensity("X", 6);
 
             assertFalse(fAggregateA.isExact(fAggregateB));
             assertFalse(fAggregateB.isExact(fAggregateA));
             assertTrue(fAggregateA.isExactData(fAggregateB));
             assertTrue(fAggregateB.isExactData(fAggregateA));
 
-            fAggregateB.getRefMaterial().setDensity("X", 5);
+            fAggregateB.getRefFMaterial().setDensity("X", 5);
             fAggregateB.getRefParticles().asList().get(0).setRadius(2);
 
             assertFalse(fAggregateA.isExact(fAggregateB));
@@ -1196,7 +1196,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FPairPos3D range = fAggregate.getRange();
+            FPairPos3D range = fAggregate.getBoundary();
 
             Assertions.assertAll("Validate range",
                     () -> assertEquals(factory.getFPairPos3D(-7, -8, -9, 2, 3, 4), range,
@@ -1738,8 +1738,8 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000).addFMaterial();
 
             double rgDefault = fAggregate.getRadiusOfGyration();
-            double rgLegacyMono = fAggregate.getRadiusOfGyrationMonodisperse();
-            double rgLegacyPoly = fAggregate.getRadiusOfGyrationPolydisperse();
+            double rgLegacyMono = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_MONO);
+            double rgLegacyPoly = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_POLY);
 
             double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
             double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
@@ -1754,9 +1754,9 @@ public class FAggregateTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFMaterial();
 
-            fAggregate.getRefMaterial().setDensity("X", 5);
+            fAggregate.getRefFMaterial().setDensity("X", 5);
 
-            assertEquals(5, fAggregate.getRefMaterial().getDensity("X"));
+            assertEquals(5, fAggregate.getRefFMaterial().getDensity("X"));
         }
 
         @Test
@@ -1765,10 +1765,10 @@ public class FAggregateTest {
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFMaterial();
 
-            fAggregate.getRefMaterial().setRefIndex("X", 2, 3);
+            fAggregate.getRefFMaterial().setRefIndex("X", 2, 3);
 
-            assertEquals(2, fAggregate.getRefMaterial().getRefIndexRe("X"));
-            assertEquals(3, fAggregate.getRefMaterial().getRefIndexIm("X"));
+            assertEquals(2, fAggregate.getRefFMaterial().getRefIndexRe("X"));
+            assertEquals(3, fAggregate.getRefFMaterial().getRefIndexIm("X"));
         }
 
         @Test
@@ -1856,9 +1856,9 @@ public class FAggregateTest {
             String schema18 = F3D_N1000_Mono.get_18_14();
             String schema22 = F3D_N1000_Mono.get_22_10();
 
-            FAggregate fAggregate14 = factory.getFAggregate(schema14);
-            FAggregate fAggregate18 = factory.getFAggregate(schema18);
-            FAggregate fAggregate22 = factory.getFAggregate(schema22);
+            FAggregate fAggregate14 = factory.getFAggregate(schema14).addFBuffer(1000000);
+            FAggregate fAggregate18 = factory.getFAggregate(schema18).addFBuffer(1000000);
+            FAggregate fAggregate22 = factory.getFAggregate(schema22).addFBuffer(1000000);
 
             double dim14 = fAggregate14.getBoxDimension();
             double dim18 = fAggregate18.getBoxDimension();

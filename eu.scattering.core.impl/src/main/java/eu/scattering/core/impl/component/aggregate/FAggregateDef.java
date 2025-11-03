@@ -56,11 +56,12 @@ public class FAggregateDef implements FAggregate {
 
         FAggregate fAggregate = new FAggregateDef(factory, factory.getFAssembly(json.getJSONObject(JSON_PARTICLES)));
 
-        fAggregate.setRefMaterial(factory.getFMaterial(json.getJSONObject(JSON_MATERIAL)));
+        if (json.has(JSON_MATERIAL)) {
+            fAggregate.setRefFMaterial(factory.getFMaterial(json.getJSONObject(JSON_MATERIAL)));
+        }
 
-        int capacity = json.getInt(JSON_CAPACITY);
-        if (capacity > 0) {
-            fAggregate.addFBuffer(capacity);
+        if (json.has(JSON_CAPACITY)) {
+            fAggregate.addFBuffer(json.getInt(JSON_CAPACITY));
         }
 
         return fAggregate;
@@ -73,7 +74,7 @@ public class FAggregateDef implements FAggregate {
             throw new IllegalArgumentException("The buffer must consist of at least one element");
         }
 
-        setRefBuffer(factory.getFBuffer(capacity));
+        setRefFBuffer(factory.getFBuffer(capacity));
 
         return this;
     }
@@ -81,7 +82,7 @@ public class FAggregateDef implements FAggregate {
     @Override
     public FAggregate addFMaterial() {
 
-        setRefMaterial(factory.getFMaterial());
+        setRefFMaterial(factory.getFMaterial());
 
         return this;
     }
@@ -91,9 +92,16 @@ public class FAggregateDef implements FAggregate {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
-        json.put(JSON_CAPACITY, this.buffer.capacity());
-        json.put(JSON_MATERIAL, this.material.toJSON());
-        json.put(JSON_PARTICLES, this.particles.toJSON());
+
+        if (getRefFBuffer() != null) {
+            json.put(JSON_CAPACITY, getRefFBuffer().capacity());
+        }
+
+        if (getRefFMaterial() != null) {
+            json.put(JSON_MATERIAL, getRefFMaterial().toJSON());
+        }
+
+        json.put(JSON_PARTICLES, getRefParticles().toJSON());
 
         return json;
     }
@@ -242,13 +250,13 @@ public class FAggregateDef implements FAggregate {
 
         validateFBuffer();
 
-        getRefBuffer().clear();
+        getRefFBuffer().clear();
 
         for (Shape shape : getRefParticles()) {
-            shape.fillVolumeArray(getRefBuffer(), getRefParticles().asList());
+            shape.fillVolumeArray(getRefFBuffer(), getRefParticles().asList());
         }
 
-        FMesh<FBufferData> mesh = getRefBuffer().toFArrayMesh();
+        FMesh<FBufferData> mesh = getRefFBuffer().toFArrayMesh();
 
         mesh.deduplicate((a, b) -> b.getLayerIndex() < a.getLayerIndex());
 
@@ -283,14 +291,14 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPairPos3D getRange() {
+    public FPairPos3D getBoundary() {
 
-        return getRefParticles().getRange();
+        return getRefParticles().getBoundary();
     }
 
     @Override
     public FPos3D getLength() {
-        FPairPos3D range = getRange();
+        FPairPos3D range = getBoundary();
 
         double lengthX = range.getPosB().getD0() - range.getPosA().getD0();
         double lengthY = range.getPosB().getD1() - range.getPosA().getD1();
@@ -371,7 +379,7 @@ public class FAggregateDef implements FAggregate {
 
     private double getMassCenterMethodPrecise(FPoint center, Shape shape) {
 
-        if (getRefMaterial() == null) {
+        if (getRefFMaterial() == null) {
             return getMassCenterMethodPreciseMath(center, shape);
         }
 
@@ -398,7 +406,7 @@ public class FAggregateDef implements FAggregate {
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
             String meta = shape.getMetaData().get(i).getMeta();
 
-            mass += shape.getLayerVolume(i) * getRefMaterial().getDensity(meta);
+            mass += shape.getLayerVolume(i) * getRefFMaterial().getDensity(meta);
         }
 
         center.setX(center.getX() + (shape.getCenterX() * mass));
@@ -410,7 +418,7 @@ public class FAggregateDef implements FAggregate {
 
     private double getMassCenterMethodApprox(FPoint center, Shape shape) {
 
-        if (getRefMaterial() == null) {
+        if (getRefFMaterial() == null) {
             return getMassCenterMethodApproxMath(center, shape);
         }
 
@@ -418,13 +426,13 @@ public class FAggregateDef implements FAggregate {
     }
 
     private double getMassCenterMethodApproxMath(FPoint center, Shape shape) {
-        getRefBuffer().clear();
+        getRefFBuffer().clear();
 
-        double unitVolume = shape.fillVolumeArray(getRefBuffer(), getRefParticles().asList());
+        double unitVolume = shape.fillVolumeArray(getRefFBuffer(), getRefParticles().asList());
 
         FBoxDouble volume = factory.getFBoxDouble();
 
-        getRefBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+        getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
             center.setX(center.getX() + (d0 * unitVolume));
             center.setY(center.getY() + (d1 * unitVolume));
             center.setZ(center.getZ() + (d2 * unitVolume));
@@ -436,14 +444,14 @@ public class FAggregateDef implements FAggregate {
     }
 
     private double getMassCenterMethodApproxPhys(FPoint center, Shape shape) {
-        getRefBuffer().clear();
+        getRefFBuffer().clear();
 
-        double unitVolume = shape.fillVolumeArray(getRefBuffer(), getRefParticles().asList());
+        double unitVolume = shape.fillVolumeArray(getRefFBuffer(), getRefParticles().asList());
 
         FBoxDouble mass = factory.getFBoxDouble();
 
-        getRefBuffer().forEach((index, d0, d1, d2, data, meta) -> {
-            double unitMass = unitVolume * getRefMaterial().getDensity(meta.getMeta());
+        getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+            double unitMass = unitVolume * getRefFMaterial().getDensity(meta.getMeta());
 
             center.setX(center.getX() + (d0 * unitMass));
             center.setY(center.getY() + (d1 * unitMass));
@@ -510,76 +518,76 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public double getRadiusOfGyration() {
+
+        return getRadiusOfGyration(RoG.COMPLEX);
+    }
+
+    @Override
+    public double getRadiusOfGyration(RoG type) {
+
+        return switch (type) {
+            case COMPLEX -> getRadiusOfGyrationComplex();
+            case SIMPLE_MONO -> getRadiusOfGyrationSimpleMono();
+            case SIMPLE_POLY -> getRadiusOfGyrationSimplePoly();
+            case SIMPLE_FILIPPOV -> getRadiusOfGyrationSimpleFilippov();
+        };
+    }
+
+    private double getRadiusOfGyrationComplex() {
         validateFBuffer();
 
-        if (getRefMaterial() == null) {
-            return getRadiusOfGyrationMath();
-        }
-
-        return getRadiusOfGyrationPhys();
-    }
-
-    public double getRadiusOfGyrationMath() {
-        FPoint center = factory.getFPoint();
         FBoxDouble numerator = factory.getFBoxDouble();
         FBoxDouble denominator = factory.getFBoxDouble();
 
+        FPoint center = factory.getFPoint();
+
         getMassCenter(center);
 
-        for (Shape shape : getRefParticles()) {
-            getRadiusOfGyrationShapeMath(numerator, denominator, center, shape);
+        if (getRefFMaterial() == null) {
+            for (Shape shape : getRefParticles()) {
+                getRadiusOfGyrationComplexShapeMath(numerator, denominator, center, shape);
+            }
+        } else {
+            for (Shape shape : getRefParticles()) {
+                getRadiusOfGyrationComplexShapePhys(numerator, denominator, center, shape);
+            }
         }
 
         return Math.sqrt(numerator.getValue() / denominator.getValue());
     }
 
-    private double getRadiusOfGyrationPhys() {
-        FPoint center = factory.getFPoint();
-        FBoxDouble numerator = factory.getFBoxDouble();
-        FBoxDouble denominator = factory.getFBoxDouble();
+    private void getRadiusOfGyrationComplexShapeMath(FBoxDouble numerator, FBoxDouble denominator, FPoint center, Shape shape) {
+        getRefFBuffer().clear();
 
-        getMassCenter(center);
+        double unitVolume = shape.fillVolumeArray(getRefFBuffer(), getRefParticles().asList());
 
-        for (Shape shape : getRefParticles()) {
-            getRadiusOfGyrationShapePhys(numerator, denominator, center, shape);
-        }
-
-        return Math.sqrt(numerator.getValue() / denominator.getValue());
-    }
-
-    private void getRadiusOfGyrationShapeMath(FBoxDouble numerator, FBoxDouble denominator, FPoint center, Shape shape) {
-        getRefBuffer().clear();
-
-        double unitVolume = shape.fillVolumeArray(getRefBuffer(), getRefParticles().asList());
-
-        getRefBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+        getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
             numerator.setValue(numerator.getValue() + (unitVolume * Math.pow(center.getDistance(d0, d1, d2), 2)));
             denominator.setValue(denominator.getValue() + unitVolume);
         });
     }
 
-    private void getRadiusOfGyrationShapePhys(FBoxDouble numerator, FBoxDouble denominator, FPoint center, Shape shape) {
-        getRefBuffer().clear();
+    private void getRadiusOfGyrationComplexShapePhys(FBoxDouble numerator, FBoxDouble denominator, FPoint center, Shape shape) {
+        getRefFBuffer().clear();
 
-        double unitVolume = shape.fillVolumeArray(getRefBuffer(), getRefParticles().asList());
+        double unitVolume = shape.fillVolumeArray(getRefFBuffer(), getRefParticles().asList());
 
-        getRefBuffer().forEach((index, d0, d1, d2, data, meta) -> {
-            double mass = unitVolume * getRefMaterial().getDensity(meta.getMeta());
+        getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
+            double mass = unitVolume * getRefFMaterial().getDensity(meta.getMeta());
 
             numerator.setValue(numerator.getValue() + (mass * Math.pow(center.getDistance(d0, d1, d2), 2)));
             denominator.setValue(denominator.getValue() + mass);
         });
     }
 
-    @Override
-    public double getRadiusOfGyrationMonodisperse() {
-        double radius = 0;
+    private double getRadiusOfGyrationSimpleFilippov() {
+        double avgRadius = 0;
 
         for (Shape shape: getRefParticles()) {
-            radius += shape.getRadius();
+            avgRadius += shape.getRadius();
         }
 
-        radius = radius / getRefParticles().size();
+        avgRadius = avgRadius / getRefParticles().size();
 
         FPoint massCenter = factory.getFPoint();
 
@@ -599,20 +607,10 @@ public class FAggregateDef implements FAggregate {
             numerator += Math.pow(shape.getDistCenter(massCenter), 2);
         }
 
-        return Math.sqrt((numerator / getRefParticles().size()) + (0.6 * radius));
+        return Math.sqrt((numerator / getRefParticles().size()) + Math.pow(avgRadius, 2));
     }
 
-    @Override
-    public double getRadiusOfGyrationPolydisperse() {
-
-        if (getRefMaterial() == null) {
-            return getRadiusOfGyrationPolydisperseMath();
-        }
-
-        return getRadiusOfGyrationPolydispersePhys();
-    }
-
-    private double getRadiusOfGyrationPolydisperseMath() {
+    private double getRadiusOfGyrationSimpleMono() {
         double avgRadius = 0;
 
         for (Shape shape: getRefParticles()) {
@@ -623,16 +621,38 @@ public class FAggregateDef implements FAggregate {
 
         FPoint massCenter = factory.getFPoint();
 
-        double massTotal = 0;
         for (Shape shape: getRefParticles()) {
-            double volumeParticle = shape.getVolumeAlgebraic();
-
-            massCenter.setX(massCenter.getX() + (volumeParticle * shape.getCenterX()));
-            massCenter.setY(massCenter.getY() + (volumeParticle * shape.getCenterY()));
-            massCenter.setZ(massCenter.getZ() + (volumeParticle * shape.getCenterZ()));
-
-            massTotal += volumeParticle;
+            massCenter.setX(massCenter.getX() + shape.getCenterX());
+            massCenter.setY(massCenter.getY() + shape.getCenterY());
+            massCenter.setZ(massCenter.getZ() + shape.getCenterZ());
         }
+
+        massCenter.setX(massCenter.getX() / getRefParticles().size());
+        massCenter.setY(massCenter.getY() / getRefParticles().size());
+        massCenter.setZ(massCenter.getZ() / getRefParticles().size());
+
+        double numerator = 0;
+
+        for (Shape shape: getRefParticles()) {
+            numerator += Math.pow(shape.getDistCenter(massCenter), 2);
+        }
+
+        return Math.sqrt((numerator / getRefParticles().size()) + (0.6 * avgRadius));
+    }
+
+    private double getRadiusOfGyrationSimplePoly() {
+        double avgRadius = 0;
+
+        for (Shape shape: getRefParticles()) {
+            avgRadius += shape.getRadius();
+        }
+
+        avgRadius = avgRadius / getRefParticles().size();
+
+        FPoint massCenter = factory.getFPoint();
+
+        double massTotal = getRefFMaterial() == null ?
+                getRadiusOfGyrationSimplePolyMath(massCenter) : getRadiusOfGyrationSimplePolyPhys(massCenter);
 
         massCenter.setX(massCenter.getX() / massTotal);
         massCenter.setY(massCenter.getY() / massTotal);
@@ -647,18 +667,25 @@ public class FAggregateDef implements FAggregate {
         return Math.sqrt((numerator / getRefParticles().size()) + (0.6 * avgRadius));
     }
 
-    private double getRadiusOfGyrationPolydispersePhys() {
-        double avgRadius = 0;
+    private double getRadiusOfGyrationSimplePolyMath(FPoint massCenter) {
+        double volumeTotal = 0;
 
         for (Shape shape: getRefParticles()) {
-            avgRadius += shape.getRadius();
+            double volumeParticle = shape.getVolumeAlgebraic();
+
+            massCenter.setX(massCenter.getX() + (volumeParticle * shape.getCenterX()));
+            massCenter.setY(massCenter.getY() + (volumeParticle * shape.getCenterY()));
+            massCenter.setZ(massCenter.getZ() + (volumeParticle * shape.getCenterZ()));
+
+            volumeTotal += volumeParticle;
         }
 
-        avgRadius = avgRadius / getRefParticles().size();
+        return volumeTotal;
+    }
 
-        FPoint massCenter = factory.getFPoint();
-
+    private double getRadiusOfGyrationSimplePolyPhys(FPoint massCenter) {
         double massTotal = 0;
+
         for (Shape shape: getRefParticles()) {
             double massParticle = getParticleMass(shape);
 
@@ -669,17 +696,19 @@ public class FAggregateDef implements FAggregate {
             massTotal += massParticle;
         }
 
-        massCenter.setX(massCenter.getX() / massTotal);
-        massCenter.setY(massCenter.getY() / massTotal);
-        massCenter.setZ(massCenter.getZ() / massTotal);
+        return massTotal;
+    }
 
-        double numerator = 0;
+    private double getParticleMass(Shape shape) {
+        double mass = 0;
 
-        for (Shape shape: getRefParticles()) {
-            numerator += Math.pow(shape.getDistCenter(massCenter), 2);
+        for (int i = 0 ; i < shape.getLayerCount() ; i++) {
+            FBufferData meta = shape.getMetaData().get(i);
+
+            mass += shape.getLayerVolume(i) * getRefFMaterial().getDensity(meta.getMeta());
         }
 
-        return Math.sqrt((numerator / getRefParticles().size()) + (0.6 * avgRadius));
+        return mass;
     }
 
     @Override
@@ -1015,29 +1044,12 @@ public class FAggregateDef implements FAggregate {
         return results;
     }
 
-    private double getParticleMass(Shape shape) {
-        double mass = 0;
 
-        for (int i = 0 ; i < shape.getLayerCount() ; i++) {
-            FBufferData meta = shape.getMetaData().get(i);
-
-            mass += shape.getLayerVolume(i) * getRefMaterial().getDensity(meta.getMeta());
-        }
-
-        return mass;
-    }
 
     private void validateFBuffer() {
 
-        if (getRefBuffer() == null) {
+        if (getRefFBuffer() == null) {
             throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
-        }
-    }
-
-    private void validateFMaterial() {
-
-        if (getRefMaterial() == null) {
-            throw new IllegalStateException("To perform this operation a FMaterial object must be added to the structure");
         }
     }
 
@@ -1048,8 +1060,8 @@ public class FAggregateDef implements FAggregate {
         FAggregate copy = factory.getFAggregate();
 
         copy.setRefParticles(getRefParticles().copy());
-        copy.setRefMaterial(getRefMaterial().copy());
-        copy.setRefBuffer(factory.getFBuffer(getRefBuffer().capacity()));
+        copy.setRefFMaterial(getRefFMaterial().copy());
+        copy.setRefFBuffer(factory.getFBuffer(getRefFBuffer().capacity()));
 
         return null;
     }
@@ -1061,11 +1073,11 @@ public class FAggregateDef implements FAggregate {
             return false;
         }
 
-        if (!getRefMaterial().isEqual(aggregate.getRefMaterial())) {
+        if (!getRefFMaterial().isEqual(aggregate.getRefFMaterial())) {
             return false;
         }
 
-        return getRefBuffer().capacity() == aggregate.getRefBuffer().capacity();
+        return getRefFBuffer().capacity() == aggregate.getRefFBuffer().capacity();
     }
 
     @Override
@@ -1091,29 +1103,29 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FBuffer<FBufferData> getRefBuffer() {
+    public FBuffer<FBufferData> getRefFBuffer() {
 
         return this.buffer;
     }
 
     @Override
-    public FAggregate setRefBuffer(FBuffer<FBufferData> buffer) {
+    public FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer) {
 
-        this.buffer = buffer;
+        this.buffer = refFBuffer;
 
         return this;
     }
 
     @Override
-    public FMaterial getRefMaterial() {
+    public FMaterial getRefFMaterial() {
 
         return this.material;
     }
 
     @Override
-    public FAggregate setRefMaterial(FMaterial material) {
+    public FAggregate setRefFMaterial(FMaterial refMaterial) {
 
-        this.material = material;
+        this.material = refMaterial;
 
         return this;
     }

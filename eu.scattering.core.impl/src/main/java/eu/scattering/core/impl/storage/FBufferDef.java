@@ -13,8 +13,6 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 public class FBufferDef<T> implements FBuffer<T> {
-    private static final int DEF_CAPACITY = 1_000_000;
-
     private static final TransferFactory factoryExt = TransferFactoryConcrete.create();
 
     private static final String JSON_MAIN = "array";
@@ -29,23 +27,18 @@ public class FBufferDef<T> implements FBuffer<T> {
 
     private int index;
 
-    private FBufferDef() {
-
-        this(DEF_CAPACITY);
-    }
-
     private FBufferDef(int capacity) {
+
+        if (capacity < 1) {
+            throw new IllegalArgumentException("The capacity must be greater than zero");
+        }
+
         this.index = 0;
 
         this.capacity = capacity;
 
         this.value = new double[4][this.capacity];
         this.meta = new Object[this.capacity];
-    }
-
-    public static <T> FBuffer<T> create() {
-
-        return new FBufferDef<>();
     }
 
     public static <T> FBuffer<T> create(int capacity) {

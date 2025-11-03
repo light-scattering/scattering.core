@@ -28,19 +28,6 @@ public class FBufferTest {
         }
 
         @Test
-        @DisplayName("Create (default)")
-        void createDefault() {
-            FBuffer<Double> fArray = factory.getFBuffer();
-
-            Assertions.assertAll("Check values",
-                    () -> assertEquals(0, fArray.size(),
-                            "The number of elements is incorrect"),
-                    () -> assertEquals(1000000, fArray.capacity(),
-                            "The capacity is incorrect")
-            );
-        }
-
-        @Test
         @DisplayName("Increment")
         void increment() {
             FBuffer<Double> fArray = factory.getFBuffer(100);
