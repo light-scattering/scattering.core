@@ -957,6 +957,29 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public FStat1D getCoordinationNumber() {
+        FStat1D coordination = factory.getFStat1D();
+
+        for (Shape shape : getRefParticles()) {
+            coordination.add(shape.touchesOrOverlaps(getRefParticles()));
+        }
+
+        return coordination;
+    }
+
+    @Override
+    public FPlot2D getCoordinationNumberDistribution() {
+        FStat1D coordination = getCoordinationNumber();
+
+        double max = coordination.max();
+
+        FPlot2D histogram = coordination.toFPlot2DHistogram(1, max, (int) max - 1);
+        histogram.distribute();
+
+        return histogram;
+    }
+
+    @Override
     public FStat1D getTripletAngle(boolean deg) {
         FStat1D angle = supplyFStat1D();
 

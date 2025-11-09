@@ -68,6 +68,9 @@ public interface FAggregate extends Component {
     FStat1D getPairDistance();
     FPlot2D getPairDistanceDistribution();
 
+    FStat1D getCoordinationNumber();
+    FPlot2D getCoordinationNumberDistribution();
+
     FStat1D getTripletAngle(boolean deg);
     FPlot2D getTripletAngleDistribution(boolean deg);
 

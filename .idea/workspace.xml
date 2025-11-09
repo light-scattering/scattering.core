@@ -24,10 +24,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateHeavyTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelFilippovTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/model/pc/FModelFilippovTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,8 +162,8 @@
       <recent name="eu.scattering.core.design.transfer.complex" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FModelFilippovTest.aggregate2D">
-    <configuration name="FAggregateHeavyTest.infinitePCTunableFilippov3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.Tests in 'scattering.core.eu.scattering.core.test'">
+    <configuration name="FAggregateAdvancedTest.coordinationNumberA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -177,7 +176,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateHeavyTest.infinitePCTunableFilippov3D&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateAdvancedTest.coordinationNumberA&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -187,7 +186,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FAggregateTopologyTest.getBoxDimensionStatisticsDim14" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FAggregateAdvancedTest.coordinationNumberB" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -200,7 +199,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateTopologyTest.getBoxDimensionStatisticsDim14&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateAdvancedTest.coordinationNumberB&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -210,7 +209,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FAggregateTopologyTest.infinitePCTunableFilippov3D" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FAggregateAdvancedTest.getCoordinationNumberDistribution" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -223,7 +222,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateTopologyTest.infinitePCTunableFilippov3D&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateAdvancedTest.getCoordinationNumberDistribution&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -292,11 +291,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.FModelFilippovTest.aggregate2D" />
         <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FAggregateHeavyTest.infinitePCTunableFilippov3D" />
-        <item itemvalue="Gradle.FAggregateTopologyTest.getBoxDimensionStatisticsDim14" />
-        <item itemvalue="Gradle.FAggregateTopologyTest.infinitePCTunableFilippov3D" />
+        <item itemvalue="Gradle.FAggregateAdvancedTest.getCoordinationNumberDistribution" />
+        <item itemvalue="Gradle.FAggregateAdvancedTest.coordinationNumberB" />
+        <item itemvalue="Gradle.FAggregateAdvancedTest.coordinationNumberA" />
+        <item itemvalue="Gradle.FModelFilippovTest.aggregate2D" />
       </list>
     </recent_temporary>
   </component>
@@ -552,13 +551,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
-          <line>155</line>
+          <line>154</line>
           <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
-          <line>282</line>
+          <line>281</line>
           <option name="timeStamp" value="78" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
+          <line>1993</line>
+          <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-field">
           <url>file://$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/transfer/primitive/FPos4DI.java</url>

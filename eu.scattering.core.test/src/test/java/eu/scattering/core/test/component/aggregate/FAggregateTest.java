@@ -1935,6 +1935,70 @@ public class FAggregateTest {
         }
 
         @Test
+        @DisplayName("Coordination number - A")
+        void coordinationNumberA() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FStat1D results = fAggregate.getCoordinationNumber();
+
+            results.sort(true);
+
+            assertEquals(7, results.size());
+            assertEquals(1, results.get(0), 1E-4);
+            assertEquals(6, results.get(results.size() - 1), 1E-4);
+
+            results.removeDuplicates();
+
+            assertEquals(2, results.size());
+        }
+
+        @Test
+        @DisplayName("Coordination number - B")
+        void coordinationNumberB() {
+            FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
+
+            FStat1D results = fAggregate.getCoordinationNumber();
+
+            assertEquals(1000, results.size());
+        }
+
+        @Test
+        @DisplayName("Coordination number - Distribution")
+        void getCoordinationNumberDistribution() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FPlot2D results = fAggregate.getCoordinationNumberDistribution();
+
+            assertEquals(1, results.getStatY().sum(), 1E-4);
+            assertEquals(0, results.getY(1));
+            assertEquals(0, results.getY(2));
+            assertEquals(0, results.getY(3));
+            assertTrue(results.getY(0) > results.getY(4));
+        }
+
+        @Test
         @DisplayName("Triplet angle - A")
         void getTripletAngleA() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
