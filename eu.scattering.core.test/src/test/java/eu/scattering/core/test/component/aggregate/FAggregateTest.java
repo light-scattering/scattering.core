@@ -7,14 +7,14 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
+import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.transfer.complex.FBufferData;
-import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.storage.buffer.FBuffer;
-import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.mock.aggregate.F3D_N1000_Mono;
@@ -2133,26 +2133,74 @@ public class FAggregateTest {
             double dim18 = fAggregate18.getBoxDimension();
             double dim22 = fAggregate22.getBoxDimension();
 
-            System.out.println(dim14);
-            System.out.println(dim18);
-            System.out.println(dim22);
-//            assertEquals(1.4, dim14, 0.15);
-//            assertEquals(1.8, dim18, 0.15);
-//            assertEquals(2.2, dim22, 0.15);
+            assertEquals(1.4, dim14, 0.2);
+            assertEquals(1.8, dim18, 0.2);
+            assertEquals(2.2, dim22, 0.2);
         }
 
         @Test
         @DisplayName("Get box dimension - Basic geometry")
         void getBoxDimensionBasicGeometry() {
-            FAggregate fAggregate1d = factory.getFAggregateGeo1d(10, 1).addFBuffer(1000000);
-            FAggregate fAggregate2d = factory.getFAggregateGeo2d(10, 10, 1).addFBuffer(1000000);
-            FAggregate fAggregate3d = factory.getFAggregateGeo3d(10, 10, 10, 1).addFBuffer(1000000);
+            FAggregate fAggregate1d = factory.getFAggregateGeo1d(10);
+            FAggregate fAggregate2d = factory.getFAggregateGeo2d(10, 10);
+            FAggregate fAggregate3d = factory.getFAggregateGeo3d(10, 10, 10);
 
             double dim1d = fAggregate1d.getBoxDimension();
             double dim2d = fAggregate2d.getBoxDimension();
             double dim3d = fAggregate3d.getBoxDimension();
 
-            System.out.println(dim1d);
+            assertEquals(1, dim1d, 0.01);
+            assertEquals(2, dim2d, 0.01);
+            assertEquals(3, dim3d, 0.01);
+        }
+
+        @Test
+        @DisplayName("Get box dimension - Basic geometry (asymmetric)")
+        void getBoxDimensionBasicGeometryAsymmetric() {
+            FAggregate fAggregate1d = factory.getFAggregateGeo1d(9);
+            FAggregate fAggregate2d = factory.getFAggregateGeo2d(9, 11);
+            FAggregate fAggregate3d = factory.getFAggregateGeo3d(9, 11, 13);
+
+            double dim1d = fAggregate1d.getBoxDimension();
+            double dim2d = fAggregate2d.getBoxDimension();
+            double dim3d = fAggregate3d.getBoxDimension();
+
+            assertEquals(1, dim1d, 0.2);
+            assertEquals(2, dim2d, 0.3);
+            assertEquals(3, dim3d, 0.4);
+        }
+
+        @Test
+        @DisplayName("Get box dimension - Basic geometry (translated)")
+        void getBoxDimensionBasicGeometryTranslated() {
+            FAggregate fAggregate1d = factory.getFAggregateGeo1d(10);
+            FAggregate fAggregate2d = factory.getFAggregateGeo2d(10, 10);
+            FAggregate fAggregate3d = factory.getFAggregateGeo3d(10, 10, 10);
+
+            fAggregate1d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
+            fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
+            fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
+
+            double dim1d = fAggregate1d.getBoxDimension();
+            double dim2d = fAggregate2d.getBoxDimension();
+            double dim3d = fAggregate3d.getBoxDimension();
+
+            assertEquals(1, dim1d, 0.01);
+            assertEquals(2, dim2d, 0.01);
+            assertEquals(3, dim3d, 0.01);
+        }
+
+        @Test
+        @DisplayName("Get box dimension - Sphere")
+        void getBoxDimensionSphereGeometry() {
+            FAggregate fAggregate1d = factory.getFAggregateGeoFullCircle(10);
+            FAggregate fAggregate2d = factory.getFAggregateGeoFullSphere(10);
+
+            double dim2d = fAggregate1d.getBoxDimension();
+            double dim3d = fAggregate2d.getBoxDimension();
+
+            assertEquals(2, dim2d, 0.10);
+            assertEquals(3, dim3d, 0.25);
         }
     }
 }

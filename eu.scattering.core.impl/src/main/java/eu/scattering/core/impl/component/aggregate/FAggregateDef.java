@@ -24,6 +24,8 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.function.BiConsumer;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
+
 public class FAggregateDef implements FAggregate {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "aggregate";
@@ -830,16 +832,11 @@ public class FAggregateDef implements FAggregate {
         FPlot2D results = supplyFPlot2D();
 
         double cutoffInner = getParticleRadius().min() * 2;
-        double cutoffOuter = cutoffInner;
 
-        while (cutoffOuter < getLengthMax()) {
-            cutoffOuter *= 2;
-        }
-
-        double box = cutoffOuter;
-        while (box >= cutoffInner) {
-            getBoxDimensionStep(results, box);
-            box *= 0.5;
+        double step = getLengthMax();
+        while (step >= cutoffInner) {
+            getBoxDimensionStep(results, step);
+            step *= 0.5;
         }
 
         return getBoxDimensionAnalyze(results);
@@ -848,11 +845,13 @@ public class FAggregateDef implements FAggregate {
     private void getBoxDimensionStep(FPlot2D data, double step) {
         FSphereHelper helper = getFSphereHelper();
 
+        FPos3D origin = getBoundary().getPosA();
         double scale = 1 / step;
 
         Queue<Shape> particles = new LinkedList<>(getRefParticles().copy().asList());
+        particles.forEach(e -> e.translate(-origin.getD0(), -origin.getD1(), -origin.getD2()));
         particles.forEach(e -> e.scalePosition(scale).scaleSize(scale));
-        
+
         int sum = 0;
         while (particles.size() > 0) {
             Shape particle = particles.poll();
@@ -864,23 +863,29 @@ public class FAggregateDef implements FAggregate {
                     neighbours.add(e);
                 }
             });
-            
-            int minX = (int) Math.floor(particle.getCenterX() - particle.getRadius());
-            int minY = (int) Math.floor(particle.getCenterY() - particle.getRadius());
-            int minZ = (int) Math.floor(particle.getCenterZ() - particle.getRadius());
 
-            int maxX = (int) Math.ceil(particle.getCenterX() + particle.getRadius());
-            int maxY = (int) Math.ceil(particle.getCenterY() + particle.getRadius());
-            int maxZ = (int) Math.ceil(particle.getCenterZ() + particle.getRadius());
+            double coreMinX = particle.getCenterX() - particle.getRadius() + EPSILON;
+            int minX = (int) Math.floor(coreMinX);
+            double coreMinY = particle.getCenterY() - particle.getRadius() + EPSILON;
+            int minY = (int) Math.floor(coreMinY);
+            double coreMinZ = particle.getCenterZ() - particle.getRadius() + EPSILON;
+            int minZ = (int) Math.floor(coreMinZ);
 
-            for (int x = minX ; x <= maxX ; x++) {
-                for (int y = minY ; y <= maxY ; y++) {
+            double coreMaxX = particle.getCenterX() + particle.getRadius() - EPSILON;
+            int maxX = (int) Math.ceil(coreMaxX);
+            double coreMaxY = particle.getCenterY() + particle.getRadius() - EPSILON;
+            int maxY = (int) Math.ceil(coreMaxY);
+            double coreMaxZ = particle.getCenterZ() + particle.getRadius() - EPSILON;
+            int maxZ = (int) Math.ceil(coreMaxZ);
+
+            for (int x = minX ; x < maxX ; x++) {
+                for (int y = minY ; y < maxY ; y++) {
 
                     next:
-                    for (int z = minZ ; z <= maxZ ; z++) {
-                        if (helper.intersectsCube(particle, x, y, z, 1)) {
+                    for (int z = minZ ; z < maxZ ; z++) {
+                        if (helper.intersectsCube(particle, x + 0.5, y + 0.5, z + 0.5, 1)) {
                             for (Shape neighbour : neighbours) {
-                                if (helper.intersectsCube(neighbour, x, y, z, 1)) {
+                                if (helper.intersectsCube(neighbour, x + 0.5, y + 0.5, z + 0.5, 1)) {
                                     continue next;
                                 }
                             }
@@ -899,19 +904,11 @@ public class FAggregateDef implements FAggregate {
         data.mutateY((x, y) -> Math.log(y));
         data.mutateX((x, y) -> Math.log(1 / x));
 
-//        data.filter((x, y) -> y > 0);
-
-//        data.interpolate(100);
-
-//        data.setStatY(data.getStatY()
-//                .replaceDecreasingWithNaN()
-//                .replaceSameWithNaN()
-//        );
+        data.filter((x, y) -> y > 0);
 
         FPlot2D reference = data.copy();
         FPos2D regression = reference.simpleLinearRegression();
 
-        String plot = factory.getStatisticsExporter().toPythonPlotlyLinear(data, reference);
         return regression.getD0();
     }
 

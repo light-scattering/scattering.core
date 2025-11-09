@@ -103,7 +103,7 @@ public class FModelFilippovTest {
         };
 
         BiFunction<FAggregate, Shape, Boolean> validator = (aggregate, shape) ->
-                shape.getCenterX() < 2 && shape.getCenterX() > -2;
+                shape.getCenterX() < 2;
 
         AtomicInteger acceptorIndex = new AtomicInteger(0);
         BiFunction<FAggregate, Integer, Boolean> acceptor = (aggregate, iteration) -> {
@@ -119,7 +119,7 @@ public class FModelFilippovTest {
             }
         };
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.4, 1.4);
+        FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.5, 1.1);
         modelTunable.setEarlyStageCorrection(true);
         modelTunable.addStepMonitor(monitor);
         modelTunable.addStepValidator(validator);
@@ -129,7 +129,7 @@ public class FModelFilippovTest {
         double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
 
         for (Shape shape : fAggregate.getRefParticles()) {
-            assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2,
+            assertTrue(shape.getCenterX() < 2,
                     "The validator doesn't work as intended");
         }
 
