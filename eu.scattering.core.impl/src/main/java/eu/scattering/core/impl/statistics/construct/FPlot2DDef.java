@@ -440,6 +440,13 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
+    public void distribute() {
+        double sum = getStatY().sum();
+
+        mutateY((x, y) -> y / sum);
+    }
+
+    @Override
     public void sortX(boolean ascending) {
 
         if (ascending) {

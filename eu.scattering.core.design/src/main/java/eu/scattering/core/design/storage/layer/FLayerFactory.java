@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public interface FLayerFactory {
 
-    FLayer getFLayerCounter();
+    FLayer getFLayer();
 
-    FLayer getFLayerCounter(JSONObject json);
+    FLayer getFLayer(JSONObject json);
 }

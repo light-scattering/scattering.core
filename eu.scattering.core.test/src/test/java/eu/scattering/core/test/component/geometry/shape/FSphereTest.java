@@ -1257,7 +1257,7 @@ public class FSphereTest {
             void volumeLayerOverlapDistant() {
                 double delta = 0.05;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1290,7 +1290,7 @@ public class FSphereTest {
             void volumeLayerOverlapDoubleClose() {
                 double delta = 0.05;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1328,7 +1328,7 @@ public class FSphereTest {
             void volumeLayerOverlapMultipleClose() {
                 double delta = 0.05;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1365,7 +1365,7 @@ public class FSphereTest {
             void volumeLayer() {
                 double delta = 0.1;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphere = factory.getFSphere(1)
                         .addCoat(1, 1, 1)
@@ -1464,7 +1464,7 @@ public class FSphereTest {
             void volumeLayerVolumeUnit() {
                 double delta = 0.1;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1483,7 +1483,7 @@ public class FSphereTest {
             void volumeLayerErroneousShape() {
                 double delta = 1;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1621,7 +1621,7 @@ public class FSphereTest {
             void surfaceLayerOverlapDistant() {
                 double delta = 0.01;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1654,7 +1654,7 @@ public class FSphereTest {
             void surfaceLayerOverlapDoubleClose() {
                 double delta = 0.01;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1692,7 +1692,7 @@ public class FSphereTest {
             void surfaceLayerOverlapMultipleClose() {
                 double delta = 0.01;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1729,7 +1729,7 @@ public class FSphereTest {
             void surfaceLayer() {
                 double delta = 0.1;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphere = factory.getFSphere(1)
                         .addCoat(1, 1, 1)
@@ -1819,7 +1819,7 @@ public class FSphereTest {
             void surfaceLayerSurfaceUnit() {
                 double delta = 0.1;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);
@@ -1838,7 +1838,7 @@ public class FSphereTest {
             void surfaceLayerErroneousShape() {
                 double delta = 1;
 
-                FLayer fLayer = factory.getFLayerCounter();
+                FLayer fLayer = factory.getFLayer();
 
                 Shape fSphereRef = factory.getFSphere( 1)
                         .setDelta(delta);

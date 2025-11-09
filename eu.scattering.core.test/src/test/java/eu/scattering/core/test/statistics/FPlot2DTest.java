@@ -1029,6 +1029,34 @@ public class FPlot2DTest {
         }
 
         @Test
+        @DisplayName("Distribute")
+        void distribute() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            fPlot.distribute();
+
+            Assertions.assertAll("Test values",
+                    () -> assertEquals(1, fPlot.getStatY().sum(), 1E-4),
+                    () -> assertEquals(-2, fPlot.getX(0)),
+                    () -> assertEquals(-1, fPlot.getX(1)),
+                    () -> assertEquals(0, fPlot.getX(2)),
+                    () -> assertEquals(1, fPlot.getX(3)),
+                    () -> assertEquals(2, fPlot.getX(4)),
+                    () -> assertEquals(2d / 6, fPlot.getY(0), 1E-4),
+                    () -> assertEquals(1d / 6, fPlot.getY(1), 1E-4),
+                    () -> assertEquals(0d / 6, fPlot.getY(2), 1E-4),
+                    () -> assertEquals(1d / 6, fPlot.getY(3), 1E-4),
+                    () -> assertEquals(2d / 6, fPlot.getY(4), 1E-4)
+            );
+        }
+
+        @Test
         @DisplayName("Sort asc X")
         void sortAscX() {
             FPlot2D fPlot = factory.getFPlot2D();

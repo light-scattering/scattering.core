@@ -1,6 +1,5 @@
 package eu.scattering.core.design.component.aggregate;
 
-import eu.scattering.core.design.annotation.Legacy;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -8,6 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
@@ -17,6 +17,8 @@ import eu.scattering.core.design.transfer.primitive.FPos3D;
 import java.util.function.BiConsumer;
 
 public interface FAggregate extends Component {
+
+    int size();
 
     FAggregate addFBuffer(int capacity);
     FAggregate addFMaterial();
@@ -59,23 +61,25 @@ public interface FAggregate extends Component {
     double getRadiusOfGyration(RoG type);
 
     double getOverlapFactor();
+    double getOverlapFactor(OF type);
+
     double getBoxDimension();
 
     FStat1D getPairDistance();
-//    FStat2D getPairDistanceDistribution();
+    FPlot2D getPairDistanceDistribution();
 
-    FStat1D getTripletAngle();
-//    FStat2D getTripletAngleDistribution(boolean deg);
+    FStat1D getTripletAngle(boolean deg);
+    FPlot2D getTripletAngleDistribution(boolean deg);
 
     boolean isCompact();
     boolean isSparse();
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
 
-//    void setEpsilon(double epsilon);
-//    void setDelta(double delta);
+    void setEpsilon(double epsilon);
+    void setDelta(double delta);
 
-    FStat1D getStatRadius();
+    FStat1D getParticleRadius();
 
     //--------------------------------------------------
 
@@ -86,25 +90,23 @@ public interface FAggregate extends Component {
 
     //--------------------------------------------------
 
-    @Legacy
-    double getOverlapFactorLinear();
-
     @Modificator
     FAssembly<Shape> getRefParticles();
     @Modificator
     FAggregate setRefParticles(FAssembly<Shape> particles);
 
     @Modificator
-    FBuffer<FBufferData> getRefFBuffer();
-    @Modificator
-    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
-
-    @Modificator
     FMaterial getRefFMaterial();
     @Modificator
     FAggregate setRefFMaterial(FMaterial refMaterial);
 
+    @Modificator
+    FBuffer<FBufferData> getRefFBuffer();
+    @Modificator
+    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
+
     //--------------------------------------------------
 
     enum RoG { COMPLEX, SIMPLE_FILIPPOV, SIMPLE_MONO, SIMPLE_POLY }
+    enum OF { VOLUMETRIC, LINEAR }
 }

@@ -7,7 +7,9 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
+import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.storage.buffer.FBuffer;
@@ -37,11 +39,12 @@ public class FAggregateTest {
         @Test
         @DisplayName("Construct")
         void construct() {
-            FAggregate fAggregate = factory.getFAggregate().addFBuffer(1_000_000);
+            FAggregate fAggregate = factory.getFAggregate();
 
             Assertions.assertAll("Validate FAggregate",
-                    () -> assertEquals(1000000, fAggregate.getRefFBuffer().capacity(),
-                            "The capacity is erroneous")
+                    () -> assertEquals(0, fAggregate.size()),
+                    () -> assertNull(fAggregate.getRefFBuffer()),
+                    () -> assertNull(fAggregate.getRefFMaterial())
             );
         }
 
@@ -50,26 +53,13 @@ public class FAggregateTest {
         void constructWithReferenceParticles() {
             FAssembly<Shape> fAssembly = factory.getFAssembly();
 
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000);
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             Assertions.assertAll("Validate FAggregate",
-                    () -> assertSame(fAssembly, fAggregate.getRefParticles(),
-                            "The reference should not change"),
-                    () -> assertEquals(1000000, fAggregate.getRefFBuffer().capacity(),
-                            "The capacity is erroneous")
-            );
-        }
-
-        @Test
-        @DisplayName("Construct mono")
-        void constructMono() {
-            FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertEquals(10, fAggregate.getRefParticles().size(),
-                            "The number of particles is incorrect"),
-                    () -> assertEquals(1, fAggregate.getRefParticles().asList().get(0).getRadius(),
-                            epsilon, "The particle radius is erroneous")
+                    () -> assertSame(fAssembly, fAggregate.getRefParticles()),
+                    () -> assertEquals(fAssembly.size(), fAggregate.size()),
+                    () -> assertNull(fAggregate.getRefFBuffer()),
+                    () -> assertNull(fAggregate.getRefFMaterial())
             );
         }
 
@@ -118,20 +108,68 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Validate reference elements")
-        void validateReferenceElements() {
-            FBuffer<FBufferData> fArrayA = factory.getFBuffer(123);
+        @DisplayName("Add FBuffer")
+        void addFBuffer() {
+            FAggregate fAggregateA = factory.getFAggregate();
+
+            assertNull(fAggregateA.getRefFBuffer());
+
+            FAggregate fAggregateB = fAggregateA.addFBuffer(100);
+
+            assertSame(fAggregateA, fAggregateB);
+            assertEquals(100, fAggregateA.getRefFBuffer().capacity());
+            assertEquals(0, fAggregateA.getRefFBuffer().size());
+        }
+
+        @Test
+        @DisplayName("Validate FBuffer")
+        void validateFBuffer() {
+            FBuffer<FBufferData> fBufferA = factory.getFBuffer(123);
 
             FAggregate fAggregateA = factory.getFAggregate();
 
-            FAggregate fAggregateB = fAggregateA.setRefFBuffer(fArrayA);
+            FAggregate fAggregateB = fAggregateA.setRefFBuffer(fBufferA);
 
-            FBuffer<FBufferData> fArrayB = fAggregateA.getRefFBuffer();
+            FBuffer<FBufferData> fBufferB = fAggregateA.getRefFBuffer();
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertSame(fAggregateA, fAggregateB,
                             "The reference should not change"),
-                    () -> assertSame(fArrayA, fArrayB,
+                    () -> assertSame(fBufferA, fBufferB,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Add FMaterial")
+        void addFMaterial() {
+            FAggregate fAggregateA = factory.getFAggregate();
+
+            assertNull(fAggregateA.getRefFMaterial());
+
+            FAggregate fAggregateB = fAggregateA.addFMaterial();
+
+            fAggregateA.getRefFMaterial().setDensity("X", 1);
+
+            assertSame(fAggregateA, fAggregateB);
+            assertEquals(2, fAggregateA.getRefFMaterial().size());
+        }
+
+        @Test
+        @DisplayName("Validate FMaterial")
+        void validateFMaterial() {
+            FMaterial fMaterialA = factory.getFMaterial();
+
+            FAggregate fAggregateA = factory.getFAggregate();
+
+            FAggregate fAggregateB = fAggregateA.setRefFMaterial(fMaterialA);
+
+            FMaterial fMaterialB = fAggregateA.getRefFMaterial();
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertSame(fAggregateA, fAggregateB,
+                            "The reference should not change"),
+                    () -> assertSame(fMaterialA, fMaterialB,
                             "The reference should not change")
             );
         }
@@ -143,8 +181,23 @@ public class FAggregateTest {
     class FAggregateCoreTest {
 
         @Test
-        @DisplayName("Parse JSON")
-        void parseJSON() {
+        @DisplayName("Parse JSON - A")
+        void parseJSONA() {
+            FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
+
+            JSONObject json = fAggregate.toJSON();
+
+            FAggregate fAggregateCopy = factory.getFAggregate(json);
+
+            assertTrue(fAggregate.isExactData(fAggregateCopy));
+            assertTrue(fAggregateCopy.isExactData(fAggregate));
+            assertTrue(fAggregate.isExact(fAggregateCopy));
+            assertTrue(fAggregateCopy.isExact(fAggregate));
+        }
+
+        @Test
+        @DisplayName("Parse JSON - B")
+        void parseJSONB() {
             FAggregate fAggregate = factory.getFAggregatePreMono(10, 1).addFBuffer(10).addFMaterial();
             fAggregate.getRefFMaterial().setDensity("A", 3);
             fAggregate.getRefFMaterial().setDensity("B", 6);
@@ -206,6 +259,28 @@ public class FAggregateTest {
             assertFalse(fAggregateB.isExact(fAggregateA));
             assertFalse(fAggregateA.isExactData(fAggregateB));
             assertFalse(fAggregateB.isExactData(fAggregateA));
+        }
+
+        @Test
+        @DisplayName("Copy")
+        void copy() {
+            FAggregate fAggregateA = factory.getFAggregate().addFBuffer(10).addFMaterial();
+
+            Shape fSphereAA = factory.getFSphere(0, 0, 0, 1);
+            Shape fSphereAB = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereAC = factory.getFSphere(0, 2, 0, 1);
+            Shape fSphereAD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereAA, fSphereAB, fSphereAC, fSphereAD));
+
+            fAggregateA.setRefParticles(fAssemblyA);
+
+            fAggregateA.getRefFMaterial().setDensity("X", 5);
+
+            FAggregate fAggregateB = fAggregateA.copy();
+
+            assertNotSame(fAggregateA, fAggregateB);
+            assertTrue(fAggregateA.isExact(fAggregateB));
         }
     }
 
@@ -550,7 +625,7 @@ public class FAggregateTest {
 
             FMesh<FBufferData> fArray = fAggregate.getVolumeMesh();
 
-            FLayer fLayer = factory.getFLayerCounter();
+            FLayer fLayer = factory.getFLayer();
 
             fArray.forEach((index, d0, d1, d2, data) -> fLayer.inc(data.getLayerIndex()));
 
@@ -866,7 +941,7 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get overlap factory - Same position - Double")
+        @DisplayName("Get overlap factor - Same position - Double")
         void getOverlapFactorSamePositionDouble() {
             FSphere fSphereA = factory.getFSphere();
             FSphere fSphereB = factory.getFSphere();
@@ -881,7 +956,7 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get overlap factory - Same position - Triple")
+        @DisplayName("Get overlap factor - Same position - Triple")
         void getOverlapFactorSamePositionTriple() {
             FSphere fSphereA = factory.getFSphere();
             FSphere fSphereB = factory.getFSphere();
@@ -897,7 +972,7 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get overlap factory - Distant")
+        @DisplayName("Get overlap factor - Distant")
         void getOverlapFactorDistant() {
             FSphere fSphereA = factory.getFSphere(-1, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
@@ -912,7 +987,7 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get overlap factory - Intersecting")
+        @DisplayName("Get overlap factor - Intersecting")
         void getOverlapFactorIntersecting() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
@@ -932,7 +1007,7 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get overlap factory - Field")
+        @DisplayName("Get overlap factor - Field")
         void getOverlapFactorField() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
@@ -958,8 +1033,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get overlap factory legacy - Same position")
-        void getOverlapFactorLegacySamePosition() {
+        @DisplayName("Get overlap factory linear - Same position")
+        void getOverlapFactorLinearSamePosition() {
             FSphere fSphereA = factory.getFSphere();
             FSphere fSphereB = factory.getFSphere();
 
@@ -967,14 +1042,14 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactorLinear();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
 
             assertEquals(1, overlap, epsilon);
         }
 
         @Test
-        @DisplayName("Get overlap factory legacy - Distant")
-        void getOverlapFactorLegacyDistant() {
+        @DisplayName("Get overlap factory linear - Distant")
+        void getOverlapFactorLinearDistant() {
             FSphere fSphereA = factory.getFSphere(-2, 0, 0);
             FSphere fSphereB = factory.getFSphere(2, 0, 0);
 
@@ -982,14 +1057,14 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactorLinear();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
 
             assertEquals(0, overlap, epsilon);
         }
 
         @Test
-        @DisplayName("Get overlap factory legacy - Intersecting")
-        void getOverlapFactorLegacyIntersecting() {
+        @DisplayName("Get overlap factory linear - Intersecting")
+        void getOverlapFactorLinearIntersecting() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
 
@@ -997,14 +1072,14 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactorLinear();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
 
             assertEquals(0.5, overlap, epsilon);
         }
 
         @Test
-        @DisplayName("Get overlap factory legacy - Field")
-        void getOverlapFactorLegacyField() {
+        @DisplayName("Get overlap factory linear - Field")
+        void getOverlapFactorLinearField() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
             FSphere fSphereC = factory.getFSphere(0, 3, 0);
@@ -1015,7 +1090,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactorLinear();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
 
             double relError = factory.getStatisticsHelper().getRelErr(0.5, overlap);
 
@@ -1187,8 +1262,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get range")
-        void getRange() {
+        @DisplayName("Get boundary")
+        void getBoundary() {
             Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
             Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
@@ -1196,11 +1271,32 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            FPairPos3D range = fAggregate.getBoundary();
+            FPairPos3D boundary = fAggregate.getBoundary();
 
             Assertions.assertAll("Validate range",
-                    () -> assertEquals(factory.getFPairPos3D(-7, -8, -9, 2, 3, 4), range,
+                    () -> assertEquals(factory.getFPairPos3D(-7, -8, -9, 2, 3, 4), boundary,
                             "The range is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Get length")
+        void getLength() {
+            Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
+            Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPos3D length = fAggregate.getLength();
+            double lengthMax = fAggregate.getLengthMax();
+
+            Assertions.assertAll("Validate range",
+                    () -> assertEquals(factory.getFPos3D(9, 11, 13), length,
+                            "The length is incorrect"),
+                    () -> assertEquals(13, lengthMax,
+                            "The maximum length is incorrect")
             );
         }
 
@@ -1740,12 +1836,15 @@ public class FAggregateTest {
             double rgDefault = fAggregate.getRadiusOfGyration();
             double rgLegacyMono = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_MONO);
             double rgLegacyPoly = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_POLY);
+            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_FILIPPOV);
 
             double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
             double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
+            double rgErrFilippov = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyFilippov);
 
             assertTrue(rgErrMono < 0.05);
             assertTrue(rgErrPoly < 0.05);
+            assertTrue(rgErrFilippov < 0.05);
         }
 
         @Test
@@ -1811,7 +1910,32 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Triplet angle function - A")
+        @DisplayName("Pair distance - Distribution")
+        void getPairDistanceDistribution() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FPlot2D results = fAggregate.getPairDistanceDistribution();
+
+            assertEquals(1, results.getStatY().sum(), 1E-4);
+            assertEquals(0, results.getY(0));
+            assertEquals(0, results.getY(1));
+            assertEquals(0, results.getY(3));
+            assertTrue(results.getY(2) > results.getY(4));
+        }
+
+        @Test
+        @DisplayName("Triplet angle - A")
         void getTripletAngleA() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
             Shape shapeA = factory.getFSphere(2, 0, 0, 1);
@@ -1826,7 +1950,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D results = fAggregate.getTripletAngle();
+            FStat1D results = fAggregate.getTripletAngle(false);
 
             results.sort(true);
 
@@ -1840,14 +1964,159 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Triplet angle function - B")
+        @DisplayName("Triplet angle - B")
         void getTripletAngleB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FStat1D results = fAggregate.getTripletAngle();
+            FStat1D results = fAggregate.getTripletAngle(false);
 
             assertTrue(results.size() > 1000);
         }
+
+        @Test
+        @DisplayName("Triplet angle (degree)")
+        void getTripletAngleDegree() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FStat1D results = fAggregate.getTripletAngle(true);
+
+            results.sort(true);
+
+            assertEquals(15, results.size());
+            assertEquals(90, results.get(0), 1E-4);
+            assertEquals(180, results.get(results.size() - 1), 1E-4);
+
+            results.removeDuplicates();
+
+            assertEquals(2, results.size());
+        }
+
+        @Test
+        @DisplayName("Triplet angle - Distribution")
+        void getTripletAngleDistribution() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FPlot2D results = fAggregate.getTripletAngleDistribution(false);
+
+            results.filter((x, y) -> y > 0);
+
+            assertEquals(2, results.size());
+            assertEquals(1, results.getStatY().sum(), 1E-4);
+            assertEquals(Math.PI * 0.5, results.getX(0), 1E-4);
+            assertEquals(Math.PI, results.getX(1), 1E-4);
+            assertTrue(results.getY(0) > results.getY(1));
+        }
+
+        @Test
+        @DisplayName("Triplet angle - Distribution (degree)")
+        void getTripletAngleDistributionDegree() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FPlot2D results = fAggregate.getTripletAngleDistribution(true);
+
+            results.filter((x, y) -> y > 0);
+
+            assertEquals(2, results.size());
+            assertEquals(1, results.getStatY().sum(), 1E-4);
+            assertEquals(90, results.getX(0), 1E-4);
+            assertEquals(180, results.getX(1), 1E-4);
+            assertTrue(results.getY(0) > results.getY(1));
+        }
+
+        @Test
+        @DisplayName("Get particle radius")
+        void getParticleRadius() {
+            Shape shapeA = factory.getFSphere(1);
+            Shape shapeB = factory.getFSphere(2);
+            Shape shapeC = factory.getFSphere(3);
+            Shape shapeD = factory.getFSphere(4);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shapeA, shapeB, shapeC, shapeD));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FStat1D stat = fAggregate.getParticleRadius();
+
+            assertEquals(4, stat.size());
+            assertEquals(1, stat.min());
+            assertEquals(4, stat.max());
+        }
+
+        @Test
+        @DisplayName("Set epsilon")
+        void setEpsilon() {
+            Shape shapeA = factory.getFSphere(1);
+            Shape shapeB = factory.getFSphere(2);
+            Shape shapeC = factory.getFSphere(3);
+            Shape shapeD = factory.getFSphere(4);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shapeA, shapeB, shapeC, shapeD));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            fAggregate.setEpsilon(1);
+
+            fAggregate.getRefParticles().forEach(e -> assertEquals(1, e.getEpsilon()));
+        }
+
+        @Test
+        @DisplayName("Set delta")
+        void setDelta() {
+            Shape shapeA = factory.getFSphere(1);
+            Shape shapeB = factory.getFSphere(2);
+            Shape shapeC = factory.getFSphere(3);
+            Shape shapeD = factory.getFSphere(4);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shapeA, shapeB, shapeC, shapeD));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            fAggregate.setDelta(1);
+
+            fAggregate.getRefParticles().forEach(e -> assertEquals(1, e.getDelta()));
+        }
+    }
+
+    @Nested
+    @Tag("Topology")
+    @DisplayName("Topology")
+    class FAggregateTopologyTest {
 
         @Test
         @DisplayName("Get box dimension")
@@ -1870,6 +2139,20 @@ public class FAggregateTest {
 //            assertEquals(1.4, dim14, 0.15);
 //            assertEquals(1.8, dim18, 0.15);
 //            assertEquals(2.2, dim22, 0.15);
+        }
+
+        @Test
+        @DisplayName("Get box dimension - Basic geometry")
+        void getBoxDimensionBasicGeometry() {
+            FAggregate fAggregate1d = factory.getFAggregateGeo1d(10, 1).addFBuffer(1000000);
+            FAggregate fAggregate2d = factory.getFAggregateGeo2d(10, 10, 1).addFBuffer(1000000);
+            FAggregate fAggregate3d = factory.getFAggregateGeo3d(10, 10, 10, 1).addFBuffer(1000000);
+
+            double dim1d = fAggregate1d.getBoxDimension();
+            double dim2d = fAggregate2d.getBoxDimension();
+            double dim3d = fAggregate3d.getBoxDimension();
+
+            System.out.println(dim1d);
         }
     }
 }

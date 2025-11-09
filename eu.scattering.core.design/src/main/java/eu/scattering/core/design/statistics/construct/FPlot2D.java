@@ -56,6 +56,8 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     void interpolate(double step, boolean overflow);
     void interpolate(double divisions);
 
+    void distribute();
+
     void sortX(boolean ascending);
     void sortY(boolean ascending);
 

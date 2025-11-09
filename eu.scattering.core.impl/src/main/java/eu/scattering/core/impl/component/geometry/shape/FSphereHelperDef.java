@@ -3,7 +3,10 @@ package eu.scattering.core.impl.component.geometry.shape;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
+import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+
+import java.util.function.BiConsumer;
 
 public class FSphereHelperDef implements FSphereHelper {
     private final FPointHelper fPointHelper;
@@ -129,6 +132,52 @@ public class FSphereHelperDef implements FSphereHelper {
         double dZ = pZ - z;
 
         return (dX * dX) + (dY * dY) + (dZ * dZ) <= Math.pow(shape.getRadius(), 2);
+    }
+
+    @Override
+    public void getSpherePoints(double radius, int count, TriConsumer<Double, Double, Double> consumer) {
+
+        if (radius <= 0) {
+            throw new IllegalArgumentException("The sphere radius must be greater then zero");
+        }
+
+        if (count <= 0) {
+            throw new IllegalArgumentException("The number of points must be greater then zero");
+        }
+
+        double offset = 2.0 / count;
+        double increment = Math.PI * (3.0 - Math.sqrt(5));
+
+        for (int i = 0; i < count; i++) {
+            double y = 1 - (i + 0.5) * offset;
+            double r = Math.sqrt(1 - y * y);
+            double phi = i * increment;
+
+            double x = Math.cos(phi) * r;
+            double z = Math.sin(phi) * r;
+
+            consumer.accept(x * radius, y * radius, z * radius);
+        }
+    }
+
+    @Override
+    public void getCirclePoints(double radius, int count, BiConsumer<Double, Double> consumer) {
+
+        if (radius <= 0) {
+            throw new IllegalArgumentException("The sphere radius must be greater then zero");
+        }
+
+        if (count <= 0) {
+            throw new IllegalArgumentException("The number of points must be greater then zero");
+        }
+
+        double spacing = 2 * Math.PI / count;
+
+        for (int i = 0; i < count; i++) {
+            double angle = i * spacing;
+
+            consumer.accept(radius * Math.cos(angle), radius * Math.sin(angle));
+        }
     }
 }
 

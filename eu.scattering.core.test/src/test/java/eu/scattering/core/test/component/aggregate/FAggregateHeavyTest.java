@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import static eu.scattering.core.test.Config.factory;
 
-public class FAggregateInfiniteTest {
+@Disabled
+public class FAggregateHeavyTest {
 
     @Test
-    @Disabled
     @DisplayName("Infinite PC tunable Filippov 3D")
     void infinitePCTunableFilippov3D() {
         FAggregate fAggregate = factory.getFAggregatePreMono(250, 1);
@@ -33,5 +33,7 @@ public class FAggregateInfiniteTest {
         System.out.println(data.mean());
         System.out.println(data.std(true));
     }
+
+
 
 }

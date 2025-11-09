@@ -816,7 +816,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     public double fillSurfaceLayerOverlap(FLayer in, Iterable<? extends Shape> field) {
         double srfUnit = getDelta() * getDelta();
 
-        getSurfaceElements(getRadius(), (x, y, z) -> {
+        getSurfacePoints(getRadius(), (x, y, z) -> {
             int layers = 0;
 
             for (Shape shape : field) {
@@ -860,7 +860,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         for (int i = 0 ; i < getLayerCount() ; i++) {
             int location = i;
 
-            getSurfaceElements(getLayerRadius(location), (x, y, z) -> {
+            getSurfacePoints(getLayerRadius(location), (x, y, z) -> {
                 boolean isPartOf = true;
 
                 for (Shape shape : structure) {
@@ -894,7 +894,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         for (int i = 0 ; i < getLayerCount() ; i++) {
             int index = i;
 
-            getSurfaceElements(getLayerRadius(i), (d0, d1, d2) ->
+            getSurfacePoints(getLayerRadius(i), (d0, d1, d2) ->
                     in.addWithDataAndMeta(d0, d1, d2, getDelta(), metaData.get(index)));
         }
 
@@ -916,7 +916,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         for (int i = 0 ; i < getLayerCount() ; i++) {
             int location = i;
 
-            getSurfaceElements(getLayerRadius(location), (x, y, z) -> {
+            getSurfacePoints(getLayerRadius(location), (x, y, z) -> {
                 boolean isPartOf = true;
 
                 for (Shape shape : structure) {
@@ -941,7 +941,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return srfUnit;
     }
 
-    private void getSurfaceElements(double radius, TriConsumer consumer) {
+    private void getSurfacePoints(double radius, TriConsumer consumer) {
         int points = (int) Math.round(helper.getSurface(radius) / (getDelta() * getDelta()));
 
         double offset = 2.0 / points;

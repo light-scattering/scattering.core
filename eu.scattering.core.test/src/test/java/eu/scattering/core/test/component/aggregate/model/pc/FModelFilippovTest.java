@@ -65,7 +65,7 @@ public class FModelFilippovTest {
         modelTunable.addCompletionValidator(acceptor);
         modelTunable.build();
 
-        double overlap = fAggregate.getOverlapFactorLinear();
+        double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
 
         for (Shape shape : fAggregate.getRefParticles()) {
             assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2,
@@ -126,7 +126,7 @@ public class FModelFilippovTest {
         modelTunable.addCompletionValidator(acceptor);
         modelTunable.build();
 
-        double overlap = fAggregate.getOverlapFactorLinear();
+        double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
 
         for (Shape shape : fAggregate.getRefParticles()) {
             assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2,

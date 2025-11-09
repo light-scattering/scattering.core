@@ -772,7 +772,7 @@ public class FStat1DDef implements FStat1D {
         double range = max - min;
         double step = range / divisions;
 
-        for (int i = 0; i < divisions; i++) {
+        for (int i = 0; i < divisions + 1; i++) {
             fPlot.add(min + (i * step));
         }
 
@@ -783,8 +783,8 @@ public class FStat1DDef implements FStat1D {
                 continue;
             }
 
-            for (int i = 0; i < divisions; i++) {
-                if (value < fPlot.getX(i) + step) {
+            for (int i = 0; i < divisions + 1; i++) {
+                if (value == fPlot.getX(i) || value < fPlot.getX(i) + step) {
                     fPlot.add((y1, y2) -> y1 + 1, fPlot.getX(i));
 
                     continue main;
