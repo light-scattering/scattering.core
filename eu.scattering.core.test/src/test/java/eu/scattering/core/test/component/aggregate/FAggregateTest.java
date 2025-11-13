@@ -1910,8 +1910,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Pair distance - Distribution")
-        void getPairDistanceDistribution() {
+        @DisplayName("Pair distance - Distribution A")
+        void getPairDistanceDistributionA() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
             Shape shapeA = factory.getFSphere(2, 0, 0, 1);
             Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
@@ -1925,13 +1925,25 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getPairDistanceDistribution();
+            FPlot2D results = fAggregate.getPairDistanceFunction();
+            results.distribute();
 
             assertEquals(1, results.getStatY().sum(), 1E-4);
             assertEquals(0, results.getY(0));
             assertEquals(0, results.getY(1));
             assertEquals(0, results.getY(3));
             assertTrue(results.getY(2) > results.getY(4));
+        }
+
+        @Test
+        @DisplayName("Pair distance - Distribution B")
+        void getPairDistanceDistributionB() {
+            FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
+
+            FPlot2D results = fAggregate.getPairDistanceFunction();
+            results.distribute();
+
+            assertTrue(results.size() > 100);
         }
 
         @Test
@@ -1989,13 +2001,55 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getCoordinationNumberDistribution();
+            FPlot2D results = fAggregate.getCoordinationNumberFunction();
+            results.distribute();
 
             assertEquals(1, results.getStatY().sum(), 1E-4);
             assertEquals(0, results.getY(1));
             assertEquals(0, results.getY(2));
             assertEquals(0, results.getY(3));
             assertTrue(results.getY(0) > results.getY(4));
+        }
+
+        @Test
+        @DisplayName("Density correlation - Distribution A")
+        void getDensityCorrelationDistributionA() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FPlot2D results = fAggregate.getDensityCorrelationFunction();
+
+            String data = factory.getStatisticsExporter().toPythonPlotlyLinear(results);
+
+            assertEquals(1, results.getStatY().sum(), 1E-4);
+            assertEquals(0, results.getY(1));
+            assertEquals(0, results.getY(2));
+            assertEquals(0, results.getY(3));
+            assertTrue(results.getY(0) > results.getY(4));
+        }
+
+        @Test
+        @DisplayName("Density correlation - Distribution B")
+        void getDensityCorrelationDistributionB() {
+            FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
+
+            FPlot2D results = fAggregate.getDensityCorrelationFunction();
+//            results.filter((x, y) -> x > 0 && y > 0);
+            results.ln(true, true);
+
+            String data = factory.getStatisticsExporter().toPythonPlotlyLinear(results);
+
+            assertEquals(1000, results.size());
         }
 
         @Test
@@ -2082,7 +2136,8 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getTripletAngleDistribution(false);
+            FPlot2D results = fAggregate.getTripletAngleFunction(false);
+            results.distribute();
 
             results.filter((x, y) -> y > 0);
 
@@ -2109,7 +2164,8 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getTripletAngleDistribution(true);
+            FPlot2D results = fAggregate.getTripletAngleFunction(true);
+            results.distribute();
 
             results.filter((x, y) -> y > 0);
 

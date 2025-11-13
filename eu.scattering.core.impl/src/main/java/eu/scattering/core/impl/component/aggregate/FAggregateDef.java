@@ -943,17 +943,14 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot2D getPairDistanceDistribution() {
+    public FPlot2D getPairDistanceFunction() {
         FStat1D distance = getPairDistance();
         FStat1D radius = getParticleRadius();
 
         double max = distance.max();
         int steps = (int) (max / radius.min());
 
-        FPlot2D histogram = distance.toFPlot2DHistogram(0, max, steps);
-        histogram.distribute();
-
-        return histogram;
+        return distance.toFPlot2DHistogram(0, max, steps);
     }
 
     @Override
@@ -968,15 +965,12 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot2D getCoordinationNumberDistribution() {
+    public FPlot2D getCoordinationNumberFunction() {
         FStat1D coordination = getCoordinationNumber();
 
         double max = coordination.max();
 
-        FPlot2D histogram = coordination.toFPlot2DHistogram(1, max, (int) max - 1);
-        histogram.distribute();
-
-        return histogram;
+        return coordination.toFPlot2DHistogram(1, max, (int) max - 1);
     }
 
     @Override
@@ -1016,19 +1010,72 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot2D getTripletAngleDistribution(boolean deg) {
+    public FPlot2D getTripletAngleFunction(boolean deg) {
         FStat1D angle = getTripletAngle(deg);
-        FPlot2D histogram;
 
         if (deg) {
-            histogram = angle.toFPlot2DHistogram(0, 180, 180);
+            return angle.toFPlot2DHistogram(0, 180, 180);
         } else {
-            histogram = angle.toFPlot2DHistogram(0, Math.PI, 180);
+            return angle.toFPlot2DHistogram(0, Math.PI, 180);
+        }
+    }
+
+    @Override
+    public FPlot2D getDensityCorrelationFunction() {
+
+        FSphereHelper helper = getFSphereHelper();
+//        FPlot2D fPlot = getPairDistanceFunction();
+//
+//        double r0, r1;
+//        for (int i = 1 ; i < fPlot.size() ; i++) {
+//            r0 = fPlot.getX(i - 1);
+//            r1 = fPlot.getX(i);
+//
+//            fPlot.setY(i, fPlot.getY(i) / helper.getVolumeRing(r0, r1));
+//        }
+//
+//        return fPlot;
+
+
+
+
+        FStat1D distances = getPairDistance();
+
+        // Skip the first ring of particles.
+        double min = 2.1 * distances.min();
+        double max = distances.max();
+        double delta = min * 0.5;
+
+        FPlot2D results = supplyFPlot2D();
+
+        double step = min;
+        while (step <= max) {
+            results.add(step, 0);
+            step *= 1.1;
         }
 
-        histogram.distribute();
 
-        return histogram;
+        for (double distance : distances) {
+            for (int i = 0 ; i < results.size() ; i++) {
+
+                if (Math.abs(distance - results.getX(i)) < delta) {
+                    results.setY(i, results.getY(i) + 1);
+                }
+
+                if (distance + delta < results.getX(i)) {
+                    break;
+                }
+            }
+        }
+
+        for (int i = 0 ; i < results.size() ; i++) {
+            double element = results.getX(i);
+            double volume = helper.getVolumeRing(element - delta, element + delta);
+
+            results.setY(i, results.getY(i) / volume);
+        }
+
+        return results;
     }
 
     @Override
@@ -1163,6 +1210,11 @@ public class FAggregateDef implements FAggregate {
     private FPlot2D supplyFPlot2D() {
 
         return factory.getFPlot2D();
+    }
+
+    private FPlot2D supplyFPlot2D(FLayer fLayer) {
+
+        return factory.getFPlot2D(fLayer);
     }
 
     private FPoint supplyFPoint() {

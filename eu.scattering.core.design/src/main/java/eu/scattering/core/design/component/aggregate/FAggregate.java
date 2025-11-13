@@ -66,13 +66,15 @@ public interface FAggregate extends Component {
     double getBoxDimension();
 
     FStat1D getPairDistance();
-    FPlot2D getPairDistanceDistribution();
+    FPlot2D getPairDistanceFunction();
 
     FStat1D getCoordinationNumber();
-    FPlot2D getCoordinationNumberDistribution();
+    FPlot2D getCoordinationNumberFunction();
 
     FStat1D getTripletAngle(boolean deg);
-    FPlot2D getTripletAngleDistribution(boolean deg);
+    FPlot2D getTripletAngleFunction(boolean deg);
+
+    FPlot2D getDensityCorrelationFunction();
 
     boolean isCompact();
     boolean isSparse();

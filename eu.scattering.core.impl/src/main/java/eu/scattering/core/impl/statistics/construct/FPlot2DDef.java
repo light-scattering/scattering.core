@@ -5,6 +5,7 @@ import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
 import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +38,20 @@ public class FPlot2DDef implements FPlot2D {
         FPlot2DDef fPlot = new FPlot2DDef(factory);
 
         fPlot.data = new ArrayList<>();
+        fPlot.interpolator = FPlot2DInterpolatorDef.create();
+
+        return fPlot;
+    }
+
+    public static FPlot2D create(ScatFactory factory, FLayer layer) {
+        FPlot2DDef fPlot = new FPlot2DDef(factory);
+
+        fPlot.data = new ArrayList<>();
+
+        for (int i = 0 ; i < layer.size() ; i++) {
+            fPlot.add(FPlot2DRecordDef.create(i, layer.get(i)));
+        }
+
         fPlot.interpolator = FPlot2DInterpolatorDef.create();
 
         return fPlot;

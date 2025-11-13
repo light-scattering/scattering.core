@@ -609,6 +609,12 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
+    public FPlot2D getFPlot2D(FLayer fLayer) {
+
+        return FPlot2DDef.create(this, fLayer);
+    }
+
+    @Override
     public FPlot2D getFPlot2D(JSONObject json) {
 
         return FPlot2DDef.create(this, json);

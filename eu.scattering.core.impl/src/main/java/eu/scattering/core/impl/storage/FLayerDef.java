@@ -111,6 +111,22 @@ public class FLayerDef implements FLayer {
     }
 
     @Override
+    public void incGroup(int minLayer, int maxLayer) {
+
+        for (int i = minLayer; i <= maxLayer; i++) {
+            inc(i);
+        }
+    }
+
+    @Override
+    public void setGroup(int minLayer, int maxLayer, int value) {
+
+        for (int i = minLayer; i <= maxLayer; i++) {
+            set(i, value);
+        }
+    }
+
+    @Override
     public void add(FLayer... fLayers) {
         int index = size();
 
@@ -208,6 +224,20 @@ public class FLayerDef implements FLayer {
         }
 
         return max;
+    }
+
+    @Override
+    public void assertSize(int size) {
+
+        while (this.layers.size() < size) {
+            this.layers.add(FLayerUnit.create());
+        }
+
+        if (index > size - 1) {
+            return;
+        }
+
+        index = size - 1;
     }
 
     @Override

@@ -2,6 +2,7 @@ package eu.scattering.core.test.statistics;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -25,6 +26,33 @@ public class FPlot2DTest {
             FPlot2D fPlot = factory.getFPlot2D();
 
             assertEquals(0, fPlot.size());
+        }
+
+        @Test
+        @DisplayName("Create with FLayer")
+        void createWithFLayer() {
+            FLayer fLayer = factory.getFLayer();
+
+            fLayer.incGroup(1, 5);
+            fLayer.setGroup(2, 4, 3);
+
+            FPlot2D fPlot = factory.getFPlot2D(fLayer);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(6, fPlot.size()),
+                    () -> assertEquals(0, fPlot.getX(0)),
+                    () -> assertEquals(1, fPlot.getX(1)),
+                    () -> assertEquals(2, fPlot.getX(2)),
+                    () -> assertEquals(3, fPlot.getX(3)),
+                    () -> assertEquals(4, fPlot.getX(4)),
+                    () -> assertEquals(5, fPlot.getX(5)),
+                    () -> assertEquals(0, fPlot.getY(0)),
+                    () -> assertEquals(1, fPlot.getY(1)),
+                    () -> assertEquals(3, fPlot.getY(2)),
+                    () -> assertEquals(3, fPlot.getY(3)),
+                    () -> assertEquals(3, fPlot.getY(4)),
+                    () -> assertEquals(1, fPlot.getY(5))
+            );
         }
 
         @Test
@@ -1310,6 +1338,69 @@ public class FPlot2DTest {
                     () -> assertEquals(Math.log10(4), fPlot.getY(0), 1E-4),
                     () -> assertEquals(Math.log10(5), fPlot.getY(1), 1E-4),
                     () -> assertEquals(Math.log10(6), fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Ln X")
+        void lnX() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.ln(true, false);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
+                    () -> assertEquals(Math.log(2), fPlot.getX(1), 1E-4),
+                    () -> assertEquals(Math.log(3), fPlot.getX(2), 1E-4),
+                    () -> assertEquals(4, fPlot.getY(0), 1E-4),
+                    () -> assertEquals(5, fPlot.getY(1), 1E-4),
+                    () -> assertEquals(6, fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Ln Y")
+        void lnY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.ln(false, true);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(1, fPlot.getX(0), 1E-4),
+                    () -> assertEquals(2, fPlot.getX(1), 1E-4),
+                    () -> assertEquals(3, fPlot.getX(2), 1E-4),
+                    () -> assertEquals(Math.log(4), fPlot.getY(0), 1E-4),
+                    () -> assertEquals(Math.log(5), fPlot.getY(1), 1E-4),
+                    () -> assertEquals(Math.log(6), fPlot.getY(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Ln XY")
+        void lnXY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            fPlot.ln(true, true);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
+                    () -> assertEquals(Math.log(2), fPlot.getX(1), 1E-4),
+                    () -> assertEquals(Math.log(3), fPlot.getX(2), 1E-4),
+                    () -> assertEquals(Math.log(4), fPlot.getY(0), 1E-4),
+                    () -> assertEquals(Math.log(5), fPlot.getY(1), 1E-4),
+                    () -> assertEquals(Math.log(6), fPlot.getY(2), 1E-4)
             );
         }
 

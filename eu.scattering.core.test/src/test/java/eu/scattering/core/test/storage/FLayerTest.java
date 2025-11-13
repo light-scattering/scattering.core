@@ -683,5 +683,53 @@ public class FLayerTest {
 
             assertFalse(fLayer.isZeroLayerOnly());
         }
+
+        @Test
+        @DisplayName("Increment group")
+        void incGroup() {
+            FLayer fLayer = factory.getFLayer();
+
+            fLayer.incGroup(1, 5);
+            fLayer.incGroup(2, 6);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, fLayer.get(0)),
+                    () -> assertEquals(1, fLayer.get(1)),
+                    () -> assertEquals(2, fLayer.get(2)),
+                    () -> assertEquals(2, fLayer.get(3)),
+                    () -> assertEquals(2, fLayer.get(4)),
+                    () -> assertEquals(2, fLayer.get(5)),
+                    () -> assertEquals(1, fLayer.get(6))
+            );
+        }
+
+        @Test
+        @DisplayName("Set group")
+        void setGroup() {
+            FLayer fLayer = factory.getFLayer();
+
+            fLayer.setGroup(1, 5, 3);
+            fLayer.setGroup(2, 6, 4);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(0, fLayer.get(0)),
+                    () -> assertEquals(3, fLayer.get(1)),
+                    () -> assertEquals(4, fLayer.get(2)),
+                    () -> assertEquals(4, fLayer.get(3)),
+                    () -> assertEquals(4, fLayer.get(4)),
+                    () -> assertEquals(4, fLayer.get(5)),
+                    () -> assertEquals(4, fLayer.get(6))
+            );
+        }
+
+        @Test
+        @DisplayName("Assert size")
+        void assertSize() {
+            FLayer fLayer = factory.getFLayer();
+
+            fLayer.assertSize(100);
+
+            assertEquals(100, fLayer.size());
+        }
     }
 }

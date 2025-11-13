@@ -89,4 +89,11 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     int getIndexCeil(double x);
     @Fragment
     int getIndexFloor(double x);
+
+    // -------------------------------------------------------------------------------------------------
+
+    default void ln(boolean x, boolean y) {
+
+        log(Math.E, x, y);
+    }
 }
