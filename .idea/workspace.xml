@@ -25,16 +25,8 @@
     <list default="true" id="3acd1ab4-90f7-48a5-931f-9a431fe5dc61" name="Default Changelist" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/component/aggregate/FAggregate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/construct/FPlot2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/construct/FPlot2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/construct/FPlot2DFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/statistics/construct/FPlot2DFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/storage/layer/FLayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/storage/layer/FLayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/FactoryDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/component/aggregate/FAggregateDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/statistics/construct/FPlot2DDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/statistics/construct/FPlot2DDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/storage/FLayerDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.impl/src/main/java/eu/scattering/core/impl/storage/FLayerDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/statistics/FPlot2DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/statistics/FPlot2DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/storage/FLayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/storage/FLayerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +162,53 @@
       <recent name="eu.scattering.core.design.transfer.complex" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.FAggregateAdvancedTest.getDensityCorrelationDistributionB">
+  <component name="RunManager" selected="Gradle.FAggregateAdvancedTest.getBoxCoverageFunctionA (1)">
+    <configuration name="FAggregateAdvancedTest.getBoxCoverageFunctionA (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.test:test" />
+            <option value="--tests" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateAdvancedTest.getBoxCoverageFunctionA&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="FAggregateAdvancedTest.getDensityCorrelationDistributionA" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":eu.scattering.core.test:test" />
+            <option value="--tests" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateAdvancedTest.getDensityCorrelationDistributionA&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="FAggregateAdvancedTest.getDensityCorrelationDistributionB" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -194,7 +232,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FAggregateAdvancedTest.getPairDistanceDistributionB" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FAggregateAdvancedTest.getTripletAngleDegree" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -207,7 +245,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateAdvancedTest.getPairDistanceDistributionB&quot;" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest$FAggregateAdvancedTest.getTripletAngleDegree&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -217,7 +255,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FLayerTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FAggregateTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -230,51 +268,7 @@
           <list>
             <option value=":eu.scattering.core.test:test" />
             <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.storage.FLayerTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="FPlot2DTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
-            <option value="--tests" />
-            <option value="&quot;eu.scattering.core.test.statistics.FPlot2DTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="Tests in 'scattering.core.eu.scattering.core.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":eu.scattering.core.test:test" />
+            <option value="&quot;eu.scattering.core.test.component.aggregate.FAggregateTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -299,11 +293,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.FAggregateAdvancedTest.getBoxCoverageFunctionA (1)" />
         <item itemvalue="Gradle.FAggregateAdvancedTest.getDensityCorrelationDistributionB" />
-        <item itemvalue="Gradle.FPlot2DTest" />
-        <item itemvalue="Gradle.FAggregateAdvancedTest.getPairDistanceDistributionB" />
-        <item itemvalue="Gradle.Tests in 'scattering.core.eu.scattering.core.test'" />
-        <item itemvalue="Gradle.FLayerTest" />
+        <item itemvalue="Gradle.FAggregateAdvancedTest.getDensityCorrelationDistributionA" />
+        <item itemvalue="Gradle.FAggregateAdvancedTest.getTripletAngleDegree" />
+        <item itemvalue="Gradle.FAggregateTest" />
       </list>
     </recent_temporary>
   </component>
@@ -559,28 +553,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
-          <line>154</line>
+          <line>155</line>
           <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
-          <line>281</line>
+          <line>282</line>
           <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
-          <line>2033</line>
-          <option name="timeStamp" value="107" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
-          <line>2051</line>
-          <option name="timeStamp" value="108" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/eu.scattering.core.test/src/test/java/eu/scattering/core/test/component/aggregate/FAggregateTest.java</url>
-          <line>1943</line>
-          <option name="timeStamp" value="113" />
+          <line>2075</line>
+          <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-field">
           <url>file://$PROJECT_DIR$/eu.scattering.core.design/src/main/java/eu/scattering/core/design/transfer/primitive/FPos4DI.java</url>

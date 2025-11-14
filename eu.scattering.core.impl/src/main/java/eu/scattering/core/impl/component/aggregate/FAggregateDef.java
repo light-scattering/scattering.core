@@ -317,10 +317,16 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getLengthMax() {
+    public double getLength(Axis type) {
         FPos3D length = getLength();
 
-        return Math.max(length.getD0(), Math.max(length.getD1(), length.getD2()));
+        return switch (type) {
+            case X -> length.getD0();
+            case Y -> length.getD1();
+            case Z -> length.getD2();
+            case MAX -> Math.max(length.getD0(), Math.max(length.getD1(), length.getD2()));
+            case MIN -> Math.min(length.getD0(), Math.min(length.getD1(), length.getD2()));
+        };
     }
 
     @Override
@@ -526,12 +532,6 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getRadiusOfGyration() {
-
-        return getRadiusOfGyration(RoG.COMPLEX);
-    }
-
-    @Override
     public double getRadiusOfGyration(RoG type) {
 
         return switch (type) {
@@ -721,12 +721,6 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getOverlapFactor() {
-
-        return getOverlapFactor(OF.VOLUMETRIC);
-    }
-
-    @Override
     public double getOverlapFactor(OF type) {
 
         return switch(type) {
@@ -833,7 +827,7 @@ public class FAggregateDef implements FAggregate {
 
         double cutoffInner = getParticleRadius().min() * 2;
 
-        double step = getLengthMax();
+        double step = getLength(Axis.MAX);
         while (step >= cutoffInner) {
             getBoxDimensionStep(results, step);
             step *= 0.5;
@@ -974,7 +968,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FStat1D getTripletAngle(boolean deg) {
+    public FStat1D getTripletAngle() {
         FStat1D angle = supplyFStat1D();
 
         List<Shape> neighbours = new LinkedList<>();
@@ -1001,48 +995,23 @@ public class FAggregateDef implements FAggregate {
             }
         }
 
-        if (deg) {
-            FTrigHelper helper = getFTrigHelper();
-            angle.mutate(helper::convertRadToDeg);
-        }
-
         return angle;
     }
 
     @Override
-    public FPlot2D getTripletAngleFunction(boolean deg) {
-        FStat1D angle = getTripletAngle(deg);
+    public FPlot2D getTripletAngleFunction() {
+        FStat1D angle = getTripletAngle();
 
-        if (deg) {
-            return angle.toFPlot2DHistogram(0, 180, 180);
-        } else {
-            return angle.toFPlot2DHistogram(0, Math.PI, 180);
-        }
+        return angle.toFPlot2DHistogram(0, Math.PI, 180);
     }
 
     @Override
-    public FPlot2D getDensityCorrelationFunction() {
-
+    public FPlot2D getDensityCorrelationFunction(boolean log) {
         FSphereHelper helper = getFSphereHelper();
-//        FPlot2D fPlot = getPairDistanceFunction();
-//
-//        double r0, r1;
-//        for (int i = 1 ; i < fPlot.size() ; i++) {
-//            r0 = fPlot.getX(i - 1);
-//            r1 = fPlot.getX(i);
-//
-//            fPlot.setY(i, fPlot.getY(i) / helper.getVolumeRing(r0, r1));
-//        }
-//
-//        return fPlot;
-
-
-
 
         FStat1D distances = getPairDistance();
 
-        // Skip the first ring of particles.
-        double min = 2.1 * distances.min();
+        double min = distances.min();
         double max = distances.max();
         double delta = min * 0.5;
 
@@ -1051,9 +1020,8 @@ public class FAggregateDef implements FAggregate {
         double step = min;
         while (step <= max) {
             results.add(step, 0);
-            step *= 1.1;
+            step = log ? step * 1.1 : step + delta;
         }
-
 
         for (double distance : distances) {
             for (int i = 0 ; i < results.size() ; i++) {
@@ -1073,6 +1041,87 @@ public class FAggregateDef implements FAggregate {
             double volume = helper.getVolumeRing(element - delta, element + delta);
 
             results.setY(i, results.getY(i) / volume);
+        }
+
+        results.filter((x, y) -> x > 0 && y > 0);
+
+        return results;
+    }
+
+//    private FPlot2D getDensityCorrelationFunctionLinear() {
+//        FSphereHelper helper = getFSphereHelper();
+//        FPlot2D results = getPairDistanceFunction();
+//
+//        double r0, r1;
+//        for (int i = 1 ; i < results.size() ; i++) {
+//            r0 = results.getX(i - 1);
+//            r1 = results.getX(i);
+//
+//            results.setY(i, results.getY(i) / helper.getVolumeRing(r0, r1));
+//        }
+//
+//        results.filter((x, y) -> x > 0 && y > 0);
+//
+//        return results;
+//    }
+//
+//    private FPlot2D getDensityCorrelationFunctionLogarithmic() {
+//        FSphereHelper helper = getFSphereHelper();
+//
+//        FStat1D distances = getPairDistance();
+//
+//        double min = distances.min();
+//        double max = distances.max();
+//        double delta = min * 0.5;
+//
+//        FPlot2D results = supplyFPlot2D();
+//
+//        double step = min;
+//        while (step <= max) {
+//            results.add(step, 0);
+//            step *= 1.1;
+//        }
+//
+//        for (double distance : distances) {
+//            for (int i = 0 ; i < results.size() ; i++) {
+//
+//                if (Math.abs(distance - results.getX(i)) < delta) {
+//                    results.setY(i, results.getY(i) + 1);
+//                }
+//
+//                if (distance + delta < results.getX(i)) {
+//                    break;
+//                }
+//            }
+//        }
+//
+//        for (int i = 0 ; i < results.size() ; i++) {
+//            double element = results.getX(i);
+//            double volume = helper.getVolumeRing(element - delta, element + delta);
+//
+//            results.setY(i, results.getY(i) / volume);
+//        }
+//
+//        results.filter((x, y) -> x > 0 && y > 0);
+//
+//        return results;
+//    }
+
+    @Override
+    public FPlot2D getBoxCoverageFunction(boolean log) {
+        FPlot2D results = supplyFPlot2D();
+
+        double radius = getParticleRadius().mean();
+
+        double cutoffInner = radius * 2;
+        double cutoffOuter = getLength(Axis.MAX);
+
+        results.add(cutoffOuter, 1);
+
+        double size = log ? cutoffOuter * 0.5 : cutoffOuter - radius;
+        while (size >= cutoffInner) {
+            getBoxDimensionStep(results, size);
+            size = log ? size * 0.5 : size - radius;
         }
 
         return results;

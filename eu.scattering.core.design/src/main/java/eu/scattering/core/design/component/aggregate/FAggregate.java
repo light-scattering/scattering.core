@@ -50,20 +50,21 @@ public interface FAggregate extends Component {
     FPairPos3D getBoundary();
 
     FPos3D getLength();
-    double getLengthMax();
+    double getLength(Axis type);
 
     double getRadius(double x, double y, double z);
     double getRadius(FPoint center);
     double getRadius(FPos3D center);
     double getRadiusFromOrigin();
 
-    double getRadiusOfGyration();
     double getRadiusOfGyration(RoG type);
-
-    double getOverlapFactor();
+//    double getFractalDimension(FD type);
     double getOverlapFactor(OF type);
 
     double getBoxDimension();
+
+    FStat1D getTripletAngle();
+    FPlot2D getTripletAngleFunction();
 
     FStat1D getPairDistance();
     FPlot2D getPairDistanceFunction();
@@ -71,10 +72,8 @@ public interface FAggregate extends Component {
     FStat1D getCoordinationNumber();
     FPlot2D getCoordinationNumberFunction();
 
-    FStat1D getTripletAngle(boolean deg);
-    FPlot2D getTripletAngleFunction(boolean deg);
-
-    FPlot2D getDensityCorrelationFunction();
+    FPlot2D getDensityCorrelationFunction(boolean log);
+    FPlot2D getBoxCoverageFunction(boolean log);
 
     boolean isCompact();
     boolean isSparse();
@@ -111,7 +110,9 @@ public interface FAggregate extends Component {
     FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
 
     //--------------------------------------------------
-
+    
+    enum Axis { X, Y, Z, MIN, MAX}
+    enum Dim { BOX, CORRELATION }
     enum RoG { COMPLEX, SIMPLE_FILIPPOV, SIMPLE_MONO, SIMPLE_POLY }
     enum OF { VOLUMETRIC, LINEAR }
 }

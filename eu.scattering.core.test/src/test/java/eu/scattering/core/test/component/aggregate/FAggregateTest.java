@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
@@ -950,7 +951,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactor();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.VOLUMETRIC);
 
             assertEquals(1, overlap, epsilon);
         }
@@ -966,7 +967,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactor();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.VOLUMETRIC);
 
             assertEquals(1, overlap, epsilon);
         }
@@ -981,7 +982,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactor();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.VOLUMETRIC);
 
             assertEquals(0, overlap, epsilon);
         }
@@ -996,7 +997,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactor();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.VOLUMETRIC);
 
             double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
             double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -1019,7 +1020,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getOverlapFactor();
+            double overlap = fAggregate.getOverlapFactor(FAggregate.OF.VOLUMETRIC);
 
             double volAlgOverlap = (4  * Math.PI / 3) +
                     2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -1290,13 +1291,20 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             FPos3D length = fAggregate.getLength();
-            double lengthMax = fAggregate.getLengthMax();
+            double lengthX = fAggregate.getLength(FAggregate.Axis.X);
+            double lengthY = fAggregate.getLength(FAggregate.Axis.Y);
+            double lengthZ = fAggregate.getLength(FAggregate.Axis.Z);
+            double lengthMax = fAggregate.getLength(FAggregate.Axis.MAX);
+            double lengthMin = fAggregate.getLength(FAggregate.Axis.MIN);
+
 
             Assertions.assertAll("Validate range",
-                    () -> assertEquals(factory.getFPos3D(9, 11, 13), length,
-                            "The length is incorrect"),
-                    () -> assertEquals(13, lengthMax,
-                            "The maximum length is incorrect")
+                    () -> assertEquals(factory.getFPos3D(9, 11, 13), length),
+                    () -> assertEquals(9, lengthX),
+                    () -> assertEquals(11, lengthY),
+                    () -> assertEquals(13, lengthZ),
+                    () -> assertEquals(9, lengthMin),
+                    () -> assertEquals(13, lengthMax)
             );
         }
 
@@ -1811,7 +1819,7 @@ public class FAggregateTest {
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
             double rgExpected = factory.getFSphereHelper().getRadiusOfGyration(radius);
-            double rgActual = fAggregate.getRadiusOfGyration();
+            double rgActual = fAggregate.getRadiusOfGyration(FAggregate.RoG.COMPLEX);
 
             double rgErr = factory.getStatisticsHelper().getRelErr(rgExpected, rgActual);
 
@@ -1833,7 +1841,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000).addFMaterial();
 
-            double rgDefault = fAggregate.getRadiusOfGyration();
+            double rgDefault = fAggregate.getRadiusOfGyration(FAggregate.RoG.COMPLEX);
             double rgLegacyMono = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_MONO);
             double rgLegacyPoly = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_POLY);
             double rgLegacyFilippov = fAggregate.getRadiusOfGyration(FAggregate.RoG.SIMPLE_FILIPPOV);
@@ -2012,8 +2020,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Density correlation - Distribution A")
-        void getDensityCorrelationDistributionA() {
+        @DisplayName("Density correlation - Function A")
+        void getDensityCorrelationFunctionA() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
             Shape shapeA = factory.getFSphere(2, 0, 0, 1);
             Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
@@ -2027,29 +2035,46 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getDensityCorrelationFunction();
-
-            String data = factory.getStatisticsExporter().toPythonPlotlyLinear(results);
+            FPlot2D results = fAggregate.getDensityCorrelationFunction(false);
+            results.distribute();
 
             assertEquals(1, results.getStatY().sum(), 1E-4);
-            assertEquals(0, results.getY(1));
-            assertEquals(0, results.getY(2));
-            assertEquals(0, results.getY(3));
-            assertTrue(results.getY(0) > results.getY(4));
+            assertTrue(results.getY(1) < results.getY(0));
+            assertTrue(results.getY(2) < results.getY(1));
         }
 
         @Test
-        @DisplayName("Density correlation - Distribution B")
-        void getDensityCorrelationDistributionB() {
+        @DisplayName("Density correlation - Function B")
+        void getDensityCorrelationFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot2D results = fAggregate.getDensityCorrelationFunction();
-//            results.filter((x, y) -> x > 0 && y > 0);
-            results.ln(true, true);
+            FPlot2D results = fAggregate.getDensityCorrelationFunction(true);
 
-            String data = factory.getStatisticsExporter().toPythonPlotlyLinear(results);
+            assertTrue(results.size() > 25);
+        }
 
-            assertEquals(1000, results.size());
+        @Test
+        @DisplayName("Box coverage - Function A")
+        void getBoxCoverageFunctionA() {
+            Shape shape = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeC = factory.getFSphere(0, 2, 0, 1);
+            Shape shapeD = factory.getFSphere(0, -2, 0, 1);
+            Shape shapeE = factory.getFSphere(0, 0, 2, 1);
+            Shape shapeF = factory.getFSphere(0, 0, -2, 1);
+
+            FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
+            FAggregate fAggregate = factory.getFAggregate();
+
+            fAggregate.setRefParticles(core);
+
+            FPlot2D results = fAggregate.getBoxCoverageFunction(false);
+            results.distribute();
+
+            assertEquals(1, results.getStatY().sum(), 1E-4);
+            assertTrue(results.getY(1) < results.getY(0));
+            assertTrue(results.getY(2) < results.getY(1));
         }
 
         @Test
@@ -2068,7 +2093,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D results = fAggregate.getTripletAngle(false);
+            FStat1D results = fAggregate.getTripletAngle();
 
             results.sort(true);
 
@@ -2086,7 +2111,7 @@ public class FAggregateTest {
         void getTripletAngleB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FStat1D results = fAggregate.getTripletAngle(false);
+            FStat1D results = fAggregate.getTripletAngle();
 
             assertTrue(results.size() > 1000);
         }
@@ -2107,7 +2132,10 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D results = fAggregate.getTripletAngle(true);
+            FStat1D results = fAggregate.getTripletAngle();
+
+            FTrigHelper helper = factory.getFTrigHelper();
+            results.mutate(helper::convertRadToDeg);
 
             results.sort(true);
 
@@ -2136,7 +2164,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getTripletAngleFunction(false);
+            FPlot2D results = fAggregate.getTripletAngleFunction();
             results.distribute();
 
             results.filter((x, y) -> y > 0);
@@ -2164,7 +2192,11 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getTripletAngleFunction(true);
+            FPlot2D results = fAggregate.getTripletAngleFunction();
+
+            FTrigHelper helper = factory.getFTrigHelper();
+            results.mutateX((x, y) -> helper.convertRadToDeg(x));
+
             results.distribute();
 
             results.filter((x, y) -> y > 0);
