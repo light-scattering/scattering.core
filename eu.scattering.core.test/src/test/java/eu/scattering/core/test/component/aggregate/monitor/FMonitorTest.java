@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.aggregate.monitor.construct.FMonitorConstruct;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +44,8 @@ public class FMonitorTest {
             FPlot2D resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.log(Math.E, true, true);
+            resultsMono.mutateFStatX(FStat1D::ln);
+            resultsMono.mutateFStatY(FStat1D::ln);
 
             FPlot2D regression = resultsMono.copy();
             FPos2D slope = regression.simpleLinearRegression();
@@ -73,7 +75,8 @@ public class FMonitorTest {
             FPlot2D resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.log(Math.E, true, true);
+            resultsMono.mutateFStatX(FStat1D::ln);
+            resultsMono.mutateFStatY(FStat1D::ln);
 
             FPlot2D regression = resultsMono.copy();
             FPos2D slope = regression.simpleLinearRegression();
@@ -103,7 +106,8 @@ public class FMonitorTest {
             FPlot2D resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.log(Math.E, true, true);
+            resultsMono.mutateFStatX(FStat1D::ln);
+            resultsMono.mutateFStatY(FStat1D::ln);
 
             FPlot2D regression = resultsMono.copy();
             FPos2D slope = regression.simpleLinearRegression();
@@ -140,8 +144,8 @@ public class FMonitorTest {
             FPlot2D resultsPoly = fMonitorPoly.getResults();
             FPlot2D resultsFilippov = fMonitorFilippov.getResults();
 
-            assertTrue(results.getStatY().isSimilarAbs(0.25,
-                    resultsMono.getStatY(), resultsPoly.getStatY(), resultsFilippov.getStatY()));
+            assertTrue(results.getRefFStatY().isSimilarAbs(0.25,
+                    resultsMono.getRefFStatY(), resultsPoly.getRefFStatY(), resultsFilippov.getRefFStatY()));
         }
 
         @Test
@@ -172,8 +176,8 @@ public class FMonitorTest {
             FPlot2D resultsPoly = fMonitorPoly.getResults();
             FPlot2D resultsFilippov = fMonitorFilippov.getResults();
 
-            assertTrue(results.getStatY().isSimilarAbs(0.1,
-                    resultsMono.getStatY(), resultsPoly.getStatY(), resultsFilippov.getStatY()));
+            assertTrue(results.getRefFStatY().isSimilarAbs(0.1,
+                    resultsMono.getRefFStatY(), resultsPoly.getRefFStatY(), resultsFilippov.getRefFStatY()));
         }
     }
 }

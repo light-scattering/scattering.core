@@ -1071,7 +1071,10 @@ public class FAggregateDef implements FAggregate {
 
 //        data.filter((x, y) -> x < midpoint);
 
-        data.log(10, true, true);
+        data.mutateFStat((a, b) -> {
+            a.log(10);
+            b.log(10);
+        });
 
 //        FStat1D dataY = data.getStatY();
 //        double min = dataY.min();

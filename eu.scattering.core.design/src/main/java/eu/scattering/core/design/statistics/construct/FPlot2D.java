@@ -1,16 +1,18 @@
 package eu.scattering.core.design.statistics.construct;
 
 import eu.scattering.core.design.annotation.Fragment;
+import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
-import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface FPlot2D extends Statistics<FPlot2D> {
 
@@ -25,23 +27,15 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     double getY(int index);
     void setY(int index, double y);
 
-    FStat1D getStatX();
-    void setStatX(FStat1D statX); // Option to remove null (or leave).
-    void mutateStatX(Consumer<FStat1D> action);
+    int getIndexX(Index type, double x);
+    int getIndexY(Index type, double y);
 
-    FStat1D getStatY();
-    void setStatY(FStat1D statY); // Option to remove null (or leave).
-    void mutateStatY(Consumer<FStat1D> action);
+    <T> T getWithFStat(BiFunction<FStat1D, FStat1D, T> function);
 
-    int getIndex(double x); // Closest or what? Is this needed?
+    <T> T getWithFStatX(Function<FStat1D, T> function);
+    <T> T getWithFStatY(Function<FStat1D, T> function);
 
     // -------------------------------------------------------------------------------------------------
-
-    double minX(); // Needed?
-    double maxX(); // Needed?
-
-    double minY(); // Needed?
-    double maxY(); // Needed?
 
     double integrate();
 
@@ -56,30 +50,31 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     int filter(BiFunction<Double, Double, Boolean> filter);
 
+    void setY(FPoly est);
+
+    void mutateFStat(Consumer<FStat1D> consumer);
+    void mutateFStat(BiConsumer<FStat1D, FStat1D> consumer);
+
     void mutateX(BiFunction<Double, Double, Double> function);
+    void mutateFStatX(Consumer<FStat1D> consumer);
+
     void mutateY(BiFunction<Double, Double, Double> function);
+    void mutateFStatY(Consumer<FStat1D> consumer);
 
     void interpolate(double step, boolean overflow);
     void interpolate(double divisions);
 
-    void distribute(); // Maybe 1D?
-
     void sortX(boolean ascending);
     void sortY(boolean ascending);
 
-    void setY(FPoly est);
-
     void swapXY();
-
-    void log(double base, boolean x, boolean y); // Maybe 1D?
 
     // -------------------------------------------------------------------------------------------------
 
-    void forEach(BiConsumer<Double, Double> consumer);
+    void forEach(TriConsumer<Double, Double, Integer> consumer);
 
     double[][] toArray();
 
-    FPlot2DRecord getRecord(int index); // No
     FPlot2DInterpolator getInterpolator();
 
     // -------------------------------------------------------------------------------------------------
@@ -89,21 +84,24 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     // -------------------------------------------------------------------------------------------------
 
+    @Modificator
+    FStat1D getRefFStatX();
+    @Modificator
+    void setRefFStatX(FStat1D fStat1DX);
+
+    @Modificator
+    FStat1D getRefFStatY();
+    @Modificator
+    void setRefFStatY(FStat1D fStat1DY);
+
 //    @Fragment
 //    FPlot2D removeNull();
 
     @Fragment
-    int getIndexCeil(double x);
-    @Fragment
-    int getIndexFloor(double x);
+    FPos2D getRecord(int index);
 
     // -------------------------------------------------------------------------------------------------
 
-    default void ln(boolean x, boolean y) {
-
-        log(Math.E, x, y);
-    }
-
-    // Get regression mean square error.
+    enum Index { ROUND, FLOOR, CEIL }
     // Different toString
 }

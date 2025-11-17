@@ -137,42 +137,6 @@ public class FStat1DTest {
         }
 
         @Test
-        @DisplayName("Add with collision")
-        void addWithCollision() {
-            FStat1D fStat = factory.getFStat1D();
-
-            fStat.add((x) -> x + 1, 5);
-            fStat.add((x) -> x + 1, 7);
-            fStat.add((x) -> x + 1, 9);
-
-            fStat.add((x) -> x + 1, 5);
-            fStat.add((x) -> x + 1, 7);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertEquals(3, fStat.size()),
-                    () -> assertEquals(6, fStat.get(0)),
-                    () -> assertEquals(8, fStat.get(1)),
-                    () -> assertEquals(9, fStat.get(2))
-            );
-        }
-
-        @Test
-        @DisplayName("Add vararg with collision")
-        void addVarargWithCollision() {
-            FStat1D fStat = factory.getFStat1D();
-
-            fStat.add((x) -> x + 1, 5, 7, 9);
-            fStat.add((x) -> x + 1, 5, 7);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertEquals(3, fStat.size()),
-                    () -> assertEquals(6, fStat.get(0)),
-                    () -> assertEquals(8, fStat.get(1)),
-                    () -> assertEquals(9, fStat.get(2))
-            );
-        }
-
-        @Test
         @DisplayName("Clear")
         void clear() {
             FStat1D fStat = factory.getFStat1D();
@@ -191,9 +155,9 @@ public class FStat1DTest {
         void set() {
             FStat1D fStat = factory.getFStat1D();
 
-            fStat.add((x) -> x + 1, 5);
-            fStat.add((x) -> x + 1, 7);
-            fStat.add((x) -> x + 1, 9);
+            fStat.add(5);
+            fStat.add(7);
+            fStat.add(9);
 
             fStat.set(1, 1);
 
@@ -1246,7 +1210,7 @@ public class FStat1DTest {
 
             var results = fStat.replaceOutliersWithNaN(true, 1.5);
 
-            long count = fStat.getData().stream().filter(e -> Double.isNaN(e)).toList().size();
+            long count = fStat.getRefData().stream().filter(e -> Double.isNaN(e)).toList().size();
 
             assertSame(fStat, results);
             assertEquals(2, count);
@@ -1262,7 +1226,7 @@ public class FStat1DTest {
 
             var results = fStat.replaceOutliersWithNaN(2.55555556, 10.9099852, 1.5);
 
-            long count = fStat.getData().stream().filter(e -> Double.isNaN(e)).toList().size();
+            long count = fStat.getRefData().stream().filter(e -> Double.isNaN(e)).toList().size();
 
             assertSame(fStat, results);
             assertEquals(2, count);
@@ -1278,7 +1242,7 @@ public class FStat1DTest {
 
             fStat.replaceOutliersWithNaN(false, 1.5);
 
-            long count = fStat.getData().stream().filter(e -> Double.isNaN(e)).toList().size();
+            long count = fStat.getRefData().stream().filter(e -> Double.isNaN(e)).toList().size();
 
             assertEquals(2, count);
             assertEquals(9, fStat.size());

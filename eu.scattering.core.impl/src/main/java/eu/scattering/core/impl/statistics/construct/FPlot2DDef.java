@@ -1,33 +1,35 @@
 package eu.scattering.core.impl.statistics.construct;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
-import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 public class FPlot2DDef implements FPlot2D {
     private static final String JSON_TYPE = "type";
     private static final String JSON_MAIN = "plot2D";
-    private static final String JSON_DATA = "records";
+    private static final String JSON_DATA_X = "dataX";
+    private static final String JSON_DATA_Y = "dataY";
     private static final String JSON_INT = "interpolator";
 
     private final ScatFactory factory;
 
-    private List<FPlot2DRecord> data;
     private FPlot2DInterpolator interpolator;
+    private FStat1D dataX;
+    private FStat1D dataY;
 
     private String name = "";
 
@@ -39,22 +41,26 @@ public class FPlot2DDef implements FPlot2D {
     public static FPlot2D create(ScatFactory factory) {
         FPlot2DDef fPlot = new FPlot2DDef(factory);
 
-        fPlot.data = new ArrayList<>();
         fPlot.interpolator = FPlot2DInterpolatorDef.create();
+
+        fPlot.dataX = factory.getFStat1D();
+        fPlot.dataY = factory.getFStat1D();
 
         return fPlot;
     }
 
-    public static FPlot2D create(ScatFactory factory, FLayer layer) {
+    public static FPlot2D create(ScatFactory factory, FLayer fLayer) {
         FPlot2DDef fPlot = new FPlot2DDef(factory);
 
-        fPlot.data = new ArrayList<>();
-
-        for (int i = 0 ; i < layer.size() ; i++) {
-            fPlot.add(FPlot2DRecordDef.create(i, layer.get(i)));
-        }
-
         fPlot.interpolator = FPlot2DInterpolatorDef.create();
+
+        fPlot.dataX = factory.getFStat1D();
+        fPlot.dataY = factory.getFStat1D();
+
+        for (int i = 0 ; i < fLayer.size() ; i++) {
+            fPlot.dataX.add(i);
+            fPlot.dataY.add(fLayer.get(i));
+        }
 
         return fPlot;
     }
@@ -62,44 +68,19 @@ public class FPlot2DDef implements FPlot2D {
     public static FPlot2D create(ScatFactory factory, JSONObject json) {
         FPlot2DDef fPlot = new FPlot2DDef(factory);
 
-        fPlot.data = new ArrayList<>();
-
-        JSONArray data = json.getJSONArray(JSON_DATA);
-        for (int i = 0 ; i < data.length() ; i++) {
-            fPlot.add(FPlot2DRecordDef.create(data.getJSONObject(i)));
-        }
-
         fPlot.interpolator = FPlot2DInterpolatorDef.create(json.getJSONObject(JSON_INT));
 
-        return fPlot;
-    }
+        fPlot.dataX = factory.getFStat1D(json.getJSONObject(JSON_DATA_X));
+        fPlot.dataY = factory.getFStat1D(json.getJSONObject(JSON_DATA_Y));
 
-    @Override
-    public FPlot2D copy() {
-        FPlot2D fPlot = factory.getFPlot2D();
-
-        fPlot.getInterpolator().setMethod(getInterpolator().getMethod());
-        fPlot.getInterpolator().setHermiteBias(getInterpolator().getHermiteBias());
-        fPlot.getInterpolator().setHermiteTension(getInterpolator().getHermiteTension());
-
-        for (FPlot2DRecord record : getData()) {
-            fPlot.add(record.getX(), record.getY());
+        if (fPlot.dataX.size() != fPlot.dataY.size()) {
+            throw new IllegalArgumentException("The data is corrupted");
         }
 
         return fPlot;
     }
 
-    @Override
-    public int size() {
-
-        return getData().size();
-    }
-
-    @Override
-    public void clear() {
-
-        getData().clear();
-    }
+    // -------------------------------------------------------------------------------------------------
 
     @Override
     public void add(double x) {
@@ -108,13 +89,20 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalStateException("The x value already exists");
         }
 
-        getData().add(FPlot2DRecordDef.create(x, 0));
+        getRefFStatX().add(x);
+        getRefFStatY().add(0);
     }
 
     @Override
     public void add(BiFunction<Double, Double, Double> collision, double x) {
+        int position = position(x);
 
-        add(collision, x, 0);
+        if (position < 0) {
+            getRefFStatX().add(x);
+            getRefFStatY().add(0);
+        } else {
+            getRefFStatY().set(position, collision.apply(getRefFStatY().get(position), 0d));
+        }
     }
 
     @Override
@@ -124,7 +112,8 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalStateException("The x value already exists");
         }
 
-        getData().add(FPlot2DRecordDef.create(x, y));
+        getRefFStatX().add(x);
+        getRefFStatY().add(y);
     }
 
     @Override
@@ -132,227 +121,88 @@ public class FPlot2DDef implements FPlot2D {
         int position = position(x);
 
         if (position < 0) {
-            getData().add(FPlot2DRecordDef.create(x, y));
+            getRefFStatX().add(x);
+            getRefFStatY().add(y);
         } else {
-            FPlot2DRecord record = getData().get(position);
-
-            record.setY(collision.apply(record.getY(), y));
+            getRefFStatY().set(position, collision.apply(getRefFStatY().get(position), y));
         }
     }
 
     @Override
     public double getX(int index) {
 
-        return getData().get(index).getX();
+        return getRefFStatX().get(index);
     }
 
     @Override
     public void setX(int index, double x) {
 
-        getData().get(index).setX(x);
-
+        getRefFStatX().set(index, x);
     }
 
     @Override
     public double getY(int index) {
 
-        return getData().get(index).getY();
+        return getRefFStatY().get(index);
     }
 
     @Override
     public void setY(int index, double y) {
 
-        getData().get(index).setY(y);
+        getRefFStatY().set(index, y);
     }
 
     @Override
-    public FStat1D getStatX() {
-        FStat1D fStat = factory.getFStat1D();
+    public int getIndexX(Index type, double x) {
 
-        for (FPlot2DRecord record : getData()) {
-            fStat.add(record.getX());
-        }
-
-        return fStat;
+        return switch (type) {
+            case ROUND -> getIndexXRound(x);
+            case FLOOR -> getIndexXFloor(x);
+            case CEIL -> getIndexXCeil(x);
+        };
     }
 
     @Override
-    public void setStatX(FStat1D statX) {
+    public int getIndexY(Index type, double y) {
 
-        if (!statX.allDistinct()) {
-            throw new IllegalArgumentException("X axis values must be unique");
-        }
-
-        if (statX.size() != size()) {
-            throw new IllegalArgumentException("The number of elements is erroneous");
-        }
-
-        List<FPlot2DRecord> results = new ArrayList<>();
-
-        for (int i = 0 ; i < statX.size() ; i++) {
-
-            if (Double.isNaN(statX.get(i))) {
-                continue;
-            }
-
-            results.add(FPlot2DRecordDef.create(statX.get(i), getY(i)));
-        }
-
-        setData(results);
+        return switch (type) {
+            case ROUND -> getIndexYRound(y);
+            case FLOOR -> getIndexYFloor(y);
+            case CEIL -> getIndexYCeil(y);
+        };
     }
 
     @Override
-    public void mutateStatX(Consumer<FStat1D> action) {
-        FStat1D statX = getStatX();
+    public <T> T getWithFStat(BiFunction<FStat1D, FStat1D, T> function) {
+        T value = function.apply(getRefFStatX(), getRefFStatY());
 
-        action.accept(statX);
+        if (getRefFStatX().size() != getRefFStatY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
 
-        setStatX(statX);
+        return value;
     }
 
     @Override
-    public FStat1D getStatY() {
-        FStat1D fStat = factory.getFStat1D();
+    public <T> T getWithFStatX(Function<FStat1D, T> function) {
+        T value = function.apply(this.dataX);
 
-        for (FPlot2DRecord record : getData()) {
-            fStat.add(record.getY());
+        if (getRefFStatX().size() != getRefFStatY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
         }
 
-        return fStat;
+        return value;
     }
 
     @Override
-    public void setStatY(FStat1D statY) {
+    public <T> T getWithFStatY(Function<FStat1D, T> function) {
+        T value = function.apply(this.dataY);
 
-        if (statY.size() != size()) {
-            throw new IllegalArgumentException("The number of elements is erroneous");
+        if (getRefFStatX().size() != getRefFStatY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
         }
 
-        List<FPlot2DRecord> results = new ArrayList<>();
-
-        for (int i = 0 ; i < statY.size() ; i++) {
-
-            if (Double.isNaN(statY.get(i))) {
-                continue;
-            }
-
-            results.add(FPlot2DRecordDef.create(getX(i), statY.get(i)));
-        }
-
-        setData(results);
-    }
-
-    @Override
-    public void mutateStatY(Consumer<FStat1D> action) {
-        FStat1D statY = getStatY();
-
-        action.accept(statY);
-
-        setStatY(statY);
-    }
-
-    @Override
-    public int getIndex(double x) {
-        double valueMin = Double.POSITIVE_INFINITY;
-        int index = -1;
-
-        for (int i = 0 ; i < size() ; i++) {
-            double value = getX(i);
-
-            double abs = Math.abs(x - value);
-            if (abs < valueMin) {
-                valueMin = abs;
-                index = i;
-            }
-        }
-
-        return index;
-    }
-
-    @Override
-    public int getIndexCeil(double x) {
-        double valueMax = Double.POSITIVE_INFINITY;
-        int index = -1;
-
-        for (int i = 0 ; i < this.data.size() ; i++) {
-            double value = this.data.get(i).getX();
-
-            if (value < valueMax && value >= x) {
-                valueMax = value;
-                index = i;
-            }
-        }
-
-        return index;
-    }
-
-    @Override
-    public int getIndexFloor(double x) {
-        double valueMin = Double.NEGATIVE_INFINITY;
-        int index = -1;
-
-        for (int i = 0 ; i < this.data.size() ; i++) {
-            double value = this.data.get(i).getX();
-
-            if (value > valueMin && value <= x) {
-                valueMin = value;
-                index = i;
-            }
-        }
-
-        return index;
-    }
-
-    @Override
-    public double minX() {
-        double valueMin = Double.POSITIVE_INFINITY;
-
-        for (FPlot2DRecord record : getData()) {
-            if (record.getX() < valueMin) {
-                valueMin = record.getX();
-            }
-        }
-
-        return valueMin;
-    }
-
-    @Override
-    public double minY() {
-        double valueMin = Double.POSITIVE_INFINITY;
-
-        for (FPlot2DRecord record : getData()) {
-            if (record.getY() < valueMin) {
-                valueMin = record.getY();
-            }
-        }
-
-        return valueMin;
-    }
-
-    @Override
-    public double maxX() {
-        double valueMax = Double.NEGATIVE_INFINITY;
-
-        for (FPlot2DRecord record : getData()) {
-            if (record.getX() > valueMax) {
-                valueMax = record.getX();
-            }
-        }
-
-        return valueMax;
-    }
-
-    @Override
-    public double maxY() {
-        double valueMax = Double.NEGATIVE_INFINITY;
-
-        for (FPlot2DRecord record : getData()) {
-            if (record.getY() > valueMax) {
-                valueMax = record.getY();
-            }
-        }
-
-        return valueMax;
+        return value;
     }
 
     @Override
@@ -380,130 +230,9 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public double mse(FPoly est) {
-        double mse = 0;
-
-        for (int i = 0 ; i < size() ; i++) {
-            mse += Math.pow(getY(i) - est.getValue(getX(i)), 2);
-        }
-
-        return mse / size();
-    }
-
-    @Override
-    public int filter(BiFunction<Double, Double, Boolean> filter) {
-        int oldSize = size();
-
-        setData(getData().stream()
-                .filter(e -> filter.apply(e.getX(), e.getY()))
-                .collect(Collectors.toList()));
-
-        return oldSize - size();
-    }
-
-    @Override
-    public void mutateX(BiFunction<Double, Double, Double> function) {
-
-        for (FPlot2DRecord record : this.data) {
-            record.setX(function.apply(record.getX(), record.getY()));
-        }
-    }
-
-    @Override
-    public void mutateY(BiFunction<Double, Double, Double> function) {
-
-        for (FPlot2DRecord record : this.data) {
-            record.setY(function.apply(record.getX(), record.getY()));
-        }
-    }
-
-    @Override
-    public void interpolate(double step, boolean overflow) {
-
-        if (step <= 0) {
-            throw new IllegalArgumentException("The step value must be greater than zero");
-        }
-
-        double minX = minX();
-        double maxX = maxX();
-
-        List<FPlot2DRecord> list = new ArrayList<>();
-
-        double value = minX;
-        while (value < maxX) {
-            list.add(FPlot2DRecordDef.create(value, approximate(value)));
-            value += step;
-        }
-
-        if (overflow) {
-            list.add(FPlot2DRecordDef.create(value, approximate(maxX)));
-        }
-
-        setData(list);
-    }
-
-    @Override
-    public void interpolate(double divisions) {
-
-        if (divisions < 1) {
-            throw new IllegalArgumentException("The number of divisions cannot be smaller then one");
-        }
-
-        double minX = minX();
-        double maxX = maxX();
-
-        double step = (maxX - minX) / divisions;
-
-        List<FPlot2DRecord> list = new ArrayList<>();
-
-        double value = minX;
-        while (value < maxX) {
-            list.add(FPlot2DRecordDef.create(value, approximate(value)));
-            value += step;
-        }
-
-        list.add(FPlot2DRecordDef.create(maxX, approximate(maxX)));
-
-        setData(list);
-    }
-
-    @Override
-    public void distribute() {
-        double sum = getStatY().sum();
-
-        mutateY((x, y) -> y / sum);
-    }
-
-    @Override
-    public void sortX(boolean ascending) {
-
-        if (ascending) {
-            sortAscX();
-        } else {
-            sortDscX();
-        }
-    }
-
-    @Override
-    public void sortY(boolean ascending) {
-
-        if (ascending) {
-            sortAscY();
-        } else {
-            sortDscY();
-        }
-    }
-
-    @Override
-    public void setY(FPoly est) {
-
-        mutateY((x, y) -> est.getValue(x));
-    }
-
-    @Override
     public FPos2D simpleLinearRegression() {
-        FStat1D sx = getStatX();
-        FStat1D sy = getStatY();
+        FStat1D sx = getRefFStatX();
+        FStat1D sy = getRefFStatY();
 
         double mx = sx.mean();
         double my = sy.mean();
@@ -525,35 +254,241 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
+    public double mse(FPoly est) {
+        double mse = 0;
+
+        for (int i = 0 ; i < size() ; i++) {
+            mse += Math.pow(getY(i) - est.getValue(getX(i)), 2);
+        }
+
+        return mse / size();
+    }
+
+    @Override
+    public int filter(BiFunction<Double, Double, Boolean> filter) {
+        int oldSize = size();
+
+        FStat1D fStatX = factory.getFStat1D();
+        FStat1D fStatY = factory.getFStat1D();
+
+        for (int i = 0 ; i < size() ; i++) {
+            if (filter.apply(getX(i), getY(i))) {
+                fStatX.add(getX(i));
+                fStatY.add(getY(i));
+            }
+        }
+
+        setRefFStatX(fStatX);
+        setRefFStatY(fStatY);
+
+        return oldSize - size();
+    }
+
+    @Override
+    public void setY(FPoly est) {
+
+        mutateY((x, y) -> est.getValue(x));
+    }
+
+    @Override
+    public void mutateFStat(Consumer<FStat1D> consumer) {
+
+        consumer.accept(getRefFStatX());
+        consumer.accept(getRefFStatY());
+
+        if (getRefFStatX().size() != getRefFStatY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+    }
+
+    @Override
+    public void mutateFStat(BiConsumer<FStat1D, FStat1D> consumer) {
+
+        consumer.accept(getRefFStatX(), getRefFStatY());
+
+        if (getRefFStatX().size() != getRefFStatY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+    }
+
+    @Override
+    public void mutateX(BiFunction<Double, Double, Double> function) {
+
+        for (int i = 0 ; i < size() ; i++) {
+            setX(i, function.apply(getX(i), getY(i)));
+        }
+    }
+
+    @Override
+    public void mutateFStatX(Consumer<FStat1D> consumer) {
+
+        consumer.accept(getRefFStatX());
+
+        if (getRefFStatX().size() != getRefFStatY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+    }
+
+    @Override
+    public void mutateY(BiFunction<Double, Double, Double> function) {
+
+        for (int i = 0 ; i < size() ; i++) {
+            setY(i, function.apply(getX(i), getY(i)));
+        }
+    }
+
+    @Override
+    public void mutateFStatY(Consumer<FStat1D> consumer) {
+
+        consumer.accept(getRefFStatY());
+
+        if (getRefFStatX().size() != getRefFStatY().size()) {
+            throw new IllegalStateException("The number of elements is erroneous");
+        }
+    }
+
+    @Override
+    public void interpolate(double step, boolean overflow) {
+
+        if (step <= 0) {
+            throw new IllegalArgumentException("The step value must be greater than zero");
+        }
+
+        double minX = getRefFStatX().min();
+        double maxX = getRefFStatX().max();
+
+        FStat1D fStatX = factory.getFStat1D();
+        FStat1D fStatY = factory.getFStat1D();
+
+        double value = minX;
+        while (value < maxX) {
+            fStatX.add(value);
+            fStatY.add(approximate(value));
+
+            value += step;
+        }
+
+        if (overflow) {
+            fStatX.add(value);
+            fStatY.add(approximate(maxX));
+        }
+
+        setRefFStatX(fStatX);
+        setRefFStatY(fStatY);
+    }
+
+    @Override
+    public void interpolate(double divisions) {
+
+        if (divisions < 1) {
+            throw new IllegalArgumentException("The number of divisions cannot be smaller then one");
+        }
+
+        double minX = getRefFStatX().min();
+        double maxX = getRefFStatX().max();
+
+        double step = (maxX - minX) / divisions;
+
+        FStat1D fStatX = factory.getFStat1D();
+        FStat1D fStatY = factory.getFStat1D();
+
+        double value = minX;
+        while (value < maxX) {
+            fStatX.add(value);
+            fStatY.add(approximate(value));
+
+            value += step;
+        }
+
+        fStatX.add(maxX);
+        fStatY.add(approximate(maxX));
+
+        setRefFStatX(fStatX);
+        setRefFStatY(fStatY);
+    }
+
+    @Override
+    public void sortX(boolean ascending) {
+        List<FPos2D> data = new ArrayList<>(size());
+
+        forEach((x, y, index) -> data.add(factory.getFPos2D(x, y)));
+
+        if (ascending) {
+            sortAscX(data);
+        } else {
+            sortDscX(data);
+        }
+
+        for (int i = 0 ; i < size() ; i++) {
+            FPos2D item = data.get(i);
+            setX(i, item.getD0());
+            setY(i, item.getD1());
+        }
+    }
+
+    @Override
+    public void sortY(boolean ascending) {
+        List<FPos2D> data = new ArrayList<>(size());
+
+        forEach((x, y, index) -> data.add(factory.getFPos2D(x, y)));
+
+        if (ascending) {
+            sortAscY(data);
+        } else {
+            sortDscY(data);
+        }
+
+        for (int i = 0 ; i < size() ; i++) {
+            FPos2D item = data.get(i);
+            setX(i, item.getD0());
+            setY(i, item.getD1());
+        }
+    }
+
+    @Override
     public void swapXY() {
         double swap;
 
-        for (FPlot2DRecord record : getData()) {
-            swap = record.getX();
-            record.setX(record.getY());
-            record.setY(swap);
+        for (int i = 0 ; i < size() ; i++) {
+            swap = getX(i);
+            setX(i, getY(i));
+            setY(i, swap);
+        }
+    }
+
+//    @Override
+//    public void log(double base, boolean x, boolean y) {
+//        double denominator = Math.log(base);
+//
+//        if (x) {
+//            mutateX((dx, dy) -> Math.log(dx) / denominator);
+//        }
+//
+//        if (y) {
+//            mutateY((dx, dy) -> Math.log(dy) / denominator);
+//        }
+//    }
+
+    @Override
+    public void forEach(TriConsumer<Double, Double, Integer> consumer) {
+        Iterator<Double> iteratorX = getRefFStatX().iterator();
+        Iterator<Double> iteratorY = getRefFStatY().iterator();
+
+        for (int i = 0; i < getRefFStatX().size() ; i++) {
+            consumer.accept(iteratorX.next(), iteratorY.next(), i);
         }
     }
 
     @Override
-    public void log(double base, boolean x, boolean y) {
-        double denominator = Math.log(base);
+    public double[][] toArray() {
+        double [][] values = new double[2][size()];
 
-        if (x) {
-            mutateX((dx, dy) -> Math.log(dx) / denominator);
-        }
+        forEach((x, y, i) -> {
+            values[0][i] = x;
+            values[1][i] = y;
+        });
 
-        if (y) {
-            mutateY((dx, dy) -> Math.log(dy) / denominator);
-        }
-    }
-
-    @Override
-    public void forEach(BiConsumer<Double, Double> consumer) {
-
-        for (FPlot2DRecord record : getData()) {
-            consumer.accept(record.getX(), record.getY());
-        }
+        return values;
     }
 
     @Override
@@ -563,28 +498,133 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public double[][] toArray() {
-        double [][] values = new double[2][size()];
+    public FStat1D getRefFStatX() {
 
-        for (int i = 0 ; i < size() ; i++) {
-            values[0][i] = getX(i);
-            values[1][i] = getY(i);
-        }
+        return this.dataX;
+    }
 
-        return values;
+    @Override
+    public void setRefFStatX(FStat1D fStat1DX) {
+
+        this.dataX = fStat1DX;
+    }
+
+    @Override
+    public FStat1D getRefFStatY() {
+
+        return this.dataY;
+    }
+
+    @Override
+    public void setRefFStatY(FStat1D fStat1DY) {
+
+        this.dataY = fStat1DY;
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    private void add(FPlot2DRecord record) {
+    private int getIndexXRound(double x) {
+        double valueMin = Double.POSITIVE_INFINITY;
+        int index = -1;
 
-        getData().add(record);
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getX(i);
+
+            double abs = Math.abs(x - value);
+            if (abs < valueMin) {
+                valueMin = abs;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexYRound(double y) {
+        double valueMin = Double.POSITIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getY(i);
+
+            double abs = Math.abs(y - value);
+            if (abs < valueMin) {
+                valueMin = abs;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexXCeil(double x) {
+        double valueMax = Double.POSITIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getX(i);
+
+            if (value < valueMax && value >= x) {
+                valueMax = value;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexYCeil(double y) {
+        double valueMax = Double.POSITIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getY(i);
+
+            if (value < valueMax && value >= y) {
+                valueMax = value;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexXFloor(double x) {
+        double valueMin = Double.NEGATIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getX(i);
+
+            if (value > valueMin && value <= x) {
+                valueMin = value;
+                index = i;
+            }
+        }
+
+        return index;
+    }
+
+    private int getIndexYFloor(double y) {
+        double valueMin = Double.NEGATIVE_INFINITY;
+        int index = -1;
+
+        for (int i = 0 ; i < size() ; i++) {
+            double value = getY(i);
+
+            if (value > valueMin && value <= y) {
+                valueMin = value;
+                index = i;
+            }
+        }
+
+        return index;
     }
 
     private int position(double x) {
 
-        for (int i = 0 ; i < this.data.size() ; i++) {
-            if (this.data.get(i).getX() == x) {
+        for (int i = 0 ; i < size() ; i++) {
+            if (getX(i) == x) {
                 return i;
             }
         }
@@ -592,27 +632,53 @@ public class FPlot2DDef implements FPlot2D {
         return -1;
     }
 
-    private void sortAscX() {
+    private void sortAscX(List<FPos2D> data) {
 
-        this.data.sort((a, b) -> a.getX() - b.getX() > 0 ? 1 : a.getX() == b.getX() ? 0 : -1);
+        data.sort((a, b) -> a.getD0() - b.getD0() > 0 ? 1 : a.getD0() == b.getD0() ? 0 : -1);
     }
 
-    private void sortDscX() {
+    private void sortDscX(List<FPos2D> data) {
 
-        this.data.sort((a, b) -> a.getX() - b.getX() < 0 ? 1 : a.getX() == b.getX() ? 0 : -1);
+        data.sort((a, b) -> a.getD0() - b.getD0() < 0 ? 1 : a.getD0() == b.getD0() ? 0 : -1);
     }
 
-    private void sortAscY() {
+    private void sortAscY(List<FPos2D> data) {
 
-        this.data.sort((a, b) -> a.getY() - b.getY() > 0 ? 1 : a.getY() == b.getY() ? 0 : -1);
+        data.sort((a, b) -> a.getD1() - b.getD1() > 0 ? 1 : a.getD1() == b.getD1() ? 0 : -1);
     }
 
-    private void sortDscY() {
+    private void sortDscY(List<FPos2D> data) {
 
-        this.data.sort((a, b) -> a.getY() - b.getY() < 0 ? 1 : a.getY() == b.getY() ? 0 : -1);
+        data.sort((a, b) -> a.getD1() - b.getD1() < 0 ? 1 : a.getD1() == b.getD1() ? 0 : -1);
     }
 
     //--------------------------------------------------
+
+    @Override
+    public int size() {
+
+        return getRefFStatX().size();
+    }
+
+    @Override
+    public void clear() {
+
+        getRefFStatX().clear();
+        getRefFStatY().clear();
+    }
+
+    @Override
+    public FPlot2D copy() {
+        FPlot2D fPlot = factory.getFPlot2D();
+
+        fPlot.getInterpolator().setMethod(getInterpolator().getMethod());
+        fPlot.getInterpolator().setHermiteBias(getInterpolator().getHermiteBias());
+        fPlot.getInterpolator().setHermiteTension(getInterpolator().getHermiteTension());
+
+        forEach((x, y, index) -> fPlot.add(x, y));
+
+        return fPlot;
+    }
 
     @Override
     public boolean isEqual(FPlot2D fPlot2D) {
@@ -621,17 +687,7 @@ public class FPlot2DDef implements FPlot2D {
             return false;
         }
 
-        if (this.size() != fPlot2D.size()) {
-            return false;
-        }
-
-        for (int i = 0 ; i < this.size() ; i++) {
-            if (this.getX(i) != fPlot2D.getX(i) || this.getY(i) != fPlot2D.getY(i)) {
-                return false;
-            }
-        }
-
-        return true;
+        return isEqualData(fPlot2D);
     }
 
     @Override
@@ -641,13 +697,7 @@ public class FPlot2DDef implements FPlot2D {
             return false;
         }
 
-        for (int i = 0 ; i < this.size() ; i++) {
-            if (this.getX(i) != fPlot2D.getX(i) || this.getY(i) != fPlot2D.getY(i)) {
-                return false;
-            }
-        }
-
-        return true;
+        return this.getRefFStatX().isEqualData(fPlot2D.getRefFStatX()) && this.getRefFStatY().isEqualData(fPlot2D.getRefFStatY());
     }
 
     @Override
@@ -655,15 +705,14 @@ public class FPlot2DDef implements FPlot2D {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_DATA_X, getRefFStatX().toJSON());
+        json.put(JSON_DATA_Y, getRefFStatY().toJSON());
         json.put(JSON_INT, getInterpolator().toJSON());
-
-        for (FPlot2DRecord record : this.data) {
-            json.append(JSON_DATA, record.toJSON());
-        }
 
         return json;
     }
 
+    @Override
     public String toString() {
 
         return toJSON().toString();
@@ -683,25 +732,11 @@ public class FPlot2DDef implements FPlot2D {
         this.name = name;
     }
 
-    //--------------------------------------------------
-
     @Override
-    public FPlot2DRecord getRecord(int index) {
+    public FPos2D getRecord(int index) {
 
-        return getData().get(index);
+        return factory.getFPos2D(getX(index), getY(index));
     }
-
-    private List<FPlot2DRecord> getData() {
-
-        return this.data;
-    }
-
-    private void setData(List<FPlot2DRecord> data) {
-
-        this.data = data;
-    }
-
-
 }
 
 // https://paulbourke.net/miscellaneous/interpolation/

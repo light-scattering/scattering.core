@@ -13,8 +13,6 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     void add(double value);
     void add(double... value);
-    void add(Function<Double, Double> collision, double value); // Is this needed?
-    void add(Function<Double, Double> collision, double... value); // Add conditional
 
     double get(int index);
     void set(int index, double value);
@@ -75,6 +73,8 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     // -------------------------------------------------------------------------------------------------
 
+    void log(double base);
+
     void mutate(Function<Double, Double> function);
     void mutate(boolean dynamic, BiFunction<Double, Double, Double> function);
 
@@ -86,6 +86,7 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     void spread();
 
     void absolute();
+    void distribute();
 
     void normalize(boolean sample);
     void normalize(double mean, double std);
@@ -129,9 +130,15 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     FStat1D replaceIncreasingWithNaN();
 
     @Modificator
-    List<Double> getData();
+    List<Double> getRefData();
     @Modificator
-    void setData(List<Double> data);
+    void setRefData(List<Double> data);
 
+    // -------------------------------------------------------------------------------------------------
+
+    default void ln() {
+
+        log(Math.E);
+    }
     // Different 'toString'
 }

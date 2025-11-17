@@ -2,7 +2,7 @@ package eu.scattering.core.impl.statistics.construct;
 
 import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
-import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONObject;
 
 public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
@@ -85,15 +85,15 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexR2 = getIndexR1(data, x);
 
         if (indexL1 == indexR2) {
-            return data.getRecord(indexL1).getY();
+            return data.getY(indexL1);
         }
 
-        FPlot2DRecord recordL1 = data.getRecord(indexL1);
-        FPlot2DRecord recordR1 = data.getRecord(indexR2);
+        FPos2D recordL1 = data.getRecord(indexL1);
+        FPos2D recordR1 = data.getRecord(indexR2);
 
-        double tmp = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
+        double tmp = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
 
-        return recordL1.getY() * (1 - tmp) + (recordR1.getY() * tmp);
+        return recordL1.getD1() * (1 - tmp) + (recordR1.getD1() * tmp);
     }
 
     @Override
@@ -102,16 +102,16 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexR2 = getIndexR1(data, x);
 
         if (indexL1 == indexR2) {
-            return data.getRecord(indexL1).getY();
+            return data.getY(indexL1);
         }
 
-        FPlot2DRecord recordL1 = data.getRecord(indexL1);
-        FPlot2DRecord recordR1 = data.getRecord(indexR2);
+        FPos2D recordL1 = data.getRecord(indexL1);
+        FPos2D recordR1 = data.getRecord(indexR2);
 
-        double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
+        double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = (1 - Math.cos(tmp1 * Math.PI)) / 2;
 
-        return recordL1.getY() * (1 - tmp2) + (recordR1.getY() * tmp2);
+        return recordL1.getD1() * (1 - tmp2) + (recordR1.getD1() * tmp2);
     }
 
     @Override
@@ -120,24 +120,24 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexR1 = getIndexR1(data, x);
 
         if (indexL1 == indexR1) {
-            return data.getRecord(indexL1).getY();
+            return data.getY(indexL1);
         }
 
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPlot2DRecord recordL2 = data.getRecord(indexL2);
-        FPlot2DRecord recordL1 = data.getRecord(indexL1);
-        FPlot2DRecord recordR1 = data.getRecord(indexR1);
-        FPlot2DRecord recordR2 = data.getRecord(indexR2);
+        FPos2D recordL2 = data.getRecord(indexL2);
+        FPos2D recordL1 = data.getRecord(indexL1);
+        FPos2D recordR1 = data.getRecord(indexR1);
+        FPos2D recordR2 = data.getRecord(indexR2);
 
-        double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
+        double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
 
-        double a0 = recordR2.getY() - recordR1.getY() - recordL2.getY() + recordR1.getY();
-        double a1 = recordL2.getY() - recordL1.getY() - a0;
-        double a2 = recordR1.getY() - recordL2.getY();
-        double a3 = recordL1.getY();
+        double a0 = recordR2.getD1() - recordR1.getD1() - recordL2.getD1() + recordR1.getD1();
+        double a1 = recordL2.getD1() - recordL1.getD1() - a0;
+        double a2 = recordR1.getD1() - recordL2.getD1();
+        double a3 = recordL1.getD1();
 
         return (a0 * tmp1 * tmp2) + (a1 * tmp2) + (a2 * tmp1) + a3;
     }
@@ -148,24 +148,24 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexR1 = getIndexR1(data, x);
 
         if (indexL1 == indexR1) {
-            return data.getRecord(indexL1).getY();
+            return data.getY(indexL1);
         }
 
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPlot2DRecord recordL2 = data.getRecord(indexL2);
-        FPlot2DRecord recordL1 = data.getRecord(indexL1);
-        FPlot2DRecord recordR1 = data.getRecord(indexR1);
-        FPlot2DRecord recordR2 = data.getRecord(indexR2);
+        FPos2D recordL2 = data.getRecord(indexL2);
+        FPos2D recordL1 = data.getRecord(indexL1);
+        FPos2D recordR1 = data.getRecord(indexR1);
+        FPos2D recordR2 = data.getRecord(indexR2);
 
-        double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
+        double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
 
-        double a0 = (-0.5 * recordL2.getY()) + (1.5 * recordL1.getY()) - (1.5 * recordR1.getY()) + (0.5 * recordR2.getY());
-        double a1 = recordL2.getY() - (2.5 * recordL1.getY()) + (2 * recordR1.getY()) - (0.5 * recordR2.getY());
-        double a2 = (-0.5 * recordL2.getY()) + (0.5 * recordR1.getY());
-        double a3 = recordL1.getY();
+        double a0 = (-0.5 * recordL2.getD1()) + (1.5 * recordL1.getD1()) - (1.5 * recordR1.getD1()) + (0.5 * recordR2.getD1());
+        double a1 = recordL2.getD1() - (2.5 * recordL1.getD1()) + (2 * recordR1.getD1()) - (0.5 * recordR2.getD1());
+        double a2 = (-0.5 * recordL2.getD1()) + (0.5 * recordR1.getD1());
+        double a3 = recordL1.getD1();
 
         return (a0 * tmp1 * tmp2) + (a1 * tmp2) + (a2 * tmp1) + a3;
     }
@@ -176,25 +176,25 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexR1 = getIndexR1(data, x);
 
         if (indexL1 == indexR1) {
-            return data.getRecord(indexL1).getY();
+            return data.getY(indexL1);
         }
 
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPlot2DRecord recordL2 = data.getRecord(indexL2);
-        FPlot2DRecord recordL1 = data.getRecord(indexL1);
-        FPlot2DRecord recordR1 = data.getRecord(indexR1);
-        FPlot2DRecord recordR2 = data.getRecord(indexR2);
+        FPos2D recordL2 = data.getRecord(indexL2);
+        FPos2D recordL1 = data.getRecord(indexL1);
+        FPos2D recordR1 = data.getRecord(indexR1);
+        FPos2D recordR2 = data.getRecord(indexR2);
 
-        double tmp1 = (x - recordL1.getX()) / (recordR1.getX() - recordL1.getX());
+        double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
         double tmp3 = tmp2 * tmp1;
 
-        double m0 = (recordL1.getY() - recordL2.getY()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
-        m0 += (recordR1.getY() - recordL1.getY()) * (1 - this.hBias) * ((1 - this.hTension) / 2);
-        double m1 = (recordR1.getY() - recordL1.getY()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
-        m1 += (recordR2.getY() - recordR1.getY()) * ( 1 - this.hBias) * ((1 - this.hTension) / 2);
+        double m0 = (recordL1.getD1() - recordL2.getD1()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
+        m0 += (recordR1.getD1() - recordL1.getD1()) * (1 - this.hBias) * ((1 - this.hTension) / 2);
+        double m1 = (recordR1.getD1() - recordL1.getD1()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
+        m1 += (recordR2.getD1() - recordR1.getD1()) * ( 1 - this.hBias) * ((1 - this.hTension) / 2);
 
 
         double a0 = (2 * tmp3) - (3 * tmp2) + 1;
@@ -202,13 +202,13 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         double a2 = tmp3 - tmp2;
         double a3 = (-2 * tmp3) + (3 * tmp2);
 
-        return (a0 * recordL1.getY()) + (a1 * m0) + (a2 * m1) + (a3 * recordR1.getY());
+        return (a0 * recordL1.getD1()) + (a1 * m0) + (a2 * m1) + (a3 * recordR1.getD1());
     }
 
     //--------------------------------------------------
 
     private int getIndexL1(FPlot2D data, double x) {
-        int indexL1 = data.getIndexFloor(x);
+        int indexL1 = data.getIndexX(FPlot2D.Index.FLOOR, x);
 
         if (indexL1 == -1) {
             throw new IllegalArgumentException("The provided value is out of range");
@@ -218,7 +218,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     private int getIndexR1(FPlot2D data, double x) {
-        int indexR1 = data.getIndexCeil(x);
+        int indexR1 = data.getIndexX(FPlot2D.Index.CEIL, x);
 
         if (indexR1 == -1) {
             throw new IllegalArgumentException("The provided value is out of range");

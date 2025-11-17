@@ -348,24 +348,6 @@ public class FPlot2DTest {
         }
 
         @Test
-        @DisplayName("Configure")
-        void configure() {
-            FPlot2D fPlot = factory.getFPlot2D();
-
-            fPlot.getInterpolator().setHermiteBias(2);
-
-            assertEquals(2, fPlot.getInterpolator().getHermiteBias());
-
-            fPlot.getInterpolator().setHermiteTension(3);
-
-            assertEquals(3, fPlot.getInterpolator().getHermiteTension());
-
-            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.COSINE);
-
-            assertEquals(FPlot2DInterpolator.Method.COSINE, fPlot.getInterpolator().getMethod());
-        }
-
-        @Test
         @DisplayName("Copy")
         void copy() {
             FPlot2D fPlotA = factory.getFPlot2D();
@@ -384,6 +366,24 @@ public class FPlot2DTest {
             assertTrue(fPlotA.isEqual(fPlotB));
             assertTrue(fPlotB.isEqual(fPlotA));
         }
+
+        @Test
+        @DisplayName("Configure")
+        void configure() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.getInterpolator().setHermiteBias(2);
+
+            assertEquals(2, fPlot.getInterpolator().getHermiteBias());
+
+            fPlot.getInterpolator().setHermiteTension(3);
+
+            assertEquals(3, fPlot.getInterpolator().getHermiteTension());
+
+            fPlot.getInterpolator().setMethod(FPlot2DInterpolator.Method.COSINE);
+
+            assertEquals(FPlot2DInterpolator.Method.COSINE, fPlot.getInterpolator().getMethod());
+        }
     }
 
     @Nested
@@ -392,8 +392,66 @@ public class FPlot2DTest {
     class FPlot2DAdvancedTest {
 
         @Test
-        @DisplayName("Get stat X")
-        void getStatX() {
+        @DisplayName("Get with FStat1D")
+        void getWithFStat1D() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 2);
+            fPlot.add(3, 4);
+            fPlot.add(5, 6);
+
+            assertEquals(7d, fPlot.getWithFStat((x, y) -> x.max() + y.min()));
+            assertEquals(2d, fPlot.getWithFStat((x, y) -> {
+                x.add(1);
+                y.add(1);
+                return x.min() + y.min();
+            }));
+
+            assertThrows(IllegalStateException.class, () -> fPlot.getWithFStat((x, y) -> {
+                x.add(1);
+                return x.min() + y.min();
+            }));
+        }
+
+        @Test
+        @DisplayName("Get with FStat1D X")
+        void getWithFStat1DX() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 2);
+            fPlot.add(3, 4);
+            fPlot.add(5, 6);
+
+            assertEquals(1d, fPlot.getWithFStatX(FStat1D::min));
+            assertEquals(5d, fPlot.getWithFStatX(FStat1D::max));
+
+            assertThrows(IllegalStateException.class, () -> fPlot.getWithFStatX((data) -> {
+                data.add(1);
+                return data.min();
+            }));
+        }
+
+        @Test
+        @DisplayName("Get with FStat1D Y")
+        void getWithFStat1DY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, 2);
+            fPlot.add(3, 4);
+            fPlot.add(5, 6);
+
+            assertEquals(2d, fPlot.getWithFStatY(FStat1D::min));
+            assertEquals(6d, fPlot.getWithFStatY(FStat1D::max));
+
+            assertThrows(IllegalStateException.class, () -> fPlot.getWithFStatY((data) -> {
+                data.add(1);
+                return data.min();
+            }));
+        }
+
+        @Test
+        @DisplayName("Get ref FStat1D X")
+        void getRefFStat1DX() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(1, 2);
@@ -404,14 +462,14 @@ public class FPlot2DTest {
 
             fStatRef.add(1, 3, 5);
 
-            FStat1D fStat = fPlot.getStatX();
+            FStat1D fStat = fPlot.getRefFStatX();
 
             assertTrue(fStatRef.isEqual(fStat));
         }
 
         @Test
-        @DisplayName("Set stat X")
-        void setStatX() {
+        @DisplayName("Set ref FStat1D X")
+        void setRefFStat1DX() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(1, 2);
@@ -420,19 +478,9 @@ public class FPlot2DTest {
 
             FStat1D fStat = factory.getFStat1D();
 
-            fStat.add(1, 3, 5, 7);
-
-            assertThrows(IllegalArgumentException.class, () -> fPlot.setStatX(fStat));
-
-            fStat.clear();
-            fStat.add(1, 1, 5);
-
-            assertThrows(IllegalArgumentException.class, () -> fPlot.setStatX(fStat));
-
-            fStat.clear();
             fStat.add(-1, -3, -5);
 
-            fPlot.setStatX(fStat);
+            fPlot.setRefFStatX(fStat);
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(3, fPlot.size()),
@@ -443,24 +491,11 @@ public class FPlot2DTest {
                     () -> assertEquals(4, fPlot.getY(1)),
                     () -> assertEquals(6, fPlot.getY(2))
             );
-
-            fStat.clear();
-            fStat.add(1, Double.NaN, 5);
-
-            fPlot.setStatX(fStat);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertEquals(2, fPlot.size()),
-                    () -> assertEquals(1, fPlot.getX(0)),
-                    () -> assertEquals(5, fPlot.getX(1)),
-                    () -> assertEquals(2, fPlot.getY(0)),
-                    () -> assertEquals(6, fPlot.getY(1))
-            );
         }
 
         @Test
-        @DisplayName("Get stat Y")
-        void getStatY() {
+        @DisplayName("Get ref FStat1D Y")
+        void getRefFStat1DY() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(1, 2);
@@ -471,14 +506,14 @@ public class FPlot2DTest {
 
             fStatRef.add(2, 4, 6);
 
-            FStat1D fStat = fPlot.getStatY();
+            FStat1D fStat = fPlot.getRefFStatY();
 
             assertTrue(fStatRef.isEqual(fStat));
         }
 
         @Test
-        @DisplayName("Set stat Y")
-        void setStatY() {
+        @DisplayName("Set ref FStat1D Y")
+        void setRefFStat1DY() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(1, 2);
@@ -487,14 +522,9 @@ public class FPlot2DTest {
 
             FStat1D fStat = factory.getFStat1D();
 
-            fStat.add(1, 3, 5, 7);
-
-            assertThrows(IllegalArgumentException.class, () -> fPlot.setStatY(fStat));
-
-            fStat.clear();
             fStat.add(-2, -4, -6);
 
-            fPlot.setStatY(fStat);
+            fPlot.setRefFStatY(fStat);
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(3, fPlot.size()),
@@ -505,132 +535,233 @@ public class FPlot2DTest {
                     () -> assertEquals(-4, fPlot.getY(1)),
                     () -> assertEquals(-6, fPlot.getY(2))
             );
-
-            fStat.clear();
-            fStat.add(2, Double.NaN, 6);
-
-            fPlot.setStatY(fStat);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertEquals(2, fPlot.size()),
-                    () -> assertEquals(1, fPlot.getX(0)),
-                    () -> assertEquals(5, fPlot.getX(1)),
-                    () -> assertEquals(2, fPlot.getY(0)),
-                    () -> assertEquals(6, fPlot.getY(1))
-            );
         }
 
         @Test
-        @DisplayName("Get index round (sorted)")
-        void getIndexRoundSorted() {
+        @DisplayName("Get index  X round (sorted)")
+        void getIndexXRoundSorted() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
             fPlot.add(0, 0);
             fPlot.add(1, -1);
-            fPlot.add(2, -1);
+            fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(4, fPlot.getIndex(1.8)),
-                    () -> assertEquals(1, fPlot.getIndex(-1.1)),
-                    () -> assertEquals(4, fPlot.getIndex(100)),
-                    () -> assertEquals(0, fPlot.getIndex(-100))
+                    () -> assertEquals(4, fPlot.getIndexX(FPlot2D.Index.ROUND, 1.8)),
+                    () -> assertEquals(1, fPlot.getIndexX(FPlot2D.Index.ROUND, -1.1)),
+                    () -> assertEquals(4, fPlot.getIndexX(FPlot2D.Index.ROUND, 100)),
+                    () -> assertEquals(0, fPlot.getIndexX(FPlot2D.Index.ROUND, -100))
             );
         }
 
         @Test
-        @DisplayName("Get index round (random)")
-        void getIndexRoundRandom() {
+        @DisplayName("Get index X round (random)")
+        void getIndexXRoundRandom() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(1, -1);
             fPlot.add(0, 0);
             fPlot.add(-2, 2);
-            fPlot.add(2, -1);
+            fPlot.add(2, -2);
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlot.getIndex(1.8)),
-                    () -> assertEquals(4, fPlot.getIndex(-1.1)),
-                    () -> assertEquals(3, fPlot.getIndex(100)),
-                    () -> assertEquals(2, fPlot.getIndex(-100))
+                    () -> assertEquals(3, fPlot.getIndexX(FPlot2D.Index.ROUND, 1.8)),
+                    () -> assertEquals(4, fPlot.getIndexX(FPlot2D.Index.ROUND, -1.1)),
+                    () -> assertEquals(3, fPlot.getIndexX(FPlot2D.Index.ROUND, 100)),
+                    () -> assertEquals(2, fPlot.getIndexX(FPlot2D.Index.ROUND, -100))
             );
         }
 
         @Test
-        @DisplayName("Get index floor (sorted)")
-        void getIndexFloorSorted() {
-            FPlot2D fPlot = factory.getFPlot2D();
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, -1);
-            fPlot.add(2, -1);
-
-            Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlot.getIndexFloor(1.8)),
-                    () -> assertEquals(0, fPlot.getIndexFloor(-1.1)),
-                    () -> assertEquals(4, fPlot.getIndexFloor(100)),
-                    () -> assertEquals(-1, fPlot.getIndexFloor(-100))
-            );
-        }
-
-        @Test
-        @DisplayName("Get index floor (random)")
-        void getIndexFloorRandom() {
-            FPlot2D fPlot = factory.getFPlot2D();
-
-            fPlot.add(1, -1);
-            fPlot.add(0, 0);
-            fPlot.add(-2, 2);
-            fPlot.add(2, -1);
-            fPlot.add(-1, 1);
-
-            Assertions.assertAll("Check indexes",
-                    () -> assertEquals(0, fPlot.getIndexFloor(1.8)),
-                    () -> assertEquals(2, fPlot.getIndexFloor(-1.1)),
-                    () -> assertEquals(3, fPlot.getIndexFloor(100)),
-                    () -> assertEquals(-1, fPlot.getIndexFloor(-100))
-            );
-        }
-
-        @Test
-        @DisplayName("Get index ceil (sorted)")
-        void getIndexCeilSorted() {
+        @DisplayName("Get index X floor (sorted)")
+        void getIndexXFloorSorted() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
             fPlot.add(0, 0);
             fPlot.add(1, -1);
-            fPlot.add(2, -1);
+            fPlot.add(2, -2);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(3, fPlot.getIndexCeil(0.8)),
-                    () -> assertEquals(1, fPlot.getIndexCeil(-1.1)),
-                    () -> assertEquals(-1, fPlot.getIndexCeil(100)),
-                    () -> assertEquals(0, fPlot.getIndexCeil(-100))
+                    () -> assertEquals(3, fPlot.getIndexX(FPlot2D.Index.FLOOR, 1.8)),
+                    () -> assertEquals(0, fPlot.getIndexX(FPlot2D.Index.FLOOR, -1.1)),
+                    () -> assertEquals(4, fPlot.getIndexX(FPlot2D.Index.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexX(FPlot2D.Index.FLOOR, -100))
             );
         }
 
         @Test
-        @DisplayName("Get index ceil (random)")
-        void getIndexCeilRandom() {
+        @DisplayName("Get index X floor (random)")
+        void getIndexXFloorRandom() {
             FPlot2D fPlot = factory.getFPlot2D();
 
             fPlot.add(1, -1);
             fPlot.add(0, 0);
             fPlot.add(-2, 2);
-            fPlot.add(2, -1);
+            fPlot.add(2, -2);
             fPlot.add(-1, 1);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(0, fPlot.getIndexCeil(0.8)),
-                    () -> assertEquals(4, fPlot.getIndexCeil(-1.1)),
-                    () -> assertEquals(-1, fPlot.getIndexCeil(100)),
-                    () -> assertEquals(2, fPlot.getIndexCeil(-100))
+                    () -> assertEquals(0, fPlot.getIndexX(FPlot2D.Index.FLOOR, 1.8)),
+                    () -> assertEquals(2, fPlot.getIndexX(FPlot2D.Index.FLOOR, -1.1)),
+                    () -> assertEquals(3, fPlot.getIndexX(FPlot2D.Index.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexX(FPlot2D.Index.FLOOR, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index X ceil (sorted)")
+        void getIndexXCeilSorted() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(3, fPlot.getIndexX(FPlot2D.Index.CEIL, 0.8)),
+                    () -> assertEquals(1, fPlot.getIndexX(FPlot2D.Index.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexX(FPlot2D.Index.CEIL, 100)),
+                    () -> assertEquals(0, fPlot.getIndexX(FPlot2D.Index.CEIL, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index X ceil (random)")
+        void getIndexXCeilRandom() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, -1);
+            fPlot.add(0, 0);
+            fPlot.add(-2, 2);
+            fPlot.add(2, -2);
+            fPlot.add(-1, 1);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(0, fPlot.getIndexX(FPlot2D.Index.CEIL, 0.8)),
+                    () -> assertEquals(4, fPlot.getIndexX(FPlot2D.Index.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexX(FPlot2D.Index.CEIL, 100)),
+                    () -> assertEquals(2, fPlot.getIndexX(FPlot2D.Index.CEIL, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index  Y round (sorted)")
+        void getIndexYRoundSorted() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(0, fPlot.getIndexY(FPlot2D.Index.ROUND, 1.8)),
+                    () -> assertEquals(3, fPlot.getIndexY(FPlot2D.Index.ROUND, -1.1)),
+                    () -> assertEquals(0, fPlot.getIndexY(FPlot2D.Index.ROUND, 100)),
+                    () -> assertEquals(4, fPlot.getIndexY(FPlot2D.Index.ROUND, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index Y round (random)")
+        void getIndexXYRoundRandom() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, -1);
+            fPlot.add(0, 0);
+            fPlot.add(-2, 2);
+            fPlot.add(2, -2);
+            fPlot.add(-1, 1);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(2, fPlot.getIndexY(FPlot2D.Index.ROUND, 1.8)),
+                    () -> assertEquals(0, fPlot.getIndexY(FPlot2D.Index.ROUND, -1.1)),
+                    () -> assertEquals(2, fPlot.getIndexY(FPlot2D.Index.ROUND, 100)),
+                    () -> assertEquals(3, fPlot.getIndexY(FPlot2D.Index.ROUND, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index Y floor (sorted)")
+        void getIndexYFloorSorted() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(1, fPlot.getIndexY(FPlot2D.Index.FLOOR, 1.8)),
+                    () -> assertEquals(4, fPlot.getIndexY(FPlot2D.Index.FLOOR, -1.1)),
+                    () -> assertEquals(0, fPlot.getIndexY(FPlot2D.Index.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexY(FPlot2D.Index.FLOOR, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index Y floor (random)")
+        void getIndexYFloorRandom() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, -1);
+            fPlot.add(0, 0);
+            fPlot.add(-2, 2);
+            fPlot.add(2, -2);
+            fPlot.add(-1, 1);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(4, fPlot.getIndexY(FPlot2D.Index.FLOOR, 1.8)),
+                    () -> assertEquals(3, fPlot.getIndexY(FPlot2D.Index.FLOOR, -1.1)),
+                    () -> assertEquals(2, fPlot.getIndexY(FPlot2D.Index.FLOOR, 100)),
+                    () -> assertEquals(-1, fPlot.getIndexY(FPlot2D.Index.FLOOR, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index Y ceil (sorted)")
+        void getIndexYCeilSorted() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(1, fPlot.getIndexY(FPlot2D.Index.CEIL, 0.8)),
+                    () -> assertEquals(3, fPlot.getIndexY(FPlot2D.Index.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexY(FPlot2D.Index.CEIL, 100)),
+                    () -> assertEquals(4, fPlot.getIndexY(FPlot2D.Index.CEIL, -100))
+            );
+        }
+
+        @Test
+        @DisplayName("Get index Y ceil (random)")
+        void getIndexYCeilRandom() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(1, -1);
+            fPlot.add(0, 0);
+            fPlot.add(-2, 2);
+            fPlot.add(2, -2);
+            fPlot.add(-1, 1);
+
+            Assertions.assertAll("Check indexes",
+                    () -> assertEquals(4, fPlot.getIndexY(FPlot2D.Index.CEIL, 0.8)),
+                    () -> assertEquals(0, fPlot.getIndexY(FPlot2D.Index.CEIL, -1.1)),
+                    () -> assertEquals(-1, fPlot.getIndexY(FPlot2D.Index.CEIL, 100)),
+                    () -> assertEquals(3, fPlot.getIndexY(FPlot2D.Index.CEIL, -100))
             );
         }
 
@@ -646,10 +777,10 @@ public class FPlot2DTest {
             fPlot.add(-1, 5);
 
             Assertions.assertAll("Check indexes",
-                    () -> assertEquals(-2, fPlot.minX()),
-                    () -> assertEquals(2, fPlot.maxX()),
-                    () -> assertEquals(-1, fPlot.minY()),
-                    () -> assertEquals(5, fPlot.maxY())
+                    () -> assertEquals(-2, fPlot.getRefFStatX().min()),
+                    () -> assertEquals(2, fPlot.getRefFStatX().max()),
+                    () -> assertEquals(-1, fPlot.getRefFStatY().min()),
+                    () -> assertEquals(5, fPlot.getRefFStatY().max())
             );
         }
 
@@ -960,6 +1091,58 @@ public class FPlot2DTest {
         }
 
         @Test
+        @DisplayName("Mutate FStat1D - Consumer")
+        void mutateFStat1DConsumer() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(2, 3);
+            fPlot.add(3, 4);
+
+            fPlot.mutateFStat((a) -> {
+                a.mutate((b) -> b * 2);
+            });
+
+            assertEquals(2, fPlot.size());
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(4, fPlot.getX(0)),
+                    () -> assertEquals(6, fPlot.getY(0)),
+                    () -> assertEquals(6, fPlot.getX(1)),
+                    () -> assertEquals(8, fPlot.getY(1))
+            );
+        }
+
+        @Test
+        @DisplayName("Mutate FStat1D - BiConsumer")
+        void mutateFStat1DBiConsumer() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(2, 3);
+            fPlot.add(3, 4);
+
+            fPlot.mutateFStat((a, b) -> {
+                a.mutate((c) -> c * 2);
+                b.mutate((c) -> c * 4);
+            });
+
+            assertEquals(2, fPlot.size());
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(4, fPlot.getX(0)),
+                    () -> assertEquals(12, fPlot.getY(0)),
+                    () -> assertEquals(6, fPlot.getX(1)),
+                    () -> assertEquals(16, fPlot.getY(1))
+            );
+
+            fPlot.mutateFStat((a, b) -> {
+                a.add(1);
+                b.add(1);
+            });
+
+            assertThrows(IllegalStateException.class, () -> fPlot.mutateFStat((a, b) -> a.add(1)));
+        }
+
+        @Test
         @DisplayName("Mutate X")
         void mutateX() {
             FPlot2D fPlot = factory.getFPlot2D();
@@ -977,6 +1160,28 @@ public class FPlot2DTest {
                     () -> assertEquals(10, fPlot.getX(1)),
                     () -> assertEquals(4, fPlot.getY(1))
             );
+        }
+
+        @Test
+        @DisplayName("Mutate FStat1D X")
+        void mutateFStat1DX() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(2, 3);
+            fPlot.add(3, 4);
+
+            fPlot.mutateFStatX((a) -> a.mutate((b) -> b * 2));
+
+            assertEquals(2, fPlot.size());
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(4, fPlot.getX(0)),
+                    () -> assertEquals(3, fPlot.getY(0)),
+                    () -> assertEquals(6, fPlot.getX(1)),
+                    () -> assertEquals(4, fPlot.getY(1))
+            );
+
+            assertThrows(IllegalStateException.class, () -> fPlot.mutateFStatX((x) -> x.add(1)));
         }
 
         @Test
@@ -1000,6 +1205,28 @@ public class FPlot2DTest {
         }
 
         @Test
+        @DisplayName("Mutate FStat1D Y")
+        void mutateFStat1DY() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(2, 3);
+            fPlot.add(3, 4);
+
+            fPlot.mutateFStatY((a) -> a.mutate((b) -> b * 2));
+
+            assertEquals(2, fPlot.size());
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fPlot.getX(0)),
+                    () -> assertEquals(6, fPlot.getY(0)),
+                    () -> assertEquals(3, fPlot.getX(1)),
+                    () -> assertEquals(8, fPlot.getY(1))
+            );
+
+            assertThrows(IllegalStateException.class, () -> fPlot.mutateFStatY((x) -> x.add(1)));
+        }
+
+        @Test
         @DisplayName("Interpolate")
         void interpolate() {
             FPlot2D fPlot = factory.getFPlot2D();
@@ -1016,8 +1243,8 @@ public class FPlot2DTest {
 
             Assertions.assertAll("Test values",
                     () -> assertEquals(40, fPlot.size(), 1),
-                    () -> assertEquals(-2, fPlot.minX(), 1E-6),
-                    () -> assertEquals(2, fPlot.maxX(), 1E-6),
+                    () -> assertEquals(-2, fPlot.getRefFStatX().min(), 1E-6),
+                    () -> assertEquals(2, fPlot.getRefFStatX().max(), 1E-6),
                     () -> assertEquals(1.5, fPlot.approximate(-1.5), 0.25),
                     () -> assertEquals(0.5, fPlot.approximate(-0.5), 0.25),
                     () -> assertEquals(0, fPlot.approximate(0), 0.25),
@@ -1057,10 +1284,10 @@ public class FPlot2DTest {
             fPlot.add(1, 1);
             fPlot.add(2, 2);
 
-            fPlot.distribute();
+            fPlot.mutateFStatY(FStat1D::distribute);
 
             Assertions.assertAll("Test values",
-                    () -> assertEquals(1, fPlot.getStatY().sum(), 1E-4),
+                    () -> assertEquals(1, fPlot.getRefFStatY().sum(), 1E-4),
                     () -> assertEquals(-2, fPlot.getX(0)),
                     () -> assertEquals(-1, fPlot.getX(1)),
                     () -> assertEquals(0, fPlot.getX(2)),
@@ -1196,7 +1423,7 @@ public class FPlot2DTest {
             AtomicInteger sumX = new AtomicInteger();
             AtomicInteger sumY = new AtomicInteger();
 
-            fPlot.forEach((x, y) -> {
+            fPlot.forEach((x, y, index) -> {
                 sumX.addAndGet((int) Math.round(x));
                 sumY.addAndGet((int) Math.round(y));
             });
@@ -1214,7 +1441,7 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.log(Math.E, true, false);
+            fPlot.mutateFStatX((e) -> e.log(Math.E));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
@@ -1235,7 +1462,7 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.log(Math.E, false, true);
+            fPlot.mutateFStatY((e) -> e.log(Math.E));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0), 1E-4),
@@ -1256,7 +1483,8 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.log(Math.E, true, true);
+            fPlot.mutateFStatX((e) -> e.log(Math.E));
+            fPlot.mutateFStatY((e) -> e.log(Math.E));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
@@ -1277,7 +1505,7 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.log(10, true, false);
+            fPlot.mutateFStatX((e) -> e.log(10));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log10(1), fPlot.getX(0), 1E-4),
@@ -1298,7 +1526,7 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.log(10, false, true);
+            fPlot.mutateFStatY((e) -> e.log(10));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0), 1E-4),
@@ -1319,7 +1547,8 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.log(10, true, true);
+            fPlot.mutateFStatX((e) -> e.log(10));
+            fPlot.mutateFStatY((e) -> e.log(10));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log10(1), fPlot.getX(0), 1E-4),
@@ -1340,7 +1569,7 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.ln(true, false);
+            fPlot.mutateFStatX(FStat1D::ln);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
@@ -1361,7 +1590,7 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.ln(false, true);
+            fPlot.mutateFStatY(FStat1D::ln);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0), 1E-4),
@@ -1382,7 +1611,8 @@ public class FPlot2DTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.ln(true, true);
+            fPlot.mutateFStatX(FStat1D::ln);
+            fPlot.mutateFStatY(FStat1D::ln);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),

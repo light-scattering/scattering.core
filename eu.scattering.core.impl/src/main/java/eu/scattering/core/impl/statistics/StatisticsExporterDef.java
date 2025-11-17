@@ -72,7 +72,7 @@ public class StatisticsExporterDef implements StatisticsExporter {
         builder.append("fig = go.Figure()\n");
 
         for (int i = 0 ; i < stat.length ; i++) {
-            List<String> x = stat[i].getData().stream().map(e -> "" + e).toList();
+            List<String> x = stat[i].getRefData().stream().map(e -> "" + e).toList();
             String name = stat[i].getName().isEmpty() ? "data " + i : stat[i].getName();
 
             builder.append("fig.add_trace(go.Histogram(");

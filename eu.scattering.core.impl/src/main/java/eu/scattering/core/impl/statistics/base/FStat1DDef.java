@@ -77,7 +77,7 @@ public class FStat1DDef implements FStat1D {
     public FStat1D copy() {
         FStat1D results = factory.getFStat1D();
 
-        getData().forEach(results::add);
+        getRefData().forEach(results::add);
 
         return results;
     }
@@ -85,19 +85,19 @@ public class FStat1DDef implements FStat1D {
     @Override
     public int size() {
 
-        return getData().size();
+        return getRefData().size();
     }
 
     @Override
     public void clear() {
 
-        getData().clear();
+        getRefData().clear();
     }
 
     @Override
     public void add(double value) {
 
-        getData().add(value);
+        getRefData().add(value);
     }
 
     @Override
@@ -109,48 +109,22 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public void add(Function<Double, Double> collision, double value) {
-        boolean isUpdated = false;
-
-        for (int i = 0 ; i < size() ; i++) {
-
-            if (get(i) == value) {
-                isUpdated = true;
-
-                set(i, collision.apply(value));
-            }
-        }
-
-        if (!isUpdated) {
-            add(value);
-        }
-    }
-
-    @Override
-    public void add(Function<Double, Double> collision, double... value) {
-
-        for (double v : value) {
-            add(collision, v);
-        }
-    }
-
-    @Override
     public double get(int index) {
 
-        return getData().get(index);
+        return getRefData().get(index);
     }
 
     @Override
     public void set(int index, double value) {
 
-        getData().set(index, value);
+        getRefData().set(index, value);
     }
 
     @Override
     public double min() {
         double min = Double.POSITIVE_INFINITY;
 
-        for (Double item : getData()) {
+        for (Double item : getRefData()) {
 
             if (item < min) {
                 min = item;
@@ -164,7 +138,7 @@ public class FStat1DDef implements FStat1D {
     public double max() {
         double max = Double.NEGATIVE_INFINITY;
 
-        for (Double item : getData()) {
+        for (Double item : getRefData()) {
 
             if (item > max) {
                 max = item;
@@ -189,7 +163,7 @@ public class FStat1DDef implements FStat1D {
     @Override
     public double sum() {
 
-        return getData().stream().reduce(0d, Double::sum);
+        return getRefData().stream().reduce(0d, Double::sum);
     }
 
     @Override
@@ -268,7 +242,7 @@ public class FStat1DDef implements FStat1D {
 
         FPlot2D fPlot = factory.getFPlot2D();
 
-        for (double v : getData()) {
+        for (double v : getRefData()) {
             fPlot.add((y1, y2) -> y1 + 1, v);
         }
 
@@ -298,7 +272,7 @@ public class FStat1DDef implements FStat1D {
     public double rms() {
         double sum = 0;
 
-        for (double value : getData()) {
+        for (double value : getRefData()) {
             sum += (value * value);
         }
 
@@ -316,7 +290,7 @@ public class FStat1DDef implements FStat1D {
     public double ss(double mean) {
         double sum = 0;
 
-        for (double value : getData()) {
+        for (double value : getRefData()) {
             sum += Math.pow(value - mean, 2);
         }
 
@@ -334,7 +308,7 @@ public class FStat1DDef implements FStat1D {
     public double mad(double mean) {
         double sum = 0;
 
-        for (double value : getData()) {
+        for (double value : getRefData()) {
             sum += Math.abs(value - mean);
         }
 
@@ -419,14 +393,14 @@ public class FStat1DDef implements FStat1D {
     @Override
     public boolean allDistinct() {
 
-        return getData().stream().distinct().toList().size() == size();
+        return getRefData().stream().distinct().toList().size() == size();
     }
 
     @Override
     public int filter(Function<Double, Boolean> function) {
         int oldSize = size();
 
-        setData(getData().stream().filter(function::apply).collect(Collectors.toList()));
+        setRefData(getRefData().stream().filter(function::apply).collect(Collectors.toList()));
 
         return oldSize - size();
     }
@@ -441,7 +415,7 @@ public class FStat1DDef implements FStat1D {
         List<Double> results = dynamic ? filterDynamic(function) : filterStatic(function);
         int count = size() - results.size();
 
-        setData(results);
+        setRefData(results);
 
         return count;
     }
@@ -574,11 +548,18 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
+    public void log(double base) {
+        double denominator = Math.log(base);
+
+        mutate((e) -> Math.log(e) / denominator);
+    }
+
+    @Override
     public void mutate(Function<Double, Double> function) {
 
         for (int i = 0 ; i < size() ; i++) {
 
-            getData().set(i, function.apply(getData().get(i)));
+            getRefData().set(i, function.apply(getRefData().get(i)));
         }
     }
 
@@ -621,9 +602,16 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
+    public void distribute() {
+        double sum = sum();
+
+        mutate((x) -> x / sum);
+    }
+
+    @Override
     public void invert() {
 
-        setData(getData().reversed());
+        setRefData(getRefData().reversed());
     }
 
     @Override
@@ -638,7 +626,7 @@ public class FStat1DDef implements FStat1D {
         double std = std(sample);
 
         for (int i = 0 ; i < size() ; i++) {
-            getData().set(i, (getData().get(i) - mean) / std);
+            getRefData().set(i, (getRefData().get(i) - mean) / std);
         }
     }
 
@@ -646,7 +634,7 @@ public class FStat1DDef implements FStat1D {
     public void normalize(double mean, double std) {
 
         for (int i = 0 ; i < size() ; i++) {
-            getData().set(i, (getData().get(i) - mean) / std);
+            getRefData().set(i, (getRefData().get(i) - mean) / std);
         }
     }
 
@@ -745,7 +733,7 @@ public class FStat1DDef implements FStat1D {
 
         for (int i = 0 ; i < size() ; i++) {
 
-            fPlot.add(i, getData().get(i));
+            fPlot.add(i, getRefData().get(i));
         }
 
         return fPlot;
@@ -760,7 +748,7 @@ public class FStat1DDef implements FStat1D {
 
         FPlot2D fPlot = factory.getFPlot2D();
 
-        for (double v : getData()) {
+        for (double v : getRefData()) {
             fPlot.add((y1, y2) -> y1 + 1, v, 1);
         }
 
@@ -791,7 +779,7 @@ public class FStat1DDef implements FStat1D {
         }
 
         main:
-        for (double value : getData()) {
+        for (double value : getRefData()) {
 
             if (value < min || value > max) {
                 continue;
@@ -897,12 +885,12 @@ public class FStat1DDef implements FStat1D {
 
     private void sortAsc() {
 
-        getData().sort((a, b) -> a - b > 0 ? 1 : a.equals(b) ? 0 : -1);
+        getRefData().sort((a, b) -> a - b > 0 ? 1 : a.equals(b) ? 0 : -1);
     }
 
     private void sortDsc() {
 
-        getData().sort((a, b) -> a - b < 0 ? 1 : a.equals(b) ? 0 : -1);
+        getRefData().sort((a, b) -> a - b < 0 ? 1 : a.equals(b) ? 0 : -1);
     }
 
     private double varSample(double mean) {
@@ -913,7 +901,7 @@ public class FStat1DDef implements FStat1D {
 
         double sum = 0;
 
-        for (double d : getData()) {
+        for (double d : getRefData()) {
             sum += Math.pow(d - mean, 2);
         }
 
@@ -928,7 +916,7 @@ public class FStat1DDef implements FStat1D {
 
         double sum = 0;
 
-        for (double d : getData()) {
+        for (double d : getRefData()) {
             sum += Math.pow(d - mean, 2);
         }
 
@@ -940,7 +928,7 @@ public class FStat1DDef implements FStat1D {
         double prefix = n / ((n - 1) * (n - 2));
         double sum = 0;
 
-        for (double value : getData()) {
+        for (double value : getRefData()) {
             sum += Math.pow((value - mean) / std, 3);
         }
 
@@ -950,7 +938,7 @@ public class FStat1DDef implements FStat1D {
     private double skewnessPopulation(double mean, double std) {
         double sum = 0;
 
-        for (double value : getData()) {
+        for (double value : getRefData()) {
             sum += Math.pow(value - mean, 3);
         }
 
@@ -962,7 +950,7 @@ public class FStat1DDef implements FStat1D {
         double prefix = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
         double sum = 0;
 
-        for (double value : getData()) {
+        for (double value : getRefData()) {
             sum += Math.pow((value - mean) / std, 4);
         }
 
@@ -972,7 +960,7 @@ public class FStat1DDef implements FStat1D {
     private double kurtosisPopulation(double mean, double std) {
         double sum = 0;
 
-        for (double value : getData()) {
+        for (double value : getRefData()) {
             sum += Math.pow(value - mean, 4);
         }
 
@@ -989,7 +977,7 @@ public class FStat1DDef implements FStat1D {
         }
 
         for (int i = 0 ; i < fStat.size() ; i++) {
-            if (!(getData().get(i) == fStat.get(i))) {
+            if (!(getRefData().get(i) == fStat.get(i))) {
                 return false;
             }
         }
@@ -1009,7 +997,7 @@ public class FStat1DDef implements FStat1D {
 
         json.put(JSON_TYPE, JSON_MAIN);
 
-        for (Double item : getData()) {
+        for (Double item : getRefData()) {
             json.append(JSON_DATA, item);
         }
 
@@ -1037,13 +1025,13 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public List<Double> getData() {
+    public List<Double> getRefData() {
 
         return this.data;
     }
 
     @Override
-    public void setData(List<Double> data) {
+    public void setRefData(List<Double> data) {
 
         this.data = data;
     }
