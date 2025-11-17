@@ -3,6 +3,7 @@ import eu.scattering.core.design.statistics.construct.FPlot2D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -243,6 +244,33 @@ public class FPlot2DTest {
                     () -> assertEquals(2, fPlot.getY(0)),
                     () -> assertEquals(3, fPlot.getX(1)),
                     () -> assertEquals(1, fPlot.getY(1))
+            );
+        }
+
+        @Test
+        @DisplayName("Set Y with polynomial")
+        void setYWithPolynomial() {
+            FPlot2D fPlot = factory.getFPlot2D();
+
+            fPlot.add(2, -2);
+            fPlot.add(5, -5);
+            fPlot.add(1, -1);
+            fPlot.add(4, -4);
+            fPlot.add(3, -3);
+
+            fPlot.setY(factory.getFPoly(1, 2));
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(2, fPlot.getX(0)),
+                    () -> assertEquals(4, fPlot.getY(0)),
+                    () -> assertEquals(5, fPlot.getX(1)),
+                    () -> assertEquals(7, fPlot.getY(1)),
+                    () -> assertEquals(1, fPlot.getX(2)),
+                    () -> assertEquals(3, fPlot.getY(2)),
+                    () -> assertEquals(4, fPlot.getX(3)),
+                    () -> assertEquals(6, fPlot.getY(3)),
+                    () -> assertEquals(3, fPlot.getX(4)),
+                    () -> assertEquals(5, fPlot.getY(4))
             );
         }
     }
@@ -829,6 +857,36 @@ public class FPlot2DTest {
         }
 
         @Test
+        @DisplayName("Mean square error A")
+        void MeanSquareErrorA() {
+            FPlot2D fPlot = factory.getFPlot2D();
+            FPoly fPoly = factory.getFPoly(1, 2);
+
+            fPlot.add(-2, 0);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 2);
+            fPlot.add(1, 3);
+            fPlot.add(2, 4);
+
+            assertEquals(0, fPlot.mse(fPoly), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Mean square error B")
+        void MeanSquareErrorB() {
+            FPlot2D fPlot = factory.getFPlot2D();
+            FPoly fPoly = factory.getFPoly(1, 2);
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            assertEquals(3.2, fPlot.mse(fPoly), 1E-4);
+        }
+
+        @Test
         @DisplayName("Regression - Simple linear")
         void regressionSimpleLinear() {
             FPlot2D fPlot = factory.getFPlot2D();
@@ -849,26 +907,6 @@ public class FPlot2DTest {
             assertEquals(-0.12, fPlot.getY(2), 1E-4);
             assertEquals(-1.24, fPlot.getY(3), 1E-4);
             assertEquals(-2.36, fPlot.getY(4), 1E-4);
-        }
-
-        @Test
-        @DisplayName("Absolute")
-        void absolute() {
-            FPlot2D fPlot = factory.getFPlot2D();
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, -1);
-            fPlot.add(2, -2);
-
-            fPlot.absolute();
-
-            assertEquals(2, fPlot.getY(0), 1E-4);
-            assertEquals(1, fPlot.getY(1), 1E-4);
-            assertEquals(0, fPlot.getY(2), 1E-4);
-            assertEquals(1, fPlot.getY(3), 1E-4);
-            assertEquals(2, fPlot.getY(4), 1E-4);
         }
 
         @Test
@@ -958,54 +996,6 @@ public class FPlot2DTest {
                     () -> assertEquals(7, fPlot.getY(0)),
                     () -> assertEquals(3, fPlot.getX(1)),
                     () -> assertEquals(10, fPlot.getY(1))
-            );
-        }
-
-        @Test
-        @DisplayName("Mutate with polynomial - A")
-        void mutateWithPolynomialA() {
-            FPlot2D fPlot = factory.getFPlot2D();
-
-            fPlot.add(1, 1);
-            fPlot.add(2, 1);
-            fPlot.add(4, 1);
-            fPlot.add(5, 1);
-
-            fPlot.mutateYWithPolynomial((x, p) -> x - p, 1, 1);
-
-            Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fPlot.getX(0)),
-                    () -> assertEquals(2, fPlot.getX(1)),
-                    () -> assertEquals(4, fPlot.getX(2)),
-                    () -> assertEquals(5, fPlot.getX(3)),
-                    () -> assertEquals(-1, fPlot.getY(0)),
-                    () -> assertEquals(-2, fPlot.getY(1)),
-                    () -> assertEquals(-4, fPlot.getY(2)),
-                    () -> assertEquals(-5, fPlot.getY(3))
-            );
-        }
-
-        @Test
-        @DisplayName("Mutate with polynomial - B")
-        void mutateWithPolynomialB() {
-            FPlot2D fPlot = factory.getFPlot2D();
-
-            fPlot.add(1, -2);
-            fPlot.add(2, -1);
-            fPlot.add(4, 1);
-            fPlot.add(5, 2);
-
-            fPlot.mutateYWithPolynomial((x, p) -> x - p, 1);
-
-            Assertions.assertAll("Check values",
-                    () -> assertEquals(1, fPlot.getX(0)),
-                    () -> assertEquals(2, fPlot.getX(1)),
-                    () -> assertEquals(4, fPlot.getX(2)),
-                    () -> assertEquals(5, fPlot.getX(3)),
-                    () -> assertEquals(-3, fPlot.getY(0)),
-                    () -> assertEquals(-2, fPlot.getY(1)),
-                    () -> assertEquals(0, fPlot.getY(2)),
-                    () -> assertEquals(1, fPlot.getY(3))
             );
         }
 

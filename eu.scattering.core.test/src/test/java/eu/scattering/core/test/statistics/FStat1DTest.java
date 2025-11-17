@@ -358,11 +358,11 @@ public class FStat1DTest {
 
             fStat.add(1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.2, 2.3, 2.4, 2.5);
 
-            assertTrue(fStat.isUnique());
+            assertTrue(fStat.allDistinct());
 
             fStat.add(2.5);
 
-            assertFalse(fStat.isUnique());
+            assertFalse(fStat.allDistinct());
         }
 
         @Test
@@ -1108,6 +1108,37 @@ public class FStat1DTest {
         }
 
         @Test
+        @DisplayName("Spread")
+        void spread() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1, 7, 4, 10, -5, 2, 4);
+
+            fStat.spread();
+
+            assertEquals(1, fStat.max(), 1E-6);
+            assertEquals(0, fStat.min(), 1E-6);
+        }
+
+        @Test
+        @DisplayName("Absolute")
+        void absolute() {
+            FStat1D fStat = factory.getFStat1D();
+
+            fStat.add(1, -7, -4, 10, -5, 2, 4);
+
+            fStat.absolute();
+
+            assertEquals(1, fStat.get(0), 1E-6);
+            assertEquals(7, fStat.get(1), 1E-6);
+            assertEquals(4, fStat.get(2), 1E-6);
+            assertEquals(10, fStat.get(3), 1E-6);
+            assertEquals(5, fStat.get(4), 1E-6);
+            assertEquals(2, fStat.get(5), 1E-6);
+            assertEquals(4, fStat.get(6), 1E-6);
+        }
+
+        @Test
         @DisplayName("Invert order")
         void invertOrder() {
             FStat1D fStat = factory.getFStat1D();
@@ -1642,7 +1673,7 @@ public class FStat1DTest {
 
             data.add(1, 2, 3, 1, 1, 5, 2, 3);
 
-            int count = data.removeDuplicates();
+            int count = data.deduplicate();
 
             data.sort(false);
 

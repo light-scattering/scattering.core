@@ -1902,7 +1902,7 @@ public class FAggregateTest {
             assertEquals(2, results.get(0), 1E-4);
             assertEquals(4, results.get(results.size() - 1), 1E-4);
 
-            results.removeDuplicates();
+            results.deduplicate();
 
             assertEquals(3, results.size());
         }
@@ -1919,7 +1919,7 @@ public class FAggregateTest {
 
         @Test
         @DisplayName("Pair distance - Distribution A")
-        void getPairDistanceDistributionA() {
+        void getPairDistanceFunctionA() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
             Shape shapeA = factory.getFSphere(2, 0, 0, 1);
             Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
@@ -1945,7 +1945,7 @@ public class FAggregateTest {
 
         @Test
         @DisplayName("Pair distance - Distribution B")
-        void getPairDistanceDistributionB() {
+        void getPairDistanceFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
             FPlot2D results = fAggregate.getPairDistanceFunction();
@@ -1978,7 +1978,7 @@ public class FAggregateTest {
             assertEquals(1, results.get(0), 1E-4);
             assertEquals(6, results.get(results.size() - 1), 1E-4);
 
-            results.removeDuplicates();
+            results.deduplicate();
 
             assertEquals(2, results.size());
         }
@@ -1995,7 +1995,7 @@ public class FAggregateTest {
 
         @Test
         @DisplayName("Coordination number - Distribution")
-        void getCoordinationNumberDistribution() {
+        void getCoordinationNumberFunction() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
             Shape shapeA = factory.getFSphere(2, 0, 0, 1);
             Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
@@ -2073,8 +2073,21 @@ public class FAggregateTest {
             results.distribute();
 
             assertEquals(1, results.getStatY().sum(), 1E-4);
-            assertTrue(results.getY(1) < results.getY(0));
-            assertTrue(results.getY(2) < results.getY(1));
+            assertTrue(results.size() >= 5);
+        }
+
+        @Test
+        @DisplayName("Box coverage - Function B")
+        void getBoxCoverageFunctionB() {
+            FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
+
+            FPlot2D results = fAggregate.getBoxCoverageFunction(true);
+
+            assertTrue(results.size() >= 5);
+            assertTrue(results.getY(0) < results.getY(1));
+            assertTrue(results.getY(1) < results.getY(2));
+            assertTrue(results.getY(2) < results.getY(3));
+            assertTrue(results.getY(3) < results.getY(4));
         }
 
         @Test
@@ -2101,7 +2114,7 @@ public class FAggregateTest {
             assertEquals(Math.PI * 0.5, results.get(0), 1E-4);
             assertEquals(Math.PI, results.get(results.size() - 1), 1E-4);
 
-            results.removeDuplicates();
+            results.deduplicate();
 
             assertEquals(2, results.size());
         }
@@ -2143,14 +2156,14 @@ public class FAggregateTest {
             assertEquals(90, results.get(0), 1E-4);
             assertEquals(180, results.get(results.size() - 1), 1E-4);
 
-            results.removeDuplicates();
+            results.deduplicate();
 
             assertEquals(2, results.size());
         }
 
         @Test
         @DisplayName("Triplet angle - Distribution")
-        void getTripletAngleDistribution() {
+        void getTripletAngleFunction() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
             Shape shapeA = factory.getFSphere(2, 0, 0, 1);
             Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
@@ -2178,7 +2191,7 @@ public class FAggregateTest {
 
         @Test
         @DisplayName("Triplet angle - Distribution (degree)")
-        void getTripletAngleDistributionDegree() {
+        void getTripletAngleFunctionDegree() {
             Shape shape = factory.getFSphere(0, 0, 0, 1);
             Shape shapeA = factory.getFSphere(2, 0, 0, 1);
             Shape shapeB = factory.getFSphere(-2, 0, 0, 1);
@@ -2277,13 +2290,13 @@ public class FAggregateTest {
             String schema18 = F3D_N1000_Mono.get_18_14();
             String schema22 = F3D_N1000_Mono.get_22_10();
 
-            FAggregate fAggregate14 = factory.getFAggregate(schema14).addFBuffer(1000000);
-            FAggregate fAggregate18 = factory.getFAggregate(schema18).addFBuffer(1000000);
-            FAggregate fAggregate22 = factory.getFAggregate(schema22).addFBuffer(1000000);
+            FAggregate fAggregate14 = factory.getFAggregate(schema14);
+            FAggregate fAggregate18 = factory.getFAggregate(schema18);
+            FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
-            double dim14 = fAggregate14.getBoxDimension();
-            double dim18 = fAggregate18.getBoxDimension();
-            double dim22 = fAggregate22.getBoxDimension();
+            double dim14 = fAggregate14.getFractalDimension(FAggregate.Dim.BOX);
+            double dim18 = fAggregate18.getFractalDimension(FAggregate.Dim.BOX);
+            double dim22 = fAggregate22.getFractalDimension(FAggregate.Dim.BOX);
 
             assertEquals(1.4, dim14, 0.2);
             assertEquals(1.8, dim18, 0.2);
@@ -2297,9 +2310,9 @@ public class FAggregateTest {
             FAggregate fAggregate2d = factory.getFAggregateGeo2d(10, 10);
             FAggregate fAggregate3d = factory.getFAggregateGeo3d(10, 10, 10);
 
-            double dim1d = fAggregate1d.getBoxDimension();
-            double dim2d = fAggregate2d.getBoxDimension();
-            double dim3d = fAggregate3d.getBoxDimension();
+            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dim.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dim.BOX);
+            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dim.BOX);
 
             assertEquals(1, dim1d, 0.01);
             assertEquals(2, dim2d, 0.01);
@@ -2313,9 +2326,9 @@ public class FAggregateTest {
             FAggregate fAggregate2d = factory.getFAggregateGeo2d(9, 11);
             FAggregate fAggregate3d = factory.getFAggregateGeo3d(9, 11, 13);
 
-            double dim1d = fAggregate1d.getBoxDimension();
-            double dim2d = fAggregate2d.getBoxDimension();
-            double dim3d = fAggregate3d.getBoxDimension();
+            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dim.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dim.BOX);
+            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dim.BOX);
 
             assertEquals(1, dim1d, 0.2);
             assertEquals(2, dim2d, 0.3);
@@ -2333,9 +2346,9 @@ public class FAggregateTest {
             fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
             fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
 
-            double dim1d = fAggregate1d.getBoxDimension();
-            double dim2d = fAggregate2d.getBoxDimension();
-            double dim3d = fAggregate3d.getBoxDimension();
+            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dim.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dim.BOX);
+            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dim.BOX);
 
             assertEquals(1, dim1d, 0.01);
             assertEquals(2, dim2d, 0.01);
@@ -2348,11 +2361,45 @@ public class FAggregateTest {
             FAggregate fAggregate1d = factory.getFAggregateGeoFullCircle(10);
             FAggregate fAggregate2d = factory.getFAggregateGeoFullSphere(10);
 
-            double dim2d = fAggregate1d.getBoxDimension();
-            double dim3d = fAggregate2d.getBoxDimension();
+            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dim.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dim.BOX);
+
+            assertEquals(2, dim1d, 0.10);
+            assertEquals(3, dim2d, 0.25);
+        }
+
+        @Test
+        @DisplayName("Get density dimension")
+        void getDensityDimension() {
+            String schema14 = F3D_N1000_Mono.get_14_18();
+            String schema18 = F3D_N1000_Mono.get_18_14();
+            String schema22 = F3D_N1000_Mono.get_22_10();
+
+            FAggregate fAggregate14 = factory.getFAggregate(schema14);
+            FAggregate fAggregate18 = factory.getFAggregate(schema18);
+            FAggregate fAggregate22 = factory.getFAggregate(schema22);
+
+            double dim14 = fAggregate14.getFractalDimension(FAggregate.Dim.CORRELATION);
+            double dim18 = fAggregate18.getFractalDimension(FAggregate.Dim.CORRELATION);
+            double dim22 = fAggregate22.getFractalDimension(FAggregate.Dim.CORRELATION);
+
+            assertEquals(1.4, dim14, 0.2);
+            assertEquals(1.8, dim18, 0.2);
+            assertEquals(2.2, dim22, 0.2);
+        }
+
+        @Test
+        @DisplayName("Get density dimension - Sphere")
+        void getDensityDimensionSphereGeometry() {
+            FAggregate fAggregate2d = factory.getFAggregateGeoFullCircle(10);
+            FAggregate fAggregate3d = factory.getFAggregateGeoFullSphere(10);
+
+            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dim.CORRELATION);
+            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dim.CORRELATION);
 
             assertEquals(2, dim2d, 0.10);
             assertEquals(3, dim3d, 0.25);
         }
+
     }
 }

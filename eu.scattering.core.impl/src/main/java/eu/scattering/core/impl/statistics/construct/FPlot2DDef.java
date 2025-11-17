@@ -6,6 +6,7 @@ import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
 import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class FPlot2DDef implements FPlot2D {
@@ -177,7 +179,7 @@ public class FPlot2DDef implements FPlot2D {
     @Override
     public void setStatX(FStat1D statX) {
 
-        if (!statX.isUnique()) {
+        if (!statX.allDistinct()) {
             throw new IllegalArgumentException("X axis values must be unique");
         }
 
@@ -197,6 +199,15 @@ public class FPlot2DDef implements FPlot2D {
         }
 
         setData(results);
+    }
+
+    @Override
+    public void mutateStatX(Consumer<FStat1D> action) {
+        FStat1D statX = getStatX();
+
+        action.accept(statX);
+
+        setStatX(statX);
     }
 
     @Override
@@ -229,6 +240,15 @@ public class FPlot2DDef implements FPlot2D {
         }
 
         setData(results);
+    }
+
+    @Override
+    public void mutateStatY(Consumer<FStat1D> action) {
+        FStat1D statY = getStatY();
+
+        action.accept(statY);
+
+        setStatY(statY);
     }
 
     @Override
@@ -360,6 +380,17 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
+    public double mse(FPoly est) {
+        double mse = 0;
+
+        for (int i = 0 ; i < size() ; i++) {
+            mse += Math.pow(getY(i) - est.getValue(getX(i)), 2);
+        }
+
+        return mse / size();
+    }
+
+    @Override
     public int filter(BiFunction<Double, Double, Boolean> filter) {
         int oldSize = size();
 
@@ -384,24 +415,6 @@ public class FPlot2DDef implements FPlot2D {
         for (FPlot2DRecord record : this.data) {
             record.setY(function.apply(record.getX(), record.getY()));
         }
-    }
-
-    @Override
-    public void mutateYWithPolynomial(BiFunction<Double, Double, Double> function, double... polynomial) {
-
-        for (FPlot2DRecord record : getData()) {
-            record.setY(function.apply(record.getY(), getPolynomialValue(record.getX(), polynomial)));
-        }
-    }
-
-    private double getPolynomialValue(double x, double[] polynomial) {
-        double value = 0;
-
-        for (int i = 0 ; i < polynomial.length ; i++) {
-            value += polynomial[i] * Math.pow(x, polynomial.length - 1 - i);
-        }
-
-        return value;
     }
 
     @Override
@@ -482,9 +495,9 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public void absolute() {
+    public void setY(FPoly est) {
 
-        mutateY((x, y) -> Math.abs(y));
+        mutateY((x, y) -> est.getValue(x));
     }
 
     @Override

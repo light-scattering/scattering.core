@@ -417,7 +417,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public boolean isUnique() {
+    public boolean allDistinct() {
 
         return getData().stream().distinct().toList().size() == size();
     }
@@ -472,7 +472,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public int removeDuplicates() {
+    public int deduplicate() {
         Set<Double> values = new HashSet<>();
 
         for (int i = 0 ; i < size() ; i++) {
@@ -604,6 +604,20 @@ public class FStat1DDef implements FStat1D {
         } else {
             sortDsc();
         }
+    }
+
+    @Override
+    public void spread() {
+        double min = min();
+        double max = max();
+
+        mutate((x) -> (x - min) / (max - min));
+    }
+
+    @Override
+    public void absolute() {
+
+        mutate(Math::abs);
     }
 
     @Override

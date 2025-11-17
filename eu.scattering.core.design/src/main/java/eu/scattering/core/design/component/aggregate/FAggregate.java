@@ -58,10 +58,8 @@ public interface FAggregate extends Component {
     double getRadiusFromOrigin();
 
     double getRadiusOfGyration(RoG type);
-//    double getFractalDimension(FD type);
+    double getFractalDimension(Dim type);
     double getOverlapFactor(OF type);
-
-    double getBoxDimension();
 
     FStat1D getTripletAngle();
     FPlot2D getTripletAngleFunction();
@@ -72,16 +70,16 @@ public interface FAggregate extends Component {
     FStat1D getCoordinationNumber();
     FPlot2D getCoordinationNumberFunction();
 
-    FPlot2D getDensityCorrelationFunction(boolean log);
     FPlot2D getBoxCoverageFunction(boolean log);
+    FPlot2D getDensityCorrelationFunction(boolean log);
 
-    boolean isCompact();
     boolean isSparse();
+    boolean isCompact();
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
 
-    void setEpsilon(double epsilon);
     void setDelta(double delta);
+    void setEpsilon(double epsilon);
 
     FStat1D getParticleRadius();
 

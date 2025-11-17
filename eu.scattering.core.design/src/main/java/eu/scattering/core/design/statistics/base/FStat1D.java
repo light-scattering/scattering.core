@@ -13,8 +13,8 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     void add(double value);
     void add(double... value);
-    void add(Function<Double, Double> collision, double value);
-    void add(Function<Double, Double> collision, double... value);
+    void add(Function<Double, Double> collision, double value); // Is this needed?
+    void add(Function<Double, Double> collision, double... value); // Add conditional
 
     double get(int index);
     void set(int index, double value);
@@ -35,8 +35,6 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     double q3();
     double median();
     double midspread();
-
-    double[] mode();
 
     double rms();
 
@@ -61,7 +59,9 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     double kurtosisExcess(boolean sample);
     double kurtosisExcess(boolean sample, double mean, double std);
 
-    boolean isUnique();
+    double[] mode();
+
+    boolean allDistinct();
 
     // -------------------------------------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     int removeOutliers(boolean sample, double factor);
     int removeOutliers(double mean, double std, double factor);
 
-    int removeDuplicates();
+    int deduplicate();
 
     // -------------------------------------------------------------------------------------------------
 
@@ -82,6 +82,10 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
     void invert();
     void mirror();
+
+    void spread();
+
+    void absolute();
 
     void normalize(boolean sample);
     void normalize(double mean, double std);
@@ -108,7 +112,7 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     // -------------------------------------------------------------------------------------------------
 
     @Fragment
-    FStat1D removeNaN();
+    FStat1D removeNaN(); // Replace with null
     @Fragment
     FStat1D replaceWithNaN(Function<Double, Boolean> function);
     @Fragment
@@ -128,4 +132,6 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     List<Double> getData();
     @Modificator
     void setData(List<Double> data);
+
+    // Different 'toString'
 }

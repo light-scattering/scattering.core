@@ -821,91 +821,6 @@ public class FAggregateDef implements FAggregate {
         return oFacTotal / oFacCount;
     }
 
-    @Override
-    public double getBoxDimension() {
-        FPlot2D results = supplyFPlot2D();
-
-        double cutoffInner = getParticleRadius().min() * 2;
-
-        double step = getLength(Axis.MAX);
-        while (step >= cutoffInner) {
-            getBoxDimensionStep(results, step);
-            step *= 0.5;
-        }
-
-        return getBoxDimensionAnalyze(results);
-    }
-
-    private void getBoxDimensionStep(FPlot2D data, double step) {
-        FSphereHelper helper = getFSphereHelper();
-
-        FPos3D origin = getBoundary().getPosA();
-        double scale = 1 / step;
-
-        Queue<Shape> particles = new LinkedList<>(getRefParticles().copy().asList());
-        particles.forEach(e -> e.translate(-origin.getD0(), -origin.getD1(), -origin.getD2()));
-        particles.forEach(e -> e.scalePosition(scale).scaleSize(scale));
-
-        int sum = 0;
-        while (particles.size() > 0) {
-            Shape particle = particles.poll();
-
-            List<Shape> neighbours = new ArrayList<>(particles.size());
-
-            particles.forEach(e -> {
-                if (e.getDistCenterP2(particle) < Math.pow(e.getRadius() + particle.getRadius() + 2, 2)) {
-                    neighbours.add(e);
-                }
-            });
-
-            double coreMinX = particle.getCenterX() - particle.getRadius() + EPSILON;
-            int minX = (int) Math.floor(coreMinX);
-            double coreMinY = particle.getCenterY() - particle.getRadius() + EPSILON;
-            int minY = (int) Math.floor(coreMinY);
-            double coreMinZ = particle.getCenterZ() - particle.getRadius() + EPSILON;
-            int minZ = (int) Math.floor(coreMinZ);
-
-            double coreMaxX = particle.getCenterX() + particle.getRadius() - EPSILON;
-            int maxX = (int) Math.ceil(coreMaxX);
-            double coreMaxY = particle.getCenterY() + particle.getRadius() - EPSILON;
-            int maxY = (int) Math.ceil(coreMaxY);
-            double coreMaxZ = particle.getCenterZ() + particle.getRadius() - EPSILON;
-            int maxZ = (int) Math.ceil(coreMaxZ);
-
-            for (int x = minX ; x < maxX ; x++) {
-                for (int y = minY ; y < maxY ; y++) {
-
-                    next:
-                    for (int z = minZ ; z < maxZ ; z++) {
-                        if (helper.intersectsCube(particle, x + 0.5, y + 0.5, z + 0.5, 1)) {
-                            for (Shape neighbour : neighbours) {
-                                if (helper.intersectsCube(neighbour, x + 0.5, y + 0.5, z + 0.5, 1)) {
-                                    continue next;
-                                }
-                            }
-
-                            sum ++;
-                        }
-                    }
-                }
-            }
-        }
-
-        data.add(step, sum);
-    }
-
-    private double getBoxDimensionAnalyze(FPlot2D data) {
-        data.mutateY((x, y) -> Math.log(y));
-        data.mutateX((x, y) -> Math.log(1 / x));
-
-        data.filter((x, y) -> y > 0);
-
-        FPlot2D reference = data.copy();
-        FPos2D regression = reference.simpleLinearRegression();
-
-        return regression.getD0();
-    }
-
     private double getOverlapFactorLegacyPair(Shape shapeA, Shape shapeB) {
 
         double dist = shapeA.getDistCenter(shapeB);
@@ -1000,9 +915,8 @@ public class FAggregateDef implements FAggregate {
 
     @Override
     public FPlot2D getTripletAngleFunction() {
-        FStat1D angle = getTripletAngle();
 
-        return angle.toFPlot2DHistogram(0, Math.PI, 180);
+        return getTripletAngle().toFPlot2DHistogram(0, Math.PI, 180);
     }
 
     @Override
@@ -1048,65 +962,6 @@ public class FAggregateDef implements FAggregate {
         return results;
     }
 
-//    private FPlot2D getDensityCorrelationFunctionLinear() {
-//        FSphereHelper helper = getFSphereHelper();
-//        FPlot2D results = getPairDistanceFunction();
-//
-//        double r0, r1;
-//        for (int i = 1 ; i < results.size() ; i++) {
-//            r0 = results.getX(i - 1);
-//            r1 = results.getX(i);
-//
-//            results.setY(i, results.getY(i) / helper.getVolumeRing(r0, r1));
-//        }
-//
-//        results.filter((x, y) -> x > 0 && y > 0);
-//
-//        return results;
-//    }
-//
-//    private FPlot2D getDensityCorrelationFunctionLogarithmic() {
-//        FSphereHelper helper = getFSphereHelper();
-//
-//        FStat1D distances = getPairDistance();
-//
-//        double min = distances.min();
-//        double max = distances.max();
-//        double delta = min * 0.5;
-//
-//        FPlot2D results = supplyFPlot2D();
-//
-//        double step = min;
-//        while (step <= max) {
-//            results.add(step, 0);
-//            step *= 1.1;
-//        }
-//
-//        for (double distance : distances) {
-//            for (int i = 0 ; i < results.size() ; i++) {
-//
-//                if (Math.abs(distance - results.getX(i)) < delta) {
-//                    results.setY(i, results.getY(i) + 1);
-//                }
-//
-//                if (distance + delta < results.getX(i)) {
-//                    break;
-//                }
-//            }
-//        }
-//
-//        for (int i = 0 ; i < results.size() ; i++) {
-//            double element = results.getX(i);
-//            double volume = helper.getVolumeRing(element - delta, element + delta);
-//
-//            results.setY(i, results.getY(i) / volume);
-//        }
-//
-//        results.filter((x, y) -> x > 0 && y > 0);
-//
-//        return results;
-//    }
-
     @Override
     public FPlot2D getBoxCoverageFunction(boolean log) {
         FPlot2D results = supplyFPlot2D();
@@ -1120,13 +975,122 @@ public class FAggregateDef implements FAggregate {
 
         double size = log ? cutoffOuter * 0.5 : cutoffOuter - radius;
         while (size >= cutoffInner) {
-            getBoxDimensionStep(results, size);
+            getBoxCoverageStep(results, size);
             size = log ? size * 0.5 : size - radius;
         }
 
         return results;
     }
 
+    @Override
+    public double getFractalDimension(Dim type) {
+
+        return switch (type) {
+            case BOX -> getBoxCoverageAnalyze(getBoxCoverageFunction(true));
+            case CORRELATION -> getDensityCorrelationAnalyze(getDensityCorrelationFunction(true));
+        };
+    }
+
+    private void getBoxCoverageStep(FPlot2D data, double step) {
+        FSphereHelper helper = getFSphereHelper();
+
+        FPos3D origin = getBoundary().getPosA();
+        double scale = 1 / step;
+
+        Queue<Shape> particles = new LinkedList<>(getRefParticles().copy().asList());
+        particles.forEach(e -> e.translate(-origin.getD0(), -origin.getD1(), -origin.getD2()));
+        particles.forEach(e -> e.scalePosition(scale).scaleSize(scale));
+
+        int sum = 0;
+        while (particles.size() > 0) {
+            Shape particle = particles.poll();
+
+            List<Shape> neighbours = new ArrayList<>(particles.size());
+
+            particles.forEach(e -> {
+                if (e.getDistCenterP2(particle) < Math.pow(e.getRadius() + particle.getRadius() + 2, 2)) {
+                    neighbours.add(e);
+                }
+            });
+
+            double coreMinX = particle.getCenterX() - particle.getRadius() + EPSILON;
+            int minX = (int) Math.floor(coreMinX);
+            double coreMinY = particle.getCenterY() - particle.getRadius() + EPSILON;
+            int minY = (int) Math.floor(coreMinY);
+            double coreMinZ = particle.getCenterZ() - particle.getRadius() + EPSILON;
+            int minZ = (int) Math.floor(coreMinZ);
+
+            double coreMaxX = particle.getCenterX() + particle.getRadius() - EPSILON;
+            int maxX = (int) Math.ceil(coreMaxX);
+            double coreMaxY = particle.getCenterY() + particle.getRadius() - EPSILON;
+            int maxY = (int) Math.ceil(coreMaxY);
+            double coreMaxZ = particle.getCenterZ() + particle.getRadius() - EPSILON;
+            int maxZ = (int) Math.ceil(coreMaxZ);
+
+            for (int x = minX ; x < maxX ; x++) {
+                for (int y = minY ; y < maxY ; y++) {
+
+                    next:
+                    for (int z = minZ ; z < maxZ ; z++) {
+                        if (helper.intersectsCube(particle, x + 0.5, y + 0.5, z + 0.5, 1)) {
+                            for (Shape neighbour : neighbours) {
+                                if (helper.intersectsCube(neighbour, x + 0.5, y + 0.5, z + 0.5, 1)) {
+                                    continue next;
+                                }
+                            }
+
+                            sum ++;
+                        }
+                    }
+                }
+            }
+        }
+
+        data.add(step, sum);
+    }
+
+    private double getBoxCoverageAnalyze(FPlot2D data) {
+        data.mutateY((x, y) -> Math.log(y));
+        data.mutateX((x, y) -> Math.log(1 / x));
+
+        data.filter((x, y) -> y > 0);
+
+        FPos2D regression = data.simpleLinearRegression();
+
+        return regression.getD0();
+    }
+
+    private double getDensityCorrelationAnalyze(FPlot2D data) {
+        double distMin = data.getX(0);
+
+        data.filter((x, y) -> x > 2.1 * distMin);
+        data.filter((x, y) -> y > 0);
+
+
+        double midpoint = data.getX((int) (data.size() * 0.75));
+
+//        data.filter((x, y) -> x < midpoint);
+
+        data.log(10, true, true);
+
+//        FStat1D dataY = data.getStatY();
+//        double min = dataY.min();
+//        dataY.mutate((x) -> x - min);
+//
+//        dataY.replaceWithNaN(false, (y0, y1) -> {
+//
+//            return Math.abs((y1 - y0) / y0) < 0.05;
+//        }
+//        );
+
+//        data.setStatY(dataY);
+
+        String model = factory.getStatisticsExporter().toPythonPlotlyLinear(data);
+
+        FPos2D regression = data.simpleLinearRegression();
+
+        return 3 + regression.getD0();
+    }
     @Override
     public boolean isCompact() {
 

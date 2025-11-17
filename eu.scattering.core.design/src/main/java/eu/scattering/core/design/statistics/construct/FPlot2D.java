@@ -1,15 +1,16 @@
 package eu.scattering.core.design.statistics.construct;
 
-
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.statistics.Statistics;
+import eu.scattering.core.design.statistics.base.FStat1D;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
 import eu.scattering.core.design.statistics.construct.utils.FPlot2DRecord;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public interface FPlot2D extends Statistics<FPlot2D> {
 
@@ -25,24 +26,31 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     void setY(int index, double y);
 
     FStat1D getStatX();
-    void setStatX(FStat1D statX);
+    void setStatX(FStat1D statX); // Option to remove null (or leave).
+    void mutateStatX(Consumer<FStat1D> action);
 
     FStat1D getStatY();
-    void setStatY(FStat1D statY);
+    void setStatY(FStat1D statY); // Option to remove null (or leave).
+    void mutateStatY(Consumer<FStat1D> action);
 
-    int getIndex(double x);
+    int getIndex(double x); // Closest or what? Is this needed?
 
     // -------------------------------------------------------------------------------------------------
 
-    double minX();
-    double maxX();
+    double minX(); // Needed?
+    double maxX(); // Needed?
 
-    double minY();
-    double maxY();
+    double minY(); // Needed?
+    double maxY(); // Needed?
 
     double integrate();
 
     double approximate(double x);
+
+    FPos2D simpleLinearRegression(); // Different types of regression, returns FPoly. Does not mutate results. Regression in range, eg. 2 - 3
+    // Get slope
+
+    double mse(FPoly est);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -51,23 +59,19 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     void mutateX(BiFunction<Double, Double, Double> function);
     void mutateY(BiFunction<Double, Double, Double> function);
 
-    void mutateYWithPolynomial(BiFunction<Double, Double, Double> function, double... polynomial);
-
     void interpolate(double step, boolean overflow);
     void interpolate(double divisions);
 
-    void distribute();
+    void distribute(); // Maybe 1D?
 
     void sortX(boolean ascending);
     void sortY(boolean ascending);
 
-    void absolute();
-
-    FPos2D simpleLinearRegression();
+    void setY(FPoly est);
 
     void swapXY();
 
-    void log(double base, boolean x, boolean y);
+    void log(double base, boolean x, boolean y); // Maybe 1D?
 
     // -------------------------------------------------------------------------------------------------
 
@@ -75,7 +79,7 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     double[][] toArray();
 
-    FPlot2DRecord getRecord(int index);
+    FPlot2DRecord getRecord(int index); // No
     FPlot2DInterpolator getInterpolator();
 
     // -------------------------------------------------------------------------------------------------
@@ -84,6 +88,9 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     void setName(String name);
 
     // -------------------------------------------------------------------------------------------------
+
+//    @Fragment
+//    FPlot2D removeNull();
 
     @Fragment
     int getIndexCeil(double x);
@@ -96,4 +103,7 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
         log(Math.E, x, y);
     }
+
+    // Get regression mean square error.
+    // Different toString
 }
