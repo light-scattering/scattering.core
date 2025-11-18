@@ -6,8 +6,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.physics.material.FMaterial;
-import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
@@ -61,17 +61,17 @@ public interface FAggregate extends Component {
     double getFractalDimension(Dim type);
     double getOverlapFactor(OF type);
 
-    FStat1D getTripletAngle();
-    FPlot2D getTripletAngleFunction();
+    FStat getTripletAngle();
+    FPlot getTripletAngleFunction();
 
-    FStat1D getPairDistance();
-    FPlot2D getPairDistanceFunction();
+    FStat getPairDistance();
+    FPlot getPairDistanceFunction();
 
-    FStat1D getCoordinationNumber();
-    FPlot2D getCoordinationNumberFunction();
+    FStat getCoordinationNumber();
+    FPlot getCoordinationNumberFunction();
 
-    FPlot2D getBoxCoverageFunction(boolean log);
-    FPlot2D getDensityCorrelationFunction(boolean log);
+    FPlot getBoxCoverageFunction(boolean log);
+    FPlot getDensityCorrelationFunction(boolean log);
 
     boolean isSparse();
     boolean isCompact();
@@ -81,7 +81,7 @@ public interface FAggregate extends Component {
     void setDelta(double delta);
     void setEpsilon(double epsilon);
 
-    FStat1D getParticleRadius();
+    FStat getParticleRadius();
 
     //--------------------------------------------------
 

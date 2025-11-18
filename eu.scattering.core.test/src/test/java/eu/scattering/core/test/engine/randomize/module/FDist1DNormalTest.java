@@ -3,7 +3,7 @@ package eu.scattering.core.test.engine.randomize.module;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.engine.randomize.generator.module.dist1d.normal.FDist1DNormal;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.base.FStat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -24,7 +24,7 @@ public class FDist1DNormalTest {
         FRandGenerator random = factory.getFRand();
         FDist1D dist = random.getFDist1DNormal(mean, std);
 
-        FStat1D fStat = factory.getFStat1D();
+        FStat fStat = factory.getFStat();
 
         for (int i = 0 ; i < 2500 ; i++) {
             fStat.add(dist.produce());

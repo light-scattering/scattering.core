@@ -4,8 +4,8 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.aggregate.monitor.construct.FMonitorConstruct;
-import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -41,13 +41,13 @@ public class FMonitorTest {
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot2D resultsMono = fMonitor.getResults();
+            FPlot resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.mutateFStatX(FStat1D::ln);
-            resultsMono.mutateFStatY(FStat1D::ln);
+            resultsMono.mutateFStatX(FStat::ln);
+            resultsMono.mutateFStatY(FStat::ln);
 
-            FPlot2D regression = resultsMono.copy();
+            FPlot regression = resultsMono.copy();
             FPos2D slope = regression.simpleLinearRegression();
 
             assertEquals(df, slope.getD0(), 0.05);
@@ -72,13 +72,13 @@ public class FMonitorTest {
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot2D resultsMono = fMonitor.getResults();
+            FPlot resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.mutateFStatX(FStat1D::ln);
-            resultsMono.mutateFStatY(FStat1D::ln);
+            resultsMono.mutateFStatX(FStat::ln);
+            resultsMono.mutateFStatY(FStat::ln);
 
-            FPlot2D regression = resultsMono.copy();
+            FPlot regression = resultsMono.copy();
             FPos2D slope = regression.simpleLinearRegression();
 
             assertEquals(df, slope.getD0(), 0.05);
@@ -103,13 +103,13 @@ public class FMonitorTest {
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot2D resultsMono = fMonitor.getResults();
+            FPlot resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.mutateFStatX(FStat1D::ln);
-            resultsMono.mutateFStatY(FStat1D::ln);
+            resultsMono.mutateFStatX(FStat::ln);
+            resultsMono.mutateFStatY(FStat::ln);
 
-            FPlot2D regression = resultsMono.copy();
+            FPlot regression = resultsMono.copy();
             FPos2D slope = regression.simpleLinearRegression();
 
             assertEquals(df, slope.getD0(), 0.05);
@@ -139,13 +139,13 @@ public class FMonitorTest {
             fModel.addStepMonitor(fMonitorFilippov);
             fModel.build();
 
-            FPlot2D results = fMonitor.getResults();
-            FPlot2D resultsMono = fMonitorMono.getResults();
-            FPlot2D resultsPoly = fMonitorPoly.getResults();
-            FPlot2D resultsFilippov = fMonitorFilippov.getResults();
+            FPlot results = fMonitor.getResults();
+            FPlot resultsMono = fMonitorMono.getResults();
+            FPlot resultsPoly = fMonitorPoly.getResults();
+            FPlot resultsFilippov = fMonitorFilippov.getResults();
 
-            assertTrue(results.getRefFStatY().isSimilarAbs(0.25,
-                    resultsMono.getRefFStatY(), resultsPoly.getRefFStatY(), resultsFilippov.getRefFStatY()));
+            assertTrue(results.getRefCoreY().isSimilarAbs(0.25,
+                    resultsMono.getRefCoreY(), resultsPoly.getRefCoreY(), resultsFilippov.getRefCoreY()));
         }
 
         @Test
@@ -171,13 +171,13 @@ public class FMonitorTest {
             fModel.addStepMonitor(fMonitorFilippov);
             fModel.build();
 
-            FPlot2D results = fMonitor.getResults();
-            FPlot2D resultsMono = fMonitorMono.getResults();
-            FPlot2D resultsPoly = fMonitorPoly.getResults();
-            FPlot2D resultsFilippov = fMonitorFilippov.getResults();
+            FPlot results = fMonitor.getResults();
+            FPlot resultsMono = fMonitorMono.getResults();
+            FPlot resultsPoly = fMonitorPoly.getResults();
+            FPlot resultsFilippov = fMonitorFilippov.getResults();
 
-            assertTrue(results.getRefFStatY().isSimilarAbs(0.1,
-                    resultsMono.getRefFStatY(), resultsPoly.getRefFStatY(), resultsFilippov.getRefFStatY()));
+            assertTrue(results.getRefCoreY().isSimilarAbs(0.1,
+                    resultsMono.getRefCoreY(), resultsPoly.getRefCoreY(), resultsFilippov.getRefCoreY()));
         }
     }
 }

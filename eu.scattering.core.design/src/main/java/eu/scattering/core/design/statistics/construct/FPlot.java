@@ -4,8 +4,8 @@ import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.Statistics;
-import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 
@@ -14,12 +14,14 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public interface FPlot2D extends Statistics<FPlot2D> {
+public interface FPlot extends Statistics<FPlot> {
 
     void add(double x);
     void add(double x, double y);
     void add(BiFunction<Double, Double, Double> collision, double x);
     void add(BiFunction<Double, Double, Double> collision, double x, double y);
+
+    // -------------------------------------------------------------------------------------------------
 
     double getX(int index);
     void setX(int index, double x);
@@ -30,10 +32,10 @@ public interface FPlot2D extends Statistics<FPlot2D> {
     int getIndexX(Index type, double x);
     int getIndexY(Index type, double y);
 
-    <T> T getWithFStat(BiFunction<FStat1D, FStat1D, T> function);
+    <T> T getWithFStat(BiFunction<FStat, FStat, T> function);
 
-    <T> T getWithFStatX(Function<FStat1D, T> function);
-    <T> T getWithFStatY(Function<FStat1D, T> function);
+    <T> T getWithFStatX(Function<FStat, T> function);
+    <T> T getWithFStatY(Function<FStat, T> function);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -52,14 +54,14 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     void setY(FPoly est);
 
-    void mutateFStat(Consumer<FStat1D> consumer);
-    void mutateFStat(BiConsumer<FStat1D, FStat1D> consumer);
+    void mutateFStat(Consumer<FStat> consumer);
+    void mutateFStat(BiConsumer<FStat, FStat> consumer);
 
     void mutateX(BiFunction<Double, Double, Double> function);
-    void mutateFStatX(Consumer<FStat1D> consumer);
+    void mutateFStatX(Consumer<FStat> consumer);
 
     void mutateY(BiFunction<Double, Double, Double> function);
-    void mutateFStatY(Consumer<FStat1D> consumer);
+    void mutateFStatY(Consumer<FStat> consumer);
 
     void interpolate(double step, boolean overflow);
     void interpolate(double divisions);
@@ -75,33 +77,27 @@ public interface FPlot2D extends Statistics<FPlot2D> {
 
     double[][] toArray();
 
-    FPlot2DInterpolator getInterpolator();
+    FPlotInterpolator getInterpolator();
 
     // -------------------------------------------------------------------------------------------------
 
     String getName();
-    void setName(String name);
+    void setName(String name); // comment, boundary.
 
     // -------------------------------------------------------------------------------------------------
 
     @Modificator
-    FStat1D getRefFStatX();
+    FStat getRefCoreX();
     @Modificator
-    void setRefFStatX(FStat1D fStat1DX);
-
-    @Modificator
-    FStat1D getRefFStatY();
-    @Modificator
-    void setRefFStatY(FStat1D fStat1DY);
+    FStat getRefCoreY();
 
 //    @Fragment
-//    FPlot2D removeNull();
+//    FPlot removeNaN();
 
     @Fragment
-    FPos2D getRecord(int index);
+    FPos2D getFPos2D(int index); // FPredictor
 
     // -------------------------------------------------------------------------------------------------
 
     enum Index { ROUND, FLOOR, CEIL }
-    // Different toString
 }

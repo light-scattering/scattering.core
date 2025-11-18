@@ -9,8 +9,8 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
-import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
@@ -838,8 +838,8 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FStat1D getPairDistance() {
-        FStat1D distance = supplyFStat1D();
+    public FStat getPairDistance() {
+        FStat distance = supplyFStat();
         List<Shape> particles = getRefParticles().asList();
 
         for (int i = 0 ; i < getRefParticles().size() - 1 ; i++) {
@@ -852,19 +852,19 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot2D getPairDistanceFunction() {
-        FStat1D distance = getPairDistance();
-        FStat1D radius = getParticleRadius();
+    public FPlot getPairDistanceFunction() {
+        FStat distance = getPairDistance();
+        FStat radius = getParticleRadius();
 
         double max = distance.max();
         int steps = (int) (max / radius.min());
 
-        return distance.toFPlot2DHistogram(0, max, steps);
+        return distance.toFPlotHistogram(0, max, steps);
     }
 
     @Override
-    public FStat1D getCoordinationNumber() {
-        FStat1D coordination = factory.getFStat1D();
+    public FStat getCoordinationNumber() {
+        FStat coordination = factory.getFStat();
 
         for (Shape shape : getRefParticles()) {
             coordination.add(shape.touchesOrOverlaps(getRefParticles()));
@@ -874,17 +874,17 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot2D getCoordinationNumberFunction() {
-        FStat1D coordination = getCoordinationNumber();
+    public FPlot getCoordinationNumberFunction() {
+        FStat coordination = getCoordinationNumber();
 
         double max = coordination.max();
 
-        return coordination.toFPlot2DHistogram(1, max, (int) max - 1);
+        return coordination.toFPlotHistogram(1, max, (int) max - 1);
     }
 
     @Override
-    public FStat1D getTripletAngle() {
-        FStat1D angle = supplyFStat1D();
+    public FStat getTripletAngle() {
+        FStat angle = supplyFStat();
 
         List<Shape> neighbours = new LinkedList<>();
         FVector vecA = supplyFVector();
@@ -914,22 +914,22 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot2D getTripletAngleFunction() {
+    public FPlot getTripletAngleFunction() {
 
-        return getTripletAngle().toFPlot2DHistogram(0, Math.PI, 180);
+        return getTripletAngle().toFPlotHistogram(0, Math.PI, 180);
     }
 
     @Override
-    public FPlot2D getDensityCorrelationFunction(boolean log) {
+    public FPlot getDensityCorrelationFunction(boolean log) {
         FSphereHelper helper = getFSphereHelper();
 
-        FStat1D distances = getPairDistance();
+        FStat distances = getPairDistance();
 
         double min = distances.min();
         double max = distances.max();
         double delta = min * 0.5;
 
-        FPlot2D results = supplyFPlot2D();
+        FPlot results = supplyFPlot();
 
         double step = min;
         while (step <= max) {
@@ -963,8 +963,8 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPlot2D getBoxCoverageFunction(boolean log) {
-        FPlot2D results = supplyFPlot2D();
+    public FPlot getBoxCoverageFunction(boolean log) {
+        FPlot results = supplyFPlot();
 
         double radius = getParticleRadius().mean();
 
@@ -991,7 +991,7 @@ public class FAggregateDef implements FAggregate {
         };
     }
 
-    private void getBoxCoverageStep(FPlot2D data, double step) {
+    private void getBoxCoverageStep(FPlot data, double step) {
         FSphereHelper helper = getFSphereHelper();
 
         FPos3D origin = getBoundary().getPosA();
@@ -1049,7 +1049,7 @@ public class FAggregateDef implements FAggregate {
         data.add(step, sum);
     }
 
-    private double getBoxCoverageAnalyze(FPlot2D data) {
+    private double getBoxCoverageAnalyze(FPlot data) {
         data.mutateY((x, y) -> Math.log(y));
         data.mutateX((x, y) -> Math.log(1 / x));
 
@@ -1060,7 +1060,7 @@ public class FAggregateDef implements FAggregate {
         return regression.getD0();
     }
 
-    private double getDensityCorrelationAnalyze(FPlot2D data) {
+    private double getDensityCorrelationAnalyze(FPlot data) {
         double distMin = data.getX(0);
 
         data.filter((x, y) -> x > 2.1 * distMin);
@@ -1174,8 +1174,8 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FStat1D getParticleRadius() {
-        FStat1D particles = supplyFStat1D();
+    public FStat getParticleRadius() {
+        FStat particles = supplyFStat();
 
         getRefParticles().forEach(e -> particles.add(e.getRadius()));
 
@@ -1218,19 +1218,19 @@ public class FAggregateDef implements FAggregate {
         return factory.getFLayer();
     }
 
-    private FStat1D supplyFStat1D() {
+    private FStat supplyFStat() {
 
-        return factory.getFStat1D();
+        return factory.getFStat();
     }
 
-    private FPlot2D supplyFPlot2D() {
+    private FPlot supplyFPlot() {
 
-        return factory.getFPlot2D();
+        return factory.getFPlot();
     }
 
-    private FPlot2D supplyFPlot2D(FLayer fLayer) {
+    private FPlot supplyFPlot(FLayer fLayer) {
 
-        return factory.getFPlot2D(fLayer);
+        return factory.getFPlot(fLayer);
     }
 
     private FPoint supplyFPoint() {

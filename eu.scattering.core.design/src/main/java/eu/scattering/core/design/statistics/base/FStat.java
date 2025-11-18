@@ -3,16 +3,18 @@ package eu.scattering.core.design.statistics.base;
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.statistics.Statistics;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.construct.FPlot;
 
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
+public interface FStat extends Statistics<FStat>, Iterable<Double> {
 
     void add(double value);
     void add(double... value);
+
+    // -------------------------------------------------------------------------------------------------
 
     double get(int index);
     void set(int index, double value);
@@ -83,7 +85,8 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     void invert();
     void mirror();
 
-    void spread();
+    void rescale();
+    void rescale(double min, double max);
 
     void absolute();
     void distribute();
@@ -94,45 +97,45 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
     void removeBias();
     void removeBias(double mean);
 
-    boolean isSimilarAbs(double threshold, FStat1D... comparison);
-    boolean isSimilarRel(double threshold, FStat1D... comparison);
+    boolean isSimilarAbs(double threshold, FStat... comparison);
+    boolean isSimilarRel(double threshold, FStat... comparison);
 
     // -------------------------------------------------------------------------------------------------
 
     double[] toArray();
 
-    FPlot2D toFPlot2DLinear();
-    FPlot2D toFPlot2DPieChart();
-    FPlot2D toFPlot2DHistogram(double min, double max, int divisions);
+    FPlot toFPlotLinear();
+    FPlot toFPlotPieChart();
+
+    FPlot toFPlotHistogram(double step);
+    FPlot toFPlotHistogram(double min, double max, int divisions);
 
     // -------------------------------------------------------------------------------------------------
 
-    String getName();
-    void setName(String name);
+    String getMetaName();
+    void setMetaName(String name);
 
     // -------------------------------------------------------------------------------------------------
 
     @Fragment
-    FStat1D removeNaN(); // Replace with null
+    FStat removeNaN();
     @Fragment
-    FStat1D replaceWithNaN(Function<Double, Boolean> function);
+    FStat replaceWithNaN(Function<Double, Boolean> function);
     @Fragment
-    FStat1D replaceWithNaN(boolean dynamic, BiFunction<Double, Double, Boolean> function);
+    FStat replaceWithNaN(boolean dynamic, BiFunction<Double, Double, Boolean> function);
     @Fragment
-    FStat1D replaceOutliersWithNaN(boolean sample, double factor);
+    FStat replaceOutliersWithNaN(boolean sample, double factor);
     @Fragment
-    FStat1D replaceOutliersWithNaN(double mean, double std, double factor);
+    FStat replaceOutliersWithNaN(double mean, double std, double factor);
     @Fragment
-    FStat1D replaceSameWithNaN();
+    FStat replaceSameWithNaN();
     @Fragment
-    FStat1D replaceDecreasingWithNaN();
+    FStat replaceDecreasingWithNaN();
     @Fragment
-    FStat1D replaceIncreasingWithNaN();
+    FStat replaceIncreasingWithNaN();
 
     @Modificator
-    List<Double> getRefData();
-    @Modificator
-    void setRefData(List<Double> data);
+    List<Double> getRefCore();
 
     // -------------------------------------------------------------------------------------------------
 
@@ -140,5 +143,4 @@ public interface FStat1D extends Statistics<FStat1D>, Iterable<Double> {
 
         log(Math.E);
     }
-    // Different 'toString'
 }

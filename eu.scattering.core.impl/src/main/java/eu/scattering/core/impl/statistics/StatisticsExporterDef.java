@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.statistics;
 
 import eu.scattering.core.design.statistics.StatisticsExporter;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.base.FStat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class StatisticsExporterDef implements StatisticsExporter {
     }
 
     @Override
-    public String toPythonPlotlyLinear(FPlot2D... plot) {
+    public String toPythonPlotlyLinear(FPlot... plot) {
         StringBuilder builder = new StringBuilder();
         String namePlot = getName().isEmpty() ? "" : getName();
         String nameX = getNameX().isEmpty() ? "" : getNameX();
@@ -61,7 +61,7 @@ public class StatisticsExporterDef implements StatisticsExporter {
     }
 
     @Override
-    public String toPythonPlotlyHistogram(FStat1D... stat) {
+    public String toPythonPlotlyHistogram(FStat... stat) {
         StringBuilder builder = new StringBuilder();
         String namePlot = getName().isEmpty() ? "" : getName();
         String nameX = getNameX().isEmpty() ? "" : getNameX();
@@ -72,12 +72,12 @@ public class StatisticsExporterDef implements StatisticsExporter {
         builder.append("fig = go.Figure()\n");
 
         for (int i = 0 ; i < stat.length ; i++) {
-            List<String> x = stat[i].getRefData().stream().map(e -> "" + e).toList();
-            String name = stat[i].getName().isEmpty() ? "data " + i : stat[i].getName();
+            List<String> x = stat[i].getRefCore().stream().map(e -> "" + e).toList();
+            String name = stat[i].getMetaName().isEmpty() ? "data " + i : stat[i].getMetaName();
 
             builder.append("fig.add_trace(go.Histogram(");
             builder.append("x=[" + String.join(",", x) + "], ");
-            builder.append("name='" + stat[i].getName() + "', ");
+            builder.append("name='" + stat[i].getMetaName() + "', ");
             builder.append("opacity=0.75))\n");
         }
 
@@ -95,7 +95,7 @@ public class StatisticsExporterDef implements StatisticsExporter {
     }
 
     @Override
-    public String toPythonPlotlyHistogram(FPlot2D... plot) {
+    public String toPythonPlotlyHistogram(FPlot... plot) {
         StringBuilder builder = new StringBuilder();
         String namePlot = getName().isEmpty() ? "" : getName();
         String nameX = getNameX().isEmpty() ? "" : getNameX();

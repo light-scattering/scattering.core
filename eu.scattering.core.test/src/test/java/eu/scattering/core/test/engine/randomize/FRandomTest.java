@@ -3,7 +3,7 @@ package eu.scattering.core.test.engine.randomize;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.transfer.primitive.*;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.*;
@@ -716,8 +716,8 @@ public class FRandomTest {
             FRandGenerator fRandomA = FactoryDef.create(seed).getFRand();
             FRandGenerator fRandomB = FactoryDef.create(seed).getFRand();
 
-            FStat1D fStatA = factory.getFStat1D();
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
+            FStat fStatB = factory.getFStat();
 
             for (int i = 0 ; i < 2500 ; i++) {
                 fStatA.add(fRandomA.nextGaussian(mean, std));
@@ -740,8 +740,8 @@ public class FRandomTest {
             FRandGenerator fRandomA = FactoryDef.create().getFRand();
             FRandGenerator fRandomB = FactoryDef.create().getFRand();
 
-            FStat1D fStatA = factory.getFStat1D();
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
+            FStat fStatB = factory.getFStat();
 
             for (int i = 0 ; i < 2500 ; i++) {
                 fStatA.add(fRandomA.nextGaussian(mean, std));

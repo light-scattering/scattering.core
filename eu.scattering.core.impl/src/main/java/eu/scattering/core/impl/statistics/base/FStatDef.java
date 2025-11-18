@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.statistics.base;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.base.FStat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,73 +11,56 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class FStat1DDef implements FStat1D {
+public class FStatDef implements FStat {
     private static final String JSON_TYPE = "type";
-    private static final String JSON_MAIN = "stat1D";
+    private static final String JSON_MAIN = "stat";
     private static final String JSON_DATA = "data";
+    private static final String JSON_TOTAL = "total";
+    private static final String JSON_INVALID = "invalid";
 
     private final ScatFactory factory;
 
-    private List<Double> data = new ArrayList<>();
+    private final List<Double> data;
 
     private String name = "";
 
-    private FStat1DDef(ScatFactory factory) {
+    private FStatDef(ScatFactory factory, List<Double> data) {
 
         this.factory = factory;
+        this.data = data == null ? new ArrayList<>() : data;
     }
 
-    public static FStat1D create(ScatFactory factory) {
+    public static FStat create(ScatFactory factory) {
 
-        return new FStat1DDef(factory);
+        return new FStatDef(factory, null);
     }
 
-    public static FStat1D create(ScatFactory factory, int[] values) {
-        FStat1D fStat = FStat1DDef.create(factory);
+    public static FStat create(ScatFactory factory, List<Double> data) {
 
-        for (double item : values) {
-            fStat.add(item);
-        }
-
-        return fStat;
+        return new FStatDef(factory, data);
     }
 
-    public static FStat1D create(ScatFactory factory, double[] values) {
-        FStat1D fStat = FStat1DDef.create(factory);
-
-        for (double item : values) {
-            fStat.add(item);
-        }
-
-        return fStat;
-    }
-
-    public static FStat1D create(ScatFactory factory, Collection<Double> values) {
-        FStat1D fStat = FStat1DDef.create(factory);
-
-        for (Double item : values) {
-            fStat.add(item);
-        }
-
-        return fStat;
-    }
-
-    public static FStat1D create(ScatFactory factory, JSONObject json) {
-        FStat1D fStat1D = FStat1DDef.create(factory);
+    public static FStat create(ScatFactory factory, JSONObject json) {
+        FStat fStat = FStatDef.create(factory);
 
         JSONArray data = json.getJSONArray(JSON_DATA);
         for (int i = 0 ; i < data.length() ; i++) {
-            fStat1D.add(data.getDouble(i));
+
+            if (data.isNull(i)) {
+                fStat.add(Double.NaN);
+            } else {
+                fStat.add(data.getDouble(i));
+            }
         }
 
-        return fStat1D;
+        return fStat;
     }
 
     @Override
-    public FStat1D copy() {
-        FStat1D results = factory.getFStat1D();
+    public FStat copy() {
+        FStat results = factory.getFStat();
 
-        getRefData().forEach(results::add);
+        getRefCore().forEach(results::add);
 
         return results;
     }
@@ -85,19 +68,19 @@ public class FStat1DDef implements FStat1D {
     @Override
     public int size() {
 
-        return getRefData().size();
+        return getRefCore().size();
     }
 
     @Override
     public void clear() {
 
-        getRefData().clear();
+        getRefCore().clear();
     }
 
     @Override
     public void add(double value) {
 
-        getRefData().add(value);
+        getRefCore().add(value);
     }
 
     @Override
@@ -111,20 +94,20 @@ public class FStat1DDef implements FStat1D {
     @Override
     public double get(int index) {
 
-        return getRefData().get(index);
+        return getRefCore().get(index);
     }
 
     @Override
     public void set(int index, double value) {
 
-        getRefData().set(index, value);
+        getRefCore().set(index, value);
     }
 
     @Override
     public double min() {
         double min = Double.POSITIVE_INFINITY;
 
-        for (Double item : getRefData()) {
+        for (Double item : getRefCore()) {
 
             if (item < min) {
                 min = item;
@@ -138,7 +121,7 @@ public class FStat1DDef implements FStat1D {
     public double max() {
         double max = Double.NEGATIVE_INFINITY;
 
-        for (Double item : getRefData()) {
+        for (Double item : getRefCore()) {
 
             if (item > max) {
                 max = item;
@@ -163,7 +146,7 @@ public class FStat1DDef implements FStat1D {
     @Override
     public double sum() {
 
-        return getRefData().stream().reduce(0d, Double::sum);
+        return getRefCore().stream().reduce(0d, Double::sum);
     }
 
     @Override
@@ -183,7 +166,7 @@ public class FStat1DDef implements FStat1D {
             throw new IllegalArgumentException("The value cannot be greater than one hundred");
         }
 
-        FStat1D copy = copy();
+        FStat copy = copy();
 
         copy.sort(true);
 
@@ -240,9 +223,9 @@ public class FStat1DDef implements FStat1D {
             return new double[0];
         }
 
-        FPlot2D fPlot = factory.getFPlot2D();
+        FPlot fPlot = factory.getFPlot();
 
-        for (double v : getRefData()) {
+        for (double v : getRefCore()) {
             fPlot.add((y1, y2) -> y1 + 1, v);
         }
 
@@ -257,22 +240,22 @@ public class FStat1DDef implements FStat1D {
             }
         }
 
-        FStat1D fStat1D = factory.getFStat1D();
+        FStat fStat = factory.getFStat();
 
         for (int j = 0 ; j < i ; j++) {
-            fStat1D.add(fPlot.getX(j));
+            fStat.add(fPlot.getX(j));
         }
 
-        fStat1D.sort(true);
+        fStat.sort(true);
 
-        return fStat1D.toArray();
+        return fStat.toArray();
     }
 
     @Override
     public double rms() {
         double sum = 0;
 
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
             sum += (value * value);
         }
 
@@ -290,7 +273,7 @@ public class FStat1DDef implements FStat1D {
     public double ss(double mean) {
         double sum = 0;
 
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
             sum += Math.pow(value - mean, 2);
         }
 
@@ -308,7 +291,7 @@ public class FStat1DDef implements FStat1D {
     public double mad(double mean) {
         double sum = 0;
 
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
             sum += Math.abs(value - mean);
         }
 
@@ -393,14 +376,14 @@ public class FStat1DDef implements FStat1D {
     @Override
     public boolean allDistinct() {
 
-        return getRefData().stream().distinct().toList().size() == size();
+        return getRefCore().stream().distinct().toList().size() == size();
     }
 
     @Override
     public int filter(Function<Double, Boolean> function) {
         int oldSize = size();
 
-        setRefData(getRefData().stream().filter(function::apply).collect(Collectors.toList()));
+        setData(getRefCore().stream().filter(function::apply).collect(Collectors.toList()));
 
         return oldSize - size();
     }
@@ -415,7 +398,7 @@ public class FStat1DDef implements FStat1D {
         List<Double> results = dynamic ? filterDynamic(function) : filterStatic(function);
         int count = size() - results.size();
 
-        setRefData(results);
+        setData(results);
 
         return count;
     }
@@ -459,7 +442,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D removeNaN() {
+    public FStat removeNaN() {
 
         filter((x) -> !Double.isNaN(x));
 
@@ -467,7 +450,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D replaceWithNaN(Function<Double, Boolean> function) {
+    public FStat replaceWithNaN(Function<Double, Boolean> function) {
 
         for (int i = 0 ; i < size() ; i++) {
             if (!function.apply(get(i))) {
@@ -479,7 +462,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D replaceWithNaN(boolean dynamic, BiFunction<Double, Double, Boolean> function) {
+    public FStat replaceWithNaN(boolean dynamic, BiFunction<Double, Double, Boolean> function) {
 
         if (size() < 2) {
             throw new IllegalStateException("The set must contain at least two elements");
@@ -495,7 +478,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D replaceOutliersWithNaN(boolean sample, double factor) {
+    public FStat replaceOutliersWithNaN(boolean sample, double factor) {
 
         if (factor < 0) {
             throw new IllegalArgumentException("The multiplication factor cannot be lower then zero");
@@ -510,7 +493,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D replaceOutliersWithNaN(double mean, double std, double factor) {
+    public FStat replaceOutliersWithNaN(double mean, double std, double factor) {
 
         if (factor < 0) {
             throw new IllegalArgumentException("The multiplication factor cannot be lower then zero");
@@ -524,7 +507,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D replaceSameWithNaN() {
+    public FStat replaceSameWithNaN() {
 
         replaceWithNaN(true, (x0, x1) -> !Objects.equals(x0, x1));
 
@@ -532,7 +515,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D replaceDecreasingWithNaN() {
+    public FStat replaceDecreasingWithNaN() {
 
         replaceWithNaN(true, (x0, x1) -> x1 >= x0);
 
@@ -540,7 +523,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FStat1D replaceIncreasingWithNaN() {
+    public FStat replaceIncreasingWithNaN() {
 
         replaceWithNaN(true, (x0, x1) -> x1 <= x0);
 
@@ -559,7 +542,7 @@ public class FStat1DDef implements FStat1D {
 
         for (int i = 0 ; i < size() ; i++) {
 
-            getRefData().set(i, function.apply(getRefData().get(i)));
+            getRefCore().set(i, function.apply(getRefCore().get(i)));
         }
     }
 
@@ -588,11 +571,25 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public void spread() {
+    public void rescale() {
         double min = min();
         double max = max();
 
         mutate((x) -> (x - min) / (max - min));
+    }
+
+    @Override
+    public void rescale(double min, double max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("The min value must be greater then the max value");
+        }
+
+        double spread = max - min;
+
+        rescale();
+
+        mutate((x) -> (x * spread) + min);
     }
 
     @Override
@@ -611,7 +608,7 @@ public class FStat1DDef implements FStat1D {
     @Override
     public void invert() {
 
-        setRefData(getRefData().reversed());
+        setData(new ArrayList<>(getRefCore().reversed()));
     }
 
     @Override
@@ -626,7 +623,7 @@ public class FStat1DDef implements FStat1D {
         double std = std(sample);
 
         for (int i = 0 ; i < size() ; i++) {
-            getRefData().set(i, (getRefData().get(i) - mean) / std);
+            getRefCore().set(i, (getRefCore().get(i) - mean) / std);
         }
     }
 
@@ -634,7 +631,7 @@ public class FStat1DDef implements FStat1D {
     public void normalize(double mean, double std) {
 
         for (int i = 0 ; i < size() ; i++) {
-            getRefData().set(i, (getRefData().get(i) - mean) / std);
+            getRefCore().set(i, (getRefCore().get(i) - mean) / std);
         }
     }
 
@@ -652,7 +649,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public boolean isSimilarAbs(double threshold, FStat1D... comparison) {
+    public boolean isSimilarAbs(double threshold, FStat... comparison) {
 
         if (threshold < 0) {
             throw new IllegalArgumentException("The threshold value cannot be negative");
@@ -662,7 +659,7 @@ public class FStat1DDef implements FStat1D {
             throw new IllegalArgumentException("At least one set must be provided for comparison");
         }
 
-        for (FStat1D fStat : comparison) {
+        for (FStat fStat : comparison) {
             if (size() != fStat.size()) {
                 throw new IllegalArgumentException("All sets must have the same size");
             }
@@ -671,7 +668,7 @@ public class FStat1DDef implements FStat1D {
         for (int i = 0 ; i < size() ; i++) {
             double value = get(i);
 
-            for (FStat1D fStat : comparison) {
+            for (FStat fStat : comparison) {
                 if (Math.abs(value - fStat.get(i)) > threshold) {
                     return false;
                 }
@@ -682,7 +679,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public boolean isSimilarRel(double threshold, FStat1D... comparison) {
+    public boolean isSimilarRel(double threshold, FStat... comparison) {
 
         if (threshold < 0) {
             throw new IllegalArgumentException("The threshold value cannot be negative");
@@ -692,7 +689,7 @@ public class FStat1DDef implements FStat1D {
             throw new IllegalArgumentException("At least one set must be provided for comparison");
         }
 
-        for (FStat1D fStat : comparison) {
+        for (FStat fStat : comparison) {
             if (size() != fStat.size()) {
                 throw new IllegalArgumentException("All sets must have the same size");
             }
@@ -701,7 +698,7 @@ public class FStat1DDef implements FStat1D {
         for (int i = 0 ; i < size() ; i++) {
             double value = get(i);
 
-            for (FStat1D fStat : comparison) {
+            for (FStat fStat : comparison) {
                 if (Math.abs((fStat.get(i) - value) / value) > threshold) {
                     return false;
                 }
@@ -723,32 +720,32 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FPlot2D toFPlot2DLinear() {
+    public FPlot toFPlotLinear() {
 
         if (size() == 0) {
             throw new IllegalStateException("The number of elements must be greater than zero");
         }
 
-        FPlot2D fPlot = factory.getFPlot2D();
+        FPlot fPlot = factory.getFPlot();
 
         for (int i = 0 ; i < size() ; i++) {
 
-            fPlot.add(i, getRefData().get(i));
+            fPlot.add(i, getRefCore().get(i));
         }
 
         return fPlot;
     }
 
     @Override
-    public FPlot2D toFPlot2DPieChart() {
+    public FPlot toFPlotPieChart() {
 
         if (size() == 0) {
             throw new IllegalStateException("The number of elements must be greater than zero");
         }
 
-        FPlot2D fPlot = factory.getFPlot2D();
+        FPlot fPlot = factory.getFPlot();
 
-        for (double v : getRefData()) {
+        for (double v : getRefCore()) {
             fPlot.add((y1, y2) -> y1 + 1, v, 1);
         }
 
@@ -759,7 +756,7 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public FPlot2D toFPlot2DHistogram(double min, double max, int divisions) {
+    public FPlot toFPlotHistogram(double min, double max, int divisions) {
 
         if (divisions < 2) {
             throw new IllegalArgumentException("The number of groups must be greater then one");
@@ -769,7 +766,7 @@ public class FStat1DDef implements FStat1D {
             throw new IllegalArgumentException("The minimum value must be smaller than the maximum value");
         }
 
-        FPlot2D fPlot = factory.getFPlot2D();
+        FPlot fPlot = factory.getFPlot();
 
         double range = max - min;
         double step = range / divisions;
@@ -779,7 +776,47 @@ public class FStat1DDef implements FStat1D {
         }
 
         main:
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
+
+            if (value < min || value > max) {
+                continue;
+            }
+
+            for (int i = 0; i < divisions + 1; i++) {
+                if (value == fPlot.getX(i) || value < fPlot.getX(i) + step) {
+                    fPlot.add((y1, y2) -> y1 + 1, fPlot.getX(i));
+
+                    continue main;
+                }
+            }
+
+            throw new IllegalStateException("The histogram could not be generated");
+        }
+
+        return fPlot;
+    }
+
+    @Override
+    public FPlot toFPlotHistogram(double step) {
+
+        if (step <= 0) {
+            throw new IllegalArgumentException("The step must be greater than zero");
+        }
+
+        double min = min();
+        double max = max();
+
+        FPlot fPlot = factory.getFPlot();
+
+        double range = max - min;
+        int divisions = (int) Math.ceil(range / step);
+
+        for (int i = 0; i < divisions + 1; i++) {
+            fPlot.add(min + (i * step));
+        }
+
+        main:
+        for (double value : getRefCore()) {
 
             if (value < min || value > max) {
                 continue;
@@ -800,6 +837,12 @@ public class FStat1DDef implements FStat1D {
     }
 
     //--------------------------------------------------
+
+    private void setData(Collection<Double> data) {
+
+        getRefCore().clear();
+        getRefCore().addAll(data);
+    }
 
     private void replaceWithNaNDynamic(BiFunction<Double, Double, Boolean> function) {
         double previous = get(0);
@@ -885,12 +928,12 @@ public class FStat1DDef implements FStat1D {
 
     private void sortAsc() {
 
-        getRefData().sort((a, b) -> a - b > 0 ? 1 : a.equals(b) ? 0 : -1);
+        getRefCore().sort((a, b) -> a - b > 0 ? 1 : a.equals(b) ? 0 : -1);
     }
 
     private void sortDsc() {
 
-        getRefData().sort((a, b) -> a - b < 0 ? 1 : a.equals(b) ? 0 : -1);
+        getRefCore().sort((a, b) -> a - b < 0 ? 1 : a.equals(b) ? 0 : -1);
     }
 
     private double varSample(double mean) {
@@ -901,7 +944,7 @@ public class FStat1DDef implements FStat1D {
 
         double sum = 0;
 
-        for (double d : getRefData()) {
+        for (double d : getRefCore()) {
             sum += Math.pow(d - mean, 2);
         }
 
@@ -916,7 +959,7 @@ public class FStat1DDef implements FStat1D {
 
         double sum = 0;
 
-        for (double d : getRefData()) {
+        for (double d : getRefCore()) {
             sum += Math.pow(d - mean, 2);
         }
 
@@ -928,7 +971,7 @@ public class FStat1DDef implements FStat1D {
         double prefix = n / ((n - 1) * (n - 2));
         double sum = 0;
 
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
             sum += Math.pow((value - mean) / std, 3);
         }
 
@@ -938,7 +981,7 @@ public class FStat1DDef implements FStat1D {
     private double skewnessPopulation(double mean, double std) {
         double sum = 0;
 
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
             sum += Math.pow(value - mean, 3);
         }
 
@@ -950,7 +993,7 @@ public class FStat1DDef implements FStat1D {
         double prefix = (n * (n + 1)) / ((n - 1) * (n - 2) * (n - 3));
         double sum = 0;
 
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
             sum += Math.pow((value - mean) / std, 4);
         }
 
@@ -960,7 +1003,7 @@ public class FStat1DDef implements FStat1D {
     private double kurtosisPopulation(double mean, double std) {
         double sum = 0;
 
-        for (double value : getRefData()) {
+        for (double value : getRefCore()) {
             sum += Math.pow(value - mean, 4);
         }
 
@@ -970,14 +1013,14 @@ public class FStat1DDef implements FStat1D {
     //--------------------------------------------------
 
     @Override
-    public boolean isEqual(FStat1D fStat) {
+    public boolean isEqual(FStat fStat) {
 
         if (size() != fStat.size()) {
             return false;
         }
 
         for (int i = 0 ; i < fStat.size() ; i++) {
-            if (!(getRefData().get(i) == fStat.get(i))) {
+            if (!(getRefCore().get(i) == fStat.get(i))) {
                 return false;
             }
         }
@@ -986,9 +1029,35 @@ public class FStat1DDef implements FStat1D {
     }
 
     @Override
-    public boolean isEqualData(FStat1D fStat) {
+    public boolean isEqualWithNaN(FStat fStat) {
+
+        if (size() != fStat.size()) {
+            return false;
+        }
+
+        for (int i = 0 ; i < fStat.size() ; i++) {
+            if (!(getRefCore().get(i) == fStat.get(i))) {
+                if (getRefCore().get(i).isNaN() && Double.isNaN(fStat.get(i))) {
+                    continue;
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isEqualData(FStat fStat) {
 
         return isEqual(fStat);
+    }
+
+    @Override
+    public boolean isEqualDataWithNaN(FStat fStat) {
+
+        return isEqualWithNaN(fStat);
     }
 
     @Override
@@ -997,9 +1066,26 @@ public class FStat1DDef implements FStat1D {
 
         json.put(JSON_TYPE, JSON_MAIN);
 
-        for (Double item : getRefData()) {
-            json.append(JSON_DATA, item);
+        for (Double item : getRefCore()) {
+            if (item.isNaN()) {
+                json.append(JSON_DATA, null);
+            } else {
+                json.append(JSON_DATA, item);
+            }
         }
+
+        return json;
+    }
+
+    @Override
+    public JSONObject toSimpleJSON() {
+        JSONObject json = new JSONObject();
+
+        int invalid = copy().filter((x) -> !Double.isNaN(x));
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_TOTAL, size());
+        json.put(JSON_INVALID, invalid);
 
         return json;
     }
@@ -1007,48 +1093,42 @@ public class FStat1DDef implements FStat1D {
     @Override
     public String toString() {
 
-        return toJSON().toString();
+        return toSimpleJSON().toString();
     }
 
     //--------------------------------------------------
 
     @Override
-    public String getName() {
+    public String getMetaName() {
 
         return this.name;
     }
 
     @Override
-    public void setName(String name) {
+    public void setMetaName(String name) {
 
         this.name = name;
     }
 
     @Override
-    public List<Double> getRefData() {
+    public List<Double> getRefCore() {
 
         return this.data;
     }
 
     @Override
-    public void setRefData(List<Double> data) {
-
-        this.data = data;
-    }
-
-    @Override
     public Iterator<Double> iterator() {
 
-        return new FStat1DIterator();
+        return new FStatIterator();
     }
 
-    class FStat1DIterator implements Iterator<Double> {
+    class FStatIterator implements Iterator<Double> {
         private int index = 0;
 
         @Override
         public boolean hasNext() {
 
-            return index < FStat1DDef.this.size();
+            return index < FStatDef.this.size();
         }
 
         @Override
@@ -1058,7 +1138,7 @@ public class FStat1DDef implements FStat1D {
                 throw new NoSuchElementException();
             }
 
-            return FStat1DDef.this.get(index++);
+            return FStatDef.this.get(index++);
         }
     }
 }

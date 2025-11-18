@@ -47,8 +47,8 @@ import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.physics.material.data.FMaterialData;
 import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.StatisticsHelper;
-import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
@@ -83,8 +83,8 @@ import eu.scattering.core.impl.physics.FMaterialDataDef;
 import eu.scattering.core.impl.physics.FMaterialDef;
 import eu.scattering.core.impl.statistics.FStatHelperDef;
 import eu.scattering.core.impl.statistics.StatisticsExporterDef;
-import eu.scattering.core.impl.statistics.base.FStat1DDef;
-import eu.scattering.core.impl.statistics.construct.FPlot2DDef;
+import eu.scattering.core.impl.statistics.base.FStatDef;
+import eu.scattering.core.impl.statistics.construct.FPlotDef;
 import eu.scattering.core.impl.storage.FBufferDef;
 import eu.scattering.core.impl.storage.FCacheDef;
 import eu.scattering.core.impl.storage.FLayerDef;
@@ -92,7 +92,6 @@ import eu.scattering.core.impl.storage.FMeshDef;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public final class FactoryDef implements ScatFactory {
@@ -603,51 +602,45 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FPlot2D getFPlot2D() {
+    public FPlot getFPlot() {
 
-        return FPlot2DDef.create(this);
+        return FPlotDef.create(this);
     }
 
     @Override
-    public FPlot2D getFPlot2D(FLayer fLayer) {
+    public FPlot getFPlot(FLayer fLayer) {
 
-        return FPlot2DDef.create(this, fLayer);
+        return FPlotDef.create(this, fLayer);
     }
 
     @Override
-    public FPlot2D getFPlot2D(JSONObject json) {
+    public FPlot getRefFPlot(FStat refDataX, FStat refDataY) {
 
-        return FPlot2DDef.create(this, json);
+        return FPlotDef.create(this, refDataX, refDataY);
     }
 
     @Override
-    public FStat1D getFStat1D() {
+    public FPlot getFPlot(JSONObject json) {
 
-        return FStat1DDef.create(this);
+        return FPlotDef.create(this, json);
     }
 
     @Override
-    public FStat1D getFStat1D(int[] values) {
+    public FStat getFStat() {
 
-        return FStat1DDef.create(this, values);
+        return FStatDef.create(this);
     }
 
     @Override
-    public FStat1D getFStat1D(double[] values) {
+    public FStat getRefFStat(List<Double> refData) {
 
-        return FStat1DDef.create(this, values);
+        return FStatDef.create(this, refData);
     }
 
     @Override
-    public FStat1D getFStat1D(Collection<Double> values) {
+    public FStat getFStat(JSONObject json) {
 
-        return FStat1DDef.create(this, values);
-    }
-
-    @Override
-    public FStat1D getFStat1D(JSONObject json) {
-
-        return FStat1DDef.create(this, json);
+        return FStatDef.create(this, json);
     }
 
     //--------------------------------------------------

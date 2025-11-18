@@ -4,20 +4,20 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.monitor.construct.FMonitorConstruct;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.construct.FPlot;
 
 public class FMonitorRoGDef implements FMonitorConstruct {
     private final FAggregate.RoG type;
-    private final FPlot2D fPlot2D;
+    private final FPlot fPlot;
 
     private double skip = -1;
 
     private FMonitorRoGDef(ScatFactory factory, FAggregate.RoG type) {
 
         this.type = type;
-        this.fPlot2D = factory.getFPlot2D();
+        this.fPlot = factory.getFPlot();
 
-        this.fPlot2D.setName("Radius of gyration");
+        this.fPlot.setName("Radius of gyration");
     }
 
     public static FMonitorConstruct create(ScatFactory factory, int skip, FAggregate.RoG type) {
@@ -35,19 +35,19 @@ public class FMonitorRoGDef implements FMonitorConstruct {
     }
 
     @Override
-    public FPlot2D getResults() {
+    public FPlot getResults() {
 
-        return this.fPlot2D;
+        return this.fPlot;
     }
 
     @Override
     public void accept(FAggregate fAggregate, Shape shape) {
 
         if (fAggregate.getRefParticles().size() == 0) {
-            fPlot2D.clear();
+            fPlot.clear();
         } else {
             if (fAggregate.getRefParticles().size() > this.skip) {
-                fPlot2D.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyration(type));
+                fPlot.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyration(type));
             }
         }
     }

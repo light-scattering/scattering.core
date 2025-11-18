@@ -1,8 +1,8 @@
 package eu.scattering.core.test.statistics;
 
 import eu.scattering.core.design.statistics.StatisticsExporter;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.base.FStat;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
@@ -13,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StatisticsExporterTest {
 
     @Test
-    @DisplayName("Plotly FPlot2D linear")
-    void plotlyFPlot2DLinear() {
-        FPlot2D fPlot = factory.getFPlot2D();
+    @DisplayName("Plotly FPlot linear")
+    void plotlyFPlotLinear() {
+        FPlot fPlot = factory.getFPlot();
         StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
 
         fPlotExporter.setName("Test");
@@ -30,9 +30,9 @@ public class StatisticsExporterTest {
         fPlot.add(2, 1);
         fPlot.add(3, -3);
 
-        FPlot2D fPlotRaw = fPlot.copy();
-        FPlot2D fPlotInterpolated = fPlot.copy();
-        FPlot2D fPlotSimpleLinearRegression = fPlot.copy();
+        FPlot fPlotRaw = fPlot.copy();
+        FPlot fPlotInterpolated = fPlot.copy();
+        FPlot fPlotSimpleLinearRegression = fPlot.copy();
 
         fPlotRaw.setName("Raw");
         fPlotInterpolated.setName("Interpolated");
@@ -49,22 +49,22 @@ public class StatisticsExporterTest {
     }
 
     @Test
-    @DisplayName("Plotly FStat1D histogram")
-    void plotlyFStat1DHistogram() {
+    @DisplayName("Plotly FStat histogram")
+    void plotlyFStatHistogram() {
         StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
         fPlotExporter.setNameY("Y");
 
-        FStat1D fStatA = factory.getFStat1D();
+        FStat fStatA = factory.getFStat();
         fStatA.add(1, 0.2, -5, 2, 4.2, -1.9, 2, 0.2, 0.2, 5.2, -2.6, -1.9, 0, 2.5, 4.1, -1.0, -0.3);
 
-        FStat1D fStatB = factory.getFStat1D();
+        FStat fStatB = factory.getFStat();
         fStatB.add(-2, 1, 8, 4.5, 3.1, 1.9, 1.8, 1.7, -1.3, 3.6, 5.1, 6.9, 2.9, -0.9, -0.8);
 
-        fStatA.setName("Stat A");
-        fStatB.setName("Stat B");
+        fStatA.setMetaName("Stat A");
+        fStatB.setMetaName("Stat B");
 
         String script = fPlotExporter.toPythonPlotlyHistogram(fStatA, fStatB);
 
@@ -74,15 +74,15 @@ public class StatisticsExporterTest {
     }
 
     @Test
-    @DisplayName("Plotly FPlot2D histogram")
-    void plotlyFPlot2DHistogram() {
+    @DisplayName("Plotly FPlot histogram")
+    void plotlyFPlotHistogram() {
         StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setNameX("X");
         fPlotExporter.setNameY("Y");
 
-        FPlot2D fPlotA = factory.getFPlot2D();
+        FPlot fPlotA = factory.getFPlot();
         fPlotA.setName("A");
 
         fPlotA.add(-3, 4);
@@ -93,7 +93,7 @@ public class StatisticsExporterTest {
         fPlotA.add(2, 1);
         fPlotA.add(3, 3);
 
-        FPlot2D fPlotB = factory.getFPlot2D();
+        FPlot fPlotB = factory.getFPlot();
         fPlotB.setName("B");
 
         fPlotB.add(0, 4);
@@ -114,7 +114,7 @@ public class StatisticsExporterTest {
     @Nested
     @Tag("Meta")
     @DisplayName("Meta")
-    class FPlot2DExporterMetaTest {
+    class FPlotExporterMetaTest {
 
         @Test
         @DisplayName("Set name")

@@ -10,8 +10,8 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
-import eu.scattering.core.design.statistics.base.FStat1D;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
@@ -1894,7 +1894,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D results = fAggregate.getPairDistance();
+            FStat results = fAggregate.getPairDistance();
 
             results.sort(true);
 
@@ -1912,7 +1912,7 @@ public class FAggregateTest {
         void getPairDistanceB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FStat1D results = fAggregate.getPairDistance();
+            FStat results = fAggregate.getPairDistance();
 
             assertTrue(results.size() > 100000);
         }
@@ -1933,10 +1933,10 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getPairDistanceFunction();
-            results.mutateFStatY(FStat1D::distribute);
+            FPlot results = fAggregate.getPairDistanceFunction();
+            results.mutateFStatY(FStat::distribute);
 
-            assertEquals(1, results.getRefFStatY().sum(), 1E-4);
+            assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertEquals(0, results.getY(0));
             assertEquals(0, results.getY(1));
             assertEquals(0, results.getY(3));
@@ -1948,8 +1948,8 @@ public class FAggregateTest {
         void getPairDistanceFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot2D results = fAggregate.getPairDistanceFunction();
-            results.mutateFStatY(FStat1D::distribute);
+            FPlot results = fAggregate.getPairDistanceFunction();
+            results.mutateFStatY(FStat::distribute);
 
             assertTrue(results.size() > 100);
         }
@@ -1970,7 +1970,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D results = fAggregate.getCoordinationNumber();
+            FStat results = fAggregate.getCoordinationNumber();
 
             results.sort(true);
 
@@ -1988,7 +1988,7 @@ public class FAggregateTest {
         void coordinationNumberB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FStat1D results = fAggregate.getCoordinationNumber();
+            FStat results = fAggregate.getCoordinationNumber();
 
             assertEquals(1000, results.size());
         }
@@ -2009,10 +2009,10 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getCoordinationNumberFunction();
-            results.mutateFStatY(FStat1D::distribute);
+            FPlot results = fAggregate.getCoordinationNumberFunction();
+            results.mutateFStatY(FStat::distribute);
 
-            assertEquals(1, results.getRefFStatY().sum(), 1E-4);
+            assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertEquals(0, results.getY(1));
             assertEquals(0, results.getY(2));
             assertEquals(0, results.getY(3));
@@ -2035,10 +2035,10 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getDensityCorrelationFunction(false);
-            results.mutateFStatY(FStat1D::distribute);
+            FPlot results = fAggregate.getDensityCorrelationFunction(false);
+            results.mutateFStatY(FStat::distribute);
 
-            assertEquals(1, results.getRefFStatY().sum(), 1E-4);
+            assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertTrue(results.getY(1) < results.getY(0));
             assertTrue(results.getY(2) < results.getY(1));
         }
@@ -2048,7 +2048,7 @@ public class FAggregateTest {
         void getDensityCorrelationFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot2D results = fAggregate.getDensityCorrelationFunction(true);
+            FPlot results = fAggregate.getDensityCorrelationFunction(true);
 
             assertTrue(results.size() > 25);
         }
@@ -2069,10 +2069,10 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getBoxCoverageFunction(false);
-            results.mutateFStatY(FStat1D::distribute);
+            FPlot results = fAggregate.getBoxCoverageFunction(false);
+            results.mutateFStatY(FStat::distribute);
 
-            assertEquals(1, results.getRefFStatY().sum(), 1E-4);
+            assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertTrue(results.size() >= 5);
         }
 
@@ -2081,7 +2081,7 @@ public class FAggregateTest {
         void getBoxCoverageFunctionB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FPlot2D results = fAggregate.getBoxCoverageFunction(true);
+            FPlot results = fAggregate.getBoxCoverageFunction(true);
 
             assertTrue(results.size() >= 5);
             assertTrue(results.getY(0) < results.getY(1));
@@ -2106,7 +2106,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D results = fAggregate.getTripletAngle();
+            FStat results = fAggregate.getTripletAngle();
 
             results.sort(true);
 
@@ -2124,7 +2124,7 @@ public class FAggregateTest {
         void getTripletAngleB() {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
-            FStat1D results = fAggregate.getTripletAngle();
+            FStat results = fAggregate.getTripletAngle();
 
             assertTrue(results.size() > 1000);
         }
@@ -2145,7 +2145,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D results = fAggregate.getTripletAngle();
+            FStat results = fAggregate.getTripletAngle();
 
             FTrigHelper helper = factory.getFTrigHelper();
             results.mutate(helper::convertRadToDeg);
@@ -2177,13 +2177,13 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getTripletAngleFunction();
-            results.mutateFStatY(FStat1D::distribute);
+            FPlot results = fAggregate.getTripletAngleFunction();
+            results.mutateFStatY(FStat::distribute);
 
             results.filter((x, y) -> y > 0);
 
             assertEquals(2, results.size());
-            assertEquals(1, results.getRefFStatY().sum(), 1E-4);
+            assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertEquals(Math.PI * 0.5, results.getX(0), 1E-4);
             assertEquals(Math.PI, results.getX(1), 1E-4);
             assertTrue(results.getY(0) > results.getY(1));
@@ -2205,17 +2205,17 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FPlot2D results = fAggregate.getTripletAngleFunction();
+            FPlot results = fAggregate.getTripletAngleFunction();
 
             FTrigHelper helper = factory.getFTrigHelper();
             results.mutateX((x, y) -> helper.convertRadToDeg(x));
 
-            results.mutateFStatY(FStat1D::distribute);
+            results.mutateFStatY(FStat::distribute);
 
             results.filter((x, y) -> y > 0);
 
             assertEquals(2, results.size());
-            assertEquals(1, results.getRefFStatY().sum(), 1E-4);
+            assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertEquals(90, results.getX(0), 1E-4);
             assertEquals(180, results.getX(1), 1E-4);
             assertTrue(results.getY(0) > results.getY(1));
@@ -2234,7 +2234,7 @@ public class FAggregateTest {
 
             fAggregate.setRefParticles(core);
 
-            FStat1D stat = fAggregate.getParticleRadius();
+            FStat stat = fAggregate.getParticleRadius();
 
             assertEquals(4, stat.size());
             assertEquals(1, stat.min());

@@ -1,64 +1,41 @@
 package eu.scattering.core.test.statistics;
 
-import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.base.FStat;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("FStat1D")
-public class FStat1DTest {
+@DisplayName("FStat")
+public class FStatTest {
 
     @Nested
     @Tag("Basic")
     @DisplayName("Basic")
-    class FStat1DBasicTest {
+    class FStatBasicTest {
 
         @Test
         @DisplayName("Create")
         void create() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertEquals(0, fStat.size());
         }
 
         @Test
-        @DisplayName("Create with array - int")
-        void createWithArrayInt() {
-            int[] values = new int[]{1, 2, 3, 4, 5};
+        @DisplayName("Create with reference")
+        void createWithReference() {
+            List<Double> data = Arrays.asList(1d, 2d, 3d, 4d, 5d);
 
-            FStat1D fStat = factory.getFStat1D(values);
+            FStat fStat = factory.getRefFStat(data);
 
-            Assertions.assertAll("Validate results",
-                    () -> assertEquals(values.length, fStat.size()),
-                    () -> assertEquals(values[0], fStat.get(0)),
-                    () -> assertEquals(values[1], fStat.get(1)),
-                    () -> assertEquals(values[2], fStat.get(2)),
-                    () -> assertEquals(values[3], fStat.get(3)),
-                    () -> assertEquals(values[4], fStat.get(4))
-            );
-        }
-
-        @Test
-        @DisplayName("Create with array - double")
-        void createWithArrayDouble() {
-            double[] values = new double[]{1, 2, 3, 4, 5};
-
-            FStat1D fStat = factory.getFStat1D(values);
-
-            Assertions.assertAll("Validate results",
-                    () -> assertEquals(values.length, fStat.size()),
-                    () -> assertEquals(values[0], fStat.get(0)),
-                    () -> assertEquals(values[1], fStat.get(1)),
-                    () -> assertEquals(values[2], fStat.get(2)),
-                    () -> assertEquals(values[3], fStat.get(3)),
-                    () -> assertEquals(values[4], fStat.get(4))
-            );
+            assertSame(data, fStat.getRefCore());
         }
 
         @Test
@@ -72,7 +49,7 @@ public class FStat1DTest {
             values.add(4d);
             values.add(5d);
 
-            FStat1D fStat = factory.getFStat1D(values);
+            FStat fStat = factory.getRefFStat(values);
 
             Assertions.assertAll("Validate results",
                     () -> assertEquals(values.size(), fStat.size()),
@@ -87,14 +64,12 @@ public class FStat1DTest {
         @Test
         @DisplayName("Export to array")
         void exportToArray() {
-            double[] values = new double[]{1, 2, 3, 4, 5};
-
-            FStat1D fStat = factory.getFStat1D(values);
+            FStat fStat = factory.getFStat();
+            fStat.add(1, 2, 3, 4, 5);
 
             double[] results = fStat.toArray();
 
             Assertions.assertAll("Validate results",
-                    () -> assertNotSame(values, results),
                     () -> assertEquals(results.length, fStat.size()),
                     () -> assertEquals(results[0], fStat.get(0)),
                     () -> assertEquals(results[1], fStat.get(1)),
@@ -107,7 +82,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Add")
         void add() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5);
             fStat.add(7);
@@ -124,7 +99,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Add vararg")
         void addVararg() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 7, 9);
 
@@ -139,7 +114,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Clear")
         void clear() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5);
             fStat.add(7);
@@ -153,7 +128,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Set")
         void set() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5);
             fStat.add(7);
@@ -176,12 +151,12 @@ public class FStat1DTest {
     @Nested
     @Tag("Core")
     @DisplayName("Core")
-    class FStat1DCoreTest {
+    class FStatCoreTest {
 
         @Test
         @DisplayName("Is equal")
         void isEqual() {
-            FStat1D fStat1 = factory.getFStat1D();
+            FStat fStat1 = factory.getFStat();
 
             fStat1.add(1);
             fStat1.add(-2);
@@ -189,7 +164,7 @@ public class FStat1DTest {
             fStat1.add(3);
             fStat1.add(-2);
 
-            FStat1D fStat2 = factory.getFStat1D();
+            FStat fStat2 = factory.getFStat();
 
             fStat2.add(1);
             fStat2.add(-2);
@@ -204,7 +179,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Equals (fail)")
         void equalsFail() {
-            FStat1D fStat1 = factory.getFStat1D();
+            FStat fStat1 = factory.getFStat();
 
             fStat1.add(1);
             fStat1.add(-2);
@@ -212,7 +187,7 @@ public class FStat1DTest {
             fStat1.add(3);
             fStat1.add(-2);
 
-            FStat1D fStat2 = factory.getFStat1D();
+            FStat fStat2 = factory.getFStat();
 
             fStat2.add(1);
             fStat2.add(-2);
@@ -227,7 +202,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("To JSON")
         void toJSON() {
-            FStat1D fStat1 = factory.getFStat1D();
+            FStat fStat1 = factory.getFStat();
 
             fStat1.add(1);
             fStat1.add(-2);
@@ -237,20 +212,61 @@ public class FStat1DTest {
 
             JSONObject json = fStat1.toJSON();
 
-            FStat1D fStat2 = factory.getFStat1D(json);
+            FStat fStat2 = factory.getFStat(json);
 
             assertTrue(fStat1.isEqual(fStat2));
             assertTrue(fStat2.isEqual(fStat1));
         }
 
         @Test
+        @DisplayName("To JSON with text")
+        void toJSONWithText() {
+            FStat fStat1 = factory.getFStat();
+
+            fStat1.add(1);
+            fStat1.add(-2);
+            fStat1.add(5);
+            fStat1.add(3);
+            fStat1.add(-2);
+
+            JSONObject json = fStat1.toJSON();
+
+            FStat fStat2 = factory.getFStat(json.toString());
+
+            assertTrue(fStat1.isEqual(fStat2));
+            assertTrue(fStat2.isEqual(fStat1));
+        }
+
+        @Test
+        @DisplayName("To JSON with NaN")
+        void toJSONWithNaN() {
+            FStat fStat1 = factory.getFStat();
+
+            fStat1.add(1);
+            fStat1.add(2);
+            fStat1.add(Double.NaN);
+            fStat1.add(4);
+            fStat1.add(5);
+
+            JSONObject json = fStat1.toJSON();
+
+            FStat fStat2 = factory.getFStat(json);
+
+            assertFalse(fStat1.isEqual(fStat2));
+            assertFalse(fStat2.isEqual(fStat1));
+
+            assertTrue(fStat1.isEqualWithNaN(fStat2));
+            assertTrue(fStat2.isEqualWithNaN(fStat1));
+        }
+
+        @Test
         @DisplayName("Iterate")
         void iterate() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, -2, 5, 3, -2);
 
-            FStat1D results = factory.getFStat1D();
+            FStat results = factory.getFStat();
 
             for (double value : fStat) {
                 results.add(value);
@@ -269,12 +285,12 @@ public class FStat1DTest {
     @Nested
     @Tag("Advanced")
     @DisplayName("Advanced")
-    class FStat1DAdvancedTest {
+    class FStatAdvancedTest {
 
         @Test
         @DisplayName("Sort ascending")
         void sortAsc() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -296,7 +312,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Sort descending")
         void sortDsc() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -318,7 +334,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is unique")
         void isUnique() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.2, 2.3, 2.4, 2.5);
 
@@ -332,7 +348,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Filter")
         void filter() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -354,7 +370,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Filter - History (static)")
         void filterHistoryStatic() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -375,7 +391,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Filter - History (dynamic)")
         void filterHistoryDynamic() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -395,7 +411,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Remove NaN")
         void removeNaN() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -420,7 +436,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace with NaN")
         void replaceWithNaN() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, -2, 5, 3, -2);
 
@@ -439,7 +455,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace with NaN - History (static)")
         void replaceWithNaNHistoryStatic() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -462,7 +478,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace with NaN - History (dynamic)")
         void replaceWithNaNHistoryDynamic() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -485,7 +501,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace same with NaN")
         void replaceSameWithNaN() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -514,7 +530,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace decreasing with NaN")
         void replaceDecreasingWithNaN() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-4);
@@ -543,7 +559,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace increasing with NaN")
         void replaceIncreasingWithNaN() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -572,7 +588,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mutate")
         void mutate() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -594,7 +610,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mutate - History (static)")
         void mutateHistoryStatic() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(2);
@@ -616,7 +632,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mutate - History (dynamic)")
         void mutateHistoryDynamic() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(2);
@@ -638,7 +654,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Get min")
         void getMin() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -652,7 +668,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Get max")
         void getMax() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -666,7 +682,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Get range")
         void getRange() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -678,7 +694,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Get midrange")
         void getMidrange() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -690,7 +706,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Sum")
         void sum() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -704,7 +720,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Sum or squares")
         void sumOfSquares() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -716,7 +732,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Sum or squares (provided)")
         void sumOfSquaresProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -728,7 +744,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mean")
         void mean() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1);
             fStat.add(-2);
@@ -742,7 +758,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mean absolute deviation")
         void meanAbsoluteDeviation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -754,7 +770,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mean absolute deviation (provided)")
         void meanAbsoluteDeviationProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -766,7 +782,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Root mean square")
         void rootMeanSquare() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -778,7 +794,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Percentile - Even")
         void percentileEven() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 9, 3, 2, 8, 7, 1, 4, 6, 0);
 
@@ -794,7 +810,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Percentile - Odd")
         void percentileOdd() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 10, 8, 3, 1, 4, 9, 7, 0, 2, 6);
 
@@ -810,7 +826,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Median")
         void median() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 9, 3, 2, 8, 7, 1, 4, 6, 0);
 
@@ -820,7 +836,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Q1")
         void q1() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 9, 3, 2, 8, 7, 1, 4, 6, 0);
 
@@ -830,7 +846,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Q2")
         void q2() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 9, 3, 2, 8, 7, 1, 4, 6, 0);
 
@@ -840,7 +856,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Q3")
         void q3() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 9, 3, 2, 8, 7, 1, 4, 6, 0);
 
@@ -850,7 +866,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mode")
         void mode() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             double[] resA = fStat.mode();
             assertEquals(0, resA.length);
@@ -886,7 +902,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Mode")
         void iqr() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(5, 9, 3, 2, 8, 7, 1, 4, 6, 0);
 
@@ -898,7 +914,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Variance - Sample")
         void varianceSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.var(true));
 
@@ -916,7 +932,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Variance - Sample (provided)")
         void varianceSampleProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.var(true, 3.2857143));
 
@@ -934,7 +950,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Variance - Population")
         void variancePopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.var(false));
 
@@ -948,7 +964,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Variance - Population (provided)")
         void variancePopulationProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.var(false, 3.2857143));
 
@@ -962,7 +978,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Standard deviation - Sample")
         void standardDeviationSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.std(true));
 
@@ -980,7 +996,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Standard deviation - Sample (provided)")
         void standardDeviationSampleProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.std(true, 3.2857143));
 
@@ -998,7 +1014,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Standard deviation - Population")
         void standardDeviationPopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.std(false));
 
@@ -1012,7 +1028,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Standard deviation - Population (provided)")
         void standardDeviationPopulationProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             assertThrows(IllegalStateException.class, () -> fStat.std(false, 3.2857143));
 
@@ -1026,7 +1042,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Normalize")
         void normalize() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1050,7 +1066,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Normalize - Sample")
         void normalizeSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1072,22 +1088,45 @@ public class FStat1DTest {
         }
 
         @Test
-        @DisplayName("Spread")
-        void spread() {
-            FStat1D fStat = factory.getFStat1D();
+        @DisplayName("Rescale")
+        void rescale() {
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.spread();
+            fStat.rescale();
 
             assertEquals(1, fStat.max(), 1E-6);
             assertEquals(0, fStat.min(), 1E-6);
         }
 
         @Test
+        @DisplayName("Rescale with range")
+        void rescaleWithRange() {
+            FStat fStat = factory.getFStat();
+
+            fStat.add(1, 7, 4, 10, -5, 2, 4);
+
+            fStat.rescale(-1, 5);
+
+            assertEquals(5, fStat.max(), 1E-6);
+            assertEquals(-1, fStat.min(), 1E-6);
+        }
+
+        @Test
+        @DisplayName("Rescale with range (fail)")
+        void rescaleWithRangeFail() {
+            FStat fStat = factory.getFStat();
+
+            fStat.add(1, 7, 4, 10, -5, 2, 4);
+
+            assertThrows(IllegalArgumentException.class, () -> fStat.rescale(1, -2));
+        }
+
+        @Test
         @DisplayName("Absolute")
         void absolute() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, -7, -4, 10, -5, 2, 4);
 
@@ -1105,7 +1144,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Invert order")
         void invertOrder() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1123,7 +1162,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Invert values")
         void invertValues() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1141,7 +1180,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Remove bias")
         void removeBias() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1153,7 +1192,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Remove bias (provided)")
         void removeBiasProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1165,7 +1204,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Remove outliers - Sample")
         void removeOutliersSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
@@ -1178,7 +1217,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Remove outliers - Population")
         void removeOutliersPopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
@@ -1191,7 +1230,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Remove outliers (provided)")
         void removeOutliersProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
@@ -1204,13 +1243,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace outliers with NaN - Sample")
         void replaceOutliersWithNaNSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
             var results = fStat.replaceOutliersWithNaN(true, 1.5);
 
-            long count = fStat.getRefData().stream().filter(e -> Double.isNaN(e)).toList().size();
+            long count = fStat.getRefCore().stream().filter(e -> Double.isNaN(e)).toList().size();
 
             assertSame(fStat, results);
             assertEquals(2, count);
@@ -1220,13 +1259,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace outliers with NaN - Population")
         void replaceOutliersWithNaNPopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
             var results = fStat.replaceOutliersWithNaN(2.55555556, 10.9099852, 1.5);
 
-            long count = fStat.getRefData().stream().filter(e -> Double.isNaN(e)).toList().size();
+            long count = fStat.getRefCore().stream().filter(e -> Double.isNaN(e)).toList().size();
 
             assertSame(fStat, results);
             assertEquals(2, count);
@@ -1236,13 +1275,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Replace outliers with NaN (provided)")
         void replaceOutliersWithNaNProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(-20, 1, 7, 4, 10, -5, 2, 4, 20);
 
             fStat.replaceOutliersWithNaN(false, 1.5);
 
-            long count = fStat.getRefData().stream().filter(e -> Double.isNaN(e)).toList().size();
+            long count = fStat.getRefCore().stream().filter(e -> Double.isNaN(e)).toList().size();
 
             assertEquals(2, count);
             assertEquals(9, fStat.size());
@@ -1251,7 +1290,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Normalize - Population")
         void normalizePopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1275,7 +1314,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Skewness - Sample")
         void skewnessSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1287,7 +1326,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Skewness - Sample (provided)")
         void skewnessSampleProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1299,7 +1338,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Skewness - Population")
         void skewnessPopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1311,7 +1350,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Skewness - Population (provided)")
         void skewnessPopulationProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1323,7 +1362,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis - Sample")
         void kurtosisSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1335,7 +1374,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis - Sample (provided)")
         void kurtosisSampleProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1347,7 +1386,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis - Population")
         void kurtosisPopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1359,7 +1398,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis - Population (provided)")
         void kurtosisPopulationProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1371,7 +1410,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis excess - Sample")
         void kurtosisExcessSample() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1383,7 +1422,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis excess - Sample (provided)")
         void kurtosisExcessSampleProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1395,7 +1434,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis excess - Population")
         void kurtosisExcessPopulation() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1407,7 +1446,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Kurtosis excess - Population (provided)")
         void kurtosisExcessPopulationProvided() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
@@ -1417,13 +1456,13 @@ public class FStat1DTest {
         }
 
         @Test
-        @DisplayName("To FPlot2D linear")
-        void toFPlot2DLinear() {
-            FStat1D fStat = factory.getFStat1D();
+        @DisplayName("To FPlot linear")
+        void toFPlotLinear() {
+            FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            FPlot2D fPlot = fStat.toFPlot2DLinear();
+            FPlot fPlot = fStat.toFPlotLinear();
 
             assertEquals(0, fPlot.getX(0));
             assertEquals(1, fPlot.getX(1));
@@ -1443,13 +1482,13 @@ public class FStat1DTest {
         }
 
         @Test
-        @DisplayName("To FPlot2D pie chart")
-        void toFPlot2DPieChart() {
-            FStat1D fStat = factory.getFStat1D();
+        @DisplayName("To FPlot pie chart")
+        void toFPlotPieChart() {
+            FStat fStat = factory.getFStat();
 
             fStat.add(-1, 0, 1, 2, 2, 3, 4, 5, 5, 5, 8);
 
-            FPlot2D fPlot = fStat.toFPlot2DPieChart();
+            FPlot fPlot = fStat.toFPlotPieChart();
 
             assertEquals(5, fPlot.getX(0));
             assertEquals(2, fPlot.getX(1));
@@ -1471,13 +1510,35 @@ public class FStat1DTest {
         }
 
         @Test
-        @DisplayName("To FPlot2D histogram")
-        void toFPlot2DHistogram() {
-            FStat1D fStat = factory.getFStat1D();
+        @DisplayName("To FPlot histogram with division")
+        void toFPlotHistogramWithDivision() {
+            FStat fStat = factory.getFStat();
 
             fStat.add(0, 0.2, 0.5, 0.9, 1.4, 2.3, 2.6, 3.5);
 
-            FPlot2D fPlot = fStat.toFPlot2DHistogram(0, 5, 5);
+            FPlot fPlot = fStat.toFPlotHistogram(0, 5, 5);
+
+            assertEquals(0, fPlot.getX(0));
+            assertEquals(1, fPlot.getX(1));
+            assertEquals(2, fPlot.getX(2));
+            assertEquals(3, fPlot.getX(3));
+            assertEquals(4, fPlot.getX(4));
+
+            assertEquals(4, fPlot.getY(0));
+            assertEquals(1, fPlot.getY(1));
+            assertEquals(2, fPlot.getY(2));
+            assertEquals(1, fPlot.getY(3));
+            assertEquals(0, fPlot.getY(4));
+        }
+
+        @Test
+        @DisplayName("To FPlot histogram with step")
+        void toFPlotHistogramWithStep() {
+            FStat fStat = factory.getFStat();
+
+            fStat.add(0, 0.2, 0.5, 0.9, 1.4, 2.3, 2.6, 3.5);
+
+            FPlot fPlot = fStat.toFPlotHistogram(1);
 
             assertEquals(0, fPlot.getX(0));
             assertEquals(1, fPlot.getX(1));
@@ -1495,13 +1556,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (absolute)")
         void isSimilarAbs() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2, 3.2, 3.9, 5);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(0.9, 2, 3, 4.1, 5);
 
             assertTrue(fStat.isSimilarAbs(0.25, fStatA, fStatB));
@@ -1510,13 +1571,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (absolute) - Fail")
         void isSimilarAbsFail() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2, 3.3, 3.9, 5);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(0.9, 2, 3, 4.1, 5);
 
             assertFalse(fStat.isSimilarAbs(0.25, fStatA, fStatB));
@@ -1525,13 +1586,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (absolute) - Wrong length")
         void isSimilarAbsWrongLength() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2, 3.3, 3.9, 5, 6);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(0.9, 2, 3, 4.1, 5);
 
             assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarAbs(0.25, fStatA, fStatB));
@@ -1540,13 +1601,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (absolute) - Negative threshold")
         void isSimilarAbsNegativeThreshold() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2, 3.2, 3.9, 5);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(0.9, 2, 3, 4.1, 5);
 
             assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarAbs(-1, fStatA, fStatB));
@@ -1555,7 +1616,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (absolute) - Empty set")
         void isSimilarAbsEmptySet() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
             assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarAbs(1));
@@ -1564,13 +1625,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (relative)")
         void isSimilarRel() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2.1, 3.2, 3.9, 5);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(1, 2, 3, 4.1, 5.4);
 
             assertTrue(fStat.isSimilarRel(0.1, fStatA, fStatB));
@@ -1579,13 +1640,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (relative) - Fail")
         void isSimilarRelFail() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2.1, 3.2, 3.9, 5);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(1.2, 2, 3, 4.1, 5.4);
 
             assertFalse(fStat.isSimilarRel(0.1, fStatA, fStatB));
@@ -1594,13 +1655,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (relative) - Wrong length")
         void isSimilarRelWrongLength() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2, 3.3, 3.9, 5, 6);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(0.9, 2, 3, 4.1, 5);
 
             assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarRel(0.25, fStatA, fStatB));
@@ -1609,13 +1670,13 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (relative) - Negative threshold")
         void isSimilarRelNegativeThreshold() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
-            FStat1D fStatA = factory.getFStat1D();
+            FStat fStatA = factory.getFStat();
             fStatA.add(1, 2, 3.2, 3.9, 5);
 
-            FStat1D fStatB = factory.getFStat1D();
+            FStat fStatB = factory.getFStat();
             fStatB.add(0.9, 2, 3, 4.1, 5);
 
             assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarRel(-1, fStatA, fStatB));
@@ -1624,7 +1685,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Is similar (relative) - Empty set")
         void isSimilarRelEmptySet() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
             fStat.add(1, 2, 3, 4, 5);
 
             assertThrows(IllegalArgumentException.class, () -> fStat.isSimilarRel(1));
@@ -1633,7 +1694,7 @@ public class FStat1DTest {
         @Test
         @DisplayName("Deduplicate")
         void deduplicate() {
-            FStat1D data = factory.getFStat1D();
+            FStat data = factory.getFStat();
 
             data.add(1, 2, 3, 1, 1, 5, 2, 3);
 
@@ -1653,16 +1714,16 @@ public class FStat1DTest {
     @Nested
     @Tag("Meta")
     @DisplayName("Meta")
-    class FStat1DMetaTest {
+    class FStatMetaTest {
 
         @Test
         @DisplayName("Set name")
         void setName() {
-            FStat1D fStat = factory.getFStat1D();
+            FStat fStat = factory.getFStat();
 
-            fStat.setName("test");
+            fStat.setMetaName("test");
 
-            assertEquals("test", fStat.getName());
+            assertEquals("test", fStat.getMetaName());
         }
     }
 }

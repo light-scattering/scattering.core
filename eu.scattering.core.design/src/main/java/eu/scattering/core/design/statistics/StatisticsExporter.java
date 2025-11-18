@@ -1,9 +1,9 @@
 package eu.scattering.core.design.statistics;
 
-import eu.scattering.core.design.statistics.base.FStat1DExporter;
-import eu.scattering.core.design.statistics.construct.FPlot2DExporter;
+import eu.scattering.core.design.statistics.base.FStatExporter;
+import eu.scattering.core.design.statistics.construct.FPlotExporter;
 
-public interface StatisticsExporter extends FStat1DExporter, FPlot2DExporter {
+public interface StatisticsExporter extends FStatExporter, FPlotExporter {
 
     String getName();
     void setName(String name);

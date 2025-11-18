@@ -2,9 +2,9 @@ package eu.scattering.core.impl.statistics.construct;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.lambda.TriConsumer;
-import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
-import eu.scattering.core.design.statistics.base.FStat1D;
+import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
@@ -18,44 +18,48 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class FPlot2DDef implements FPlot2D {
+public class FPlotDef implements FPlot {
     private static final String JSON_TYPE = "type";
-    private static final String JSON_MAIN = "plot2D";
+    private static final String JSON_MAIN = "plot";
     private static final String JSON_DATA_X = "dataX";
     private static final String JSON_DATA_Y = "dataY";
     private static final String JSON_INT = "interpolator";
 
     private final ScatFactory factory;
 
-    private FPlot2DInterpolator interpolator;
-    private FStat1D dataX;
-    private FStat1D dataY;
+    private final FStat dataX;
+    private final FStat dataY;
+
+    private FPlotInterpolator interpolator;
 
     private String name = "";
 
-    private FPlot2DDef(ScatFactory factory) {
+    private FPlotDef(ScatFactory factory, FStat dataX, FStat dataY) {
 
         this.factory = factory;
+
+        this.dataX = dataX == null ? factory.getFStat() : dataX;
+        this.dataY = dataY == null ? factory.getFStat() : dataY;
+
+        if (this.dataX.size() != this.dataY.size()) {
+            throw new IllegalArgumentException("The data is corrupted");
+        }
+
+        this.interpolator = FPlotInterpolatorDef.create();
     }
 
-    public static FPlot2D create(ScatFactory factory) {
-        FPlot2DDef fPlot = new FPlot2DDef(factory);
+    public static FPlot create(ScatFactory factory) {
 
-        fPlot.interpolator = FPlot2DInterpolatorDef.create();
-
-        fPlot.dataX = factory.getFStat1D();
-        fPlot.dataY = factory.getFStat1D();
-
-        return fPlot;
+        return new FPlotDef(factory, null, null);
     }
 
-    public static FPlot2D create(ScatFactory factory, FLayer fLayer) {
-        FPlot2DDef fPlot = new FPlot2DDef(factory);
+    public static FPlot create(ScatFactory factory, FStat dataX, FStat dataY) {
 
-        fPlot.interpolator = FPlot2DInterpolatorDef.create();
+        return new FPlotDef(factory, dataX, dataY);
+    }
 
-        fPlot.dataX = factory.getFStat1D();
-        fPlot.dataY = factory.getFStat1D();
+    public static FPlot create(ScatFactory factory, FLayer fLayer) {
+        FPlotDef fPlot = new FPlotDef(factory, null, null);
 
         for (int i = 0 ; i < fLayer.size() ; i++) {
             fPlot.dataX.add(i);
@@ -65,17 +69,13 @@ public class FPlot2DDef implements FPlot2D {
         return fPlot;
     }
 
-    public static FPlot2D create(ScatFactory factory, JSONObject json) {
-        FPlot2DDef fPlot = new FPlot2DDef(factory);
+    public static FPlot create(ScatFactory factory, JSONObject json) {
+        FStat dataX = factory.getFStat(json.getJSONObject(JSON_DATA_X));
+        FStat dataY = factory.getFStat(json.getJSONObject(JSON_DATA_Y));
 
-        fPlot.interpolator = FPlot2DInterpolatorDef.create(json.getJSONObject(JSON_INT));
+        FPlotDef fPlot = new FPlotDef(factory, dataX, dataY);
 
-        fPlot.dataX = factory.getFStat1D(json.getJSONObject(JSON_DATA_X));
-        fPlot.dataY = factory.getFStat1D(json.getJSONObject(JSON_DATA_Y));
-
-        if (fPlot.dataX.size() != fPlot.dataY.size()) {
-            throw new IllegalArgumentException("The data is corrupted");
-        }
+        fPlot.interpolator = FPlotInterpolatorDef.create(json.getJSONObject(JSON_INT));
 
         return fPlot;
     }
@@ -89,8 +89,8 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalStateException("The x value already exists");
         }
 
-        getRefFStatX().add(x);
-        getRefFStatY().add(0);
+        getRefCoreX().add(x);
+        getRefCoreY().add(0);
     }
 
     @Override
@@ -98,10 +98,10 @@ public class FPlot2DDef implements FPlot2D {
         int position = position(x);
 
         if (position < 0) {
-            getRefFStatX().add(x);
-            getRefFStatY().add(0);
+            getRefCoreX().add(x);
+            getRefCoreY().add(0);
         } else {
-            getRefFStatY().set(position, collision.apply(getRefFStatY().get(position), 0d));
+            getRefCoreY().set(position, collision.apply(getRefCoreY().get(position), 0d));
         }
     }
 
@@ -112,8 +112,8 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalStateException("The x value already exists");
         }
 
-        getRefFStatX().add(x);
-        getRefFStatY().add(y);
+        getRefCoreX().add(x);
+        getRefCoreY().add(y);
     }
 
     @Override
@@ -121,35 +121,35 @@ public class FPlot2DDef implements FPlot2D {
         int position = position(x);
 
         if (position < 0) {
-            getRefFStatX().add(x);
-            getRefFStatY().add(y);
+            getRefCoreX().add(x);
+            getRefCoreY().add(y);
         } else {
-            getRefFStatY().set(position, collision.apply(getRefFStatY().get(position), y));
+            getRefCoreY().set(position, collision.apply(getRefCoreY().get(position), y));
         }
     }
 
     @Override
     public double getX(int index) {
 
-        return getRefFStatX().get(index);
+        return getRefCoreX().get(index);
     }
 
     @Override
     public void setX(int index, double x) {
 
-        getRefFStatX().set(index, x);
+        getRefCoreX().set(index, x);
     }
 
     @Override
     public double getY(int index) {
 
-        return getRefFStatY().get(index);
+        return getRefCoreY().get(index);
     }
 
     @Override
     public void setY(int index, double y) {
 
-        getRefFStatY().set(index, y);
+        getRefCoreY().set(index, y);
     }
 
     @Override
@@ -173,10 +173,10 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public <T> T getWithFStat(BiFunction<FStat1D, FStat1D, T> function) {
-        T value = function.apply(getRefFStatX(), getRefFStatY());
+    public <T> T getWithFStat(BiFunction<FStat, FStat, T> function) {
+        T value = function.apply(getRefCoreX(), getRefCoreY());
 
-        if (getRefFStatX().size() != getRefFStatY().size()) {
+        if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
 
@@ -184,10 +184,10 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public <T> T getWithFStatX(Function<FStat1D, T> function) {
+    public <T> T getWithFStatX(Function<FStat, T> function) {
         T value = function.apply(this.dataX);
 
-        if (getRefFStatX().size() != getRefFStatY().size()) {
+        if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
 
@@ -195,10 +195,10 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public <T> T getWithFStatY(Function<FStat1D, T> function) {
+    public <T> T getWithFStatY(Function<FStat, T> function) {
         T value = function.apply(this.dataY);
 
-        if (getRefFStatX().size() != getRefFStatY().size()) {
+        if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
 
@@ -231,8 +231,8 @@ public class FPlot2DDef implements FPlot2D {
 
     @Override
     public FPos2D simpleLinearRegression() {
-        FStat1D sx = getRefFStatX();
-        FStat1D sy = getRefFStatY();
+        FStat sx = getRefCoreX();
+        FStat sy = getRefCoreY();
 
         double mx = sx.mean();
         double my = sy.mean();
@@ -268,8 +268,8 @@ public class FPlot2DDef implements FPlot2D {
     public int filter(BiFunction<Double, Double, Boolean> filter) {
         int oldSize = size();
 
-        FStat1D fStatX = factory.getFStat1D();
-        FStat1D fStatY = factory.getFStat1D();
+        List<Double> fStatX = new ArrayList<>();
+        List<Double> fStatY = new ArrayList<>();
 
         for (int i = 0 ; i < size() ; i++) {
             if (filter.apply(getX(i), getY(i))) {
@@ -278,8 +278,10 @@ public class FPlot2DDef implements FPlot2D {
             }
         }
 
-        setRefFStatX(fStatX);
-        setRefFStatY(fStatY);
+        getRefCoreX().clear();
+        getRefCoreX().getRefCore().addAll(fStatX);
+        getRefCoreY().clear();
+        getRefCoreY().getRefCore().addAll(fStatY);
 
         return oldSize - size();
     }
@@ -291,22 +293,22 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public void mutateFStat(Consumer<FStat1D> consumer) {
+    public void mutateFStat(Consumer<FStat> consumer) {
 
-        consumer.accept(getRefFStatX());
-        consumer.accept(getRefFStatY());
+        consumer.accept(getRefCoreX());
+        consumer.accept(getRefCoreY());
 
-        if (getRefFStatX().size() != getRefFStatY().size()) {
+        if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
     }
 
     @Override
-    public void mutateFStat(BiConsumer<FStat1D, FStat1D> consumer) {
+    public void mutateFStat(BiConsumer<FStat, FStat> consumer) {
 
-        consumer.accept(getRefFStatX(), getRefFStatY());
+        consumer.accept(getRefCoreX(), getRefCoreY());
 
-        if (getRefFStatX().size() != getRefFStatY().size()) {
+        if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
     }
@@ -320,11 +322,11 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public void mutateFStatX(Consumer<FStat1D> consumer) {
+    public void mutateFStatX(Consumer<FStat> consumer) {
 
-        consumer.accept(getRefFStatX());
+        consumer.accept(getRefCoreX());
 
-        if (getRefFStatX().size() != getRefFStatY().size()) {
+        if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
     }
@@ -338,11 +340,11 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public void mutateFStatY(Consumer<FStat1D> consumer) {
+    public void mutateFStatY(Consumer<FStat> consumer) {
 
-        consumer.accept(getRefFStatY());
+        consumer.accept(getRefCoreY());
 
-        if (getRefFStatX().size() != getRefFStatY().size()) {
+        if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
     }
@@ -354,11 +356,11 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalArgumentException("The step value must be greater than zero");
         }
 
-        double minX = getRefFStatX().min();
-        double maxX = getRefFStatX().max();
+        double minX = getRefCoreX().min();
+        double maxX = getRefCoreX().max();
 
-        FStat1D fStatX = factory.getFStat1D();
-        FStat1D fStatY = factory.getFStat1D();
+        List<Double> fStatX = new ArrayList<>();
+        List<Double> fStatY = new ArrayList<>();
 
         double value = minX;
         while (value < maxX) {
@@ -373,8 +375,10 @@ public class FPlot2DDef implements FPlot2D {
             fStatY.add(approximate(maxX));
         }
 
-        setRefFStatX(fStatX);
-        setRefFStatY(fStatY);
+        getRefCoreX().clear();
+        getRefCoreX().getRefCore().addAll(fStatX);
+        getRefCoreY().clear();
+        getRefCoreY().getRefCore().addAll(fStatY);
     }
 
     @Override
@@ -384,13 +388,13 @@ public class FPlot2DDef implements FPlot2D {
             throw new IllegalArgumentException("The number of divisions cannot be smaller then one");
         }
 
-        double minX = getRefFStatX().min();
-        double maxX = getRefFStatX().max();
+        double minX = getRefCoreX().min();
+        double maxX = getRefCoreX().max();
 
         double step = (maxX - minX) / divisions;
 
-        FStat1D fStatX = factory.getFStat1D();
-        FStat1D fStatY = factory.getFStat1D();
+        List<Double> fStatX = new ArrayList<>();
+        List<Double> fStatY = new ArrayList<>();
 
         double value = minX;
         while (value < maxX) {
@@ -403,8 +407,10 @@ public class FPlot2DDef implements FPlot2D {
         fStatX.add(maxX);
         fStatY.add(approximate(maxX));
 
-        setRefFStatX(fStatX);
-        setRefFStatY(fStatY);
+        getRefCoreX().clear();
+        getRefCoreX().getRefCore().addAll(fStatX);
+        getRefCoreY().clear();
+        getRefCoreY().getRefCore().addAll(fStatY);
     }
 
     @Override
@@ -456,25 +462,12 @@ public class FPlot2DDef implements FPlot2D {
         }
     }
 
-//    @Override
-//    public void log(double base, boolean x, boolean y) {
-//        double denominator = Math.log(base);
-//
-//        if (x) {
-//            mutateX((dx, dy) -> Math.log(dx) / denominator);
-//        }
-//
-//        if (y) {
-//            mutateY((dx, dy) -> Math.log(dy) / denominator);
-//        }
-//    }
-
     @Override
     public void forEach(TriConsumer<Double, Double, Integer> consumer) {
-        Iterator<Double> iteratorX = getRefFStatX().iterator();
-        Iterator<Double> iteratorY = getRefFStatY().iterator();
+        Iterator<Double> iteratorX = getRefCoreX().iterator();
+        Iterator<Double> iteratorY = getRefCoreY().iterator();
 
-        for (int i = 0; i < getRefFStatX().size() ; i++) {
+        for (int i = 0; i < getRefCoreX().size() ; i++) {
             consumer.accept(iteratorX.next(), iteratorY.next(), i);
         }
     }
@@ -492,33 +485,21 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public FPlot2DInterpolator getInterpolator() {
+    public FPlotInterpolator getInterpolator() {
 
         return this.interpolator;
     }
 
     @Override
-    public FStat1D getRefFStatX() {
+    public FStat getRefCoreX() {
 
         return this.dataX;
     }
 
     @Override
-    public void setRefFStatX(FStat1D fStat1DX) {
-
-        this.dataX = fStat1DX;
-    }
-
-    @Override
-    public FStat1D getRefFStatY() {
+    public FStat getRefCoreY() {
 
         return this.dataY;
-    }
-
-    @Override
-    public void setRefFStatY(FStat1D fStat1DY) {
-
-        this.dataY = fStat1DY;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -657,19 +638,19 @@ public class FPlot2DDef implements FPlot2D {
     @Override
     public int size() {
 
-        return getRefFStatX().size();
+        return getRefCoreX().size();
     }
 
     @Override
     public void clear() {
 
-        getRefFStatX().clear();
-        getRefFStatY().clear();
+        getRefCoreX().clear();
+        getRefCoreY().clear();
     }
 
     @Override
-    public FPlot2D copy() {
-        FPlot2D fPlot = factory.getFPlot2D();
+    public FPlot copy() {
+        FPlot fPlot = factory.getFPlot();
 
         fPlot.getInterpolator().setMethod(getInterpolator().getMethod());
         fPlot.getInterpolator().setHermiteBias(getInterpolator().getHermiteBias());
@@ -681,23 +662,43 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public boolean isEqual(FPlot2D fPlot2D) {
+    public boolean isEqual(FPlot fPlot) {
 
-        if (!getInterpolator().isEqual(fPlot2D.getInterpolator())) {
+        if (!getInterpolator().isEqual(fPlot.getInterpolator())) {
             return false;
         }
 
-        return isEqualData(fPlot2D);
+        return isEqualData(fPlot);
     }
 
     @Override
-    public boolean isEqualData(FPlot2D fPlot2D) {
+    public boolean isEqualWithNaN(FPlot fPlot) {
 
-        if (this.size() != fPlot2D.size()) {
+        if (!getInterpolator().isEqual(fPlot.getInterpolator())) {
             return false;
         }
 
-        return this.getRefFStatX().isEqualData(fPlot2D.getRefFStatX()) && this.getRefFStatY().isEqualData(fPlot2D.getRefFStatY());
+        return isEqualDataWithNaN(fPlot);
+    }
+
+    @Override
+    public boolean isEqualData(FPlot fPlot) {
+
+        if (this.size() != fPlot.size()) {
+            return false;
+        }
+
+        return this.getRefCoreX().isEqualData(fPlot.getRefCoreX()) && this.getRefCoreY().isEqualData(fPlot.getRefCoreY());
+    }
+
+    @Override
+    public boolean isEqualDataWithNaN(FPlot fPlot) {
+
+        if (this.size() != fPlot.size()) {
+            return false;
+        }
+
+        return this.getRefCoreX().isEqualDataWithNaN(fPlot.getRefCoreX()) && this.getRefCoreY().isEqualDataWithNaN(fPlot.getRefCoreY());
     }
 
     @Override
@@ -705,8 +706,20 @@ public class FPlot2DDef implements FPlot2D {
         JSONObject json = new JSONObject();
 
         json.put(JSON_TYPE, JSON_MAIN);
-        json.put(JSON_DATA_X, getRefFStatX().toJSON());
-        json.put(JSON_DATA_Y, getRefFStatY().toJSON());
+        json.put(JSON_DATA_X, getRefCoreX().toJSON());
+        json.put(JSON_DATA_Y, getRefCoreY().toJSON());
+        json.put(JSON_INT, getInterpolator().toJSON());
+
+        return json;
+    }
+
+    @Override
+    public JSONObject toSimpleJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+        json.put(JSON_DATA_X, getRefCoreX().toSimpleJSON());
+        json.put(JSON_DATA_Y, getRefCoreY().toSimpleJSON());
         json.put(JSON_INT, getInterpolator().toJSON());
 
         return json;
@@ -715,7 +728,7 @@ public class FPlot2DDef implements FPlot2D {
     @Override
     public String toString() {
 
-        return toJSON().toString();
+        return toSimpleJSON().toString();
     }
 
     //--------------------------------------------------
@@ -733,7 +746,7 @@ public class FPlot2DDef implements FPlot2D {
     }
 
     @Override
-    public FPos2D getRecord(int index) {
+    public FPos2D getFPos2D(int index) {
 
         return factory.getFPos2D(getX(index), getY(index));
     }

@@ -1,9 +1,9 @@
 package eu.scattering.core.design.statistics;
 
-import eu.scattering.core.design.statistics.construct.FPlot2DFactory;
-import eu.scattering.core.design.statistics.base.FStat1DFactory;
+import eu.scattering.core.design.statistics.construct.FPlotFactory;
+import eu.scattering.core.design.statistics.base.FStatFactory;
 
-public interface StatisticsFactory extends FStat1DFactory, FPlot2DFactory {
+public interface StatisticsFactory extends FStatFactory, FPlotFactory {
 
     StatisticsExporter getStatisticsExporter();
 

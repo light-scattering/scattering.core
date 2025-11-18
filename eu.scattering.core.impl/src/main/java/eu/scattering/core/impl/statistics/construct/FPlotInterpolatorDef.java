@@ -1,11 +1,11 @@
 package eu.scattering.core.impl.statistics.construct;
 
-import eu.scattering.core.design.statistics.construct.FPlot2D;
-import eu.scattering.core.design.statistics.construct.utils.FPlot2DInterpolator;
+import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONObject;
 
-public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
+public class FPlotInterpolatorDef implements FPlotInterpolator {
     private static final String JSON_METHOD = "method";
     private static final String JSON_H_BIAS = "bias";
     private static final String JSON_H_TENSION = "tension";
@@ -14,15 +14,15 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     private double hTension = 0;
     private double hBias = 0;
 
-    private FPlot2DInterpolatorDef() {}
+    private FPlotInterpolatorDef() {}
 
-    protected static FPlot2DInterpolator create() {
+    protected static FPlotInterpolator create() {
 
-        return new FPlot2DInterpolatorDef();
+        return new FPlotInterpolatorDef();
     }
 
-    protected static FPlot2DInterpolator create(JSONObject json) {
-        FPlot2DInterpolator interpolator = new FPlot2DInterpolatorDef();
+    protected static FPlotInterpolator create(JSONObject json) {
+        FPlotInterpolator interpolator = new FPlotInterpolatorDef();
 
         interpolator.setMethod(json.getEnum(Method.class, JSON_METHOD));
         interpolator.setHermiteTension(json.getDouble(JSON_H_TENSION));
@@ -68,7 +68,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     @Override
-    public double apx(FPlot2D data, double x) {
+    public double apx(FPlot data, double x) {
 
         return switch (this.method) {
             case LINEAR -> apxLinear(data, x);
@@ -80,7 +80,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     @Override
-    public double apxLinear(FPlot2D data, double x) {
+    public double apxLinear(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR2 = getIndexR1(data, x);
 
@@ -88,8 +88,8 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
             return data.getY(indexL1);
         }
 
-        FPos2D recordL1 = data.getRecord(indexL1);
-        FPos2D recordR1 = data.getRecord(indexR2);
+        FPos2D recordL1 = data.getFPos2D(indexL1);
+        FPos2D recordR1 = data.getFPos2D(indexR2);
 
         double tmp = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
 
@@ -97,7 +97,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     @Override
-    public double apxCosine(FPlot2D data, double x) {
+    public double apxCosine(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR2 = getIndexR1(data, x);
 
@@ -105,8 +105,8 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
             return data.getY(indexL1);
         }
 
-        FPos2D recordL1 = data.getRecord(indexL1);
-        FPos2D recordR1 = data.getRecord(indexR2);
+        FPos2D recordL1 = data.getFPos2D(indexL1);
+        FPos2D recordR1 = data.getFPos2D(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = (1 - Math.cos(tmp1 * Math.PI)) / 2;
@@ -115,7 +115,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     @Override
-    public double apxCubic(FPlot2D data, double x) {
+    public double apxCubic(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -126,10 +126,10 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPos2D recordL2 = data.getRecord(indexL2);
-        FPos2D recordL1 = data.getRecord(indexL1);
-        FPos2D recordR1 = data.getRecord(indexR1);
-        FPos2D recordR2 = data.getRecord(indexR2);
+        FPos2D recordL2 = data.getFPos2D(indexL2);
+        FPos2D recordL1 = data.getFPos2D(indexL1);
+        FPos2D recordR1 = data.getFPos2D(indexR1);
+        FPos2D recordR2 = data.getFPos2D(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
@@ -143,7 +143,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     @Override
-    public double apxCatmullRom(FPlot2D data, double x) {
+    public double apxCatmullRom(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -154,10 +154,10 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPos2D recordL2 = data.getRecord(indexL2);
-        FPos2D recordL1 = data.getRecord(indexL1);
-        FPos2D recordR1 = data.getRecord(indexR1);
-        FPos2D recordR2 = data.getRecord(indexR2);
+        FPos2D recordL2 = data.getFPos2D(indexL2);
+        FPos2D recordL1 = data.getFPos2D(indexL1);
+        FPos2D recordR1 = data.getFPos2D(indexR1);
+        FPos2D recordR2 = data.getFPos2D(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
@@ -171,7 +171,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     @Override
-    public double apxHermite(FPlot2D data, double x) {
+    public double apxHermite(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -182,10 +182,10 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPos2D recordL2 = data.getRecord(indexL2);
-        FPos2D recordL1 = data.getRecord(indexL1);
-        FPos2D recordR1 = data.getRecord(indexR1);
-        FPos2D recordR2 = data.getRecord(indexR2);
+        FPos2D recordL2 = data.getFPos2D(indexL2);
+        FPos2D recordL1 = data.getFPos2D(indexL1);
+        FPos2D recordR1 = data.getFPos2D(indexR1);
+        FPos2D recordR2 = data.getFPos2D(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
@@ -207,8 +207,8 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
 
     //--------------------------------------------------
 
-    private int getIndexL1(FPlot2D data, double x) {
-        int indexL1 = data.getIndexX(FPlot2D.Index.FLOOR, x);
+    private int getIndexL1(FPlot data, double x) {
+        int indexL1 = data.getIndexX(FPlot.Index.FLOOR, x);
 
         if (indexL1 == -1) {
             throw new IllegalArgumentException("The provided value is out of range");
@@ -217,8 +217,8 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         return indexL1;
     }
 
-    private int getIndexR1(FPlot2D data, double x) {
-        int indexR1 = data.getIndexX(FPlot2D.Index.CEIL, x);
+    private int getIndexR1(FPlot data, double x) {
+        int indexR1 = data.getIndexX(FPlot.Index.CEIL, x);
 
         if (indexR1 == -1) {
             throw new IllegalArgumentException("The provided value is out of range");
@@ -237,7 +237,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
         return indexL2;
     }
 
-    private int getIndexR2(FPlot2D data, int indexR1) {
+    private int getIndexR2(FPlot data, int indexR1) {
         int indexR2 = indexR1 + 1;
 
         if (indexR2 > data.size() - 1) {
@@ -261,7 +261,7 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     //--------------------------------------------------
 
     @Override
-    public boolean isEqual(FPlot2DInterpolator interpolator) {
+    public boolean isEqual(FPlotInterpolator interpolator) {
 
         if (getHermiteBias() != interpolator.getHermiteBias()) {
             return false;
@@ -275,8 +275,8 @@ public class FPlot2DInterpolatorDef implements FPlot2DInterpolator {
     }
 
     @Override
-    public FPlot2DInterpolator copy() {
-        FPlot2DInterpolator copy = FPlot2DInterpolatorDef.create();
+    public FPlotInterpolator copy() {
+        FPlotInterpolator copy = FPlotInterpolatorDef.create();
 
         copy.setMethod(getMethod());
         copy.setHermiteBias(getHermiteBias());

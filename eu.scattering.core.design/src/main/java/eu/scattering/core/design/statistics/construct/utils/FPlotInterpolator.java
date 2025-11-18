@@ -1,9 +1,9 @@
 package eu.scattering.core.design.statistics.construct.utils;
 
-import eu.scattering.core.design.statistics.construct.FPlot2D;
+import eu.scattering.core.design.statistics.construct.FPlot;
 import org.json.JSONObject;
 
-public interface FPlot2DInterpolator {
+public interface FPlotInterpolator {
 
     Method getMethod();
     void setMethod(Method method);
@@ -16,19 +16,19 @@ public interface FPlot2DInterpolator {
 
     // -------------------------------------------------------------------------------------------------
 
-    double apx(FPlot2D data, double x);
+    double apx(FPlot data, double x);
 
-    double apxLinear(FPlot2D data, double x);
-    double apxCosine(FPlot2D data, double x);
-    double apxCubic(FPlot2D data, double x);
-    double apxCatmullRom(FPlot2D data, double x);
-    double apxHermite(FPlot2D data, double x);
+    double apxLinear(FPlot data, double x);
+    double apxCosine(FPlot data, double x);
+    double apxCubic(FPlot data, double x);
+    double apxCatmullRom(FPlot data, double x);
+    double apxHermite(FPlot data, double x);
 
     // -------------------------------------------------------------------------------------------------
 
-    boolean isEqual(FPlot2DInterpolator interpolator);
+    boolean isEqual(FPlotInterpolator interpolator);
 
-    FPlot2DInterpolator copy();
+    FPlotInterpolator copy();
 
     JSONObject toJSON();
 
