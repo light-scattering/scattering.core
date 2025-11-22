@@ -1,8 +1,9 @@
 package eu.scattering.core.test.statistics;
 
 import eu.scattering.core.design.statistics.StatisticsExporter;
-import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.transfer.primitive.FPoly;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
@@ -39,7 +40,10 @@ public class StatisticsExporterTest {
         fPlotSimpleLinearRegression.setName("Linear regression");
 
         fPlotInterpolated.interpolate(0.05, true);
-        fPlotSimpleLinearRegression.simpleLinearRegression();
+
+        FPoly regression = fPlotSimpleLinearRegression.reg().poly(1);
+
+        fPlotSimpleLinearRegression.setY(regression);
 
         String script = fPlotExporter.toPythonPlotlyLinear(fPlotRaw, fPlotInterpolated, fPlotSimpleLinearRegression);
 

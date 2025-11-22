@@ -17,7 +17,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.box.FBoxDouble;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.json.JSONObject;
 
@@ -1055,9 +1055,9 @@ public class FAggregateDef implements FAggregate {
 
         data.filter((x, y) -> y > 0);
 
-        FPos2D regression = data.simpleLinearRegression();
+        FPoly regression = data.reg().poly(1);
 
-        return regression.getD0();
+        return regression.getCore1();
     }
 
     private double getDensityCorrelationAnalyze(FPlot data) {
@@ -1071,6 +1071,7 @@ public class FAggregateDef implements FAggregate {
 
 //        data.filter((x, y) -> x < midpoint);
 
+//        data.mutateY((x, y) -> y * 2);
         data.mutateFStat((a, b) -> {
             a.log(10);
             b.log(10);
@@ -1088,11 +1089,16 @@ public class FAggregateDef implements FAggregate {
 
 //        data.setStatY(dataY);
 
-        String model = factory.getStatisticsExporter().toPythonPlotlyLinear(data);
 
-        FPos2D regression = data.simpleLinearRegression();
 
-        return 3 + regression.getD0();
+        FPoly regression = data.reg().poly(1);
+        FPoly regOki = data.reg().slope((int) (data.size() * 0.75));
+        FPlot reg = data.copy();
+        reg.setY(regOki);
+
+        String model = factory.getStatisticsExporter().toPythonPlotlyLinear(data, reg);
+
+        return 3 + regOki.getCore1();
     }
     @Override
     public boolean isCompact() {

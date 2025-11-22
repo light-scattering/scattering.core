@@ -5,8 +5,7 @@ import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(1)
 @DisplayName("FPoly")
@@ -24,9 +23,15 @@ public class FPolyTest {
             var dto = factory.getFPoly(1, 2, 3);
 
             assertEquals(3, dto.size());
-            assertEquals(1, dto.getCore()[0]);
-            assertEquals(2, dto.getCore()[1]);
-            assertEquals(3, dto.getCore()[2]);
+            assertEquals(1, dto.getRefCore()[0]);
+            assertEquals(1, dto.getCore0());
+            assertEquals(2, dto.getRefCore()[1]);
+            assertEquals(2, dto.getCore1());
+            assertEquals(3, dto.getRefCore()[2]);
+            assertEquals(3, dto.getCoreN(2));
+
+            assertThrows(IllegalArgumentException.class, () -> dto.getCoreN(-1));
+            assertThrows(IllegalArgumentException.class, () -> dto.getCoreN(3));
         }
     }
 
@@ -50,7 +55,7 @@ public class FPolyTest {
         @Test
         @DisplayName("Get value")
         void getValueTest() {
-            var dto = factory.getFPoly(1, 2, 3);
+            var dto = factory.getFPoly(3, 2, 1);
 
             assertEquals(6, dto.getValue(1), 1E-6);
             assertEquals(2, dto.getValue(-1), 1E-6);

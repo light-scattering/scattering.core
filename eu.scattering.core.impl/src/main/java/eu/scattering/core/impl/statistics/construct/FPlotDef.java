@@ -5,6 +5,7 @@ import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
@@ -31,6 +32,7 @@ public class FPlotDef implements FPlot {
     private final FStat dataY;
 
     private FPlotInterpolator interpolator;
+    private final FPlotRegressor regressor;
 
     private String name = "";
 
@@ -46,6 +48,7 @@ public class FPlotDef implements FPlot {
         }
 
         this.interpolator = FPlotInterpolatorDef.create();
+        this.regressor = FPlotRegressorDef.create(factory, this);
     }
 
     public static FPlot create(ScatFactory factory) {
@@ -226,42 +229,7 @@ public class FPlotDef implements FPlot {
     @Override
     public double approximate(double x) {
 
-        return getInterpolator().apx(this, x);
-    }
-
-    @Override
-    public FPos2D simpleLinearRegression() {
-        FStat sx = getRefCoreX();
-        FStat sy = getRefCoreY();
-
-        double mx = sx.mean();
-        double my = sy.mean();
-
-        double numerator = 0;
-        double denominator = 0;
-
-        for (int i = 0 ; i < size() ; i++) {
-            numerator += (getX(i) - mx) * (getY(i) - my);
-            denominator += Math.pow(getX(i) - mx, 2);
-        }
-
-        double a = numerator / denominator;
-        double b = my - (a * mx);
-
-        mutateY((x, y) -> (a * x) + b);
-
-        return factory.getFPos2D(a, b);
-    }
-
-    @Override
-    public double mse(FPoly est) {
-        double mse = 0;
-
-        for (int i = 0 ; i < size() ; i++) {
-            mse += Math.pow(getY(i) - est.getValue(getX(i)), 2);
-        }
-
-        return mse / size();
+        return apx().get(this, x);
     }
 
     @Override
@@ -485,7 +453,13 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
-    public FPlotInterpolator getInterpolator() {
+    public FPlotRegressor reg() {
+
+        return this.regressor;
+    }
+
+    @Override
+    public FPlotInterpolator apx() {
 
         return this.interpolator;
     }
@@ -652,9 +626,9 @@ public class FPlotDef implements FPlot {
     public FPlot copy() {
         FPlot fPlot = factory.getFPlot();
 
-        fPlot.getInterpolator().setMethod(getInterpolator().getMethod());
-        fPlot.getInterpolator().setHermiteBias(getInterpolator().getHermiteBias());
-        fPlot.getInterpolator().setHermiteTension(getInterpolator().getHermiteTension());
+        fPlot.apx().setMethod(apx().getMethod());
+        fPlot.apx().setHermiteBias(apx().getHermiteBias());
+        fPlot.apx().setHermiteTension(apx().getHermiteTension());
 
         forEach((x, y, index) -> fPlot.add(x, y));
 
@@ -664,7 +638,7 @@ public class FPlotDef implements FPlot {
     @Override
     public boolean isEqual(FPlot fPlot) {
 
-        if (!getInterpolator().isEqual(fPlot.getInterpolator())) {
+        if (!apx().isEqual(fPlot.apx())) {
             return false;
         }
 
@@ -674,7 +648,7 @@ public class FPlotDef implements FPlot {
     @Override
     public boolean isEqualWithNaN(FPlot fPlot) {
 
-        if (!getInterpolator().isEqual(fPlot.getInterpolator())) {
+        if (!apx().isEqual(fPlot.apx())) {
             return false;
         }
 
@@ -708,7 +682,7 @@ public class FPlotDef implements FPlot {
         json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_DATA_X, getRefCoreX().toJSON());
         json.put(JSON_DATA_Y, getRefCoreY().toJSON());
-        json.put(JSON_INT, getInterpolator().toJSON());
+        json.put(JSON_INT, apx().toJSON());
 
         return json;
     }
@@ -720,7 +694,7 @@ public class FPlotDef implements FPlot {
         json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_DATA_X, getRefCoreX().toSimpleJSON());
         json.put(JSON_DATA_Y, getRefCoreY().toSimpleJSON());
-        json.put(JSON_INT, getInterpolator().toJSON());
+        json.put(JSON_INT, apx().toJSON());
 
         return json;
     }
@@ -743,6 +717,14 @@ public class FPlotDef implements FPlot {
     public void setName(String name) {
 
         this.name = name;
+    }
+
+    @Override
+    public FPlot removeNaN() {
+
+        filter((x, y) -> !Double.isNaN(x) && !Double.isNaN(y));
+
+        return this;
     }
 
     @Override

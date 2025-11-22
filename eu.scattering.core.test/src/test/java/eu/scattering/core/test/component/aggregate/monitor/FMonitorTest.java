@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTu
 import eu.scattering.core.design.component.aggregate.monitor.construct.FMonitorConstruct;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPoly;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -48,9 +48,9 @@ public class FMonitorTest {
             resultsMono.mutateFStatY(FStat::ln);
 
             FPlot regression = resultsMono.copy();
-            FPos2D slope = regression.simpleLinearRegression();
+            FPoly slope = regression.reg().poly(1);
 
-            assertEquals(df, slope.getD0(), 0.05);
+            assertEquals(df, slope.getCore1(), 0.05);
 
             assertEquals(quantity, resultsMono.size() + skip);
         }
@@ -79,9 +79,9 @@ public class FMonitorTest {
             resultsMono.mutateFStatY(FStat::ln);
 
             FPlot regression = resultsMono.copy();
-            FPos2D slope = regression.simpleLinearRegression();
+            FPoly slope = regression.reg().poly(1);
 
-            assertEquals(df, slope.getD0(), 0.05);
+            assertEquals(df, slope.getCore1(), 0.05);
 
             assertEquals(quantity, resultsMono.size() + skip);
         }
@@ -110,9 +110,9 @@ public class FMonitorTest {
             resultsMono.mutateFStatY(FStat::ln);
 
             FPlot regression = resultsMono.copy();
-            FPos2D slope = regression.simpleLinearRegression();
+            FPoly slope = regression.reg().poly(1);
 
-            assertEquals(df, slope.getD0(), 0.05);
+            assertEquals(df, slope.getCore1(), 0.05);
 
             assertEquals(quantity, resultsMono.size() + skip);
         }

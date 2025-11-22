@@ -6,6 +6,7 @@ import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 
@@ -29,24 +30,19 @@ public interface FPlot extends Statistics<FPlot> {
     double getY(int index);
     void setY(int index, double y);
 
-    int getIndexX(Index type, double x);
-    int getIndexY(Index type, double y);
+    // -------------------------------------------------------------------------------------------------
 
     <T> T getWithFStat(BiFunction<FStat, FStat, T> function);
 
     <T> T getWithFStatX(Function<FStat, T> function);
     <T> T getWithFStatY(Function<FStat, T> function);
 
-    // -------------------------------------------------------------------------------------------------
+    int getIndexX(Index type, double x);
+    int getIndexY(Index type, double y);
 
     double integrate();
 
-    double approximate(double x);
-
-    FPos2D simpleLinearRegression(); // Different types of regression, returns FPoly. Does not mutate results. Regression in range, eg. 2 - 3
-    // Get slope
-
-    double mse(FPoly est);
+    double approximate(double x); //
 
     // -------------------------------------------------------------------------------------------------
 
@@ -63,8 +59,8 @@ public interface FPlot extends Statistics<FPlot> {
     void mutateY(BiFunction<Double, Double, Double> function);
     void mutateFStatY(Consumer<FStat> consumer);
 
-    void interpolate(double step, boolean overflow);
-    void interpolate(double divisions);
+    void interpolate(double step, boolean overflow); //
+    void interpolate(double divisions); //
 
     void sortX(boolean ascending);
     void sortY(boolean ascending);
@@ -77,7 +73,8 @@ public interface FPlot extends Statistics<FPlot> {
 
     double[][] toArray();
 
-    FPlotInterpolator getInterpolator();
+    FPlotRegressor reg();
+    FPlotInterpolator apx();
 
     // -------------------------------------------------------------------------------------------------
 
@@ -86,16 +83,16 @@ public interface FPlot extends Statistics<FPlot> {
 
     // -------------------------------------------------------------------------------------------------
 
+    @Fragment
+    FPlot removeNaN();
+
+    @Fragment
+    FPos2D getFPos2D(int index);
+
     @Modificator
     FStat getRefCoreX();
     @Modificator
     FStat getRefCoreY();
-
-//    @Fragment
-//    FPlot removeNaN();
-
-    @Fragment
-    FPos2D getFPos2D(int index); // FPredictor
 
     // -------------------------------------------------------------------------------------------------
 

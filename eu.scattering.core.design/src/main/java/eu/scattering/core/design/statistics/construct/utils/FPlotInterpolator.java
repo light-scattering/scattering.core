@@ -16,13 +16,15 @@ public interface FPlotInterpolator {
 
     // -------------------------------------------------------------------------------------------------
 
-    double apx(FPlot data, double x);
+    double get(FPlot data, double x);
 
-    double apxLinear(FPlot data, double x);
-    double apxCosine(FPlot data, double x);
-    double apxCubic(FPlot data, double x);
-    double apxCatmullRom(FPlot data, double x);
-    double apxHermite(FPlot data, double x);
+    double hermite(FPlot data, double x);
+    double hermite(FPlot data, double x, double bias, double tension);
+
+    double cubic(FPlot data, double x);
+    double linear(FPlot data, double x);
+    double cosine(FPlot data, double x);
+    double catmullRom(FPlot data, double x);
 
     // -------------------------------------------------------------------------------------------------
 

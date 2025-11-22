@@ -1,5 +1,6 @@
 package eu.scattering.core.design.transfer.primitive;
 
+import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.transfer.Transfer;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,13 +52,45 @@ public class FPoly implements Transfer {
         double value = 0;
 
         for (int i = 0 ; i < this.core.length ; i++) {
-            value += this.core[i] * Math.pow(x, this.core.length - 1 - i);
+            value += this.core[i] * Math.pow(x, i);
         }
 
         return value;
     }
 
-    public double[] getCore() {
+    public double getCore0() {
+
+        if (size() < 1) {
+            throw new IllegalArgumentException("The index is erroneous");
+        }
+
+        return core[0];
+    }
+
+    public double getCore1() {
+
+        if (size() < 2) {
+            throw new IllegalArgumentException("The index is erroneous");
+        }
+
+        return core[1];
+    }
+
+    public double getCoreN(int n) {
+
+        if (n < 0) {
+            throw new IllegalArgumentException("The index cannot be lower than zero");
+        }
+
+        if (size() <= n) {
+            throw new IllegalArgumentException("The index is erroneous");
+        }
+
+        return core[n];
+    }
+
+    @Modificator
+    public double[] getRefCore() {
 
         return this.core;
     }
@@ -90,12 +123,12 @@ public class FPoly implements Transfer {
 
         if (object instanceof FPoly fPoly) {
 
-            if (this.core.length != fPoly.getCore().length) {
+            if (this.core.length != fPoly.getRefCore().length) {
                 return false;
             }
 
             for (int i = 0 ; i < this.core.length ; i++) {
-                if (this.core[i] != fPoly.getCore()[i]) {
+                if (this.core[i] != fPoly.getRefCore()[i]) {
                     return false;
                 }
             }

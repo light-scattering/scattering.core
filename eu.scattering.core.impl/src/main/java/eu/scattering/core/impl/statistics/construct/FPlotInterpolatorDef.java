@@ -68,19 +68,19 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double apx(FPlot data, double x) {
+    public double get(FPlot data, double x) {
 
         return switch (this.method) {
-            case LINEAR -> apxLinear(data, x);
-            case COSINE -> apxCosine(data, x);
-            case CUBIC -> apxCubic(data, x);
-            case CATMULL_ROM -> apxCatmullRom(data, x);
-            case HERMITE -> apxHermite(data, x);
+            case LINEAR -> linear(data, x);
+            case COSINE -> cosine(data, x);
+            case CUBIC -> cubic(data, x);
+            case CATMULL_ROM -> catmullRom(data, x);
+            case HERMITE -> hermite(data, x);
         };
     }
 
     @Override
-    public double apxLinear(FPlot data, double x) {
+    public double linear(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR2 = getIndexR1(data, x);
 
@@ -97,7 +97,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double apxCosine(FPlot data, double x) {
+    public double cosine(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR2 = getIndexR1(data, x);
 
@@ -115,7 +115,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double apxCubic(FPlot data, double x) {
+    public double cubic(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -143,7 +143,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double apxCatmullRom(FPlot data, double x) {
+    public double catmullRom(FPlot data, double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -171,7 +171,15 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double apxHermite(FPlot data, double x) {
+    public double hermite(FPlot data, double x) {
+
+        return hermite(data, x, 0, 0);
+    }
+
+    @Override
+    public double hermite(FPlot data, double x, double bias, double tension) {
+
+
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -191,10 +199,10 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
         double tmp2 = tmp1 * tmp1;
         double tmp3 = tmp2 * tmp1;
 
-        double m0 = (recordL1.getD1() - recordL2.getD1()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
-        m0 += (recordR1.getD1() - recordL1.getD1()) * (1 - this.hBias) * ((1 - this.hTension) / 2);
-        double m1 = (recordR1.getD1() - recordL1.getD1()) * (1 + this.hBias) * ((1 - this.hTension) / 2);
-        m1 += (recordR2.getD1() - recordR1.getD1()) * ( 1 - this.hBias) * ((1 - this.hTension) / 2);
+        double m0 = (recordL1.getD1() - recordL2.getD1()) * (1 + bias) * ((1 - tension) / 2);
+        m0 += (recordR1.getD1() - recordL1.getD1()) * (1 - bias) * ((1 - tension) / 2);
+        double m1 = (recordR1.getD1() - recordL1.getD1()) * (1 + bias) * ((1 - tension) / 2);
+        m1 += (recordR2.getD1() - recordR1.getD1()) * ( 1 - bias) * ((1 - tension) / 2);
 
 
         double a0 = (2 * tmp3) - (3 * tmp2) + 1;
@@ -247,6 +255,8 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
         return indexR2;
     }
 
+    //--------------------------------------------------
+
     @Override
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
@@ -257,8 +267,6 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
 
         return json;
     }
-
-    //--------------------------------------------------
 
     @Override
     public boolean isEqual(FPlotInterpolator interpolator) {

@@ -4,7 +4,6 @@ import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
@@ -27,6 +26,19 @@ public class FPlotTest {
             FPlot fPlot = factory.getFPlot();
 
             assertEquals(0, fPlot.size());
+        }
+
+        @Test
+        @DisplayName("Create with reference")
+        void createWithReference() {
+            FStat coreX = factory.getFStat();
+            FStat coreY = factory.getFStat();
+
+            FPlot fPlot = factory.getRefFPlot(coreX, coreY);
+
+            assertEquals(0, fPlot.size());
+            assertSame(coreX, fPlot.getRefCoreX());
+            assertSame(coreY, fPlot.getRefCoreY());
         }
 
         @Test
@@ -258,7 +270,7 @@ public class FPlotTest {
             fPlot.add(4, -4);
             fPlot.add(3, -3);
 
-            fPlot.setY(factory.getFPoly(1, 2));
+            fPlot.setY(factory.getFPoly(2, 1));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(2, fPlot.getX(0)),
@@ -281,13 +293,13 @@ public class FPlotTest {
     class FPlotCoreTest {
 
         @Test
-        @DisplayName("Is equal")
-        void isEqual() {
+        @DisplayName("Is equal - Interpolator")
+        void isEqualInterpolator() {
             FPlot fPlotA = factory.getFPlot();
 
-            fPlotA.getInterpolator().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.getInterpolator().setHermiteTension(2);
-            fPlotA.getInterpolator().setHermiteBias(3);
+            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
+            fPlotA.apx().setHermiteTension(2);
+            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(0, 0);
             fPlotA.add(1, 1);
@@ -295,9 +307,9 @@ public class FPlotTest {
 
             FPlot fPlotB = factory.getFPlot();
 
-            fPlotB.getInterpolator().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotB.getInterpolator().setHermiteTension(2);
-            fPlotB.getInterpolator().setHermiteBias(3);
+            fPlotB.apx().setMethod(FPlotInterpolator.Method.CUBIC);
+            fPlotB.apx().setHermiteTension(2);
+            fPlotB.apx().setHermiteBias(3);
 
             fPlotB.add(0, 0);
             fPlotB.add(1, 1);
@@ -308,14 +320,14 @@ public class FPlotTest {
             assertTrue(fPlotA.isEqualData(fPlotB));
             assertTrue(fPlotB.isEqualData(fPlotA));
 
-            fPlotA.getInterpolator().setHermiteTension(3);
+            fPlotA.apx().setHermiteTension(3);
 
             assertFalse(fPlotA.isEqual(fPlotB));
             assertFalse(fPlotB.isEqual(fPlotA));
             assertTrue(fPlotA.isEqualData(fPlotB));
             assertTrue(fPlotB.isEqualData(fPlotA));
 
-            fPlotA.getInterpolator().setHermiteTension(2);
+            fPlotA.apx().setHermiteTension(2);
             fPlotA.add(10, 10);
 
             assertFalse(fPlotA.isEqual(fPlotB));
@@ -329,9 +341,9 @@ public class FPlotTest {
         void toJSON() {
             FPlot fPlotA = factory.getFPlot();
 
-            fPlotA.getInterpolator().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.getInterpolator().setHermiteTension(2);
-            fPlotA.getInterpolator().setHermiteBias(3);
+            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
+            fPlotA.apx().setHermiteTension(2);
+            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(-2, 2);
             fPlotA.add(-1, 1);
@@ -352,9 +364,9 @@ public class FPlotTest {
         void toJSONWithText() {
             FPlot fPlotA = factory.getFPlot();
 
-            fPlotA.getInterpolator().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.getInterpolator().setHermiteTension(2);
-            fPlotA.getInterpolator().setHermiteBias(3);
+            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
+            fPlotA.apx().setHermiteTension(2);
+            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(-2, 2);
             fPlotA.add(-1, 1);
@@ -375,9 +387,9 @@ public class FPlotTest {
         void toJSONWithNaN() {
             FPlot fPlotA = factory.getFPlot();
 
-            fPlotA.getInterpolator().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.getInterpolator().setHermiteTension(2);
-            fPlotA.getInterpolator().setHermiteBias(3);
+            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
+            fPlotA.apx().setHermiteTension(2);
+            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(-2, 2);
             fPlotA.add(Double.NaN, 1);
@@ -401,9 +413,9 @@ public class FPlotTest {
         void copy() {
             FPlot fPlotA = factory.getFPlot();
 
-            fPlotA.getInterpolator().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.getInterpolator().setHermiteTension(2);
-            fPlotA.getInterpolator().setHermiteBias(3);
+            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
+            fPlotA.apx().setHermiteTension(2);
+            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(0, 0);
             fPlotA.add(1, 1);
@@ -421,17 +433,17 @@ public class FPlotTest {
         void configure() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setHermiteBias(2);
+            fPlot.apx().setHermiteBias(2);
 
-            assertEquals(2, fPlot.getInterpolator().getHermiteBias());
+            assertEquals(2, fPlot.apx().getHermiteBias());
 
-            fPlot.getInterpolator().setHermiteTension(3);
+            fPlot.apx().setHermiteTension(3);
 
-            assertEquals(3, fPlot.getInterpolator().getHermiteTension());
+            assertEquals(3, fPlot.apx().getHermiteTension());
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.COSINE);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.COSINE);
 
-            assertEquals(FPlotInterpolator.Method.COSINE, fPlot.getInterpolator().getMethod());
+            assertEquals(FPlotInterpolator.Method.COSINE, fPlot.apx().getMethod());
         }
     }
 
@@ -789,7 +801,7 @@ public class FPlotTest {
             fPlot.add(-2, 0);
             fPlot.add(2, 5);
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.LINEAR);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.LINEAR);
             fPlot.interpolate(100);
 
             double area = 10;
@@ -823,7 +835,7 @@ public class FPlotTest {
         void approxLinear() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.LINEAR);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.LINEAR);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -855,7 +867,7 @@ public class FPlotTest {
         void approxCosine() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.COSINE);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.COSINE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -887,7 +899,7 @@ public class FPlotTest {
         void approxCubic() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.CUBIC);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.CUBIC);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -921,7 +933,7 @@ public class FPlotTest {
         void approxCatmullRom() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.CATMULL_ROM);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.CATMULL_ROM);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -955,7 +967,7 @@ public class FPlotTest {
         void approxHermite() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.HERMITE);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.HERMITE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -988,7 +1000,7 @@ public class FPlotTest {
         @DisplayName("Mean square error A")
         void MeanSquareErrorA() {
             FPlot fPlot = factory.getFPlot();
-            FPoly fPoly = factory.getFPoly(1, 2);
+            FPoly fPoly = factory.getFPoly(2, 1);
 
             fPlot.add(-2, 0);
             fPlot.add(-1, 1);
@@ -996,14 +1008,14 @@ public class FPlotTest {
             fPlot.add(1, 3);
             fPlot.add(2, 4);
 
-            assertEquals(0, fPlot.mse(fPoly), 1E-4);
+            assertEquals(0, fPlot.reg().mse(fPoly), 1E-4);
         }
 
         @Test
         @DisplayName("Mean square error B")
         void MeanSquareErrorB() {
             FPlot fPlot = factory.getFPlot();
-            FPoly fPoly = factory.getFPoly(1, 2);
+            FPoly fPoly = factory.getFPoly(2, 1);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -1011,30 +1023,7 @@ public class FPlotTest {
             fPlot.add(1, 1);
             fPlot.add(2, 2);
 
-            assertEquals(3.2, fPlot.mse(fPoly), 1E-4);
-        }
-
-        @Test
-        @DisplayName("Regression - Simple linear")
-        void regressionSimpleLinear() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.add(-2, 2.1);
-            fPlot.add(-1, 0.9);
-            fPlot.add(0, 0.2);
-            fPlot.add(1, -1.5);
-            fPlot.add(2, -2.3);
-
-            FPos2D parameters = fPlot.simpleLinearRegression();
-
-            assertEquals(-1.12, parameters.getD0(), 1E-4);
-            assertEquals(-0.12, parameters.getD1(), 1E-4);
-
-            assertEquals(2.12, fPlot.getY(0), 1E-4);
-            assertEquals(1, fPlot.getY(1), 1E-4);
-            assertEquals(-0.12, fPlot.getY(2), 1E-4);
-            assertEquals(-1.24, fPlot.getY(3), 1E-4);
-            assertEquals(-2.36, fPlot.getY(4), 1E-4);
+            assertEquals(3.2, fPlot.reg().mse(fPoly), 1E-4);
         }
 
         @Test
@@ -1226,7 +1215,7 @@ public class FPlotTest {
         void interpolate() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.HERMITE);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.HERMITE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -1249,11 +1238,93 @@ public class FPlotTest {
         }
 
         @Test
+        @DisplayName("Regression with range - Poly 0")
+        void regressionWithRangePoly0() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2.1);
+            fPlot.add(-1, 0.9);
+            fPlot.add(0, 0.2);
+            fPlot.add(1, -1.5);
+            fPlot.add(2, -2.3);
+
+            FPoly parameters = fPlot.reg().poly(0, 2, 3);
+
+            assertEquals(-0.65, parameters.getRefCore()[0], 1E-4);
+        }
+
+        @Test
+        @DisplayName("Regression - Poly 0")
+        void regressionPoly0() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2.1);
+            fPlot.add(-1, 0.9);
+            fPlot.add(0, 0.2);
+            fPlot.add(1, -1.5);
+            fPlot.add(2, -2.3);
+
+            FPoly parameters = fPlot.reg().poly(0);
+
+            assertEquals(-0.12, parameters.getRefCore()[0], 1E-4);
+
+            fPlot.setY(parameters);
+
+            assertEquals(-0.12, fPlot.getY(0), 1E-4);
+            assertEquals(-0.12, fPlot.getY(1), 1E-4);
+            assertEquals(-0.12, fPlot.getY(2), 1E-4);
+            assertEquals(-0.12, fPlot.getY(3), 1E-4);
+            assertEquals(-0.12, fPlot.getY(4), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Regression with range - Linear")
+        void regressionWithRangePoly1() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2.1);
+            fPlot.add(-1, 0.9);
+            fPlot.add(0, 0.2);
+            fPlot.add(1, -1.5);
+            fPlot.add(2, -2.3);
+
+            FPoly parameters = fPlot.reg().poly(1, 2, 3);
+
+            assertEquals(-1.7, parameters.getRefCore()[1], 1E-4);
+            assertEquals(0.2, parameters.getRefCore()[0], 1E-4);
+        }
+
+        @Test
+        @DisplayName("Regression - Linear")
+        void regressionPoly1() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2.1);
+            fPlot.add(-1, 0.9);
+            fPlot.add(0, 0.2);
+            fPlot.add(1, -1.5);
+            fPlot.add(2, -2.3);
+
+            FPoly parameters = fPlot.reg().poly(1);
+
+            assertEquals(-1.12, parameters.getRefCore()[1], 1E-4);
+            assertEquals(-0.12, parameters.getRefCore()[0], 1E-4);
+
+            fPlot.setY(parameters);
+
+            assertEquals(2.12, fPlot.getY(0), 1E-4);
+            assertEquals(1, fPlot.getY(1), 1E-4);
+            assertEquals(-0.12, fPlot.getY(2), 1E-4);
+            assertEquals(-1.24, fPlot.getY(3), 1E-4);
+            assertEquals(-2.36, fPlot.getY(4), 1E-4);
+        }
+
+        @Test
         @DisplayName("Interpolate with divisions")
         void interpolateWithDivisions() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.getInterpolator().setMethod(FPlotInterpolator.Method.HERMITE);
+            fPlot.apx().setMethod(FPlotInterpolator.Method.HERMITE);
 
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
@@ -1637,6 +1708,38 @@ public class FPlotTest {
                     () -> assertEquals(1, fPlot.getY(0)),
                     () -> assertEquals(2, fPlot.getY(1)),
                     () -> assertEquals(3, fPlot.getY(2))
+            );
+        }
+
+        @Test
+        @DisplayName("Remove NaN")
+        void removeNaN() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(1, 4);
+            fPlot.add(2, 5);
+            fPlot.add(3, 6);
+
+            Assertions.assertAll("Check values",
+                    () -> assertEquals(3, fPlot.size()),
+                    () -> assertEquals(1, fPlot.getX(0)),
+                    () -> assertEquals(2, fPlot.getX(1)),
+                    () -> assertEquals(3, fPlot.getX(2)),
+                    () -> assertEquals(4, fPlot.getY(0)),
+                    () -> assertEquals(5, fPlot.getY(1)),
+                    () -> assertEquals(6, fPlot.getY(2))
+            );
+
+            fPlot.setX(1, Double.NaN);
+            fPlot.setY(2, Double.NaN);
+
+            FPlot results = fPlot.removeNaN();
+
+            Assertions.assertAll("Check values",
+                    () -> assertSame(fPlot, results),
+                    () -> assertEquals(1, fPlot.size()),
+                    () -> assertEquals(1, fPlot.getX(0)),
+                    () -> assertEquals(4, fPlot.getY(0))
             );
         }
     }
