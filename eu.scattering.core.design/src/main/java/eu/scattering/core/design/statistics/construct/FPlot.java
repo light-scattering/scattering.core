@@ -8,12 +8,10 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
 import eu.scattering.core.design.transfer.primitive.FPoly;
-import eu.scattering.core.design.transfer.primitive.FPos2D;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface FPlot extends Statistics<FPlot> {
 
@@ -30,19 +28,10 @@ public interface FPlot extends Statistics<FPlot> {
     double getY(int index);
     void setY(int index, double y);
 
-    // -------------------------------------------------------------------------------------------------
-
-    <T> T getWithFStat(BiFunction<FStat, FStat, T> function);
-
-    <T> T getWithFStatX(Function<FStat, T> function);
-    <T> T getWithFStatY(Function<FStat, T> function);
-
     int getIndexX(Index type, double x);
     int getIndexY(Index type, double y);
 
     double integrate();
-
-    double approximate(double x); //
 
     // -------------------------------------------------------------------------------------------------
 
@@ -50,17 +39,14 @@ public interface FPlot extends Statistics<FPlot> {
 
     void setY(FPoly est);
 
-    void mutateFStat(Consumer<FStat> consumer);
-    void mutateFStat(BiConsumer<FStat, FStat> consumer);
+    void mutate(Consumer<FStat> consumer);
+    void mutate(BiConsumer<FStat, FStat> consumer);
 
+    void mutateX(Consumer<FStat> consumer);
     void mutateX(BiFunction<Double, Double, Double> function);
-    void mutateFStatX(Consumer<FStat> consumer);
 
+    void mutateY(Consumer<FStat> consumer);
     void mutateY(BiFunction<Double, Double, Double> function);
-    void mutateFStatY(Consumer<FStat> consumer);
-
-    void interpolate(double step, boolean overflow); //
-    void interpolate(double divisions); //
 
     void sortX(boolean ascending);
     void sortY(boolean ascending);
@@ -79,15 +65,12 @@ public interface FPlot extends Statistics<FPlot> {
     // -------------------------------------------------------------------------------------------------
 
     String getName();
-    void setName(String name); // comment, boundary.
+    void setName(String name);
 
     // -------------------------------------------------------------------------------------------------
 
     @Fragment
     FPlot removeNaN();
-
-    @Fragment
-    FPos2D getFPos2D(int index);
 
     @Modificator
     FStat getRefCoreX();

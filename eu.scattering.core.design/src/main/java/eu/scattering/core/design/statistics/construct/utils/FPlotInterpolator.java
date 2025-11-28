@@ -1,40 +1,23 @@
 package eu.scattering.core.design.statistics.construct.utils;
 
 import eu.scattering.core.design.statistics.construct.FPlot;
-import org.json.JSONObject;
+
+import java.util.function.BiFunction;
 
 public interface FPlotInterpolator {
 
-    Method getMethod();
-    void setMethod(Method method);
-
-    double getHermiteBias();
-    void setHermiteBias(double bias);
-
-    double getHermiteTension();
-    void setHermiteTension(double tension);
+    double hermite(double x);
+    double hermite(double x, double bias, double tension);
+    double cosine(double x);
+    double catmullRom(double x);
+    double linear(double x);
+    double cubic(double x);
 
     // -------------------------------------------------------------------------------------------------
 
-    double get(FPlot data, double x);
+    FPlot sampleStep(BiFunction<FPlotInterpolator, Double, Double> function, double step);
+    FPlot sampleStep(BiFunction<FPlotInterpolator, Double, Double> function, double min, double max, double step);
 
-    double hermite(FPlot data, double x);
-    double hermite(FPlot data, double x, double bias, double tension);
-
-    double cubic(FPlot data, double x);
-    double linear(FPlot data, double x);
-    double cosine(FPlot data, double x);
-    double catmullRom(FPlot data, double x);
-
-    // -------------------------------------------------------------------------------------------------
-
-    boolean isEqual(FPlotInterpolator interpolator);
-
-    FPlotInterpolator copy();
-
-    JSONObject toJSON();
-
-    // -------------------------------------------------------------------------------------------------
-
-    enum Method { HERMITE, CATMULL_ROM, LINEAR, COSINE, CUBIC }
+    FPlot sampleDivisions(BiFunction<FPlotInterpolator, Double, Double> function, int divisions);
+    FPlot sampleDivisions(BiFunction<FPlotInterpolator, Double, Double> function, double min, double max, int divisions);
 }

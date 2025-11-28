@@ -1099,13 +1099,13 @@ public class FStatDef implements FStat {
     //--------------------------------------------------
 
     @Override
-    public String getMetaName() {
+    public String getName() {
 
         return this.name;
     }
 
     @Override
-    public void setMetaName(String name) {
+    public void setName(String name) {
 
         this.name = name;
     }

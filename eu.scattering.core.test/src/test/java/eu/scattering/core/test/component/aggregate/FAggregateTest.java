@@ -1934,7 +1934,7 @@ public class FAggregateTest {
             fAggregate.setRefParticles(core);
 
             FPlot results = fAggregate.getPairDistanceFunction();
-            results.mutateFStatY(FStat::distribute);
+            results.mutateY(FStat::distribute);
 
             assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertEquals(0, results.getY(0));
@@ -1949,7 +1949,7 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getFAggregate(F3D_N1000_Mono.get_18_14());
 
             FPlot results = fAggregate.getPairDistanceFunction();
-            results.mutateFStatY(FStat::distribute);
+            results.mutateY(FStat::distribute);
 
             assertTrue(results.size() > 100);
         }
@@ -2010,7 +2010,7 @@ public class FAggregateTest {
             fAggregate.setRefParticles(core);
 
             FPlot results = fAggregate.getCoordinationNumberFunction();
-            results.mutateFStatY(FStat::distribute);
+            results.mutateY(FStat::distribute);
 
             assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertEquals(0, results.getY(1));
@@ -2036,7 +2036,7 @@ public class FAggregateTest {
             fAggregate.setRefParticles(core);
 
             FPlot results = fAggregate.getDensityCorrelationFunction(false);
-            results.mutateFStatY(FStat::distribute);
+            results.mutateY(FStat::distribute);
 
             assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertTrue(results.getY(1) < results.getY(0));
@@ -2070,7 +2070,7 @@ public class FAggregateTest {
             fAggregate.setRefParticles(core);
 
             FPlot results = fAggregate.getBoxCoverageFunction(false);
-            results.mutateFStatY(FStat::distribute);
+            results.mutateY(FStat::distribute);
 
             assertEquals(1, results.getRefCoreY().sum(), 1E-4);
             assertTrue(results.size() >= 5);
@@ -2178,7 +2178,7 @@ public class FAggregateTest {
             fAggregate.setRefParticles(core);
 
             FPlot results = fAggregate.getTripletAngleFunction();
-            results.mutateFStatY(FStat::distribute);
+            results.mutateY(FStat::distribute);
 
             results.filter((x, y) -> y > 0);
 
@@ -2210,7 +2210,7 @@ public class FAggregateTest {
             FTrigHelper helper = factory.getFTrigHelper();
             results.mutateX((x, y) -> helper.convertRadToDeg(x));
 
-            results.mutateFStatY(FStat::distribute);
+            results.mutateY(FStat::distribute);
 
             results.filter((x, y) -> y > 0);
 

@@ -45,7 +45,6 @@ import eu.scattering.core.design.helper.transfer.FTransferHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.physics.material.data.FMaterialData;
-import eu.scattering.core.design.statistics.StatisticsExporter;
 import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
@@ -82,7 +81,6 @@ import eu.scattering.core.impl.helper.FTrigHelperDef;
 import eu.scattering.core.impl.physics.FMaterialDataDef;
 import eu.scattering.core.impl.physics.FMaterialDef;
 import eu.scattering.core.impl.statistics.FStatHelperDef;
-import eu.scattering.core.impl.statistics.StatisticsExporterDef;
 import eu.scattering.core.impl.statistics.base.FStatDef;
 import eu.scattering.core.impl.statistics.construct.FPlotDef;
 import eu.scattering.core.impl.storage.FBufferDef;
@@ -115,7 +113,7 @@ public final class FactoryDef implements ScatFactory {
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
 
-        this.fExportEngine = FExportEngineDef.get();
+        this.fExportEngine = FExportEngineDef.get(this);
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
         this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
@@ -135,7 +133,7 @@ public final class FactoryDef implements ScatFactory {
     private FactoryDef(long seed) {
         this.fRandGenerator = FRandGeneratorDef.create(seed);
 
-        this.fExportEngine = FExportEngineDef.get();
+        this.fExportEngine = FExportEngineDef.get(this);
         this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
         this.fProtoEngine = FProtoEngineDef.get();
         this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
@@ -594,12 +592,6 @@ public final class FactoryDef implements ScatFactory {
     }
 
     //--------------------------------------------------
-
-    @Override
-    public StatisticsExporter getStatisticsExporter() {
-
-        return StatisticsExporterDef.create();
-    }
 
     @Override
     public FPlot getFPlot() {

@@ -1,46 +1,46 @@
 package eu.scattering.core.impl.statistics.construct;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
 import eu.scattering.core.design.transfer.primitive.FPoly;
-import eu.scattering.core.design.transfer.primitive.FPolyFactory;
 
 public class FPlotRegressorDef implements FPlotRegressor {
-    private final FPolyFactory factory;
+    private final ScatFactory factory;
     private final FPlot data;
 
-    private FPlotRegressorDef(FPolyFactory factory, FPlot data) {
+    private FPlotRegressorDef(ScatFactory factory, FPlot data) {
 
         this.factory = factory;
         this.data = data;
     }
 
-    protected static FPlotRegressor create(FPolyFactory factory, FPlot data) {
+    protected static FPlotRegressor create(ScatFactory factory, FPlot data) {
 
         return new FPlotRegressorDef(factory, data);
     }
 
     @Override
-    public FPoly poly(int n) {
+    public FPoly poly(int degree) {
         int min = 0;
         int max = data.size() - 1;
 
-        return poly(n, min, max);
+        return poly(degree, min, max);
     }
 
     @Override
-    public FPoly poly(int n, int min, int max) {
+    public FPoly poly(int degree, int min, int max) {
 
-        return switch (n) {
-            case 0 -> poly0(min, max);
-            case 1 -> poly1(min, max);
+        return switch (degree) {
+            case 0 -> fitConstant(min, max);
+            case 1 -> fitLinear(min, max);
 
-            default -> throw new IllegalStateException("The method has not been implemented: Poly '" + n + "'");
+            default -> throw new IllegalStateException("The method has not been implemented: Poly '" + degree + "'");
         };
     }
 
     @Override
-    public FPoly poly0(int min, int max) {
+    public FPoly fitConstant(int min, int max) {
 
         if (min >= max) {
             throw new IllegalArgumentException("The min value must be greater than the max value");
@@ -63,7 +63,7 @@ public class FPlotRegressorDef implements FPlotRegressor {
     }
 
     @Override
-    public FPoly poly1(int min, int max) {
+    public FPoly fitLinear(int min, int max) {
 
         if (min >= max) {
             throw new IllegalArgumentException("The min value must be greater than the max value");
@@ -103,7 +103,7 @@ public class FPlotRegressorDef implements FPlotRegressor {
     }
 
     @Override
-    public FPoly slope(int window) {
+    public FPoly fitSlope(int window) {
 
         if (window < 3) {
             throw new IllegalArgumentException("The window must be at least three elements wide");
@@ -117,7 +117,7 @@ public class FPlotRegressorDef implements FPlotRegressor {
         double mseMin = Double.MAX_VALUE;
 
         for (int i = 0 ; i < data.size() - window ; i++) {
-            FPoly candidate = poly1(i, i + window);
+            FPoly candidate = fitLinear(i, i + window);
             double error = mse(candidate, i, i + window);
 
             if (error < mseMin) {
@@ -153,9 +153,21 @@ public class FPlotRegressorDef implements FPlotRegressor {
         double mse = 0;
 
         for (int i = min ; i <= max ; i++) {
-            mse += Math.pow(data.getY(i) - candidate.getValue(data.getX(i)), 2);
+            mse += Math.pow(data.getY(i) - candidate.value(data.getX(i)), 2);
         }
 
-        return mse / data.size();
+        return mse / (max - min + 1);
+    }
+
+    @Override
+    public double rmse(FPoly candidate) {
+
+        return Math.sqrt(mse(candidate));
+    }
+
+    @Override
+    public double rmse(FPoly candidate, int min, int max) {
+
+        return Math.sqrt(mse(candidate, min, max));
     }
 }

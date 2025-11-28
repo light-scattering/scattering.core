@@ -1,14 +1,13 @@
 package eu.scattering.core.test.statistics;
 
-import eu.scattering.core.design.statistics.StatisticsExporter;
+import eu.scattering.core.design.statistics.StatisticsEngineExport;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
-import eu.scattering.core.design.transfer.primitive.FPoly;
+import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FChartLine")
 public class StatisticsExporterTest {
@@ -17,11 +16,14 @@ public class StatisticsExporterTest {
     @DisplayName("Plotly FPlot linear")
     void plotlyFPlotLinear() {
         FPlot fPlot = factory.getFPlot();
-        StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
+        StatisticsEngineExport fPlotExporter = factory.getFExportEngine().getPlotContext();
 
-        fPlotExporter.setName("Test");
+        fPlotExporter.setName("Name");
+        fPlotExporter.setAnnotation("Annotation");
         fPlotExporter.setNameX("X");
         fPlotExporter.setNameY("Y");
+        fPlotExporter.setRangeX(-5, 5);
+        fPlotExporter.setRangeY(-6, 6);
 
         fPlot.add(-3, 4);
         fPlot.add(-2, 3);
@@ -31,21 +33,16 @@ public class StatisticsExporterTest {
         fPlot.add(2, 1);
         fPlot.add(3, -3);
 
-        FPlot fPlotRaw = fPlot.copy();
-        FPlot fPlotInterpolated = fPlot.copy();
-        FPlot fPlotSimpleLinearRegression = fPlot.copy();
+        FPlot fPlotInterpolated = fPlot.apx().sampleStep(FPlotInterpolator::hermite, 0.05);
 
-        fPlotRaw.setName("Raw");
+        FPlot fPlotSimpleLinearRegression = fPlot.copy();
+        fPlotSimpleLinearRegression.setY(fPlotSimpleLinearRegression.reg().poly(1));
+
+        fPlot.setName("Raw");
         fPlotInterpolated.setName("Interpolated");
         fPlotSimpleLinearRegression.setName("Linear regression");
 
-        fPlotInterpolated.interpolate(0.05, true);
-
-        FPoly regression = fPlotSimpleLinearRegression.reg().poly(1);
-
-        fPlotSimpleLinearRegression.setY(regression);
-
-        String script = fPlotExporter.toPythonPlotlyLinear(fPlotRaw, fPlotInterpolated, fPlotSimpleLinearRegression);
+        String script = fPlotExporter.exportPythonPlotlyLinear(fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -55,11 +52,14 @@ public class StatisticsExporterTest {
     @Test
     @DisplayName("Plotly FStat histogram")
     void plotlyFStatHistogram() {
-        StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
+        StatisticsEngineExport fPlotExporter = factory.getFExportEngine().getPlotContext();
 
         fPlotExporter.setName("Test");
+        fPlotExporter.setAnnotation("Annotation");
         fPlotExporter.setNameX("X");
         fPlotExporter.setNameY("Y");
+        fPlotExporter.setRangeX(-10, 10);
+        fPlotExporter.setRangeY(0, 10);
 
         FStat fStatA = factory.getFStat();
         fStatA.add(1, 0.2, -5, 2, 4.2, -1.9, 2, 0.2, 0.2, 5.2, -2.6, -1.9, 0, 2.5, 4.1, -1.0, -0.3);
@@ -67,10 +67,10 @@ public class StatisticsExporterTest {
         FStat fStatB = factory.getFStat();
         fStatB.add(-2, 1, 8, 4.5, 3.1, 1.9, 1.8, 1.7, -1.3, 3.6, 5.1, 6.9, 2.9, -0.9, -0.8);
 
-        fStatA.setMetaName("Stat A");
-        fStatB.setMetaName("Stat B");
+        fStatA.setName("Stat A");
+        fStatB.setName("Stat B");
 
-        String script = fPlotExporter.toPythonPlotlyHistogram(fStatA, fStatB);
+        String script = fPlotExporter.exportPythonPlotlyHistogram(fStatA, fStatB);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -80,14 +80,17 @@ public class StatisticsExporterTest {
     @Test
     @DisplayName("Plotly FPlot histogram")
     void plotlyFPlotHistogram() {
-        StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
+        StatisticsEngineExport fPlotExporter = factory.getFExportEngine().getPlotContext();
 
         fPlotExporter.setName("Test");
+        fPlotExporter.setAnnotation("Annotation");
         fPlotExporter.setNameX("X");
         fPlotExporter.setNameY("Y");
+        fPlotExporter.setRangeX(-10, 10);
+        fPlotExporter.setRangeY(0, 10);
 
         FPlot fPlotA = factory.getFPlot();
-        fPlotA.setName("A");
+        fPlotA.setName("Plot A");
 
         fPlotA.add(-3, 4);
         fPlotA.add(-2, 3);
@@ -98,7 +101,7 @@ public class StatisticsExporterTest {
         fPlotA.add(3, 3);
 
         FPlot fPlotB = factory.getFPlot();
-        fPlotB.setName("B");
+        fPlotB.setName("Plot B");
 
         fPlotB.add(0, 4);
         fPlotB.add(1, 3);
@@ -108,7 +111,7 @@ public class StatisticsExporterTest {
         fPlotB.add(5, 1);
         fPlotB.add(6, 3);
 
-        String script = fPlotExporter.toPythonPlotlyHistogram(fPlotA, fPlotB);
+        String script = fPlotExporter.exportPythonPlotlyHistogram(fPlotA, fPlotB);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -123,15 +126,24 @@ public class StatisticsExporterTest {
         @Test
         @DisplayName("Set name")
         void setName() {
-            StatisticsExporter fPlotExporter = factory.getStatisticsExporter();
+            StatisticsEngineExport fPlotExporter = factory.getFExportEngine().getPlotContext();
 
-            fPlotExporter.setName("a");
-            fPlotExporter.setNameX("b");
-            fPlotExporter.setNameY("c");
+            StatisticsEngineExport results = fPlotExporter
+                    .setName("a")
+                    .setNameX("b")
+                    .setNameY("c")
+                    .setAnnotation("d")
+                    .setRangeX(1, 2)
+                    .setRangeY(3, 4);
 
+            assertSame(fPlotExporter, results);
             assertEquals("a", fPlotExporter.getName());
             assertEquals("b", fPlotExporter.getNameX());
             assertEquals("c", fPlotExporter.getNameY());
-        }
+            assertEquals("d", fPlotExporter.getAnnotation());
+            assertEquals(1, fPlotExporter.getRangeX().getD0());
+            assertEquals(2, fPlotExporter.getRangeX().getD1());
+            assertEquals(3, fPlotExporter.getRangeY().getD0());
+            assertEquals(4, fPlotExporter.getRangeY().getD1());        }
     }
 }

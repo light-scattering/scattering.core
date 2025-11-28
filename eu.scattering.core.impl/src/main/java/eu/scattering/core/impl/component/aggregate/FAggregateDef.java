@@ -1057,7 +1057,7 @@ public class FAggregateDef implements FAggregate {
 
         FPoly regression = data.reg().poly(1);
 
-        return regression.getCore1();
+        return regression.at(1);
     }
 
     private double getDensityCorrelationAnalyze(FPlot data) {
@@ -1072,7 +1072,7 @@ public class FAggregateDef implements FAggregate {
 //        data.filter((x, y) -> x < midpoint);
 
 //        data.mutateY((x, y) -> y * 2);
-        data.mutateFStat((a, b) -> {
+        data.mutate((a, b) -> {
             a.log(10);
             b.log(10);
         });
@@ -1092,13 +1092,17 @@ public class FAggregateDef implements FAggregate {
 
 
         FPoly regression = data.reg().poly(1);
-        FPoly regOki = data.reg().slope((int) (data.size() * 0.75));
+        FPoly regOki = data.reg().fitSlope((int) (data.size() * 0.75));
         FPlot reg = data.copy();
         reg.setY(regOki);
 
-        String model = factory.getStatisticsExporter().toPythonPlotlyLinear(data, reg);
+        String model = factory.getFExportEngine().getPlotContext()
+                .setRangeX(0,3)
+                .setRangeY(-5, 2)
+                .setAnnotation("Test data")
+                .exportPythonPlotlyLinear(data, reg);
 
-        return 3 + regOki.getCore1();
+        return 3 + regOki.at(1);
     }
     @Override
     public boolean isCompact() {

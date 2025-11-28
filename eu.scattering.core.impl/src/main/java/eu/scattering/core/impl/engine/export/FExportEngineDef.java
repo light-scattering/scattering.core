@@ -1,24 +1,32 @@
 package eu.scattering.core.impl.engine.export;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.engine.export.FExportEngine;
+import eu.scattering.core.design.statistics.StatisticsEngineExport;
+import eu.scattering.core.impl.statistics.StatisticsEngineExportDef;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FExportEngineDef implements FExportEngine {
-    private static FExportEngine self;
+    private static FExportEngine SELF;
 
-    private FExportEngineDef() {}
+    private final ScatFactory factory;
 
-    public static FExportEngine get() {
+    private FExportEngineDef(ScatFactory factory) {
 
-        if (FExportEngineDef.self == null) {
-            FExportEngineDef.self = new FExportEngineDef();
+        this.factory = factory;
+    }
+
+    public static FExportEngine get(ScatFactory factory) {
+
+        if (FExportEngineDef.SELF == null) {
+            FExportEngineDef.SELF = new FExportEngineDef(factory);
         }
 
-        return FExportEngineDef.self;
+        return FExportEngineDef.SELF;
     }
 
     //--------------------------------------------------
@@ -93,5 +101,13 @@ public class FExportEngineDef implements FExportEngine {
         builder.append(");\n");
 
         return "particle_" + (int) shape.getIndex();
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public StatisticsEngineExport getPlotContext() {
+
+        return StatisticsEngineExportDef.create(this.factory);
     }
 }

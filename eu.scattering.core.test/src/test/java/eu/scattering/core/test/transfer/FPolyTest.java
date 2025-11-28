@@ -24,14 +24,14 @@ public class FPolyTest {
 
             assertEquals(3, dto.size());
             assertEquals(1, dto.getRefCore()[0]);
-            assertEquals(1, dto.getCore0());
+            assertEquals(1, dto.at(0));
             assertEquals(2, dto.getRefCore()[1]);
-            assertEquals(2, dto.getCore1());
+            assertEquals(2, dto.at(1));
             assertEquals(3, dto.getRefCore()[2]);
-            assertEquals(3, dto.getCoreN(2));
+            assertEquals(3, dto.at(2));
 
-            assertThrows(IllegalArgumentException.class, () -> dto.getCoreN(-1));
-            assertThrows(IllegalArgumentException.class, () -> dto.getCoreN(3));
+            assertThrows(ArrayIndexOutOfBoundsException.class, () -> dto.at(-1));
+            assertThrows(ArrayIndexOutOfBoundsException.class, () -> dto.at(3));
         }
     }
 
@@ -57,10 +57,10 @@ public class FPolyTest {
         void getValueTest() {
             var dto = factory.getFPoly(3, 2, 1);
 
-            assertEquals(6, dto.getValue(1), 1E-6);
-            assertEquals(2, dto.getValue(-1), 1E-6);
-            assertEquals(11, dto.getValue(2), 1E-6);
-            assertEquals(3, dto.getValue(-2), 1E-6);
+            assertEquals(6, dto.value(1), 1E-6);
+            assertEquals(2, dto.value(-1), 1E-6);
+            assertEquals(11, dto.value(2), 1E-6);
+            assertEquals(3, dto.value(-2), 1E-6);
         }
     }
 

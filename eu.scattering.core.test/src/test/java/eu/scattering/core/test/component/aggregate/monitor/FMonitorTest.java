@@ -44,13 +44,13 @@ public class FMonitorTest {
             FPlot resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.mutateFStatX(FStat::ln);
-            resultsMono.mutateFStatY(FStat::ln);
+            resultsMono.mutateX(FStat::ln);
+            resultsMono.mutateY(FStat::ln);
 
             FPlot regression = resultsMono.copy();
             FPoly slope = regression.reg().poly(1);
 
-            assertEquals(df, slope.getCore1(), 0.05);
+            assertEquals(df, slope.at(1), 0.05);
 
             assertEquals(quantity, resultsMono.size() + skip);
         }
@@ -75,13 +75,13 @@ public class FMonitorTest {
             FPlot resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.mutateFStatX(FStat::ln);
-            resultsMono.mutateFStatY(FStat::ln);
+            resultsMono.mutateX(FStat::ln);
+            resultsMono.mutateY(FStat::ln);
 
             FPlot regression = resultsMono.copy();
             FPoly slope = regression.reg().poly(1);
 
-            assertEquals(df, slope.getCore1(), 0.05);
+            assertEquals(df, slope.at(1), 0.05);
 
             assertEquals(quantity, resultsMono.size() + skip);
         }
@@ -106,13 +106,13 @@ public class FMonitorTest {
             FPlot resultsMono = fMonitor.getResults();
 
             resultsMono.swapXY();
-            resultsMono.mutateFStatX(FStat::ln);
-            resultsMono.mutateFStatY(FStat::ln);
+            resultsMono.mutateX(FStat::ln);
+            resultsMono.mutateY(FStat::ln);
 
             FPlot regression = resultsMono.copy();
             FPoly slope = regression.reg().poly(1);
 
-            assertEquals(df, slope.getCore1(), 0.05);
+            assertEquals(df, slope.at(1), 0.05);
 
             assertEquals(quantity, resultsMono.size() + skip);
         }

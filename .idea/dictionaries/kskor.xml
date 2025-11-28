@@ -7,6 +7,7 @@
       <w>flage</w>
       <w>hanning</w>
       <w>hoverinfo</w>
+      <w>hovertemplate</w>
       <w>interquartile</w>
       <w>midspread</w>
       <w>monodisperse</w>
@@ -15,12 +16,15 @@
       <w>prefactor</w>
       <w>prot</w>
       <w>regressor</w>
+      <w>rmse</w>
       <w>rodrigues</w>
+      <w>showarrow</w>
       <w>stdp</w>
       <w>tunability</w>
       <w>varp</w>
       <w>xaxis</w>
       <w>xbins</w>
+      <w>yref</w>
     </words>
   </dictionary>
 </component>

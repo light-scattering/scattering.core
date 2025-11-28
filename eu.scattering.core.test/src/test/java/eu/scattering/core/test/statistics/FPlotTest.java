@@ -293,23 +293,15 @@ public class FPlotTest {
     class FPlotCoreTest {
 
         @Test
-        @DisplayName("Is equal - Interpolator")
-        void isEqualInterpolator() {
+        @DisplayName("Is equal")
+        void isEqual() {
             FPlot fPlotA = factory.getFPlot();
-
-            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.apx().setHermiteTension(2);
-            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(0, 0);
             fPlotA.add(1, 1);
             fPlotA.add(2, 2);
 
             FPlot fPlotB = factory.getFPlot();
-
-            fPlotB.apx().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotB.apx().setHermiteTension(2);
-            fPlotB.apx().setHermiteBias(3);
 
             fPlotB.add(0, 0);
             fPlotB.add(1, 1);
@@ -320,14 +312,6 @@ public class FPlotTest {
             assertTrue(fPlotA.isEqualData(fPlotB));
             assertTrue(fPlotB.isEqualData(fPlotA));
 
-            fPlotA.apx().setHermiteTension(3);
-
-            assertFalse(fPlotA.isEqual(fPlotB));
-            assertFalse(fPlotB.isEqual(fPlotA));
-            assertTrue(fPlotA.isEqualData(fPlotB));
-            assertTrue(fPlotB.isEqualData(fPlotA));
-
-            fPlotA.apx().setHermiteTension(2);
             fPlotA.add(10, 10);
 
             assertFalse(fPlotA.isEqual(fPlotB));
@@ -340,10 +324,6 @@ public class FPlotTest {
         @DisplayName("To JSON")
         void toJSON() {
             FPlot fPlotA = factory.getFPlot();
-
-            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.apx().setHermiteTension(2);
-            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(-2, 2);
             fPlotA.add(-1, 1);
@@ -364,10 +344,6 @@ public class FPlotTest {
         void toJSONWithText() {
             FPlot fPlotA = factory.getFPlot();
 
-            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.apx().setHermiteTension(2);
-            fPlotA.apx().setHermiteBias(3);
-
             fPlotA.add(-2, 2);
             fPlotA.add(-1, 1);
             fPlotA.add(0, 0);
@@ -386,10 +362,6 @@ public class FPlotTest {
         @DisplayName("To JSON with NaN")
         void toJSONWithNaN() {
             FPlot fPlotA = factory.getFPlot();
-
-            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.apx().setHermiteTension(2);
-            fPlotA.apx().setHermiteBias(3);
 
             fPlotA.add(-2, 2);
             fPlotA.add(Double.NaN, 1);
@@ -413,10 +385,6 @@ public class FPlotTest {
         void copy() {
             FPlot fPlotA = factory.getFPlot();
 
-            fPlotA.apx().setMethod(FPlotInterpolator.Method.CUBIC);
-            fPlotA.apx().setHermiteTension(2);
-            fPlotA.apx().setHermiteBias(3);
-
             fPlotA.add(0, 0);
             fPlotA.add(1, 1);
             fPlotA.add(2, 2);
@@ -427,88 +395,12 @@ public class FPlotTest {
             assertTrue(fPlotA.isEqual(fPlotB));
             assertTrue(fPlotB.isEqual(fPlotA));
         }
-
-        @Test
-        @DisplayName("Configure")
-        void configure() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.apx().setHermiteBias(2);
-
-            assertEquals(2, fPlot.apx().getHermiteBias());
-
-            fPlot.apx().setHermiteTension(3);
-
-            assertEquals(3, fPlot.apx().getHermiteTension());
-
-            fPlot.apx().setMethod(FPlotInterpolator.Method.COSINE);
-
-            assertEquals(FPlotInterpolator.Method.COSINE, fPlot.apx().getMethod());
-        }
     }
 
     @Nested
     @Tag("Advanced")
     @DisplayName("Advanced")
     class FPlotAdvancedTest {
-
-        @Test
-        @DisplayName("Get with FStat")
-        void getWithFStat() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.add(1, 2);
-            fPlot.add(3, 4);
-            fPlot.add(5, 6);
-
-            assertEquals(7d, fPlot.getWithFStat((x, y) -> x.max() + y.min()));
-            assertEquals(2d, fPlot.getWithFStat((x, y) -> {
-                x.add(1);
-                y.add(1);
-                return x.min() + y.min();
-            }));
-
-            assertThrows(IllegalStateException.class, () -> fPlot.getWithFStat((x, y) -> {
-                x.add(1);
-                return x.min() + y.min();
-            }));
-        }
-
-        @Test
-        @DisplayName("Get with FStat X")
-        void getWithFStatX() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.add(1, 2);
-            fPlot.add(3, 4);
-            fPlot.add(5, 6);
-
-            assertEquals(1d, fPlot.getWithFStatX(FStat::min));
-            assertEquals(5d, fPlot.getWithFStatX(FStat::max));
-
-            assertThrows(IllegalStateException.class, () -> fPlot.getWithFStatX((data) -> {
-                data.add(1);
-                return data.min();
-            }));
-        }
-
-        @Test
-        @DisplayName("Get with FStat Y")
-        void getWithFStatY() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.add(1, 2);
-            fPlot.add(3, 4);
-            fPlot.add(5, 6);
-
-            assertEquals(2d, fPlot.getWithFStatY(FStat::min));
-            assertEquals(6d, fPlot.getWithFStatY(FStat::max));
-
-            assertThrows(IllegalStateException.class, () -> fPlot.getWithFStatY((data) -> {
-                data.add(1);
-                return data.min();
-            }));
-        }
 
         @Test
         @DisplayName("Get ref FStat X")
@@ -801,8 +693,7 @@ public class FPlotTest {
             fPlot.add(-2, 0);
             fPlot.add(2, 5);
 
-            fPlot.apx().setMethod(FPlotInterpolator.Method.LINEAR);
-            fPlot.interpolate(100);
+            fPlot.apx().sampleDivisions(FPlotInterpolator::linear, 100);
 
             double area = 10;
             double results = fPlot.integrate();
@@ -822,208 +713,12 @@ public class FPlotTest {
                 x += step;
             }
 
-            fPlot.interpolate(100);
+            fPlot.apx().sampleDivisions(FPlotInterpolator::hermite, 100);
 
             double area = 4;
             double results = fPlot.integrate();
 
             assertEquals(area, results, 1E-1);
-        }
-
-        @Test
-        @DisplayName("Approximate linear")
-        void approxLinear() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.apx().setMethod(FPlotInterpolator.Method.LINEAR);
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, -1);
-            fPlot.add(2, -2);
-
-            Assertions.assertAll("Integer values",
-                    () -> assertEquals(2, fPlot.approximate(-2), 1E-6),
-                    () -> assertEquals(1, fPlot.approximate(-1), 1E-6),
-                    () -> assertEquals(0, fPlot.approximate(0), 1E-6),
-                    () -> assertEquals(-1, fPlot.approximate(1), 1E-6),
-                    () -> assertEquals(-2, fPlot.approximate(2), 1E-6)
-            );
-
-            Assertions.assertAll("Test values",
-                    () -> assertEquals(1.5, fPlot.approximate(-1.5), 1E-6),
-                    () -> assertEquals(-1.9, fPlot.approximate(1.9), 1E-6)
-            );
-
-            Assertions.assertAll("Erroneous values",
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(-2.5)),
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(2.5))
-            );
-        }
-
-        @Test
-        @DisplayName("Approximate cosine")
-        void approxCosine() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.apx().setMethod(FPlotInterpolator.Method.COSINE);
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, -1);
-            fPlot.add(2, -2);
-
-            Assertions.assertAll("Integer values",
-                    () -> assertEquals(2, fPlot.approximate(-2), 1E-6),
-                    () -> assertEquals(1, fPlot.approximate(-1), 1E-6),
-                    () -> assertEquals(0, fPlot.approximate(0), 1E-6),
-                    () -> assertEquals(-1, fPlot.approximate(1), 1E-6),
-                    () -> assertEquals(-2, fPlot.approximate(2), 1E-6)
-            );
-
-            Assertions.assertAll("Test values",
-                    () -> assertTrue(fPlot.approximate(-1.5) > 1 && fPlot.approximate(-1.5) < 2),
-                    () -> assertTrue(fPlot.approximate(1.9) > -2 && fPlot.approximate(1.9) < -1)
-            );
-
-            Assertions.assertAll("Erroneous values",
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(-2.5)),
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(2.5))
-            );
-        }
-
-        @Test
-        @DisplayName("Approximate cubic")
-        void approxCubic() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.apx().setMethod(FPlotInterpolator.Method.CUBIC);
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, -1);
-            fPlot.add(2, -2);
-
-            Assertions.assertAll("Integer values",
-                    () -> assertEquals(2, fPlot.approximate(-2), 1E-6),
-                    () -> assertEquals(1, fPlot.approximate(-1), 1E-6),
-                    () -> assertEquals(0, fPlot.approximate(0), 1E-6),
-                    () -> assertEquals(-1, fPlot.approximate(1), 1E-6),
-                    () -> assertEquals(-2, fPlot.approximate(2), 1E-6)
-            );
-
-            Assertions.assertAll("Test values",
-                    () -> assertTrue(fPlot.approximate(-1.5) > 1 && fPlot.approximate(-1.5) < 2),
-                    () -> assertTrue(fPlot.approximate(-0.5) > 0 && fPlot.approximate(-0.5) < 1),
-                    () -> assertTrue(fPlot.approximate(0.5) > -1 && fPlot.approximate(0.5) < 0),
-                    () -> assertTrue(fPlot.approximate(1.5) > -2 && fPlot.approximate(1.5) < -1)
-            );
-
-            Assertions.assertAll("Erroneous values",
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(-2.5)),
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(2.5))
-            );
-        }
-
-        @Test
-        @DisplayName("Approximate Catmull-Rom")
-        void approxCatmullRom() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.apx().setMethod(FPlotInterpolator.Method.CATMULL_ROM);
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, -1);
-            fPlot.add(2, -2);
-
-            Assertions.assertAll("Integer values",
-                    () -> assertEquals(2, fPlot.approximate(-2), 1E-6),
-                    () -> assertEquals(1, fPlot.approximate(-1), 1E-6),
-                    () -> assertEquals(0, fPlot.approximate(0), 1E-6),
-                    () -> assertEquals(-1, fPlot.approximate(1), 1E-6),
-                    () -> assertEquals(-2, fPlot.approximate(2), 1E-6)
-            );
-
-            Assertions.assertAll("Test values",
-                    () -> assertTrue(fPlot.approximate(-1.5) > 1 && fPlot.approximate(-1.5) < 2),
-                    () -> assertTrue(fPlot.approximate(-0.5) > 0 && fPlot.approximate(-0.5) < 1),
-                    () -> assertTrue(fPlot.approximate(0.5) > -1 && fPlot.approximate(0.5) < 0),
-                    () -> assertTrue(fPlot.approximate(1.5) > -2 && fPlot.approximate(1.5) < -1)
-            );
-
-            Assertions.assertAll("Erroneous values",
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(-2.5)),
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(2.5))
-            );
-        }
-
-        @Test
-        @DisplayName("Approximate Hermite")
-        void approxHermite() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.apx().setMethod(FPlotInterpolator.Method.HERMITE);
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, -1);
-            fPlot.add(2, -2);
-
-            Assertions.assertAll("Integer values",
-                    () -> assertEquals(2, fPlot.approximate(-2), 1E-6),
-                    () -> assertEquals(1, fPlot.approximate(-1), 1E-6),
-                    () -> assertEquals(0, fPlot.approximate(0), 1E-6),
-                    () -> assertEquals(-1, fPlot.approximate(1), 1E-6),
-                    () -> assertEquals(-2, fPlot.approximate(2), 1E-6)
-            );
-
-            Assertions.assertAll("Test values",
-                    () -> assertTrue(fPlot.approximate(-1.5) > 1 && fPlot.approximate(-1.5) < 2),
-                    () -> assertTrue(fPlot.approximate(-0.5) > 0 && fPlot.approximate(-0.5) < 1),
-                    () -> assertTrue(fPlot.approximate(0.5) > -1 && fPlot.approximate(0.5) < 0),
-                    () -> assertTrue(fPlot.approximate(1.5) > -2 && fPlot.approximate(1.5) < -1)
-            );
-
-            Assertions.assertAll("Erroneous values",
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(-2.5)),
-                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.approximate(2.5))
-            );
-        }
-
-        @Test
-        @DisplayName("Mean square error A")
-        void MeanSquareErrorA() {
-            FPlot fPlot = factory.getFPlot();
-            FPoly fPoly = factory.getFPoly(2, 1);
-
-            fPlot.add(-2, 0);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 2);
-            fPlot.add(1, 3);
-            fPlot.add(2, 4);
-
-            assertEquals(0, fPlot.reg().mse(fPoly), 1E-4);
-        }
-
-        @Test
-        @DisplayName("Mean square error B")
-        void MeanSquareErrorB() {
-            FPlot fPlot = factory.getFPlot();
-            FPoly fPoly = factory.getFPoly(2, 1);
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, 1);
-            fPlot.add(2, 2);
-
-            assertEquals(3.2, fPlot.reg().mse(fPoly), 1E-4);
         }
 
         @Test
@@ -1084,7 +779,7 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateFStat((a) -> a.mutate((b) -> b * 2));
+            fPlot.mutate((a) -> a.mutate((b) -> b * 2));
 
             assertEquals(2, fPlot.size());
 
@@ -1104,7 +799,7 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateFStat((a, b) -> {
+            fPlot.mutate((a, b) -> {
                 a.mutate((c) -> c * 2);
                 b.mutate((c) -> c * 4);
             });
@@ -1118,12 +813,12 @@ public class FPlotTest {
                     () -> assertEquals(16, fPlot.getY(1))
             );
 
-            fPlot.mutateFStat((a, b) -> {
+            fPlot.mutate((a, b) -> {
                 a.add(1);
                 b.add(1);
             });
 
-            assertThrows(IllegalStateException.class, () -> fPlot.mutateFStat((a, b) -> a.add(1)));
+            assertThrows(IllegalStateException.class, () -> fPlot.mutate((a, b) -> a.add(1)));
         }
 
         @Test
@@ -1154,7 +849,7 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateFStatX((a) -> a.mutate((b) -> b * 2));
+            fPlot.mutateX((a) -> a.mutate((b) -> b * 2));
 
             assertEquals(2, fPlot.size());
 
@@ -1165,7 +860,7 @@ public class FPlotTest {
                     () -> assertEquals(4, fPlot.getY(1))
             );
 
-            assertThrows(IllegalStateException.class, () -> fPlot.mutateFStatX((x) -> x.add(1)));
+            assertThrows(IllegalStateException.class, () -> fPlot.mutateX((x) -> x.add(1)));
         }
 
         @Test
@@ -1196,7 +891,7 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateFStatY((a) -> a.mutate((b) -> b * 2));
+            fPlot.mutateY((a) -> a.mutate((b) -> b * 2));
 
             assertEquals(2, fPlot.size());
 
@@ -1207,34 +902,7 @@ public class FPlotTest {
                     () -> assertEquals(8, fPlot.getY(1))
             );
 
-            assertThrows(IllegalStateException.class, () -> fPlot.mutateFStatY((x) -> x.add(1)));
-        }
-
-        @Test
-        @DisplayName("Interpolate")
-        void interpolate() {
-            FPlot fPlot = factory.getFPlot();
-
-            fPlot.apx().setMethod(FPlotInterpolator.Method.HERMITE);
-
-            fPlot.add(-2, 2);
-            fPlot.add(-1, 1);
-            fPlot.add(0, 0);
-            fPlot.add(1, 1);
-            fPlot.add(2, 2);
-
-            fPlot.interpolate(0.1, true);
-
-            Assertions.assertAll("Test values",
-                    () -> assertEquals(40, fPlot.size(), 1),
-                    () -> assertEquals(-2, fPlot.getRefCoreX().min(), 1E-6),
-                    () -> assertEquals(2, fPlot.getRefCoreX().max(), 1E-6),
-                    () -> assertEquals(1.5, fPlot.approximate(-1.5), 0.25),
-                    () -> assertEquals(0.5, fPlot.approximate(-0.5), 0.25),
-                    () -> assertEquals(0, fPlot.approximate(0), 0.25),
-                    () -> assertEquals(0.5, fPlot.approximate(0.5), 0.25),
-                    () -> assertEquals(1.5, fPlot.approximate(1.5), 0.25)
-            );
+            assertThrows(IllegalStateException.class, () -> fPlot.mutateY((x) -> x.add(1)));
         }
 
         @Test
@@ -1324,18 +992,16 @@ public class FPlotTest {
         void interpolateWithDivisions() {
             FPlot fPlot = factory.getFPlot();
 
-            fPlot.apx().setMethod(FPlotInterpolator.Method.HERMITE);
-
             fPlot.add(-2, 2);
             fPlot.add(-1, 1);
             fPlot.add(0, 0);
             fPlot.add(1, 1);
             fPlot.add(2, 2);
 
-            fPlot.interpolate(10);
+            FPlot results = fPlot.apx().sampleDivisions(FPlotInterpolator::hermite, 10);
 
             Assertions.assertAll("Test values",
-                    () -> assertEquals(11, fPlot.size())
+                    () -> assertEquals(11, results.size())
             );
         }
 
@@ -1350,7 +1016,7 @@ public class FPlotTest {
             fPlot.add(1, 1);
             fPlot.add(2, 2);
 
-            fPlot.mutateFStatY(FStat::distribute);
+            fPlot.mutateY(FStat::distribute);
 
             Assertions.assertAll("Test values",
                     () -> assertEquals(1, fPlot.getRefCoreY().sum(), 1E-4),
@@ -1507,7 +1173,7 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatX((e) -> e.log(Math.E));
+            fPlot.mutateX((e) -> e.log(Math.E));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
@@ -1528,7 +1194,7 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatY((e) -> e.log(Math.E));
+            fPlot.mutateY((e) -> e.log(Math.E));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0), 1E-4),
@@ -1549,8 +1215,8 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatX((e) -> e.log(Math.E));
-            fPlot.mutateFStatY((e) -> e.log(Math.E));
+            fPlot.mutateX((e) -> e.log(Math.E));
+            fPlot.mutateY((e) -> e.log(Math.E));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
@@ -1571,7 +1237,7 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatX((e) -> e.log(10));
+            fPlot.mutateX((e) -> e.log(10));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log10(1), fPlot.getX(0), 1E-4),
@@ -1592,7 +1258,7 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatY((e) -> e.log(10));
+            fPlot.mutateY((e) -> e.log(10));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0), 1E-4),
@@ -1613,8 +1279,8 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatX((e) -> e.log(10));
-            fPlot.mutateFStatY((e) -> e.log(10));
+            fPlot.mutateX((e) -> e.log(10));
+            fPlot.mutateY((e) -> e.log(10));
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log10(1), fPlot.getX(0), 1E-4),
@@ -1635,7 +1301,7 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatX(FStat::ln);
+            fPlot.mutateX(FStat::ln);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
@@ -1656,7 +1322,7 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatY(FStat::ln);
+            fPlot.mutateY(FStat::ln);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0), 1E-4),
@@ -1677,8 +1343,8 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.mutateFStatX(FStat::ln);
-            fPlot.mutateFStatY(FStat::ln);
+            fPlot.mutateX(FStat::ln);
+            fPlot.mutateY(FStat::ln);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(Math.log(1), fPlot.getX(0), 1E-4),
@@ -1740,6 +1406,314 @@ public class FPlotTest {
                     () -> assertEquals(1, fPlot.size()),
                     () -> assertEquals(1, fPlot.getX(0)),
                     () -> assertEquals(4, fPlot.getY(0))
+            );
+        }
+    }
+
+    @Nested
+    @Tag("Regressor")
+    @DisplayName("Regressor")
+    class FPlotRegressorTest {
+
+        @Test
+        @DisplayName("Mean square error A")
+        void meanSquareErrorA() {
+            FPlot fPlot = factory.getFPlot();
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            fPlot.add(-2, 0);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 2);
+            fPlot.add(1, 3);
+            fPlot.add(2, 4);
+
+            assertEquals(0, fPlot.reg().mse(fPoly), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Mean square error B")
+        void meanSquareErrorB() {
+            FPlot fPlot = factory.getFPlot();
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            assertEquals(3.2, fPlot.reg().mse(fPoly), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Mean square error - Range")
+        void meanSquareErrorRange() {
+            FPlot fPlot = factory.getFPlot();
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            assertEquals(8d / 3, fPlot.reg().mse(fPoly, 0, 2), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Root mean square error A")
+        void rootMeanSquareErrorA() {
+            FPlot fPlot = factory.getFPlot();
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            fPlot.add(-2, 0);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 2);
+            fPlot.add(1, 3);
+            fPlot.add(2, 4);
+
+            assertEquals(0, fPlot.reg().rmse(fPoly), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Root mean square error B")
+        void rootMeanSquareErrorB() {
+            FPlot fPlot = factory.getFPlot();
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            assertEquals(Math.sqrt(3.2), fPlot.reg().rmse(fPoly), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Root mean square error - Range")
+        void rootMeanSquareErrorRange() {
+            FPlot fPlot = factory.getFPlot();
+            FPoly fPoly = factory.getFPoly(2, 1);
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            assertEquals(Math.sqrt(8d / 3), fPlot.reg().rmse(fPoly, 0, 2), 1E-4);
+        }
+    }
+
+    @Nested
+    @Tag("Interpolator")
+    @DisplayName("Interpolator")
+    class FPlotInterpolatorTest {
+
+        @Test
+        @DisplayName("Approximate linear")
+        void approxLinear() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Integer values",
+                    () -> assertEquals(2, fPlot.apx().linear(-2), 1E-6),
+                    () -> assertEquals(1, fPlot.apx().linear(-1), 1E-6),
+                    () -> assertEquals(0, fPlot.apx().linear(0), 1E-6),
+                    () -> assertEquals(-1, fPlot.apx().linear(1), 1E-6),
+                    () -> assertEquals(-2, fPlot.apx().linear(2), 1E-6)
+            );
+
+            Assertions.assertAll("Test values",
+                    () -> assertEquals(1.5, fPlot.apx().linear(-1.5), 1E-6),
+                    () -> assertEquals(-1.9, fPlot.apx().linear(1.9), 1E-6)
+            );
+
+            Assertions.assertAll("Erroneous values",
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().linear(-2.5)),
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().linear(2.5))
+            );
+        }
+
+        @Test
+        @DisplayName("Approximate cosine")
+        void approxCosine() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Integer values",
+                    () -> assertEquals(2, fPlot.apx().cosine(-2), 1E-6),
+                    () -> assertEquals(1, fPlot.apx().cosine(-1), 1E-6),
+                    () -> assertEquals(0, fPlot.apx().cosine(0), 1E-6),
+                    () -> assertEquals(-1, fPlot.apx().cosine(1), 1E-6),
+                    () -> assertEquals(-2, fPlot.apx().cosine(2), 1E-6)
+            );
+
+            Assertions.assertAll("Test values",
+                    () -> assertTrue(fPlot.apx().cosine(-1.5) > 1 && fPlot.apx().cosine(-1.5) < 2),
+                    () -> assertTrue(fPlot.apx().cosine(1.9) > -2 && fPlot.apx().cosine(1.9) < -1)
+            );
+
+            Assertions.assertAll("Erroneous values",
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().cosine(-2.5)),
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().cosine(2.5))
+            );
+        }
+
+        @Test
+        @DisplayName("Approximate cubic")
+        void approxCubic() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Integer values",
+                    () -> assertEquals(2, fPlot.apx().cubic(-2), 1E-6),
+                    () -> assertEquals(1, fPlot.apx().cubic(-1), 1E-6),
+                    () -> assertEquals(0, fPlot.apx().cubic(0), 1E-6),
+                    () -> assertEquals(-1, fPlot.apx().cubic(1), 1E-6),
+                    () -> assertEquals(-2, fPlot.apx().cubic(2), 1E-6)
+            );
+
+            Assertions.assertAll("Test values",
+                    () -> assertTrue(fPlot.apx().cubic(-1.5) > 1 && fPlot.apx().cubic(-1.5) < 2),
+                    () -> assertTrue(fPlot.apx().cubic(-0.5) > 0 && fPlot.apx().cubic(-0.5) < 1),
+                    () -> assertTrue(fPlot.apx().cubic(0.5) > -1 && fPlot.apx().cubic(0.5) < 0),
+                    () -> assertTrue(fPlot.apx().cubic(1.5) > -2 && fPlot.apx().cubic(1.5) < -1)
+            );
+
+            Assertions.assertAll("Erroneous values",
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().cubic(-2.5)),
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().cubic(2.5))
+            );
+        }
+
+        @Test
+        @DisplayName("Approximate Catmull-Rom")
+        void approxCatmullRom() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Integer values",
+                    () -> assertEquals(2, fPlot.apx().catmullRom(-2), 1E-6),
+                    () -> assertEquals(1, fPlot.apx().catmullRom(-1), 1E-6),
+                    () -> assertEquals(0, fPlot.apx().catmullRom(0), 1E-6),
+                    () -> assertEquals(-1, fPlot.apx().catmullRom(1), 1E-6),
+                    () -> assertEquals(-2, fPlot.apx().catmullRom(2), 1E-6)
+            );
+
+            Assertions.assertAll("Test values",
+                    () -> assertTrue(fPlot.apx().catmullRom(-1.5) > 1 && fPlot.apx().catmullRom(-1.5) < 2),
+                    () -> assertTrue(fPlot.apx().catmullRom(-0.5) > 0 && fPlot.apx().catmullRom(-0.5) < 1),
+                    () -> assertTrue(fPlot.apx().catmullRom(0.5) > -1 && fPlot.apx().catmullRom(0.5) < 0),
+                    () -> assertTrue(fPlot.apx().catmullRom(1.5) > -2 && fPlot.apx().catmullRom(1.5) < -1)
+            );
+
+            Assertions.assertAll("Erroneous values",
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().catmullRom(-2.5)),
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().catmullRom(2.5))
+            );
+        }
+
+        @Test
+        @DisplayName("Approximate Hermite")
+        void approxHermite() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, -1);
+            fPlot.add(2, -2);
+
+            Assertions.assertAll("Integer values",
+                    () -> assertEquals(2, fPlot.apx().hermite(-2), 1E-6),
+                    () -> assertEquals(1, fPlot.apx().hermite(-1), 1E-6),
+                    () -> assertEquals(0, fPlot.apx().hermite(0), 1E-6),
+                    () -> assertEquals(-1, fPlot.apx().hermite(1), 1E-6),
+                    () -> assertEquals(-2, fPlot.apx().hermite(2), 1E-6)
+            );
+
+            Assertions.assertAll("Test values",
+                    () -> assertTrue(fPlot.apx().hermite(-1.5) > 1 && fPlot.apx().hermite(-1.5) < 2),
+                    () -> assertTrue(fPlot.apx().hermite(-0.5) > 0 && fPlot.apx().hermite(-0.5) < 1),
+                    () -> assertTrue(fPlot.apx().hermite(0.5) > -1 && fPlot.apx().hermite(0.5) < 0),
+                    () -> assertTrue(fPlot.apx().hermite(1.5) > -2 && fPlot.apx().hermite(1.5) < -1)
+            );
+
+            Assertions.assertAll("Erroneous values",
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().hermite(-2.5)),
+                    () -> assertThrows(IllegalArgumentException.class, () -> fPlot.apx().hermite(2.5))
+            );
+        }
+
+        @Test
+        @DisplayName("Interpolate with step")
+        void interpolate() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            FPlot results = fPlot.apx().sampleStep(FPlotInterpolator::hermite, 0.1);
+
+            Assertions.assertAll("Test values",
+                    () -> assertEquals(40, results.size(), 1),
+                    () -> assertEquals(-2, results.getRefCoreX().min(), 1E-6),
+                    () -> assertEquals(2, results.getRefCoreX().max(), 1E-6),
+                    () -> assertEquals(1.5, results.apx().hermite(-1.5), 0.25),
+                    () -> assertEquals(0.5, results.apx().hermite(-0.5), 0.25),
+                    () -> assertEquals(0, results.apx().hermite(0), 0.25),
+                    () -> assertEquals(0.5, results.apx().hermite(0.5), 0.25),
+                    () -> assertEquals(1.5, results.apx().hermite(1.5), 0.25)
+            );
+        }
+
+        @Test
+        @DisplayName("Interpolate with divisions")
+        void interpolateWithDivisions() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2);
+            fPlot.add(-1, 1);
+            fPlot.add(0, 0);
+            fPlot.add(1, 1);
+            fPlot.add(2, 2);
+
+            FPlot results = fPlot.apx().sampleDivisions(FPlotInterpolator::hermite, 39);
+
+            Assertions.assertAll("Test values",
+                    () -> assertEquals(40, results.size(), 1),
+                    () -> assertEquals(-2, results.getRefCoreX().min(), 1E-6),
+                    () -> assertEquals(2, results.getRefCoreX().max(), 1E-6),
+                    () -> assertEquals(1.5, results.apx().hermite(-1.5), 0.25),
+                    () -> assertEquals(0.5, results.apx().hermite(-0.5), 0.25),
+                    () -> assertEquals(0, results.apx().hermite(0), 0.25),
+                    () -> assertEquals(0.5, results.apx().hermite(0.5), 0.25),
+                    () -> assertEquals(1.5, results.apx().hermite(1.5), 0.25)
             );
         }
     }

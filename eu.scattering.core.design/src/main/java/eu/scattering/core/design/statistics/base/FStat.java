@@ -112,8 +112,8 @@ public interface FStat extends Statistics<FStat>, Iterable<Double> {
 
     // -------------------------------------------------------------------------------------------------
 
-    String getMetaName();
-    void setMetaName(String name);
+    String getName();
+    void setName(String name);
 
     // -------------------------------------------------------------------------------------------------
 

@@ -48,7 +48,12 @@ public class FPoly implements Transfer {
         return this.core.length;
     }
 
-    public double getValue(double x) {
+    public double at(int n) {
+
+        return core[n];
+    }
+
+    public double value(double x) {
         double value = 0;
 
         for (int i = 0 ; i < this.core.length ; i++) {
@@ -56,37 +61,6 @@ public class FPoly implements Transfer {
         }
 
         return value;
-    }
-
-    public double getCore0() {
-
-        if (size() < 1) {
-            throw new IllegalArgumentException("The index is erroneous");
-        }
-
-        return core[0];
-    }
-
-    public double getCore1() {
-
-        if (size() < 2) {
-            throw new IllegalArgumentException("The index is erroneous");
-        }
-
-        return core[1];
-    }
-
-    public double getCoreN(int n) {
-
-        if (n < 0) {
-            throw new IllegalArgumentException("The index cannot be lower than zero");
-        }
-
-        if (size() <= n) {
-            throw new IllegalArgumentException("The index is erroneous");
-        }
-
-        return core[n];
     }
 
     @Modificator

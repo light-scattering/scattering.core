@@ -1,86 +1,33 @@
 package eu.scattering.core.impl.statistics.construct;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
-import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FPlotInterpolatorDef implements FPlotInterpolator {
-    private static final String JSON_METHOD = "method";
-    private static final String JSON_H_BIAS = "bias";
-    private static final String JSON_H_TENSION = "tension";
+    private final ScatFactory factory;
+    private final FPlot data;
 
-    private Method method = Method.HERMITE;
-    private double hTension = 0;
-    private double hBias = 0;
+    private FPlotInterpolatorDef(ScatFactory factory, FPlot data) {
 
-    private FPlotInterpolatorDef() {}
-
-    protected static FPlotInterpolator create() {
-
-        return new FPlotInterpolatorDef();
+        this.factory = factory;
+        this.data = data;
     }
 
-    protected static FPlotInterpolator create(JSONObject json) {
-        FPlotInterpolator interpolator = new FPlotInterpolatorDef();
+    protected static FPlotInterpolator create(ScatFactory factory, FPlot data) {
 
-        interpolator.setMethod(json.getEnum(Method.class, JSON_METHOD));
-        interpolator.setHermiteTension(json.getDouble(JSON_H_TENSION));
-        interpolator.setHermiteBias(json.getDouble(JSON_H_BIAS));
-
-        return interpolator;
+        return new FPlotInterpolatorDef(factory, data);
     }
 
     @Override
-    public Method getMethod() {
-
-        return this.method;
-    }
-
-    @Override
-    public void setMethod(Method method) {
-
-        this.method = method;
-    }
-
-    @Override
-    public double getHermiteBias() {
-
-        return this.hBias;
-    }
-
-    @Override
-    public void setHermiteBias(double bias) {
-
-        this.hBias = bias;
-    }
-
-    @Override
-    public double getHermiteTension() {
-
-        return this.hTension;
-    }
-
-    @Override
-    public void setHermiteTension(double tension) {
-
-        this.hTension = tension;
-    }
-
-    @Override
-    public double get(FPlot data, double x) {
-
-        return switch (this.method) {
-            case LINEAR -> linear(data, x);
-            case COSINE -> cosine(data, x);
-            case CUBIC -> cubic(data, x);
-            case CATMULL_ROM -> catmullRom(data, x);
-            case HERMITE -> hermite(data, x);
-        };
-    }
-
-    @Override
-    public double linear(FPlot data, double x) {
+    public double linear(double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR2 = getIndexR1(data, x);
 
@@ -88,8 +35,8 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
             return data.getY(indexL1);
         }
 
-        FPos2D recordL1 = data.getFPos2D(indexL1);
-        FPos2D recordR1 = data.getFPos2D(indexR2);
+        FPos2D recordL1 = getRecord(indexL1);
+        FPos2D recordR1 = getRecord(indexR2);
 
         double tmp = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
 
@@ -97,7 +44,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double cosine(FPlot data, double x) {
+    public double cosine(double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR2 = getIndexR1(data, x);
 
@@ -105,8 +52,8 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
             return data.getY(indexL1);
         }
 
-        FPos2D recordL1 = data.getFPos2D(indexL1);
-        FPos2D recordR1 = data.getFPos2D(indexR2);
+        FPos2D recordL1 = getRecord(indexL1);
+        FPos2D recordR1 = getRecord(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = (1 - Math.cos(tmp1 * Math.PI)) / 2;
@@ -115,7 +62,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double cubic(FPlot data, double x) {
+    public double cubic(double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -126,10 +73,10 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPos2D recordL2 = data.getFPos2D(indexL2);
-        FPos2D recordL1 = data.getFPos2D(indexL1);
-        FPos2D recordR1 = data.getFPos2D(indexR1);
-        FPos2D recordR2 = data.getFPos2D(indexR2);
+        FPos2D recordL2 = getRecord(indexL2);
+        FPos2D recordL1 = getRecord(indexL1);
+        FPos2D recordR1 = getRecord(indexR1);
+        FPos2D recordR2 = getRecord(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
@@ -143,7 +90,7 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double catmullRom(FPlot data, double x) {
+    public double catmullRom(double x) {
         int indexL1 = getIndexL1(data, x);
         int indexR1 = getIndexR1(data, x);
 
@@ -154,10 +101,10 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPos2D recordL2 = data.getFPos2D(indexL2);
-        FPos2D recordL1 = data.getFPos2D(indexL1);
-        FPos2D recordR1 = data.getFPos2D(indexR1);
-        FPos2D recordR2 = data.getFPos2D(indexR2);
+        FPos2D recordL2 = getRecord(indexL2);
+        FPos2D recordL1 = getRecord(indexL1);
+        FPos2D recordR1 = getRecord(indexR1);
+        FPos2D recordR2 = getRecord(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
@@ -171,13 +118,84 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     @Override
-    public double hermite(FPlot data, double x) {
+    public FPlot sampleStep(BiFunction<FPlotInterpolator, Double, Double> function, double step) {
+        double min = data.getRefCoreX().min();
+        double max = data.getRefCoreX().max();
 
-        return hermite(data, x, 0, 0);
+        return sampleStep(function, min, max, step);
     }
 
     @Override
-    public double hermite(FPlot data, double x, double bias, double tension) {
+    public FPlot sampleStep(BiFunction<FPlotInterpolator, Double, Double> function, double min, double max, double step) {
+
+        if (step <= 0) {
+            throw new IllegalArgumentException("The step value must be greater than zero");
+        }
+
+        double minX = data.getRefCoreX().min();
+        double maxX = data.getRefCoreX().max();
+
+        List<Double> fStatX = new ArrayList<>();
+        List<Double> fStatY = new ArrayList<>();
+
+        double value = minX;
+        while (value <= maxX) {
+            fStatX.add(value);
+            fStatY.add(function.apply(this, value));
+
+            value += step;
+        }
+
+        if (Math.abs(value - max) < EPSILON) {
+            fStatX.add(max);
+            fStatY.add(function.apply(this, max));
+        }
+
+        return factory.getRefFPlot(factory.getRefFStat(fStatX), factory.getRefFStat(fStatY));
+    }
+
+    @Override
+    public FPlot sampleDivisions(BiFunction<FPlotInterpolator, Double, Double> function, int divisions) {
+        double min = data.getRefCoreX().min();
+        double max = data.getRefCoreX().max();
+
+        return sampleDivisions(function, min, max, divisions);
+    }
+
+    @Override
+    public FPlot sampleDivisions(BiFunction<FPlotInterpolator, Double, Double> function, double min, double max, int divisions) {
+
+        if (divisions < 1) {
+            throw new IllegalArgumentException("The number of divisions cannot be smaller then one");
+        }
+
+        double step = (max - min) / divisions;
+
+        List<Double> fStatX = new ArrayList<>();
+        List<Double> fStatY = new ArrayList<>();
+
+        double value = min;
+        while (value < max) {
+            fStatX.add(value);
+            fStatY.add(function.apply(this, value));
+
+            value += step;
+        }
+
+        fStatX.add(max);
+        fStatY.add(function.apply(this, max));
+
+        return factory.getRefFPlot(factory.getRefFStat(fStatX), factory.getRefFStat(fStatY));
+    }
+
+    @Override
+    public double hermite(double x) {
+
+        return hermite(x, 0, 0);
+    }
+
+    @Override
+    public double hermite(double x, double bias, double tension) {
 
 
         int indexL1 = getIndexL1(data, x);
@@ -190,10 +208,10 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
         int indexL2 = getIndexL2(indexL1);
         int indexR2 = getIndexR2(data, indexR1);
 
-        FPos2D recordL2 = data.getFPos2D(indexL2);
-        FPos2D recordL1 = data.getFPos2D(indexL1);
-        FPos2D recordR1 = data.getFPos2D(indexR1);
-        FPos2D recordR2 = data.getFPos2D(indexR2);
+        FPos2D recordL2 = getRecord(indexL2);
+        FPos2D recordL1 = getRecord(indexL1);
+        FPos2D recordR1 = getRecord(indexR1);
+        FPos2D recordR2 = getRecord(indexR2);
 
         double tmp1 = (x - recordL1.getD0()) / (recordR1.getD0() - recordL1.getD0());
         double tmp2 = tmp1 * tmp1;
@@ -214,6 +232,11 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
     }
 
     //--------------------------------------------------
+
+    private FPos2D getRecord(int index) {
+
+        return factory.getFPos2D(data.getX(index), data.getY(index));
+    }
 
     private int getIndexL1(FPlot data, double x) {
         int indexL1 = data.getIndexX(FPlot.Index.FLOOR, x);
@@ -253,49 +276,5 @@ public class FPlotInterpolatorDef implements FPlotInterpolator {
         }
 
         return indexR2;
-    }
-
-    //--------------------------------------------------
-
-    @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-
-        json.put(JSON_METHOD, getMethod());
-        json.put(JSON_H_BIAS, getHermiteBias());
-        json.put(JSON_H_TENSION, getHermiteTension());
-
-        return json;
-    }
-
-    @Override
-    public boolean isEqual(FPlotInterpolator interpolator) {
-
-        if (getHermiteBias() != interpolator.getHermiteBias()) {
-            return false;
-        }
-
-        if (getHermiteTension() != interpolator.getHermiteTension()) {
-            return false;
-        }
-
-        return getMethod().equals(interpolator.getMethod());
-    }
-
-    @Override
-    public FPlotInterpolator copy() {
-        FPlotInterpolator copy = FPlotInterpolatorDef.create();
-
-        copy.setMethod(getMethod());
-        copy.setHermiteBias(getHermiteBias());
-        copy.setHermiteTension(getHermiteTension());
-
-        return copy;
-    }
-
-    @Override
-    public String toString() {
-
-        return toJSON().toString();
     }
 }

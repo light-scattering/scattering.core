@@ -1721,9 +1721,9 @@ public class FStatTest {
         void setName() {
             FStat fStat = factory.getFStat();
 
-            fStat.setMetaName("test");
+            fStat.setName("test");
 
-            assertEquals("test", fStat.getMetaName());
+            assertEquals("test", fStat.getName());
         }
     }
 }

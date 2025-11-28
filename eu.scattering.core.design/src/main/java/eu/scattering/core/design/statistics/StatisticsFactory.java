@@ -5,7 +5,5 @@ import eu.scattering.core.design.statistics.base.FStatFactory;
 
 public interface StatisticsFactory extends FStatFactory, FPlotFactory {
 
-    StatisticsExporter getStatisticsExporter();
-
     StatisticsHelper getStatisticsHelper();
 }
