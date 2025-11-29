@@ -1,4 +1,4 @@
-package eu.scattering.core.test.aspect;
+package eu.scattering.core.test.aspect.rotate;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Timeout(5)
 @DisplayName("FRotation")
-public class FRotationTest {
+public class FRotTest {
     private final FRotGenerator fRot = factory.getFRot();
     private final FRotAspect fRotHelper = factory.getRotAspect();
 

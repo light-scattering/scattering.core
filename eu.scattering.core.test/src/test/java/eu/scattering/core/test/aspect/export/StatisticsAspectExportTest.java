@@ -1,4 +1,4 @@
-package eu.scattering.core.test.statistics;
+package eu.scattering.core.test.aspect.export;
 
 import eu.scattering.core.design.statistics.StatisticsAspectExport;
 import eu.scattering.core.design.statistics.base.FStat;
@@ -9,14 +9,14 @@ import org.junit.jupiter.api.*;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("FChartLine")
+@DisplayName("Statistics export")
 public class StatisticsAspectExportTest {
 
     @Test
     @DisplayName("Plotly FPlot linear")
     void plotlyFPlotLinear() {
         FPlot fPlot = factory.getFPlot();
-        StatisticsAspectExport fPlotExporter = factory.getExportAspect().getFPlotContext();
+        StatisticsAspectExport fPlotExporter = factory.getExportAspect().getStatisticsContext();
 
         fPlotExporter.setName("Name");
         fPlotExporter.setAnnotation("Annotation");
@@ -52,7 +52,7 @@ public class StatisticsAspectExportTest {
     @Test
     @DisplayName("Plotly FStat histogram")
     void plotlyFStatHistogram() {
-        StatisticsAspectExport fPlotExporter = factory.getExportAspect().getFPlotContext();
+        StatisticsAspectExport fPlotExporter = factory.getExportAspect().getStatisticsContext();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setAnnotation("Annotation");
@@ -80,7 +80,7 @@ public class StatisticsAspectExportTest {
     @Test
     @DisplayName("Plotly FPlot histogram")
     void plotlyFPlotHistogram() {
-        StatisticsAspectExport fPlotExporter = factory.getExportAspect().getFPlotContext();
+        StatisticsAspectExport fPlotExporter = factory.getExportAspect().getStatisticsContext();
 
         fPlotExporter.setName("Test");
         fPlotExporter.setAnnotation("Annotation");
@@ -126,7 +126,7 @@ public class StatisticsAspectExportTest {
         @Test
         @DisplayName("Set name")
         void setName() {
-            StatisticsAspectExport fPlotExporter = factory.getExportAspect().getFPlotContext();
+            StatisticsAspectExport fPlotExporter = factory.getExportAspect().getStatisticsContext();
 
             StatisticsAspectExport results = fPlotExporter
                     .setName("a")

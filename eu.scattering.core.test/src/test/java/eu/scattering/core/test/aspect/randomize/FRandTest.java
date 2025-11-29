@@ -18,7 +18,7 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FAspect")
-public class FRandomTest {
+public class FRandTest {
 
     @Nested
     @Tag("Basic")

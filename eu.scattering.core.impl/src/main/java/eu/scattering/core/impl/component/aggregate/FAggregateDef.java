@@ -923,7 +923,7 @@ public class FAggregateDef implements FAggregate {
     public FPlot getDensityCorrelationFunction(boolean log) {
         FSphereHelper helper = getFSphereHelper();
 
-        FStat distances = getPairDistance();
+        FStat distances = getPairDistance(); // NOPE
 
         double min = distances.min();
         double max = distances.max();
@@ -1096,7 +1096,7 @@ public class FAggregateDef implements FAggregate {
         FPlot reg = data.copy();
         reg.setY(regOki);
 
-        String model = factory.getExportAspect().getFPlotContext()
+        String model = factory.getExportAspect().getStatisticsContext()
                 .setRangeX(0,3)
                 .setRangeY(-5, 2)
                 .setAnnotation("Test data")

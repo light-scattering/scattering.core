@@ -7,7 +7,9 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.component.geometry.base;
     opens eu.scattering.core.test.component.geometry.construct;
     opens eu.scattering.core.test.component.number;
-    opens eu.scattering.core.test.aspect;
+    opens eu.scattering.core.test.aspect.export;
+    opens eu.scattering.core.test.aspect.randomize;
+    opens eu.scattering.core.test.aspect.rotate;
     opens eu.scattering.core.test.helper;
     opens eu.scattering.core.test;
     opens eu.scattering.core.test.component.geometry.base.aspect;
@@ -17,7 +19,6 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.component.geometry.shape.aspect;
     opens eu.scattering.core.test.component.geometry.container;
     opens eu.scattering.core.test.component.geometry;
-    opens eu.scattering.core.test.aspect.randomize;
     opens eu.scattering.core.test.aspect.randomize.module;
     opens eu.scattering.core.test.component.aggregate;
     opens eu.scattering.core.test.component.aggregate.monitor;

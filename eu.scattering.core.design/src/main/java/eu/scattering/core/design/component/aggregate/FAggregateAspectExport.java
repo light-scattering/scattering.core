@@ -5,25 +5,25 @@ import eu.scattering.core.design.annotation.Legacy;
 public interface FAggregateAspectExport {
 
     @Legacy
-    void exportFLAGE(FAggregate aggregate, StringBuilder builder);
+    void toFLAGE(FAggregate aggregate, StringBuilder builder);
 
-    void exportNGSolve(FAggregate aggregate, StringBuilder builder);
+    void toNGSolve(FAggregate aggregate, StringBuilder builder);
 
     //--------------------------------------------------
 
     @Legacy
-    default String exportFLAGE(FAggregate aggregate) {
+    default String toFLAGE(FAggregate aggregate) {
         StringBuilder builder = new StringBuilder();
 
-        exportFLAGE(aggregate, builder);
+        toFLAGE(aggregate, builder);
 
         return builder.toString();
     }
 
-    default String exportNGSolve(FAggregate aggregate) {
+    default String toNGSolve(FAggregate aggregate) {
         StringBuilder builder = new StringBuilder();
 
-        exportNGSolve(aggregate, builder);
+        toNGSolve(aggregate, builder);
 
         return builder.toString();
     }
