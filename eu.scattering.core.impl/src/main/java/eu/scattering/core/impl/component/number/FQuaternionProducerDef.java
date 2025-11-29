@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.number;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionFactory;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;

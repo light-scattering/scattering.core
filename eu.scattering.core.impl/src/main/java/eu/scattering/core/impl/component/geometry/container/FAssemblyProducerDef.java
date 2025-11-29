@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyFactory;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssemblyProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
 
     private final FAssemblyFactory factory;
     private final ProducerCoreDef<FAssembly<T>> processor;
-    private final FRandEngine rndEngine;
+    private final FRandAspect rndAspect;
 
-    private FAssemblyProducerDef(FAssemblyFactory factory, FRandEngine randomizer) {
+    private FAssemblyProducerDef(FAssemblyFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
+        this.rndAspect = randomizer;
+        this.processor = new ProducerCoreDef<>(this.rndAspect.getFRand());
     }
 
-    public static <U extends Geometry> FAssemblyProducer<U> create(FAssemblyFactory factory, FRandEngine randomizer) {
+    public static <U extends Geometry> FAssemblyProducer<U> create(FAssemblyFactory factory, FRandAspect randomizer) {
 
         return new FAssemblyProducerDef<>(factory, randomizer);
     }
@@ -39,9 +39,9 @@ public class FAssemblyProducerDef<T extends Geometry> implements FAssemblyProduc
     }
 
     @Override
-    public FAssemblyProducer<T> withCustomRule(BiFunction<FAssemblyFactory, FRandEngine, FAssembly<T>> function, int weight) {
+    public FAssemblyProducer<T> withCustomRule(BiFunction<FAssemblyFactory, FRandAspect, FAssembly<T>> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, rndAspect), weight);
 
         return this;
     }

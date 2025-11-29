@@ -1,6 +1,6 @@
 package eu.scattering.core.impl.component.support;
 
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointHelper;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.engine.rotate.FRotEngine;
+import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
@@ -1472,9 +1472,9 @@ public abstract class ShapePresetDef implements Shape {
         return factory.getFTrigHelper();
     }
 
-    protected FRotEngine getFRotEngine() {
+    protected FRotAspect getAspectRot() {
 
-        return factory.getFRotEngine();
+        return factory.getRotAspect();
     }
 
     protected CmpDistCenter getCacheCmpDistCenter() {

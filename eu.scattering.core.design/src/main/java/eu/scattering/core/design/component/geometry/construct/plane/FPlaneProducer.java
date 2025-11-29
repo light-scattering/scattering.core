@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.construct.plane;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.extension.Producer;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface FPlaneProducer extends Producer<FPlane> {
     // -------------------------------------------------------------------------------------------------
 
     FPlaneProducer withCustomRule(Function<FPlaneFactory, FPlane> function, int weight);
-    FPlaneProducer withCustomRule(BiFunction<FPlaneFactory, FRandEngine, FPlane> function, int weight);
+    FPlaneProducer withCustomRule(BiFunction<FPlaneFactory, FRandAspect, FPlane> function, int weight);
 
     FPlaneProducer withFVector(FVectorProducer origin, int weight);
 
@@ -36,7 +36,7 @@ public interface FPlaneProducer extends Producer<FPlane> {
         return withCustomRule(function, 1);
     }
 
-    default FPlaneProducer withCustomRule(BiFunction<FPlaneFactory, FRandEngine, FPlane> function) {
+    default FPlaneProducer withCustomRule(BiFunction<FPlaneFactory, FRandAspect, FPlane> function) {
 
         return withCustomRule(function, 1);
     }

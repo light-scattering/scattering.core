@@ -8,7 +8,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.impl.FactoryDef;
@@ -216,7 +216,7 @@ public class FModelDLATest {
         FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
         FModelDLA model = factory.createFModelDLA3D(fAggregate);
 
-        TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+        TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
         model.setStep(1.1);
         model.setExileFactor(3.3);
@@ -235,7 +235,7 @@ public class FModelDLATest {
         FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
         FModelDLA model = factory.createFModelDLA2D(fAggregate);
 
-        TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+        TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
         model.setStep(1.1);
         model.setExileFactor(3.3);

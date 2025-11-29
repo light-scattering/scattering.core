@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneFactory;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlaneProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public class FPlaneProducerDef implements FPlaneProducer {
 
     private final FPlaneFactory factory;
     private final ProducerCoreDef<FPlane> processor;
-    private final FRandEngine rndEngine;
+    private final FRandAspect rndAspect;
 
-    private FPlaneProducerDef(FPlaneFactory factory, FRandEngine randomizer) {
+    private FPlaneProducerDef(FPlaneFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
+        this.rndAspect = randomizer;
+        this.processor = new ProducerCoreDef<>(this.rndAspect.getFRand());
     }
 
-    public static FPlaneProducer create(FPlaneFactory factory, FRandEngine randomizer) {
+    public static FPlaneProducer create(FPlaneFactory factory, FRandAspect randomizer) {
 
         return new FPlaneProducerDef(factory, randomizer);
     }
@@ -39,9 +39,9 @@ public class FPlaneProducerDef implements FPlaneProducer {
     }
 
     @Override
-    public FPlaneProducer withCustomRule(BiFunction<FPlaneFactory, FRandEngine, FPlane> function, int weight) {
+    public FPlaneProducer withCustomRule(BiFunction<FPlaneFactory, FRandAspect, FPlane> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, rndAspect), weight);
 
         return this;
     }

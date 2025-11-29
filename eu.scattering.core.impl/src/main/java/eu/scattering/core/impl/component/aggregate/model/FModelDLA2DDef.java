@@ -7,8 +7,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 
@@ -26,10 +26,10 @@ public class FModelDLA2DDef implements FModelDLA {
     private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
     private final List<BiFunction<FAggregate, Shape, Boolean>> validator;
 
-    private TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement;
+    private TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement;
 
     private final FRandGenerator rndGen;
-    private final FRandEngine rndEng;
+    private final FRandAspect rndEng;
 
     private final FAggregate aggregate;
 
@@ -59,7 +59,7 @@ public class FModelDLA2DDef implements FModelDLA {
         this.validator = new ArrayList<>();
         this.acceptor = new ArrayList<>();
 
-        this.rndEng = factory.getFRandEngine();
+        this.rndEng = factory.getRandAspect();
         this.rndGen = this.rndEng.getFRand();
 
         this.aggregate = aggregate;
@@ -305,13 +305,13 @@ public class FModelDLA2DDef implements FModelDLA {
     }
 
     @Override
-    public TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> getMovement() {
+    public TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> getMovement() {
 
         return this.movement;
     }
 
     @Override
-    public void setMovement(TriConsumer<FAssembly<Shape>, FRandEngine, FPoint> movement) {
+    public void setMovement(TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement) {
 
         this.movement = movement;
     }

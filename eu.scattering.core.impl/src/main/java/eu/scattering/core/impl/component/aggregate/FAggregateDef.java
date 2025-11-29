@@ -1096,11 +1096,11 @@ public class FAggregateDef implements FAggregate {
         FPlot reg = data.copy();
         reg.setY(regOki);
 
-        String model = factory.getFExportEngine().getPlotContext()
+        String model = factory.getExportAspect().getFPlotContext()
                 .setRangeX(0,3)
                 .setRangeY(-5, 2)
                 .setAnnotation("Test data")
-                .exportPythonPlotlyLinear(data, reg);
+                .toPythonPlotlyLinear(data, reg);
 
         return 3 + regOki.at(1);
     }

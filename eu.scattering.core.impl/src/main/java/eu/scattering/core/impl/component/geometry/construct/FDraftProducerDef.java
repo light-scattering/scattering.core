@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraftFactory;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraftProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public class FDraftProducerDef implements FDraftProducer {
 
     private final FDraftFactory factory;
     private final ProducerCoreDef<FDraft> processor;
-    private final FRandEngine rndEngine;
+    private final FRandAspect rndAspect;
 
-    private FDraftProducerDef(FDraftFactory factory, FRandEngine randomizer) {
+    private FDraftProducerDef(FDraftFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
+        this.rndAspect = randomizer;
+        this.processor = new ProducerCoreDef<>(this.rndAspect.getFRand());
     }
 
-    public static FDraftProducer create(FDraftFactory factory, FRandEngine randomizer) {
+    public static FDraftProducer create(FDraftFactory factory, FRandAspect randomizer) {
 
         return new FDraftProducerDef(factory, randomizer);
     }
@@ -39,9 +39,9 @@ public class FDraftProducerDef implements FDraftProducer {
     }
 
     @Override
-    public FDraftProducer withCustomRule(BiFunction<FDraftFactory, FRandEngine, FDraft> function, int weight) {
+    public FDraftProducer withCustomRule(BiFunction<FDraftFactory, FRandAspect, FDraft> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, rndAspect), weight);
 
         return this;
     }

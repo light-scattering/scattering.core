@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentFactory;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegmentProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public class FSegmentProducerDef implements FSegmentProducer {
 
     private final FSegmentFactory factory;
     private final ProducerCoreDef<FSegment> processor;
-    private final FRandEngine rndEngine;
+    private final FRandAspect rndAspect;
 
-    private FSegmentProducerDef(FSegmentFactory factory, FRandEngine randomizer) {
+    private FSegmentProducerDef(FSegmentFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
+        this.rndAspect = randomizer;
+        this.processor = new ProducerCoreDef<>(this.rndAspect.getFRand());
     }
 
-    public static FSegmentProducer create(FSegmentFactory factory, FRandEngine randomizer) {
+    public static FSegmentProducer create(FSegmentFactory factory, FRandAspect randomizer) {
 
         return new FSegmentProducerDef(factory, randomizer);
     }
@@ -39,9 +39,9 @@ public class FSegmentProducerDef implements FSegmentProducer {
     }
 
     @Override
-    public FSegmentProducer withCustomRule(BiFunction<FSegmentFactory, FRandEngine, FSegment> function, int weight) {
+    public FSegmentProducer withCustomRule(BiFunction<FSegmentFactory, FRandAspect, FSegment> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, rndAspect), weight);
 
         return this;
     }

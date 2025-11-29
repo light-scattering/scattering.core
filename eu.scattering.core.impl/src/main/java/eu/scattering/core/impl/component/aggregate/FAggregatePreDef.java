@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.engine.randomize.generator.module.dist1d.normal.FDist1DNormal;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal.FDist1DNormal;
 import eu.scattering.core.design.extension.Producer;
 
 public class FAggregatePreDef {

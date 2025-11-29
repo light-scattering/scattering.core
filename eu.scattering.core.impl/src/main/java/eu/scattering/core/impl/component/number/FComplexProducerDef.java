@@ -3,7 +3,7 @@ package eu.scattering.core.impl.component.number;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexFactory;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;

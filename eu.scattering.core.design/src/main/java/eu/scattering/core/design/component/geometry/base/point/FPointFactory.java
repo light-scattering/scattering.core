@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.base.point;
 
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
@@ -47,7 +47,7 @@ public interface FPointFactory {
         return getFPointProducer().withCustomRule(function);
     }
 
-    default FPointProducer getFPointProducer(BiFunction<FPointFactory, FRandEngine, FPoint> function) {
+    default FPointProducer getFPointProducer(BiFunction<FPointFactory, FRandAspect, FPoint> function) {
 
         return getFPointProducer().withCustomRule(function);
     }

@@ -4,7 +4,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayFactory;
 import eu.scattering.core.design.component.geometry.construct.ray.FRayProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -16,16 +16,16 @@ public class FRayProducerDef implements FRayProducer {
 
     private final FRayFactory factory;
     private final ProducerCoreDef<FRay> processor;
-    private final FRandEngine rndEngine;
+    private final FRandAspect rndAspect;
 
-    private FRayProducerDef(FRayFactory factory, FRandEngine randomizer) {
+    private FRayProducerDef(FRayFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
-        this.processor = new ProducerCoreDef<>(this.rndEngine.getFRand());
+        this.rndAspect = randomizer;
+        this.processor = new ProducerCoreDef<>(this.rndAspect.getFRand());
     }
 
-    public static FRayProducer create(FRayFactory factory, FRandEngine randomizer) {
+    public static FRayProducer create(FRayFactory factory, FRandAspect randomizer) {
 
         return new FRayProducerDef(factory, randomizer);
     }
@@ -39,9 +39,9 @@ public class FRayProducerDef implements FRayProducer {
     }
 
     @Override
-    public FRayProducer withCustomRule(BiFunction<FRayFactory, FRandEngine, FRay> function, int weight) {
+    public FRayProducer withCustomRule(BiFunction<FRayFactory, FRandAspect, FRay> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, rndAspect), weight);
 
         return this;
     }

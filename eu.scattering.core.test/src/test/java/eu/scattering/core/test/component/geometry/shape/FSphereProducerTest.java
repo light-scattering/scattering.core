@@ -5,8 +5,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
-import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.impl.FactoryDef;
@@ -794,13 +794,13 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCustomRule((factoryLocal, engine) -> {
+                .withCustomRule((factoryLocal, aspect) -> {
                     FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-                    engine.onSphere(fPoint);
+                    aspect.onSphere(fPoint);
 
                     return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
                 }, 1);
@@ -821,13 +821,13 @@ public class FSphereProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspectSimple() {
         FSphereProducer producer = factory.getFSphereProducer()
-                .withCustomRule((factoryLocal, engine) -> {
+                .withCustomRule((factoryLocal, aspect) -> {
                     FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-                    engine.onSphere(fPoint);
+                    aspect.onSphere(fPoint);
 
                     return factoryLocal.getFSphere(fPoint.getX(), fPoint.getY(), fPoint.getZ(), 1);
                 });

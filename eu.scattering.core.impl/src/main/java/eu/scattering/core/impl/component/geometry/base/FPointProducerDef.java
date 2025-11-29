@@ -3,9 +3,9 @@ package eu.scattering.core.impl.component.geometry.base;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
@@ -21,17 +21,17 @@ public class FPointProducerDef implements FPointProducer {
     private final FPointFactory factory;
     private final ProducerCoreDef<FPoint> processor;
     private final FRandGenerator rndGenerator;
-    private final FRandEngine rndEngine;
+    private final FRandAspect rndAspect;
 
-    private FPointProducerDef(FPointFactory factory, FRandEngine randomizer) {
+    private FPointProducerDef(FPointFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
+        this.rndAspect = randomizer;
         this.rndGenerator = randomizer.getFRand();
         this.processor = new ProducerCoreDef<>(this.rndGenerator);
     }
 
-    public static FPointProducer create(FPointFactory factory, FRandEngine randomizer) {
+    public static FPointProducer create(FPointFactory factory, FRandAspect randomizer) {
 
         return new FPointProducerDef(factory, randomizer);
     }
@@ -45,9 +45,9 @@ public class FPointProducerDef implements FPointProducer {
     }
 
     @Override
-    public FPointProducer withCustomRule(BiFunction<FPointFactory, FRandEngine, FPoint> function, int weight) {
+    public FPointProducer withCustomRule(BiFunction<FPointFactory, FRandAspect, FPoint> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, rndAspect), weight);
 
         return this;
     }

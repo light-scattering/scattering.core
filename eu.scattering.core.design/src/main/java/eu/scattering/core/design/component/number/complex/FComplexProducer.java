@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.number.complex;
 
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.extension.Producer;
 
 import java.util.List;

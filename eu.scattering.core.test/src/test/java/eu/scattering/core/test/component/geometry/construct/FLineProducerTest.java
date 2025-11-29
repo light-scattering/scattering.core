@@ -289,9 +289,9 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
-        FLineProducer producer = factory.getFLineProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
+        FLineProducer producer = factory.getFLineProducer().withCustomRule((factory, aspect) -> {
             FLine fLine = factory.getFLine();
 
             fLine.getRefOrigin().set(
@@ -299,7 +299,7 @@ public class FLineProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fLine.getRefOrigin());
+            aspect.onSphere(fLine.getRefOrigin());
 
             return fLine;
         }, 1);
@@ -320,9 +320,9 @@ public class FLineProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
-        FLineProducer producer = factory.getFLineProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspectSimple() {
+        FLineProducer producer = factory.getFLineProducer().withCustomRule((factory, aspect) -> {
             FLine fLine = factory.getFLine();
 
             fLine.getRefOrigin().set(
@@ -330,7 +330,7 @@ public class FLineProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fLine.getRefOrigin());
+            aspect.onSphere(fLine.getRefOrigin());
 
             return fLine;
         });

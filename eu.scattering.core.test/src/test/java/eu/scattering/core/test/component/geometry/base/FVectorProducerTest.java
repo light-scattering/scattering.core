@@ -745,11 +745,11 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withCustomRule((factory, engine) ->
-                        engine.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)), 1);
+                .withCustomRule((factory, aspect) ->
+                        aspect.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)), 1);
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();
@@ -767,11 +767,11 @@ public class FVectorProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspectSimple() {
         FVectorProducer producer = factory.getFVectorProducer()
-                .withCustomRule((factory, engine) ->
-                        engine.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)));
+                .withCustomRule((factory, aspect) ->
+                        aspect.onSphere(factory.getFVector(1, 2, 3, 2, 2, 3)));
 
         FVector resultA = producer.produce();
         FVector resultB = producer.produce();

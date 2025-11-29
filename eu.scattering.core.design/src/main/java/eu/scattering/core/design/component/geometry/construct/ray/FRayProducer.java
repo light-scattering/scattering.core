@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.construct.ray;
 
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.extension.Producer;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface FRayProducer extends Producer<FRay> {
     // -------------------------------------------------------------------------------------------------
 
     FRayProducer withCustomRule(Function<FRayFactory, FRay> function, int weight);
-    FRayProducer withCustomRule(BiFunction<FRayFactory, FRandEngine, FRay> function, int weight);
+    FRayProducer withCustomRule(BiFunction<FRayFactory, FRandAspect, FRay> function, int weight);
 
     FRayProducer withFVector(FVectorProducer origin, int weight);
 
@@ -36,7 +36,7 @@ public interface FRayProducer extends Producer<FRay> {
         return withCustomRule(function, 1);
     }
 
-    default FRayProducer withCustomRule(BiFunction<FRayFactory, FRandEngine, FRay> function) {
+    default FRayProducer withCustomRule(BiFunction<FRayFactory, FRandAspect, FRay> function) {
 
         return withCustomRule(function, 1);
     }

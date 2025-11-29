@@ -3,7 +3,7 @@ package eu.scattering.core.test.component.geometry.base;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.impl.FactoryDef;
@@ -456,14 +456,14 @@ public class FPointProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
         AtomicInteger length = new AtomicInteger(1);
 
-        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, engine) -> {
+        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, aspect) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            return engine.onSphere(factory.getFPoint(lengthCurrent));
+            return aspect.onSphere(factory.getFPoint(lengthCurrent));
         }, 1);
 
         FPoint resultA = producer.produce();
@@ -482,14 +482,14 @@ public class FPointProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspectSimple() {
         AtomicInteger length = new AtomicInteger(1);
 
-        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, engine) -> {
+        FPointProducer producer = factory.getFPointProducer().withCustomRule((factory, aspect) -> {
             int lengthCurrent = length.getAndIncrement();
 
-            return engine.onSphere(factory.getFPoint(lengthCurrent));
+            return aspect.onSphere(factory.getFPoint(lengthCurrent));
         });
 
         FPoint resultA = producer.produce();

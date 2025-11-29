@@ -289,9 +289,9 @@ public class FSegmentProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
-        FSegmentProducer producer = factory.getFSegmentProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
+        FSegmentProducer producer = factory.getFSegmentProducer().withCustomRule((factory, aspect) -> {
             FSegment fSegment = factory.getFSegment();
 
             fSegment.getRefOrigin().set(
@@ -299,7 +299,7 @@ public class FSegmentProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fSegment.getRefOrigin());
+            aspect.onSphere(fSegment.getRefOrigin());
 
             return fSegment;
         });

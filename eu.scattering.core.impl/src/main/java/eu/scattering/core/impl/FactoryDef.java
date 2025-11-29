@@ -35,12 +35,12 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.engine.export.FExportEngine;
-import eu.scattering.core.design.engine.prototype.FProtoEngine;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.rotate.FRotEngine;
-import eu.scattering.core.design.engine.rotate.generator.FRotGenerator;
+import eu.scattering.core.design.aspect.export.FExportAspect;
+import eu.scattering.core.design.aspect.prototype.FProtoAspect;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.rotate.FRotAspect;
+import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.transfer.FTransferHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
@@ -70,12 +70,12 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
-import eu.scattering.core.impl.engine.export.FExportEngineDef;
-import eu.scattering.core.impl.engine.prototype.FProtoEngineDef;
-import eu.scattering.core.impl.engine.randomize.FRandEngineDef;
-import eu.scattering.core.impl.engine.randomize.FRandGeneratorDef;
-import eu.scattering.core.impl.engine.rotate.FRotEngineDef;
-import eu.scattering.core.impl.engine.rotate.FRotProcessorDef;
+import eu.scattering.core.impl.aspect.export.FExportAspectDef;
+import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
+import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
+import eu.scattering.core.impl.aspect.randomize.FRandGeneratorDef;
+import eu.scattering.core.impl.aspect.rotate.FRotAspectDef;
+import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FPositionHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
 import eu.scattering.core.impl.physics.FMaterialDataDef;
@@ -98,10 +98,10 @@ public final class FactoryDef implements ScatFactory {
     private final FRandGenerator fRandGenerator;
     private final FRotGenerator fRotGenerator;
 
-    private final FExportEngine fExportEngine;
-    private final FProtoEngine fProtoEngine;
-    private final FRandEngine fRandEngine;
-    private final FRotEngine fRotEngine;
+    private final FExportAspect fAspectExport;
+    private final FProtoAspect fAspectProto;
+    private final FRandAspect fAspectRand;
+    private final FRotAspect fAspectRot;
 
     private final FTrigHelper fTrigHelper;
     private final StatisticsHelper fStatHelper;
@@ -113,10 +113,10 @@ public final class FactoryDef implements ScatFactory {
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
 
-        this.fExportEngine = FExportEngineDef.get(this);
-        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
-        this.fProtoEngine = FProtoEngineDef.get();
-        this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
+        this.fAspectExport = FExportAspectDef.get(this);
+        this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
+        this.fAspectProto = FProtoAspectDef.get();
+        this.fAspectRot = FRotAspectDef.create(FRotProcessorDef.get());
 
         this.fRotGenerator = FRotProcessorDef.get();
 
@@ -133,10 +133,10 @@ public final class FactoryDef implements ScatFactory {
     private FactoryDef(long seed) {
         this.fRandGenerator = FRandGeneratorDef.create(seed);
 
-        this.fExportEngine = FExportEngineDef.get(this);
-        this.fRandEngine = FRandEngineDef.create(this.fRandGenerator, this);
-        this.fProtoEngine = FProtoEngineDef.get();
-        this.fRotEngine = FRotEngineDef.create(FRotProcessorDef.get());
+        this.fAspectExport = FExportAspectDef.get(this);
+        this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
+        this.fAspectProto = FProtoAspectDef.get();
+        this.fAspectRot = FRotAspectDef.create(FRotProcessorDef.get());
 
         this.fRotGenerator = FRotProcessorDef.get();
 
@@ -199,7 +199,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FPointProducer getFPointProducer() {
 
-        return FPointProducerDef.create(this, this.fRandEngine);
+        return FPointProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -213,7 +213,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FVectorProducer getFVectorProducer() {
 
-        return FVectorProducerDef.create(this, this.fRandEngine);
+        return FVectorProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -239,7 +239,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FDraftProducer getFDraftProducer() {
 
-        return FDraftProducerDef.create(this, this.fRandEngine);
+        return FDraftProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -259,7 +259,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FPlaneProducer getFPlaneProducer() {
 
-        return FPlaneProducerDef.create(this, this.fRandEngine);
+        return FPlaneProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -279,7 +279,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FRayProducer getFRayProducer() {
 
-        return FRayProducerDef.create(this, this.fRandEngine);
+        return FRayProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -299,7 +299,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FLineProducer getFLineProducer() {
 
-        return FLineProducerDef.create(this, this.fRandEngine);
+        return FLineProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -319,7 +319,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FSegmentProducer getFSegmentProducer() {
 
-        return FSegmentProducerDef.create(this, this.fRandEngine);
+        return FSegmentProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -354,7 +354,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FSphereProducer getFSphereProducer() {
 
-        return FSphereProducerDef.create(this, this.fRandEngine);
+        return FSphereProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -374,7 +374,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public <T extends Geometry> FAssemblyProducer<T> getFAssemblyProducer() {
 
-        return FAssemblyProducerDef.create(this, this.fRandEngine);
+        return FAssemblyProducerDef.create(this, this.fAspectRand);
     }
 
     @Override
@@ -540,27 +540,27 @@ public final class FactoryDef implements ScatFactory {
     //--------------------------------------------------
 
     @Override
-    public FExportEngine getFExportEngine() {
+    public FExportAspect getExportAspect() {
 
-        return this.fExportEngine;
+        return this.fAspectExport;
     }
 
     @Override
-    public FProtoEngine getFProtoEngine() {
+    public FProtoAspect getProtoAspect() {
 
-        return this.fProtoEngine;
+        return this.fAspectProto;
     }
 
     @Override
-    public FRandEngine getFRandEngine() {
+    public FRandAspect getRandAspect() {
 
-        return this.fRandEngine;
+        return this.fAspectRand;
     }
 
     @Override
-    public FRotEngine getFRotEngine() {
+    public FRotAspect getRotAspect() {
 
-        return this.fRotEngine;
+        return this.fAspectRot;
     }
 
     //--------------------------------------------------

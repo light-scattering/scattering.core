@@ -1,10 +1,10 @@
 package eu.scattering.core.design.component.geometry.shape.sphere;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.extension.Producer;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public interface FSphereProducer extends Producer<FSphere> {
     // -------------------------------------------------------------------------------------------------
 
     FSphereProducer withCustomRule(Function<FSphereFactory, FSphere> function, int weight);
-    FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandEngine, FSphere> function, int weight);
+    FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandAspect, FSphere> function, int weight);
 
     FSphereProducer withFixRadius(double radius, int weight);
     FSphereProducer withDistRadius(FDist1D radius, int weight);
@@ -67,7 +67,7 @@ public interface FSphereProducer extends Producer<FSphere> {
         return withCustomRule(function, 1);
     }
 
-    default FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandEngine, FSphere> function) {
+    default FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandAspect, FSphere> function) {
 
         return withCustomRule(function, 1);
     }

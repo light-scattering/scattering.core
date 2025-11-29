@@ -1,7 +1,7 @@
 package eu.scattering.core.design.component.geometry.container.assembly;
 
 import eu.scattering.core.design.component.geometry.Geometry;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.extension.Producer;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface FAssemblyProducer<T extends Geometry> extends Producer<FAssembl
     // -------------------------------------------------------------------------------------------------
 
     FAssemblyProducer<T> withCustomRule(Function<FAssemblyFactory, FAssembly<T>> function, int weight);
-    FAssemblyProducer<T> withCustomRule(BiFunction<FAssemblyFactory, FRandEngine, FAssembly<T>> function, int weight);
+    FAssemblyProducer<T> withCustomRule(BiFunction<FAssemblyFactory, FRandAspect, FAssembly<T>> function, int weight);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ public interface FAssemblyProducer<T extends Geometry> extends Producer<FAssembl
         return withCustomRule(function, 1);
     }
 
-    default FAssemblyProducer<T> withCustomRule(BiFunction<FAssemblyFactory, FRandEngine, FAssembly<T>> function) {
+    default FAssemblyProducer<T> withCustomRule(BiFunction<FAssemblyFactory, FRandAspect, FAssembly<T>> function) {
 
         return withCustomRule(function, 1);
     }

@@ -289,9 +289,9 @@ public class FRayProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
-        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
+        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory, aspect) -> {
             FRay fRay = factory.getFRay();
 
             fRay.getRefOrigin().set(
@@ -299,7 +299,7 @@ public class FRayProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fRay.getRefOrigin());
+            aspect.onSphere(fRay.getRefOrigin());
 
             return fRay;
         }, 1);
@@ -320,9 +320,9 @@ public class FRayProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
-        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspectSimple() {
+        FRayProducer producer = factory.getFRayProducer().withCustomRule((factory, aspect) -> {
             FRay fRay = factory.getFRay();
 
             fRay.getRefOrigin().set(
@@ -330,7 +330,7 @@ public class FRayProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fRay.getRefOrigin());
+            aspect.onSphere(fRay.getRefOrigin());
 
             return fRay;
         });

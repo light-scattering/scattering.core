@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,7 +25,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
     private final List<BiFunction<FAggregate, Shape, Boolean>> validator;
 
-    private final FRandEngine rndEng;
+    private final FRandAspect rndEng;
 
     private final FAggregate aggregate;
 
@@ -54,7 +54,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         this.validator = new ArrayList<>();
         this.acceptor = new ArrayList<>();
 
-        this.rndEng = factory.getFRandEngine();
+        this.rndEng = factory.getRandAspect();
 
         this.aggregate = aggregate;
 

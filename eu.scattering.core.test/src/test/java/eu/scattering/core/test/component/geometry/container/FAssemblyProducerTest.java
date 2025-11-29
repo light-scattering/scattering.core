@@ -290,16 +290,16 @@ public class FAssemblyProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
         FAssemblyProducer<FPoint> producer = factory.getFAssemblyProducer();
 
-        producer.withCustomRule((factoryLocal, engine) -> {
+        producer.withCustomRule((factoryLocal, aspect) -> {
             FAssembly<FPoint> fAssembly = factoryLocal.getFAssembly();
 
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            engine.onSphere(fPoint);
+            aspect.onSphere(fPoint);
 
             fAssembly.register(fPoint);
 
@@ -322,16 +322,16 @@ public class FAssemblyProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspecteSimple() {
         FAssemblyProducer<FPoint> producer = factory.getFAssemblyProducer();
 
-        producer.withCustomRule((factoryLocal, engine) -> {
+        producer.withCustomRule((factoryLocal, aspect) -> {
             FAssembly<FPoint> fAssembly = factoryLocal.getFAssembly();
 
             FPoint fPoint = factory.getFPoint(1, 0, 0);
 
-            engine.onSphere(fPoint);
+            aspect.onSphere(fPoint);
 
             fAssembly.register(fPoint);
 

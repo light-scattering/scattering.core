@@ -342,7 +342,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
         double angle = super.getFTrigHelper().getAngle(sideB, sideA, sideC);
 
-        super.getFRotEngine().setRgAngleBaseCommon(fVectorAxis, target.getCenter(), angle);
+        super.getAspectRot().setRgAngleBaseCommon(fVectorAxis, target.getCenter(), angle);
 
         this.setCenter(fVectorAxis.getRefHead());
 

@@ -289,9 +289,9 @@ public class FDraftProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
-        FDraftProducer producer = factory.getFDraftProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
+        FDraftProducer producer = factory.getFDraftProducer().withCustomRule((factory, aspect) -> {
             FDraft fDraft = factory.getFDraft();
 
             fDraft.getRefOrigin().set(
@@ -299,7 +299,7 @@ public class FDraftProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fDraft.getRefOrigin());
+            aspect.onSphere(fDraft.getRefOrigin());
 
             return fDraft;
         }, 1);
@@ -320,9 +320,9 @@ public class FDraftProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
-        FDraftProducer producer = factory.getFDraftProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspectSimple() {
+        FDraftProducer producer = factory.getFDraftProducer().withCustomRule((factory, aspect) -> {
             FDraft fDraft = factory.getFDraft();
 
             fDraft.getRefOrigin().set(
@@ -330,7 +330,7 @@ public class FDraftProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fDraft.getRefOrigin());
+            aspect.onSphere(fDraft.getRefOrigin());
 
             return fDraft;
         });

@@ -289,9 +289,9 @@ public class FPlaneProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine")
-    void produceWithEngine() {
-        FPlaneProducer producer = factory.getFPlaneProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect")
+    void produceWithAspect() {
+        FPlaneProducer producer = factory.getFPlaneProducer().withCustomRule((factory, aspect) -> {
             FPlane fPlane = factory.getFPlane();
 
             fPlane.getRefOrigin().set(
@@ -299,7 +299,7 @@ public class FPlaneProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fPlane.getRefOrigin());
+            aspect.onSphere(fPlane.getRefOrigin());
 
             return fPlane;
         }, 1);
@@ -320,9 +320,9 @@ public class FPlaneProducerTest {
     }
 
     @Test
-    @DisplayName("Produce with engine (simple)")
-    void produceWithEngineSimple() {
-        FPlaneProducer producer = factory.getFPlaneProducer().withCustomRule((factory, engine) -> {
+    @DisplayName("Produce with aspect (simple)")
+    void produceWithAspectSimple() {
+        FPlaneProducer producer = factory.getFPlaneProducer().withCustomRule((factory, aspect) -> {
             FPlane fPlane = factory.getFPlane();
 
             fPlane.getRefOrigin().set(
@@ -330,7 +330,7 @@ public class FPlaneProducerTest {
                     2, 2, 3
             );
 
-            engine.onSphere(fPlane.getRefOrigin());
+            aspect.onSphere(fPlane.getRefOrigin());
 
             return fPlane;
         });

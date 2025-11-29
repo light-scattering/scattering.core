@@ -5,8 +5,8 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorFactory;
 import eu.scattering.core.design.component.geometry.base.vector.FVectorProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
 import java.util.List;
@@ -19,17 +19,17 @@ public class FVectorProducerDef implements FVectorProducer {
     private final FVectorFactory factory;
     private final ProducerCoreDef<FVector> processor;
     private final FRandGenerator rndGenerator;
-    private final FRandEngine rndEngine;
+    private final FRandAspect rndAspect;
 
-    private FVectorProducerDef(FVectorFactory factory, FRandEngine randomizer) {
+    private FVectorProducerDef(FVectorFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
-        this.rndEngine = randomizer;
+        this.rndAspect = randomizer;
         this.rndGenerator = randomizer.getFRand();
         this.processor = new ProducerCoreDef<>(this.rndGenerator);
     }
 
-    public static FVectorProducer create(FVectorFactory factory, FRandEngine randomizer) {
+    public static FVectorProducer create(FVectorFactory factory, FRandAspect randomizer) {
 
         return new FVectorProducerDef(factory, randomizer);
     }
@@ -43,9 +43,9 @@ public class FVectorProducerDef implements FVectorProducer {
     }
 
     @Override
-    public FVectorProducer withCustomRule(BiFunction<FVectorFactory, FRandEngine, FVector> function, int weight) {
+    public FVectorProducer withCustomRule(BiFunction<FVectorFactory, FRandAspect, FVector> function, int weight) {
 
-        this.processor.addConfig(() -> function.apply(factory, rndEngine), weight);
+        this.processor.addConfig(() -> function.apply(factory, rndAspect), weight);
 
         return this;
     }

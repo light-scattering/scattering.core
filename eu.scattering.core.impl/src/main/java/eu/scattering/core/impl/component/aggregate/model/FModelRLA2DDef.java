@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ public class FModelRLA2DDef implements FModelRLA {
     private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
     private final List<BiFunction<FAggregate, Shape, Boolean>> validator;
 
-    private final FRandEngine rndEng;
+    private final FRandAspect rndEng;
 
     private final FAggregate aggregate;
 
@@ -45,7 +45,7 @@ public class FModelRLA2DDef implements FModelRLA {
         this.acceptor = new ArrayList<>();
         this.validator = new ArrayList<>();
 
-        this.rndEng = factory.getFRandEngine();
+        this.rndEng = factory.getRandAspect();
 
         this.aggregate = aggregate;
 

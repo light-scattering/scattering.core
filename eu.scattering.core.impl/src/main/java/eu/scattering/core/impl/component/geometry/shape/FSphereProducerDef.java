@@ -4,10 +4,10 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereFactory;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
-import eu.scattering.core.design.engine.randomize.FRandEngine;
-import eu.scattering.core.design.engine.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.engine.randomize.generator.module.dist1d.FDist1D;
-import eu.scattering.core.design.engine.randomize.generator.module.dist3d.FDist3D;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
+import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.impl.component.support.ProducerCoreDef;
 
@@ -31,14 +31,14 @@ public class FSphereProducerDef implements FSphereProducer {
 
     private final FSphereFactory factory;
     private final ProducerCoreDef<FSphere> processor;
-    private final FRandEngine randomizer;
+    private final FRandAspect randomizer;
 
     private String[] meta = null;
 
     private Double delta = null;
     private Double epsilon = null;
 
-    private FSphereProducerDef(FSphereFactory factory, FRandEngine randomizer) {
+    private FSphereProducerDef(FSphereFactory factory, FRandAspect randomizer) {
 
         this.factory = factory;
         this.randomizer = randomizer;
@@ -47,7 +47,7 @@ public class FSphereProducerDef implements FSphereProducer {
         this.processor.addMutation(MUTATION_ITERATION);
     }
 
-    public static FSphereProducer create(FSphereFactory factory, FRandEngine randomizer) {
+    public static FSphereProducer create(FSphereFactory factory, FRandAspect randomizer) {
 
         return new FSphereProducerDef(factory, randomizer);
     }
@@ -61,7 +61,7 @@ public class FSphereProducerDef implements FSphereProducer {
     }
 
     @Override
-    public FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandEngine, FSphere> function, int weight) {
+    public FSphereProducer withCustomRule(BiFunction<FSphereFactory, FRandAspect, FSphere> function, int weight) {
 
         this.processor.addConfig(() -> updateConfig(function.apply(factory, randomizer)), weight);
 
