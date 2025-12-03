@@ -77,7 +77,7 @@ public class FAggregateGeometryTest {
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(fAggregate.getRefParticles().size() > 1000),
-                () -> assertTrue(fAggregate.getOverlapFactor(FAggregate.OF.LINEAR) < EPSILON)
+                () -> assertTrue(fAggregate.getLinearOverlapFactor() < EPSILON)
         );
     }
 
@@ -96,7 +96,7 @@ public class FAggregateGeometryTest {
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertTrue(fAggregate.getRefParticles().size() > 1000),
-                () -> assertTrue(fAggregate.getOverlapFactor(FAggregate.OF.LINEAR) < EPSILON)
+                () -> assertTrue(fAggregate.getLinearOverlapFactor() < EPSILON)
         );
     }
 

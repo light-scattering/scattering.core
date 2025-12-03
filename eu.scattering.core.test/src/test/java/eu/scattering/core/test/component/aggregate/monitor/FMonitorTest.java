@@ -35,7 +35,7 @@ public class FMonitorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.setEarlyStageCorrection(true);
@@ -66,7 +66,7 @@ public class FMonitorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.setEarlyStageCorrection(true);
@@ -97,7 +97,7 @@ public class FMonitorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.setEarlyStageCorrection(true);
@@ -128,10 +128,10 @@ public class FMonitorTest {
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FMonitorConstruct fMonitor = factory.getFMonitorRoG(FAggregate.RoG.COMPLEX);
-            FMonitorConstruct fMonitorMono = factory.getFMonitorRoG(FAggregate.RoG.SIMPLE_MONO);
-            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoG(FAggregate.RoG.SIMPLE_POLY);
-            FMonitorConstruct fMonitorFilippov = factory.getFMonitorRoG(FAggregate.RoG.SIMPLE_FILIPPOV);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(FAggregate.RadiusOfGyration.COMPLEX);
+            FMonitorConstruct fMonitorMono = factory.getFMonitorRoG(FAggregate.RadiusOfGyration.SIMPLE_MONO);
+            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoG(FAggregate.RadiusOfGyration.SIMPLE_POLY);
+            FMonitorConstruct fMonitorFilippov = factory.getFMonitorRoG(FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);
@@ -160,10 +160,10 @@ public class FMonitorTest {
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RoG.COMPLEX);
-            FMonitorConstruct fMonitorMono = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_MONO);
-            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_POLY);
-            FMonitorConstruct fMonitorFilippov = factory.getFMonitorRoG(skip, FAggregate.RoG.SIMPLE_FILIPPOV);
+            FMonitorConstruct fMonitor = factory.getFMonitorRoG(skip, FAggregate.RadiusOfGyration.COMPLEX);
+            FMonitorConstruct fMonitorMono = factory.getFMonitorRoG(skip, FAggregate.RadiusOfGyration.SIMPLE_MONO);
+            FMonitorConstruct fMonitorPoly = factory.getFMonitorRoG(skip, FAggregate.RadiusOfGyration.SIMPLE_POLY);
+            FMonitorConstruct fMonitorFilippov = factory.getFMonitorRoG(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);

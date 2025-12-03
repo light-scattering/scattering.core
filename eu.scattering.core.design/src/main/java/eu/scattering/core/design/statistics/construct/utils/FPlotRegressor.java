@@ -7,7 +7,10 @@ public interface FPlotRegressor {
     FPoly poly(int degree);
     FPoly poly(int degree, int min, int max);
 
+    FPoly fitConstant();
     FPoly fitConstant(int min, int max);
+
+    FPoly fitLinear();
     FPoly fitLinear(int min, int max);
 
     // -------------------------------------------------------------------------------------------------

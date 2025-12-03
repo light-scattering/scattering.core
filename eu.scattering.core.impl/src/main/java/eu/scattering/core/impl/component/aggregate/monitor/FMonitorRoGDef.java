@@ -7,12 +7,12 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.construct.FPlot;
 
 public class FMonitorRoGDef implements FMonitorConstruct {
-    private final FAggregate.RoG type;
+    private final FAggregate.RadiusOfGyration type;
     private final FPlot fPlot;
 
     private double skip = -1;
 
-    private FMonitorRoGDef(ScatFactory factory, FAggregate.RoG type) {
+    private FMonitorRoGDef(ScatFactory factory, FAggregate.RadiusOfGyration type) {
 
         this.type = type;
         this.fPlot = factory.getFPlot();
@@ -20,7 +20,7 @@ public class FMonitorRoGDef implements FMonitorConstruct {
         this.fPlot.setName("Radius of gyration");
     }
 
-    public static FMonitorConstruct create(ScatFactory factory, int skip, FAggregate.RoG type) {
+    public static FMonitorConstruct create(ScatFactory factory, int skip, FAggregate.RadiusOfGyration type) {
         FMonitorConstruct results = new FMonitorRoGDef(factory, type);
 
         results.setSkip(skip);

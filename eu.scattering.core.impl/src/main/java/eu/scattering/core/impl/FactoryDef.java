@@ -53,8 +53,8 @@ import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
-import eu.scattering.core.impl.component.aggregate.FAggregateGeoDef;
-import eu.scattering.core.impl.component.aggregate.FAggregatePreDef;
+import eu.scattering.core.impl.component.aggregate.FAggregateFactoryGeoDef;
+import eu.scattering.core.impl.component.aggregate.FAggregateFactoryPreDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
@@ -418,43 +418,43 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FAggregate getFAggregatePreMono(int quantity, double radius) {
 
-        return FAggregatePreDef.createFAggregatePreMono(this, quantity, radius);
+        return FAggregateFactoryPreDef.createFAggregatePreMono(this, quantity, radius);
     }
 
     @Override
     public FAggregate getFAggregatePrePoly(int quantity, double avg, double std, double cutoff) {
 
-        return FAggregatePreDef.createFAggregatePrePoly(this, quantity, avg, std, cutoff);
+        return FAggregateFactoryPreDef.createFAggregatePrePoly(this, quantity, avg, std, cutoff);
     }
 
     @Override
     public FAggregate getFAggregateGeo1d(int d1, double radius) {
 
-        return FAggregateGeoDef.getFAggregateGeo1d(this, d1, radius);
+        return FAggregateFactoryGeoDef.getFAggregateGeo1d(this, d1, radius);
     }
 
     @Override
     public FAggregate getFAggregateGeo2d(int d1, int d2, double radius) {
 
-        return FAggregateGeoDef.getFAggregateGeo2d(this, d1, d2, radius);
+        return FAggregateFactoryGeoDef.getFAggregateGeo2d(this, d1, d2, radius);
     }
 
     @Override
     public FAggregate getFAggregateGeo3d(int d1, int d2, int d3, double radius) {
 
-        return FAggregateGeoDef.getFAggregateGeo3d(this, d1, d2, d3, radius);
+        return FAggregateFactoryGeoDef.getFAggregateGeo3d(this, d1, d2, d3, radius);
     }
 
     @Override
     public FAggregate getFAggregateGeoFullCircle(int layers, double radius) {
 
-        return FAggregateGeoDef.getFAggregateGeoFullCircle(this, layers, radius);
+        return FAggregateFactoryGeoDef.getFAggregateGeoFullCircle(this, layers, radius);
     }
 
     @Override
     public FAggregate getFAggregateGeoFullSphere(int layers, double radius) {
 
-        return FAggregateGeoDef.getFAggregateGeoFullSphere(this, layers, radius);
+        return FAggregateFactoryGeoDef.getFAggregateGeoFullSphere(this, layers, radius);
     }
 
     @Override
@@ -518,7 +518,7 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FMonitorConstruct getFMonitorRoG(int skip, FAggregate.RoG type) {
+    public FMonitorConstruct getFMonitorRoG(int skip, FAggregate.RadiusOfGyration type) {
 
         return FMonitorRoGDef.create(this, skip, type);
     }

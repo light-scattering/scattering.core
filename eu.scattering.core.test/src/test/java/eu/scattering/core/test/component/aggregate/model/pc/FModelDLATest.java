@@ -66,7 +66,7 @@ public class FModelDLATest {
         modelDLA.addCompletionValidator(acceptor);
         modelDLA.build();
 
-        double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
+        double overlap = fAggregate.getLinearOverlapFactor();
 
         for (Shape shape : fAggregate.getRefParticles()) {
             assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2,
@@ -126,7 +126,7 @@ public class FModelDLATest {
         modelDLA.addCompletionValidator(acceptor);
         modelDLA.build();
 
-        double overlap = fAggregate.getOverlapFactor(FAggregate.OF.LINEAR);
+        double overlap = fAggregate.getLinearOverlapFactor();
 
         for (Shape shape : fAggregate.getRefParticles()) {
             assertEquals(0, shape.getCenterZ(),

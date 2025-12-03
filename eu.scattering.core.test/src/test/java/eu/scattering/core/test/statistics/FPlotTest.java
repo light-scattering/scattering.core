@@ -918,7 +918,7 @@ public class FPlotTest {
 
             FPoly parameters = fPlot.reg().poly(0, 2, 3);
 
-            assertEquals(-0.65, parameters.getRefCore()[0], 1E-4);
+            assertEquals(-0.65, parameters.at(0), 1E-4);
         }
 
         @Test
@@ -934,6 +934,30 @@ public class FPlotTest {
 
             FPoly parameters = fPlot.reg().poly(0);
 
+            assertEquals(-0.12, parameters.at(0), 1E-4);
+
+            fPlot.setY(parameters);
+
+            assertEquals(-0.12, fPlot.getY(0), 1E-4);
+            assertEquals(-0.12, fPlot.getY(1), 1E-4);
+            assertEquals(-0.12, fPlot.getY(2), 1E-4);
+            assertEquals(-0.12, fPlot.getY(3), 1E-4);
+            assertEquals(-0.12, fPlot.getY(4), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Regression (constant) - Poly 0")
+        void regressionConstantPoly0() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2.1);
+            fPlot.add(-1, 0.9);
+            fPlot.add(0, 0.2);
+            fPlot.add(1, -1.5);
+            fPlot.add(2, -2.3);
+
+            FPoly parameters = fPlot.reg().fitConstant();
+
             assertEquals(-0.12, parameters.getRefCore()[0], 1E-4);
 
             fPlot.setY(parameters);
@@ -946,7 +970,7 @@ public class FPlotTest {
         }
 
         @Test
-        @DisplayName("Regression with range - Linear")
+        @DisplayName("Regression with range - Poly 1")
         void regressionWithRangePoly1() {
             FPlot fPlot = factory.getFPlot();
 
@@ -958,12 +982,12 @@ public class FPlotTest {
 
             FPoly parameters = fPlot.reg().poly(1, 2, 3);
 
-            assertEquals(-1.7, parameters.getRefCore()[1], 1E-4);
-            assertEquals(0.2, parameters.getRefCore()[0], 1E-4);
+            assertEquals(-1.7, parameters.at(1), 1E-4);
+            assertEquals(0.2, parameters.at(0), 1E-4);
         }
 
         @Test
-        @DisplayName("Regression - Linear")
+        @DisplayName("Regression - Poly 1")
         void regressionPoly1() {
             FPlot fPlot = factory.getFPlot();
 
@@ -974,6 +998,31 @@ public class FPlotTest {
             fPlot.add(2, -2.3);
 
             FPoly parameters = fPlot.reg().poly(1);
+
+            assertEquals(-1.12, parameters.at(1), 1E-4);
+            assertEquals(-0.12, parameters.at(0), 1E-4);
+
+            fPlot.setY(parameters);
+
+            assertEquals(2.12, fPlot.getY(0), 1E-4);
+            assertEquals(1, fPlot.getY(1), 1E-4);
+            assertEquals(-0.12, fPlot.getY(2), 1E-4);
+            assertEquals(-1.24, fPlot.getY(3), 1E-4);
+            assertEquals(-2.36, fPlot.getY(4), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Regression (linear) - Poly 1")
+        void regressionLinearPoly1() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(-2, 2.1);
+            fPlot.add(-1, 0.9);
+            fPlot.add(0, 0.2);
+            fPlot.add(1, -1.5);
+            fPlot.add(2, -2.3);
+
+            FPoly parameters = fPlot.reg().fitLinear();
 
             assertEquals(-1.12, parameters.getRefCore()[1], 1E-4);
             assertEquals(-0.12, parameters.getRefCore()[0], 1E-4);

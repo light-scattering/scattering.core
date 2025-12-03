@@ -11,7 +11,7 @@ import eu.scattering.core.design.extension.Producer;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
-public class FAggregateGeoDef {
+public class FAggregateFactoryGeoDef {
 
     public static FAggregate getFAggregateGeo1d(ScatFactory factory, int d1, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
@@ -32,7 +32,7 @@ public class FAggregateGeoDef {
         FPoint center = factory.getFPoint();
         fAggregate.getSpatialCenter(center);
 
-        fAggregate.positionCenter(center);
+        fAggregate.setCenter(center);
 
         return fAggregate;
     }
@@ -58,7 +58,7 @@ public class FAggregateGeoDef {
         FPoint center = factory.getFPoint();
         fAggregate.getSpatialCenter(center);
 
-        fAggregate.positionCenter(center);
+        fAggregate.setCenter(center);
 
         return fAggregate;
     }
@@ -86,7 +86,7 @@ public class FAggregateGeoDef {
         FPoint center = factory.getFPoint();
         fAggregate.getSpatialCenter(center);
 
-        fAggregate.positionCenter(center);
+        fAggregate.setCenter(center);
 
         return fAggregate;
     }

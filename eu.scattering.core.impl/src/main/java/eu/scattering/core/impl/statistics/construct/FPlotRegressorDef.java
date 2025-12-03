@@ -40,6 +40,12 @@ public class FPlotRegressorDef implements FPlotRegressor {
     }
 
     @Override
+    public FPoly fitConstant() {
+
+        return poly(0);
+    }
+
+    @Override
     public FPoly fitConstant(int min, int max) {
 
         if (min >= max) {
@@ -60,6 +66,12 @@ public class FPlotRegressorDef implements FPlotRegressor {
         }
 
         return factory.getFPoly(sum / (max - min + 1));
+    }
+
+    @Override
+    public FPoly fitLinear() {
+
+        return poly(1);
     }
 
     @Override

@@ -21,31 +21,24 @@ public interface FAggregate extends Component {
     int size();
 
     FAggregate addFBuffer(int capacity);
+
     FAggregate addFMaterial();
 
-    FMesh<FBufferData> getVolumeMesh();
-
-    double getVolume();
-    double getVolume(double[] layers);
-    double getVolumeRadius();
-    double getVolumeRadius(double[] layers);
+    //--------------------------------------------------
 
     double getSurface();
     double getSurface(double[] layers);
+
     double getSurfaceRadius();
     double getSurfaceRadius(double[] layers);
 
-    void getMassCenter(FPoint in);
-    FPos3D getMassCenter();
+    double getVolume();
+    double getVolume(double[] layers);
 
-    void getSpatialCenter(FPoint in);
-    FPos3D getSpatialCenter();
+    double getVolumeRadius();
+    double getVolumeRadius(double[] layers);
 
-    void getSphericalCenter(FPoint in);
-    FPos3D getSphericalCenter();
-
-    void positionCenter(FPoint center);
-    void positionCenter(FPos3D center);
+    FMesh<FBufferData> getVolumeMesh();
 
     FPairPos3D getBoundary();
 
@@ -57,9 +50,37 @@ public interface FAggregate extends Component {
     double getRadius(FPos3D center);
     double getRadiusFromOrigin();
 
-    double getRadiusOfGyration(RoG type);
-    double getFractalDimension(Dim type);
-    double getOverlapFactor(OF type);
+    //--------------------------------------------------
+
+    void getMassCenter(FPoint in);
+    FPos3D getMassCenter();
+
+    void getSpatialCenter(FPoint in);
+    FPos3D getSpatialCenter();
+
+    void getSphericalCenter(FPoint in);
+    FPos3D getSphericalCenter();
+
+    void setCenter(FPoint center);
+    void setCenter(FPos3D center);
+
+    //--------------------------------------------------
+
+    double getRadiusOfGyration(RadiusOfGyration type);
+
+    //--------------------------------------------------
+
+    double getFractalDimension(Dimension type);
+
+    FPlot getBoxCoverageFunction(boolean log);
+    FPlot getDensityCorrelationFunction(boolean log);
+
+    //--------------------------------------------------
+
+    double getVolumetricOverlapFactor();
+    double getLinearOverlapFactor();
+
+    //--------------------------------------------------
 
     FStat getTripletAngle();
     FPlot getTripletAngleFunction();
@@ -70,18 +91,15 @@ public interface FAggregate extends Component {
     FStat getCoordinationNumber();
     FPlot getCoordinationNumberFunction();
 
-    FPlot getBoxCoverageFunction(boolean log);
-    FPlot getDensityCorrelationFunction(boolean log);
+    FStat getParticleRadius();
+
+    void setParticleDelta(double delta);
+    void setParticleEpsilon(double epsilon);
 
     boolean isSparse();
     boolean isCompact();
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
-
-    void setDelta(double delta);
-    void setEpsilon(double epsilon);
-
-    FStat getParticleRadius();
 
     //--------------------------------------------------
 
@@ -110,7 +128,7 @@ public interface FAggregate extends Component {
     //--------------------------------------------------
     
     enum Axis { X, Y, Z, MIN, MAX}
-    enum Dim { BOX, CORRELATION }
-    enum RoG { COMPLEX, SIMPLE_FILIPPOV, SIMPLE_MONO, SIMPLE_POLY }
-    enum OF { VOLUMETRIC, LINEAR }
+    enum Overlap { VOLUMETRIC, LINEAR }
+    enum Dimension { BOX, CORRELATION }
+    enum RadiusOfGyration { COMPLEX, SIMPLE_FILIPPOV, SIMPLE_MONO, SIMPLE_POLY }
 }
