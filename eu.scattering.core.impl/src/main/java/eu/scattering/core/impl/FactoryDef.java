@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPC
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
-import eu.scattering.core.design.component.aggregate.monitor.construct.FMonitorConstruct;
+import eu.scattering.core.design.component.aggregate.monitor.construct.dedicate.FMonitorRadiusOfGyration;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -56,7 +56,7 @@ import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryGeoDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryPreDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
-import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRoGDef;
+import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRadiusOfGyrationDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -518,9 +518,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FMonitorConstruct getFMonitorRoG(int skip, FAggregate.RadiusOfGyration type) {
+    public FMonitorRadiusOfGyration getFMonitorRadiusOfGyration(int skip, FAggregate.RadiusOfGyration type) {
 
-        return FMonitorRoGDef.create(this, skip, type);
+        return FMonitorRadiusOfGyrationDef.create(this, skip, type);
     }
 
     //--------------------------------------------------

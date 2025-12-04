@@ -1,15 +1,16 @@
 package eu.scattering.core.design.component.aggregate.monitor.construct;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.monitor.construct.dedicate.FMonitorRadiusOfGyration;
 
 public interface FMonitorConstructFactory {
 
-    FMonitorConstruct getFMonitorRoG(int skip, FAggregate.RadiusOfGyration type);
+    FMonitorRadiusOfGyration getFMonitorRadiusOfGyration(int skip, FAggregate.RadiusOfGyration type);
 
     // -------------------------------------------------------------------------------------------------
 
-    default FMonitorConstruct getFMonitorRoG(FAggregate.RadiusOfGyration type) {
+    default FMonitorRadiusOfGyration getFMonitorRadiusOfGyration(FAggregate.RadiusOfGyration type) {
 
-        return getFMonitorRoG(-1, type);
+        return getFMonitorRadiusOfGyration(-1, type);
     }
 }

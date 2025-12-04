@@ -71,4 +71,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.monitor.construct;
     exports eu.scattering.core.design.physics.material.data;
     exports eu.scattering.core.design.physics.material;
+    exports eu.scattering.core.design.component.aggregate.monitor.construct.dedicate;
 }
