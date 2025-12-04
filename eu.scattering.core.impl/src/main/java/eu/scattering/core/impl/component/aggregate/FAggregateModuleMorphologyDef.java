@@ -54,7 +54,7 @@ public class FAggregateModuleMorphologyDef {
     protected FStat getCoordinationNumber() {
         FStat coordination = factory.getFStat();
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             coordination.add(shape.touchesOrOverlaps(this.aggregate.getRefParticles()));
         }
 
@@ -78,7 +78,7 @@ public class FAggregateModuleMorphologyDef {
         FVector vecA = this.factory.getFVector();
         FVector vecB = this.factory.getFVector();
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             shape.touchesOrOverlaps(this.aggregate.getRefParticles(), neighbours);
 
             if (neighbours.size() < 2) {
@@ -107,6 +107,11 @@ public class FAggregateModuleMorphologyDef {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    protected int size() {
+
+        return this.aggregate.getRefParticles().size();
+    }
 
     protected FStat getParticleRadius() {
         FStat particles = this.factory.getFStat();
@@ -181,7 +186,7 @@ public class FAggregateModuleMorphologyDef {
 
         queue.poll();
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             candidates.clear();
 
             shape.touchesOrOverlaps(queue, candidates);

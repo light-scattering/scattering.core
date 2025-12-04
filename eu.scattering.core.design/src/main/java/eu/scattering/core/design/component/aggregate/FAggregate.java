@@ -16,15 +16,7 @@ import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.function.BiConsumer;
 
-public interface FAggregate extends Component {
-
-    int size();
-
-    FAggregate addFBuffer(int capacity);
-
-    FAggregate addFMaterial();
-
-    //--------------------------------------------------
+public interface FAggregate extends Component, Iterable<Shape> {
 
     double getSurface();
     double getSurface(double[] layers);
@@ -82,6 +74,8 @@ public interface FAggregate extends Component {
 
     //--------------------------------------------------
 
+    int size();
+
     FStat getTripletAngle();
     FPlot getTripletAngleFunction();
 
@@ -112,18 +106,19 @@ public interface FAggregate extends Component {
 
     @Modificator
     FAssembly<Shape> getRefParticles();
+
+    FAggregate addFBuffer(int capacity);
+    FAggregate addFMaterial();
+
     @Modificator
-    FAggregate setRefParticles(FAssembly<Shape> particles);
+    FAggregate setRefFMaterial(FMaterial refMaterial);
+    @Modificator
+    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
 
     @Modificator
     FMaterial getRefFMaterial();
     @Modificator
-    FAggregate setRefFMaterial(FMaterial refMaterial);
-
-    @Modificator
     FBuffer<FBufferData> getRefFBuffer();
-    @Modificator
-    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
 
     //--------------------------------------------------
     

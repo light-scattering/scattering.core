@@ -97,7 +97,7 @@ public class FAggregateModuleGeometryDef {
     private List<Shape> getUniqueShapes() {
         ArrayList<Shape> results = new ArrayList<>();
 
-        this.aggregate.getRefParticles().forEach(e -> {
+        this.aggregate.forEach(e -> {
             if (results.stream().noneMatch(e::isExact)) {
                 results.add(e);
             }
@@ -116,7 +116,7 @@ public class FAggregateModuleGeometryDef {
 
         queue.poll();
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
 
             if (shape.overlaps(queue) == 0) {
                 volume += shape.getVolumeAlgebraic();
@@ -139,7 +139,7 @@ public class FAggregateModuleGeometryDef {
 
         Arrays.fill(layers, 0);
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             getVolumeMethod(shape, layers);
         }
 
@@ -206,7 +206,7 @@ public class FAggregateModuleGeometryDef {
 
         this.aggregate.getRefFBuffer().clear();
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             shape.fillVolumeArray(this.aggregate.getRefFBuffer(), this.aggregate.getRefParticles().asList());
         }
 
@@ -249,7 +249,7 @@ public class FAggregateModuleGeometryDef {
     protected double getRadius(double x, double y, double z) {
         double maxRadius = -1;
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             double radius = shape.getDistCenter(x, y, z) + shape.getRadius();
 
             if (radius > maxRadius) {
@@ -273,7 +273,7 @@ public class FAggregateModuleGeometryDef {
     protected double getRadiusFromOrigin() {
         double maxRadius = -1;
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             double radius = shape.getDistCenter(0, 0, 0) + shape.getRadius();
 
             if (radius > maxRadius) {

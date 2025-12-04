@@ -85,30 +85,6 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Set reference particles")
-        void setReferenceParticles() {
-            FAggregate fAggregateA = factory.getFAggregate();
-
-            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
-            FSphere fSphereB = factory.getFSphere(2, 0, 0, 1);
-            FSphere fSphereC = factory.getFSphere(0, 2, 0, 1);
-            FSphere fSphereD = factory.getFSphere(0, 0, 2, 1);
-
-            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-            FAggregate fAggregateB = fAggregateA.setRefParticles(fAssemblyA);
-
-            FAssembly<Shape> fAssemblyB = fAggregateA.getRefParticles();
-
-            Assertions.assertAll("Validate FAggregate",
-                    () -> assertSame(fAggregateA, fAggregateB,
-                            "The reference not should change"),
-                    () -> assertSame(fAssemblyA, fAssemblyB,
-                            "The reference should not change")
-            );
-        }
-
-        @Test
         @DisplayName("Add FBuffer")
         void addFBuffer() {
             FAggregate fAggregateA = factory.getFAggregate();
@@ -219,9 +195,6 @@ public class FAggregateTest {
         @Test
         @DisplayName("Exactness")
         void isExact() {
-            FAggregate fAggregateA = factory.getFAggregate().addFBuffer(10).addFMaterial();
-            FAggregate fAggregateB = factory.getFAggregate().addFBuffer(10).addFMaterial();
-
             Shape fSphereAA = factory.getFSphere(0, 0, 0, 1);
             Shape fSphereAB = factory.getFSphere(2, 0, 0, 1);
             Shape fSphereAC = factory.getFSphere(0, 2, 0, 1);
@@ -235,8 +208,8 @@ public class FAggregateTest {
             FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereAA, fSphereAB, fSphereAC, fSphereAD));
             FAssembly<Shape> fAssemblyB = factory.getFAssembly(List.of(fSphereBA, fSphereBB, fSphereBC, fSphereBD));
 
-            fAggregateA.setRefParticles(fAssemblyA);
-            fAggregateB.setRefParticles(fAssemblyB);
+            FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA).addFBuffer(10).addFMaterial();
+            FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB).addFBuffer(10).addFMaterial();
 
             fAggregateA.getRefFMaterial().setDensity("X", 5);
             fAggregateB.getRefFMaterial().setDensity("X", 5);
@@ -265,8 +238,6 @@ public class FAggregateTest {
         @Test
         @DisplayName("Copy")
         void copy() {
-            FAggregate fAggregateA = factory.getFAggregate().addFBuffer(10).addFMaterial();
-
             Shape fSphereAA = factory.getFSphere(0, 0, 0, 1);
             Shape fSphereAB = factory.getFSphere(2, 0, 0, 1);
             Shape fSphereAC = factory.getFSphere(0, 2, 0, 1);
@@ -274,7 +245,7 @@ public class FAggregateTest {
 
             FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereAA, fSphereAB, fSphereAC, fSphereAD));
 
-            fAggregateA.setRefParticles(fAssemblyA);
+            FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA).addFBuffer(10).addFMaterial();
 
             fAggregateA.getRefFMaterial().setDensity("X", 5);
 
@@ -1890,9 +1861,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FStat results = fAggregate.getPairDistance();
 
@@ -1929,9 +1898,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FPlot results = fAggregate.getPairDistanceFunction();
             results.mutateY(FStat::distribute);
@@ -1966,9 +1933,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FStat results = fAggregate.getCoordinationNumber();
 
@@ -2005,9 +1970,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FPlot results = fAggregate.getCoordinationNumberFunction();
             results.mutateY(FStat::distribute);
@@ -2031,9 +1994,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FPlot results = fAggregate.getDensityCorrelationFunction(false);
             results.mutateY(FStat::distribute);
@@ -2064,9 +2025,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FPlot results = fAggregate.getBoxCoverageFunction(false);
             results.mutateY(FStat::distribute);
@@ -2101,9 +2060,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FStat results = fAggregate.getTripletAngle();
 
@@ -2140,9 +2097,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FStat results = fAggregate.getTripletAngle();
 
@@ -2172,9 +2127,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FPlot results = fAggregate.getTripletAngleFunction();
             results.mutateY(FStat::distribute);
@@ -2200,9 +2153,7 @@ public class FAggregateTest {
             Shape shapeF = factory.getFSphere(0, 0, -2, 1);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shape, shapeA, shapeB, shapeC, shapeD, shapeE, shapeF));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FPlot results = fAggregate.getTripletAngleFunction();
 
@@ -2229,9 +2180,7 @@ public class FAggregateTest {
             Shape shapeD = factory.getFSphere(4);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shapeA, shapeB, shapeC, shapeD));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             FStat stat = fAggregate.getParticleRadius();
 
@@ -2249,9 +2198,7 @@ public class FAggregateTest {
             Shape shapeD = factory.getFSphere(4);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shapeA, shapeB, shapeC, shapeD));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             fAggregate.setParticleEpsilon(1);
 
@@ -2267,9 +2214,7 @@ public class FAggregateTest {
             Shape shapeD = factory.getFSphere(4);
 
             FAssembly<Shape> core = factory.getFAssembly(List.of(shapeA, shapeB, shapeC, shapeD));
-            FAggregate fAggregate = factory.getFAggregate();
-
-            fAggregate.setRefParticles(core);
+            FAggregate fAggregate = factory.getRefFAggregate(core);
 
             fAggregate.setParticleDelta(1);
 

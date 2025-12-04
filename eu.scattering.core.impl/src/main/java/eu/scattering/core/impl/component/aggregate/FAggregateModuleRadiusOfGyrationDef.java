@@ -43,11 +43,11 @@ public class FAggregateModuleRadiusOfGyrationDef {
         this.aggregate.getMassCenter(center);
 
         if (this.aggregate.getRefFMaterial() == null) {
-            for (Shape shape : this.aggregate.getRefParticles()) {
+            for (Shape shape : this.aggregate) {
                 getComplexShapeMath(numerator, denominator, center, shape);
             }
         } else {
-            for (Shape shape : this.aggregate.getRefParticles()) {
+            for (Shape shape : this.aggregate) {
                 getComplexShapePhys(numerator, denominator, center, shape);
             }
         }
@@ -83,7 +83,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
         double avgRadius = 0;
         int size = this.aggregate.size();
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             avgRadius += shape.getRadius();
         }
 
@@ -91,7 +91,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
         FPoint massCenter = factory.getFPoint();
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             massCenter.setX(massCenter.getX() + shape.getCenterX());
             massCenter.setY(massCenter.getY() + shape.getCenterY());
             massCenter.setZ(massCenter.getZ() + shape.getCenterZ());
@@ -103,7 +103,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
         double numerator = 0;
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             numerator += Math.pow(shape.getDistCenter(massCenter), 2);
         }
 
@@ -114,7 +114,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
         double avgRadius = 0;
         int size = this.aggregate.size();
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             avgRadius += shape.getRadius();
         }
 
@@ -122,7 +122,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
         FPoint massCenter = factory.getFPoint();
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             massCenter.setX(massCenter.getX() + shape.getCenterX());
             massCenter.setY(massCenter.getY() + shape.getCenterY());
             massCenter.setZ(massCenter.getZ() + shape.getCenterZ());
@@ -134,7 +134,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
         double numerator = 0;
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             numerator += Math.pow(shape.getDistCenter(massCenter), 2);
         }
 
@@ -145,7 +145,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
         double avgRadius = 0;
         int size = this.aggregate.size();
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             avgRadius += shape.getRadius();
         }
 
@@ -162,7 +162,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
         double numerator = 0;
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             numerator += Math.pow(shape.getDistCenter(massCenter), 2);
         }
 
@@ -172,7 +172,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
     private double getSimplePolyMath(FPoint massCenter) {
         double volumeTotal = 0;
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             double volumeParticle = shape.getVolumeAlgebraic();
 
             massCenter.setX(massCenter.getX() + (volumeParticle * shape.getCenterX()));
@@ -188,7 +188,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
     private double getSimplePolyPhys(FPoint massCenter) {
         double massTotal = 0;
 
-        for (Shape shape: this.aggregate.getRefParticles()) {
+        for (Shape shape: this.aggregate) {
             double massParticle = getParticleMass(shape);
 
             massCenter.setX(massCenter.getX() + (massParticle * shape.getCenterX()));

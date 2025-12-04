@@ -50,7 +50,7 @@ public class FAggregateModuleCenterDef {
 
         in.set(0, 0, 0);
 
-        for (Shape shape : this.aggregate.getRefParticles()) {
+        for (Shape shape : this.aggregate) {
             volume += getMassCenterMethod(in, shape);
         }
 

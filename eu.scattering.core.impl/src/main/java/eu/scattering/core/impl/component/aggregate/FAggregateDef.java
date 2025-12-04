@@ -15,7 +15,9 @@ import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class FAggregateDef implements FAggregate {
     private static final String JSON_TYPE = "type";
@@ -25,6 +27,7 @@ public class FAggregateDef implements FAggregate {
     private static final String JSON_MATERIAL = "material";
 
     private final ScatFactory factory;
+    private final FAssembly<Shape> particles;
 
     private final FAggregateModuleRadiusOfGyrationDef moduleRadiusOfGyration;
     private final FAggregateModuleTopologyDef moduleTopology;
@@ -32,8 +35,6 @@ public class FAggregateDef implements FAggregate {
     private final FAggregateModuleOverlapDef moduleOverlap;
     private final FAggregateModuleGeometryDef moduleGeometry;
     private final FAggregateModuleMorphologyDef moduleMorphology;
-
-    private FAssembly<Shape> particles;
 
     private FMaterial material;
     private FBuffer<FBufferData> buffer;
@@ -73,51 +74,6 @@ public class FAggregateDef implements FAggregate {
         }
 
         return fAggregate;
-    }
-
-    @Override
-    public int size() {
-
-        return getRefParticles().size();
-    }
-
-    @Override
-    public FAggregate addFBuffer(int capacity) {
-
-        if (capacity < 1) {
-            throw new IllegalArgumentException("The buffer must consist of at least one element");
-        }
-
-        setRefFBuffer(supplyFBuffer(capacity));
-
-        return this;
-    }
-
-    @Override
-    public FAggregate addFMaterial() {
-
-        setRefFMaterial(supplyFMaterial());
-
-        return this;
-    }
-
-    @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-
-        json.put(JSON_TYPE, JSON_MAIN);
-
-        if (getRefFBuffer() != null) {
-            json.put(JSON_CAPACITY, getRefFBuffer().capacity());
-        }
-
-        if (getRefFMaterial() != null) {
-            json.put(JSON_MATERIAL, getRefFMaterial().toJSON());
-        }
-
-        json.put(JSON_PARTICLES, getRefParticles().toJSON());
-
-        return json;
     }
 
     @Override
@@ -193,54 +149,6 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void getSpatialCenter(FPoint in) {
-
-        this.moduleCenter.getSpatialCenter(in);
-    }
-
-    @Override
-    public FPos3D getSpatialCenter() {
-
-        return this.moduleCenter.getSpatialCenter();
-    }
-
-    @Override
-    public void getSphericalCenter(FPoint in) {
-
-        this.moduleCenter.getSphericalCenter(in);
-    }
-
-    @Override
-    public FPos3D getSphericalCenter() {
-
-        return this.moduleCenter.getSphericalCenter();
-    }
-
-    @Override
-    public void getMassCenter(FPoint in) {
-
-        this.moduleCenter.getMassCenter(in);
-    }
-
-    @Override
-    public FPos3D getMassCenter() {
-
-        return this.moduleCenter.getMassCenter();
-    }
-
-    @Override
-    public void setCenter(FPoint center) {
-
-        this.moduleCenter.positionCenter(center);
-    }
-
-    @Override
-    public void setCenter(FPos3D center) {
-
-        this.moduleCenter.positionCenter(center);
-    }
-
-    @Override
     public double getRadius(double x, double y, double z) {
 
         return this.moduleGeometry.getRadius(x, y, z);
@@ -265,9 +173,75 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public void getMassCenter(FPoint in) {
+
+        this.moduleCenter.getMassCenter(in);
+    }
+
+    @Override
+    public FPos3D getMassCenter() {
+
+        return this.moduleCenter.getMassCenter();
+    }
+
+    @Override
+    public void getSpatialCenter(FPoint in) {
+
+        this.moduleCenter.getSpatialCenter(in);
+    }
+
+    @Override
+    public FPos3D getSpatialCenter() {
+
+        return this.moduleCenter.getSpatialCenter();
+    }
+
+    @Override
+    public void getSphericalCenter(FPoint in) {
+
+        this.moduleCenter.getSphericalCenter(in);
+    }
+
+    @Override
+    public FPos3D getSphericalCenter() {
+
+        return this.moduleCenter.getSphericalCenter();
+    }
+
+    @Override
+    public void setCenter(FPoint center) {
+
+        this.moduleCenter.positionCenter(center);
+    }
+
+    @Override
+    public void setCenter(FPos3D center) {
+
+        this.moduleCenter.positionCenter(center);
+    }
+
+    @Override
     public double getRadiusOfGyration(RadiusOfGyration type) {
 
         return this.moduleRadiusOfGyration.get(type);
+    }
+
+    @Override
+    public double getFractalDimension(Dimension type) {
+
+        return this.moduleTopology.getFractalDimension(type);
+    }
+
+    @Override
+    public FPlot getBoxCoverageFunction(boolean log) {
+
+        return this.moduleTopology.getBoxCoverageFunction(log);
+    }
+
+    @Override
+    public FPlot getDensityCorrelationFunction(boolean log) {
+
+        return this.moduleTopology.getDensityCorrelationFunction(log);
     }
 
     @Override
@@ -280,6 +254,24 @@ public class FAggregateDef implements FAggregate {
     public double getLinearOverlapFactor() {
 
         return this.moduleOverlap.getLinearOverlapFactor();
+    }
+
+    @Override
+    public int size() {
+
+        return this.moduleMorphology.size();
+    }
+
+    @Override
+    public FStat getTripletAngle() {
+
+        return this.moduleMorphology.getTripletAngle();
+    }
+
+    @Override
+    public FPlot getTripletAngleFunction() {
+
+        return this.moduleMorphology.getTripletAngleFunction();
     }
 
     @Override
@@ -307,57 +299,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FStat getTripletAngle() {
-
-        return this.moduleMorphology.getTripletAngle();
-    }
-
-    @Override
     public FStat getParticleRadius() {
 
         return this.moduleMorphology.getParticleRadius();
     }
 
     @Override
-    public FPlot getTripletAngleFunction() {
+    public void setParticleDelta(double delta) {
 
-        return this.moduleMorphology.getTripletAngleFunction();
-    }
-
-    @Override
-    public FPlot getDensityCorrelationFunction(boolean log) {
-
-        return this.moduleTopology.getDensityCorrelationFunction(log);
-    }
-
-    @Override
-    public FPlot getBoxCoverageFunction(boolean log) {
-
-        return this.moduleTopology.getBoxCoverageFunction(log);
-    }
-
-    @Override
-    public double getFractalDimension(Dimension type) {
-
-        return this.moduleTopology.getFractalDimension(type);
-    }
-
-    @Override
-    public boolean isCompact() {
-
-       return this.moduleMorphology.isCompact();
-    }
-
-    @Override
-    public boolean isSparse() {
-
-       return this.moduleMorphology.isSparse();
-    }
-
-    @Override
-    public void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
-
-        this.moduleMorphology.forEachPairInContact(consumer);
+        this.moduleMorphology.setDelta(delta);
     }
 
     @Override
@@ -367,13 +317,22 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void setParticleDelta(double delta) {
+    public boolean isSparse() {
 
-        this.moduleMorphology.setDelta(delta);
+        return this.moduleMorphology.isSparse();
     }
 
+    @Override
+    public boolean isCompact() {
 
+        return this.moduleMorphology.isCompact();
+    }
 
+    @Override
+    public void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
+
+        this.moduleMorphology.forEachPairInContact(consumer);
+    }
 
     // -------------------------------------------------------------------------------------------------
 
@@ -388,6 +347,25 @@ public class FAggregateDef implements FAggregate {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        json.put(JSON_TYPE, JSON_MAIN);
+
+        if (getRefFBuffer() != null) {
+            json.put(JSON_CAPACITY, getRefFBuffer().capacity());
+        }
+
+        if (getRefFMaterial() != null) {
+            json.put(JSON_MATERIAL, getRefFMaterial().toJSON());
+        }
+
+        json.put(JSON_PARTICLES, getRefParticles().toJSON());
+
+        return json;
+    }
 
     @Override
     public FAggregate copy() {
@@ -444,17 +422,29 @@ public class FAggregateDef implements FAggregate {
     //--------------------------------------------------
 
     @Override
-    public FAssembly<Shape> getRefParticles() {
+    public FAggregate addFBuffer(int capacity) {
 
-        return this.particles;
+        if (capacity < 1) {
+            throw new IllegalArgumentException("The buffer must consist of at least one element");
+        }
+
+        setRefFBuffer(supplyFBuffer(capacity));
+
+        return this;
     }
 
     @Override
-    public FAggregate setRefParticles(FAssembly<Shape> particles) {
+    public FAggregate addFMaterial() {
 
-        this.particles = particles;
+        setRefFMaterial(supplyFMaterial());
 
         return this;
+    }
+
+    @Override
+    public FAssembly<Shape> getRefParticles() {
+
+        return this.particles;
     }
 
     @Override
@@ -483,6 +473,18 @@ public class FAggregateDef implements FAggregate {
         this.material = refMaterial;
 
         return this;
+    }
+
+    @Override
+    public Iterator<Shape> iterator() {
+
+        return getRefParticles().iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Shape> action) {
+
+        getRefParticles().forEach(action);
     }
 }
 
