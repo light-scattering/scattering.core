@@ -9,7 +9,7 @@ import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
-import eu.scattering.core.design.type.RoundMethod;
+import eu.scattering.core.design.type.Round;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -151,7 +151,7 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
-    public int getIndexX(RoundMethod type, double x) {
+    public int getIndexX(Round type, double x) {
 
         return switch (type) {
             case CLOSEST -> getIndexXRound(x);
@@ -161,7 +161,7 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
-    public int getIndexY(RoundMethod type, double y) {
+    public int getIndexY(Round type, double y) {
 
         return switch (type) {
             case CLOSEST -> getIndexYRound(y);

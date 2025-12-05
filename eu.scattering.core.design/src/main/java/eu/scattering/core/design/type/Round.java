@@ -1,5 +1,5 @@
 package eu.scattering.core.design.type;
 
-public enum RoundMethod {
+public enum Round {
     CLOSEST, FLOOR, CEIL
 }
