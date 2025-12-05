@@ -64,6 +64,7 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.transfer.primitive;
     exports eu.scattering.core.design.transfer.complex;
     exports eu.scattering.core.design.transfer;
+    exports eu.scattering.core.design.type;
     exports eu.scattering.core.design.helper.transfer;
     exports eu.scattering.core.design.storage.cache;
     exports eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal;

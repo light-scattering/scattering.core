@@ -6,14 +6,15 @@ import eu.scattering.core.design.component.aggregate.monitor.common.module.FMoni
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.type.RadiusOfGyration;
 
 public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
-    private final FAggregate.RadiusOfGyration type;
+    private final RadiusOfGyration type;
     private final FPlot fPlot;
 
     private double skip = -1;
 
-    private FMonitorRadiusOfGyrationDef(ScatFactory factory, FAggregate.RadiusOfGyration type) {
+    private FMonitorRadiusOfGyrationDef(ScatFactory factory, RadiusOfGyration type) {
 
         this.type = type;
         this.fPlot = factory.getFPlot();
@@ -21,7 +22,7 @@ public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
         this.fPlot.setName("Radius of gyration");
     }
 
-    public static FMonitorRadiusOfGyration create(ScatFactory factory, int skip, FAggregate.RadiusOfGyration type) {
+    public static FMonitorRadiusOfGyration create(ScatFactory factory, int skip, RadiusOfGyration type) {
         FMonitorRadiusOfGyration results = new FMonitorRadiusOfGyrationDef(factory, type);
 
         results.setSkip(skip);

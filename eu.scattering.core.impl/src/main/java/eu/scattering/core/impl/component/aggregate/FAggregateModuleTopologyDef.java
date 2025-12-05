@@ -8,6 +8,8 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.FractalDimension;
+import eu.scattering.core.design.type.LinearDimension;
 
 import java.util.*;
 
@@ -31,7 +33,7 @@ public class FAggregateModuleTopologyDef {
         double radius = this.aggregate.getParticleRadius().mean();
 
         double cutoffInner = radius * 2;
-        double cutoffOuter = this.aggregate.getLength(FAggregate.Axis.MAX);
+        double cutoffOuter = this.aggregate.getLength(LinearDimension.MAX);
 
         results.add(cutoffOuter, 1);
 
@@ -226,7 +228,7 @@ public class FAggregateModuleTopologyDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getFractalDimension(FAggregate.Dimension type) {
+    protected double getFractalDimension(FractalDimension type) {
 
         return switch (type) {
             case BOX -> getBoxCoverageAnalyze(

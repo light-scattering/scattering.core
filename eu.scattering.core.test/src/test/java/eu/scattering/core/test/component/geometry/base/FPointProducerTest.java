@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.aspect.randomize.generator.module.dist3d.FDist3D;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.type.PointLocation;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -626,7 +627,7 @@ public class FPointProducerTest {
         ScatFactory factoryA = FactoryDef.create(seed);
         ScatFactory factoryB = FactoryDef.create(seed);
 
-        Producer<FPoint> producerA = factoryA.getFPointProducer(10, FPointProducer.Location.IN_SPHERE);
+        Producer<FPoint> producerA = factoryA.getFPointProducer(10, PointLocation.IN_SPHERE);
         Producer<FPoint> producerB = factoryB.getFPointProducer()
                 .withInSphere(10);
 
@@ -646,7 +647,7 @@ public class FPointProducerTest {
         ScatFactory factoryA = FactoryDef.create(seed);
         ScatFactory factoryB = FactoryDef.create(seed);
 
-        Producer<FPoint> producerA = factoryA.getFPointProducer(10, FPointProducer.Location.ON_SPHERE);
+        Producer<FPoint> producerA = factoryA.getFPointProducer(10, PointLocation.ON_SPHERE);
         Producer<FPoint> producerB = factoryB.getFPointProducer()
                 .withOnSphere(10);
 
@@ -683,7 +684,7 @@ public class FPointProducerTest {
     void addCorrection() {
         FPoint center = factory.getFPoint();
 
-        Producer<FPoint> producer = factory.getFPointProducer(10, FPointProducer.Location.IN_SPHERE)
+        Producer<FPoint> producer = factory.getFPointProducer(10, PointLocation.IN_SPHERE)
                 .addCorrection((fPoint, randomizer) -> fPoint.setDistance(center, 1));
 
         center.set(1, 2, 3);
@@ -710,7 +711,7 @@ public class FPointProducerTest {
     @Test
     @DisplayName("Add mutation")
     void addMutation() {
-        Producer<FPoint> producer = factory.getFPointProducer(10, FPointProducer.Location.IN_SPHERE)
+        Producer<FPoint> producer = factory.getFPointProducer(10, PointLocation.IN_SPHERE)
                 .addMutation((list) -> list.forEach(e -> {
                     e.setX(Math.abs(e.getX()));
                     e.setY(Math.abs(e.getY()));

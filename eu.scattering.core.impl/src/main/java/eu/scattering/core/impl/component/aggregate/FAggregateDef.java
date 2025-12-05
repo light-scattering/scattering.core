@@ -13,6 +13,9 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.FractalDimension;
+import eu.scattering.core.design.type.LinearDimension;
+import eu.scattering.core.design.type.RadiusOfGyration;
 import org.json.JSONObject;
 
 import java.util.Iterator;
@@ -143,7 +146,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getLength(Axis type) {
+    public double getLength(LinearDimension type) {
 
         return this.moduleGeometry.getLength(type);
     }
@@ -227,7 +230,7 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getFractalDimension(Dimension type) {
+    public double getFractalDimension(FractalDimension type) {
 
         return this.moduleTopology.getFractalDimension(type);
     }

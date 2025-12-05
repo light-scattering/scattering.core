@@ -13,6 +13,7 @@ import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.type.PointLocation;
 import eu.scattering.core.test.TestHelper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -4126,7 +4127,7 @@ public class FSphereTest {
             void attachLinearEnclosed() {
                 Shape fSphereRef = factory.getFSphere(10);
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(8.9, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(8.9, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 Shape fSphereArg = fSphereProducer.produce();
@@ -4154,7 +4155,7 @@ public class FSphereTest {
             void attachLinearDistant() {
                 Shape fSphereRef = factory.getFSphere(1);
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(10, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(10, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 Shape fSphereArg = fSphereProducer.produce();
@@ -4182,7 +4183,7 @@ public class FSphereTest {
             void attachLinearTouching() {
                 Shape fSphereRef = factory.getFSphere(1);
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(2, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(2, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 Shape fSphereArg = fSphereProducer.produce();
@@ -4228,7 +4229,7 @@ public class FSphereTest {
             @Timeout(1)
             @DisplayName("Attach spherical with primitives")
             void attachSphericalWithPrimitives() {
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 Shape fSphereRef = fSphereProducer.produce();
@@ -4259,7 +4260,7 @@ public class FSphereTest {
             @Timeout(1)
             @DisplayName("Attach spherical with FPoint")
             void attachSphericalWithFPoint() {
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 Shape fSphereRef = fSphereProducer.produce();
@@ -4290,7 +4291,7 @@ public class FSphereTest {
             @Timeout(1)
             @DisplayName("Attach spherical with FPos3D")
             void attachSphericalWithFPos3D() {
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 Shape fSphereRef = fSphereProducer.produce();
@@ -4321,7 +4322,7 @@ public class FSphereTest {
             @Timeout(1)
             @DisplayName("Attach spherical, distant")
             void attachSphericalDistant() {
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(1.5, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 Shape fSphereRef = fSphereProducer.produce();
@@ -4448,17 +4449,17 @@ public class FSphereTest {
             @Test
             @DisplayName("Attach monodisperse, single")
             void attachMonodisperseSingle() {
-                Producer<FPoint> fFieldPointProducer = factory.getFPointProducer(5, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fFieldPointProducer = factory.getFPointProducer(5, PointLocation.ON_SPHERE);
                 Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer(fFieldPointProducer, 1);
 
                 FAssembly<FSphere> fSphereField = factory.getFAssembly(fFieldSphereProducer.getListFixed(2));
 
-                Producer<FPoint> fPointRefProducer = factory.getFPointProducer(3.9, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointRefProducer = factory.getFPointProducer(3.9, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer(fPointRefProducer, 1);
 
                 FSphere fSphereRef = fSphereRefProducer.produce();
 
-                Producer<FPoint> fPointArgProducer = factory.getFPointProducer(6, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointArgProducer = factory.getFPointProducer(6, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer(fPointArgProducer, 1);
 
                 FSphere fSphereArg = fSphereArgProducer.produce();
@@ -4476,12 +4477,12 @@ public class FSphereTest {
             @Test
             @DisplayName("Attach monodisperse, field")
             void attachMonodisperseField() {
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(2, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(2, PointLocation.ON_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 FAssembly<FSphere> fSphereField = factory.getFAssembly(fSphereProducer.getListFixed(3));
 
-                Producer<FPoint> fPointRefProducer = factory.getFPointProducer(4, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointRefProducer = factory.getFPointProducer(4, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer(fPointRefProducer, 1);
 
                 FSphere fSphereRef = fSphereRefProducer.produce();
@@ -4511,17 +4512,17 @@ public class FSphereTest {
             @Test
             @DisplayName("Attach polydisperse, single")
             void attachPolydisperseSingle() {
-                Producer<FPoint> fFieldPointProducer = factory.getFPointProducer(5, FPointProducer.Location.ON_SPHERE);
+                Producer<FPoint> fFieldPointProducer = factory.getFPointProducer(5, PointLocation.ON_SPHERE);
                 Producer<FSphere> fFieldSphereProducer = factory.getFSphereProducer(fFieldPointProducer, 1);
 
                 FAssembly<FSphere> fSphereField = factory.getFAssembly(fFieldSphereProducer.getListFixed(10));
 
-                Producer<FPoint> fPointRefProducer = factory.getFPointProducer(3.9, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointRefProducer = factory.getFPointProducer(3.9, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereRefProducer = factory.getFSphereProducer(fPointRefProducer, 1);
 
                 FSphere fSphereRef = fSphereRefProducer.produce();
 
-                Producer<FPoint> fPointArgProducer = factory.getFPointProducer(6, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointArgProducer = factory.getFPointProducer(6, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereArgProducer = factory.getFSphereProducer(fPointArgProducer, 1);
 
                 FSphere fSphereArg = fSphereArgProducer.produce();
@@ -4612,7 +4613,7 @@ public class FSphereTest {
             void setMinRadiusMultiple() {
                 Shape fSphereRef = factory.getFSphere(1, 2, 3, EPSILON);
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(100, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(100, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1);
 
                 FAssembly<FSphere> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(20));
@@ -4810,7 +4811,7 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere();
                 FSphere fSphereZero = factory.getFSphere();
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
                         .validateNoOverlap();
 
@@ -4853,7 +4854,7 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere(-4, 2, 3);
                 FSphere fSphereZero = factory.getFSphere(1, 7, 3);
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
                         .validateNoOverlap();
 
@@ -4893,7 +4894,7 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere(-4, 2, 3);
                 FSphere fSphereZero = factory.getFSphere(1, 7, 3);
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
                         .validateNoOverlap();
 
@@ -4933,7 +4934,7 @@ public class FSphereTest {
                 FSphere fSphereRef = factory.getFSphere(-4, 2, 3);
                 FSphere fSphereZero = factory.getFSphere(1, 7, 3);
 
-                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, FPointProducer.Location.IN_SPHERE);
+                Producer<FPoint> fPointProducer = factory.getFPointProducer(15, PointLocation.IN_SPHERE);
                 Producer<FSphere> fSphereProducer = factory.getFSphereProducer(fPointProducer, 1)
                         .validateNoOverlap();
 

@@ -53,6 +53,8 @@ import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
+import eu.scattering.core.design.type.FractalDimension;
+import eu.scattering.core.design.type.RadiusOfGyration;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryGeoDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryPreDef;
@@ -520,13 +522,13 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FMonitorRadiusOfGyration getFMonitorRadiusOfGyration(int skip, FAggregate.RadiusOfGyration type) {
+    public FMonitorRadiusOfGyration getFMonitorRadiusOfGyration(int skip, RadiusOfGyration type) {
 
         return FMonitorRadiusOfGyrationDef.create(this, skip, type);
     }
 
     @Override
-    public FValidatorFractalDimension getFValidatorFractalDimension(FAggregate.Dimension type, double expected, double error) {
+    public FValidatorFractalDimension getFValidatorFractalDimension(FractalDimension type, double expected, double error) {
 
         return FValidatorFractalDimensionDef.create(this, type, expected, error);
     }

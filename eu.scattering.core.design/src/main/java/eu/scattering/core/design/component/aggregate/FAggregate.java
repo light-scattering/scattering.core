@@ -13,6 +13,9 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.FractalDimension;
+import eu.scattering.core.design.type.LinearDimension;
+import eu.scattering.core.design.type.RadiusOfGyration;
 
 import java.util.function.BiConsumer;
 
@@ -35,7 +38,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
     FPairPos3D getBoundary();
 
     FPos3D getLength();
-    double getLength(Axis type);
+    double getLength(LinearDimension type);
 
     double getRadius(double x, double y, double z);
     double getRadius(FPoint center);
@@ -62,7 +65,7 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     //--------------------------------------------------
 
-    double getFractalDimension(Dimension type);
+    double getFractalDimension(FractalDimension type);
 
     FPlot getBoxCoverageFunction(boolean log);
     FPlot getDensityCorrelationFunction(boolean log);
@@ -119,11 +122,4 @@ public interface FAggregate extends Component, Iterable<Shape> {
     FMaterial getRefFMaterial();
     @Modificator
     FBuffer<FBufferData> getRefFBuffer();
-
-    //--------------------------------------------------
-    
-    enum Axis { X, Y, Z, MIN, MAX}
-    enum Overlap { VOLUMETRIC, LINEAR }
-    enum Dimension { BOX, CORRELATION }
-    enum RadiusOfGyration { COMPLEX, SIMPLE_FILIPPOV, SIMPLE_MONO, SIMPLE_POLY }
 }

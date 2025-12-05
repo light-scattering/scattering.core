@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.aggregate.monitor.common.module.FMoni
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.transfer.primitive.FPoly;
+import eu.scattering.core.design.type.RadiusOfGyration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -72,8 +73,8 @@ public class FMonitorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -105,8 +106,8 @@ public class FMonitorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -138,8 +139,8 @@ public class FMonitorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
-            FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
-            FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
@@ -171,10 +172,10 @@ public class FMonitorTest {
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(FAggregate.RadiusOfGyration.COMPLEX);
-            FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(FAggregate.RadiusOfGyration.SIMPLE_MONO);
-            FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(FAggregate.RadiusOfGyration.SIMPLE_POLY);
-            FMonitorRadiusOfGyration fMonitorFilippov = factory.getFMonitorRadiusOfGyration(FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.COMPLEX);
+            FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+            FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
+            FMonitorRadiusOfGyration fMonitorFilippov = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);
@@ -203,10 +204,10 @@ public class FMonitorTest {
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.COMPLEX);
-            FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_MONO);
-            FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_POLY);
-            FMonitorRadiusOfGyration fMonitorFilippov = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.COMPLEX);
+            FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_MONO);
+            FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_POLY);
+            FMonitorRadiusOfGyration fMonitorFilippov = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
             fModel.addStepMonitor(fMonitor);
             fModel.addStepMonitor(fMonitorMono);

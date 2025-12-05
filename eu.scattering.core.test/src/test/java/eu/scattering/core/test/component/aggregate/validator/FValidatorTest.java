@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.aggregate.validator.common.module.FValidatorFractalDimension;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.type.FractalDimension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -28,7 +29,7 @@ public class FValidatorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorFractalDimension(FAggregate.Dimension.BOX, 2.0, 0.2);
+            FValidatorFractalDimension fValidator = factory.getFValidatorFractalDimension(FractalDimension.BOX, 2.0, 0.2);
 
             fModel.addCompletionValidator(fValidator);
             fModel.build();
@@ -46,7 +47,7 @@ public class FValidatorTest {
             FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
 
             FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
-            FValidatorFractalDimension fValidator = factory.getFValidatorFractalDimension(FAggregate.Dimension.CORRELATION, 2.2, 0.2);
+            FValidatorFractalDimension fValidator = factory.getFValidatorFractalDimension(FractalDimension.CORRELATION, 2.2, 0.2);
 
             fModel.addCompletionValidator(fValidator);
             fModel.build();

@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.box.FBoxDouble;
 import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.type.RadiusOfGyration;
 
 public class FAggregateModuleRadiusOfGyrationDef {
     private final ScatFactory factory;
@@ -19,7 +20,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double get(FAggregate.RadiusOfGyration type) {
+    protected double get(RadiusOfGyration type) {
 
         return switch (type) {
             case COMPLEX -> getComplex();

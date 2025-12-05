@@ -18,6 +18,10 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.FractalDimension;
+import eu.scattering.core.design.type.LinearDimension;
+import eu.scattering.core.design.type.PointLocation;
+import eu.scattering.core.design.type.RadiusOfGyration;
 import eu.scattering.core.mock.aggregate.F3D_N1000_Mono;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -287,7 +291,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get volume, point contact B")
         void getVolumePointContactB() {
-            Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
@@ -450,7 +454,7 @@ public class FAggregateTest {
             double delta = 0.1;
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .setDelta(delta)
                     .correctAddCoat(1, 1)
@@ -648,7 +652,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Get surface, point contact B")
         void getSurfacePointContactB() {
-            Producer<FPoint> fPointProd = factory.getFPointProducer(20, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(20, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1).validateNoOverlap();
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProd.getListRandomized(50));
@@ -788,7 +792,7 @@ public class FAggregateTest {
             double delta = 0.1;
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .setDelta(delta)
                     .correctAddCoat(1, 1)
@@ -1262,11 +1266,11 @@ public class FAggregateTest {
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
             FPos3D length = fAggregate.getLength();
-            double lengthX = fAggregate.getLength(FAggregate.Axis.X);
-            double lengthY = fAggregate.getLength(FAggregate.Axis.Y);
-            double lengthZ = fAggregate.getLength(FAggregate.Axis.Z);
-            double lengthMax = fAggregate.getLength(FAggregate.Axis.MAX);
-            double lengthMin = fAggregate.getLength(FAggregate.Axis.MIN);
+            double lengthX = fAggregate.getLength(LinearDimension.X);
+            double lengthY = fAggregate.getLength(LinearDimension.Y);
+            double lengthZ = fAggregate.getLength(LinearDimension.Z);
+            double lengthMax = fAggregate.getLength(LinearDimension.MAX);
+            double lengthMin = fAggregate.getLength(LinearDimension.MIN);
 
 
             Assertions.assertAll("Validate range",
@@ -1644,7 +1648,7 @@ public class FAggregateTest {
         void getVolumeRadiusSingle() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -1666,7 +1670,7 @@ public class FAggregateTest {
         void getVolumeRadius() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -1709,7 +1713,7 @@ public class FAggregateTest {
         void getSurfaceRadiusSingle() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -1733,7 +1737,7 @@ public class FAggregateTest {
         void getSurfaceRadius() {
             int quantity = 25;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .correctAddCoat(1, 1)
                     .validateNoOverlap();
@@ -1790,7 +1794,7 @@ public class FAggregateTest {
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
             double rgExpected = factory.getFSphereHelper().getRadiusOfGyration(radius);
-            double rgActual = fAggregate.getRadiusOfGyration(FAggregate.RadiusOfGyration.COMPLEX);
+            double rgActual = fAggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX);
 
             double rgErr = factory.getStatisticsHelper().getRelErr(rgExpected, rgActual);
 
@@ -1803,7 +1807,7 @@ public class FAggregateTest {
             int quantity = 25;
             double delta = 0.1;
 
-            Producer<FPoint> fPointProd = factory.getFPointProducer(50, FPointProducer.Location.IN_SPHERE);
+            Producer<FPoint> fPointProd = factory.getFPointProducer(50, PointLocation.IN_SPHERE);
             Producer<FSphere> fSphereProd = factory.getFSphereProducer(fPointProd, 1)
                     .setDelta(delta)
                     .validateNoOverlap();
@@ -1812,10 +1816,10 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly).addFBuffer(1_000_000).addFMaterial();
 
-            double rgDefault = fAggregate.getRadiusOfGyration(FAggregate.RadiusOfGyration.COMPLEX);
-            double rgLegacyMono = fAggregate.getRadiusOfGyration(FAggregate.RadiusOfGyration.SIMPLE_MONO);
-            double rgLegacyPoly = fAggregate.getRadiusOfGyration(FAggregate.RadiusOfGyration.SIMPLE_POLY);
-            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
+            double rgDefault = fAggregate.getRadiusOfGyration(RadiusOfGyration.COMPLEX);
+            double rgLegacyMono = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+            double rgLegacyPoly = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
+            double rgLegacyFilippov = fAggregate.getRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
 
             double rgErrMono = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyMono);
             double rgErrPoly = factory.getStatisticsHelper().getRelErr(rgDefault, rgLegacyPoly);
@@ -2238,9 +2242,9 @@ public class FAggregateTest {
             FAggregate fAggregate18 = factory.getFAggregate(schema18);
             FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
-            double dim14 = fAggregate14.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim18 = fAggregate18.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim22 = fAggregate22.getFractalDimension(FAggregate.Dimension.BOX);
+            double dim14 = fAggregate14.getFractalDimension(FractalDimension.BOX);
+            double dim18 = fAggregate18.getFractalDimension(FractalDimension.BOX);
+            double dim22 = fAggregate22.getFractalDimension(FractalDimension.BOX);
 
             assertEquals(1.4, dim14, 0.2);
             assertEquals(1.8, dim18, 0.2);
@@ -2254,9 +2258,9 @@ public class FAggregateTest {
             FAggregate fAggregate2d = factory.getFAggregateGeo2d(10, 10);
             FAggregate fAggregate3d = factory.getFAggregateGeo3d(10, 10, 10);
 
-            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dimension.BOX);
+            double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX);
+            double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BOX);
 
             assertEquals(1, dim1d, 0.01);
             assertEquals(2, dim2d, 0.01);
@@ -2270,9 +2274,9 @@ public class FAggregateTest {
             FAggregate fAggregate2d = factory.getFAggregateGeo2d(9, 11);
             FAggregate fAggregate3d = factory.getFAggregateGeo3d(9, 11, 13);
 
-            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dimension.BOX);
+            double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX);
+            double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BOX);
 
             assertEquals(1, dim1d, 0.2);
             assertEquals(2, dim2d, 0.3);
@@ -2290,9 +2294,9 @@ public class FAggregateTest {
             fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
             fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
 
-            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dimension.BOX);
+            double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX);
+            double dim3d = fAggregate3d.getFractalDimension(FractalDimension.BOX);
 
             assertEquals(1, dim1d, 0.01);
             assertEquals(2, dim2d, 0.01);
@@ -2305,8 +2309,8 @@ public class FAggregateTest {
             FAggregate fAggregate1d = factory.getFAggregateGeoFullCircle(10);
             FAggregate fAggregate2d = factory.getFAggregateGeoFullSphere(10);
 
-            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dimension.BOX);
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.BOX);
+            double dim1d = fAggregate1d.getFractalDimension(FractalDimension.BOX);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.BOX);
 
             assertEquals(2, dim1d, 0.10);
             assertEquals(3, dim2d, 0.25);
@@ -2323,9 +2327,9 @@ public class FAggregateTest {
             FAggregate fAggregate18 = factory.getFAggregate(schema18);
             FAggregate fAggregate22 = factory.getFAggregate(schema22);
 
-            double dim14 = fAggregate14.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim18 = fAggregate18.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim22 = fAggregate22.getFractalDimension(FAggregate.Dimension.CORRELATION);
+            double dim14 = fAggregate14.getFractalDimension(FractalDimension.CORRELATION);
+            double dim18 = fAggregate18.getFractalDimension(FractalDimension.CORRELATION);
+            double dim22 = fAggregate22.getFractalDimension(FractalDimension.CORRELATION);
 
             assertEquals(1.4, dim14, 1.4 * 0.05);
             assertEquals(1.8, dim18, 1.8 * 0.05);
@@ -2339,9 +2343,9 @@ public class FAggregateTest {
             FAggregate fAggregate2d = factory.getFAggregateGeo2d(15, 15);
             FAggregate fAggregate3d = factory.getFAggregateGeo3d(13, 13, 13);
 
-            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dimension.CORRELATION);
+            double dim1d = fAggregate1d.getFractalDimension(FractalDimension.CORRELATION);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
+            double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
 
             assertEquals(1, dim1d, 1 * 0.05);
             assertEquals(2, dim2d, 2 * 0.05);
@@ -2354,8 +2358,8 @@ public class FAggregateTest {
             FAggregate fAggregate2d = factory.getFAggregateGeo2d(13, 15);
             FAggregate fAggregate3d = factory.getFAggregateGeo3d(13, 15, 17);
 
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dimension.CORRELATION);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
+            double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
 
             assertEquals(2, dim2d, 2 * 0.05);
             assertEquals(3, dim3d, 3 * 0.05);
@@ -2372,9 +2376,9 @@ public class FAggregateTest {
             fAggregate2d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
             fAggregate3d.getRefParticles().translate(factory.getFRand().nextDoubleInSphere(5));
 
-            double dim1d = fAggregate1d.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dimension.CORRELATION);
+            double dim1d = fAggregate1d.getFractalDimension(FractalDimension.CORRELATION);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
+            double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
 
             assertEquals(1, dim1d, 1 * 0.05);
             assertEquals(2, dim2d, 2 * 0.05);
@@ -2387,8 +2391,8 @@ public class FAggregateTest {
             FAggregate fAggregate2d = factory.getFAggregateGeoFullCircle(10);
             FAggregate fAggregate3d = factory.getFAggregateGeoFullSphere(10);
 
-            double dim2d = fAggregate2d.getFractalDimension(FAggregate.Dimension.CORRELATION);
-            double dim3d = fAggregate3d.getFractalDimension(FAggregate.Dimension.CORRELATION);
+            double dim2d = fAggregate2d.getFractalDimension(FractalDimension.CORRELATION);
+            double dim3d = fAggregate3d.getFractalDimension(FractalDimension.CORRELATION);
 
             assertEquals(2, dim2d, 2 * 0.05);
             assertEquals(3, dim3d, 3 * 0.05);

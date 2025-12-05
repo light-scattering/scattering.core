@@ -9,6 +9,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.LinearDimension;
 
 import java.util.*;
 
@@ -234,7 +235,7 @@ public class FAggregateModuleGeometryDef {
         return factory.getFPos3D(lengthX, lengthY, lengthZ);
     }
 
-    protected double getLength(FAggregate.Axis type) {
+    protected double getLength(LinearDimension type) {
         FPos3D length = getLength();
 
         return switch (type) {
