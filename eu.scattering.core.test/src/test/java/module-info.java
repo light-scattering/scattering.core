@@ -22,6 +22,7 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.aspect.randomize.module;
     opens eu.scattering.core.test.component.aggregate;
     opens eu.scattering.core.test.component.aggregate.monitor;
+    opens eu.scattering.core.test.component.aggregate.validator;
     opens eu.scattering.core.test.component.aggregate.model.pc;
     opens eu.scattering.core.test.statistics;
     opens eu.scattering.core.test.transfer;

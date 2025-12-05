@@ -3,7 +3,6 @@ package eu.scattering.core.test.component.aggregate.monitor;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
-import eu.scattering.core.design.component.aggregate.monitor.FMonitor;
 import eu.scattering.core.design.component.aggregate.monitor.common.module.FMonitorRadiusOfGyration;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
@@ -12,6 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,8 +27,8 @@ public class FMonitorTest {
     class FMonitorCustomTest {
 
         @Test
-        @DisplayName("Radius of gyration - Df = 1.8")
-        void rogMonodisperseDf18() {
+        @DisplayName("Radius - Df = 1.8")
+        void radiusMonodisperseDf18() {
             int quantity = 100;
             double df = 1.8;
             double kf = 1.6;
@@ -74,11 +75,11 @@ public class FMonitorTest {
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
-            fModel.addStepMonitor(fMonitorA, fMonitorB);
+            fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot resultsMono = fMonitorA.getFPlot();
+            FPlot resultsMono = fMonitorA.getRefFPlot();
 
             resultsMono.swapXY();
             resultsMono.mutateX(FStat::ln);
@@ -107,11 +108,11 @@ public class FMonitorTest {
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
-            fModel.addStepMonitor(fMonitorA, fMonitorB);
+            fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot resultsMono = fMonitorA.getFPlot();
+            FPlot resultsMono = fMonitorA.getRefFPlot();
 
             resultsMono.swapXY();
             resultsMono.mutateX(FStat::ln);
@@ -140,11 +141,11 @@ public class FMonitorTest {
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, FAggregate.RadiusOfGyration.SIMPLE_FILIPPOV);
 
-            fModel.addStepMonitor(fMonitorA, fMonitorB);
+            fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot resultsMono = fMonitorA.getFPlot();
+            FPlot resultsMono = fMonitorA.getRefFPlot();
 
             resultsMono.swapXY();
             resultsMono.mutateX(FStat::ln);
@@ -181,10 +182,10 @@ public class FMonitorTest {
             fModel.addStepMonitor(fMonitorFilippov);
             fModel.build();
 
-            FPlot results = fMonitor.getFPlot();
-            FPlot resultsMono = fMonitorMono.getFPlot();
-            FPlot resultsPoly = fMonitorPoly.getFPlot();
-            FPlot resultsFilippov = fMonitorFilippov.getFPlot();
+            FPlot results = fMonitor.getRefFPlot();
+            FPlot resultsMono = fMonitorMono.getRefFPlot();
+            FPlot resultsPoly = fMonitorPoly.getRefFPlot();
+            FPlot resultsFilippov = fMonitorFilippov.getRefFPlot();
 
             assertTrue(results.getRefCoreY().isSimilarAbs(0.25,
                     resultsMono.getRefCoreY(), resultsPoly.getRefCoreY(), resultsFilippov.getRefCoreY()));
@@ -213,10 +214,10 @@ public class FMonitorTest {
             fModel.addStepMonitor(fMonitorFilippov);
             fModel.build();
 
-            FPlot results = fMonitor.getFPlot();
-            FPlot resultsMono = fMonitorMono.getFPlot();
-            FPlot resultsPoly = fMonitorPoly.getFPlot();
-            FPlot resultsFilippov = fMonitorFilippov.getFPlot();
+            FPlot results = fMonitor.getRefFPlot();
+            FPlot resultsMono = fMonitorMono.getRefFPlot();
+            FPlot resultsPoly = fMonitorPoly.getRefFPlot();
+            FPlot resultsFilippov = fMonitorFilippov.getRefFPlot();
 
             assertTrue(results.getRefCoreY().isSimilarAbs(0.1,
                     resultsMono.getRefCoreY(), resultsPoly.getRefCoreY(), resultsFilippov.getRefCoreY()));

@@ -36,7 +36,7 @@ public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
     }
 
     @Override
-    public FPlot getFPlot() {
+    public FPlot getRefFPlot() {
 
         return this.fPlot;
     }

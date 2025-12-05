@@ -157,9 +157,9 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
     }
 
     @Override
-    public void addStepValidator(BiFunction<FAggregate, Shape, Boolean> validator) {
+    public void addStepAcceptor(BiFunction<FAggregate, Shape, Boolean> acceptor) {
 
-        this.validator.add(validator);
+        this.validator.add(acceptor);
     }
 
     @Override

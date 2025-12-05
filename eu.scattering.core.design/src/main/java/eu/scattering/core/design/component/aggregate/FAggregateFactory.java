@@ -3,12 +3,13 @@ package eu.scattering.core.design.component.aggregate;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.aggregate.model.FModelFactory;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactory;
+import eu.scattering.core.design.component.aggregate.validator.FValidatorFactory;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public interface FAggregateFactory extends FModelFactory, FMonitorFactory {
+public interface FAggregateFactory extends FModelFactory, FMonitorFactory, FValidatorFactory {
 
     FAggregate getFAggregate();
 

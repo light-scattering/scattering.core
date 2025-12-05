@@ -62,7 +62,7 @@ public class FModelDLATest {
 
         FModelDLA modelDLA = factory.createFModelDLA3D(fAggregate);
         modelDLA.addStepMonitor(monitor);
-        modelDLA.addStepValidator(validator);
+        modelDLA.addStepAcceptor(validator);
         modelDLA.addCompletionValidator(acceptor);
         modelDLA.build();
 
@@ -122,7 +122,7 @@ public class FModelDLATest {
 
         FModelDLA modelDLA = factory.createFModelDLA2D(fAggregate);
         modelDLA.addStepMonitor(monitor);
-        modelDLA.addStepValidator(validator);
+        modelDLA.addStepAcceptor(validator);
         modelDLA.addCompletionValidator(acceptor);
         modelDLA.build();
 

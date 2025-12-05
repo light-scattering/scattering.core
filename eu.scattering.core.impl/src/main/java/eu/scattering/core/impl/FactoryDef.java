@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.aggregate.monitor.common.module.FMonitorRadiusOfGyration;
+import eu.scattering.core.design.component.aggregate.validator.common.module.FValidatorFractalDimension;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -57,6 +58,7 @@ import eu.scattering.core.impl.component.aggregate.FAggregateFactoryGeoDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryPreDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRadiusOfGyrationDef;
+import eu.scattering.core.impl.component.aggregate.validator.FValidatorFractalDimensionDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -521,6 +523,12 @@ public final class FactoryDef implements ScatFactory {
     public FMonitorRadiusOfGyration getFMonitorRadiusOfGyration(int skip, FAggregate.RadiusOfGyration type) {
 
         return FMonitorRadiusOfGyrationDef.create(this, skip, type);
+    }
+
+    @Override
+    public FValidatorFractalDimension getFValidatorFractalDimension(FAggregate.Dimension type, double expected, double error) {
+
+        return FValidatorFractalDimensionDef.create(this, type, expected, error);
     }
 
     //--------------------------------------------------

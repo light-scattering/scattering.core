@@ -59,7 +59,7 @@ public class FModelRLATest {
 
         FModelPC modelRLA = factory.createFModelRLA3D(fAggregate);
         modelRLA.addStepMonitor(monitor);
-        modelRLA.addStepValidator(validator);
+        modelRLA.addStepAcceptor(validator);
         modelRLA.addCompletionValidator(acceptor);
         modelRLA.build();
 
@@ -119,7 +119,7 @@ public class FModelRLATest {
 
         FModelPC modelRLA = factory.createFModelRLA2D(fAggregate);
         modelRLA.addStepMonitor(monitor);
-        modelRLA.addStepValidator(validator);
+        modelRLA.addStepAcceptor(validator);
         modelRLA.addCompletionValidator(acceptor);
         modelRLA.build();
 

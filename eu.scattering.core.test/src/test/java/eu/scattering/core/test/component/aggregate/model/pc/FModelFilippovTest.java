@@ -61,7 +61,7 @@ public class FModelFilippovTest {
         FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.8, 1.4);
         modelTunable.setEarlyStageCorrection(true);
         modelTunable.addStepMonitor(monitor);
-        modelTunable.addStepValidator(validator);
+        modelTunable.addStepAcceptor(validator);
         modelTunable.addCompletionValidator(acceptor);
         modelTunable.build();
 
@@ -122,7 +122,7 @@ public class FModelFilippovTest {
         FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.5, 1.1);
         modelTunable.setEarlyStageCorrection(true);
         modelTunable.addStepMonitor(monitor);
-        modelTunable.addStepValidator(validator);
+        modelTunable.addStepAcceptor(validator);
         modelTunable.addCompletionValidator(acceptor);
         modelTunable.build();
 

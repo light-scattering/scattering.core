@@ -59,7 +59,7 @@ public class FModelBallisticTest {
 
         FModelPC modelBallistic = factory.createFModelBallistic3D(fAggregate);
         modelBallistic.addStepMonitor(monitor);
-        modelBallistic.addStepValidator(validator);
+        modelBallistic.addStepAcceptor(validator);
         modelBallistic.addCompletionValidator(acceptor);
         modelBallistic.build();
 
@@ -119,7 +119,7 @@ public class FModelBallisticTest {
 
         FModelPC modelBallistic = factory.createFModelBallistic2D(fAggregate);
         modelBallistic.addStepMonitor(monitor);
-        modelBallistic.addStepValidator(validator);
+        modelBallistic.addStepAcceptor(validator);
         modelBallistic.addCompletionValidator(acceptor);
         modelBallistic.build();
 
