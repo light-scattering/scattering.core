@@ -2,8 +2,9 @@ package eu.scattering.core.impl.component.aggregate.monitor;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.monitor.construct.dedicate.FMonitorRadiusOfGyration;
+import eu.scattering.core.design.component.aggregate.monitor.common.module.FMonitorRadiusOfGyration;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
 
 public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
@@ -35,7 +36,7 @@ public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
     }
 
     @Override
-    public FPlot getResults() {
+    public FPlot getFPlot() {
 
         return this.fPlot;
     }
@@ -54,7 +55,12 @@ public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
 
     @Override
     public double getPowerLawDimension() {
+        FPlot reg = this.fPlot.copy();
 
-        return fPlot.reg().fitSlope((int) (fPlot.size() * 0.9)).at(1);
+        reg.swapXY();
+        reg.mutateX(FStat::ln);
+        reg.mutateY(FStat::ln);
+
+        return reg.reg().fitSlope((int) (reg.size() * 0.9)).at(1);
     }
 }

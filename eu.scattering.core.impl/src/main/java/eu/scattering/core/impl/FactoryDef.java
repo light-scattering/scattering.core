@@ -6,7 +6,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPC
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
-import eu.scattering.core.design.component.aggregate.monitor.construct.dedicate.FMonitorRadiusOfGyration;
+import eu.scattering.core.design.component.aggregate.monitor.common.module.FMonitorRadiusOfGyration;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;

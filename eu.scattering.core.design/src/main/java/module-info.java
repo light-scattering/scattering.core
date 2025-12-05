@@ -68,8 +68,8 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.storage.cache;
     exports eu.scattering.core.design.aspect.randomize.generator.module.dist1d.normal;
     exports eu.scattering.core.design.component.aggregate.monitor;
-    exports eu.scattering.core.design.component.aggregate.monitor.construct;
     exports eu.scattering.core.design.physics.material.data;
     exports eu.scattering.core.design.physics.material;
-    exports eu.scattering.core.design.component.aggregate.monitor.construct.dedicate;
+    exports eu.scattering.core.design.component.aggregate.monitor.common;
+    exports eu.scattering.core.design.component.aggregate.monitor.common.module;
 }
