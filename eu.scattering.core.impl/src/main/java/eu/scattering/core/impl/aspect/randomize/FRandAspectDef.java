@@ -599,6 +599,151 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
+    public boolean attach(FAggregate ref, FAggregate arg) {
+
+        return attach(ref, arg, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean attach(FAggregate ref, FAggregate arg, int corrections) {
+
+        return attach(ref, arg, corrections, true);
+    }
+
+    @Override
+    public boolean attach2D(FAggregate ref, FAggregate arg) {
+
+        return attach2D(ref, arg, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean attach2D(FAggregate ref, FAggregate arg, int corrections) {
+
+        return attach(ref, arg, corrections, false);
+    }
+
+    public boolean attach(FAggregate ref, FAggregate arg, int corrections, boolean is3D) {
+        List<Shape> particlesRef = new ArrayList<>(ref.getRefParticles().asList());
+
+        double minRadius = arg.getParticleRadius().min();
+
+        for (int i = 0 ; i < corrections ; i++) {
+            Shape particleRef = factory.getFSphere();
+            Shape particleArg = factory.getFSphere();
+            Shape particleLoc = factory.getFSphere(minRadius);
+
+            boolean progress;
+
+            progress = setRefPosition(ref, particlesRef, particleRef, particleLoc, is3D);
+
+            if (!progress) {
+                continue;
+            }
+
+            progress = setArgPosition(ref, arg, particleRef, particleArg, particleLoc);
+
+            if (!progress) {
+                continue;
+            }
+
+            FVector shift = factory.getRefFVector(particleArg.getRefCenter(), particleLoc.getRefCenter());
+            shift.moveBaseToCenter();
+
+            arg.getRefParticles().translate(shift.getRefHead().toFPos3D());
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    private boolean setRefPosition(FAggregate ref, List<Shape> particles, Shape particleRef, Shape particleLoc, boolean is3D) {
+        int maxPositions = 100;
+
+        while (true) {
+
+            if (particles.size() == 0) {
+                throw new IllegalStateException("The particle reference pool is depleted");
+            }
+
+            Shape candidate = factory.getFRand().getElement(particles, false);
+
+            double radius = candidate.getRadius() + particleLoc.getRadius();
+
+            for (int i = 0; i < maxPositions; i++) {
+
+                if (is3D) {
+                    FPos3D position = factory.getFRand().nextDoubleOnSphere(radius);
+                    particleLoc.setCenter(position.getD0(), position.getD1(), position.getD2());
+                } else {
+                    FPos2D position = factory.getFRand().nextDoubleOnCircle(radius);
+                    particleLoc.setCenter(position.getD0(), position.getD1(), 0);
+                }
+
+                particleLoc.getRefCenter().add(candidate.getRefCenter());
+
+                if (particleLoc.overlaps(ref.getRefParticles().asList()) == 0) {
+                    particleRef.setRadius(candidate.getRadius());
+                    particleRef.setCenter(candidate.getRefCenter());
+
+                    return true;
+                }
+            }
+
+            particles.remove(candidate);
+        }
+    }
+
+    private boolean setArgPosition(FAggregate ref, FAggregate arg, Shape particleRef, Shape particleArg, Shape particleLoc) {
+        FPos3D initialParticleLoc = particleLoc.getRefCenter().toFPos3D();
+
+        FVector shift = factory.getFVector();
+
+        Shape dummy = factory.getFSphere();
+
+        List<Shape> candidates = new ArrayList<>(arg.getRefParticles().asList());
+        factory.getFRand().shuffle(candidates);
+
+        for (Shape candidate : candidates) {
+            particleLoc.setRadius(candidate.getRadius());
+
+            particleLoc.setCenter(initialParticleLoc);
+            particleLoc.attachLinear(particleRef);
+
+            if (particleLoc.overlaps(ref.getRefParticles().asList()) > 0) {
+                continue;
+            }
+
+            shift.setBase(particleLoc.getRefCenter());
+            shift.setHead(particleRef.getRefCenter());
+
+            shift.moveBase(candidate.getRefCenter());
+
+            dummy.setRadius(particleLoc.getRadius());
+            dummy.setCenter(shift.getRefHead());
+
+            if (dummy.overlaps(arg.getRefParticles().asList()) > 0) {
+                continue;
+            }
+
+            particleArg.setRadius(candidate.getRadius());
+            particleArg.setCenter(candidate.getRefCenter());
+
+            shift.setBase(particleArg.getRefCenter());
+            shift.setHead(particleLoc.getRefCenter());
+
+            if (arg.overlapsWithShift(ref, shift)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean project(FAggregate ref, FAggregate arg) {
 
         return project(ref, arg, Integer.MAX_VALUE);
@@ -680,6 +825,51 @@ public class FRandAspectDef implements FRandAspect {
 
             FPoint targetArg = factory.getFPoint();
             targetArg.set(core.nextDouble(-radiusArg, radiusArg), 0, 0);
+            factory.getRotAspect().setRgAngle(targetArg, base, 0.5 * Math.PI);
+
+            ref.getRefParticles().translate(base.toFPos3D());
+
+            double shift = ref.project(arg, ray);
+
+            if (shift >= 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean project(FAggregate ref, FAggregate arg, int corrections, boolean is3D) {
+        FPoint base = factory.getFPoint();
+        FPoint head = factory.getFPoint();
+        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            FPoint centerRef = factory.getFPoint();
+            ref.getSpatialCenter(centerRef);
+            ref.setCenter(centerRef);
+
+            FPoint centerArg = factory.getFPoint();
+            arg.getSpatialCenter(centerArg);
+            arg.setCenter(centerArg);
+
+            double radiusRef = ref.getRadiusFromOrigin();
+            double radiusArg = arg.getRadiusFromOrigin();
+
+            if (is3D) {
+                base.applyStateFrom(core.nextDoubleOnSphere(10 * (radiusRef + radiusArg)));
+            } else {
+                base.set(core.nextDoubleOnCircle(10 * (radiusRef + radiusArg)), 0);
+            }
+
+            FPoint targetRef = factory.getFPoint();
+            targetRef.set(core.nextDoubleInCircle(radiusRef), 0);
+            factory.getRotAspect().setRgAngle(targetRef, base, 0.5 * Math.PI);
+
+            FPoint targetArg = factory.getFPoint();
+            targetArg.set(core.nextDoubleInCircle(radiusArg), 0);
             factory.getRotAspect().setRgAngle(targetArg, base, 0.5 * Math.PI);
 
             ref.getRefParticles().translate(base.toFPos3D());

@@ -19,7 +19,7 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregatePreMono(25, 1);
         FAggregate aggB = factory.getFAggregatePreMono(25, 1);
 
-        FModelPC modelA = factory.createFModelBallistic3D(aggA);
+        FModelPC modelA = factory.createFModelFilippov3D(aggA, 1.8, 1.6);
         FModelPC modelB = factory.createFModelBallistic3D(aggB);
 
         modelA.build();
@@ -46,6 +46,50 @@ public class FAggregateRandomizeTest {
         modelB.build();
 
         boolean results = factory.getRandAspect().project2D(aggA, aggB);
+        aggA.merge(aggB, true);
+
+        assertTrue(results);
+        assertTrue(aggA.isCompact());
+        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+
+        for (Shape shape : aggA) {
+            assertEquals(0, shape.getCenterZ(), 1E-6);
+        }
+    }
+
+    @Test
+    @DisplayName("Attach 3D")
+    void attach3D() {
+        FAggregate aggA = factory.getFAggregatePreMono(250, 1);
+        FAggregate aggB = factory.getFAggregatePreMono(250, 1);
+
+        FModelPC modelA = factory.createFModelFilippov3D(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.createFModelFilippov3D(aggB, 1.8, 1.6);
+
+        modelA.build();
+        modelB.build();
+
+        boolean results = factory.getRandAspect().attach(aggA, aggB);
+        aggA.merge(aggB, true);
+
+        assertTrue(results);
+        assertTrue(aggA.isCompact());
+        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+    }
+
+    @Test
+    @DisplayName("Attach 2D")
+    void attach2D() {
+        FAggregate aggA = factory.getFAggregatePreMono(25, 1);
+        FAggregate aggB = factory.getFAggregatePreMono(25, 1);
+
+        FModelPC modelA = factory.createFModelBallistic2D(aggA);
+        FModelPC modelB = factory.createFModelBallistic2D(aggB);
+
+        modelA.build();
+        modelB.build();
+
+        boolean results = factory.getRandAspect().attach2D(aggA, aggB);
         aggA.merge(aggB, true);
 
         assertTrue(results);
