@@ -3,6 +3,7 @@ package eu.scattering.core.test.component.geometry.base;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
@@ -1025,6 +1026,18 @@ public class FVectorTest {
     @Tag("Advanced")
     @DisplayName("Functionality - Advanced")
     class FVectorAdvancedTest {
+
+        @Test
+        @DisplayName("To FVector")
+        void toFVector() {
+            FVector origin = factory.getFVector(0, 0, 0, 100, 0, 0);
+            FRay fRay = factory.getRefFRay(origin);
+
+            FVector results = fRay.toFVector(5);
+
+            assertTrue(results.isSimilar(0, 0, 0, 5, 0, 0),
+                    "The length of the FVector is incorrect");
+        }
 
         @Test
         @DisplayName("Set spherical coordinates")

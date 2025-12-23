@@ -4,6 +4,7 @@ import eu.scattering.core.design.annotation.Extension;
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Terminator;
 import eu.scattering.core.design.component.geometry.base.Base;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.function.Consumer;
@@ -12,6 +13,9 @@ import java.util.function.Function;
 public interface FPoint extends Base<FPoint> {
 
     FPoint set(double x, double y, double z);
+
+    FPoint set(FPos2D posXY, double z);
+    FPoint set(double x, FPos2D posYZ);
 
     double getX();
     FPoint setX(double x);
@@ -24,7 +28,7 @@ public interface FPoint extends Base<FPoint> {
 
     //--------------------------------------------------
 
-    FPoint applyStateFrom(FPos3D position);
+    FPoint applyStateFrom(FPos3D pos);
 
     FPos3D toFPos3D();
 

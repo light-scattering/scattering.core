@@ -3,6 +3,8 @@ package eu.scattering.core.impl.component.aggregate;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.physics.material.FMaterial;
@@ -18,7 +20,7 @@ import eu.scattering.core.design.type.LinearDimension;
 import eu.scattering.core.design.type.RadiusOfGyration;
 import org.json.JSONObject;
 
-import java.util.Iterator;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -337,6 +339,112 @@ public class FAggregateDef implements FAggregate {
         this.moduleMorphology.forEachPairInContact(consumer);
     }
 
+    @Override
+    public boolean overlaps(FAggregate arg) {
+        FPos3D centerRef = getSpatialCenter();
+        FPos3D centerArg = arg.getSpatialCenter();
+
+        double radiusRef = getRadius(centerRef);
+        double radiusArg = arg.getRadius(centerArg);
+
+        List<Shape> particlesRef = new ArrayList<>(size());
+        List<Shape> particlesArg = new ArrayList<>(arg.size());
+
+        for (Shape shape : getRefParticles()) {
+            if (shape.getDistCenter(centerArg) < radiusArg + shape.getRadius()) {
+                particlesRef.add(shape);
+            }
+        }
+
+        for (Shape shape : arg.getRefParticles()) {
+            if (shape.getDistCenter(centerRef) < radiusRef + shape.getRadius()) {
+                particlesArg.add(shape);
+            }
+        }
+
+        for (Shape shapeRef : particlesRef) {
+            for (Shape shapeArg : particlesArg) {
+                if (shapeRef.overlaps(shapeArg)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean overlapsWithShift(FAggregate arg, FVector shift) {
+        FPos3D centerRef = getSpatialCenter();
+        FPos3D centerArg = arg.getSpatialCenter();
+
+        double radiusRef = getRadius(centerRef);
+        double radiusArg = arg.getRadius(centerArg);
+
+        List<Shape> particlesRef = new ArrayList<>(size());
+        List<Shape> particlesArg = new ArrayList<>(arg.size());
+
+        FVector translator = shift.copy();
+
+        for (Shape shape : getRefParticles()) {
+            translator.moveBase(shape.getRefCenter());
+
+            if (translator.getRefHead().getDistance(centerArg) < radiusArg + shape.getRadius()) {
+                particlesRef.add(shape);
+            }
+        }
+
+        for (Shape shape : arg.getRefParticles()) {
+            translator.moveBase(centerRef);
+
+            if (shape.getDistCenter(translator.getRefHead()) < radiusRef + shape.getRadius()) {
+                particlesArg.add(shape);
+            }
+        }
+
+        FPoint memo = supplyFPoint();
+        for (Shape shapeRef : particlesRef) {
+            memo.applyStateFrom(shapeRef.getRefCenter());
+
+            translator.applyStateFrom(shift);
+            translator.moveBase(memo);
+
+            shapeRef.setCenter(translator.getRefHead());
+
+            for (Shape shapeArg : particlesArg) {
+                if (shapeRef.overlaps(shapeArg)) {
+                    shapeRef.setCenter(memo);
+                    return true;
+                }
+            }
+
+            shapeRef.setCenter(memo);
+        }
+
+        return false;
+    }
+
+    @Override
+    public void merge(FAggregate arg, boolean remove) {
+
+        for (Shape shape : arg.getRefParticles()) {
+            getRefParticles().register(shape);
+        }
+
+        if (remove) {
+            arg.getRefParticles().clear();
+        }
+    }
+
+    @Override
+    public void index() {
+
+        int i = 0;
+        for (Shape shape : getRefParticles()) {
+            shape.setIndex(i++);
+        }
+    }
+
     // -------------------------------------------------------------------------------------------------
 
     private FBuffer<FBufferData> supplyFBuffer(int capacity) {
@@ -347,6 +455,11 @@ public class FAggregateDef implements FAggregate {
     private FMaterial supplyFMaterial() {
 
         return factory.getFMaterial();
+    }
+
+    private FPoint supplyFPoint() {
+
+        return factory.getFPoint();
     }
 
     //--------------------------------------------------
@@ -488,6 +601,39 @@ public class FAggregateDef implements FAggregate {
     public void forEach(Consumer<? super Shape> action) {
 
         getRefParticles().forEach(action);
+    }
+
+    //--------------------------------------------------
+
+    @Override
+    public double project(FAggregate aggregate, FRay ray) {
+        FRay translator = ray.copy();
+        List<Shape> candidates = new ArrayList<>(getRefParticles().asList());
+
+        FPoint center = supplyFPoint();
+        aggregate.getSpatialCenter(center);
+
+        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(center)));
+
+        for (Shape candidate : candidates) {
+            translator.getRefOrigin().moveBase(candidate.getRefCenter());
+            double shift = candidate.projectDryRun(aggregate, translator);
+
+            if (shift >= 0) {
+                boolean overlaps = overlapsWithShift(aggregate, translator.toFVector(shift));
+
+                if (!overlaps) {
+                    for (Shape particle : getRefParticles()) {
+                        ray.shiftForward(particle, shift);
+                    }
+
+                    return shift;
+                }
+            }
+
+        }
+
+        return -1;
     }
 }
 

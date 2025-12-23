@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPointFactory;
 import eu.scattering.core.design.transfer.TransferFactory;
 import eu.scattering.core.design.transfer.TransferFactoryConcrete;
 import eu.scattering.core.design.transfer.primitive.FMatrix3x3D;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import org.json.JSONObject;
 
@@ -100,9 +101,21 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public FPoint applyStateFrom(FPos3D position) {
+    public FPoint set(FPos2D posXY, double z) {
 
-        return set(position.getD0(), position.getD1(), position.getD2());
+        return set(posXY.getD0(), posXY.getD1(), z);
+    }
+
+    @Override
+    public FPoint set(double x, FPos2D posYZ) {
+
+        return set(x, posYZ.getD0(), posYZ.getD1());
+    }
+
+    @Override
+    public FPoint applyStateFrom(FPos3D pos) {
+
+        return set(pos.getD0(), pos.getD1(), pos.getD2());
     }
 
     @Override

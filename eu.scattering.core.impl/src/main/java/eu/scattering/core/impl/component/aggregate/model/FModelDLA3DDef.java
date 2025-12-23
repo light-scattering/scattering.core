@@ -181,9 +181,9 @@ public class FModelDLA3DDef implements FModelDLA {
                     continue;
                 }
 
-                boolean isPositioned = particle.project(this.attached, this.dir, this.step);
+                double distance = particle.project(this.attached, this.dir, this.step);
 
-                if (!isPositioned) {
+                if (distance < 0) {
                     continue;
                 }
 

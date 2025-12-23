@@ -122,6 +122,34 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Set values with FPos2D and primitives")
+        void setWithFPos2DAndPrimitives() {
+            FPoint fPoint = factory.getFPoint();
+
+            fPoint.set(factory.getFPos2D(refX, refY), refZ);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Set values with primitives and FPos2D")
+        void setWithPrimitivesAndFPos2D() {
+            FPoint fPoint = factory.getFPoint();
+
+            fPoint.set(refX, factory.getFPos2D(refY, refZ));
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Set values with FPoint")
         void setWithFPoint() {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);

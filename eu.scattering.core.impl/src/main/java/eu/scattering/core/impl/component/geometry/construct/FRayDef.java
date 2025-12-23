@@ -152,6 +152,20 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     }
 
     @Override
+    public FVector toFVector(double length) {
+        FVector results = supplyFVector();
+        FPoint base = results.getRefBase();
+        FPoint head = results.getRefHead();
+
+        base.applyStateFrom(getRefOrigin().getRefBase());
+        head.applyStateFrom(getRefOrigin().getRefBase());
+
+        shiftForward(head, length);
+
+        return results;
+    }
+
+    @Override
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
 

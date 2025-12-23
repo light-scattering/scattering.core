@@ -127,9 +127,9 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
             this.range.setCenter(target.getRefCenter());
             this.range.setRadius(this.aggregate.getRadius(target.getRefCenter()));
 
-            boolean isPositioned = rndEng.project(particle, this.range, this.attached, ITERATIONS);
+            double distance = rndEng.project(particle, this.range, this.attached, ITERATIONS);
 
-            if (!isPositioned) {
+            if (distance < 0) {
                 continue;
             }
 

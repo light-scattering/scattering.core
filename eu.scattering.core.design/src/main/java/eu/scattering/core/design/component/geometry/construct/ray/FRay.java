@@ -2,6 +2,7 @@ package eu.scattering.core.design.component.geometry.construct.ray;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.Construct;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 
@@ -10,6 +11,8 @@ public interface FRay extends Construct<FRay> {
     FRay set(FPairPos3D position);
 
     FPairPos3D toFPairPos3D();
+
+    FVector toFVector(double length);
 
     //--------------------------------------------------
 

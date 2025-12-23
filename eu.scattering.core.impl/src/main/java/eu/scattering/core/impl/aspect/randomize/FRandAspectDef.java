@@ -1,6 +1,9 @@
 package eu.scattering.core.impl.aspect.randomize;
 
-import eu.scattering.core.design.component.geometry.GeometryFactory;
+import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
@@ -8,8 +11,6 @@ import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
-import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.transfer.primitive.*;
 
 import java.util.ArrayList;
@@ -19,15 +20,15 @@ import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FRandAspectDef implements FRandAspect {
     private final FRandGenerator core;
-    private final GeometryFactory factory;
+    private final ScatFactory factory;
 
-    private FRandAspectDef(FRandGenerator core, GeometryFactory factory) {
+    private FRandAspectDef(FRandGenerator core, ScatFactory factory) {
 
         this.core = core;
         this.factory = factory;
     }
 
-    public static FRandAspect create(FRandGenerator core, GeometryFactory factory) {
+    public static FRandAspect create(FRandGenerator core, ScatFactory factory) {
 
         return new FRandAspectDef(core, factory);
     }
@@ -544,20 +545,100 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public boolean project(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
-        FRay ray = factory.getFRay();
+    public double project(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
+        FPoint base = factory.getFPoint();
+        FPoint head = factory.getFPoint();
+        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
 
         int iterations = 0;
 
         while (iterations++ <= corrections) {
-            ray.getRefOrigin()
-                    .setBase(core.nextDoubleOnSphere(10 * range.getRadius()))
-                    .setHead(core.nextDoubleInSphere(range.getRadius()))
-                    .translate(range.getCenter());
+            base.applyStateFrom(core.nextDoubleOnSphere(10 * range.getRadius()));
+            head.set(core.nextDoubleInCircle(range.getRadius()), 0);
 
-            boolean isPositioned = in.project(field, ray);
+            factory.getRotAspect().setRgAngle(head, base, Math.PI * 0.5);
 
-            if (isPositioned) {
+            ray.getRefOrigin().translate(range.getCenter());
+
+            double distance = in.project(field, ray);
+
+            if (distance >= 0) {
+                return distance;
+            }
+        }
+
+        return -1;
+    }
+
+    @Override
+    public double project2D(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
+        FPoint base = factory.getFPoint();
+        FPoint head = factory.getFPoint();
+        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            double radius = range.getRadius();
+
+            base.set(core.nextDoubleOnCircle(10 * radius), 0);
+            head.set(core.nextDouble(-radius, radius), 0, 0);
+
+            factory.getRotAspect().setRgAngle(head, base, Math.PI * 0.5);
+
+            ray.getRefOrigin().translate(range.getCenter());
+
+            double distance = in.project(field, ray);
+
+            if (distance >= 0) {
+                return distance;
+            }
+        }
+
+        return -1;
+    }
+
+    @Override
+    public boolean project(FAggregate ref, FAggregate arg) {
+
+        return project(ref, arg, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean project(FAggregate ref, FAggregate arg, int corrections) {
+        FPoint base = factory.getFPoint();
+        FPoint head = factory.getFPoint();
+        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
+
+        int iterations = 0;
+
+        while (iterations++ <= corrections) {
+            FPoint centerRef = factory.getFPoint();
+            ref.getSpatialCenter(centerRef);
+            ref.setCenter(centerRef);
+
+            FPoint centerArg = factory.getFPoint();
+            arg.getSpatialCenter(centerArg);
+            arg.setCenter(centerArg);
+
+            double radiusRef = ref.getRadiusFromOrigin();
+            double radiusArg = arg.getRadiusFromOrigin();
+
+            base.applyStateFrom(core.nextDoubleOnSphere(10 * (radiusRef + radiusArg)));
+
+            FPoint targetRef = factory.getFPoint();
+            targetRef.set(core.nextDoubleInCircle(radiusRef), 0);
+            factory.getRotAspect().setRgAngle(targetRef, base, 0.5 * Math.PI);
+
+            FPoint targetArg = factory.getFPoint();
+            targetArg.set(core.nextDoubleInCircle(radiusArg), 0);
+            factory.getRotAspect().setRgAngle(targetArg, base, 0.5 * Math.PI);
+
+            ref.getRefParticles().translate(base.toFPos3D());
+
+            double shift = ref.project(arg, ray);
+
+            if (shift >= 0) {
                 return true;
             }
         }
@@ -566,23 +647,46 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public boolean project2D(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
-        FRay ray = factory.getFRay();
+    public boolean project2D(FAggregate ref, FAggregate arg) {
+
+        return project2D(ref, arg, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean project2D(FAggregate ref, FAggregate arg, int corrections) {
+        FPoint base = factory.getFPoint();
+        FPoint head = factory.getFPoint();
+        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
 
         int iterations = 0;
 
         while (iterations++ <= corrections) {
-            FPos2D posBase = core.nextDoubleOnCircle(10 * range.getRadius());
-            FPos2D posHead = core.nextDoubleInCircle(range.getRadius());
+            FPoint centerRef = factory.getFPoint();
+            ref.getSpatialCenter(centerRef);
+            ref.setCenter(centerRef);
 
-            ray.getRefOrigin()
-                    .setBase(posBase.getD0(), posBase.getD1(), 0)
-                    .setHead(posHead.getD0(), posHead.getD1(), 0)
-                    .translate(range.getCenter());
+            FPoint centerArg = factory.getFPoint();
+            arg.getSpatialCenter(centerArg);
+            arg.setCenter(centerArg);
 
-            boolean isPositioned = in.project(field, ray);
+            double radiusRef = ref.getRadiusFromOrigin();
+            double radiusArg = arg.getRadiusFromOrigin();
 
-            if (isPositioned) {
+            base.set(core.nextDoubleOnCircle(10 * (radiusRef + radiusArg)), 0);
+
+            FPoint targetRef = factory.getFPoint();
+            targetRef.set(core.nextDouble(-radiusRef, radiusRef), 0, 0);
+            factory.getRotAspect().setRgAngle(targetRef, base, 0.5 * Math.PI);
+
+            FPoint targetArg = factory.getFPoint();
+            targetArg.set(core.nextDouble(-radiusArg, radiusArg), 0, 0);
+            factory.getRotAspect().setRgAngle(targetArg, base, 0.5 * Math.PI);
+
+            ref.getRefParticles().translate(base.toFPos3D());
+
+            double shift = ref.project(arg, ray);
+
+            if (shift >= 0) {
                 return true;
             }
         }

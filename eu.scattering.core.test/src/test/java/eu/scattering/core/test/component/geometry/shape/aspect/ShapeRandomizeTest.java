@@ -274,11 +274,11 @@ public class ShapeRandomizeTest {
 
         fAssembly.translate(offset);
 
-        boolean results = factory.getRandAspect()
+        double distance = factory.getRandAspect()
                 .project(fSphereRef, factory.getFSphere(offset, 10), fAssembly, 100);
 
         Assertions.assertAll("Validate position",
-                () -> assertTrue(results),
+                () -> assertTrue(distance >= 0),
                 () -> assertTrue(fSphereRef.touches(fAssembly) >= 1),
                 () -> assertEquals(0, fSphereRef.overlaps(fAssembly))
         );

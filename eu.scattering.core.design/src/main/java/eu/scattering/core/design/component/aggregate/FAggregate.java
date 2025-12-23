@@ -1,8 +1,10 @@
 package eu.scattering.core.design.component.aggregate;
 
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.Component;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.physics.material.FMaterial;
@@ -19,7 +21,7 @@ import eu.scattering.core.design.type.RadiusOfGyration;
 
 import java.util.function.BiConsumer;
 
-public interface FAggregate extends Component, Iterable<Shape> {
+public interface FAggregate extends FAggregateModuleInteraction, Component, Iterable<Shape> {
 
     double getSurface();
     double getSurface(double[] layers);
@@ -98,6 +100,12 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
 
+    boolean overlaps(FAggregate arg);
+
+    void merge(FAggregate arg, boolean remove);
+
+    void index();
+
     //--------------------------------------------------
 
     FAggregate copy();
@@ -107,19 +115,22 @@ public interface FAggregate extends Component, Iterable<Shape> {
 
     //--------------------------------------------------
 
-    @Modificator
-    FAssembly<Shape> getRefParticles();
-
     FAggregate addFBuffer(int capacity);
     FAggregate addFMaterial();
 
-    @Modificator
-    FAggregate setRefFMaterial(FMaterial refMaterial);
-    @Modificator
-    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
+    @Fragment
+    boolean overlapsWithShift(FAggregate arg, FVector shift);
 
     @Modificator
-    FMaterial getRefFMaterial();
+    FAssembly<Shape> getRefParticles();
+
+    @Modificator
+    FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
+    @Modificator
+    FAggregate setRefFMaterial(FMaterial refMaterial);
+
     @Modificator
     FBuffer<FBufferData> getRefFBuffer();
+    @Modificator
+    FMaterial getRefFMaterial();
 }

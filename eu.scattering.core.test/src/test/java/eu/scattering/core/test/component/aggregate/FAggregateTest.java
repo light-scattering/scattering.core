@@ -3,6 +3,7 @@ package eu.scattering.core.test.component.aggregate;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -2223,6 +2224,192 @@ public class FAggregateTest {
             fAggregate.setParticleDelta(1);
 
             fAggregate.getRefParticles().forEach(e -> assertEquals(1, e.getDelta()));
+        }
+
+        @Test
+        @DisplayName("Overlaps")
+        void overlaps() {
+            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(2.5, 0.5, 0.5, 1);
+            Shape shapeB2 = factory.getFSphere(4.5, 0.5, 0.5, 1);
+            Shape shapeB3 = factory.getFSphere(6.5, 0.5, 0.5, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertTrue(aggregateA.overlaps(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Overlaps (fail)")
+        void overlapsFail() {
+            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(4, -2, 0, 1);
+            Shape shapeB2 = factory.getFSphere(4, 0, 0, 1);
+            Shape shapeB3 = factory.getFSphere(4, 2, 0, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertFalse(aggregateA.overlaps(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Overlaps with shift")
+        void overlapsWithShift() {
+            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(2.5, 4.5, -3.5, 1);
+            Shape shapeB2 = factory.getFSphere(4.5, 4.5, -3.5, 1);
+            Shape shapeB3 = factory.getFSphere(6.5, 4.5, -3.5, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertFalse(aggregateA.overlaps(aggregateB));
+
+            assertFalse(aggregateA.overlapsWithShift(aggregateB, factory.getFVector()));
+            assertTrue(aggregateA.overlapsWithShift(aggregateB, factory.getFVector(0, 4, -4)));
+        }
+
+        @Test
+        @DisplayName("Project A")
+        void projectA() {
+            Shape shapeA1 = factory.getFSphere(5, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(5, 2, 0, 1);
+            Shape shapeA3 = factory.getFSphere(5, 4, 0, 1);
+            Shape shapeA4 = factory.getFSphere(7, 2, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3, shapeA4));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(0, 2, 0, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
+
+            aggregateA.project(aggregateB, dir);
+
+            aggregateA.merge(aggregateB, true);
+
+            assertTrue(aggregateA.isCompact());
+        }
+
+        @Test
+        @DisplayName("Project B")
+        void projectB() {
+            Shape shapeA1 = factory.getFSphere(3, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(5, 2, 0, 1);
+            Shape shapeA3 = factory.getFSphere(3, 4, 0, 1);
+            Shape shapeA4 = factory.getFSphere(7, 2, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3, shapeA4));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(0, 2, 0, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
+
+            aggregateA.project(aggregateB, dir);
+
+            aggregateA.merge(aggregateB, true);
+
+            assertTrue(aggregateA.isCompact());
+        }
+
+        @Test
+        @DisplayName("Project C")
+        void projectC() {
+            Shape shapeA1 = factory.getFSphere(5, 3, 0, 1);
+            Shape shapeA2 = factory.getFSphere(5, 5, 0, 1);
+            Shape shapeA3 = factory.getFSphere(5, 7, 0, 1);
+            Shape shapeA4 = factory.getFSphere(7, 5, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3, shapeA4));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(0, 2, 0, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
+
+            aggregateA.project(aggregateB, dir);
+
+            aggregateA.merge(aggregateB, true);
+
+            assertTrue(aggregateA.isCompact());
+        }
+
+        @Test
+        @DisplayName("Project, composite A")
+        void projectCompositeA() {
+            FAggregate aggregateA = factory.getFAggregateGeoFullSphere(3);
+            FAggregate aggregateB = factory.getFAggregateGeo2d(5, 5);
+
+            aggregateA.setParticleEpsilon(0.25);
+
+            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+
+            FPoint centerA = factory.getFPoint();
+            FPoint centerB = factory.getFPoint();
+
+            aggregateA.getSpatialCenter(centerA);
+            aggregateB.getSpatialCenter(centerB);
+
+            FRay dir = factory.getRefFRay(factory.getRefFVector(centerA, centerB));
+
+            aggregateA.project(aggregateB, dir);
+
+            aggregateA.merge(aggregateB, true);
+
+            assertTrue(aggregateA.isCompact());
+        }
+
+        @Test
+        @DisplayName("Project, composite B")
+        void projectCompositeB() {
+            FAggregate aggregateA = factory.getFAggregateGeo3d(2, 3, 4);
+            FAggregate aggregateB = factory.getFAggregateGeo3d(3, 4, 5);
+
+            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+
+            FPoint centerA = factory.getFPoint();
+            FPoint centerB = factory.getFPoint();
+
+            aggregateA.getSpatialCenter(centerA);
+            aggregateB.getSpatialCenter(centerB);
+
+            FRay dir = factory.getRefFRay(factory.getRefFVector(centerA, centerB));
+
+            aggregateA.project(aggregateB, dir);
+
+            aggregateA.merge(aggregateB, true);
+
+            assertTrue(aggregateA.isCompact());
         }
     }
 
