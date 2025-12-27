@@ -2,7 +2,6 @@ package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.base.point.FPointProducer;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -1510,7 +1509,7 @@ public class FAggregateTest {
 
             FPoint centerAfter = factory.getFPoint();
 
-            fAggregate.setCenter(centerBefore);
+            fAggregate.resetCenter(centerBefore);
             fAggregate.getMassCenter(centerAfter);
 
             assertTrue(centerAfter.isSimilar(0, 0, 0));
@@ -1532,7 +1531,7 @@ public class FAggregateTest {
 
             factory.getFPoint();
 
-            fAggregate.setCenter(centerBefore);
+            fAggregate.resetCenter(centerBefore);
 
             FPos3D centerAfter = fAggregate.getMassCenter();
 
@@ -1562,7 +1561,7 @@ public class FAggregateTest {
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
 
-            fAggregate.setCenter(massCenter);
+            fAggregate.resetCenter(massCenter);
             fAggregate.getMassCenter(massCenter);
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
@@ -1597,7 +1596,7 @@ public class FAggregateTest {
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
 
-            fAggregate.setCenter(massCenter);
+            fAggregate.resetCenter(massCenter);
             fAggregate.getMassCenter(massCenter);
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
@@ -1632,7 +1631,7 @@ public class FAggregateTest {
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
 
-            fAggregate.setCenter(massCenter);
+            fAggregate.resetCenter(massCenter);
             fAggregate.getMassCenter(massCenter);
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
@@ -2287,6 +2286,33 @@ public class FAggregateTest {
 
             assertFalse(aggregateA.overlapsWithShift(aggregateB, factory.getFVector()));
             assertTrue(aggregateA.overlapsWithShift(aggregateB, factory.getFVector(0, 4, -4)));
+        }
+
+        @Test
+        @DisplayName("Overlaps with rotation")
+        void overlapsWithRotation() {
+            Shape shapeA1 = factory.getFSphere(-6, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(-4, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(-2, 0, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB2 = factory.getFSphere(4, 0, 0, 1);
+            Shape shapeB3 = factory.getFSphere(6, 0, 0, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertFalse(aggregateA.overlaps(aggregateB));
+
+            assertFalse(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 1, 0), 0));
+            assertFalse(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 0, 1), 0));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 1, 0), Math.PI));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 0, 1), Math.PI));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(-2, 0, 0, -2, 1, 0), Math.PI));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(-2, 0, 0, -2, 0, 1), Math.PI));
         }
 
         @Test

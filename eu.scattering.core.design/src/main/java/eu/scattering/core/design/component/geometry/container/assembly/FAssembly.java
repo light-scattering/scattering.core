@@ -2,6 +2,7 @@ package eu.scattering.core.design.component.geometry.container.assembly;
 
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.container.Container;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
@@ -39,7 +40,12 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     <U extends T> FAssembly<T> mutate(Class<U> type, Consumer<U> action);
 
     FAssembly<T> translate(double x, double y, double z);
+//    FAssembly<T> translate(FPoint offset);
     FAssembly<T> translate(FPos3D offset);
+
+//    FAssembly<T> translate(double bX, double bY, double bZ, double hX, double hY, double hZ);
+//    FAssembly<T> translate(FVector offset);
+//    FAssembly<T> translate(FPairPos3D offset);
 
     FAssembly<T> scale(double factor);
 

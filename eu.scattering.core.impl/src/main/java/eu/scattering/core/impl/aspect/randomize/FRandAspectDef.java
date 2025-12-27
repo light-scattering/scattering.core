@@ -6,6 +6,7 @@ import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.construct.segment.FSegment;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -598,6 +599,198 @@ public class FRandAspectDef implements FRandAspect {
         return -1;
     }
 
+    //--------------------------------------------------
+
+    @Override
+    public void moveMassCenter(FAggregate ref, FAggregate arg, double distance) {
+        FPos3D position = core.nextDoubleOnSphere(distance);
+
+        FPoint destination = factory.getFPoint();
+        ref.getMassCenter(destination);
+        destination.add(position);
+
+        FPoint centerArg = factory.getFPoint();
+        arg.getMassCenter(centerArg);
+        arg.resetCenter(centerArg);
+
+        arg.getRefParticles().translate(destination.toFPos3D());
+    }
+
+    @Override
+    public void moveMassCenter2D(FAggregate ref, FAggregate arg, double distance) {
+        FPos2D position = core.nextDoubleOnCircle(distance);
+
+        FPoint destination = factory.getFPoint();
+        ref.getMassCenter(destination);
+        destination.add(position.getD0(), position.getD1(), 0);
+
+        FPoint centerArg = factory.getFPoint();
+        arg.getMassCenter(centerArg);
+        arg.resetCenter(centerArg);
+
+        arg.getRefParticles().translate(destination.toFPos3D());
+    }
+
+    @Override
+    public boolean rotate(FAggregate ref, FAggregate arg) {
+
+        return rotate(ref, arg, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean rotate(FAggregate ref, FAggregate arg, int corrections) {
+
+        return rotate(ref, arg, corrections, true);
+    }
+
+    @Override
+    public boolean rotate2D(FAggregate ref, FAggregate arg) {
+
+        return rotate2D(ref, arg, Integer.MAX_VALUE);
+    }
+
+    @Override
+    public boolean rotate2D(FAggregate ref, FAggregate arg, int corrections) {
+
+        return rotate(ref, arg, corrections, false);
+    }
+
+    private boolean rotate(FAggregate ref, FAggregate arg, int corrections, boolean is3D) {
+        FPoint centerRef = factory.getFPoint();
+        FPoint centerArg = factory.getFPoint();
+
+        ref.getMassCenter(centerRef);
+        arg.getMassCenter(centerArg);
+
+        double distance = centerRef.getDistance(centerArg);
+
+        List<Shape> candidatesRef = getRefCandidates(ref, arg, centerRef, centerArg, distance);
+        List<Shape> candidatesArg = getArgCandidates(ref, arg, centerRef, centerArg, distance);
+
+        double minRadius = arg.getParticleRadius().min();
+
+        for (int i = 0 ; i < corrections ; i++) {
+            FLine axis = factory.getFLine();
+            Shape particleRef = factory.getFSphere();
+            Shape particleArg = factory.getFSphere();
+            Shape particleLoc = factory.getFSphere(minRadius);
+
+            boolean progress;
+
+            progress = setRefPosition(ref, candidatesRef, particleRef, particleLoc, is3D);
+
+            if (!progress) {
+                continue;
+            }
+
+            progress = setArgCorrectionRotation(ref, candidatesArg, particleRef, particleArg, particleLoc);
+
+            if (!progress) {
+                continue;
+            }
+
+            progress = validateRotation(centerRef, centerArg, particleArg, particleLoc, distance);
+
+            if (!progress) {
+                continue;
+            }
+
+            double angleRef = getRefRotAngle(axis, centerRef, centerArg, particleArg, particleLoc, distance);
+            factory.getRotAspect().rotRgAround(ref.getRefParticles(), axis, angleRef);
+            factory.getRotAspect().rotRgAround(particleLoc, axis, angleRef);
+
+            double angleArg = getArgRotAngle(axis, centerArg, particleArg, particleLoc);
+            factory.getRotAspect().rotRgAround(arg.getRefParticles(), axis, angleArg);
+
+            if (ref.overlaps(arg)) {
+                continue;
+            }
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    List<Shape> getRefCandidates(FAggregate ref, FAggregate arg, FPoint centerRef, FPoint centerArg, double distance) {
+        List<Shape> candidates = new ArrayList<>(ref.size());
+
+        double radiusArg = arg.getRadius(centerArg);
+        double offset = distance - radiusArg;
+
+        for (Shape particle : ref) {
+            if (particle.getDistCenter(centerRef) > offset - particle.getRadius()) {
+                if (!particle.getRefCenter().isSimilar(centerRef)) {
+                    candidates.add(particle);
+                }
+            }
+        }
+
+        if (candidates.isEmpty()) {
+            throw new IllegalStateException("The aggregate cannot be built");
+        }
+
+        factory.getFRand().shuffle(candidates);
+
+        return candidates;
+    }
+
+    List<Shape> getArgCandidates(FAggregate ref, FAggregate arg, FPoint centerRef, FPoint centerArg, double distance) {
+        List<Shape> candidates = new ArrayList<>(arg.size());
+
+        double radiusRef = ref.getRadius(centerRef);
+        double offset = distance - radiusRef;
+
+        for (Shape particle : arg) {
+            if (particle.getDistCenter(centerArg) > offset - particle.getRadius()) {
+                if (!particle.getRefCenter().isSimilar(centerArg)) {
+                    candidates.add(particle);
+                }
+            }
+        }
+
+        if (candidates.isEmpty()) {
+            throw new IllegalStateException("The aggregate cannot be built");
+        }
+
+        factory.getFRand().shuffle(candidates);
+
+        return candidates;
+    }
+
+    private boolean validateRotation(FPoint centerRef, FPoint centerArg, Shape particleArg, Shape particleLoc, double distance) {
+        double sideA = centerRef.getDistance(particleLoc.getRefCenter());
+        double sideB = centerArg.getDistance(particleArg.getRefCenter());
+
+        return factory.getFTrigHelper().isValid(sideA, sideB, distance);
+    }
+
+    private double getRefRotAngle(FLine axis, FPoint centerRef, FPoint centerArg, Shape particleArg, Shape particleLoc, double distance) {
+        double sideA = centerRef.getDistance(particleLoc.getRefCenter());
+        double sideB = centerArg.getDistance(particleArg.getRefCenter());
+
+        axis.getRefOrigin().set(centerRef, particleLoc.getRefCenter());
+
+        double angleFinal = factory.getFTrigHelper().getAngle(sideA, distance, sideB);
+        double angleCurrent = axis.getRefOrigin().getAngle(centerRef, centerArg);
+
+        axis.getRefOrigin().setCrossProduct(centerRef, centerArg);
+
+        return angleFinal - angleCurrent;
+    }
+
+    private double getArgRotAngle(FLine axis, FPoint centerArg, Shape particleArg, Shape particleLoc) {
+
+        axis.getRefOrigin().set(centerArg, particleArg.getRefCenter());
+
+        double angleCurrent = axis.getRefOrigin().getAngle(centerArg, particleLoc.getRefCenter());
+
+        axis.getRefOrigin().setCrossProduct(centerArg, particleLoc.getRefCenter());
+
+        return -angleCurrent;
+    }
+
     @Override
     public boolean attach(FAggregate ref, FAggregate arg) {
 
@@ -640,7 +833,7 @@ public class FRandAspectDef implements FRandAspect {
                 continue;
             }
 
-            progress = setArgPosition(ref, arg, particleRef, particleArg, particleLoc);
+            progress = setArgCorrectionTranslation(ref, arg, particleRef, particleArg, particleLoc);
 
             if (!progress) {
                 continue;
@@ -695,7 +888,29 @@ public class FRandAspectDef implements FRandAspect {
         }
     }
 
-    private boolean setArgPosition(FAggregate ref, FAggregate arg, Shape particleRef, Shape particleArg, Shape particleLoc) {
+    private boolean setArgCorrectionRotation(FAggregate ref, List<Shape> particles, Shape particleRef, Shape particleArg, Shape particleLoc) {
+        FPos3D initialParticleLoc = particleLoc.getRefCenter().toFPos3D();
+
+        for (Shape candidate : particles) {
+            particleLoc.setRadius(candidate.getRadius());
+
+            particleLoc.setCenter(initialParticleLoc);
+            particleLoc.attachLinear(particleRef);
+
+            if (particleLoc.overlaps(ref.getRefParticles().asList()) > 0) {
+                continue;
+            }
+
+            particleArg.setRadius(candidate.getRadius());
+            particleArg.setCenter(candidate.getRefCenter());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean setArgCorrectionTranslation(FAggregate ref, FAggregate arg, Shape particleRef, Shape particleArg, Shape particleLoc) {
         FPos3D initialParticleLoc = particleLoc.getRefCenter().toFPos3D();
 
         FVector shift = factory.getFVector();
@@ -751,44 +966,8 @@ public class FRandAspectDef implements FRandAspect {
 
     @Override
     public boolean project(FAggregate ref, FAggregate arg, int corrections) {
-        FPoint base = factory.getFPoint();
-        FPoint head = factory.getFPoint();
-        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
 
-        int iterations = 0;
-
-        while (iterations++ <= corrections) {
-            FPoint centerRef = factory.getFPoint();
-            ref.getSpatialCenter(centerRef);
-            ref.setCenter(centerRef);
-
-            FPoint centerArg = factory.getFPoint();
-            arg.getSpatialCenter(centerArg);
-            arg.setCenter(centerArg);
-
-            double radiusRef = ref.getRadiusFromOrigin();
-            double radiusArg = arg.getRadiusFromOrigin();
-
-            base.applyStateFrom(core.nextDoubleOnSphere(10 * (radiusRef + radiusArg)));
-
-            FPoint targetRef = factory.getFPoint();
-            targetRef.set(core.nextDoubleInCircle(radiusRef), 0);
-            factory.getRotAspect().setRgAngle(targetRef, base, 0.5 * Math.PI);
-
-            FPoint targetArg = factory.getFPoint();
-            targetArg.set(core.nextDoubleInCircle(radiusArg), 0);
-            factory.getRotAspect().setRgAngle(targetArg, base, 0.5 * Math.PI);
-
-            ref.getRefParticles().translate(base.toFPos3D());
-
-            double shift = ref.project(arg, ray);
-
-            if (shift >= 0) {
-                return true;
-            }
-        }
-
-        return false;
+        return project(ref, arg, corrections, true);
     }
 
     @Override
@@ -799,44 +978,8 @@ public class FRandAspectDef implements FRandAspect {
 
     @Override
     public boolean project2D(FAggregate ref, FAggregate arg, int corrections) {
-        FPoint base = factory.getFPoint();
-        FPoint head = factory.getFPoint();
-        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
 
-        int iterations = 0;
-
-        while (iterations++ <= corrections) {
-            FPoint centerRef = factory.getFPoint();
-            ref.getSpatialCenter(centerRef);
-            ref.setCenter(centerRef);
-
-            FPoint centerArg = factory.getFPoint();
-            arg.getSpatialCenter(centerArg);
-            arg.setCenter(centerArg);
-
-            double radiusRef = ref.getRadiusFromOrigin();
-            double radiusArg = arg.getRadiusFromOrigin();
-
-            base.set(core.nextDoubleOnCircle(10 * (radiusRef + radiusArg)), 0);
-
-            FPoint targetRef = factory.getFPoint();
-            targetRef.set(core.nextDouble(-radiusRef, radiusRef), 0, 0);
-            factory.getRotAspect().setRgAngle(targetRef, base, 0.5 * Math.PI);
-
-            FPoint targetArg = factory.getFPoint();
-            targetArg.set(core.nextDouble(-radiusArg, radiusArg), 0, 0);
-            factory.getRotAspect().setRgAngle(targetArg, base, 0.5 * Math.PI);
-
-            ref.getRefParticles().translate(base.toFPos3D());
-
-            double shift = ref.project(arg, ray);
-
-            if (shift >= 0) {
-                return true;
-            }
-        }
-
-        return false;
+        return project(ref, arg, corrections, false);
     }
 
     private boolean project(FAggregate ref, FAggregate arg, int corrections, boolean is3D) {
@@ -849,11 +992,11 @@ public class FRandAspectDef implements FRandAspect {
         while (iterations++ <= corrections) {
             FPoint centerRef = factory.getFPoint();
             ref.getSpatialCenter(centerRef);
-            ref.setCenter(centerRef);
+            ref.resetCenter(centerRef);
 
             FPoint centerArg = factory.getFPoint();
             arg.getSpatialCenter(centerArg);
-            arg.setCenter(centerArg);
+            arg.resetCenter(centerArg);
 
             double radiusRef = ref.getRadiusFromOrigin();
             double radiusArg = arg.getRadiusFromOrigin();

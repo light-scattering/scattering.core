@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
@@ -214,13 +215,13 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void setCenter(FPoint center) {
+    public void resetCenter(FPoint center) {
 
         this.moduleCenter.positionCenter(center);
     }
 
     @Override
-    public void setCenter(FPos3D center) {
+    public void resetCenter(FPos3D center) {
 
         this.moduleCenter.positionCenter(center);
     }
@@ -425,6 +426,26 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public boolean overlapsWithRotation(FAggregate arg, FVector axis, double angle) {
+        FSphere dummy = supplyFSphere();
+
+        for (Shape shapeRef : getRefParticles()) {
+            dummy.setRadius(shapeRef.getRadius());
+            dummy.setCenter(shapeRef.getRefCenter());
+
+            factory.getRotAspect().rotRgAround(dummy.getRefCenter(), axis, angle);
+
+            for (Shape shapeArg : arg.getRefParticles()) {
+                if (dummy.overlaps(shapeArg)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void merge(FAggregate arg, boolean remove) {
 
         for (Shape shape : arg.getRefParticles()) {
@@ -460,6 +481,11 @@ public class FAggregateDef implements FAggregate {
     private FPoint supplyFPoint() {
 
         return factory.getFPoint();
+    }
+
+    private FSphere supplyFSphere() {
+
+        return factory.getFSphere();
     }
 
     //--------------------------------------------------

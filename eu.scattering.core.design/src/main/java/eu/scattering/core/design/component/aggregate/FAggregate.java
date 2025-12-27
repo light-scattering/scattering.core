@@ -49,7 +49,7 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     //--------------------------------------------------
 
-    void getMassCenter(FPoint in);
+    void getMassCenter(FPoint in); // Returns FPoint.
     FPos3D getMassCenter();
 
     void getSpatialCenter(FPoint in);
@@ -58,8 +58,19 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     void getSphericalCenter(FPoint in);
     FPos3D getSphericalCenter();
 
-    void setCenter(FPoint center);
-    void setCenter(FPos3D center);
+    void resetCenter(FPoint center);
+    void resetCenter(FPos3D center);
+
+//    setCenter(FPoint center);
+//    setCenter(FPos3D center);
+
+//    void translate(double x, double y, double z);
+//    void translate(FPoint offset);
+//    void translate(FPos3D offset);
+
+//    void translate(double bX, double bY, double bZ, double hX, double hY, double hZ);
+//    void translate(FVector offset);
+//    void translate(FPairPos3D offset);
 
     //--------------------------------------------------
 
@@ -120,6 +131,8 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     @Fragment
     boolean overlapsWithShift(FAggregate arg, FVector shift);
+    @Fragment
+    boolean overlapsWithRotation(FAggregate arg, FVector axis, double degree);
 
     @Modificator
     FAssembly<Shape> getRefParticles();
