@@ -38,7 +38,7 @@ public interface FPointFactory {
 
     default FPoint getFPoint(FPos3D position) {
 
-        return getFPoint().applyStateFrom(position);
+        return getFPoint().set(position);
     }
 
     // -------------------------------------------------------------------------------------------------

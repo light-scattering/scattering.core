@@ -66,7 +66,7 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withInRange(FPairPos3D range, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(rndGenerator.nextDouble3D(range));
+                factory.getFPoint().set(rndGenerator.nextDouble3D(range));
 
         withCustomRule(function, weight);
 
@@ -76,7 +76,7 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withInSphere(double radius, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(rndGenerator.nextDoubleInSphere(radius));
+                factory.getFPoint().set(rndGenerator.nextDoubleInSphere(radius));
 
         withCustomRule(function, weight);
 
@@ -86,7 +86,7 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withInShell(double radiusMin, double radiusMax, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(rndGenerator.nextDoubleInShell(radiusMin, radiusMax));
+                factory.getFPoint().set(rndGenerator.nextDoubleInShell(radiusMin, radiusMax));
 
         withCustomRule(function, weight);
 
@@ -96,7 +96,7 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withOnSphere(double radius, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(rndGenerator.nextDoubleOnSphere(radius));
+                factory.getFPoint().set(rndGenerator.nextDoubleOnSphere(radius));
 
         withCustomRule(function, weight);
 
@@ -106,7 +106,7 @@ public class FPointProducerDef implements FPointProducer {
     @Override
     public FPointProducer withDist(FDist3D dist, int weight) {
         Function<FPointFactory, FPoint> function = (factory) ->
-                factory.getFPoint().applyStateFrom(dist.produce());
+                factory.getFPoint().set(dist.produce());
 
         withCustomRule(function, weight);
 

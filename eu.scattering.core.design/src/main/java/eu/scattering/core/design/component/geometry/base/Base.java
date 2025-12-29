@@ -9,10 +9,10 @@ import org.json.JSONObject;
 
 public interface Base<T> extends Geometry {
 
+    T set(T arg);
     T set(JSONObject json);
 
     T applyStateTo(T in);
-    T applyStateFrom(T arg);
 
     boolean isExact(T arg);
     boolean isSimilar(T arg);

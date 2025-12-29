@@ -70,7 +70,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine set(FPairPos3D position) {
 
-        getRefOrigin().applyStateFrom(position);
+        getRefOrigin().set(position);
 
         return this;
     }
@@ -86,7 +86,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
     @Override
     public FLine applyStateFrom(Construct<?> arg) {
 
-        getRefOrigin().applyStateFrom(arg.getRefOrigin());
+        getRefOrigin().set(arg.getRefOrigin());
 
         return this;
     }
@@ -116,7 +116,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
 
         FLine element = supplyFLine();
 
-        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
+        element.getRefOrigin().set(getRefOrigin().copy());
 
         return element;
     }
@@ -695,7 +695,7 @@ public class FLineDef extends ConstructPresetDef<FLine> implements FLine {
         double headY = memoY - origin.getBaseY();
         double headZ = memoZ - origin.getBaseZ();
 
-        in.applyStateFrom(origin.getRefHead());
+        in.set(origin.getRefHead());
 
         in.subXYZ(origin.getRefBase());
         in.normalize();

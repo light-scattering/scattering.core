@@ -8,10 +8,10 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphereHelper;
-import eu.scattering.core.design.transfer.complex.FBufferData;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.impl.component.geometry.shape.preset.ShapePresetDef;
 import org.json.JSONObject;
 
@@ -122,7 +122,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     @Override
     public FSphere applyStateFrom(FSphere arg) {
 
-        getRefCenter().applyStateFrom(arg.getRefCenter());
+        getRefCenter().set(arg.getRefCenter());
         setRadius(arg.getRadius());
 
         getCoatWidth().clear();
@@ -397,7 +397,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double project(Shape target, FRay ray) {
+    public double projectWithOrigin(Shape target, FRay ray) {
         FPos3D projection = ray.project(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
         if (projection == null) {
@@ -422,15 +422,15 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double project(Iterable<? extends Shape> field, FRay ray) {
+    public double projectWithOrigin(Iterable<? extends Shape> field, FRay ray) {
         List<Shape> candidates = new ArrayList<>();
 
-        getCollisionListLinear(candidates, field, ray);
+        getCollisionListWithOriginLinear(candidates, field, ray);
 
         sortByDistCenter(candidates);
 
         for (Shape candidate : candidates) {
-            double shift = project(candidate, ray);
+            double shift = projectWithOrigin(candidate, ray);
 
             if (shift >= 0) {
                 if (overlaps(field) <= 0) {
@@ -443,14 +443,14 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double projectDryRun(Shape target, FRay ray) {
+    public double projectWithOriginDryRun(Shape target, FRay ray) {
         FPos3D projection = ray.project(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
         if (projection == null) {
             return -1;
         }
 
-        if (target.getDistCenter(projection) > this.getRadius() + target.getRadius()) {
+        if (target.getDistCenter(projection) >= this.getRadius() + target.getRadius()) {
             return -1;
         }
 
@@ -464,18 +464,29 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double projectDryRun(Iterable<? extends Shape> field, FRay ray) {
+    public double projectWithOriginDryRun(Iterable<? extends Shape> field, FRay ray) {
         List<Shape> candidates = new ArrayList<>();
 
-        getCollisionListLinear(candidates, field, ray);
+        getCollisionListWithOriginLinear(candidates, field, ray);
 
         sortByDistCenter(candidates);
 
+        double memoX, memoY, memoZ;
         for (Shape candidate : candidates) {
-            double shift = projectDryRun(candidate, ray);
+            double shift = projectWithOriginDryRun(candidate, ray);
 
             if (shift >= 0) {
-                if (overlaps(field) <= 0) {
+                memoX = getCenterX();
+                memoY = getCenterY();
+                memoZ = getCenterZ();
+
+                ray.shiftForward(this, shift);
+
+                boolean stop = overlaps(field) <= 0;
+
+                setCenter(memoX, memoY, memoZ);
+
+                if (stop) {
                     return shift;
                 }
             }
@@ -485,7 +496,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double project(Shape target, FRay ray, double limit) {
+    public double projectWithOrigin(Shape target, FRay ray, double limit) {
         FPos3D projection = ray.project(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
         if (projection == null) {
@@ -514,15 +525,15 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double project(Iterable<? extends Shape> field, FRay ray, double limit) {
+    public double projectWithOrigin(Iterable<? extends Shape> field, FRay ray, double limit) {
         List<Shape> candidates = new ArrayList<>();
 
-        getCollisionListLinear(candidates, field, ray);
+        getCollisionListWithOriginLinear(candidates, field, ray);
 
         sortByDistCenter(candidates);
 
         for (Shape candidate : candidates) {
-            double shift = project(candidate, ray, limit);
+            double shift = projectWithOrigin(candidate, ray, limit);
 
             if (shift >= 0) {
                 if (overlaps(field) <= 0) {
@@ -535,7 +546,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double projectDryRun(Shape target, FRay ray, double limit) {
+    public double projectWithOriginDryRun(Shape target, FRay ray, double limit) {
         FPos3D projection = ray.project(target.getCenterX(), target.getCenterY(), target.getCenterZ());
 
         if (projection == null) {
@@ -562,15 +573,15 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public double projectDryRun(Iterable<? extends Shape> field, FRay ray, double limit) {
+    public double projectWithOriginDryRun(Iterable<? extends Shape> field, FRay ray, double limit) {
         List<Shape> candidates = new ArrayList<>();
 
-        getCollisionListLinear(candidates, field, ray);
+        getCollisionListWithOriginLinear(candidates, field, ray);
 
         sortByDistCenter(candidates);
 
         for (Shape candidate : candidates) {
-            double shift = projectDryRun(candidate, ray, limit);
+            double shift = projectWithOriginDryRun(candidate, ray, limit);
 
             if (shift >= 0) {
                 if (overlaps(field) <= 0) {
@@ -624,7 +635,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     }
 
     @Override
-    public void getCollisionListLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray) {
+    public void getCollisionListWithOriginLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray) {
         in.clear();
 
         double distProjection, distShape, distRadius;
@@ -638,7 +649,7 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             distProjection = ray.getDistance(shape.getRefCenter());
             distShape = ray.getRefOrigin().getRefBase().getDistance(shape.getRefCenter()) - distRadius;
 
-            if (distProjection >= 0 && distProjection < distRadius && distShape >= 0) {
+            if (distProjection >= 0 && distProjection <= distRadius && distShape >= 0) {
                 in.add(shape);
             }
         }

@@ -68,7 +68,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public FRay set(FPairPos3D position) {
 
-        getRefOrigin().applyStateFrom(position);
+        getRefOrigin().set(position);
 
         return this;
     }
@@ -84,7 +84,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
     @Override
     public FRay applyStateFrom(Construct<?> arg) {
 
-        getRefOrigin().applyStateFrom(arg.getRefOrigin());
+        getRefOrigin().set(arg.getRefOrigin());
 
         return this;
     }
@@ -114,7 +114,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
         FRay element = supplyFRay();
 
-        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
+        element.getRefOrigin().set(getRefOrigin().copy());
 
         return element;
     }
@@ -153,16 +153,8 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
     @Override
     public FVector toFVector(double length) {
-        FVector results = supplyFVector();
-        FPoint base = results.getRefBase();
-        FPoint head = results.getRefHead();
 
-        base.applyStateFrom(getRefOrigin().getRefBase());
-        head.applyStateFrom(getRefOrigin().getRefBase());
-
-        shiftForward(head, length);
-
-        return results;
+        return getRefOrigin().copy().setMagnitude(length);
     }
 
     @Override
@@ -393,7 +385,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
 
         var fPoint = supplyFPoint();
 
-        fPoint.applyStateFrom(getRefOrigin().getRefHead());
+        fPoint.set(getRefOrigin().getRefHead());
         fPoint.subXYZ(getRefOrigin().getRefBase());
 
         var tmp = length / getRefOrigin().getMagnitude();
@@ -568,7 +560,7 @@ public class FRayDef extends ConstructPresetDef<FRay> implements FRay {
         double headY = in.getY() - origin.getBaseY();
         double headZ = in.getZ() - origin.getBaseZ();
 
-        in.applyStateFrom(origin.getRefHead());
+        in.set(origin.getRefHead());
 
         in.subXYZ(origin.getRefBase());
         in.normalize();

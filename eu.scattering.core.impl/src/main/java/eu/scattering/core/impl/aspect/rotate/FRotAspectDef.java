@@ -2,6 +2,7 @@ package eu.scattering.core.impl.aspect.rotate;
 
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
+import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
@@ -850,6 +851,28 @@ public class FRotAspectDef implements FRotAspect {
     //--------------------------------------------------
 
     @Override
+    public void rotQtAround(Geometry in, FVector ref, double angle) {
+
+        if (ref.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        FRotQt qt = core.getRotQt(ref.toFPairPos3D(), angle);
+
+        rot(in, qt);
+    }
+
+    @Override
+    public void rotRgAround(Geometry in, FVector ref, double angle) {
+
+        if (ref.isNearZeroLength()) {
+            throw new IllegalStateException("The origin is a non-directional FVector");
+        }
+
+        in.toFPoints().forEach(p -> rotRgAround(p, ref, angle));
+    }
+
+    @Override
     public void rotQtAround(Geometry in, FLine ref, double angle) {
 
         if (ref.getRefOrigin().isNearZeroLength()) {
@@ -935,6 +958,118 @@ public class FRotAspectDef implements FRotAspect {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    @Override
+    public FAggregate rotRgAround(FAggregate in, double x, double y, double z, double angle) {
+
+        for (FPoint fPoint : in.getRefParticles().toFPoints()) {
+            rotRgAround(fPoint, x, y, z, angle);
+        }
+
+        return in;
+    }
+
+    @Override
+    public FAggregate rotRgAround(FAggregate in, FPoint ref, double angle) {
+
+        return rotRgAround(in, ref.getX(), ref.getY(), ref.getZ(), angle);
+    }
+
+    @Override
+    public FAggregate rotRgAround(FAggregate in, FPos3D ref, double angle) {
+
+        return rotRgAround(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
+    }
+
+    @Override
+    public FAggregate rotRgAround(FAggregate in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
+
+        for (FPoint fPoint : in.getRefParticles().toFPoints()) {
+            rotRgAround(fPoint, bX, bY, bZ, hX, hY, hZ, angle);
+        }
+
+        return in;
+    }
+
+    @Override
+    public FAggregate rotRgAround(FAggregate in, FVector ref, double angle) {
+
+        return rotRgAround(in,
+                ref.getBaseX(), ref.getBaseY(), ref.getBaseZ(),
+                ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
+                angle);
+    }
+
+    @Override
+    public FAggregate rotRgAround(FAggregate in, FPairPos3D ref, double angle) {
+
+        return rotRgAround(in,
+                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
+                angle);
+    }
+
+    @Override
+    public FAggregate rotQtAround(FAggregate in, double x, double y, double z, double angle) {
+
+        for (FPoint fPoint : in.getRefParticles().toFPoints()) {
+            rotQtAround(fPoint, x, y, z, angle);
+        }
+
+        return in;
+    }
+
+    @Override
+    public FAggregate rotQtAround(FAggregate in, FPoint ref, double angle) {
+
+        return rotQtAround(in, ref.getX(), ref.getY(), ref.getZ(), angle);
+    }
+
+    @Override
+    public FAggregate rotQtAround(FAggregate in, FPos3D ref, double angle) {
+
+        return rotQtAround(in, ref.getD0(), ref.getD1(), ref.getD2(), angle);
+    }
+
+    @Override
+    public FAggregate rotQtAround(FAggregate in, double bX, double bY, double bZ, double hX, double hY, double hZ, double angle) {
+
+        for (FPoint fPoint : in.getRefParticles().toFPoints()) {
+            rotQtAround(fPoint, bX, bY, bZ, hX, hY, hZ, angle);
+        }
+
+        return in;
+    }
+
+    @Override
+    public FAggregate rotQtAround(FAggregate in, FVector ref, double angle) {
+
+        return rotQtAround(in,
+                ref.getBaseX(), ref.getBaseY(), ref.getBaseY(),
+                ref.getHeadX(), ref.getHeadY(), ref.getHeadZ(),
+                angle);
+    }
+
+    @Override
+    public FAggregate rotQtAround(FAggregate in, FPairPos3D ref, double angle) {
+
+        return rotQtAround(in,
+                ref.getPosA().getD0(), ref.getPosA().getD1(), ref.getPosA().getD2(),
+                ref.getPosB().getD0(), ref.getPosB().getD1(), ref.getPosB().getD2(),
+                angle);
+    }
+
+    @Override
+    public FAggregate rotQt(FAggregate in, FRotQt qt) {
+
+        for (FPoint fPoint : in.getRefParticles().toFPoints()) {
+            rot(fPoint, qt.getOffset(), qt.getMatrix());
+        }
+
+        return in;
+    }
+
+    //--------------------------------------------------
 
     private boolean isNearZeroLength(double bX, double bY, double bZ, double hX, double hY, double hZ) {
         boolean posX = Math.abs(bX - hX) < EPSILON;

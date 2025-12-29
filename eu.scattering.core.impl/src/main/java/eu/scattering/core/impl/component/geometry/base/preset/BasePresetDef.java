@@ -8,7 +8,7 @@ public abstract class BasePresetDef<T extends Base<T>> implements Base<T> {
     @Override
     public T applyStateTo(T arg) {
 
-        arg.applyStateFrom(self());
+        arg.set(self());
 
         return self();
     }

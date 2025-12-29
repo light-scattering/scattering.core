@@ -68,7 +68,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public FSegment set(FPairPos3D position) {
 
-        getRefOrigin().applyStateFrom(position);
+        getRefOrigin().set(position);
 
         return this;
     }
@@ -84,7 +84,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
     @Override
     public FSegment applyStateFrom(Construct<?> arg) {
 
-        getRefOrigin().applyStateFrom(arg.getRefOrigin());
+        getRefOrigin().set(arg.getRefOrigin());
 
         return this;
     }
@@ -114,7 +114,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
 
         FSegment element = supplyFSegment();
 
-        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
+        element.getRefOrigin().set(getRefOrigin().copy());
 
         return element;
     }
@@ -440,7 +440,7 @@ public class FSegmentDef extends ConstructPresetDef<FSegment> implements FSegmen
         double headY = in.getY() - origin.getBaseY();
         double headZ = in.getZ() - origin.getBaseZ();
 
-        in.applyStateFrom(origin.getRefHead());
+        in.set(origin.getRefHead());
 
         in.subXYZ(origin.getRefBase());
         in.normalize();

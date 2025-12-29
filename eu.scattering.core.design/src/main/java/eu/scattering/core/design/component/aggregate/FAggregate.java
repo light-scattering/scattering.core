@@ -49,13 +49,13 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     //--------------------------------------------------
 
-    void getMassCenter(FPoint in); // Returns FPoint.
+    FPoint getMassCenter(FPoint in);
     FPos3D getMassCenter();
 
-    void getSpatialCenter(FPoint in);
+    FPoint getSpatialCenter(FPoint in);
     FPos3D getSpatialCenter();
 
-    void getSphericalCenter(FPoint in);
+    FPoint getSphericalCenter(FPoint in);
     FPos3D getSphericalCenter();
 
     void resetCenter(FPoint center);

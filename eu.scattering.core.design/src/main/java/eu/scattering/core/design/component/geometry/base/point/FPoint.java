@@ -13,6 +13,7 @@ import java.util.function.Function;
 public interface FPoint extends Base<FPoint> {
 
     FPoint set(double x, double y, double z);
+    FPoint set(FPos3D pos);
 
     FPoint set(FPos2D posXY, double z);
     FPoint set(double x, FPos2D posYZ);
@@ -28,17 +29,19 @@ public interface FPoint extends Base<FPoint> {
 
     //--------------------------------------------------
 
-    FPoint applyStateFrom(FPos3D pos);
-
     FPos3D toFPos3D();
 
     //--------------------------------------------------
 
     FPoint add(double x, double y, double z);
+    FPoint add(FPos2D xy, double z);
+    FPoint add(double x, FPos2D yz);
     FPoint add(FPoint arg);
     FPoint add(FPos3D arg);
 
     FPoint sub(double x, double y, double z);
+    FPoint sub(FPos2D xy, double z);
+    FPoint sub(double x, FPos2D yz);
     FPoint sub(FPoint arg);
     FPoint sub(FPos3D arg);
 

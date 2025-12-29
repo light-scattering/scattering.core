@@ -63,6 +63,11 @@ public class FAggregateDef implements FAggregate {
         return new FAggregateDef(factory, refParticles);
     }
 
+    public static FAggregate create(ScatFactory factory, List<Shape> refParticles) {
+
+        return new FAggregateDef(factory, factory.getFAssembly(refParticles));
+    }
+
     public static FAggregate create(ScatFactory factory, JSONObject json) {
 
         if (!json.getString(JSON_TYPE).equals(JSON_MAIN)) {
@@ -179,9 +184,11 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void getMassCenter(FPoint in) {
+    public FPoint getMassCenter(FPoint in) {
 
         this.moduleCenter.getMassCenter(in);
+
+        return in;
     }
 
     @Override
@@ -191,9 +198,11 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void getSpatialCenter(FPoint in) {
+    public FPoint getSpatialCenter(FPoint in) {
 
         this.moduleCenter.getSpatialCenter(in);
+
+        return in;
     }
 
     @Override
@@ -203,9 +212,11 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void getSphericalCenter(FPoint in) {
+    public FPoint getSphericalCenter(FPoint in) {
 
         this.moduleCenter.getSphericalCenter(in);
+
+        return in;
     }
 
     @Override
@@ -403,23 +414,31 @@ public class FAggregateDef implements FAggregate {
             }
         }
 
-        FPoint memo = supplyFPoint();
+        double memoX, memoY, memoZ;
         for (Shape shapeRef : particlesRef) {
-            memo.applyStateFrom(shapeRef.getRefCenter());
+            memoX = shapeRef.getCenterX();
+            memoY = shapeRef.getCenterY();
+            memoZ = shapeRef.getCenterZ();
 
-            translator.applyStateFrom(shift);
-            translator.moveBase(memo);
+            translator.moveBase(memoX, memoY, memoZ);
 
             shapeRef.setCenter(translator.getRefHead());
 
+            boolean stop = false;
+
             for (Shape shapeArg : particlesArg) {
                 if (shapeRef.overlaps(shapeArg)) {
-                    shapeRef.setCenter(memo);
-                    return true;
+                    stop = true;
+
+                    break;
                 }
             }
 
-            shapeRef.setCenter(memo);
+            shapeRef.setCenter(memoX, memoY, memoZ);
+
+            if (stop) {
+                return true;
+            }
         }
 
         return false;
@@ -643,7 +662,8 @@ public class FAggregateDef implements FAggregate {
 
         for (Shape candidate : candidates) {
             translator.getRefOrigin().moveBase(candidate.getRefCenter());
-            double shift = candidate.projectDryRun(aggregate, translator);
+
+            double shift = candidate.projectWithOriginDryRun(aggregate, translator);
 
             if (shift >= 0) {
                 boolean overlaps = overlapsWithShift(aggregate, translator.toFVector(shift));

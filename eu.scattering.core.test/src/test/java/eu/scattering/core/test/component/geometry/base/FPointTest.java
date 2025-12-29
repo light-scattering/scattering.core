@@ -155,7 +155,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(refX, refY, refZ);
             FPoint fPoint = factory.getFPoint();
 
-            fPoint.applyStateFrom(fPointRef);
+            fPoint.set(fPointRef);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
@@ -170,7 +170,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint();
             FPoint fPointArg = factory.getFPoint(refX, refY, refZ);
 
-            FPointTestHelper.testReference(Base::applyStateFrom, fPointRef, fPointArg);
+            FPointTestHelper.testReference(Base::set, fPointRef, fPointArg);
         }
 
         @Test
@@ -179,7 +179,7 @@ public class FPointTest {
             FPos3D fPos3DRef = factory.getFPos3D(refX, refY, refZ);
             FPoint fPoint = factory.getFPoint();
 
-            fPoint.applyStateFrom(fPos3DRef);
+            fPoint.set(fPos3DRef);
 
             Assertions.assertAll("Validate FPoint values",
                     () -> assertEquals(refX, fPoint.getX(), "The X value is incorrect"),
@@ -194,7 +194,7 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint();
             FPos3D fPos3DArg = factory.getFPos3D(refX, refY, refZ);
 
-            FPointTestHelper.testReference(p -> p.applyStateFrom(fPos3DArg), fPointRef);
+            FPointTestHelper.testReference(p -> p.set(fPos3DArg), fPointRef);
         }
 
         @Test
@@ -2768,6 +2768,30 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Add FPos2D and Primitive")
+        void addFPos2DAndPrimitive() {
+            fPoint.add(factory.getFPos2D(argX, argY), argZ);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY + argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ + argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Add Primitive and FPos2D")
+        void addPrimitiveAndFPos2D() {
+            fPoint.add(argX, factory.getFPos2D(argY, argZ));
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX + argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY + argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ + argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
         @DisplayName("Sub FPoint")
         void subFPoint() {
             FPoint fPointOp = factory.getFPoint(argX, argY, argZ);
@@ -2908,6 +2932,30 @@ public class FPointTest {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
 
             FPointTestHelper.testReference(e -> e.subZ(1), fPointRef);
+        }
+
+        @Test
+        @DisplayName("Sub FPos2D and Primitive")
+        void subFPos2DAndPrimitive() {
+            fPoint.sub(factory.getFPos2D(argX, argY), argZ);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY - argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ - argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
+        }
+
+        @Test
+        @DisplayName("Sub Primitive and FPos2D")
+        void subPrimitiveAndFPos2D() {
+            fPoint.sub(factory.getFPos2D(argX, argY), argZ);
+
+            Assertions.assertAll("Validate FPoint values",
+                    () -> assertEquals(refX - argX, fPoint.getX(), "The X value is incorrect"),
+                    () -> assertEquals(refY - argY, fPoint.getY(), "The Y value is incorrect"),
+                    () -> assertEquals(refZ - argZ, fPoint.getZ(), "The Z value is incorrect")
+            );
         }
 
         @Test

@@ -1,4 +1,4 @@
-package eu.scattering.core.test.component.geometry.base.aspect;
+package eu.scattering.core.test.component.aggregate.aspect;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
@@ -28,10 +28,9 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        boolean results = factory.getRandAspect().project(aggA, aggB);
+        factory.getRandAspect().project(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
     }
@@ -48,10 +47,9 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        boolean results = factory.getRandAspect().project2D(aggA, aggB);
+        factory.getRandAspect().projectOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
 
@@ -72,10 +70,9 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        boolean results = factory.getRandAspect().attach(aggA, aggB);
+        factory.getRandAspect().attach(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
     }
@@ -92,10 +89,9 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        boolean results = factory.getRandAspect().attach2D(aggA, aggB);
+        factory.getRandAspect().attachOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
 
@@ -123,11 +119,10 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenter(aggA, aggB, 4);
 
-        boolean results = factory.getRandAspect().rotate(aggA, aggB, Integer.MAX_VALUE);
+        factory.getRandAspect().rotate(aggA, aggB);
 
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
     }
@@ -149,13 +144,12 @@ public class FAggregateRandomizeTest {
         FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
         FAggregate aggB = factory.getRefFAggregate(coreB);
 
-        factory.getRandAspect().moveMassCenter2D(aggA, aggB, 4);
+        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, 4);
 
-        boolean results = factory.getRandAspect().rotate2D(aggA, aggB, Integer.MAX_VALUE);
+        factory.getRandAspect().rotateOnSurface(aggA, aggB);
 
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
 
@@ -178,10 +172,9 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadiusFromOrigin());
 
-        boolean results = factory.getRandAspect().rotate(aggA, aggB, Integer.MAX_VALUE);
+        factory.getRandAspect().rotate(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
     }
@@ -198,12 +191,11 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenter2D(aggA, aggB, aggA.getRadiusFromOrigin());
+        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadiusFromOrigin());
 
-        boolean results = factory.getRandAspect().rotate2D(aggA, aggB);
+        factory.getRandAspect().rotateOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(results);
         assertTrue(aggA.isCompact());
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
 

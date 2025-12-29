@@ -113,13 +113,13 @@ public class FPointDef implements FPoint {
     }
 
     @Override
-    public FPoint applyStateFrom(FPos3D pos) {
+    public FPoint set(FPos3D pos) {
 
         return set(pos.getD0(), pos.getD1(), pos.getD2());
     }
 
     @Override
-    public FPoint applyStateFrom(FPoint arg) {
+    public FPoint set(FPoint arg) {
 
         return set(arg.getX(), arg.getY(), arg.getZ());
     }
@@ -142,7 +142,7 @@ public class FPointDef implements FPoint {
     @Override
     public FPoint applyStateTo(FPoint arg) {
 
-        arg.applyStateFrom(this);
+        arg.set(this);
 
         return this;
     }
@@ -225,7 +225,7 @@ public class FPointDef implements FPoint {
     @Override
     public FPoint copy() {
 
-        return supplyFPoint().applyStateFrom(this);
+        return supplyFPoint().set(this);
     }
 
     @Override
@@ -270,6 +270,18 @@ public class FPointDef implements FPoint {
     }
 
     @Override
+    public FPoint add(FPos2D xy, double z) {
+
+        return addXYZ(xy.getD0(), xy.getD1(), z);
+    }
+
+    @Override
+    public FPoint add(double x, FPos2D yz) {
+
+        return addXYZ(x, yz.getD0(), yz.getD1());
+    }
+
+    @Override
     public FPoint add(FPoint arg) {
 
         return addXYZ(arg);
@@ -285,6 +297,18 @@ public class FPointDef implements FPoint {
     public FPoint sub(double x, double y, double z) {
 
         return subXYZ(x, y, z);
+    }
+
+    @Override
+    public FPoint sub(FPos2D xy, double z) {
+
+        return subXYZ(xy.getD0(), xy.getD1(), z);
+    }
+
+    @Override
+    public FPoint sub(double x, FPos2D yz) {
+
+        return subXYZ(x, yz.getD0(), yz.getD1());
     }
 
     @Override

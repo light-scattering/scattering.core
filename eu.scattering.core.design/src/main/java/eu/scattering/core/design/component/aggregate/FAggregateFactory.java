@@ -9,12 +9,16 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public interface FAggregateFactory extends FModelFactory, FMonitorFactory, FValidatorFactory {
 
     FAggregate getFAggregate();
 
     @Modificator
     FAggregate getRefFAggregate(FAssembly<Shape> refParticles);
+    @Modificator
+    FAggregate getRefFAggregate(List<Shape> refParticles);
 
     //--------------------------------------------------
 

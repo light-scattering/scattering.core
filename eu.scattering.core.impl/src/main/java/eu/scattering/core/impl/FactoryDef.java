@@ -420,6 +420,12 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
+    public FAggregate getRefFAggregate(List<Shape> refParticles) {
+
+        return FAggregateDef.create(this, refParticles);
+    }
+
+    @Override
     public FAggregate getFAggregatePreMono(int quantity, double radius) {
 
         return FAggregateFactoryPreDef.createFAggregatePreMono(this, quantity, radius);

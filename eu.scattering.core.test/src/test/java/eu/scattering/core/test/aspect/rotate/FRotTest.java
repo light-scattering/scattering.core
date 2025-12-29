@@ -32,7 +32,7 @@ public class FRotTest {
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         epsilon, "The angle is incorrect"),
                 () -> assertTrue(factory.getFVector()
-                                .applyStateFrom(fRot.getAxis(rotor))
+                                .set(fRot.getAxis(rotor))
                                 .isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
@@ -50,7 +50,7 @@ public class FRotTest {
                 () -> assertEquals(-angle, fRot.getAngle(rotor),
                         epsilon, "The angle is incorrect"),
                 () -> assertTrue(factory.getFVector()
-                                .applyStateFrom(fRot.getAxis(rotor))
+                                .set(fRot.getAxis(rotor))
                                 .isAntiParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );
@@ -68,7 +68,7 @@ public class FRotTest {
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         epsilon, "The angle is incorrect"),
                 () -> assertTrue(factory.getFVector()
-                                .applyStateFrom(fRot.getAxis(rotor))
+                                .set(fRot.getAxis(rotor))
                                 .isParallel(axis),
                         "The axis is incorrect")
         );
@@ -86,7 +86,7 @@ public class FRotTest {
                 () -> assertEquals(-angle, fRot.getAngle(rotor),
                         epsilon, "The angle is incorrect"),
                 () -> assertTrue(factory.getFVector()
-                                .applyStateFrom(fRot.getAxis(rotor))
+                                .set(fRot.getAxis(rotor))
                                 .isAntiParallel(axis),
                         "The axis is incorrect")
         );
@@ -112,7 +112,7 @@ public class FRotTest {
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         epsilon, "The angle is incorrect"),
                 () -> assertTrue(factory.getFVector()
-                                .applyStateFrom(fRot.getAxis(rotor))
+                                .set(fRot.getAxis(rotor))
                                 .isParallel(axis),
                         "The axis is incorrect")
         );
@@ -135,7 +135,7 @@ public class FRotTest {
                 () -> assertEquals(angle, fRot.getAngle(rotor),
                         epsilon, "The angle is incorrect"),
                 () -> assertTrue(factory.getFVector()
-                                .applyStateFrom(fRot.getAxis(rotor))
+                                .set(fRot.getAxis(rotor))
                                 .isParallel(factory.getFVector(axis)),
                         "The axis is incorrect")
         );

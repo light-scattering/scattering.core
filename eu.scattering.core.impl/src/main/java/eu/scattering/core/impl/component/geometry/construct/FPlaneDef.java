@@ -72,7 +72,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane set(FPairPos3D position) {
 
-        getRefOrigin().applyStateFrom(position);
+        getRefOrigin().set(position);
 
         return this;
     }
@@ -104,7 +104,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
     @Override
     public FPlane applyStateFrom(Construct<?> arg) {
 
-        getRefOrigin().applyStateFrom(arg.getRefOrigin());
+        getRefOrigin().set(arg.getRefOrigin());
 
         return this;
     }
@@ -134,7 +134,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         FPlane element = supplyFPlane();
 
-        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
+        element.getRefOrigin().set(getRefOrigin().copy());
 
         return element;
     }
@@ -405,8 +405,8 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         FPoint aHead = u.moveBaseToCenter().getRefHead();
         FPoint bHead = v.moveBaseToCenter().getRefHead() ;
 
-        resBase.applyStateFrom(aHead);
-        resHead.applyStateFrom(bHead);
+        resBase.set(aHead);
+        resHead.set(bHead);
 
         double d1 = -aHead.getDotProduct(aBX, aBY, aBZ);
         double d2 = -bHead.getDotProduct(bBX, bBY, bBZ);
@@ -424,7 +424,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         aHead.addXYZ(resBase);
 
-        resHead.applyStateFrom(aHead);
+        resHead.set(aHead);
 
         return Optional.of(result);
     }
@@ -458,7 +458,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
 
         v.moveBase(bBX, bBY, bBZ).setMagnitude(distance);
 
-        result.applyStateFrom(v.getRefHead());
+        result.set(v.getRefHead());
 
         return Optional.of(result);
     }
@@ -521,7 +521,7 @@ public class FPlaneDef extends ConstructPresetDef<FPlane> implements FPlane {
         double headY = origin.getBaseY() - memoAY;
         double headZ = origin.getBaseZ() - memoAZ;
 
-        in.applyStateFrom(origin.getRefHead());
+        in.set(origin.getRefHead());
 
         in.subXYZ(origin.getRefBase());
         in.normalize();

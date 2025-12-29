@@ -3,6 +3,7 @@ package eu.scattering.core.design.component.geometry.shape;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Modificator;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface ShapeModulePosition {
     FPos3D getCenter();
 
     Shape setCenter(double x, double y, double z);
+    Shape setCenter(FPos2D xy, double z);
+    Shape setCenter(double x, FPos2D yz);
     Shape setCenter(Shape shape);
     Shape setCenter(FPoint fPoint);
     Shape setCenter(FPos3D fPos3D);

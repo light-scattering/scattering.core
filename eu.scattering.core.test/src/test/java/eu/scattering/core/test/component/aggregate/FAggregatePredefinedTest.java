@@ -1,7 +1,9 @@
 package eu.scattering.core.test.component.aggregate;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,10 +19,10 @@ public class FAggregatePredefinedTest {
     @Test
     @DisplayName("Construct monodisperse")
     void constructMono() {
-        FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
+        FAggregate fAggregate = factory.getFAggregatePreMono(100, 1);
 
         Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(10, fAggregate.getRefParticles().size(),
+                () -> assertEquals(100, fAggregate.getRefParticles().size(),
                         "The number of particles is incorrect"),
                 () -> assertEquals(1, fAggregate.getParticleRadius().mean(),
                         epsilon, "The particle radius is erroneous")
@@ -30,14 +32,18 @@ public class FAggregatePredefinedTest {
     @Test
     @DisplayName("Construct polydisperse")
     void constructPoly() {
-        FAggregate fAggregate = factory.getFAggregatePrePoly(1000, 10, 1, 8);
+//        long timestamp = System.currentTimeMillis();
+        ScatFactory factory = FactoryDef.create(1766972568500L);
+//        System.out.println(timestamp);
+
+        FAggregate fAggregate = factory.getFAggregatePrePoly(100, 10, 1, 8);
 
         for (Shape shape : fAggregate.getRefParticles()) {
             assertTrue(shape.getRadius() > 8);
         }
 
         Assertions.assertAll("Validate FAggregate",
-                () -> assertEquals(1000, fAggregate.getRefParticles().size(),
+                () -> assertEquals(100, fAggregate.getRefParticles().size(),
                         "The number of particles is incorrect"),
                 () -> assertEquals(10, fAggregate.getParticleRadius().mean(),
                         1, "The particle avg radius is erroneous"),

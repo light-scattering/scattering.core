@@ -1226,4 +1226,26 @@ public class FVectorRotateTest {
         assertSame(fVector, results,
                 "The reference should stay the same");
     }
+
+    @Test
+    @DisplayName("Rotate Rg (simple)")
+    void rotateRgSimple() {
+        FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+
+        rot.rotQtAround(fVector, factory.getFVector(0, 1, 0), Math.PI * 0.5);
+
+        assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                "The position of the rotated FVector is erroneous");
+    }
+
+    @Test
+    @DisplayName("Rotate Qt (simple)")
+    void rotateQtSimple() {
+        FVector fVector = factory.getFVector(-1, 1, 0, -2, 2, 0);
+
+        rot.rotQtAround(fVector, factory.getFVector(0, 1, 0), Math.PI * 0.5);
+
+        assertTrue(fVector.isSimilar(0, 1, -1, 0, 2, -2),
+                "The position of the rotated FVector is erroneous");
+    }
 }

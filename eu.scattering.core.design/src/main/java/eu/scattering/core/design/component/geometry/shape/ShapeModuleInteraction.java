@@ -16,13 +16,13 @@ public interface ShapeModuleInteraction {
     boolean attachSpherical(Shape target, FPoint center);
     boolean attachSpherical(Shape target, FPos3D center);
 
-    double project(Shape target, FRay ray);
-    double project(Iterable<? extends Shape> field, FRay ray);
+    double projectWithOrigin(Shape target, FRay ray);
+    double projectWithOrigin(Iterable<? extends Shape> field, FRay ray);
 
-    double project(Shape target, FRay ray, double limit);
-    double project(Iterable<? extends Shape> field, FRay ray, double limit);
+    double projectWithOrigin(Shape target, FRay ray, double limit);
+    double projectWithOrigin(Iterable<? extends Shape> field, FRay ray, double limit);
 
-    void getCollisionListLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
+    void getCollisionListWithOriginLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
 
     void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
     void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint center);
@@ -33,13 +33,13 @@ public interface ShapeModuleInteraction {
     // -------------------------------------------------------------------------------------------------
 
     @Fragment
-    double projectDryRun(Shape target, FRay ray);
+    double projectWithOriginDryRun(Shape target, FRay ray);
     @Fragment
-    double projectDryRun(Iterable<? extends Shape> field, FRay ray);
+    double projectWithOriginDryRun(Iterable<? extends Shape> field, FRay ray);
     @Fragment
-    double projectDryRun(Shape target, FRay ray, double limit);
+    double projectWithOriginDryRun(Shape target, FRay ray, double limit);
     @Fragment
-    double projectDryRun(Iterable<? extends Shape> field, FRay ray, double limit);
+    double projectWithOriginDryRun(Iterable<? extends Shape> field, FRay ray, double limit);
 
     // -------------------------------------------------------------------------------------------------
 

@@ -17,6 +17,7 @@ public interface FVector extends Base<FVector> {
     FVector set(double bX, double bY, double bZ, double hX, double hY, double hZ);
     FVector set(FPoint base, FPoint head);
     FVector set(FPos3D base, FPos3D head);
+    FVector set(FPairPos3D position);
 
     FVector setBase(double bX, double bY, double bZ);
     FVector setBase(FPoint base);
@@ -49,8 +50,6 @@ public interface FVector extends Base<FVector> {
     double getLengthZ();
 
     //--------------------------------------------------
-
-    FVector applyStateFrom(FPairPos3D position);
 
     FPairPos3D toFPairPos3D();
 

@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryFactory;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
 import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.plane.FPlane;
@@ -434,9 +435,78 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public FAssembly<T> translate(FPoint offset) {
+
+        return translate(offset.getX(), offset.getY(), offset.getZ());
+    }
+
+    @Override
     public FAssembly<T> translate(FPos3D offset) {
 
         return translate(offset.getD0(), offset.getD1(), offset.getD2());
+    }
+
+    @Override
+    public FAssembly<T> translate(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+        double x = hX - bX;
+        double y = hY - bY;
+        double z = hZ - bZ;
+
+        return translate(x, y, z);
+    }
+
+    @Override
+    public FAssembly<T> translate(FVector offset) {
+
+        return translate(
+                offset.getRefBase().getX(), offset.getRefBase().getY(), offset.getRefBase().getZ(),
+                offset.getRefHead().getX(), offset.getRefHead().getY(), offset.getRefHead().getZ()
+        );
+    }
+
+    @Override
+    public FAssembly<T> translate(FPairPos3D offset) {
+
+        return translate(
+                offset.getPosA().getD0(), offset.getPosA().getD1(), offset.getPosA().getD2(),
+                offset.getPosB().getD0(), offset.getPosB().getD1(), offset.getPosB().getD2()
+        );
+    }
+
+    @Override
+    public FAssembly<T> translate(FPoint base, FPoint head) {
+
+        return translate(
+                base.getX(), base.getY(), base.getZ(),
+                head.getX(), head.getY(), head.getZ()
+        );
+    }
+
+    @Override
+    public FAssembly<T> translate(FPos3D base, FPos3D head) {
+
+        return translate(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FAssembly<T> translate(FPoint base, FPos3D head) {
+
+        return translate(
+                base.getX(), base.getY(), base.getZ(),
+                head.getD0(), head.getD1(), head.getD2()
+        );
+    }
+
+    @Override
+    public FAssembly<T> translate(FPos3D base, FPoint head) {
+
+        return translate(
+                base.getD0(), base.getD1(), base.getD2(),
+                head.getX(), head.getY(), head.getZ()
+        );
     }
 
     @Override

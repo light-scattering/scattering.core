@@ -137,7 +137,7 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector applyStateFrom(FPairPos3D position) {
+    public FVector set(FPairPos3D position) {
         setBase(position.getPosA());
         setHead(position.getPosB());
 
@@ -153,7 +153,7 @@ public class FVectorDef implements FVector {
 
     @Override
     public FVector setBase(FPoint base) {
-        getRefBase().applyStateFrom(base);
+        getRefBase().set(base);
 
         return this;
     }
@@ -213,7 +213,7 @@ public class FVectorDef implements FVector {
 
     @Override
     public FVector setHead(FPoint head) {
-        getRefHead().applyStateFrom(head);
+        getRefHead().set(head);
 
         return this;
     }
@@ -265,7 +265,7 @@ public class FVectorDef implements FVector {
     }
 
     @Override
-    public FVector applyStateFrom(FVector arg) {
+    public FVector set(FVector arg) {
         setBase(arg.getRefBase());
         setHead(arg.getRefHead());
 
@@ -289,7 +289,7 @@ public class FVectorDef implements FVector {
     @Override
     public FVector applyStateTo(FVector arg) {
 
-        arg.applyStateFrom(this);
+        arg.set(this);
 
         return this;
     }
@@ -475,7 +475,7 @@ public class FVectorDef implements FVector {
     @Override
     public FVector copy() {
 
-        return supplyFVector().applyStateFrom(this);
+        return supplyFVector().set(this);
     }
 
     @Override

@@ -129,7 +129,7 @@ public class FVectorProducerDef implements FVectorProducer {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FVector fVector = factory.getFVector();
 
-            fVector.getRefHead().applyStateFrom(rndGenerator.nextDoubleInSphere(radius));
+            fVector.getRefHead().set(rndGenerator.nextDoubleInSphere(radius));
 
             return fVector;
         };
@@ -144,7 +144,7 @@ public class FVectorProducerDef implements FVectorProducer {
         Function<FVectorFactory, FVector> function = (factory) -> {
             FVector fVector = factory.getFVector();
 
-            fVector.getRefHead().applyStateFrom(rndGenerator.nextDoubleOnSphere(radius));
+            fVector.getRefHead().set(rndGenerator.nextDoubleOnSphere(radius));
 
             return fVector;
         };

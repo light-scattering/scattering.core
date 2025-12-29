@@ -1213,7 +1213,7 @@ public class FLineTest {
             fLineAOrigin.getRefHead().setZ(0);
 
             while (fLineAOrigin.isNearZeroLength()) {
-                fLineAOrigin.applyStateFrom(TestHelper.getRandFVector());
+                fLineAOrigin.set(TestHelper.getRandFVector());
 
                 fLineAOrigin.getRefBase().setZ(0);
                 fLineAOrigin.getRefHead().setZ(0);
@@ -1229,7 +1229,7 @@ public class FLineTest {
             fLineBOriginBase.setZ(0);
 
             while (fLineA.isPartOf(fLineBOriginBase)) {
-                fLineBOriginBase.applyStateFrom(TestHelper.getRandFPoint());
+                fLineBOriginBase.set(TestHelper.getRandFPoint());
 
                 fLineBOriginBase.setZ(0);
             }
@@ -1294,7 +1294,7 @@ public class FLineTest {
             FLine fLineB = factory.getRefFLine(factory.getFVector(fLineBOriginBase, fLineBOriginHead));
 
             while (fLineA.isPartOf(fLineBOriginBase)) {
-                fLineBOriginBase.applyStateFrom(TestHelper.getRandFPoint());
+                fLineBOriginBase.set(TestHelper.getRandFPoint());
             }
 
             Optional<FPoint> fPointRes = fLineA.getFPointAtIntersection(fLineB);
@@ -1401,7 +1401,7 @@ public class FLineTest {
                     .setCrossProduct(fLineBOrigin)
                     .setMagnitude(1.5 * epsilon);
 
-            fLineBOrigin.getRefBase().applyStateFrom(fVectorDrift.getRefHead());
+            fLineBOrigin.getRefBase().set(fVectorDrift.getRefHead());
 
             assertTrue(fLineA.getFPointAtIntersection(fLineB).isEmpty(),
                     "The intersecting point should be non-existent");

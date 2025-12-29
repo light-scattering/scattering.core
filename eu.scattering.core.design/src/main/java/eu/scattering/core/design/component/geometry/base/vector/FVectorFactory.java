@@ -43,6 +43,6 @@ public interface FVectorFactory {
 
     default FVector getFVector(FPairPos3D position) {
 
-        return getFVector().applyStateFrom(position);
+        return getFVector().set(position);
     }
 }

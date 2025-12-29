@@ -767,7 +767,7 @@ public class FVectorTest {
             FVector fVectorRef = factory.getFVector(TestHelper.getRandFPoint(), TestHelper.getRandFPoint());
             FVector fVector = factory.getFVector();
 
-            fVector.applyStateFrom(fVectorRef);
+            fVector.set(fVectorRef);
 
             Assertions.assertAll("Validate FVector values",
                     () -> assertEquals(fVectorRef.getRefBase().getX(), fVector.getRefBase().getX(),
@@ -791,7 +791,7 @@ public class FVectorTest {
             FVector fVectorRef = factory.getFVector(TestHelper.getRandFPoint(), TestHelper.getRandFPoint());
             FVector fVector = factory.getFVector();
 
-            fVector.applyStateFrom(fVectorRef);
+            fVector.set(fVectorRef);
 
             Assertions.assertAll("Validate FVector references",
                     () -> assertNotSame(fVectorRef.getRefBase(), fVector.getRefBase(),

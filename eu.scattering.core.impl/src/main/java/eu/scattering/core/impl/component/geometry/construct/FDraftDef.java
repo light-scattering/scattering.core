@@ -76,7 +76,7 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     @Override
     public FDraft set(FPairPos3D position) {
 
-        getRefOrigin().applyStateFrom(position);
+        getRefOrigin().set(position);
 
         return this;
     }
@@ -92,7 +92,7 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
     @Override
     public FDraft applyStateFrom(Construct<?> arg) {
 
-        getRefOrigin().applyStateFrom(arg.getRefOrigin());
+        getRefOrigin().set(arg.getRefOrigin());
 
         return this;
     }
@@ -123,7 +123,7 @@ public class FDraftDef extends ConstructPresetDef<FDraft> implements FDraft {
 
         FDraft element = supplyFDraft();
 
-        element.getRefOrigin().applyStateFrom(getRefOrigin().copy());
+        element.getRefOrigin().set(getRefOrigin().copy());
 
         return element;
     }

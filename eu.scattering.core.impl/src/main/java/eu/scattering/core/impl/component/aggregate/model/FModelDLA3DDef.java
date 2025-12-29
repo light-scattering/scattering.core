@@ -162,8 +162,8 @@ public class FModelDLA3DDef implements FModelDLA {
 
             step:
             while (true) {
-                this.dirBase.applyStateFrom(particle.getRefCenter());
-                this.dirHead.applyStateFrom(particle.getRefCenter());
+                this.dirBase.set(particle.getRefCenter());
+                this.dirHead.set(particle.getRefCenter());
 
                 this.movement.accept(this.attached, this.rndEng, this.dirHead);
 
@@ -181,7 +181,7 @@ public class FModelDLA3DDef implements FModelDLA {
                     continue;
                 }
 
-                double distance = particle.project(this.attached, this.dir, this.step);
+                double distance = particle.projectWithOrigin(this.attached, this.dir, this.step);
 
                 if (distance < 0) {
                     continue;

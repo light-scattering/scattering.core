@@ -11,6 +11,7 @@ import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 
 import java.util.ArrayList;
@@ -237,6 +238,18 @@ public abstract class ShapePresetDef implements Shape {
         setCenterZ(z);
 
         return this;
+    }
+
+    @Override
+    public Shape setCenter(FPos2D xy, double z) {
+
+        return setCenter(xy.getD0(), xy.getD1(), z);
+    }
+
+    @Override
+    public Shape setCenter(double x, FPos2D yz) {
+
+        return setCenter(x, yz.getD0(), yz.getD1());
     }
 
     @Override

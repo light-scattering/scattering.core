@@ -3,26 +3,14 @@ package eu.scattering.core.design.component.aggregate;
 public interface FAggregateAspectRand {
 
     void moveMassCenter(FAggregate ref, FAggregate arg, double distance);
+    void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, double distance);
 
-    boolean rotate(FAggregate ref, FAggregate arg);
-    boolean rotate(FAggregate ref, FAggregate arg, int corrections);
+    void rotate(FAggregate ref, FAggregate arg);
+    void rotateOnSurface(FAggregate ref, FAggregate arg);
 
-    boolean attach(FAggregate ref, FAggregate arg);
-    boolean attach(FAggregate ref, FAggregate arg, int corrections);
+    void attach(FAggregate ref, FAggregate arg);
+    void attachOnSurface(FAggregate ref, FAggregate arg);
 
-    boolean project(FAggregate ref, FAggregate arg);
-    boolean project(FAggregate ref, FAggregate arg, int corrections);
-
-    //--------------------------------------------------
-
-    void moveMassCenter2D(FAggregate ref, FAggregate arg, double distance);
-
-    boolean rotate2D(FAggregate ref, FAggregate arg);
-    boolean rotate2D(FAggregate ref, FAggregate arg, int corrections);
-
-    boolean attach2D(FAggregate ref, FAggregate arg);
-    boolean attach2D(FAggregate ref, FAggregate arg, int corrections);
-
-    boolean project2D(FAggregate ref, FAggregate arg);
-    boolean project2D(FAggregate ref, FAggregate arg, int corrections);
+    void project(FAggregate ref, FAggregate arg);
+    void projectOnSurface(FAggregate ref, FAggregate arg);
 }

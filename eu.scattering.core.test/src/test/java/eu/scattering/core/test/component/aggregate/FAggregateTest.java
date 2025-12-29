@@ -1361,7 +1361,7 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.getMassCenter(center);
+            FPoint results = fAggregate.getMassCenter(center);
 
             double volA = factory.getFSphereHelper().getVolume(1);
             double volB = factory.getFSphereHelper().getVolume(3);
@@ -1370,6 +1370,8 @@ public class FAggregateTest {
             double d2 = ((3 * volA) + (-6 * volB)) / (volA + volB);
 
             Assertions.assertAll("Validate mass center",
+                    () -> assertSame(center, results,
+                            "The reference should not change"),
                     () -> assertTrue(center.isSimilar(d0, d1, d2),
                             "The mass center position is incorrect")
             );
@@ -1411,9 +1413,11 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.getSphericalCenter(center);
+            FPoint results = fAggregate.getSphericalCenter(center);
 
             Assertions.assertAll("Validate spatial center",
+                    () -> assertSame(center, results,
+                            "The reference should not change"),
                     () -> assertEquals(0, center.getX(),
                             1E-4, "Value X is incorrect"),
                     () -> assertEquals(0, center.getY(),
@@ -1457,13 +1461,15 @@ public class FAggregateTest {
 
             FPoint center = factory.getFPoint();
 
-            fAggregate.getSpatialCenter(center);
+            FPoint results = fAggregate.getSpatialCenter(center);
 
             double d0 = (2 - 7) / 2d;
             double d1 = (3 - 8) / 2d;
             double d2 = (4 - 9) / 2d;
 
             Assertions.assertAll("Validate spatial center",
+                    () -> assertSame(center, results,
+                            "The reference should not change"),
                     () -> assertTrue(center.isSimilar(d0, d1, d2),
                             "The spatial center position is incorrect")
             );
@@ -2396,7 +2402,7 @@ public class FAggregateTest {
             FAggregate aggregateA = factory.getFAggregateGeoFullSphere(3);
             FAggregate aggregateB = factory.getFAggregateGeo2d(5, 5);
 
-            aggregateA.setParticleEpsilon(0.25);
+            aggregateA.setParticleEpsilon(1);
 
             aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
 

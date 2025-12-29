@@ -27,4 +27,5 @@ module eu.scattering.core.test {
     opens eu.scattering.core.test.statistics;
     opens eu.scattering.core.test.transfer;
     opens eu.scattering.core.test.storage;
+    opens eu.scattering.core.test.component.aggregate.aspect;
 }

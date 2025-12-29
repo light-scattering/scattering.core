@@ -1,5 +1,6 @@
 package eu.scattering.core.design.component.geometry.container.assembly;
 
+import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
@@ -40,12 +41,15 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     <U extends T> FAssembly<T> mutate(Class<U> type, Consumer<U> action);
 
     FAssembly<T> translate(double x, double y, double z);
-//    FAssembly<T> translate(FPoint offset);
+    FAssembly<T> translate(FPoint offset);
     FAssembly<T> translate(FPos3D offset);
 
-//    FAssembly<T> translate(double bX, double bY, double bZ, double hX, double hY, double hZ);
-//    FAssembly<T> translate(FVector offset);
-//    FAssembly<T> translate(FPairPos3D offset);
+    FAssembly<T> translate(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    FAssembly<T> translate(FVector offset);
+    FAssembly<T> translate(FPairPos3D offset);
+
+    FAssembly<T> translate(FPoint base, FPoint head);
+    FAssembly<T> translate(FPos3D base, FPos3D head);
 
     FAssembly<T> scale(double factor);
 
@@ -58,6 +62,11 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
 
     @Modificator
     List<T> asList();
+
+    @Fragment
+    FAssembly<T> translate(FPoint base, FPos3D head);
+    @Fragment
+    FAssembly<T> translate(FPos3D base, FPoint head);
 
     //--------------------------------------------------
 
