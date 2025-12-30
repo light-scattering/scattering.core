@@ -2,6 +2,7 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryModuleGeometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -11,9 +12,27 @@ import eu.scattering.core.design.extension.Producer;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
-public class FAggregateFactoryGeoDef {
+public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModuleGeometry {
+    private static FAggregateFactoryModuleGeometry self;
+    private final ScatFactory factory;
 
-    public static FAggregate getFAggregateGeo1d(ScatFactory factory, int d1, double radius) {
+    private FAggregateFactoryModuleGeometryDef(ScatFactory factory) {
+
+        this.factory = factory;
+    }
+
+    public static FAggregateFactoryModuleGeometry get(ScatFactory factory) {
+
+        if (FAggregateFactoryModuleGeometryDef.self == null) {
+            FAggregateFactoryModuleGeometryDef.self = new FAggregateFactoryModuleGeometryDef(factory);
+        }
+
+        return FAggregateFactoryModuleGeometryDef.self;
+    }
+
+    //--------------------------------------------------
+
+    public FAggregate d1(int d1, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
 
@@ -37,7 +56,7 @@ public class FAggregateFactoryGeoDef {
         return fAggregate;
     }
 
-    public static FAggregate getFAggregateGeo2d(ScatFactory factory, int d1, int d2, double radius) {
+    public FAggregate d2(int d1, int d2, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
 
@@ -63,7 +82,7 @@ public class FAggregateFactoryGeoDef {
         return fAggregate;
     }
 
-    public static FAggregate getFAggregateGeo3d(ScatFactory factory, int d1, int d2, int d3, double radius) {
+    public FAggregate d3(int d1, int d2, int d3, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
 
@@ -91,7 +110,7 @@ public class FAggregateFactoryGeoDef {
         return fAggregate;
     }
 
-    public static FAggregate getFAggregateGeoFullCircle(ScatFactory factory, int layers, double radius) {
+    public FAggregate fullCircle(int layers, double radius) {
 
         if (layers < 1) {
             throw new IllegalArgumentException("The number of layers must be greater than zero");
@@ -124,7 +143,7 @@ public class FAggregateFactoryGeoDef {
     }
 
     // Approximate solution
-    public static FAggregate getFAggregateGeoFullSphere(ScatFactory factory, int layers, double radius) {
+    public FAggregate fullSphere(int layers, double radius) {
 
         if (layers < 1) {
             throw new IllegalArgumentException("The number of layers must be greater than zero");

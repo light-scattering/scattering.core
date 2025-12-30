@@ -32,7 +32,7 @@ public class FModelDLATest {
     void aggregate3D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -92,7 +92,7 @@ public class FModelDLATest {
     void aggregate2D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregatePreMono(quantity, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -213,7 +213,7 @@ public class FModelDLATest {
     @Test
     @DisplayName("Configuration - Aggregate 3D")
     void configuration3D() {
-        FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(10, 1);
         FModelDLA model = factory.createFModelDLA3D(fAggregate);
 
         TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
@@ -232,7 +232,7 @@ public class FModelDLATest {
     @Test
     @DisplayName("Configuration - Aggregate 2D")
     void configuration2D() {
-        FAggregate fAggregate = factory.getFAggregatePreMono(10, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(10, 1);
         FModelDLA model = factory.createFModelDLA2D(fAggregate);
 
         TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);

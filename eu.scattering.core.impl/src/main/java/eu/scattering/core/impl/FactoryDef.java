@@ -1,6 +1,13 @@
 package eu.scattering.core.impl;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.export.FExportAspect;
+import eu.scattering.core.design.aspect.prototype.FProtoAspect;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
+import eu.scattering.core.design.aspect.rotate.FRotAspect;
+import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryModule;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
@@ -36,12 +43,6 @@ import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.complex.FComplexProducer;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.component.number.quaternion.FQuaternionProducer;
-import eu.scattering.core.design.aspect.export.FExportAspect;
-import eu.scattering.core.design.aspect.prototype.FProtoAspect;
-import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
-import eu.scattering.core.design.aspect.rotate.FRotAspect;
-import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.helper.transfer.FTransferHelper;
 import eu.scattering.core.design.helper.trigonometry.FTrigHelper;
 import eu.scattering.core.design.physics.material.FMaterial;
@@ -55,9 +56,14 @@ import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.type.FractalDimension;
 import eu.scattering.core.design.type.RadiusOfGyration;
+import eu.scattering.core.impl.aspect.export.FExportAspectDef;
+import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
+import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
+import eu.scattering.core.impl.aspect.randomize.FRandGeneratorDef;
+import eu.scattering.core.impl.aspect.rotate.FRotAspectDef;
+import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
-import eu.scattering.core.impl.component.aggregate.FAggregateFactoryGeoDef;
-import eu.scattering.core.impl.component.aggregate.FAggregateFactoryPreDef;
+import eu.scattering.core.impl.component.aggregate.FAggregateFactoryModuleDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRadiusOfGyrationDef;
 import eu.scattering.core.impl.component.aggregate.validator.FValidatorFractalDimensionDef;
@@ -74,12 +80,6 @@ import eu.scattering.core.impl.component.number.FComplexDef;
 import eu.scattering.core.impl.component.number.FComplexProducerDef;
 import eu.scattering.core.impl.component.number.FQuaternionDef;
 import eu.scattering.core.impl.component.number.FQuaternionProducerDef;
-import eu.scattering.core.impl.aspect.export.FExportAspectDef;
-import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
-import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
-import eu.scattering.core.impl.aspect.randomize.FRandGeneratorDef;
-import eu.scattering.core.impl.aspect.rotate.FRotAspectDef;
-import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.helper.FPositionHelperDef;
 import eu.scattering.core.impl.helper.FTrigHelperDef;
 import eu.scattering.core.impl.physics.FMaterialDataDef;
@@ -434,45 +434,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FAggregate getFAggregatePreMono(int quantity, double radius) {
+    public FAggregateFactoryModule getFAggregateContext() {
 
-        return FAggregateFactoryPreDef.createFAggregatePreMono(this, quantity, radius);
-    }
-
-    @Override
-    public FAggregate getFAggregatePrePoly(int quantity, double avg, double std, double cutoff) {
-
-        return FAggregateFactoryPreDef.createFAggregatePrePoly(this, quantity, avg, std, cutoff);
-    }
-
-    @Override
-    public FAggregate getFAggregateGeo1d(int d1, double radius) {
-
-        return FAggregateFactoryGeoDef.getFAggregateGeo1d(this, d1, radius);
-    }
-
-    @Override
-    public FAggregate getFAggregateGeo2d(int d1, int d2, double radius) {
-
-        return FAggregateFactoryGeoDef.getFAggregateGeo2d(this, d1, d2, radius);
-    }
-
-    @Override
-    public FAggregate getFAggregateGeo3d(int d1, int d2, int d3, double radius) {
-
-        return FAggregateFactoryGeoDef.getFAggregateGeo3d(this, d1, d2, d3, radius);
-    }
-
-    @Override
-    public FAggregate getFAggregateGeoFullCircle(int layers, double radius) {
-
-        return FAggregateFactoryGeoDef.getFAggregateGeoFullCircle(this, layers, radius);
-    }
-
-    @Override
-    public FAggregate getFAggregateGeoFullSphere(int layers, double radius) {
-
-        return FAggregateFactoryGeoDef.getFAggregateGeoFullSphere(this, layers, radius);
+        return FAggregateFactoryModuleDef.get(this);
     }
 
     @Override
