@@ -1282,7 +1282,7 @@ public class FAssemblyTest {
 
         @Test
         @DisplayName("Translate with FPoint / FPoint")
-        void translateWithFPointFPoint() {
+        void translateWithFPointAndFPoint() {
             FPoint base = factory.getFPoint(1,2, 3);
 
             FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
@@ -1313,7 +1313,7 @@ public class FAssemblyTest {
 
         @Test
         @DisplayName("Translate with FPos3D / FPos3D")
-        void translateWithFPos3DFPos3D() {
+        void translateWithFPos3DAndFPos3D() {
             FPoint base = factory.getFPoint(1,2, 3);
 
             FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
@@ -1344,7 +1344,7 @@ public class FAssemblyTest {
 
         @Test
         @DisplayName("Translate with FPoint / FPos3D")
-        void translateWithFPointFPos3D() {
+        void translateWithFPointAndFPos3D() {
             FPoint base = factory.getFPoint(1,2, 3);
 
             FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
@@ -1375,7 +1375,7 @@ public class FAssemblyTest {
 
         @Test
         @DisplayName("Translate with FPos3D / FPoint")
-        void translateWithFPos3DFPoint() {
+        void translateWithFPos3DAndFPoint() {
             FPoint base = factory.getFPoint(1,2, 3);
 
             FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
@@ -1385,6 +1385,68 @@ public class FAssemblyTest {
             FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
 
             FAssembly<FVector> results = fAssembly.translate(factory.getFPos3D(1, 2, 3), factory.getFPoint(6, 5, 4));
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fAssembly.size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(base.isExact(6, 5, 4),
+                            "The base FPoint is erroneous"),
+                    () -> assertTrue(fVectorA.isExact(6, 5, 4, 6, 5, 4),
+                            "The FVector A is erroneous"),
+                    () -> assertTrue(fVectorB.isExact(6, 5, 4, 9, 8, 7),
+                            "The FVector B is erroneous"),
+                    () -> assertTrue(fVectorC.isExact(6, 5, 4, 12, 11, 10),
+                            "The FVector C is erroneous"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Translate with FPoint / Primitives")
+        void translateWithFPointAndPrimitives() {
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
+
+            FAssembly<FVector> results = fAssembly.translate(factory.getFPoint(1, 2, 3), 6, 5, 4);
+
+            Assertions.assertAll("Validate FAssembly",
+                    () -> assertEquals(3, fAssembly.size(),
+                            "The size of the FAssembly is erroneous"),
+                    () -> assertEquals(4, fAssembly.toFPoints().size(),
+                            "The number of FPoints is incorrect"),
+                    () -> assertTrue(base.isExact(6, 5, 4),
+                            "The base FPoint is erroneous"),
+                    () -> assertTrue(fVectorA.isExact(6, 5, 4, 6, 5, 4),
+                            "The FVector A is erroneous"),
+                    () -> assertTrue(fVectorB.isExact(6, 5, 4, 9, 8, 7),
+                            "The FVector B is erroneous"),
+                    () -> assertTrue(fVectorC.isExact(6, 5, 4, 12, 11, 10),
+                            "The FVector C is erroneous"),
+                    () -> assertSame(fAssembly, results,
+                            "The reference should not change")
+            );
+        }
+
+        @Test
+        @DisplayName("Translate with FPos3D / Primitives")
+        void translateWithFPos3DAndPrimitives() {
+            FPoint base = factory.getFPoint(1,2, 3);
+
+            FVector fVectorA = factory.getRefFVector(base, factory.getFPoint(1, 2, 3));
+            FVector fVectorB = factory.getRefFVector(base, factory.getFPoint(4, 5, 6));
+            FVector fVectorC = factory.getRefFVector(base, factory.getFPoint(7, 8, 9));
+
+            FAssembly<FVector> fAssembly = factory.getFAssembly(List.of(fVectorA, fVectorB, fVectorC));
+
+            FAssembly<FVector> results = fAssembly.translate(factory.getFPos3D(1, 2, 3), 6, 5, 4);
 
             Assertions.assertAll("Validate FAssembly",
                     () -> assertEquals(3, fAssembly.size(),

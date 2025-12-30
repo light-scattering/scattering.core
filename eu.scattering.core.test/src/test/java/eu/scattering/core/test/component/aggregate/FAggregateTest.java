@@ -18,10 +18,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.type.FractalDimension;
-import eu.scattering.core.design.type.LinearDimension;
-import eu.scattering.core.design.type.PointLocation;
-import eu.scattering.core.design.type.RadiusOfGyration;
+import eu.scattering.core.design.type.*;
 import eu.scattering.core.mock.aggregate.F3D_N1000_Mono;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
@@ -1498,8 +1495,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Position center with FPoint")
-        void positionCenterFPoint() {
+        @DisplayName("Reset position with FPoint")
+        void resetPositionFPoint() {
             Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
             Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
@@ -1515,15 +1512,15 @@ public class FAggregateTest {
 
             FPoint centerAfter = factory.getFPoint();
 
-            fAggregate.resetCenter(centerBefore);
+            fAggregate.resetPosition(centerBefore);
             fAggregate.getMassCenter(centerAfter);
 
             assertTrue(centerAfter.isSimilar(0, 0, 0));
         }
 
         @Test
-        @DisplayName("Position center with FPos3D")
-        void positionCenterFPos3D() {
+        @DisplayName("Reset position with FPos3D")
+        void resetPositionFPos3D() {
             Shape fSphereA = factory.getFSphere(1, 2, 3, 1);
             Shape fSphereB = factory.getFSphere(-4, -5, -6, 3);
 
@@ -1537,11 +1534,225 @@ public class FAggregateTest {
 
             factory.getFPoint();
 
-            fAggregate.resetCenter(centerBefore);
+            fAggregate.resetPosition(centerBefore);
 
             FPos3D centerAfter = fAggregate.getMassCenter();
 
             assertTrue(factory.getFPointHelper().isSimilar(centerAfter.getD0(), centerAfter.getD1(), centerAfter.getD2(), 0, 0, 0));
+        }
+
+        @Test
+        @DisplayName("Reset center with enum")
+        void resetCenterEnum() {
+            FAggregate fAggregate = factory.getFAggregate();
+            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+
+            fAggregate.resetCenter(Center.ORIGIN);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(2, 0, 0))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(0, 2, 0))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(0, 0, 2)))
+            );
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getMassCenter(center);
+
+            assertFalse(center.isSimilar(0, 0, 0));
+
+            fAggregate.resetCenter(Center.MASS);
+
+            fAggregate.getMassCenter(center);
+
+            assertTrue(center.isSimilar(0, 0, 0));
+
+            fAggregate.getSpatialCenter(center);
+
+            assertFalse(center.isSimilar(0, 0, 0));
+
+            fAggregate.resetCenter(Center.SPATIAL);
+
+            fAggregate.getSpatialCenter(center);
+
+            assertTrue(center.isSimilar(0, 0, 0));
+
+            fAggregate.getSphericalCenter(center);
+
+            assertFalse(center.isSimilar(0, 0, 0));
+
+            fAggregate.resetCenter(Center.SPHERICAL);
+
+            fAggregate.getSphericalCenter(center);
+
+            assertTrue(center.isSimilar(0, 0, 0));
+        }
+
+        @Test
+        @DisplayName("Get center with FPoint")
+        void getCenterWithFPoint() {
+            FAggregate fAggregate = factory.getFAggregate();
+            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getCenter(center, Center.ORIGIN);
+
+            assertTrue(center.isSimilar(0, 0, 0));
+
+            fAggregate.getCenter(center, Center.MASS);
+
+            assertTrue(center.isSimilar(fAggregate.getMassCenter()));
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            assertTrue(center.isSimilar(fAggregate.getSpatialCenter()));
+
+            fAggregate.getCenter(center, Center.SPHERICAL);
+
+            assertTrue(center.isSimilar(fAggregate.getSphericalCenter()));
+        }
+
+        @Test
+        @DisplayName("Get center with FPos3D")
+        void getCenterWithFPos3D() {
+            FAggregate fAggregate = factory.getFAggregate();
+            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+
+            FPoint center = factory.getFPoint();
+
+            center.set(fAggregate.getCenter(Center.ORIGIN));
+
+            assertTrue(center.isSimilar(0, 0, 0));
+
+            center.set(fAggregate.getCenter(Center.MASS));
+
+            assertTrue(center.isSimilar(fAggregate.getMassCenter()));
+
+            center.set(fAggregate.getCenter(Center.SPATIAL));
+
+            assertTrue(center.isSimilar(fAggregate.getSpatialCenter()));
+
+            center.set(fAggregate.getCenter(Center.SPHERICAL));
+
+            assertTrue(center.isSimilar(fAggregate.getSphericalCenter()));
+        }
+
+        @Test
+        @DisplayName("Set center with primitives")
+        void setCenterWithPrimitives() {
+            FAggregate fAggregate = factory.getFAggregate();
+            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+
+            fAggregate.setCenter(Center.ORIGIN, 1, 2, 3);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.setCenter(Center.MASS, -1, -2, -3);
+
+            center.set(fAggregate.getMassCenter());
+
+            assertTrue(center.isSimilar(-1, -2, -3));
+
+            fAggregate.setCenter(Center.SPATIAL, 1, 2, 3);
+
+            center.set(fAggregate.getSpatialCenter());
+
+            assertTrue(center.isSimilar(1, 2, 3));
+
+            fAggregate.setCenter(Center.SPHERICAL, -1, -2, -3);
+
+            center.set(fAggregate.getSphericalCenter());
+
+            assertTrue(center.isSimilar(-1, -2, -3));
+        }
+
+        @Test
+        @DisplayName("Set center with FPoint")
+        void setCenterWithFPoint() {
+            FAggregate fAggregate = factory.getFAggregate();
+            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+
+            fAggregate.setCenter(Center.ORIGIN, factory.getFPoint(1, 2, 3));
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.setCenter(Center.MASS, factory.getFPoint(-1, -2, -3));
+
+            center.set(fAggregate.getMassCenter());
+
+            assertTrue(center.isSimilar(-1, -2, -3));
+
+            fAggregate.setCenter(Center.SPATIAL, factory.getFPoint(1, 2, 3));
+
+            center.set(fAggregate.getSpatialCenter());
+
+            assertTrue(center.isSimilar(1, 2, 3));
+
+            fAggregate.setCenter(Center.SPHERICAL, factory.getFPoint(-1, -2, -3));
+
+            center.set(fAggregate.getSphericalCenter());
+
+            assertTrue(center.isSimilar(-1, -2, -3));
+        }
+
+        @Test
+        @DisplayName("Set center with FPos3D")
+        void setCenterWithFPos3D() {
+            FAggregate fAggregate = factory.getFAggregate();
+            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+
+            fAggregate.setCenter(Center.ORIGIN, factory.getFPos3D(1, 2, 3));
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.setCenter(Center.MASS, factory.getFPos3D(-1, -2, -3));
+
+            center.set(fAggregate.getMassCenter());
+
+            assertTrue(center.isSimilar(-1, -2, -3));
+
+            fAggregate.setCenter(Center.SPATIAL, factory.getFPos3D(1, 2, 3));
+
+            center.set(fAggregate.getSpatialCenter());
+
+            assertTrue(center.isSimilar(1, 2, 3));
+
+            fAggregate.setCenter(Center.SPHERICAL, factory.getFPos3D(-1, -2, -3));
+
+            center.set(fAggregate.getSphericalCenter());
+
+            assertTrue(center.isSimilar(-1, -2, -3));
         }
 
         @Test
@@ -1562,18 +1773,18 @@ public class FAggregateTest {
             assertTrue(massCenter.isSimilar(3, 3, 3));
 
             double radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
-            double radiusB = fAggregate.getRadiusFromOrigin();
+            double radiusB = fAggregate.getRadius(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
 
-            fAggregate.resetCenter(massCenter);
+            fAggregate.resetPosition(massCenter);
             fAggregate.getMassCenter(massCenter);
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
             radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
-            radiusB = fAggregate.getRadiusFromOrigin();
+            radiusB = fAggregate.getRadius(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertEquals(radiusA, radiusB, 1E-6);
@@ -1597,18 +1808,18 @@ public class FAggregateTest {
             assertTrue(massCenter.isSimilar(3, 3, 3));
 
             double radiusA = fAggregate.getRadius(massCenter);
-            double radiusB = fAggregate.getRadiusFromOrigin();
+            double radiusB = fAggregate.getRadius(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
 
-            fAggregate.resetCenter(massCenter);
+            fAggregate.resetPosition(massCenter);
             fAggregate.getMassCenter(massCenter);
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
             radiusA = fAggregate.getRadius(massCenter);
-            radiusB = fAggregate.getRadiusFromOrigin();
+            radiusB = fAggregate.getRadius(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertEquals(radiusA, radiusB, 1E-6);
@@ -1632,18 +1843,53 @@ public class FAggregateTest {
             assertTrue(massCenter.isSimilar(3, 3, 3));
 
             double radiusA = fAggregate.getRadius(massCenter.toFPos3D());
-            double radiusB = fAggregate.getRadiusFromOrigin();
+            double radiusB = fAggregate.getRadius(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
 
-            fAggregate.resetCenter(massCenter);
+            fAggregate.resetPosition(massCenter);
             fAggregate.getMassCenter(massCenter);
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
             radiusA = fAggregate.getRadius(massCenter.toFPos3D());
-            radiusB = fAggregate.getRadiusFromOrigin();
+            radiusB = fAggregate.getRadius(Center.ORIGIN);
+
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertEquals(radiusA, radiusB, 1E-6);
+        }
+
+        @Test
+        @DisplayName("Get radius with enum")
+        void getRadiusWithEnum() {
+            Shape fSphereA = factory.getFSphere(1, 1, 1, 1);
+            Shape fSphereB = factory.getFSphere(3, 3, 3, 1);
+            Shape fSphereC = factory.getFSphere(5, 5, 5, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            FPoint massCenter = factory.getFPoint();
+
+            fAggregate.getMassCenter(massCenter);
+
+            assertTrue(massCenter.isSimilar(3, 3, 3));
+
+            double radiusA = fAggregate.getRadius(Center.MASS);
+            double radiusB = fAggregate.getRadius(Center.ORIGIN);
+
+            assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
+            assertNotEquals(radiusA, radiusB);
+
+            fAggregate.resetPosition(massCenter);
+            fAggregate.getMassCenter(massCenter);
+
+            assertTrue(massCenter.isSimilar(0, 0, 0));
+
+            radiusA = fAggregate.getRadius(Center.MASS);
+            radiusB = fAggregate.getRadius(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertEquals(radiusA, radiusB, 1E-6);
@@ -2182,8 +2428,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get particle radius")
-        void getParticleRadius() {
+        @DisplayName("Get FStat particle radius")
+        void getFStatParticleRadius() {
             Shape shapeA = factory.getFSphere(1);
             Shape shapeB = factory.getFSphere(2);
             Shape shapeC = factory.getFSphere(3);
@@ -2192,11 +2438,26 @@ public class FAggregateTest {
             FAssembly<Shape> core = factory.getFAssembly(List.of(shapeA, shapeB, shapeC, shapeD));
             FAggregate fAggregate = factory.getRefFAggregate(core);
 
-            FStat stat = fAggregate.getParticleRadius();
+            FStat stat = fAggregate.getFStatParticleRadius();
 
             assertEquals(4, stat.size());
             assertEquals(1, stat.min());
             assertEquals(4, stat.max());
+        }
+
+        @Test
+        @DisplayName("Get FStat distance")
+        void getFStatDistance() {
+            FAggregate fAggregate = factory.getFAggregate();
+            fAggregate.addParticle(factory.getFSphere(-1, 0, 0));
+            fAggregate.addParticle(factory.getFSphere(0, 2, 0));
+            fAggregate.addParticle(factory.getFSphere(0, 0, -3));
+
+            FStat stat = fAggregate.getFStatDistance(Center.ORIGIN);
+
+            assertEquals(3, stat.size());
+            assertEquals(1, stat.min());
+            assertEquals(3, stat.max());
         }
 
         @Test
@@ -2322,6 +2583,54 @@ public class FAggregateTest {
         }
 
         @Test
+        @DisplayName("Touches")
+        void touches() {
+            FAggregate aggregateA = factory.getFAggregate();
+            aggregateA.addParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addParticle(factory.getFSphere(2, 0, 0, 1));
+
+            FAggregate aggregateB = factory.getFAggregate();
+            aggregateB.addParticle(factory.getFSphere(4, -2, 0, 1));
+            aggregateB.addParticle(factory.getFSphere(4, 0, 0, 1));
+            aggregateB.addParticle(factory.getFSphere(4, 2, 0, 1));
+
+            assertTrue(aggregateA.touches(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Touches (fail) - A")
+        void touchesFailA() {
+            FAggregate aggregateA = factory.getFAggregate();
+            aggregateA.addParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addParticle(factory.getFSphere(2, 0, 0, 1));
+
+            FAggregate aggregateB = factory.getFAggregate();
+            aggregateB.addParticle(factory.getFSphere(3.9, -2, 0, 1));
+            aggregateB.addParticle(factory.getFSphere(3.9, 0, 0, 1));
+            aggregateB.addParticle(factory.getFSphere(3.9, 2, 0, 1));
+
+            assertFalse(aggregateA.touches(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Touches (fail) - B")
+        void touchesFailB() {
+            FAggregate aggregateA = factory.getFAggregate();
+            aggregateA.addParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addParticle(factory.getFSphere(2, 0, 0, 1));
+
+            FAggregate aggregateB = factory.getFAggregate();
+            aggregateB.addParticle(factory.getFSphere(4.1, -2, 0, 1));
+            aggregateB.addParticle(factory.getFSphere(4.1, 0, 0, 1));
+            aggregateB.addParticle(factory.getFSphere(4.1, 2, 0, 1));
+
+            assertFalse(aggregateA.touches(aggregateB));
+        }
+
+        @Test
         @DisplayName("Project A")
         void projectA() {
             Shape shapeA1 = factory.getFSphere(5, 0, 0, 1);
@@ -2339,7 +2648,7 @@ public class FAggregateTest {
 
             FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
 
-            aggregateA.project(aggregateB, dir);
+            aggregateA.projectFrom(aggregateB, dir);
 
             aggregateA.merge(aggregateB, true);
 
@@ -2364,7 +2673,7 @@ public class FAggregateTest {
 
             FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
 
-            aggregateA.project(aggregateB, dir);
+            aggregateA.projectFrom(aggregateB, dir);
 
             aggregateA.merge(aggregateB, true);
 
@@ -2389,7 +2698,7 @@ public class FAggregateTest {
 
             FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
 
-            aggregateA.project(aggregateB, dir);
+            aggregateA.projectFrom(aggregateB, dir);
 
             aggregateA.merge(aggregateB, true);
 
@@ -2414,7 +2723,7 @@ public class FAggregateTest {
 
             FRay dir = factory.getRefFRay(factory.getRefFVector(centerA, centerB));
 
-            aggregateA.project(aggregateB, dir);
+            aggregateA.projectFrom(aggregateB, dir);
 
             aggregateA.merge(aggregateB, true);
 
@@ -2437,11 +2746,195 @@ public class FAggregateTest {
 
             FRay dir = factory.getRefFRay(factory.getRefFVector(centerA, centerB));
 
-            aggregateA.project(aggregateB, dir);
+            aggregateA.projectFrom(aggregateB, dir);
 
             aggregateA.merge(aggregateB, true);
 
             assertTrue(aggregateA.isCompact());
+        }
+
+        @Test
+        @DisplayName("Add particle")
+        void addParticle() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            boolean resultsA = fAggregate.addParticle(fSphereA);
+            boolean resultsB = fAggregate.addParticle(fSphereB);
+            boolean resultsC = fAggregate.addParticle(fSphereC);
+
+            boolean resultsDuplicate = fAggregate.addParticle(fSphereB);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(3, fAggregate.size()),
+                    () -> assertTrue(resultsA),
+                    () -> assertTrue(resultsB),
+                    () -> assertTrue(resultsC),
+                    () -> assertFalse(resultsDuplicate)
+            );
+
+            fSphereA.setCenter(1, 2, 3);
+
+            assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(1, 2, 3, 1)));
+        }
+
+        @Test
+        @DisplayName("Remove particle")
+        void removeParticle() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addParticle(fSphereA);
+            fAggregate.addParticle(fSphereB);
+            fAggregate.addParticle(fSphereC);
+
+            boolean resultsA = fAggregate.removeParticle(fSphereA);
+
+            boolean resultsEmpty = fAggregate.removeParticle(fSphereA);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(2, fAggregate.size()),
+                    () -> assertTrue(resultsA),
+                    () -> assertFalse(resultsEmpty)
+            );
+        }
+
+        @Test
+        @DisplayName("Translate (FPoint) with primitives")
+        void translateFPointWithPrimitives() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addParticle(fSphereA);
+            fAggregate.addParticle(fSphereB);
+            fAggregate.addParticle(fSphereC);
+
+            fAggregate.translate(1, 2, 3);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+        }
+
+        @Test
+        @DisplayName("Translate (FPoint) with FPoint")
+        void translateFPointWithFPoint() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addParticle(fSphereA);
+            fAggregate.addParticle(fSphereB);
+            fAggregate.addParticle(fSphereC);
+
+            fAggregate.translate(factory.getFPoint(1, 2, 3));
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+        }
+
+        @Test
+        @DisplayName("Translate (FPoint) with FPos3D")
+        void translateFPointWithFPos3D() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addParticle(fSphereA);
+            fAggregate.addParticle(fSphereB);
+            fAggregate.addParticle(fSphereC);
+
+            fAggregate.translate(factory.getFPos3D(1, 2, 3));
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+        }
+
+        @Test
+        @DisplayName("Translate (FVector) with primitives")
+        void translateFVectorWithPrimitives() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addParticle(fSphereA);
+            fAggregate.addParticle(fSphereB);
+            fAggregate.addParticle(fSphereC);
+
+            fAggregate.translate(-3, -2, -1, -2, 0, 2);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+        }
+
+        @Test
+        @DisplayName("Translate (FVector) with FVector")
+        void translateFVectorWithFVector() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addParticle(fSphereA);
+            fAggregate.addParticle(fSphereB);
+            fAggregate.addParticle(fSphereC);
+
+            fAggregate.translate(factory.getFVector(-3, -2, -1, -2, 0, 2));
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
+        }
+
+        @Test
+        @DisplayName("Translate (FVector) with FPairPos3D")
+        void translateFVectorWithFPairPos3D() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
+            FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
+
+            fAggregate.addParticle(fSphereA);
+            fAggregate.addParticle(fSphereB);
+            fAggregate.addParticle(fSphereC);
+
+            fAggregate.translate(factory.getFPairPos3D(-3, -2, -1, -2, 0, 2));
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(3, 2, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
+            );
         }
     }
 

@@ -15,6 +15,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.FractalDimension;
 import eu.scattering.core.design.type.LinearDimension;
 import eu.scattering.core.design.type.RadiusOfGyration;
@@ -45,9 +46,12 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     double getRadius(double x, double y, double z);
     double getRadius(FPoint center);
     double getRadius(FPos3D center);
-    double getRadiusFromOrigin();
+    double getRadius(Center type);
 
     //--------------------------------------------------
+
+    FPoint getCenter(FPoint in, Center type);
+    FPos3D getCenter(Center type);
 
     FPoint getMassCenter(FPoint in);
     FPos3D getMassCenter();
@@ -58,19 +62,14 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     FPoint getSphericalCenter(FPoint in);
     FPos3D getSphericalCenter();
 
-    void resetCenter(FPoint center);
-    void resetCenter(FPos3D center);
+    void setCenter(Center type, double x, double y, double z);
+    void setCenter(Center type, FPoint position);
+    void setCenter(Center type, FPos3D position);
 
-//    setCenter(FPoint center);
-//    setCenter(FPos3D center);
+    void resetCenter(Center type);
 
-//    void translate(double x, double y, double z);
-//    void translate(FPoint offset);
-//    void translate(FPos3D offset);
-
-//    void translate(double bX, double bY, double bZ, double hX, double hY, double hZ);
-//    void translate(FVector offset);
-//    void translate(FPairPos3D offset);
+    void resetPosition(FPoint center);
+    void resetPosition(FPos3D center);
 
     //--------------------------------------------------
 
@@ -92,6 +91,9 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     int size();
 
+    boolean addParticle(Shape particle);
+    boolean removeParticle(Shape particle);
+
     FStat getTripletAngle();
     FPlot getTripletAngleFunction();
 
@@ -101,7 +103,8 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     FStat getCoordinationNumber();
     FPlot getCoordinationNumberFunction();
 
-    FStat getParticleRadius();
+    FStat getFStatParticleRadius();
+    FStat getFStatDistance(Center type);
 
     void setParticleDelta(double delta);
     void setParticleEpsilon(double epsilon);
@@ -109,13 +112,22 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     boolean isSparse();
     boolean isCompact();
 
-    void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
-
+    boolean touches(FAggregate arg);
     boolean overlaps(FAggregate arg);
 
-    void merge(FAggregate arg, boolean remove);
+    void merge(FAggregate arg, boolean removeParticles);
+
+    void translate(double x, double y, double z);
+    void translate(FPoint offset);
+    void translate(FPos3D offset);
+
+    void translate(double bX, double bY, double bZ, double hX, double hY, double hZ);
+    void translate(FVector offset);
+    void translate(FPairPos3D offset);
 
     void index();
+
+    void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
 
     //--------------------------------------------------
 

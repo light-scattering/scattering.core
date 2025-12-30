@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.box.FBoxDouble;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 
 public class FAggregateModuleCenterDef {
     private final ScatFactory factory;
@@ -18,6 +19,24 @@ public class FAggregateModuleCenterDef {
     }
 
     // -------------------------------------------------------------------------------------------------
+
+    protected void getCenter(FPoint in, Center type) {
+
+        switch (type) {
+            case ORIGIN -> in.set(0, 0, 0);
+            case MASS -> getMassCenter(in);
+            case SPATIAL -> getSpatialCenter(in);
+            case SPHERICAL -> getSphericalCenter(in);
+        }
+    }
+
+    protected FPos3D getCenter(Center type) {
+        FPoint center = factory.getFPoint();
+
+        getCenter(center, type);
+
+        return center.toFPos3D();
+    }
 
     protected void getSpatialCenter(FPoint in) {
 
@@ -172,5 +191,57 @@ public class FAggregateModuleCenterDef {
     protected void positionCenter(FPos3D center) {
 
         this.aggregate.getRefParticles().translate(-center.getD0(), -center.getD1(), -center.getD2());
+    }
+
+    protected void resetCenter(Center type) {
+
+        switch (type) {
+            case ORIGIN -> resetCenterOrigin();
+            case MASS -> resetCenterMass();
+            case SPATIAL -> resetCenterSpatial();
+            case SPHERICAL -> resetCenterSpherical();
+        }
+    }
+
+    private void resetCenterOrigin() {
+    }
+
+    private void resetCenterMass() {
+        FPoint center = this.factory.getFPoint();
+
+        getMassCenter(center);
+
+        positionCenter(center);
+    }
+
+    private void resetCenterSpatial() {
+        FPoint center = this.factory.getFPoint();
+
+        getSpatialCenter(center);
+
+        positionCenter(center);
+    }
+
+    private void resetCenterSpherical() {
+        FPoint center = this.factory.getFPoint();
+
+        getSphericalCenter(center);
+
+        positionCenter(center);
+    }
+
+    protected void setCenter(Center type, double x, double y, double z) {
+
+        this.aggregate.getRefParticles().translate(getCenter(type), x, y, z);
+    }
+
+    protected void setCenter(Center type, FPoint position) {
+
+        setCenter(type, position.getX(), position.getY(), position.getZ());
+    }
+
+    protected void setCenter(Center type, FPos3D position) {
+
+        setCenter(type, position.getD0(), position.getD1(), position.getD2());
     }
 }

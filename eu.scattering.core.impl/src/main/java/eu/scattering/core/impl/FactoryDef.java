@@ -161,7 +161,15 @@ public final class FactoryDef implements ScatFactory {
 
     public static ScatFactory create(long seed) {
 
-        return new FactoryDef(seed);
+        if (seed >= 0) {
+            return new FactoryDef(seed);
+        }
+
+        long timestamp = System.currentTimeMillis();
+
+        System.out.println("Timestamp: " + timestamp);
+
+        return create(timestamp);
     }
 
     //--------------------------------------------------
@@ -637,6 +645,12 @@ public final class FactoryDef implements ScatFactory {
     public FStat getFStat() {
 
         return FStatDef.create(this);
+    }
+
+    @Override
+    public FStat getFStat(double... data) {
+
+        return FStatDef.create(this, data);
     }
 
     @Override

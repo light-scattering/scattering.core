@@ -16,6 +16,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.FractalDimension;
 import eu.scattering.core.design.type.LinearDimension;
 import eu.scattering.core.design.type.RadiusOfGyration;
@@ -178,9 +179,23 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getRadiusFromOrigin() {
+    public double getRadius(Center type) {
 
-        return this.moduleGeometry.getRadiusFromOrigin();
+        return this.moduleGeometry.getRadius(type);
+    }
+
+    @Override
+    public FPoint getCenter(FPoint in, Center type) {
+
+        this.moduleCenter.getCenter(in, type);
+
+        return in;
+    }
+
+    @Override
+    public FPos3D getCenter(Center type) {
+
+        return this.moduleCenter.getCenter(type);
     }
 
     @Override
@@ -226,15 +241,39 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void resetCenter(FPoint center) {
+    public void resetPosition(FPoint center) {
 
         this.moduleCenter.positionCenter(center);
     }
 
     @Override
-    public void resetCenter(FPos3D center) {
+    public void resetPosition(FPos3D center) {
 
         this.moduleCenter.positionCenter(center);
+    }
+
+    @Override
+    public void setCenter(Center type, double x, double y, double z) {
+
+        this.moduleCenter.setCenter(type, x, y, z);
+    }
+
+    @Override
+    public void setCenter(Center type, FPoint position) {
+
+        this.moduleCenter.setCenter(type, position);
+    }
+
+    @Override
+    public void setCenter(Center type, FPos3D position) {
+
+        this.moduleCenter.setCenter(type, position);
+    }
+
+    @Override
+    public void resetCenter(Center type) {
+
+        this.moduleCenter.resetCenter(type);
     }
 
     @Override
@@ -280,6 +319,18 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public boolean addParticle(Shape particle) {
+
+        return this.moduleMorphology.addParticle(particle);
+    }
+
+    @Override
+    public boolean removeParticle(Shape particle) {
+
+        return this.moduleMorphology.removeParticle(particle);
+    }
+
+    @Override
     public FStat getTripletAngle() {
 
         return this.moduleMorphology.getTripletAngle();
@@ -316,9 +367,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FStat getParticleRadius() {
+    public FStat getFStatParticleRadius() {
 
-        return this.moduleMorphology.getParticleRadius();
+        return this.moduleMorphology.getFStatParticleRadius();
+    }
+
+    @Override
+    public FStat getFStatDistance(Center type) {
+
+        return this.moduleMorphology.getFStatDistance(type);
     }
 
     @Override
@@ -383,6 +440,45 @@ public class FAggregateDef implements FAggregate {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean touches(FAggregate arg) {
+        FPos3D centerRef = getSpatialCenter();
+        FPos3D centerArg = arg.getSpatialCenter();
+
+        double radiusRef = getRadius(centerRef);
+        double radiusArg = arg.getRadius(centerArg);
+
+        List<Shape> particlesRef = new ArrayList<>(size());
+        List<Shape> particlesArg = new ArrayList<>(arg.size());
+
+        for (Shape shape : getRefParticles()) {
+            if (shape.getDistCenter(centerArg) <= radiusArg + shape.getRadius()) {
+                particlesRef.add(shape);
+            }
+        }
+
+        for (Shape shape : arg.getRefParticles()) {
+            if (shape.getDistCenter(centerRef) <= radiusRef + shape.getRadius()) {
+                particlesArg.add(shape);
+            }
+        }
+
+        boolean touches = false;
+        for (Shape shapeRef : particlesRef) {
+            for (Shape shapeArg : particlesArg) {
+                if (shapeRef.touches(shapeArg)) {
+                    touches = true;
+                }
+
+                if (shapeRef.overlaps(shapeArg)) {
+                    return false;
+                }
+            }
+        }
+
+        return touches;
     }
 
     @Override
@@ -465,15 +561,52 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void merge(FAggregate arg, boolean remove) {
+    public void merge(FAggregate arg, boolean removeParticles) {
 
         for (Shape shape : arg.getRefParticles()) {
             getRefParticles().register(shape);
         }
 
-        if (remove) {
+        if (removeParticles) {
             arg.getRefParticles().clear();
         }
+    }
+
+    @Override
+    public void translate(double x, double y, double z) {
+
+        this.moduleMorphology.translate(x, y, z);
+    }
+
+    @Override
+    public void translate(FPoint offset) {
+
+        this.moduleMorphology.translate(offset);
+
+    }
+
+    @Override
+    public void translate(FPos3D offset) {
+
+        this.moduleMorphology.translate(offset);
+    }
+
+    @Override
+    public void translate(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        this.moduleMorphology.translate(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    @Override
+    public void translate(FVector offset) {
+
+        this.moduleMorphology.translate(offset);
+    }
+
+    @Override
+    public void translate(FPairPos3D offset) {
+
+        this.moduleMorphology.translate(offset);
     }
 
     @Override
@@ -651,26 +784,26 @@ public class FAggregateDef implements FAggregate {
     //--------------------------------------------------
 
     @Override
-    public double project(FAggregate aggregate, FRay ray) {
-        FRay translator = ray.copy();
+    public double projectFrom(FAggregate target, FRay path) {
+        FRay translator = path.copy();
         List<Shape> candidates = new ArrayList<>(getRefParticles().asList());
 
         FPoint center = supplyFPoint();
-        aggregate.getSpatialCenter(center);
+        target.getSpatialCenter(center);
 
         candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(center)));
 
         for (Shape candidate : candidates) {
             translator.getRefOrigin().moveBase(candidate.getRefCenter());
 
-            double shift = candidate.projectWithOriginDryRun(aggregate, translator);
+            double shift = candidate.projectFromDryRun(target, translator);
 
             if (shift >= 0) {
-                boolean overlaps = overlapsWithShift(aggregate, translator.toFVector(shift));
+                boolean overlaps = overlapsWithShift(target, translator.toFVector(shift));
 
                 if (!overlaps) {
                     for (Shape particle : getRefParticles()) {
-                        ray.shiftForward(particle, shift);
+                        path.shiftForward(particle, shift);
                     }
 
                     return shift;

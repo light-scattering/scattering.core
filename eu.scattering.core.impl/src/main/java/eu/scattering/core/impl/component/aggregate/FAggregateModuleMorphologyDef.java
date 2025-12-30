@@ -2,10 +2,14 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,6 +25,18 @@ public class FAggregateModuleMorphologyDef {
 
         this.factory = factory;
         this.aggregate = aggregate;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    boolean addParticle(Shape particle) {
+
+        return this.aggregate.getRefParticles().registerWithCheck(particle);
+    }
+
+    boolean removeParticle(Shape particle) {
+
+        return this.aggregate.getRefParticles().deregisterWithCheck(particle);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -41,7 +57,7 @@ public class FAggregateModuleMorphologyDef {
 
     protected FPlot getPairDistanceFunction() {
         FStat distance = getPairDistance();
-        FStat radius = getParticleRadius();
+        FStat radius = getFStatParticleRadius();
 
         double max = distance.max();
         int steps = (int) (max / radius.min());
@@ -113,12 +129,24 @@ public class FAggregateModuleMorphologyDef {
         return this.aggregate.getRefParticles().size();
     }
 
-    protected FStat getParticleRadius() {
+    protected FStat getFStatParticleRadius() {
         FStat particles = this.factory.getFStat();
 
         this.aggregate.getRefParticles().forEach(e -> particles.add(e.getRadius()));
 
         return particles;
+    }
+
+    protected FStat getFStatDistance(Center type) {
+        FStat distances = this.factory.getFStat();
+
+        FPos3D center = this.aggregate.getCenter(type);
+
+        for (Shape particle : this.aggregate) {
+            distances.add(particle.getDistCenter(center));
+        }
+
+        return distances;
     }
 
     protected void setEpsilon(double epsilon) {
@@ -175,6 +203,38 @@ public class FAggregateModuleMorphologyDef {
         for (Shape candidate : candidates) {
             isCompactRecurrence(candidate, processed);
         }
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected void translate(double x, double y, double z) {
+
+        this.aggregate.getRefParticles().translate(x, y, z);
+    }
+
+    protected void translate(FPoint offset) {
+
+        this.aggregate.getRefParticles().translate(offset);
+    }
+
+    protected void translate(FPos3D offset) {
+
+        this.aggregate.getRefParticles().translate(offset);
+    }
+
+    protected void translate(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        this.aggregate.getRefParticles().translate(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    protected void translate(FVector offset) {
+
+        this.aggregate.getRefParticles().translate(offset);
+    }
+
+    protected void translate(FPairPos3D offset) {
+
+        this.aggregate.getRefParticles().translate(offset);
     }
 
     // -------------------------------------------------------------------------------------------------

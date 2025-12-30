@@ -4,6 +4,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.type.Center;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -170,7 +171,7 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadiusFromOrigin());
+        factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadius(Center.ORIGIN));
 
         factory.getRandAspect().rotate(aggA, aggB);
         aggA.merge(aggB, true);
@@ -191,7 +192,7 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadiusFromOrigin());
+        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadius(Center.ORIGIN));
 
         factory.getRandAspect().rotateOnSurface(aggA, aggB);
         aggA.merge(aggB, true);

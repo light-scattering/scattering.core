@@ -9,6 +9,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.LinearDimension;
 
 import java.util.*;
@@ -269,6 +270,16 @@ public class FAggregateModuleGeometryDef {
     protected double getRadius(FPos3D center) {
 
         return getRadius(center.getD0(), center.getD1(), center.getD2());
+    }
+
+    protected double getRadius(Center type) {
+
+        return switch(type) {
+            case ORIGIN -> getRadius(0, 0, 0);
+            case MASS -> getRadius(aggregate.getMassCenter());
+            case SPATIAL -> getRadius(aggregate.getSpatialCenter());
+            case SPHERICAL -> getRadius(aggregate.getSphericalCenter());
+        };
     }
 
     protected double getRadiusFromOrigin() {

@@ -32,7 +32,7 @@ public class FAggregateFactoryGeoDef {
         FPoint center = factory.getFPoint();
         fAggregate.getSpatialCenter(center);
 
-        fAggregate.resetCenter(center);
+        fAggregate.resetPosition(center);
 
         return fAggregate;
     }
@@ -58,7 +58,7 @@ public class FAggregateFactoryGeoDef {
         FPoint center = factory.getFPoint();
         fAggregate.getSpatialCenter(center);
 
-        fAggregate.resetCenter(center);
+        fAggregate.resetPosition(center);
 
         return fAggregate;
     }
@@ -86,7 +86,7 @@ public class FAggregateFactoryGeoDef {
         FPoint center = factory.getFPoint();
         fAggregate.getSpatialCenter(center);
 
-        fAggregate.resetCenter(center);
+        fAggregate.resetPosition(center);
 
         return fAggregate;
     }

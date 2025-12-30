@@ -48,7 +48,10 @@ public interface FAssembly<T extends Geometry> extends Container<FAssembly<T>>, 
     FAssembly<T> translate(FVector offset);
     FAssembly<T> translate(FPairPos3D offset);
 
+    FAssembly<T> translate(FPoint base, double x, double y, double z);
     FAssembly<T> translate(FPoint base, FPoint head);
+
+    FAssembly<T> translate(FPos3D base, double x, double y, double z);
     FAssembly<T> translate(FPos3D base, FPos3D head);
 
     FAssembly<T> scale(double factor);

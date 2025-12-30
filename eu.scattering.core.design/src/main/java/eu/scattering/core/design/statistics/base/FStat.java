@@ -19,6 +19,8 @@ public interface FStat extends Statistics<FStat>, Iterable<Double> {
     double get(int index);
     void set(int index, double value);
 
+    boolean contains(double value);
+
     // -------------------------------------------------------------------------------------------------
 
     double min();

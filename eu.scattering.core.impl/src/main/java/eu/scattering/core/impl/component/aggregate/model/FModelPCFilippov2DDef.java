@@ -171,7 +171,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
         double radius = getExpectedParticleDistance();
 
         particle.setCenter(radius, 0, 0).translate(this.cMass);
-        particle.getCollisionListSpherical(this.bases, this.attached, this.cMass);
+        particle.getCollisionsSpherical(this.bases, this.attached, this.cMass);
 
         if (this.bases.size() == 0) {
             throw new IllegalStateException("The particle cannot be attached to the aggregate");

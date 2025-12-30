@@ -2,6 +2,8 @@ package eu.scattering.core.design.component.geometry.shape;
 
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.annotation.Facade;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
@@ -13,33 +15,43 @@ public interface ShapeModuleInteraction {
     boolean attachLinear(Shape target);
 
     boolean attachSpherical(Shape target, double x, double y, double z);
-    boolean attachSpherical(Shape target, FPoint center);
-    boolean attachSpherical(Shape target, FPos3D center);
+    boolean attachSpherical(Shape target, FPoint anchor);
+    boolean attachSpherical(Shape target, FPos3D anchor);
 
-    double projectWithOrigin(Shape target, FRay ray);
-    double projectWithOrigin(Iterable<? extends Shape> field, FRay ray);
+//    double attachCircular(Shape target, FLine axis);
 
-    double projectWithOrigin(Shape target, FRay ray, double limit);
-    double projectWithOrigin(Iterable<? extends Shape> field, FRay ray, double limit);
+//    double project(Shape target, FVector path);
+//    double project(Shape target, FVector path, double distLimit);
+//    double project(Iterable<? extends Shape> field, FVector path);
+//    double project(Iterable<? extends Shape> field, FVector path, double distLimit);
 
-    void getCollisionListWithOriginLinear(List<Shape> in, Iterable<? extends Shape> field, FRay ray);
+    double projectFrom(Shape target, FRay path);
+    double projectFrom(Shape target, FRay path, double distLimit);
+    double projectFrom(Iterable<? extends Shape> field, FRay path);
+    double projectFrom(Iterable<? extends Shape> field, FRay path, double distLimit);
 
-    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
-    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint center);
-    void getCollisionListSpherical(List<Shape> in, Iterable<? extends Shape> field, FPos3D center);
+//    void getCollisionsLinear(List<Shape> in, Iterable<? extends Shape> field, FVector path);
+
+    void getCollisionsFromLinear(List<Shape> in, Iterable<? extends Shape> field, FRay path);
+
+    void getCollisionsSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
+    void getCollisionsSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint anchor);
+    void getCollisionsSpherical(List<Shape> in, Iterable<? extends Shape> field, FPos3D anchor);
+
+//    void getCollisionsCircular(List<Shape> in, Iterable<? extends Shape> field, FLine axis);
 
     Shape setRadiusMin(Iterable<? extends Shape> shapes);
 
     // -------------------------------------------------------------------------------------------------
 
     @Fragment
-    double projectWithOriginDryRun(Shape target, FRay ray);
+    double projectFromDryRun(Shape target, FRay path);
     @Fragment
-    double projectWithOriginDryRun(Iterable<? extends Shape> field, FRay ray);
+    double projectFromDryRun(Shape target, FRay path, double distLimit);
     @Fragment
-    double projectWithOriginDryRun(Shape target, FRay ray, double limit);
+    double projectFromDryRun(Iterable<? extends Shape> field, FRay path);
     @Fragment
-    double projectWithOriginDryRun(Iterable<? extends Shape> field, FRay ray, double limit);
+    double projectFromDryRun(Iterable<? extends Shape> field, FRay path, double distLimit);
 
     // -------------------------------------------------------------------------------------------------
 

@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.aggregate.monitor.common.module.FMoni
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.FPlot;
 import eu.scattering.core.design.transfer.primitive.FPoly;
+import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.RadiusOfGyration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,7 +47,7 @@ public class FMonitorTest {
                     return;
                 }
 
-                radius.add(aggregate.getRadiusFromOrigin());
+                radius.add(aggregate.getRadius(Center.ORIGIN));
             });
             fModel.setEarlyStageCorrection(true);
             fModel.build();

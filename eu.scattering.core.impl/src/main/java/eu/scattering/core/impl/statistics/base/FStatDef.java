@@ -40,6 +40,16 @@ public class FStatDef implements FStat {
         return new FStatDef(factory, data);
     }
 
+    public static FStat create(ScatFactory factory, double... data) {
+        List<Double> dataList = new ArrayList<>(data.length);
+
+        for (Double element : data) {
+            dataList.add(element);
+        }
+
+        return new FStatDef(factory, dataList);
+    }
+
     public static FStat create(ScatFactory factory, JSONObject json) {
         FStat fStat = FStatDef.create(factory);
 
@@ -101,6 +111,12 @@ public class FStatDef implements FStat {
     public void set(int index, double value) {
 
         getRefCore().set(index, value);
+    }
+
+    @Override
+    public boolean contains(double value) {
+
+        return getRefCore().stream().anyMatch(e -> e == value);
     }
 
     @Override

@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public class FRandAspectModuleFAggregateDef {
         List<Shape> candidatesRef = getRotRefCandidates(ref, arg, centerRef, centerArg, distance);
         List<Shape> candidatesArg = getRotArgCandidates(ref, arg, centerRef, centerArg, distance);
 
-        double minRadius = arg.getParticleRadius().min();
+        double minRadius = arg.getFStatParticleRadius().min();
 
         while (true) {
             FVector axis = factory.getFVector();
@@ -206,7 +207,7 @@ public class FRandAspectModuleFAggregateDef {
     private void attachUniversal(FAggregate ref, FAggregate arg, boolean is3D) {
         List<Shape> particlesRef = new ArrayList<>(ref.getRefParticles().asList());
 
-        double minRadius = arg.getParticleRadius().min();
+        double minRadius = arg.getFStatParticleRadius().min();
 
         Shape particleRef = factory.getFSphere();
         Shape particleArg = factory.getFSphere();
@@ -253,11 +254,11 @@ public class FRandAspectModuleFAggregateDef {
         FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
 
         while (true) {
-            ref.resetCenter(ref.getSpatialCenter());
-            arg.resetCenter(arg.getSpatialCenter());
+            ref.resetPosition(ref.getSpatialCenter());
+            arg.resetPosition(arg.getSpatialCenter());
 
-            double radiusRef = ref.getRadiusFromOrigin();
-            double radiusArg = arg.getRadiusFromOrigin();
+            double radiusRef = ref.getRadius(Center.ORIGIN);
+            double radiusArg = arg.getRadius(Center.ORIGIN);
 
             if (is3D) {
                 base.set(core.nextDoubleOnSphere(10 * (radiusRef + radiusArg)));
@@ -275,7 +276,7 @@ public class FRandAspectModuleFAggregateDef {
 
             ref.getRefParticles().translate(base.toFPos3D());
 
-            double shift = ref.project(arg, ray);
+            double shift = ref.projectFrom(arg, ray);
 
             if (shift >= 0) {
                 return;

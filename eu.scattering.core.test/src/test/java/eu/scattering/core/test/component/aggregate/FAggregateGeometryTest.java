@@ -22,7 +22,7 @@ public class FAggregateGeometryTest {
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertEquals(11, fAggregate.getRefParticles().size()),
-                () -> assertEquals(2, fAggregate.getParticleRadius().mean()),
+                () -> assertEquals(2, fAggregate.getFStatParticleRadius().mean()),
                 () -> assertEquals(-22, boundary.getPosA().getD0(), 1E-1),
                 () -> assertEquals(-2, boundary.getPosA().getD1(), 1E-1),
                 () -> assertEquals(-2, boundary.getPosA().getD2(), 1E-1),
@@ -41,7 +41,7 @@ public class FAggregateGeometryTest {
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertEquals(5 * 7, fAggregate.getRefParticles().size()),
-                () -> assertEquals(2, fAggregate.getParticleRadius().mean()),
+                () -> assertEquals(2, fAggregate.getFStatParticleRadius().mean()),
                 () -> assertEquals(-10, boundary.getPosA().getD0(), 1E-1),
                 () -> assertEquals(-14, boundary.getPosA().getD1(), 1E-1),
                 () -> assertEquals(-2, boundary.getPosA().getD2(), 1E-1),
@@ -60,7 +60,7 @@ public class FAggregateGeometryTest {
 
         Assertions.assertAll("Validate FAggregate",
                 () -> assertEquals(5 * 7 * 9, fAggregate.getRefParticles().size()),
-                () -> assertEquals(2, fAggregate.getParticleRadius().mean()),
+                () -> assertEquals(2, fAggregate.getFStatParticleRadius().mean()),
                 () -> assertEquals(-10, boundary.getPosA().getD0(), 1E-1),
                 () -> assertEquals(-14, boundary.getPosA().getD1(), 1E-1),
                 () -> assertEquals(-18, boundary.getPosA().getD2(), 1E-1),

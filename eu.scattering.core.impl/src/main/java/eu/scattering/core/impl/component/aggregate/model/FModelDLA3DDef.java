@@ -181,7 +181,7 @@ public class FModelDLA3DDef implements FModelDLA {
                     continue;
                 }
 
-                double distance = particle.projectWithOrigin(this.attached, this.dir, this.step);
+                double distance = particle.projectFrom(this.attached, this.dir, this.step);
 
                 if (distance < 0) {
                     continue;

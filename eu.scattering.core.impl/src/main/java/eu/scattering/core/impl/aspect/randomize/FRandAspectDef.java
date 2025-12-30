@@ -523,7 +523,7 @@ public class FRandAspectDef implements FRandAspect {
         }
 
         List<Shape> candidates = new ArrayList<>();
-        in.getCollisionListSpherical(candidates, field, target.getCenter());
+        in.getCollisionsSpherical(candidates, field, target.getCenter());
 
         if (candidates.size() == 0) {
             return false;
@@ -564,7 +564,7 @@ public class FRandAspectDef implements FRandAspect {
 
             ray.getRefOrigin().translate(range.getCenter());
 
-            double distance = in.projectWithOrigin(field, ray);
+            double distance = in.projectFrom(field, ray);
 
             if (distance >= 0) {
                 return distance;
@@ -592,7 +592,7 @@ public class FRandAspectDef implements FRandAspect {
 
             ray.getRefOrigin().translate(range.getCenter());
 
-            double distance = in.projectWithOrigin(field, ray);
+            double distance = in.projectFrom(field, ray);
 
             if (distance >= 0) {
                 return distance;

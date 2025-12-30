@@ -30,7 +30,7 @@ public class FAggregateModuleTopologyDef {
     protected FPlot getBoxCoverageFunction(boolean log) {
         FPlot results = this.factory.getFPlot();
 
-        double radius = this.aggregate.getParticleRadius().mean();
+        double radius = this.aggregate.getFStatParticleRadius().mean();
 
         double cutoffInner = radius * 2;
         double cutoffOuter = this.aggregate.getLength(LinearDimension.MAX);

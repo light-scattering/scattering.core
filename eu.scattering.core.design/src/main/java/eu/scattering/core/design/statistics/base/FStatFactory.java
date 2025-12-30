@@ -9,6 +9,7 @@ import java.util.List;
 public interface FStatFactory {
 
     FStat getFStat();
+    FStat getFStat(double... data);
 
     @Modificator
     FStat getRefFStat(List<Double> refData);

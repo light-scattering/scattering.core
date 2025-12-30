@@ -62,6 +62,21 @@ public class FStatTest {
         }
 
         @Test
+        @DisplayName("Create with array")
+        void createWithArray() {
+            FStat fStat = factory.getFStat(1, 2, 3, 4, 5);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(5, fStat.size()),
+                    () -> assertEquals(1, fStat.get(0)),
+                    () -> assertEquals(2, fStat.get(1)),
+                    () -> assertEquals(3, fStat.get(2)),
+                    () -> assertEquals(4, fStat.get(3)),
+                    () -> assertEquals(5, fStat.get(4))
+            );
+        }
+
+        @Test
         @DisplayName("Export to array")
         void exportToArray() {
             FStat fStat = factory.getFStat();
@@ -144,6 +159,17 @@ public class FStatTest {
                     () -> assertEquals(5, fStat.get(0)),
                     () -> assertEquals(1, fStat.get(1)),
                     () -> assertEquals(9, fStat.get(2))
+            );
+        }
+
+        @Test
+        @DisplayName("Contains")
+        void contains() {
+            FStat fStat = factory.getFStat(1, 2, 3);
+
+            Assertions.assertAll("Validate results",
+                    () -> assertTrue(fStat.contains(2)),
+                    () -> assertFalse(fStat.contains(4))
             );
         }
     }

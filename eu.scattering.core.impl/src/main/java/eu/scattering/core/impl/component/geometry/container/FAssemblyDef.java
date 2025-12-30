@@ -474,12 +474,24 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
+    public FAssembly<T> translate(FPoint base, double x, double y, double z) {
+
+        return translate(base.getX(), base.getY(), base.getZ(), x, y, z);
+    }
+
+    @Override
     public FAssembly<T> translate(FPoint base, FPoint head) {
 
         return translate(
                 base.getX(), base.getY(), base.getZ(),
                 head.getX(), head.getY(), head.getZ()
         );
+    }
+
+    @Override
+    public FAssembly<T> translate(FPos3D base, double x, double y, double z) {
+
+        return translate(base.getD0(), base.getD1(), base.getD2(), x, y, z);
     }
 
     @Override

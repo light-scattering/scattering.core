@@ -24,7 +24,7 @@ public class FAggregatePredefinedTest {
         Assertions.assertAll("Validate FAggregate",
                 () -> assertEquals(100, fAggregate.getRefParticles().size(),
                         "The number of particles is incorrect"),
-                () -> assertEquals(1, fAggregate.getParticleRadius().mean(),
+                () -> assertEquals(1, fAggregate.getFStatParticleRadius().mean(),
                         epsilon, "The particle radius is erroneous")
         );
     }
@@ -45,9 +45,9 @@ public class FAggregatePredefinedTest {
         Assertions.assertAll("Validate FAggregate",
                 () -> assertEquals(100, fAggregate.getRefParticles().size(),
                         "The number of particles is incorrect"),
-                () -> assertEquals(10, fAggregate.getParticleRadius().mean(),
+                () -> assertEquals(10, fAggregate.getFStatParticleRadius().mean(),
                         1, "The particle avg radius is erroneous"),
-                () -> assertEquals(1, fAggregate.getParticleRadius().std(true),
+                () -> assertEquals(1, fAggregate.getFStatParticleRadius().std(true),
                         0.1, "The particle std radius is erroneous")
         );
     }
