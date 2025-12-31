@@ -1,24 +1,20 @@
 package eu.scattering.core.impl.component;
 
-import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.component.ComponentAspectExport;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.FAggregateAspectExport;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComponentAspectExportDef implements ComponentAspectExport {
-    private final ScatFactory factory;
+public class FAggregateAspectExportDef implements FAggregateAspectExport {
 
-    private ComponentAspectExportDef(ScatFactory factory) {
-
-        this.factory = factory;
+    private FAggregateAspectExportDef() {
     }
 
-    public static ComponentAspectExportDef create(ScatFactory factory) {
+    public static FAggregateAspectExportDef create() {
 
-       return new ComponentAspectExportDef(factory);
+       return new FAggregateAspectExportDef();
     }
 
     //--------------------------------------------------

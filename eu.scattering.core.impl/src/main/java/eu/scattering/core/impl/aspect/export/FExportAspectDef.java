@@ -2,9 +2,9 @@ package eu.scattering.core.impl.aspect.export;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.export.FExportAspect;
-import eu.scattering.core.design.component.ComponentAspectExport;
+import eu.scattering.core.design.component.aggregate.FAggregateAspectExport;
 import eu.scattering.core.design.statistics.StatisticsAspectExport;
-import eu.scattering.core.impl.component.ComponentAspectExportDef;
+import eu.scattering.core.impl.component.FAggregateAspectExportDef;
 import eu.scattering.core.impl.statistics.StatisticsAspectExportDef;
 
 public class FExportAspectDef implements FExportAspect {
@@ -35,8 +35,8 @@ public class FExportAspectDef implements FExportAspect {
     }
 
     @Override
-    public ComponentAspectExport getComponentContext() {
+    public FAggregateAspectExport getFAggregateContext() {
 
-        return ComponentAspectExportDef.create(this.factory);
+        return FAggregateAspectExportDef.create();
     }
 }

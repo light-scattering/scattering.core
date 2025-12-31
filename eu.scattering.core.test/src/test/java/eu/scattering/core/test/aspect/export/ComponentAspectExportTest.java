@@ -31,7 +31,7 @@ public class ComponentAspectExportTest {
 
         modelRLA.build();
 
-        String model = factory.getExportAspect().getComponentContext().toFLAGE(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toFLAGE(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -57,7 +57,7 @@ public class ComponentAspectExportTest {
 
         modelRLA.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -81,7 +81,7 @@ public class ComponentAspectExportTest {
 
         modelRLA.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -105,7 +105,7 @@ public class ComponentAspectExportTest {
 
         modelBallistic.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -129,7 +129,7 @@ public class ComponentAspectExportTest {
 
         modelBallistic.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -154,7 +154,7 @@ public class ComponentAspectExportTest {
 
         modelTunable.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -179,7 +179,7 @@ public class ComponentAspectExportTest {
 
         modelTunable.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -202,7 +202,7 @@ public class ComponentAspectExportTest {
         FModelDLA modelDLA = factory.createFModelDLA3D(fAggregate);
         modelDLA.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",
@@ -225,7 +225,7 @@ public class ComponentAspectExportTest {
         FModelDLA modelDLA = factory.createFModelDLA2D(fAggregate);
         modelDLA.build();
 
-        String model = factory.getExportAspect().getComponentContext().toNGSolve(fAggregate);
+        String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
         String[] modelSplit = model.split("\n");
 
         Assertions.assertAll("Validate model",

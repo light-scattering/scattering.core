@@ -1,11 +1,14 @@
 package eu.scattering.core.test.component.aggregate.aspect;
 
+import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
+import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -183,6 +186,8 @@ public class FAggregateRandomizeTest {
     @Test
     @DisplayName("Rotate 2D (complex)")
     void rotateComplex2D() {
+        ScatFactory factory = FactoryDef.create(-1);
+
         FAggregate aggA = factory.getFAggregateContext().template().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().template().monodisperse(25, 1);
 

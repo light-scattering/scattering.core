@@ -125,6 +125,8 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct monodisperse")
         void constructMono() {
+            ScatFactory factory = FactoryDef.create(1766972568500L);
+            System.out.println("Debug Seed Check: " + factory.getFRand().nextDouble());
             FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(100, 1);
 
             Assertions.assertAll("Validate FAggregate",
@@ -138,16 +140,16 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct polydisperse")
         void constructPoly() {
-//        long timestamp = System.currentTimeMillis();
             ScatFactory factory = FactoryDef.create(1766972568500L);
-//        System.out.println(timestamp);
-
+            System.out.println("Debug Seed Check: " + factory.getFRand().nextDouble());
             FAggregate fAggregate = factory.getFAggregateContext().template().polydisperse(100, 10, 1, 8);
+
+            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
 
             for (Shape shape : fAggregate.getRefParticles()) {
                 assertTrue(shape.getRadius() > 8);
             }
-
+double rand = factory.getFRand().nextDouble();
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),
                             "The number of particles is incorrect"),
