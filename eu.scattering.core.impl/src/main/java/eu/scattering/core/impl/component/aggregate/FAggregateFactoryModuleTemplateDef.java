@@ -10,7 +10,6 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.extension.Producer;
 
 public class FAggregateFactoryModuleTemplateDef implements FAggregateFactoryModuleTemplate {
-    private static FAggregateFactoryModuleTemplate self;
     private final ScatFactory factory;
 
     private FAggregateFactoryModuleTemplateDef(ScatFactory factory) {
@@ -18,17 +17,14 @@ public class FAggregateFactoryModuleTemplateDef implements FAggregateFactoryModu
         this.factory = factory;
     }
 
-    public static FAggregateFactoryModuleTemplate get(ScatFactory factory) {
+    public static FAggregateFactoryModuleTemplate create(ScatFactory factory) {
 
-        if (FAggregateFactoryModuleTemplateDef.self == null) {
-            FAggregateFactoryModuleTemplateDef.self = new FAggregateFactoryModuleTemplateDef(factory);
-        }
-
-        return FAggregateFactoryModuleTemplateDef.self;
+        return new FAggregateFactoryModuleTemplateDef(factory);
     }
 
     //--------------------------------------------------
 
+    @Override
     public FAggregate monodisperse(int quantity, double radius) {
 
         if (quantity < 1) {
@@ -41,6 +37,7 @@ public class FAggregateFactoryModuleTemplateDef implements FAggregateFactoryModu
         return FAggregateDef.create(factory, fAssembly);
     }
 
+    @Override
     public FAggregate polydisperse(int quantity, double avg, double std, double cutoff) {
 
         if (quantity < 1) {

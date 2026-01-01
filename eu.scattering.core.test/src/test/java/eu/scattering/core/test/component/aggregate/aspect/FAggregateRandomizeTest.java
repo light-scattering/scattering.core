@@ -1,12 +1,10 @@
 package eu.scattering.core.test.component.aggregate.aspect;
 
-import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
-import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -183,10 +181,10 @@ public class FAggregateRandomizeTest {
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
     }
 
-    @Test
+    @RepeatedTest(1000)
     @DisplayName("Rotate 2D (complex)")
     void rotateComplex2D() {
-        ScatFactory factory = FactoryDef.create(-1);
+//        ScatFactory factory = FactoryDef.create(1767145494107L);
 
         FAggregate aggA = factory.getFAggregateContext().template().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().template().monodisperse(25, 1);
@@ -197,7 +195,7 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadius(Center.ORIGIN));
+        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadius(Center.MASS));
 
         factory.getRandAspect().rotateOnSurface(aggA, aggB);
         aggA.merge(aggB, true);

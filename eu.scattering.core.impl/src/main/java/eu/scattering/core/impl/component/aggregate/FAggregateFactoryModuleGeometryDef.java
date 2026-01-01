@@ -13,7 +13,6 @@ import eu.scattering.core.design.extension.Producer;
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModuleGeometry {
-    private static FAggregateFactoryModuleGeometry self;
     private final ScatFactory factory;
 
     private FAggregateFactoryModuleGeometryDef(ScatFactory factory) {
@@ -21,17 +20,14 @@ public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModu
         this.factory = factory;
     }
 
-    public static FAggregateFactoryModuleGeometry get(ScatFactory factory) {
+    public static FAggregateFactoryModuleGeometry create(ScatFactory factory) {
 
-        if (FAggregateFactoryModuleGeometryDef.self == null) {
-            FAggregateFactoryModuleGeometryDef.self = new FAggregateFactoryModuleGeometryDef(factory);
-        }
-
-        return FAggregateFactoryModuleGeometryDef.self;
+        return new FAggregateFactoryModuleGeometryDef(factory);
     }
 
     //--------------------------------------------------
 
+    @Override
     public FAggregate d1(int d1, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
@@ -56,6 +52,7 @@ public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModu
         return fAggregate;
     }
 
+    @Override
     public FAggregate d2(int d1, int d2, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
@@ -82,6 +79,7 @@ public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModu
         return fAggregate;
     }
 
+    @Override
     public FAggregate d3(int d1, int d2, int d3, double radius) {
         Producer<FSphere> fProducer = factory.getFSphereProducer(radius);
         FAssembly<Shape> fAssembly = factory.getFAssembly();
@@ -110,6 +108,7 @@ public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModu
         return fAggregate;
     }
 
+    @Override
     public FAggregate fullCircle(int layers, double radius) {
 
         if (layers < 1) {
@@ -142,7 +141,7 @@ public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModu
         return fAggregate;
     }
 
-    // Approximate solution
+    @Override
     public FAggregate fullSphere(int layers, double radius) {
 
         if (layers < 1) {

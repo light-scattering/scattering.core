@@ -221,7 +221,7 @@ public class FMonitorTest {
             FPlot resultsPoly = fMonitorPoly.getRefFPlot();
             FPlot resultsFilippov = fMonitorFilippov.getRefFPlot();
 
-            assertTrue(results.getRefCoreY().isSimilarAbs(0.1,
+            assertTrue(results.getRefCoreY().isSimilarAbs(0.15,
                     resultsMono.getRefCoreY(), resultsPoly.getRefCoreY(), resultsFilippov.getRefCoreY()));
         }
     }

@@ -108,37 +108,25 @@ public final class FactoryDef implements ScatFactory {
     private final FRotAspect fAspectRot;
 
     private final FTrigHelper fTrigHelper;
-    private final StatisticsHelper fStatHelper;
     private final FTransferHelper fPosHelper;
+    private final StatisticsHelper fStatHelper;
 
     private final FPointHelper fPointHelper;
     private final FSphereHelper fSphereHelper;
 
     private FactoryDef() {
         this.fRandGenerator = FRandGeneratorDef.create();
-
-        this.fAspectExport = FExportAspectDef.get(this);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
-        this.fAspectProto = FProtoAspectDef.get();
-        this.fAspectRot = FRotAspectDef.create(FRotProcessorDef.get());
-
-        this.fRotGenerator = FRotProcessorDef.get();
-
-        this.fTrigHelper = FTrigHelperDef.get();
-        this.fStatHelper = FStatHelperDef.get();
-        this.fPosHelper = FPositionHelperDef.get();
-
-        this.fGeometryParser = GeometryParserDef.get(this);
-
-        this.fPointHelper = FPointHelperDef.get();
-        this.fSphereHelper = FSphereHelperDef.get(this.fPointHelper);
     }
 
     private FactoryDef(long seed) {
         this.fRandGenerator = FRandGeneratorDef.create(seed);
-
-        this.fAspectExport = FExportAspectDef.get(this);
         this.fAspectRand = FRandAspectDef.create(this.fRandGenerator, this);
+    }
+
+    {
+        this.fAspectExport = FExportAspectDef.get(this);
+
         this.fAspectProto = FProtoAspectDef.get();
         this.fAspectRot = FRotAspectDef.create(FRotProcessorDef.get());
 
@@ -436,7 +424,7 @@ public final class FactoryDef implements ScatFactory {
     @Override
     public FAggregateFactoryModule getFAggregateContext() {
 
-        return FAggregateFactoryModuleDef.get(this);
+        return FAggregateFactoryModuleDef.create(this);
     }
 
     @Override

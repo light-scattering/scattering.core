@@ -6,21 +6,18 @@ import eu.scattering.core.design.component.aggregate.FAggregateFactoryModuleGeom
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryModuleTemplate;
 
 public class FAggregateFactoryModuleDef implements FAggregateFactoryModule {
-    private static FAggregateFactoryModule self;
-    private final ScatFactory factory;
+    private final FAggregateFactoryModuleGeometry geometry;
+    private final FAggregateFactoryModuleTemplate template;
 
     private FAggregateFactoryModuleDef(ScatFactory factory) {
 
-        this.factory = factory;
+        this.geometry = FAggregateFactoryModuleGeometryDef.create(factory);
+        this.template = FAggregateFactoryModuleTemplateDef.create(factory);
     }
 
-    public static FAggregateFactoryModule get(ScatFactory factory) {
+    public static FAggregateFactoryModule create(ScatFactory factory) {
 
-        if (FAggregateFactoryModuleDef.self == null) {
-            FAggregateFactoryModuleDef.self = new FAggregateFactoryModuleDef(factory);
-        }
-
-        return FAggregateFactoryModuleDef.self;
+        return new FAggregateFactoryModuleDef(factory);
     }
 
     //--------------------------------------------------
@@ -28,12 +25,12 @@ public class FAggregateFactoryModuleDef implements FAggregateFactoryModule {
     @Override
     public FAggregateFactoryModuleGeometry geometry() {
 
-        return FAggregateFactoryModuleGeometryDef.get(this.factory);
+        return this.geometry;
     }
 
     @Override
     public FAggregateFactoryModuleTemplate template() {
 
-        return FAggregateFactoryModuleTemplateDef.get(this.factory);
+        return this.template;
     }
 }
