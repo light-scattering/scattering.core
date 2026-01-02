@@ -1,17 +1,13 @@
 package eu.scattering.core.test.component.aggregate;
 
-import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("FAggregate")
 public class FAggregateFactoryTest {
@@ -138,13 +134,20 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct polydisperse")
         void constructPoly() {
-            ScatFactory factory = FactoryDef.create(1766972568500L);
+            FAggregate fAggregate = factory.getFAggregateContext().template().polydisperse(100, 10, 1);
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().polydisperse(100, 10, 1, 8);
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(100, fAggregate.getRefParticles().size(),
+                            "The number of particles is incorrect"),
+                    () -> assertTrue(fAggregate.getFStatParticleRadius().std(true) > 0,
+                            "The particle radius should not be constant")
+            );
+        }
 
-            for (Shape shape : fAggregate.getRefParticles()) {
-                assertTrue(shape.getRadius() > 8);
-            }
+        @Test
+        @DisplayName("Construct polydisperse (limited)")
+        void constructPolyLimited() {
+            FAggregate fAggregate = factory.getFAggregateContext().template().polydisperse(100, 10, 1, 1, 0.1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),
