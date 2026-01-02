@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.statistics.construct;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.statistics.construct.FPlot;
-import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 import eu.scattering.core.design.type.Round;
 

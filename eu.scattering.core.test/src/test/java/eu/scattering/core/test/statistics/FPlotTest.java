@@ -1,6 +1,6 @@
 package eu.scattering.core.test.statistics;
-import eu.scattering.core.design.statistics.construct.FPlot;
-import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;

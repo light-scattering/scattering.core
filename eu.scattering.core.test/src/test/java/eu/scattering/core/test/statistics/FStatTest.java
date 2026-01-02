@@ -1,6 +1,6 @@
 package eu.scattering.core.test.statistics;
 
-import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.base.FStat;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;

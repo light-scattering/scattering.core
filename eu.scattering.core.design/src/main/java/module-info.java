@@ -50,9 +50,8 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.model.pc.dla;
     exports eu.scattering.core.design.lambda;
     exports eu.scattering.core.design.statistics.base;
-    exports eu.scattering.core.design.statistics.construct;
     exports eu.scattering.core.design.statistics;
-    exports eu.scattering.core.design.statistics.construct.utils;
+    exports eu.scattering.core.design.statistics.construct.plot.utils;
     exports eu.scattering.core.design.extension;
     exports eu.scattering.core.design.storage.layer;
     exports eu.scattering.core.design.storage;
@@ -74,4 +73,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.monitor.common;
     exports eu.scattering.core.design.component.aggregate.monitor.common.module;
     exports eu.scattering.core.design.component.aggregate.validator.common.module;
+    exports eu.scattering.core.design.statistics.construct.plot;
+    exports eu.scattering.core.design.statistics.construct.plotbar;
 }

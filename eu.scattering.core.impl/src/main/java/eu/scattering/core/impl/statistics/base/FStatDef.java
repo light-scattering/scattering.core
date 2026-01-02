@@ -1,7 +1,7 @@
 package eu.scattering.core.impl.statistics.base;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.base.FStat;
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package eu.scattering.core.design.statistics.construct;
+package eu.scattering.core.design.statistics.construct.plot;
 
 public interface FPlotAspectExport {
 

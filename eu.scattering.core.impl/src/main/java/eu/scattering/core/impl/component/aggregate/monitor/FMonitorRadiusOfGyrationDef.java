@@ -5,7 +5,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.monitor.common.module.FMonitorRadiusOfGyration;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.type.RadiusOfGyration;
 
 public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {

@@ -3,9 +3,9 @@ package eu.scattering.core.impl.statistics.construct;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.statistics.construct.FPlot;
-import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
-import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
@@ -572,7 +572,6 @@ public class FPlotDef implements FPlot {
 
         json.put(JSON_TYPE, JSON_MAIN);
         json.put(JSON_DATA_X, getRefCoreX().toSimpleJSON());
-        json.put(JSON_DATA_Y, getRefCoreY().toSimpleJSON());
 
         return json;
     }

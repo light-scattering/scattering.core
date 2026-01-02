@@ -1,8 +1,8 @@
 package eu.scattering.core.impl.statistics.construct;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.statistics.construct.FPlot;
-import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 
 public class FPlotRegressorDef implements FPlotRegressor {

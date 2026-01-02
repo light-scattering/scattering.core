@@ -2,7 +2,7 @@ package eu.scattering.core.impl.statistics;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.statistics.StatisticsAspectExport;
-import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 

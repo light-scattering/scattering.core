@@ -1,12 +1,12 @@
-package eu.scattering.core.design.statistics.construct;
+package eu.scattering.core.design.statistics.construct.plot;
 
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.statistics.construct.utils.FPlotInterpolator;
-import eu.scattering.core.design.statistics.construct.utils.FPlotRegressor;
+import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.type.Round;
 

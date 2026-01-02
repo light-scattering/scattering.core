@@ -1,6 +1,6 @@
-package eu.scattering.core.design.statistics.construct.utils;
+package eu.scattering.core.design.statistics.construct.plot.utils;
 
-import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 
 import java.util.function.BiFunction;
 

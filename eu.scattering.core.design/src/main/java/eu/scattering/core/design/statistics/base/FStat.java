@@ -3,7 +3,7 @@ package eu.scattering.core.design.statistics.base;
 import eu.scattering.core.design.annotation.Fragment;
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.statistics.Statistics;
-import eu.scattering.core.design.statistics.construct.FPlot;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 
 import java.util.List;
 import java.util.function.BiFunction;

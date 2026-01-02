@@ -1,7 +1,7 @@
 package eu.scattering.core.design.statistics;
 
 import eu.scattering.core.design.statistics.base.FStatAspectExport;
-import eu.scattering.core.design.statistics.construct.FPlotAspectExport;
+import eu.scattering.core.design.statistics.construct.plot.FPlotAspectExport;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
 
 public interface StatisticsAspectExport extends FStatAspectExport, FPlotAspectExport {

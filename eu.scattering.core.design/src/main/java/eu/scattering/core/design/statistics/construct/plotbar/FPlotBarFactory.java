@@ -1,30 +1,29 @@
-package eu.scattering.core.design.statistics.construct;
+package eu.scattering.core.design.statistics.construct.plotbar;
 
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.storage.layer.FLayer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public interface FPlotFactory {
+import java.util.List;
 
-    FPlot getFPlot();
+public interface FPlotBarFactory {
 
-    FPlot getFPlot(FLayer fLayer);
+    FPlotBar getFPlotBar();
 
     @Modificator
-    FPlot getRefFPlot(FStat refDataX, FStat refDataY);
+    FPlotBar getRefFPlotBar(FStat refDataX, List<FStat> refDataY);
 
     //--------------------------------------------------
 
-    FPlot getFPlot(JSONObject json);
+    FPlotBar getFPlotBar(JSONObject json);
 
     //--------------------------------------------------
 
-    default FPlot getFPlot(String text) {
+    default FPlotBar getFPlotBar(String text) {
 
         try {
-            return getFPlot(new JSONObject(text));
+            return getFPlotBar(new JSONObject(text));
         } catch (JSONException e) {
             throw new IllegalArgumentException("Invalid json format");
         }
