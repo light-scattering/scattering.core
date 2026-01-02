@@ -31,7 +31,6 @@ public interface ShapeModuleInteraction {
     double projectFrom(Iterable<? extends Shape> field, FRay path, double distLimit);
 
 //    void getCollisionsLinear(List<Shape> in, Iterable<? extends Shape> field, FVector path);
-
     void getCollisionsFromLinear(List<Shape> in, Iterable<? extends Shape> field, FRay path);
 
     void getCollisionsSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);

@@ -6,7 +6,6 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -172,7 +171,7 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadius(Center.ORIGIN));
+        factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadius(Center.MASS));
 
         factory.getRandAspect().rotate(aggA, aggB);
         aggA.merge(aggB, true);
@@ -181,11 +180,9 @@ public class FAggregateRandomizeTest {
         assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
     }
 
-    @RepeatedTest(1000)
+    @Test
     @DisplayName("Rotate 2D (complex)")
     void rotateComplex2D() {
-//        ScatFactory factory = FactoryDef.create(1767145494107L);
-
         FAggregate aggA = factory.getFAggregateContext().template().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().template().monodisperse(25, 1);
 

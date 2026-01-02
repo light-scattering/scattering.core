@@ -372,7 +372,14 @@ public class FRandAspectModuleFAggregateDef {
     private boolean setRotArgCorrection(FAggregate ref, List<Shape> particles, Shape particleRef, Shape particleArg, Shape particleLoc) {
         FPos3D initialParticleLoc = particleLoc.getRefCenter().toFPos3D();
 
-        for (Shape candidate : particles) {
+        while (true) {
+
+            if (particles.size() == 0) {
+                throw new IllegalStateException("The particle argument pool is depleted");
+            }
+
+            Shape candidate = factory.getFRand().getElement(particles, false);
+
             particleLoc.setRadius(candidate.getRadius());
 
             particleLoc.setCenter(initialParticleLoc);
@@ -387,8 +394,6 @@ public class FRandAspectModuleFAggregateDef {
 
             return true;
         }
-
-        return false;
     }
 
     private void isOnSurface(FAggregate ref) {
