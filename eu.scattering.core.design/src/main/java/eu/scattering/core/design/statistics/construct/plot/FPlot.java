@@ -7,6 +7,7 @@ import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.type.Round;
 
@@ -59,6 +60,8 @@ public interface FPlot extends Statistics<FPlot> {
     void forEach(TriConsumer<Double, Double, Integer> consumer);
 
     double[][] toArray();
+
+//    FPlotBar toFPlotBar();
 
     FPlotRegressor reg();
     FPlotInterpolator apx();

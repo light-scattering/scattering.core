@@ -101,9 +101,11 @@ public class FStatTest {
 
             fStat.add(5);
             fStat.add(7);
-            fStat.add(9);
+
+            FStat results = fStat.add(9);
 
             Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
                     () -> assertEquals(3, fStat.size()),
                     () -> assertEquals(5, fStat.get(0)),
                     () -> assertEquals(7, fStat.get(1)),
@@ -116,9 +118,10 @@ public class FStatTest {
         void addVararg() {
             FStat fStat = factory.getFStat();
 
-            fStat.add(5, 7, 9);
+            FStat results = fStat.add(5, 7, 9);
 
             Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
                     () -> assertEquals(3, fStat.size()),
                     () -> assertEquals(5, fStat.get(0)),
                     () -> assertEquals(7, fStat.get(1)),
@@ -149,12 +152,13 @@ public class FStatTest {
             fStat.add(7);
             fStat.add(9);
 
-            fStat.set(1, 1);
+            FStat results = fStat.set(1, 1);
 
             assertThrows(IndexOutOfBoundsException.class, () -> fStat.set(-1, 0));
             assertThrows(IndexOutOfBoundsException.class, () -> fStat.set(3, 0));
 
             Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
                     () -> assertEquals(3, fStat.size()),
                     () -> assertEquals(5, fStat.get(0)),
                     () -> assertEquals(1, fStat.get(1)),
@@ -324,9 +328,10 @@ public class FStatTest {
             fStat.add(3);
             fStat.add(-2);
 
-            fStat.sort(true);
+            FStat results = fStat.sort(true);
 
             Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
                     () -> assertEquals(-2, fStat.get(0)),
                     () -> assertEquals(-2, fStat.get(1)),
                     () -> assertEquals(1, fStat.get(2)),
@@ -346,9 +351,10 @@ public class FStatTest {
             fStat.add(3);
             fStat.add(-2);
 
-            fStat.sort(false);
+            FStat results = fStat.sort(false);
 
             Assertions.assertAll("Validate results",
+                    () -> assertSame(fStat, results),
                     () -> assertEquals(5, fStat.get(0)),
                     () -> assertEquals(3, fStat.get(1)),
                     () -> assertEquals(1, fStat.get(2)),
@@ -1072,7 +1078,7 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.normalize(3.2857143, 4.3985155);
+            FStat results = fStat.normalize(3.2857143, 4.3985155);
 
             assertEquals(-0.51965584752401, fStat.get(0), 1E-6);
             assertEquals(0.84444074370091, fStat.get(1), 1E-6);
@@ -1085,6 +1091,7 @@ public class FStatTest {
             double mean = fStat.mean();
             double std = fStat.std(false);
 
+            assertSame(fStat, results);
             assertEquals(0, mean, 1E-6);
             assertEquals(1, std, 1E-6);
         }
@@ -1096,7 +1103,7 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.normalize(true);
+            FStat results = fStat.normalize(true);
 
             assertEquals(-0.48110782207764, fStat.get(0), 1E-6);
             assertEquals(0.781800202983, fStat.get(1), 1E-6);
@@ -1109,6 +1116,7 @@ public class FStatTest {
             double mean = fStat.mean();
             double std = fStat.std(true);
 
+            assertSame(fStat, results);
             assertEquals(0, mean, 1E-6);
             assertEquals(1, std, 1E-6);
         }
@@ -1120,8 +1128,9 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.rescale();
+            FStat results = fStat.rescale();
 
+            assertSame(fStat, results);
             assertEquals(1, fStat.max(), 1E-6);
             assertEquals(0, fStat.min(), 1E-6);
         }
@@ -1133,8 +1142,9 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.rescale(-1, 5);
+            FStat results = fStat.rescale(-1, 5);
 
+            assertSame(fStat, results);
             assertEquals(5, fStat.max(), 1E-6);
             assertEquals(-1, fStat.min(), 1E-6);
         }
@@ -1156,8 +1166,9 @@ public class FStatTest {
 
             fStat.add(1, -7, -4, 10, -5, 2, 4);
 
-            fStat.absolute();
+            FStat results = fStat.absolute();
 
+            assertSame(fStat, results);
             assertEquals(1, fStat.get(0), 1E-6);
             assertEquals(7, fStat.get(1), 1E-6);
             assertEquals(4, fStat.get(2), 1E-6);
@@ -1168,14 +1179,62 @@ public class FStatTest {
         }
 
         @Test
+        @DisplayName("Distribute")
+        void distribute() {
+            FStat fStat = factory.getFStat(2, 1, 0, 1, 2);
+
+            FStat results = fStat.distribute();
+
+            Assertions.assertAll("Test values",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(2d / 6, fStat.get(0), 1E-4),
+                    () -> assertEquals(1d / 6, fStat.get(1), 1E-4),
+                    () -> assertEquals(0d / 6, fStat.get(2), 1E-4),
+                    () -> assertEquals(1d / 6, fStat.get(3), 1E-4),
+                    () -> assertEquals(2d / 6, fStat.get(4), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Log")
+        void log() {
+            FStat fStat = factory.getFStat(4, 5, 6);
+
+            FStat results = fStat.log(Math.E);
+
+            Assertions.assertAll("Check values",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(Math.log(4), fStat.get(0), 1E-4),
+                    () -> assertEquals(Math.log(5), fStat.get(1), 1E-4),
+                    () -> assertEquals(Math.log(6), fStat.get(2), 1E-4)
+            );
+        }
+
+        @Test
+        @DisplayName("Ln")
+        void ln() {
+            FStat fStat = factory.getFStat(4, 5, 6);
+
+            FStat results = fStat.ln();
+
+            Assertions.assertAll("Check values",
+                    () -> assertSame(fStat, results),
+                    () -> assertEquals(Math.log(4), fStat.get(0), 1E-4),
+                    () -> assertEquals(Math.log(5), fStat.get(1), 1E-4),
+                    () -> assertEquals(Math.log(6), fStat.get(2), 1E-4)
+            );
+        }
+
+        @Test
         @DisplayName("Invert order")
         void invertOrder() {
             FStat fStat = factory.getFStat();
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.invert();
+            FStat results = fStat.invert();
 
+            assertSame(fStat, results);
             assertEquals(4, fStat.get(0), 1E-6);
             assertEquals(2, fStat.get(1), 1E-6);
             assertEquals(-5, fStat.get(2), 1E-6);
@@ -1192,8 +1251,9 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.mirror();
+            FStat results = fStat.mirror();
 
+            assertSame(fStat, results);
             assertEquals(-1, fStat.get(0), 1E-6);
             assertEquals(-7, fStat.get(1), 1E-6);
             assertEquals(-4, fStat.get(2), 1E-6);
@@ -1210,7 +1270,8 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.removeBias();
+            FStat results = fStat.removeBias();
+            assertSame(fStat, results);
 
             assertEquals(0, fStat.mean(), 1E-6);
         }
@@ -1222,8 +1283,9 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.removeBias(3.28571429);
+            FStat results = fStat.removeBias(3.28571429);
 
+            assertSame(fStat, results);
             assertEquals(0, fStat.mean(), 1E-6);
         }
 
@@ -1320,8 +1382,9 @@ public class FStatTest {
 
             fStat.add(1, 7, 4, 10, -5, 2, 4);
 
-            fStat.normalize(false);
+            FStat results = fStat.normalize(false);
 
+            assertSame(fStat, results);
             assertEquals(-0.51965584752401, fStat.get(0), 1E-6);
             assertEquals(0.84444074370091, fStat.get(1), 1E-6);
             assertEquals(0.16239244808845, fStat.get(2), 1E-6);
@@ -1747,8 +1810,9 @@ public class FStatTest {
         void setName() {
             FStat fStat = factory.getFStat();
 
-            fStat.setName("test");
+            FStat results = fStat.setName("test");
 
+            assertSame(fStat, results);
             assertEquals("test", fStat.getName());
         }
     }

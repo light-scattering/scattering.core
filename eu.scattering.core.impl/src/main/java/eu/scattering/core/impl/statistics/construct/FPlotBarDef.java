@@ -86,7 +86,7 @@ public class FPlotBarDef implements FPlotBar {
             getRefCoreX().add(x);
             getRefCoreY().add(dataY);
         } else {
-            FStat dataY = getY(position);
+            FStat dataY = getRefY(position);
 
             dataY.add(y);
         }
@@ -129,13 +129,25 @@ public class FPlotBarDef implements FPlotBar {
     @Override
     public FStat getY(int index) {
 
-        return getRefCoreY().get(index);
+        return getRefCoreY().get(index).copy();
     }
 
     @Override
     public void setY(int index, FStat y) {
 
-        getRefCoreY().set(index, y);
+        getRefCoreY().set(index, y.copy());
+    }
+
+    @Override
+    public FStat getRefY(int index) {
+
+        return getRefCoreY().get(index);
+    }
+
+    @Override
+    public void setRefY(int index, FStat refY) {
+
+        getRefCoreY().set(index, refY);
     }
 
     @Override
@@ -156,9 +168,9 @@ public class FPlotBarDef implements FPlotBar {
         List<FStat> dataY = new ArrayList<>();
 
         for (int i = 0 ; i < size() ; i++) {
-            if (filter.apply(getX(i), getY(i))) {
+            if (filter.apply(getX(i), getRefY(i))) {
                 dataX.add(getX(i));
-                dataY.add(getY(i));
+                dataY.add(getRefY(i));
             }
         }
 

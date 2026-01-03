@@ -11,13 +11,13 @@ import java.util.function.Function;
 
 public interface FStat extends Statistics<FStat>, Iterable<Double> {
 
-    void add(double value);
-    void add(double... value);
+    FStat add(double value);
+    FStat add(double... value);
 
     // -------------------------------------------------------------------------------------------------
 
     double get(int index);
-    void set(int index, double value);
+    FStat set(int index, double value);
 
     boolean contains(double value);
 
@@ -77,27 +77,27 @@ public interface FStat extends Statistics<FStat>, Iterable<Double> {
 
     // -------------------------------------------------------------------------------------------------
 
-    void log(double base);
+    FStat log(double base);
 
-    void mutate(Function<Double, Double> function);
-    void mutate(boolean dynamic, BiFunction<Double, Double, Double> function);
+    FStat mutate(Function<Double, Double> function);
+    FStat mutate(boolean dynamic, BiFunction<Double, Double, Double> function);
 
-    void sort(boolean ascending);
+    FStat sort(boolean ascending);
 
-    void invert();
-    void mirror();
+    FStat invert();
+    FStat mirror();
 
-    void rescale();
-    void rescale(double min, double max);
+    FStat rescale();
+    FStat rescale(double min, double max);
 
-    void absolute();
-    void distribute();
+    FStat absolute();
+    FStat distribute();
 
-    void normalize(boolean sample);
-    void normalize(double mean, double std);
+    FStat normalize(boolean sample);
+    FStat normalize(double mean, double std);
 
-    void removeBias();
-    void removeBias(double mean);
+    FStat removeBias();
+    FStat removeBias(double mean);
 
     boolean isSimilarAbs(double threshold, FStat... comparison);
     boolean isSimilarRel(double threshold, FStat... comparison);
@@ -115,7 +115,7 @@ public interface FStat extends Statistics<FStat>, Iterable<Double> {
     // -------------------------------------------------------------------------------------------------
 
     String getName();
-    void setName(String name);
+    FStat setName(String name);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -141,8 +141,8 @@ public interface FStat extends Statistics<FStat>, Iterable<Double> {
 
     // -------------------------------------------------------------------------------------------------
 
-    default void ln() {
+    default FStat ln() {
 
-        log(Math.E);
+        return log(Math.E);
     }
 }

@@ -58,10 +58,10 @@ public interface FPlotBar extends Statistics<FPlotBar> {
 
     @Modificator
     void addRef(double x, FStat refY);
-//    @Modificator
-//    FStat getRefY(int index);
-//    @Modificator
-//    void setRefY(int index, FStat refY);
+    @Modificator
+    FStat getRefY(int index);
+    @Modificator
+    void setRefY(int index, FStat refY);
 
     @Modificator
     FStat getRefCoreX();

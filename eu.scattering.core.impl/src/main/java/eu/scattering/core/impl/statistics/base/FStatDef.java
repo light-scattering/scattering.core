@@ -88,17 +88,21 @@ public class FStatDef implements FStat {
     }
 
     @Override
-    public void add(double value) {
+    public FStat add(double value) {
 
         getRefCore().add(value);
+
+        return this;
     }
 
     @Override
-    public void add(double... value) {
+    public FStat add(double... value) {
 
         for (double v : value) {
             add(v);
         }
+
+        return this;
     }
 
     @Override
@@ -108,9 +112,11 @@ public class FStatDef implements FStat {
     }
 
     @Override
-    public void set(int index, double value) {
+    public FStat set(int index, double value) {
 
         getRefCore().set(index, value);
+
+        return this;
     }
 
     @Override
@@ -547,23 +553,27 @@ public class FStatDef implements FStat {
     }
 
     @Override
-    public void log(double base) {
+    public FStat log(double base) {
         double denominator = Math.log(base);
 
         mutate((e) -> Math.log(e) / denominator);
+
+        return this;
     }
 
     @Override
-    public void mutate(Function<Double, Double> function) {
+    public FStat mutate(Function<Double, Double> function) {
 
         for (int i = 0 ; i < size() ; i++) {
 
             getRefCore().set(i, function.apply(getRefCore().get(i)));
         }
+
+        return this;
     }
 
     @Override
-    public void mutate(boolean dynamic, BiFunction<Double, Double, Double> function) {
+    public FStat mutate(boolean dynamic, BiFunction<Double, Double, Double> function) {
 
         if (size() < 2) {
             throw new IllegalStateException("The set must contain at least two elements");
@@ -574,28 +584,34 @@ public class FStatDef implements FStat {
         } else {
             mutateStatic(function);
         }
+
+        return this;
     }
 
     @Override
-    public void sort(boolean ascending) {
+    public FStat sort(boolean ascending) {
 
         if (ascending) {
             sortAsc();
         } else {
             sortDsc();
         }
+
+        return this;
     }
 
     @Override
-    public void rescale() {
+    public FStat rescale() {
         double min = min();
         double max = max();
 
         mutate((x) -> (x - min) / (max - min));
+
+        return this;
     }
 
     @Override
-    public void rescale(double min, double max) {
+    public FStat rescale(double min, double max) {
 
         if (min >= max) {
             throw new IllegalArgumentException("The min value must be greater then the max value");
@@ -606,62 +622,80 @@ public class FStatDef implements FStat {
         rescale();
 
         mutate((x) -> (x * spread) + min);
+
+        return this;
     }
 
     @Override
-    public void absolute() {
+    public FStat absolute() {
 
         mutate(Math::abs);
+
+        return this;
     }
 
     @Override
-    public void distribute() {
+    public FStat distribute() {
         double sum = sum();
 
         mutate((x) -> x / sum);
+
+        return this;
     }
 
     @Override
-    public void invert() {
+    public FStat invert() {
 
         setData(new ArrayList<>(getRefCore().reversed()));
+
+        return this;
     }
 
     @Override
-    public void mirror() {
+    public FStat mirror() {
 
         mutate(val -> -val);
+
+        return this;
     }
 
     @Override
-    public void normalize(boolean sample) {
+    public FStat normalize(boolean sample) {
         double mean = mean();
         double std = std(sample);
 
         for (int i = 0 ; i < size() ; i++) {
             getRefCore().set(i, (getRefCore().get(i) - mean) / std);
         }
+
+        return this;
     }
 
     @Override
-    public void normalize(double mean, double std) {
+    public FStat normalize(double mean, double std) {
 
         for (int i = 0 ; i < size() ; i++) {
             getRefCore().set(i, (getRefCore().get(i) - mean) / std);
         }
+
+        return this;
     }
 
     @Override
-    public void removeBias() {
+    public FStat removeBias() {
         double mean = mean();
 
         removeBias(mean);
+
+        return this;
     }
 
     @Override
-    public void removeBias(double mean) {
+    public FStat removeBias(double mean) {
 
         mutate((val -> val - mean));
+
+        return this;
     }
 
     @Override
@@ -1121,9 +1155,11 @@ public class FStatDef implements FStat {
     }
 
     @Override
-    public void setName(String name) {
+    public FStat setName(String name) {
 
         this.name = name;
+
+        return this;
     }
 
     @Override
