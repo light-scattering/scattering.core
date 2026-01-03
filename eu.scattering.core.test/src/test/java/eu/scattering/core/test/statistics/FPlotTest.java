@@ -2,6 +2,7 @@ package eu.scattering.core.test.statistics;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.type.Round;
@@ -92,6 +93,28 @@ public class FPlotTest {
         }
 
         @Test
+        @DisplayName("Export to FPlotBar")
+        void exportToFPlotBar() {
+            FPlot fPlot = factory.getFPlot();
+
+            fPlot.add(1, 2);
+            fPlot.add(3, 4);
+            fPlot.add(5, 6);
+
+            FPlotBar fPlotBar = fPlot.toFPlotBar();
+
+            Assertions.assertAll("Validate results",
+                    () -> assertEquals(3, fPlotBar.size()),
+                    () -> assertEquals(1, fPlotBar.getX(0)),
+                    () -> assertEquals(3, fPlotBar.getX(1)),
+                    () -> assertEquals(5, fPlotBar.getX(2)),
+                    () -> assertEquals(2, fPlotBar.getRefY(0).get(0)),
+                    () -> assertEquals(4, fPlotBar.getRefY(1).get(0)),
+                    () -> assertEquals(6, fPlotBar.getRefY(2).get(0))
+            );
+        }
+
+        @Test
         @DisplayName("Add X")
         void addX() {
             FPlot fPlot = factory.getFPlot();
@@ -99,8 +122,9 @@ public class FPlotTest {
             assertEquals(0, fPlot.size());
 
             fPlot.add(0);
-            fPlot.add(1);
+            FPlot results = fPlot.add(1);
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -127,8 +151,9 @@ public class FPlotTest {
             assertEquals(0, fPlot.size());
 
             fPlot.add(1, 3);
-            fPlot.add(0, 2);
+            FPlot results = fPlot.add(0, 2);
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -157,8 +182,9 @@ public class FPlotTest {
             fPlot.add(1, 3);
             fPlot.add(0, 6);
 
-            fPlot.add((y1, y2) -> (y1 + y2) / 2, 0);
+            FPlot results = fPlot.add((y1, y2) -> (y1 + y2) / 2, 0);
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -186,8 +212,9 @@ public class FPlotTest {
             fPlot.add(1, 3);
             fPlot.add(0, 2);
 
-            fPlot.add((y1, y2) -> (y1 + y2) / 2, 0, 6);
+            FPlot results = fPlot.add((y1, y2) -> (y1 + y2) / 2, 0, 6);
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -226,7 +253,9 @@ public class FPlotTest {
             fPlot.add(1, 2);
             fPlot.add(3, 4);
 
-            fPlot.setX(1, 1);
+            FPlot results = fPlot.setX(1, 1);
+
+            assertSame(fPlot, results);
 
             assertThrows(IndexOutOfBoundsException.class, () -> fPlot.setX(-1, 0));
             assertThrows(IndexOutOfBoundsException.class, () -> fPlot.setX(2, 0));
@@ -247,7 +276,9 @@ public class FPlotTest {
             fPlot.add(1, 2);
             fPlot.add(3, 4);
 
-            fPlot.setY(1, 1);
+            FPlot results = fPlot.setY(1, 1);
+
+            assertSame(fPlot, results);
 
             assertThrows(IndexOutOfBoundsException.class, () -> fPlot.setY(-1, 0));
             assertThrows(IndexOutOfBoundsException.class, () -> fPlot.setY(2, 0));
@@ -271,7 +302,9 @@ public class FPlotTest {
             fPlot.add(4, -4);
             fPlot.add(3, -3);
 
-            fPlot.setY(factory.getFPoly(2, 1));
+            FPlot results = fPlot.setY(factory.getFPoly(2, 1));
+
+            assertSame(fPlot, results);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(2, fPlot.getX(0)),
@@ -780,8 +813,9 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutate((a) -> a.mutate((b) -> b * 2));
+            FPlot results = fPlot.mutate((a) -> a.mutate((b) -> b * 2));
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -800,11 +834,12 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutate((a, b) -> {
+            FPlot results = fPlot.mutate((a, b) -> {
                 a.mutate((c) -> c * 2);
                 b.mutate((c) -> c * 4);
             });
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -830,8 +865,9 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateX((x, y) -> (x * 2) + y);
+            FPlot results = fPlot.mutateX((x, y) -> (x * 2) + y);
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -850,8 +886,9 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateX((a) -> a.mutate((b) -> b * 2));
+            FPlot results = fPlot.mutateX((a) -> a.mutate((b) -> b * 2));
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -872,8 +909,9 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateY((x, y) -> (x * 2) + y);
+            FPlot results = fPlot.mutateY((x, y) -> (x * 2) + y);
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -892,8 +930,9 @@ public class FPlotTest {
             fPlot.add(2, 3);
             fPlot.add(3, 4);
 
-            fPlot.mutateY((a) -> a.mutate((b) -> b * 2));
+            FPlot results = fPlot.mutateY((a) -> a.mutate((b) -> b * 2));
 
+            assertSame(fPlot, results);
             assertEquals(2, fPlot.size());
 
             Assertions.assertAll("Check values",
@@ -1094,7 +1133,9 @@ public class FPlotTest {
             fPlot.add(4, -4);
             fPlot.add(3, -3);
 
-            fPlot.sortX(true);
+            FPlot results = fPlot.sortX(true);
+
+            assertSame(fPlot, results);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0)),
@@ -1121,7 +1162,9 @@ public class FPlotTest {
             fPlot.add(4, -4);
             fPlot.add(3, -3);
 
-            fPlot.sortX(false);
+            FPlot results = fPlot.sortX(false);
+
+            assertSame(fPlot, results);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(5, fPlot.getX(0)),
@@ -1148,7 +1191,9 @@ public class FPlotTest {
             fPlot.add(4, -4);
             fPlot.add(3, -3);
 
-            fPlot.sortY(true);
+            FPlot results = fPlot.sortY(true);
+
+            assertSame(fPlot, results);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(5, fPlot.getX(0)),
@@ -1175,7 +1220,9 @@ public class FPlotTest {
             fPlot.add(4, -4);
             fPlot.add(3, -3);
 
-            fPlot.sortY(false);
+            FPlot results = fPlot.sortY(false);
+
+            assertSame(fPlot, results);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(1, fPlot.getX(0)),
@@ -1205,11 +1252,12 @@ public class FPlotTest {
             AtomicInteger sumX = new AtomicInteger();
             AtomicInteger sumY = new AtomicInteger();
 
-            fPlot.forEach((x, y, index) -> {
+            FPlot results = fPlot.forEach((x, y, index) -> {
                 sumX.addAndGet((int) Math.round(x));
                 sumY.addAndGet((int) Math.round(y));
             });
 
+            assertSame(fPlot, results);
             assertEquals(15, sumX.get());
             assertEquals(-15, sumY.get());
         }
@@ -1415,7 +1463,9 @@ public class FPlotTest {
             fPlot.add(2, 5);
             fPlot.add(3, 6);
 
-            fPlot.swapXY();
+            FPlot results = fPlot.swapXY();
+
+            assertSame(fPlot, results);
 
             Assertions.assertAll("Check values",
                     () -> assertEquals(4, fPlot.getX(0)),

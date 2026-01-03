@@ -17,18 +17,18 @@ import java.util.function.Consumer;
 
 public interface FPlot extends Statistics<FPlot> {
 
-    void add(double x);
-    void add(double x, double y);
-    void add(BiFunction<Double, Double, Double> collision, double x);
-    void add(BiFunction<Double, Double, Double> collision, double x, double y);
+    FPlot add(double x);
+    FPlot add(double x, double y);
+    FPlot add(BiFunction<Double, Double, Double> collision, double x);
+    FPlot add(BiFunction<Double, Double, Double> collision, double x, double y);
 
     // -------------------------------------------------------------------------------------------------
 
     double getX(int index);
-    void setX(int index, double x);
+    FPlot setX(int index, double x);
 
     double getY(int index);
-    void setY(int index, double y);
+    FPlot setY(int index, double y);
 
     int getIndexX(Round type, double x);
     int getIndexY(Round type, double y);
@@ -39,29 +39,29 @@ public interface FPlot extends Statistics<FPlot> {
 
     int filter(BiFunction<Double, Double, Boolean> filter);
 
-    void setY(FPoly est);
+    FPlot setY(FPoly est);
 
-    void mutate(Consumer<FStat> consumer);
-    void mutate(BiConsumer<FStat, FStat> consumer);
+    FPlot mutate(Consumer<FStat> consumer);
+    FPlot mutate(BiConsumer<FStat, FStat> consumer);
 
-    void mutateX(Consumer<FStat> consumer);
-    void mutateX(BiFunction<Double, Double, Double> function);
+    FPlot mutateX(Consumer<FStat> consumer);
+    FPlot mutateX(BiFunction<Double, Double, Double> function);
 
-    void mutateY(Consumer<FStat> consumer);
-    void mutateY(BiFunction<Double, Double, Double> function);
+    FPlot mutateY(Consumer<FStat> consumer);
+    FPlot mutateY(BiFunction<Double, Double, Double> function);
 
-    void sortX(boolean ascending);
-    void sortY(boolean ascending);
+    FPlot sortX(boolean ascending);
+    FPlot sortY(boolean ascending);
 
-    void swapXY();
+    FPlot swapXY();
 
     // -------------------------------------------------------------------------------------------------
 
-    void forEach(TriConsumer<Double, Double, Integer> consumer);
+    FPlot forEach(TriConsumer<Double, Double, Integer> consumer);
 
     double[][] toArray();
 
-//    FPlotBar toFPlotBar();
+    FPlotBar toFPlotBar();
 
     FPlotRegressor reg();
     FPlotInterpolator apx();
@@ -69,7 +69,7 @@ public interface FPlot extends Statistics<FPlot> {
     // -------------------------------------------------------------------------------------------------
 
     String getName();
-    void setName(String name);
+    FPlot setName(String name);
 
     // -------------------------------------------------------------------------------------------------
 

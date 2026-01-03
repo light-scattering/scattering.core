@@ -6,6 +6,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotRegressor;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.transfer.primitive.FPos2D;
@@ -81,7 +82,7 @@ public class FPlotDef implements FPlot {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public void add(double x) {
+    public FPlot add(double x) {
 
         if (position(x) >= 0) {
             throw new IllegalStateException("The x value already exists");
@@ -89,10 +90,12 @@ public class FPlotDef implements FPlot {
 
         getRefCoreX().add(x);
         getRefCoreY().add(0);
+
+        return this;
     }
 
     @Override
-    public void add(BiFunction<Double, Double, Double> collision, double x) {
+    public FPlot add(BiFunction<Double, Double, Double> collision, double x) {
         int position = position(x);
 
         if (position < 0) {
@@ -101,10 +104,12 @@ public class FPlotDef implements FPlot {
         } else {
             getRefCoreY().set(position, collision.apply(getRefCoreY().get(position), 0d));
         }
+
+        return this;
     }
 
     @Override
-    public void add(double x, double y) {
+    public FPlot add(double x, double y) {
 
         if (position(x) >= 0) {
             throw new IllegalStateException("The x value already exists");
@@ -112,10 +117,12 @@ public class FPlotDef implements FPlot {
 
         getRefCoreX().add(x);
         getRefCoreY().add(y);
+
+        return this;
     }
 
     @Override
-    public void add(BiFunction<Double, Double, Double> collision, double x, double y) {
+    public FPlot add(BiFunction<Double, Double, Double> collision, double x, double y) {
         int position = position(x);
 
         if (position < 0) {
@@ -124,6 +131,8 @@ public class FPlotDef implements FPlot {
         } else {
             getRefCoreY().set(position, collision.apply(getRefCoreY().get(position), y));
         }
+
+        return this;
     }
 
     @Override
@@ -133,9 +142,11 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
-    public void setX(int index, double x) {
+    public FPlot setX(int index, double x) {
 
         getRefCoreX().set(index, x);
+
+        return this;
     }
 
     @Override
@@ -145,9 +156,11 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
-    public void setY(int index, double y) {
+    public FPlot setY(int index, double y) {
 
         getRefCoreY().set(index, y);
+
+        return this;
     }
 
     @Override
@@ -211,13 +224,15 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
-    public void setY(FPoly est) {
+    public FPlot setY(FPoly est) {
 
         mutateY((x, y) -> est.value(x));
+
+        return this;
     }
 
     @Override
-    public void mutate(Consumer<FStat> consumer) {
+    public FPlot mutate(Consumer<FStat> consumer) {
 
         consumer.accept(getRefCoreX());
         consumer.accept(getRefCoreY());
@@ -225,56 +240,68 @@ public class FPlotDef implements FPlot {
         if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
+
+        return this;
     }
 
     @Override
-    public void mutate(BiConsumer<FStat, FStat> consumer) {
+    public FPlot mutate(BiConsumer<FStat, FStat> consumer) {
 
         consumer.accept(getRefCoreX(), getRefCoreY());
 
         if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
+
+        return this;
     }
 
     @Override
-    public void mutateX(BiFunction<Double, Double, Double> function) {
+    public FPlot mutateX(BiFunction<Double, Double, Double> function) {
 
         for (int i = 0 ; i < size() ; i++) {
             setX(i, function.apply(getX(i), getY(i)));
         }
+
+        return this;
     }
 
     @Override
-    public void mutateX(Consumer<FStat> consumer) {
+    public FPlot mutateX(Consumer<FStat> consumer) {
 
         consumer.accept(getRefCoreX());
 
         if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
+
+        return this;
     }
 
     @Override
-    public void mutateY(BiFunction<Double, Double, Double> function) {
+    public FPlot mutateY(BiFunction<Double, Double, Double> function) {
 
         for (int i = 0 ; i < size() ; i++) {
             setY(i, function.apply(getX(i), getY(i)));
         }
+
+        return this;
     }
 
     @Override
-    public void mutateY(Consumer<FStat> consumer) {
+    public FPlot mutateY(Consumer<FStat> consumer) {
 
         consumer.accept(getRefCoreY());
 
         if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
+
+        return this;
     }
 
     @Override
-    public void sortX(boolean ascending) {
+    public FPlot sortX(boolean ascending) {
         List<FPos2D> data = new ArrayList<>(size());
 
         forEach((x, y, index) -> data.add(factory.getFPos2D(x, y)));
@@ -290,10 +317,12 @@ public class FPlotDef implements FPlot {
             setX(i, item.getD0());
             setY(i, item.getD1());
         }
+
+        return this;
     }
 
     @Override
-    public void sortY(boolean ascending) {
+    public FPlot sortY(boolean ascending) {
         List<FPos2D> data = new ArrayList<>(size());
 
         forEach((x, y, index) -> data.add(factory.getFPos2D(x, y)));
@@ -309,10 +338,12 @@ public class FPlotDef implements FPlot {
             setX(i, item.getD0());
             setY(i, item.getD1());
         }
+
+        return this;
     }
 
     @Override
-    public void swapXY() {
+    public FPlot swapXY() {
         double swap;
 
         for (int i = 0 ; i < size() ; i++) {
@@ -320,16 +351,20 @@ public class FPlotDef implements FPlot {
             setX(i, getY(i));
             setY(i, swap);
         }
+
+        return this;
     }
 
     @Override
-    public void forEach(TriConsumer<Double, Double, Integer> consumer) {
+    public FPlot forEach(TriConsumer<Double, Double, Integer> consumer) {
         Iterator<Double> iteratorX = getRefCoreX().iterator();
         Iterator<Double> iteratorY = getRefCoreY().iterator();
 
         for (int i = 0; i < getRefCoreX().size() ; i++) {
             consumer.accept(iteratorX.next(), iteratorY.next(), i);
         }
+
+        return this;
     }
 
     @Override
@@ -342,6 +377,15 @@ public class FPlotDef implements FPlot {
         });
 
         return values;
+    }
+
+    @Override
+    public FPlotBar toFPlotBar() {
+        FPlotBar fPlotBar = factory.getFPlotBar();
+
+        forEach((x, y, index) -> fPlotBar.add(x, y));
+
+        return fPlotBar;
     }
 
     @Override
@@ -591,9 +635,11 @@ public class FPlotDef implements FPlot {
     }
 
     @Override
-    public void setName(String name) {
+    public FPlot setName(String name) {
 
         this.name = name;
+
+        return this;
     }
 
     @Override
