@@ -3,6 +3,7 @@ package eu.scattering.core.impl.statistics.construct;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.type.Round;
 import org.json.JSONArray;
@@ -13,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class FPlotBarDef implements FPlotBar {
     private static final String JSON_TYPE = "type";
@@ -65,7 +67,7 @@ public class FPlotBarDef implements FPlotBar {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public void add(double x) {
+    public FPlotBar add(double x) {
 
         if (position(x) >= 0) {
             throw new IllegalStateException("The x value already exists");
@@ -73,10 +75,12 @@ public class FPlotBarDef implements FPlotBar {
 
         getRefCoreX().add(x);
         getRefCoreY().add(this.factory.getFStat());
+
+        return this;
     }
 
     @Override
-    public void add(double x, double y) {
+    public FPlotBar add(double x, double y) {
         int position = position(x);
 
         if (position < 0) {
@@ -90,10 +94,12 @@ public class FPlotBarDef implements FPlotBar {
 
             dataY.add(y);
         }
+
+        return this;
     }
 
     @Override
-    public void add(double x, FStat y) {
+    public FPlotBar add(double x, FStat y) {
 
         if (position(x) >= 0) {
             throw new IllegalStateException("The x value already exists");
@@ -101,10 +107,12 @@ public class FPlotBarDef implements FPlotBar {
 
         getRefCoreX().add(x);
         getRefCoreY().add(y.copy());
+
+        return this;
     }
 
     @Override
-    public void addRef(double x, FStat refY) {
+    public FPlotBar addRef(double x, FStat refY) {
 
         if (position(x) >= 0) {
             throw new IllegalStateException("The x value already exists");
@@ -112,6 +120,8 @@ public class FPlotBarDef implements FPlotBar {
 
         getRefCoreX().add(x);
         getRefCoreY().add(refY);
+
+        return this;
     }
 
     @Override
@@ -121,9 +131,11 @@ public class FPlotBarDef implements FPlotBar {
     }
 
     @Override
-    public void setX(int index, double x) {
+    public FPlotBar setX(int index, double x) {
 
         getRefCoreX().set(index, x);
+
+        return this;
     }
 
     @Override
@@ -133,9 +145,11 @@ public class FPlotBarDef implements FPlotBar {
     }
 
     @Override
-    public void setY(int index, FStat y) {
+    public FPlotBar setY(int index, FStat y) {
 
         getRefCoreY().set(index, y.copy());
+
+        return this;
     }
 
     @Override
@@ -145,9 +159,11 @@ public class FPlotBarDef implements FPlotBar {
     }
 
     @Override
-    public void setRefY(int index, FStat refY) {
+    public FPlotBar setRefY(int index, FStat refY) {
 
         getRefCoreY().set(index, refY);
+
+        return this;
     }
 
     @Override
@@ -183,43 +199,51 @@ public class FPlotBarDef implements FPlotBar {
     }
 
     @Override
-    public void mutateX(Consumer<FStat> consumer) {
+    public FPlotBar mutateX(Consumer<FStat> consumer) {
 
         consumer.accept(getRefCoreX());
 
         if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
+
+        return this;
     }
 
     @Override
-    public void mutateX(BiFunction<Double, FStat, Double> function) {
+    public FPlotBar mutateX(BiFunction<Double, FStat, Double> function) {
 
         for (int i = 0 ; i < size() ; i++) {
             setX(i, function.apply(getX(i), getY(i)));
         }
+
+        return this;
     }
 
     @Override
-    public void mutateY(Consumer<List<FStat>> consumer) {
+    public FPlotBar mutateY(Consumer<List<FStat>> consumer) {
 
         consumer.accept(getRefCoreY());
 
         if (getRefCoreX().size() != getRefCoreY().size()) {
             throw new IllegalStateException("The number of elements is erroneous");
         }
+
+        return this;
     }
 
     @Override
-    public void mutateY(BiFunction<Double, FStat, FStat> function) {
+    public FPlotBar mutateY(BiFunction<Double, FStat, FStat> function) {
 
         for (int i = 0 ; i < size() ; i++) {
             setY(i, function.apply(getX(i), getY(i)));
         }
+
+        return this;
     }
 
     @Override
-    public void sortX(boolean ascending) {
+    public FPlotBar sortX(boolean ascending) {
         List<Pair> data = new ArrayList<>(size());
 
         forEach((x, y, index) -> data.add(FPlotBarDef.Pair.create(x, y)));
@@ -233,19 +257,31 @@ public class FPlotBarDef implements FPlotBar {
         for (int i = 0 ; i < size() ; i++) {
             Pair item = data.get(i);
             setX(i, item.getX());
-            setY(i, item.getY());
+            setRefY(i, item.getY());
         }
+
+        return this;
     }
 
     @Override
-    public void forEach(TriConsumer<Double, FStat, Integer> consumer) {
-
+    public FPlotBar forEach(TriConsumer<Double, FStat, Integer> consumer) {
         Iterator<Double> iteratorX = getRefCoreX().iterator();
         Iterator<FStat> iteratorY = getRefCoreY().iterator();
 
         for (int i = 0; i < getRefCoreX().size() ; i++) {
             consumer.accept(iteratorX.next(), iteratorY.next(), i);
         }
+
+        return this;
+    }
+
+    @Override
+    public FPlot toFPlot(Function<FStat, Double> function) {
+        FPlot fPlot = this.factory.getFPlot();
+
+        forEach((x, y, index) -> fPlot.add(x, function.apply(y)));
+
+        return fPlot;
     }
 
     @Override
@@ -446,9 +482,11 @@ public class FPlotBarDef implements FPlotBar {
     }
 
     @Override
-    public void setName(String name) {
+    public FPlotBar setName(String name) {
 
         this.name = name;
+
+        return this;
     }
 
     @Override

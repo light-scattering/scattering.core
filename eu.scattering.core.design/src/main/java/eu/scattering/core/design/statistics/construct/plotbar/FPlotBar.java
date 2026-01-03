@@ -5,26 +5,28 @@ import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.statistics.Statistics;
 import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.type.Round;
 
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public interface FPlotBar extends Statistics<FPlotBar> {
 
-    void add(double x);
-    void add(double x, double y);
+    FPlotBar add(double x);
+    FPlotBar add(double x, double y);
 
-    void add(double x, FStat y);
+    FPlotBar add(double x, FStat y);
 
     // -------------------------------------------------------------------------------------------------
 
     double getX(int index);
-    void setX(int index, double x);
+    FPlotBar setX(int index, double x);
 
     FStat getY(int index);
-    void setY(int index, FStat y);
+    FPlotBar setY(int index, FStat y);
 
     int getIndexX(Round type, double x);
 
@@ -32,24 +34,24 @@ public interface FPlotBar extends Statistics<FPlotBar> {
 
     int filter(BiFunction<Double, FStat, Boolean> filter);
 
-    void mutateX(Consumer<FStat> consumer);
-    void mutateX(BiFunction<Double, FStat, Double> function);
+    FPlotBar mutateX(Consumer<FStat> consumer);
+    FPlotBar mutateX(BiFunction<Double, FStat, Double> function);
 
-    void mutateY(Consumer<List<FStat>> consumer);
-    void mutateY(BiFunction<Double, FStat, FStat> function);
+    FPlotBar mutateY(Consumer<List<FStat>> consumer);
+    FPlotBar mutateY(BiFunction<Double, FStat, FStat> function);
 
-    void sortX(boolean ascending);
+    FPlotBar sortX(boolean ascending);
 
     // -------------------------------------------------------------------------------------------------
 
-    void forEach(TriConsumer<Double, FStat, Integer> consumer);
+    FPlotBar forEach(TriConsumer<Double, FStat, Integer> consumer);
 
-//    FPlot toFPlot(Function<Double, FStat> function);
+    FPlot toFPlot(Function<FStat, Double> function);
 
     // -------------------------------------------------------------------------------------------------
 
     String getName();
-    void setName(String name);
+    FPlotBar setName(String name);
 
     // -------------------------------------------------------------------------------------------------
 
@@ -57,11 +59,11 @@ public interface FPlotBar extends Statistics<FPlotBar> {
     FPlotBar removeNaN();
 
     @Modificator
-    void addRef(double x, FStat refY);
+    FPlotBar addRef(double x, FStat refY);
     @Modificator
     FStat getRefY(int index);
     @Modificator
-    void setRefY(int index, FStat refY);
+    FPlotBar setRefY(int index, FStat refY);
 
     @Modificator
     FStat getRefCoreX();

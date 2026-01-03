@@ -8,6 +8,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,8 +48,9 @@ public class FPlotBarTest {
             FPlotBar fPlotBar = factory.getFPlotBar();
 
             fPlotBar.add(2);
-            fPlotBar.add(3);
+            FPlotBar results = fPlotBar.add(3);
 
+            assertSame(fPlotBar, results);
             assertEquals(2, fPlotBar.size());
             assertEquals(0, fPlotBar.getY(0).size());
             assertEquals(0, fPlotBar.getY(1).size());
@@ -65,8 +67,9 @@ public class FPlotBarTest {
             fPlotBar.add(3, 5);
 
             fPlotBar.add(2, 6);
-            fPlotBar.add(2, 8);
+            FPlotBar results = fPlotBar.add(2, 8);
 
+            assertSame(fPlotBar, results);
             assertEquals(2, fPlotBar.size());
             assertEquals(3, fPlotBar.getY(0).size());
             assertEquals(1, fPlotBar.getY(1).size());
@@ -84,8 +87,9 @@ public class FPlotBarTest {
             FStat fStatB = factory.getFStat(4, 5);
 
             fPlotBar.add(2, fStatA);
-            fPlotBar.add(3, fStatB);
+            FPlotBar results = fPlotBar.add(3, fStatB);
 
+            assertSame(fPlotBar, results);
             assertEquals(2, fPlotBar.size());
             assertEquals(3, fPlotBar.getY(0).size());
             assertEquals(2, fPlotBar.getY(1).size());
@@ -106,8 +110,9 @@ public class FPlotBarTest {
             FStat fStatB = factory.getFStat(4, 5);
 
             fPlotBar.addRef(2, fStatA);
-            fPlotBar.addRef(3, fStatB);
+            FPlotBar results = fPlotBar.addRef(3, fStatB);
 
+            assertSame(fPlotBar, results);
             assertEquals(2, fPlotBar.size());
             assertEquals(3, fPlotBar.getY(0).size());
             assertEquals(2, fPlotBar.getY(1).size());
@@ -127,8 +132,9 @@ public class FPlotBarTest {
             fPlotBar.addRef(2, factory.getFStat(1, 2, 3));
             fPlotBar.addRef(3, factory.getFStat(4, 5));
 
-            fPlotBar.setX(1, 5);
+            FPlotBar results = fPlotBar.setX(1, 5);
 
+            assertSame(fPlotBar, results);
             assertEquals(5, fPlotBar.getX(1));
 
             assertThrows(IndexOutOfBoundsException.class, () -> fPlotBar.getX(-1));
@@ -147,8 +153,9 @@ public class FPlotBarTest {
 
             FStat update = factory.getFStat(6, 7, 8);
 
-            fPlotBar.setY(1, update);
+            FPlotBar results = fPlotBar.setY(1, update);
 
+            assertSame(fPlotBar, results);
             assertNotSame(update, fPlotBar.getY(1));
             assertNotSame(update, fPlotBar.getRefY(1));
             assertEquals(3, fPlotBar.getY(1).size());
@@ -172,8 +179,9 @@ public class FPlotBarTest {
 
             FStat update = factory.getFStat(6, 7, 8);
 
-            fPlotBar.setRefY(1, update);
+            FPlotBar results = fPlotBar.setRefY(1, update);
 
+            assertSame(fPlotBar, results);
             assertNotSame(update, fPlotBar.getY(1));
             assertSame(update, fPlotBar.getRefY(1));
             assertEquals(3, fPlotBar.getRefY(1).size());
@@ -337,8 +345,9 @@ public class FPlotBarTest {
             fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
             fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
 
-            fPlotBar.mutateX(a -> a.mutate(b -> b * 2));
+            FPlotBar results = fPlotBar.mutateX(a -> a.mutate(b -> b * 2));
 
+            assertSame(fPlotBar, results);
             assertEquals(3, fPlotBar.size());
             assertEquals(0, fPlotBar.getX(0));
             assertEquals(2, fPlotBar.getX(1));
@@ -354,8 +363,9 @@ public class FPlotBarTest {
             fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
             fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
 
-            fPlotBar.mutateX((x, y) -> (double) y.size());
+            FPlotBar results = fPlotBar.mutateX((x, y) -> (double) y.size());
 
+            assertSame(fPlotBar, results);
             assertEquals(3, fPlotBar.size());
             assertEquals(2, fPlotBar.getX(0));
             assertEquals(3, fPlotBar.getX(1));
@@ -371,8 +381,9 @@ public class FPlotBarTest {
             fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
             fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
 
-            fPlotBar.mutateY(a -> a.forEach(b -> b.mutate(c -> c * 2)));
+            FPlotBar results = fPlotBar.mutateY(a -> a.forEach(b -> b.mutate(c -> c * 2)));
 
+            assertSame(fPlotBar, results);
             assertEquals(3, fPlotBar.size());
             assertEquals(6, fPlotBar.getRefY(0).sum());
             assertEquals(24, fPlotBar.getRefY(1).sum());
@@ -388,13 +399,181 @@ public class FPlotBarTest {
             fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
             fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
 
-            fPlotBar.mutateY((a, b) -> b.mutate(c -> c * a));
+            FPlotBar results = fPlotBar.mutateY((a, b) -> b.mutate(c -> c * a));
 
+            assertSame(fPlotBar, results);
             assertEquals(3, fPlotBar.size());
             assertEquals(0, fPlotBar.getRefY(0).sum());
             assertEquals(12, fPlotBar.getRefY(1).sum());
             assertEquals(60, fPlotBar.getRefY(2).sum());
         }
 
+        @Test
+        @DisplayName("Sort asc X")
+        void sortAscX() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            FStat fStatA = factory.getFStat(1, 2);
+            FStat fStatB = factory.getFStat(3, 4, 5);
+            FStat fStatC = factory.getFStat(6, 7, 8, 9);
+
+            fPlotBar.addRef(2, fStatA);
+            fPlotBar.addRef(0, fStatB);
+            fPlotBar.addRef(1, fStatC);
+
+            FPlotBar results = fPlotBar.sortX(true);
+
+            Assertions.assertAll("Check values",
+                    () -> assertSame(fPlotBar, results),
+                    () -> assertEquals(0, fPlotBar.getX(0)),
+                    () -> assertSame(fStatB, fPlotBar.getRefY(0)),
+                    () -> assertEquals(1, fPlotBar.getX(1)),
+                    () -> assertSame(fStatC, fPlotBar.getRefY(1)),
+                    () -> assertEquals(2, fPlotBar.getX(2)),
+                    () -> assertSame(fStatA, fPlotBar.getRefY(2))
+            );
+        }
+
+        @Test
+        @DisplayName("Sort dsc X")
+        void sortDscX() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            FStat fStatA = factory.getFStat(1, 2);
+            FStat fStatB = factory.getFStat(3, 4, 5);
+            FStat fStatC = factory.getFStat(6, 7, 8, 9);
+
+            fPlotBar.addRef(2, fStatA);
+            fPlotBar.addRef(0, fStatB);
+            fPlotBar.addRef(1, fStatC);
+
+            FPlotBar results = fPlotBar.sortX(false);
+
+            Assertions.assertAll("Check values",
+                    () -> assertSame(fPlotBar, results),
+                    () -> assertEquals(2, fPlotBar.getX(0)),
+                    () -> assertSame(fStatA, fPlotBar.getRefY(0)),
+                    () -> assertEquals(1, fPlotBar.getX(1)),
+                    () -> assertSame(fStatC, fPlotBar.getRefY(1)),
+                    () -> assertEquals(0, fPlotBar.getX(2)),
+                    () -> assertSame(fStatB, fPlotBar.getRefY(2))
+            );
+        }
+
+        @Test
+        @DisplayName("For each")
+        void forEach() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            FStat fStatA = factory.getFStat(1, 2);
+            FStat fStatB = factory.getFStat(3, 4, 5);
+            FStat fStatC = factory.getFStat(6, 7, 8, 9);
+
+            fPlotBar.addRef(0, fStatA);
+            fPlotBar.addRef(1, fStatB);
+            fPlotBar.addRef(2, fStatC);
+
+            AtomicInteger sumX = new AtomicInteger();
+            AtomicInteger sumY = new AtomicInteger();
+
+            FPlotBar results = fPlotBar.forEach((x, y, index) -> {
+                sumX.addAndGet((int) Math.round(x));
+                sumY.addAndGet((int) Math.round(y.sum()));
+            });
+
+            assertSame(fPlotBar, results);
+            assertEquals(3, sumX.get());
+            assertEquals(45, sumY.get());
+        }
+
+        @Test
+        @DisplayName("To FPlot")
+        void toFPlot() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            fPlotBar.addRef(0, factory.getFStat(1, 2));
+            fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            FPlot fPlot = fPlotBar.toFPlot(FStat::max);
+
+            Assertions.assertAll("Test values",
+                    () -> assertEquals(0, fPlot.getX(0)),
+                    () -> assertEquals(1, fPlot.getX(1)),
+                    () -> assertEquals(2, fPlot.getX(2)),
+                    () -> assertEquals(2, fPlot.getY(0)),
+                    () -> assertEquals(5, fPlot.getY(1)),
+                    () -> assertEquals(9, fPlot.getY(2))
+            );
+        }
+
+        @Test
+        @DisplayName("Remove NaN")
+        void removeNaN() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            fPlotBar.addRef(0, factory.getFStat(1, 2));
+            fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            fPlotBar.setX(1, Double.NaN);
+            fPlotBar.getRefY(2).set(1, Double.NaN);
+            fPlotBar.getRefY(2).set(2, Double.NaN);
+
+            FPlotBar results = fPlotBar.removeNaN();
+
+            Assertions.assertAll("Check values",
+                    () -> assertSame(fPlotBar, results),
+                    () -> assertEquals(2, fPlotBar.size()),
+                    () -> assertEquals(2, fPlotBar.getRefY(0).size()),
+                    () -> assertEquals(2, fPlotBar.getRefY(1).size())
+            );
+        }
+
+        @Test
+        @DisplayName("Get ref core X")
+        void getRefCoreX() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            fPlotBar.addRef(0, factory.getFStat(1, 2));
+            fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            FStat coreX = fPlotBar.getRefCoreX();
+            coreX.set(1, 5);
+
+            assertEquals(5, fPlotBar.getX(1));
+        }
+
+        @Test
+        @DisplayName("Get ref core Y")
+        void getRefCoreY() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            fPlotBar.addRef(0, factory.getFStat(1, 2));
+            fPlotBar.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBar.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            List<FStat> coreY = fPlotBar.getRefCoreY();
+            coreY.get(1).set(1, 0);
+
+            assertEquals(0, fPlotBar.getRefY(1).get(1));
+        }
+    }
+
+    @Nested
+    @Tag("Meta")
+    @DisplayName("Meta")
+    class FPlotBarMetaTest {
+
+        @Test
+        @DisplayName("Set name")
+        void setName() {
+            FPlotBar fPlotBar = factory.getFPlotBar();
+
+            fPlotBar.setName("test");
+
+            assertEquals("test", fPlotBar.getName());
+        }
     }
 }
