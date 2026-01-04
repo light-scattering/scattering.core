@@ -4,6 +4,7 @@ import eu.scattering.core.design.statistics.StatisticsAspectExport;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plot.utils.FPlotInterpolator;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.test.Config.factory;
@@ -118,6 +119,38 @@ public class StatisticsAspectExportTest {
         );
     }
 
+    @Test
+    @DisplayName("Plotly FPlotBar full")
+    void plotlyFPlotBarFull() {
+        StatisticsAspectExport fPlotExporter = factory.getExportAspect().getStatisticsContext();
+
+        fPlotExporter.setName("Test");
+        fPlotExporter.setAnnotation("Annotation");
+        fPlotExporter.setNameX("X");
+        fPlotExporter.setNameY("Y");
+        fPlotExporter.setRangeX(-10, 10);
+        fPlotExporter.setRangeY(-10, 10);
+
+        FPlotBar fPlotBar = factory.getFPlotBar();
+        fPlotBar.setName("data");
+
+        fPlotBar.addRef(-8, factory.getFStat(2, 3, 4));
+        fPlotBar.addRef(-6, factory.getFStat(-1, 0, 1, 1, 1, 3));
+        fPlotBar.addRef(-4, factory.getFStat());
+        fPlotBar.addRef(-2, factory.getFStat(4, 4, 6));
+        fPlotBar.addRef(0, factory.getFStat(-5, -4, -2));
+        fPlotBar.addRef(2, factory.getFStat(1.1, 1.8, 2.3, 1.2, 1.8, 1.7, 1.6, 2.0, 1.3));
+        fPlotBar.addRef(4, factory.getFStat(3));
+        fPlotBar.addRef(6, factory.getFStat(0, 1, 2));
+        fPlotBar.addRef(8, factory.getFStat(-6, -5, -4));
+
+        String script = fPlotExporter.toPythonPlotlyFull(fPlotBar);
+
+        Assertions.assertAll("Test values",
+                () -> assertTrue(script.contains("plotly.graph_objects"))
+        );
+    }
+
     @Nested
     @Tag("Meta")
     @DisplayName("Meta")
@@ -144,6 +177,7 @@ public class StatisticsAspectExportTest {
             assertEquals(1, fPlotExporter.getRangeX().getD0());
             assertEquals(2, fPlotExporter.getRangeX().getD1());
             assertEquals(3, fPlotExporter.getRangeY().getD0());
-            assertEquals(4, fPlotExporter.getRangeY().getD1());        }
+            assertEquals(4, fPlotExporter.getRangeY().getD1());
+        }
     }
 }
