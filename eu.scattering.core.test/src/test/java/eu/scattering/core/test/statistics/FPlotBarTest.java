@@ -4,6 +4,7 @@ import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.type.Round;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -193,6 +194,113 @@ public class FPlotBarTest {
             assertThrows(IndexOutOfBoundsException.class, () -> fPlotBar.getRefY(3));
             assertThrows(IndexOutOfBoundsException.class, () -> fPlotBar.setRefY(-1, update));
             assertThrows(IndexOutOfBoundsException.class, () -> fPlotBar.setRefY(3, update));
+        }
+    }
+
+    @Nested
+    @Tag("Core")
+    @DisplayName("Core")
+    class FPlotBarCoreTest {
+
+        @Test
+        @DisplayName("Is equal")
+        void isEqual() {
+            FPlotBar fPlotBarA = factory.getFPlotBar();
+
+            fPlotBarA.addRef(0, factory.getFStat(1, 2));
+            fPlotBarA.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBarA.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            FPlotBar fPlotBarB = factory.getFPlotBar();
+
+            fPlotBarB.addRef(0, factory.getFStat(1, 2));
+            fPlotBarB.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBarB.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            assertTrue(fPlotBarA.isEqual(fPlotBarB));
+            assertTrue(fPlotBarB.isEqual(fPlotBarA));
+            assertTrue(fPlotBarA.isEqualData(fPlotBarB));
+            assertTrue(fPlotBarB.isEqualData(fPlotBarA));
+
+            fPlotBarA.add(3, 1);
+
+            assertFalse(fPlotBarA.isEqual(fPlotBarB));
+            assertFalse(fPlotBarB.isEqual(fPlotBarA));
+            assertFalse(fPlotBarA.isEqualData(fPlotBarB));
+            assertFalse(fPlotBarB.isEqualData(fPlotBarA));
+        }
+
+        @Test
+        @DisplayName("To JSON")
+        void toJSON() {
+            FPlotBar fPlotBarA = factory.getFPlotBar();
+
+            fPlotBarA.addRef(0, factory.getFStat(1, 2));
+            fPlotBarA.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBarA.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            JSONObject json = fPlotBarA.toJSON();
+
+            FPlotBar fPlotBarB = factory.getFPlotBar(json);
+
+            assertTrue(fPlotBarA.isEqual(fPlotBarB));
+            assertTrue(fPlotBarB.isEqual(fPlotBarA));
+        }
+
+        @Test
+        @DisplayName("To JSON with text")
+        void toJSONWithText() {
+            FPlotBar fPlotBarA = factory.getFPlotBar();
+
+            fPlotBarA.addRef(0, factory.getFStat(1, 2));
+            fPlotBarA.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBarA.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            JSONObject json = fPlotBarA.toJSON();
+
+            FPlotBar fPlotBarB = factory.getFPlotBar(json.toString());
+
+            assertTrue(fPlotBarA.isEqual(fPlotBarB));
+            assertTrue(fPlotBarB.isEqual(fPlotBarA));
+        }
+
+        @Test
+        @DisplayName("To JSON with NaN")
+        void toJSONWithNaN() {
+            FPlotBar fPlotBarA = factory.getFPlotBar();
+
+            fPlotBarA.addRef(0, factory.getFStat(1, 2));
+            fPlotBarA.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBarA.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            fPlotBarA.mutateY((y) -> y.get(1).set(1, Double.NaN));
+
+            JSONObject json = fPlotBarA.toJSON();
+
+            FPlotBar fPlotBarB = factory.getFPlotBar(json);
+
+            assertFalse(fPlotBarA.isEqual(fPlotBarB));
+            assertFalse(fPlotBarB.isEqual(fPlotBarA));
+
+            assertTrue(fPlotBarA.isEqualWithNaN(fPlotBarB));
+            assertTrue(fPlotBarB.isEqualWithNaN(fPlotBarA));
+        }
+
+        @Test
+        @DisplayName("Copy")
+        void copy() {
+            FPlotBar fPlotBarA = factory.getFPlotBar();
+
+            fPlotBarA.addRef(0, factory.getFStat(1, 2));
+            fPlotBarA.addRef(1, factory.getFStat(3, 4, 5));
+            fPlotBarA.addRef(2, factory.getFStat(6, 7, 8, 9));
+
+            FPlotBar fPlotBarB = fPlotBarA.copy();
+
+            assertNotSame(fPlotBarA, fPlotBarB);
+            assertTrue(fPlotBarA.isEqual(fPlotBarB));
+            assertTrue(fPlotBarB.isEqual(fPlotBarA));
+            assertNotSame(fPlotBarA.getRefCoreY(), fPlotBarB.getRefCoreY());
         }
     }
 

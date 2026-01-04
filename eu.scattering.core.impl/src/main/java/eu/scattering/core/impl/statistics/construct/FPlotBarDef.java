@@ -335,7 +335,7 @@ public class FPlotBarDef implements FPlotBar {
         }
 
         for (int i = 0 ; i < size() ; i++) {
-            if (getY(i).isEqualData(fBar.getY(i))) {
+            if (!getRefY(i).isEqualData(fBar.getRefY(i))) {
                 return false;
             }
         }
@@ -345,6 +345,7 @@ public class FPlotBarDef implements FPlotBar {
 
     @Override
     public boolean isEqualDataWithNaN(FPlotBar fBar) {
+
         if (this.size() != fBar.size()) {
             return false;
         }
@@ -354,7 +355,7 @@ public class FPlotBarDef implements FPlotBar {
         }
 
         for (int i = 0 ; i < size() ; i++) {
-            if (getY(i).isEqualDataWithNaN(fBar.getY(i))) {
+            if (!getRefY(i).isEqualDataWithNaN(fBar.getRefY(i))) {
                 return false;
             }
         }
