@@ -210,7 +210,7 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public String toPythonPlotlyFull(FPlotBar fPlotBar) {
+    public String toPythonPlotlyComplex(FPlotBar fPlotBar) {
         StringBuilder builder = new StringBuilder();
         String nameAnnotation = getAnnotation().isEmpty() ? "" : getAnnotation();
         String namePlot = getName().isEmpty() ? "" : getName();

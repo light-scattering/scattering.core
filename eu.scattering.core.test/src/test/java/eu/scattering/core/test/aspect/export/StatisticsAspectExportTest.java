@@ -144,7 +144,7 @@ public class StatisticsAspectExportTest {
         fPlotBar.addRef(6, factory.getFStat(0, 1, 2));
         fPlotBar.addRef(8, factory.getFStat(-6, -5, -4));
 
-        String script = fPlotExporter.toPythonPlotlyFull(fPlotBar);
+        String script = fPlotExporter.toPythonPlotlyComplex(fPlotBar);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))

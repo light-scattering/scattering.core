@@ -20,17 +20,17 @@ public interface ShapeModuleInteraction {
 
 //    double attachCircular(Shape target, FLine axis);
 
-//    double project(Shape target, FVector path);
-//    double project(Shape target, FVector path, double distLimit);
-//    double project(Iterable<? extends Shape> field, FVector path);
-//    double project(Iterable<? extends Shape> field, FVector path, double distLimit);
+    double project(Shape target, FVector dir);
+    double project(Shape target, FVector dir, double distLimit);
+    double project(Iterable<? extends Shape> field, FVector dir);
+    double project(Iterable<? extends Shape> field, FVector dir, double distLimit);
 
     double projectFrom(Shape target, FRay path);
     double projectFrom(Shape target, FRay path, double distLimit);
     double projectFrom(Iterable<? extends Shape> field, FRay path);
     double projectFrom(Iterable<? extends Shape> field, FRay path, double distLimit);
 
-//    void getCollisionsLinear(List<Shape> in, Iterable<? extends Shape> field, FVector path);
+    void getCollisionsLinear(List<Shape> in, Iterable<? extends Shape> field, FVector dir);
     void getCollisionsFromLinear(List<Shape> in, Iterable<? extends Shape> field, FRay path);
 
     void getCollisionsSpherical(List<Shape> in, Iterable<? extends Shape> field, double x, double y, double z);
