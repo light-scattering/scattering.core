@@ -635,6 +635,11 @@ public class FAggregateDef implements FAggregate {
         return factory.getFPoint();
     }
 
+    private FRay supplyFRay() {
+
+        return factory.getFRay();
+    }
+
     private FSphere supplyFSphere() {
 
         return factory.getFSphere();
@@ -784,14 +789,14 @@ public class FAggregateDef implements FAggregate {
     //--------------------------------------------------
 
     @Override
-    public double projectFrom(FAggregate target, FRay path) {
-        FRay translator = path.copy();
+    public double project(FAggregate target, FVector dir) {
+        FRay translator = supplyFRay();
+        translator.getRefOrigin().set(dir);
         List<Shape> candidates = new ArrayList<>(getRefParticles().asList());
 
-        FPoint center = supplyFPoint();
-        target.getSpatialCenter(center);
+        FPoint centerArg = target.getCenter(supplyFPoint(), Center.SPATIAL);
 
-        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(center)));
+        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
 
         for (Shape candidate : candidates) {
             translator.getRefOrigin().moveBase(candidate.getRefCenter());
@@ -803,7 +808,46 @@ public class FAggregateDef implements FAggregate {
 
                 if (!overlaps) {
                     for (Shape particle : getRefParticles()) {
-                        path.shiftForward(particle, shift);
+                        translator.getRefOrigin().set(dir);
+                        translator.shiftForward(particle, shift);
+                    }
+
+                    return shift;
+                }
+            }
+
+        }
+
+        return -1;
+    }
+
+    @Override
+    public double project(FAggregate target, FVector dir, double distLimit) {
+        FPoint centerRef = getCenter(supplyFPoint(), Center.SPATIAL);
+        FPoint centerArg = target.getCenter(supplyFPoint(), Center.SPATIAL);
+
+        if (centerRef.getDistance(centerArg) > getRadius(centerRef) + getRadius(centerArg) + distLimit) {
+            return -1;
+        }
+
+        FRay translator = supplyFRay();
+        translator.getRefOrigin().set(dir);
+        List<Shape> candidates = new ArrayList<>(getRefParticles().asList());
+
+        candidates.sort(Comparator.comparingDouble(a -> a.getDistCenterP2(centerArg)));
+
+        for (Shape candidate : candidates) {
+            translator.getRefOrigin().moveBase(candidate.getRefCenter());
+
+            double shift = candidate.projectFromDryRun(target, translator);
+
+            if (shift >= 0 && shift <= distLimit) {
+                boolean overlaps = overlapsWithShift(target, translator.toFVector(shift));
+
+                if (!overlaps) {
+                    for (Shape particle : getRefParticles()) {
+                        translator.getRefOrigin().set(dir);
+                        translator.shiftForward(particle, shift);
                     }
 
                     return shift;

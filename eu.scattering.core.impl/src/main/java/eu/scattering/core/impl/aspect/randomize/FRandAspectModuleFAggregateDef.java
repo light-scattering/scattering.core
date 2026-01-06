@@ -5,7 +5,6 @@ import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.Center;
@@ -251,7 +250,7 @@ public class FRandAspectModuleFAggregateDef {
     private void projectUniversal(FAggregate ref, FAggregate arg, boolean is3D) {
         FPoint base = factory.getFPoint();
         FPoint head = factory.getFPoint();
-        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
+        FVector dir = factory.getRefFVector(base, head);
 
         while (true) {
             ref.resetPosition(ref.getSpatialCenter());
@@ -276,7 +275,7 @@ public class FRandAspectModuleFAggregateDef {
 
             ref.getRefParticles().translate(base.toFPos3D());
 
-            double shift = ref.projectFrom(arg, ray);
+            double shift = ref.project(arg, dir);
 
             if (shift >= 0) {
                 return;

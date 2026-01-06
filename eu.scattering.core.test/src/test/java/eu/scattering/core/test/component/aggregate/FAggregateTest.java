@@ -2,7 +2,6 @@ package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -2646,9 +2645,7 @@ public class FAggregateTest {
             FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1));
             FAggregate aggregateB = factory.getRefFAggregate(coreB);
 
-            FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
-
-            aggregateA.projectFrom(aggregateB, dir);
+            aggregateA.project(aggregateB, factory.getFVector(100, 0, 0, 0, 0, 0));
 
             aggregateA.merge(aggregateB, true);
 
@@ -2671,9 +2668,7 @@ public class FAggregateTest {
             FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1));
             FAggregate aggregateB = factory.getRefFAggregate(coreB);
 
-            FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
-
-            aggregateA.projectFrom(aggregateB, dir);
+            aggregateA.project(aggregateB, factory.getFVector(100, 0, 0, 0, 0, 0));
 
             aggregateA.merge(aggregateB, true);
 
@@ -2696,9 +2691,7 @@ public class FAggregateTest {
             FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1));
             FAggregate aggregateB = factory.getRefFAggregate(coreB);
 
-            FRay dir = factory.getRefFRay(factory.getFVector(100, 0, 0, 0, 0, 0));
-
-            aggregateA.projectFrom(aggregateB, dir);
+            aggregateA.project(aggregateB, factory.getFVector(100, 0, 0, 0, 0, 0));
 
             aggregateA.merge(aggregateB, true);
 
@@ -2721,9 +2714,7 @@ public class FAggregateTest {
             aggregateA.getSpatialCenter(centerA);
             aggregateB.getSpatialCenter(centerB);
 
-            FRay dir = factory.getRefFRay(factory.getRefFVector(centerA, centerB));
-
-            aggregateA.projectFrom(aggregateB, dir);
+            aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB));
 
             aggregateA.merge(aggregateB, true);
 
@@ -2744,9 +2735,63 @@ public class FAggregateTest {
             aggregateA.getSpatialCenter(centerA);
             aggregateB.getSpatialCenter(centerB);
 
-            FRay dir = factory.getRefFRay(factory.getRefFVector(centerA, centerB));
+            aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB));
 
-            aggregateA.projectFrom(aggregateB, dir);
+            aggregateA.merge(aggregateB, true);
+
+            assertTrue(aggregateA.isCompact());
+        }
+
+        @Test
+        @DisplayName("Project with limit, composite A")
+        void projectWithLimitCompositeA() {
+            FAggregate aggregateA = factory.getFAggregateContext().geometry().fullSphere(3);
+            FAggregate aggregateB = factory.getFAggregateContext().geometry().d2(5, 5);
+
+            aggregateA.setParticleEpsilon(1);
+
+            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+
+            FPoint centerA = factory.getFPoint();
+            FPoint centerB = factory.getFPoint();
+
+            aggregateA.getSpatialCenter(centerA);
+            aggregateB.getSpatialCenter(centerB);
+
+            double shiftA = aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB), 50);
+
+            assertTrue(shiftA < 0);
+
+            double shiftB = aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB), 100);
+
+            assertTrue(shiftB > 0);
+
+            aggregateA.merge(aggregateB, true);
+
+            assertTrue(aggregateA.isCompact());
+        }
+
+        @Test
+        @DisplayName("Project with limit, composite B")
+        void projectWithLimitCompositeB() {
+            FAggregate aggregateA = factory.getFAggregateContext().geometry().d3(2, 3, 4);
+            FAggregate aggregateB = factory.getFAggregateContext().geometry().d3(3, 4, 5);
+
+            aggregateA.getRefParticles().translate(factory.getFRand().nextDoubleOnSphere(100));
+
+            FPoint centerA = factory.getFPoint();
+            FPoint centerB = factory.getFPoint();
+
+            aggregateA.getSpatialCenter(centerA);
+            aggregateB.getSpatialCenter(centerB);
+
+            double shiftA = aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB), 50);
+
+            assertTrue(shiftA < 0);
+
+            double shiftB = aggregateA.project(aggregateB, factory.getRefFVector(centerA, centerB), 100);
+
+            assertTrue(shiftB > 0);
 
             aggregateA.merge(aggregateB, true);
 

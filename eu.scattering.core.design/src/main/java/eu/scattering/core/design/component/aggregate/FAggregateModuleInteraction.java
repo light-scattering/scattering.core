@@ -1,9 +1,9 @@
 package eu.scattering.core.design.component.aggregate;
 
-import eu.scattering.core.design.component.geometry.construct.ray.FRay;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 
 public interface FAggregateModuleInteraction {
 
-    double projectFrom(FAggregate target, FRay path);
-//    double projectFrom(FAggregate target, FRay path, double distLimit);
+    double project(FAggregate target, FVector dir);
+    double project(FAggregate target, FVector dir, double distLimit);
 }
