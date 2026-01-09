@@ -37,7 +37,7 @@ public interface ShapeModuleInteraction {
     void getCollisionsSpherical(List<Shape> in, Iterable<? extends Shape> field, FPoint anchor);
     void getCollisionsSpherical(List<Shape> in, Iterable<? extends Shape> field, FPos3D anchor);
 
-//    void getCollisionsCircular(List<Shape> in, Iterable<? extends Shape> field, FLine axis);
+    void getCollisionsCircular(List<Shape> in, Iterable<? extends Shape> field, FLine axis);
 
     Shape setRadiusMin(Iterable<? extends Shape> shapes);
 

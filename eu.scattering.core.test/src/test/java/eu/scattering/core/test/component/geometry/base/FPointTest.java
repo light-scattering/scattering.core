@@ -1796,15 +1796,6 @@ public class FPointTest {
         }
 
         @Test
-        @DisplayName("Get angle with primitives (throw IllegalStateException, similarity)")
-        void getAngleWithPrimitivesThrowIllegalStateExceptionSimilarity() {
-            FPoint fPointRef = factory.getFPoint(1, 2, 3);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fPointRef.getAngle(1, 2, 3),
-                    "The direction of the argument vector is not defined");
-        }
-
-        @Test
         @DisplayName("Get angle with primitives (validate)")
         void getAngleWithPrimitivesValidate() {
             FPoint fPointRef = factory.getFPoint(1, 2, 3);
@@ -1857,6 +1848,16 @@ public class FPointTest {
         }
 
         @Test
+        @DisplayName("Get angle (similar)")
+        void getAngleSimilar() {
+            FPoint fPointRef = factory.getFPoint(1, 2, 3);
+            FPoint fPointArg = factory.getFPoint(1, 2, 3);
+
+            assertEquals(0, fPointRef.getAngle(fPointArg),
+                    epsilon, "The angle is incorrect");
+        }
+
+        @Test
         @DisplayName("Get angle (throw IllegalStateException, input)")
         void getAngleThrowIllegalStateExceptionInput() {
             FPoint fPointRef = factory.getFPoint();
@@ -1873,16 +1874,6 @@ public class FPointTest {
             FPoint fPointArg = factory.getFPoint();
 
             Assertions.assertThrows(IllegalArgumentException.class, () -> fPointRef.getAngle(fPointArg),
-                    "The direction of the argument vector is not defined");
-        }
-
-        @Test
-        @DisplayName("Get angle (throw IllegalStateException, similarity)")
-        void getAngleThrowIllegalStateExceptionSimilarity() {
-            FPoint fPointRef = factory.getFPoint(1, 2, 3);
-            FPoint fPointArg = factory.getFPoint(1, 2, 3);
-
-            Assertions.assertThrows(IllegalStateException.class, () -> fPointRef.getAngle(fPointArg),
                     "The direction of the argument vector is not defined");
         }
 

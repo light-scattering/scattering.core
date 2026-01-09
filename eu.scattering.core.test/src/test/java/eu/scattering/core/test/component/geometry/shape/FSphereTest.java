@@ -3,6 +3,8 @@ package eu.scattering.core.test.component.geometry.shape;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.draft.FDraft;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -5279,6 +5281,211 @@ public class FSphereTest {
                                 "The FSpheres should not be in point contact");
                     }
                 }
+            }
+
+            @Test
+            @DisplayName("Get collision list - circular A")
+            void getCollisionListCircularA() {
+                FSphere fSphere = factory.getFSphere(5, 2, 3);
+                FSphere fSphereArgA1 = factory.getFSphere(-6.9, 2, 3);
+                FSphere fSphereArgA2 = factory.getFSphere(-3.1, 2, 3);
+                FSphere fSphereArgA3 = factory.getFSphere(3.1, 2, 3);
+                FSphere fSphereArgA4 = factory.getFSphere(6.9, 2, 3);
+                FSphere fSphereArgB1 = factory.getFSphere(-5, 3.9, 3);
+                FSphere fSphereArgB2 = factory.getFSphere(-5, 1.9, 3);
+                FSphere fSphereArgB3 = factory.getFSphere(5, 3.9, 3);
+                FSphere fSphereArgB4 = factory.getFSphere(5, 1.9, 3);
+
+                List<Shape> field = new ArrayList<>(List.of(
+                        fSphereArgA1, fSphereArgA2, fSphereArgA3, fSphereArgA4,
+                        fSphereArgB1, fSphereArgB2, fSphereArgB3, fSphereArgB4
+                ));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
+
+                fSphere.getCollisionsCircular(collisions, field, fLine);
+
+                assertEquals(8, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - circular B")
+            void getCollisionListCircularB() {
+                FSphere fSphere = factory.getFSphere(5, 2, 3);
+                FSphere fSphereArgA1 = factory.getFSphere(0, 2, -3.9);
+                FSphere fSphereArgA2 = factory.getFSphere(0, 2, -0.1);
+                FSphere fSphereArgA3 = factory.getFSphere(0, 2, 6.1);
+                FSphere fSphereArgA4 = factory.getFSphere(0, 2, 9.9);
+                FSphere fSphereArgB1 = factory.getFSphere(0, 3.9, -2);
+                FSphere fSphereArgB2 = factory.getFSphere(0, 1.9, -2);
+                FSphere fSphereArgB3 = factory.getFSphere(0, 3.9, 8);
+                FSphere fSphereArgB4 = factory.getFSphere(0, 1.9, 8);
+
+                List<Shape> field = new ArrayList<>(List.of(
+                        fSphereArgA1, fSphereArgA2, fSphereArgA3, fSphereArgA4,
+                        fSphereArgB1, fSphereArgB2, fSphereArgB3, fSphereArgB4
+                ));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
+
+                fSphere.getCollisionsCircular(collisions, field, fLine);
+
+                assertEquals(8, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - fixed arg")
+            void getCollisionListFixedArg() {
+                FSphere fSphere = factory.getFSphere(1, 0, 0);
+                FSphere fSphereArg = factory.getFSphere(0, 1, 0);
+
+                List<Shape> field = new ArrayList<>(List.of(fSphereArg));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
+
+                fSphere.getCollisionsCircular(collisions, field, fLine);
+
+                assertEquals(1, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - fixed ref")
+            void getCollisionListFixedRef() {
+                FSphere fSphere = factory.getFSphere(0, 1, 0);
+                FSphere fSphereArg = factory.getFSphere(1, 0, 0);
+
+                List<Shape> field = new ArrayList<>(List.of(fSphereArg));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
+
+                fSphere.getCollisionsCircular(collisions, field, fLine);
+
+                assertEquals(1, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - near")
+            void getCollisionListNear() {
+                FSphere fSphere = factory.getFSphere(20, 0, 0, 10);
+                FSphere fSphereArgA1 = factory.getFSphere(-30, 15, 15, 10);
+                FSphere fSphereArgA2 = factory.getFSphere(-30, -15, 15, 10);
+                FSphere fSphereArgA3 = factory.getFSphere(-30, 15, -15, 10);
+                FSphere fSphereArgA4 = factory.getFSphere(-30, -15, -15, 10);
+                FSphere fSphereArgB1 = factory.getFSphere(-10, 18, 0, 10);
+                FSphere fSphereArgB2 = factory.getFSphere(-10, -18, 0, 10);
+
+                List<Shape> field = new ArrayList<>(List.of(
+                        fSphereArgA1, fSphereArgA2, fSphereArgA3, fSphereArgA4,
+                        fSphereArgB1, fSphereArgB2
+                ));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FLine fLine = factory.getRefFLine(factory.getFVector(0, 1, 0));
+
+                fSphere.getCollisionsCircular(collisions, field, fLine);
+
+                assertEquals(0, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - tilt")
+            void getCollisionListTilt() {
+                FSphere fSphere = factory.getFSphere(-2, 2, 0, 1);
+                FSphere fSphereArg = factory.getFSphere(2, -2, 0, 1);
+
+                List<Shape> field = new ArrayList<>(List.of(fSphereArg));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 1, 0));
+
+                fDraft.asFRay().shiftForward(fSphere, 1);
+
+                fSphere.getCollisionsCircular(collisions, field, fDraft.asFLine());
+
+                assertEquals(1, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - circular (empty) A")
+            void getCollisionListCircularEmptyA() {
+                FSphere fSphere = factory.getFSphere(5, 2, 3);
+                FSphere fSphereArgA1 = factory.getFSphere(-7.1, 2, 3);
+                FSphere fSphereArgA2 = factory.getFSphere(-2.9, 2, 3);
+                FSphere fSphereArgA3 = factory.getFSphere(2.9, 2, 3);
+                FSphere fSphereArgA4 = factory.getFSphere(7.1, 2, 3);
+                FSphere fSphereArgB1 = factory.getFSphere(-5, 4.1, 3);
+                FSphere fSphereArgB2 = factory.getFSphere(-5, -0.1, 3);
+                FSphere fSphereArgB3 = factory.getFSphere(5, 4.1, 3);
+                FSphere fSphereArgB4 = factory.getFSphere(5, -0.1, 3);
+
+                List<Shape> field = new ArrayList<>(List.of(
+                        fSphereArgA1, fSphereArgA2, fSphereArgA3, fSphereArgA4,
+                        fSphereArgB1, fSphereArgB2, fSphereArgB3, fSphereArgB4
+                ));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
+
+                fSphere.getCollisionsCircular(collisions, field, fLine);
+
+                assertEquals(0, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - circular (empty) B")
+            void getCollisionListCircularEmptyB() {
+                FSphere fSphere = factory.getFSphere(5, 2, 3);
+                FSphere fSphereArgA1 = factory.getFSphere(0, 2, -4.1);
+                FSphere fSphereArgA2 = factory.getFSphere(0, 2, 1.9);
+                FSphere fSphereArgA3 = factory.getFSphere(0, 2, 5.9);
+                FSphere fSphereArgA4 = factory.getFSphere(0, 2, 10.1);
+                FSphere fSphereArgB1 = factory.getFSphere(0, 4.1, -2);
+                FSphere fSphereArgB2 = factory.getFSphere(0, -0.1, -2);
+                FSphere fSphereArgB3 = factory.getFSphere(0, 4.1, 2);
+                FSphere fSphereArgB4 = factory.getFSphere(0, -0.1, 2);
+
+                List<Shape> field = new ArrayList<>(List.of(
+                        fSphereArgA1, fSphereArgA2, fSphereArgA3, fSphereArgA4,
+                        fSphereArgB1, fSphereArgB2, fSphereArgB3, fSphereArgB4
+                ));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FLine fLine = factory.getRefFLine(factory.getFVector(0, 2, 3, 0, 3, 3));
+
+                fSphere.getCollisionsCircular(collisions, field, fLine);
+
+                assertEquals(0, collisions.size());
+            }
+
+            @Test
+            @DisplayName("Get collision list - tilt (empty)")
+            void getCollisionListTiltEmpty() {
+                FSphere fSphere = factory.getFSphere(-2, 2, 0, 1);
+                FSphere fSphereArg = factory.getFSphere(2, -2, 0, 1);
+
+                List<Shape> field = new ArrayList<>(List.of(fSphereArg));
+
+                List<Shape> collisions = new ArrayList<>();
+
+                FDraft fDraft = factory.getRefFDraft(factory.getFVector(1, 1, 0));
+
+                fDraft.asFRay().shiftForward(fSphere, 2);
+
+                fSphere.getCollisionsCircular(collisions, field, fDraft.asFLine());
+
+                assertEquals(0, collisions.size());
             }
         }
     }

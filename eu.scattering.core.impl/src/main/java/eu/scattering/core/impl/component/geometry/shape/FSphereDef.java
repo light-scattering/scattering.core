@@ -1,9 +1,11 @@
 package eu.scattering.core.impl.component.geometry.shape;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.line.FLine;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
@@ -705,6 +707,59 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         }
     }
 
+
+    @Override
+    public void getCollisionsCircular(List<Shape> in, Iterable<? extends Shape> field, FLine axis) {
+       FSphere dummy = supplyFSphere();
+
+       FPoint centerRef = supplyFPoint();
+       FPoint centerArg = supplyFPoint();
+
+       FVector axisRef = supplyFVector();
+       FVector axisArg = supplyFVector();
+
+       double distRef = axis.getDistance(getRefCenter());
+
+       centerRef.set(getRefCenter());
+       axis.project(centerRef);
+
+       axisRef.set(centerRef, getRefCenter());
+
+       for (Shape shape : field) {
+           double distArg = axis.getDistance(shape.getRefCenter());
+
+           if (Math.abs(distRef - distArg) > getRadius() + shape.getRadius() + EPSILON) {
+               continue;
+           }
+
+           centerArg.set(shape.getRefCenter());
+           axis.project(centerArg);
+
+           if (centerRef.getDistance(centerArg) > getRadius() + shape.getRadius() + EPSILON) {
+               continue;
+           }
+
+           dummy.setCenter(shape.getRefCenter());
+           dummy.setRadius(shape.getRadius());
+
+           axisArg.set(centerArg, dummy.getRefCenter());
+
+           if (!axisRef.isNearZeroLength() && !axisArg.isNearZeroLength() && !axisRef.isParallel(axisArg)) {
+               if (axisRef.isAntiParallel(axisArg)) {
+                   getFRotAspect().rotRgAround(dummy.getRefCenter(), axis.getRefOrigin(), Math.PI);
+               } else {
+                   double angle = -axisRef.getAngle(axisArg);
+
+                   getFRotAspect().rotRgAround(dummy.getRefCenter(), axisArg.setCrossProduct(axisRef), angle);
+               }
+           }
+
+           if (overlaps(dummy)) {
+               in.add(shape);
+           }
+       }
+    }
+
     //--- Module - Composition
 
     @Override
@@ -1138,6 +1193,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
 
     // -------------------------------------------------------------------------------------------------
 
+    private FPoint supplyFPoint() {
+
+        return factory.getFPoint();
+    }
+
     private FSphere supplyFSphere() {
 
         return factory.getFSphere();
@@ -1146,6 +1206,11 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
     private FRay supplyFRay() {
 
         return factory.getFRay();
+    }
+
+    private FRotAspect getFRotAspect() {
+
+        return factory.getRotAspect();
     }
 
     // -------------------------------------------------------------------------------------------------

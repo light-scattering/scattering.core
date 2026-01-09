@@ -890,7 +890,7 @@ public class FPointDef implements FPoint {
         }
 
         if (isSimilar(x, y, z)) {
-            throw new IllegalStateException("The vectors are similar");
+            return 0;
         }
 
         double dProd = getDotProduct(x, y, z);
