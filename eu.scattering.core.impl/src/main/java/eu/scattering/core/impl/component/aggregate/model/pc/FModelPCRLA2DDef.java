@@ -19,8 +19,8 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
     private static final int MIN_SIZE = 5;
 
     private final List<BiConsumer<FAggregate, Shape>> monitor;
-    private final List<BiFunction<FAggregate, Integer, Boolean>> acceptor;
-    private final List<BiFunction<FAggregate, Shape, Boolean>> validator;
+    private final List<BiFunction<FAggregate, Shape, Boolean>> acceptor;
+    private final List<BiFunction<FAggregate, Integer, Boolean>> validator;
 
     private final FRandAspect rndEng;
 
@@ -84,7 +84,7 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
 
             this.monitor.forEach(e -> e.accept(this.aggregate, null));
 
-            for (var acceptor : this.acceptor) {
+            for (var acceptor : this.validator) {
                 if (acceptor.apply(this.aggregate, iteration)) {
                     continue;
                 }
@@ -137,7 +137,7 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
                 continue;
             }
 
-            for (var validator : this.validator) {
+            for (var validator : this.acceptor) {
                 if (!validator.apply(this.aggregate, particle)) {
 
                     continue step;
@@ -166,12 +166,12 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
     @Override
     public void addStepAcceptor(BiFunction<FAggregate, Shape, Boolean> acceptor) {
 
-        this.validator.add(acceptor);
+        this.acceptor.add(acceptor);
     }
 
     @Override
     public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
 
-        this.acceptor.add(validator);
+        this.validator.add(validator);
     }
 }
