@@ -101,7 +101,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelBallistic = factory.createFModelBallistic3D(fAggregate);
+        FModel modelBallistic = factory.createFModelPCBallistic3D(fAggregate);
 
         modelBallistic.build();
 
@@ -125,7 +125,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelBallistic = factory.createFModelBallistic2D(fAggregate);
+        FModel modelBallistic = factory.createFModelPCBallistic2D(fAggregate);
 
         modelBallistic.build();
 

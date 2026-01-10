@@ -1,4 +1,6 @@
 package eu.scattering.core.design.component.aggregate.model.cc;
 
-public interface FModelCCFactory {
+import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallisticFactory;
+
+public interface FModelCCFactory extends FModelCCBallisticFactory {
 }

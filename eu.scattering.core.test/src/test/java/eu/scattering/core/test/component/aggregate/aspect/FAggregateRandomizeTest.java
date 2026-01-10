@@ -24,7 +24,7 @@ public class FAggregateRandomizeTest {
         FAggregate aggB = factory.getFAggregateContext().template().monodisperse(25, 1);
 
         FModelPC modelA = factory.createFModelFilippov3D(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.createFModelBallistic3D(aggB);
+        FModelPC modelB = factory.createFModelPCBallistic3D(aggB);
 
         modelA.build();
         modelB.build();
@@ -42,8 +42,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().template().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().template().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelBallistic2D(aggA);
-        FModelPC modelB = factory.createFModelBallistic2D(aggB);
+        FModelPC modelA = factory.createFModelPCBallistic2D(aggA);
+        FModelPC modelB = factory.createFModelPCBallistic2D(aggB);
 
         modelA.build();
         modelB.build();
@@ -84,8 +84,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().template().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().template().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelBallistic2D(aggA);
-        FModelPC modelB = factory.createFModelBallistic2D(aggB);
+        FModelPC modelA = factory.createFModelPCBallistic2D(aggA);
+        FModelPC modelB = factory.createFModelPCBallistic2D(aggB);
 
         modelA.build();
         modelB.build();

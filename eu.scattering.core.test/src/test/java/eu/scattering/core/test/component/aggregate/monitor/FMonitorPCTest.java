@@ -20,8 +20,8 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("FMonitor")
-public class FMonitorTest {
+@DisplayName("FMonitor PC")
+public class FMonitorPCTest {
 
     @Nested
     @Tag("Custom")
@@ -172,7 +172,7 @@ public class FMonitorTest {
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
-            FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
+            FModelPC fModel = factory.createFModelPCBallistic3D(fAggregate);
             FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.COMPLEX);
             FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
             FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
@@ -204,7 +204,7 @@ public class FMonitorTest {
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
-            FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
+            FModelPC fModel = factory.createFModelPCBallistic3D(fAggregate);
             FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.COMPLEX);
             FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_MONO);
             FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_POLY);

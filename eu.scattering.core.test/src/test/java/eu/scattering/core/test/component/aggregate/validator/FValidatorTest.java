@@ -28,7 +28,7 @@ public class FValidatorTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
 
-            FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
+            FModelPC fModel = factory.createFModelPCBallistic3D(fAggregate);
             FValidatorFractalDimension fValidator = factory.getFValidatorFractalDimension(FractalDimension.BOX, 2.0, 0.2);
 
             fModel.addCompletionValidator(fValidator);
@@ -46,7 +46,7 @@ public class FValidatorTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
 
-            FModelPC fModel = factory.createFModelBallistic3D(fAggregate);
+            FModelPC fModel = factory.createFModelPCBallistic3D(fAggregate);
             FValidatorFractalDimension fValidator = factory.getFValidatorFractalDimension(FractalDimension.CORRELATION, 2.2, 0.2);
 
             fModel.addCompletionValidator(fValidator);

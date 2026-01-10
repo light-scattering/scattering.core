@@ -57,7 +57,7 @@ public class FModelBallisticTest {
             }
         };
 
-        FModelPC modelBallistic = factory.createFModelBallistic3D(fAggregate);
+        FModelPC modelBallistic = factory.createFModelPCBallistic3D(fAggregate);
         modelBallistic.addStepMonitor(monitor);
         modelBallistic.addStepAcceptor(validator);
         modelBallistic.addCompletionValidator(acceptor);
@@ -117,7 +117,7 @@ public class FModelBallisticTest {
             }
         };
 
-        FModelPC modelBallistic = factory.createFModelBallistic2D(fAggregate);
+        FModelPC modelBallistic = factory.createFModelPCBallistic2D(fAggregate);
         modelBallistic.addStepMonitor(monitor);
         modelBallistic.addStepAcceptor(validator);
         modelBallistic.addCompletionValidator(acceptor);
@@ -161,14 +161,14 @@ public class FModelBallisticTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelBallistic3D(fAggregateA);
+        FModelPC modelA = factoryA.createFModelPCBallistic3D(fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelBallistic3D(fAggregateB);
+        FModelPC modelB = factoryB.createFModelPCBallistic3D(fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -190,14 +190,14 @@ public class FModelBallisticTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelBallistic2D(fAggregateA);
+        FModelPC modelA = factoryA.createFModelPCBallistic2D(fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelBallistic2D(fAggregateB);
+        FModelPC modelB = factoryB.createFModelPCBallistic2D(fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());

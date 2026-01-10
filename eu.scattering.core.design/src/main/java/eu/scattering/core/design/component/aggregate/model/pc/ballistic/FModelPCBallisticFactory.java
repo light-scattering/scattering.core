@@ -4,6 +4,6 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 
 public interface FModelPCBallisticFactory {
 
-    FModelPCBallistic createFModelBallistic3D(FAggregate aggregate);
-    FModelPCBallistic createFModelBallistic2D(FAggregate aggregate);
+    FModelPCBallistic createFModelPCBallistic3D(FAggregate aggregate);
+    FModelPCBallistic createFModelPCBallistic2D(FAggregate aggregate);
 }

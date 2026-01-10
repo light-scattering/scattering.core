@@ -9,6 +9,7 @@ import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryModule;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
@@ -442,15 +443,21 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FModelPCBallistic createFModelBallistic3D(FAggregate aggregate) {
+    public FModelPCBallistic createFModelPCBallistic3D(FAggregate aggregate) {
 
         return FModelPCBallistic3DDef.create(aggregate, this);
     }
 
     @Override
-    public FModelPCBallistic createFModelBallistic2D(FAggregate aggregate) {
+    public FModelPCBallistic createFModelPCBallistic2D(FAggregate aggregate) {
 
         return FModelPCBallistic2DDef.create(aggregate, this);
+    }
+
+    @Override
+    public FModelCCBallistic createFModelCCBallistic3D(FAggregate aggregate) {
+
+        return FModelCCBallistic3DDef.create(aggregate, this);
     }
 
     @Override
