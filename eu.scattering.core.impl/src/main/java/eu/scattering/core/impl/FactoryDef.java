@@ -7,13 +7,9 @@ import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
-import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
-import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
-import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
-import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
-import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
+import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.common.module.FMonitorRadiusOfGyration;
 import eu.scattering.core.design.component.aggregate.validator.common.module.FValidatorFractalDimension;
 import eu.scattering.core.design.component.geometry.Geometry;
@@ -50,8 +46,8 @@ import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.physics.material.data.FMaterialData;
 import eu.scattering.core.design.statistics.StatisticsHelper;
 import eu.scattering.core.design.statistics.base.FStat;
-import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
@@ -66,7 +62,7 @@ import eu.scattering.core.impl.aspect.rotate.FRotAspectDef;
 import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
-import eu.scattering.core.impl.component.aggregate.model.*;
+import eu.scattering.core.impl.component.aggregate.model.FModelFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRadiusOfGyrationDef;
 import eu.scattering.core.impl.component.aggregate.validator.FValidatorFractalDimensionDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
@@ -431,69 +427,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FModelRLA createFModelRLA3D(FAggregate aggregate) {
+    public FModelFactoryContext getFModelContext() {
 
-        return FModelRLA3DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelRLA createFModelRLA2D(FAggregate aggregate) {
-
-        return FModelRLA2DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelPCBallistic createFModelPCBallistic3D(FAggregate aggregate) {
-
-        return FModelPCBallistic3DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelPCBallistic createFModelPCBallistic2D(FAggregate aggregate) {
-
-        return FModelPCBallistic2DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelCCBallistic createFModelCCBallistic3D(FAggregate aggregate) {
-
-        return FModelCCBallistic3DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelPCTunable createFModelFilippov3D(FAggregate aggregate) {
-
-        return FModelPCFilippov3DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelPCTunable createFModelFilippov2D(FAggregate aggregate) {
-
-        return FModelPCFilippov2DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelPCTunable createFModelFilippov3D(FAggregate aggregate, double df, double kf) {
-
-        return FModelPCFilippov3DDef.create(aggregate, this, df, kf);
-    }
-
-    @Override
-    public FModelPCTunable createFModelFilippov2D(FAggregate aggregate, double df, double kf) {
-
-        return FModelPCFilippov2DDef.create(aggregate, this, df, kf);
-    }
-
-    @Override
-    public FModelDLA createFModelDLA3D(FAggregate aggregate) {
-
-        return FModelDLA3DDef.create(aggregate, this);
-    }
-
-    @Override
-    public FModelDLA createFModelDLA2D(FAggregate aggregate) {
-
-        return FModelDLA2DDef.create(aggregate, this);
+        return FModelFactoryContextDef.create(this);
     }
 
     @Override

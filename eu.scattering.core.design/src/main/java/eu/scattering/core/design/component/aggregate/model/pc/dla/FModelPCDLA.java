@@ -7,7 +7,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.lambda.TriConsumer;
 
-public interface FModelDLA extends FModelPC {
+public interface FModelPCDLA extends FModelPC {
 
     double getStep();
     void setStep(double step);

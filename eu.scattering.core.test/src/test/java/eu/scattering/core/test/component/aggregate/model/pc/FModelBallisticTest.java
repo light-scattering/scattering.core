@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +58,7 @@ public class FModelBallisticTest {
             }
         };
 
-        FModelPC modelBallistic = factory.createFModelPCBallistic3D(fAggregate);
+        FModelPC modelBallistic = factory.getFModelContext().pc().ballistic(fAggregate);
         modelBallistic.addStepMonitor(monitor);
         modelBallistic.addStepAcceptor(validator);
         modelBallistic.addCompletionValidator(acceptor);
@@ -117,7 +118,7 @@ public class FModelBallisticTest {
             }
         };
 
-        FModelPC modelBallistic = factory.createFModelPCBallistic2D(fAggregate);
+        FModelPC modelBallistic = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
         modelBallistic.addStepMonitor(monitor);
         modelBallistic.addStepAcceptor(validator);
         modelBallistic.addCompletionValidator(acceptor);
@@ -161,14 +162,14 @@ public class FModelBallisticTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelPCBallistic3D(fAggregateA);
+        FModelPC modelA = factoryA.getFModelContext().pc().ballistic(fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelPCBallistic3D(fAggregateB);
+        FModelPC modelB = factoryB.getFModelContext().pc().ballistic(fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -190,14 +191,14 @@ public class FModelBallisticTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelPCBallistic2D(fAggregateA);
+        FModelPC modelA = factoryA.getFModelContext().pc().ballistic(Dimension.D2, fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelPCBallistic2D(fAggregateB);
+        FModelPC modelB = factoryB.getFModelContext().pc().ballistic(Dimension.D2, fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());

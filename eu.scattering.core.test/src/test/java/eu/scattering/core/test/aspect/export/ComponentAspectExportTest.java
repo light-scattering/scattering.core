@@ -2,12 +2,13 @@ package eu.scattering.core.test.aspect.export;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
-import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
+import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.type.Dimension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelRLA = factory.createFModelRLA2D(fAggregate);
+        FModel modelRLA = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
 
         modelRLA.build();
 
@@ -53,7 +54,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelRLA = factory.createFModelRLA3D(fAggregate);
+        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
 
         modelRLA.build();
 
@@ -77,7 +78,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelRLA = factory.createFModelRLA2D(fAggregate);
+        FModel modelRLA = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
 
         modelRLA.build();
 
@@ -101,7 +102,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelBallistic = factory.createFModelPCBallistic3D(fAggregate);
+        FModel modelBallistic = factory.getFModelContext().pc().ballistic(fAggregate);
 
         modelBallistic.build();
 
@@ -125,7 +126,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelBallistic = factory.createFModelPCBallistic2D(fAggregate);
+        FModel modelBallistic = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
 
         modelBallistic.build();
 
@@ -149,7 +150,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.8, 1.4);
+        FModelPCTunable modelTunable = factory.getFModelContext().pc().filippov(fAggregate, 1.8, 1.4);
         modelTunable.setEarlyStageCorrection(true);
 
         modelTunable.build();
@@ -174,7 +175,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.3, 1.5);
+        FModelPCTunable modelTunable = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregate, 1.3, 1.5);
         modelTunable.setEarlyStageCorrection(true);
 
         modelTunable.build();
@@ -199,7 +200,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelDLA modelDLA = factory.createFModelDLA3D(fAggregate);
+        FModelPCDLA modelDLA = factory.getFModelContext().pc().dla(fAggregate);
         modelDLA.build();
 
         String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
@@ -222,7 +223,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelDLA modelDLA = factory.createFModelDLA2D(fAggregate);
+        FModelPCDLA modelDLA = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
         modelDLA.build();
 
         String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);

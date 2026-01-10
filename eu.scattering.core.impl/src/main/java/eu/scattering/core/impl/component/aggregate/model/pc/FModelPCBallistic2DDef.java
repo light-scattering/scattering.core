@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.component.aggregate.model;
+package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;

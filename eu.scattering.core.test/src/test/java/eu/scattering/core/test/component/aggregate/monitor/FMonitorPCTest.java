@@ -37,7 +37,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
 
             FStat radius = factory.getFStat();
 
@@ -73,7 +73,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
@@ -106,7 +106,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
@@ -139,7 +139,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorRadiusOfGyration fMonitorB = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
@@ -172,7 +172,7 @@ public class FMonitorPCTest {
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
-            FModelPC fModel = factory.createFModelPCBallistic3D(fAggregate);
+            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
             FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.COMPLEX);
             FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
             FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
@@ -204,7 +204,7 @@ public class FMonitorPCTest {
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
-            FModelPC fModel = factory.createFModelPCBallistic3D(fAggregate);
+            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
             FMonitorRadiusOfGyration fMonitor = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.COMPLEX);
             FMonitorRadiusOfGyration fMonitorMono = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_MONO);
             FMonitorRadiusOfGyration fMonitorPoly = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_POLY);

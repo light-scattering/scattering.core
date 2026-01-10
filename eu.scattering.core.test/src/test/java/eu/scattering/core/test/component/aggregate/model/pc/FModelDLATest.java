@@ -3,7 +3,7 @@ package eu.scattering.core.test.component.aggregate.model.pc;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
-import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
+import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -11,6 +11,7 @@ import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.lambda.TriConsumer;
+import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +61,7 @@ public class FModelDLATest {
             }
         };
 
-        FModelDLA modelDLA = factory.createFModelDLA3D(fAggregate);
+        FModelPCDLA modelDLA = factory.getFModelContext().pc().dla(fAggregate);
         modelDLA.addStepMonitor(monitor);
         modelDLA.addStepAcceptor(validator);
         modelDLA.addCompletionValidator(acceptor);
@@ -120,7 +121,7 @@ public class FModelDLATest {
             }
         };
 
-        FModelDLA modelDLA = factory.createFModelDLA2D(fAggregate);
+        FModelPCDLA modelDLA = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
         modelDLA.addStepMonitor(monitor);
         modelDLA.addStepAcceptor(validator);
         modelDLA.addCompletionValidator(acceptor);
@@ -164,14 +165,14 @@ public class FModelDLATest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelDLA3D(fAggregateA);
+        FModelPC modelA = factoryA.getFModelContext().pc().dla(fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelDLA3D(fAggregateB);
+        FModelPC modelB = factoryB.getFModelContext().pc().dla(fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -193,14 +194,14 @@ public class FModelDLATest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelDLA2D(fAggregateA);
+        FModelPC modelA = factoryA.getFModelContext().pc().dla(Dimension.D2, fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelDLA2D(fAggregateB);
+        FModelPC modelB = factoryB.getFModelContext().pc().dla(Dimension.D2, fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -214,7 +215,7 @@ public class FModelDLATest {
     @DisplayName("Configuration - Aggregate 3D")
     void configuration3D() {
         FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-        FModelDLA model = factory.createFModelDLA3D(fAggregate);
+        FModelPCDLA model = factory.getFModelContext().pc().dla(fAggregate);
 
         TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
@@ -233,7 +234,7 @@ public class FModelDLATest {
     @DisplayName("Configuration - Aggregate 2D")
     void configuration2D() {
         FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-        FModelDLA model = factory.createFModelDLA2D(fAggregate);
+        FModelPCDLA model = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
 
         TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 

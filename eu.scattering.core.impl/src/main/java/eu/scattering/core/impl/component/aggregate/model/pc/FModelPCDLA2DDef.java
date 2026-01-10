@@ -1,8 +1,8 @@
-package eu.scattering.core.impl.component.aggregate.model;
+package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelDLA;
+import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
@@ -19,7 +19,7 @@ import java.util.Queue;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class FModelDLA2DDef implements FModelDLA {
+public class FModelPCDLA2DDef implements FModelPCDLA {
     private static final int MIN_SIZE = 5;
 
     private final List<BiConsumer<FAggregate, Shape>> monitor;
@@ -45,7 +45,7 @@ public class FModelDLA2DDef implements FModelDLA {
     private double fSpawn, fExile;
     private double step;
 
-    private FModelDLA2DDef(FAggregate aggregate, ScatFactory factory) {
+    private FModelPCDLA2DDef(FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -81,9 +81,9 @@ public class FModelDLA2DDef implements FModelDLA {
         setMovementDefault();
     }
 
-    public static FModelDLA create(FAggregate aggregate, ScatFactory factory) {
+    public static FModelPCDLA create(FAggregate aggregate, ScatFactory factory) {
 
-        return new FModelDLA2DDef(aggregate, factory);
+        return new FModelPCDLA2DDef(aggregate, factory);
     }
 
     @Override

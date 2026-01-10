@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +58,7 @@ public class FModelRLATest {
             }
         };
 
-        FModelPC modelRLA = factory.createFModelRLA3D(fAggregate);
+        FModelPC modelRLA = factory.getFModelContext().pc().rla(fAggregate);
         modelRLA.addStepMonitor(monitor);
         modelRLA.addStepAcceptor(validator);
         modelRLA.addCompletionValidator(acceptor);
@@ -117,7 +118,7 @@ public class FModelRLATest {
             }
         };
 
-        FModelPC modelRLA = factory.createFModelRLA2D(fAggregate);
+        FModelPC modelRLA = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
         modelRLA.addStepMonitor(monitor);
         modelRLA.addStepAcceptor(validator);
         modelRLA.addCompletionValidator(acceptor);
@@ -161,14 +162,14 @@ public class FModelRLATest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelRLA3D(fAggregateA);
+        FModelPC modelA = factoryA.getFModelContext().pc().rla(fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelRLA3D(fAggregateB);
+        FModelPC modelB = factoryB.getFModelContext().pc().rla(fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -190,14 +191,14 @@ public class FModelRLATest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelRLA2D(fAggregateA);
+        FModelPC modelA = factoryA.getFModelContext().pc().rla(Dimension.D2, fAggregateA);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelRLA2D(fAggregateB);
+        FModelPC modelB = factoryB.getFModelContext().pc().rla(Dimension.D2, fAggregateB);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());

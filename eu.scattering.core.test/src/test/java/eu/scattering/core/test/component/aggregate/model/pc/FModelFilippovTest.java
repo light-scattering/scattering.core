@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.extension.Producer;
+import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +59,7 @@ public class FModelFilippovTest {
             }
         };
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov3D(fAggregate, 1.8, 1.4);
+        FModelPCTunable modelTunable = factory.getFModelContext().pc().filippov(fAggregate, 1.8, 1.4);
         modelTunable.setEarlyStageCorrection(true);
         modelTunable.addStepMonitor(monitor);
         modelTunable.addStepAcceptor(validator);
@@ -119,7 +120,7 @@ public class FModelFilippovTest {
             }
         };
 
-        FModelPCTunable modelTunable = factory.createFModelFilippov2D(fAggregate, 1.5, 1.1);
+        FModelPCTunable modelTunable = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregate, 1.5, 1.1);
         modelTunable.setEarlyStageCorrection(true);
         modelTunable.addStepMonitor(monitor);
         modelTunable.addStepAcceptor(validator);
@@ -159,14 +160,14 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelFilippov3D(fAggregateA, 1.4, 1.4);
+        FModelPC modelA = factoryA.getFModelContext().pc().filippov(fAggregateA, 1.4, 1.4);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelFilippov3D(fAggregateB, 1.4, 1.4);
+        FModelPC modelB = factoryB.getFModelContext().pc().filippov(fAggregateB, 1.4, 1.4);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -188,14 +189,14 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyA = factoryA.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factoryA.getRefFAggregate(fAssemblyA);
 
-        FModelPC modelA = factoryA.createFModelFilippov2D(fAggregateA, 1.4, 1.4);
+        FModelPC modelA = factoryA.getFModelContext().pc().filippov(Dimension.D2, fAggregateA, 1.4, 1.4);
         modelA.build();
 
         Producer<FSphere> fProducerB = factoryB.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factoryB.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB= factoryB.getRefFAggregate(fAssemblyB);
 
-        FModelPC modelB = factoryB.createFModelFilippov2D(fAggregateB, 1.4, 1.4);
+        FModelPC modelB = factoryB.getFModelContext().pc().filippov(Dimension.D2, fAggregateB, 1.4, 1.4);
         modelB.build();
 
         assertEquals(fAssemblyA.size(), fAssemblyB.size());
@@ -214,7 +215,7 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA);
 
-        FModelPCTunable modelA = factory.createFModelFilippov3D(fAggregateA);
+        FModelPCTunable modelA = factory.getFModelContext().pc().filippov(fAggregateA);
         modelA.setEarlyStageCorrection(true);
         modelA.setDf(2.6);
         modelA.setKf(1.2);
@@ -224,7 +225,7 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB);
 
-        FModelPCTunable modelB = factory.createFModelFilippov3D(fAggregateB);
+        FModelPCTunable modelB = factory.getFModelContext().pc().filippov(fAggregateB);
         modelB.setEarlyStageCorrection(true);
         modelB.setDf(1.4);
         modelB.setKf(1.8);
@@ -245,7 +246,7 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA);
 
-        FModelPCTunable modelA = factory.createFModelFilippov2D(fAggregateA);
+        FModelPCTunable modelA = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregateA);
         modelA.setEarlyStageCorrection(true);
         modelA.setDf(1.8);
         modelA.setKf(1.2);
@@ -255,7 +256,7 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB);
 
-        FModelPCTunable modelB = factory.createFModelFilippov2D(fAggregateB);
+        FModelPCTunable modelB = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregateB);
         modelB.setEarlyStageCorrection(true);
         modelB.setDf(1.2);
         modelB.setKf(1.8);
@@ -271,7 +272,7 @@ public class FModelFilippovTest {
     @DisplayName("Configuration - Aggregate 3D")
     void configuration3D() {
         FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-        FModelPCTunable model = factory.createFModelFilippov3D(fAggregate);
+        FModelPCTunable model = factory.getFModelContext().pc().filippov(fAggregate);
 
         model.setDf(2.2);
         model.setKf(1.1);
@@ -286,7 +287,7 @@ public class FModelFilippovTest {
     @DisplayName("Configuration - Aggregate 2D")
     void configuration2D() {
         FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-        FModelPCTunable model = factory.createFModelFilippov2D(fAggregate);
+        FModelPCTunable model = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregate);
 
         model.setDf(2.2);
         model.setKf(1.1);

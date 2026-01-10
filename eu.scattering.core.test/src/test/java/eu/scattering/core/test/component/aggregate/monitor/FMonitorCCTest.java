@@ -22,7 +22,7 @@ public class FMonitorCCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
 
-            FModelCC fModel = factory.createFModelCCBallistic3D(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().createFModelCCBallistic3D(fAggregate);
 
             fModel.build();
 

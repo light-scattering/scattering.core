@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
+import eu.scattering.core.design.type.Dimension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +24,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelFilippov3D(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.createFModelPCBallistic3D(aggB);
+        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().ballistic(aggB);
 
         modelA.build();
         modelB.build();
@@ -42,8 +43,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelPCBallistic2D(aggA);
-        FModelPC modelB = factory.createFModelPCBallistic2D(aggB);
+        FModelPC modelA = factory.getFModelContext().pc().ballistic(Dimension.D2, aggA);
+        FModelPC modelB = factory.getFModelContext().pc().ballistic(Dimension.D2, aggB);
 
         modelA.build();
         modelB.build();
@@ -65,8 +66,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelFilippov3D(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.createFModelFilippov3D(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().filippov(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
@@ -84,8 +85,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelPCBallistic2D(aggA);
-        FModelPC modelB = factory.createFModelPCBallistic2D(aggB);
+        FModelPC modelA = factory.getFModelContext().pc().ballistic(Dimension.D2, aggA);
+        FModelPC modelB = factory.getFModelContext().pc().ballistic(Dimension.D2, aggB);
 
         modelA.build();
         modelB.build();
@@ -165,8 +166,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelFilippov3D(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.createFModelFilippov3D(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().filippov(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
@@ -186,8 +187,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.createFModelFilippov2D(aggA, 1.5, 1.2);
-        FModelPC modelB = factory.createFModelFilippov2D(aggB, 1.5, 1.2);
+        FModelPC modelA = factory.getFModelContext().pc().filippov(Dimension.D2, aggA, 1.5, 1.2);
+        FModelPC modelB = factory.getFModelContext().pc().filippov(Dimension.D2, aggB, 1.5, 1.2);
 
         modelA.build();
         modelB.build();

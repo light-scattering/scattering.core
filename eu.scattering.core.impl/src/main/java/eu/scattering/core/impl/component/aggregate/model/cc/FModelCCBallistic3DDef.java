@@ -1,4 +1,4 @@
-package eu.scattering.core.impl.component.aggregate.model;
+package eu.scattering.core.impl.component.aggregate.model.cc;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
@@ -121,7 +121,7 @@ public class FModelCCBallistic3DDef implements FModelCCBallistic {
     private void buildFragments() {
 
         for (FAggregate fragment : this.fragments) {
-            factory.createFModelPCBallistic3D(fragment).build();
+            factory.getFModelContext().pc().ballistic(fragment).build();
         }
     }
 

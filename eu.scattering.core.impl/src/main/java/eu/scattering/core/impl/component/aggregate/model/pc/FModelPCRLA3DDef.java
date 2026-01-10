@@ -1,8 +1,8 @@
-package eu.scattering.core.impl.component.aggregate.model;
+package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelRLA;
+import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelPCRLA;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
@@ -14,7 +14,7 @@ import java.util.Queue;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class FModelRLA2DDef implements FModelRLA {
+public class FModelPCRLA3DDef implements FModelPCRLA {
     private static final int ITERATIONS = 100;
     private static final int MIN_SIZE = 5;
 
@@ -31,7 +31,7 @@ public class FModelRLA2DDef implements FModelRLA {
     private final FAssembly<Shape> attached;
     private final Queue<Shape> detached;
 
-    private FModelRLA2DDef(FAggregate aggregate, ScatFactory factory) {
+    private FModelPCRLA3DDef(FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -42,8 +42,8 @@ public class FModelRLA2DDef implements FModelRLA {
         }
 
         this.monitor = new ArrayList<>();
-        this.acceptor = new ArrayList<>();
         this.validator = new ArrayList<>();
+        this.acceptor = new ArrayList<>();
 
         this.rndEng = factory.getRandAspect();
 
@@ -55,9 +55,9 @@ public class FModelRLA2DDef implements FModelRLA {
         this.detached = new LinkedList<>();
     }
 
-    public static FModelRLA create(FAggregate aggregate, ScatFactory factory) {
+    public static FModelPCRLA create(FAggregate aggregate, ScatFactory random) {
 
-        return new FModelRLA2DDef(aggregate, factory);
+        return new FModelPCRLA3DDef(aggregate, random);
     }
 
     @Override
@@ -66,7 +66,6 @@ public class FModelRLA2DDef implements FModelRLA {
         if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
-
 
         boolean loop;
         int iteration = 0;
@@ -108,8 +107,6 @@ public class FModelRLA2DDef implements FModelRLA {
 
         this.attached.clear();
 
-        this.detached.forEach(e -> e.setCenterZ(0));
-
         Shape particle = detached.poll();
         assert particle != null;
 
@@ -129,7 +126,7 @@ public class FModelRLA2DDef implements FModelRLA {
             int baseIndex = rndEng.getFRand().nextInteger(0, this.bases.size());
             Shape base = this.bases.get(baseIndex);
 
-            boolean isPositioned = rndEng.attachLinear2D(particle, base, this.attached, ITERATIONS);
+            boolean isPositioned = rndEng.attachLinear(particle, base, this.attached, ITERATIONS);
 
             if (!isPositioned) {
                 this.bases.remove(base);
