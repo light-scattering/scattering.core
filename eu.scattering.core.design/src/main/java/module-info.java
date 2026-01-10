@@ -77,4 +77,6 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.statistics.construct.plotbar;
     exports eu.scattering.core.design.component.aggregate.model.cc.ballistic;
     exports eu.scattering.core.design.component.aggregate.model.cc;
+    exports eu.scattering.core.design.component.aggregate.validator.common;
+    exports eu.scattering.core.design.component.aggregate.validator;
 }

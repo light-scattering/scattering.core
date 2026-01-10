@@ -11,7 +11,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
 import eu.scattering.core.design.component.aggregate.model.FModelFactoryContext;
 import eu.scattering.core.design.component.aggregate.monitor.FMonitorFactoryContext;
-import eu.scattering.core.design.component.aggregate.validator.common.module.FValidatorFractalDimension;
+import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
 import eu.scattering.core.design.component.geometry.Geometry;
 import eu.scattering.core.design.component.geometry.GeometryParser;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
@@ -52,7 +52,6 @@ import eu.scattering.core.design.storage.buffer.FBuffer;
 import eu.scattering.core.design.storage.cache.FCache;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
-import eu.scattering.core.design.type.FractalDimension;
 import eu.scattering.core.impl.aspect.export.FExportAspectDef;
 import eu.scattering.core.impl.aspect.prototype.FProtoAspectDef;
 import eu.scattering.core.impl.aspect.randomize.FRandAspectDef;
@@ -63,7 +62,7 @@ import eu.scattering.core.impl.component.aggregate.FAggregateDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.model.FModelFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorFactoryContextDef;
-import eu.scattering.core.impl.component.aggregate.validator.FValidatorFractalDimensionDef;
+import eu.scattering.core.impl.component.aggregate.validator.FValidatorFactoryContextDef;
 import eu.scattering.core.impl.component.geometry.GeometryParserDef;
 import eu.scattering.core.impl.component.geometry.base.*;
 import eu.scattering.core.impl.component.geometry.construct.*;
@@ -438,9 +437,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FValidatorFractalDimension getFValidatorFractalDimension(FractalDimension type, double expected, double error) {
+    public FValidatorFactoryContext getFValidatorContext() {
 
-        return FValidatorFractalDimensionDef.create(this, type, expected, error);
+        return FValidatorFactoryContextDef.create(this);
     }
 
     //--------------------------------------------------

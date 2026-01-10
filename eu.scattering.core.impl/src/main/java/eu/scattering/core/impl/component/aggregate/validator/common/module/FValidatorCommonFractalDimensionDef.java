@@ -1,18 +1,18 @@
-package eu.scattering.core.impl.component.aggregate.validator;
+package eu.scattering.core.impl.component.aggregate.validator.common.module;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.validator.common.module.FValidatorFractalDimension;
+import eu.scattering.core.design.component.aggregate.validator.common.module.FValidatorCommonFractalDimension;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.type.FractalDimension;
 
-public class FValidatorFractalDimensionDef implements FValidatorFractalDimension {
+public class FValidatorCommonFractalDimensionDef implements FValidatorCommonFractalDimension {
     private final FractalDimension type;
     private final double expected;
     private final double error;
     private final FStat stat;
 
-    private FValidatorFractalDimensionDef(ScatFactory factory, FractalDimension type, double expected, double error) {
+    private FValidatorCommonFractalDimensionDef(ScatFactory factory, FractalDimension type, double expected, double error) {
 
         this.type = type;
         this.expected = expected;
@@ -22,9 +22,9 @@ public class FValidatorFractalDimensionDef implements FValidatorFractalDimension
         this.stat.setName("Fractal dimension");
     }
 
-    public static FValidatorFractalDimension create(ScatFactory factory, FractalDimension type, double expected, double error) {
+    public static FValidatorCommonFractalDimension create(ScatFactory factory, FractalDimension type, double expected, double error) {
 
-        return new FValidatorFractalDimensionDef(factory, type, expected, error);
+        return new FValidatorCommonFractalDimensionDef(factory, type, expected, error);
     }
 
     @Override
