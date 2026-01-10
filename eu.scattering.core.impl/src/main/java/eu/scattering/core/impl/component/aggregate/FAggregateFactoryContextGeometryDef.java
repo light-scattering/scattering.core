@@ -2,7 +2,7 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.FAggregateFactoryModuleGeometry;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryContextGeometry;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -12,17 +12,17 @@ import eu.scattering.core.design.extension.Producer;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
-public class FAggregateFactoryModuleGeometryDef implements FAggregateFactoryModuleGeometry {
+public class FAggregateFactoryContextGeometryDef implements FAggregateFactoryContextGeometry {
     private final ScatFactory factory;
 
-    private FAggregateFactoryModuleGeometryDef(ScatFactory factory) {
+    private FAggregateFactoryContextGeometryDef(ScatFactory factory) {
 
         this.factory = factory;
     }
 
-    public static FAggregateFactoryModuleGeometry create(ScatFactory factory) {
+    public static FAggregateFactoryContextGeometry create(ScatFactory factory) {
 
-        return new FAggregateFactoryModuleGeometryDef(factory);
+        return new FAggregateFactoryContextGeometryDef(factory);
     }
 
     //--------------------------------------------------

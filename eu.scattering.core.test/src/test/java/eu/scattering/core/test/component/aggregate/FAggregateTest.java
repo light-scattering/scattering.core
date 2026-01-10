@@ -160,7 +160,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Parse JSON - A")
         void parseJSONA() {
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(10, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
 
             JSONObject json = fAggregate.toJSON();
 
@@ -175,7 +175,7 @@ public class FAggregateTest {
         @Test
         @DisplayName("Parse JSON - B")
         void parseJSONB() {
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(10, 1).addFBuffer(10).addFMaterial();
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1).addFBuffer(10).addFMaterial();
             fAggregate.getRefFMaterial().setDensity("A", 3);
             fAggregate.getRefFMaterial().setDensity("B", 6);
             fAggregate.getRefFMaterial().setRefIndexRe("C", 3);

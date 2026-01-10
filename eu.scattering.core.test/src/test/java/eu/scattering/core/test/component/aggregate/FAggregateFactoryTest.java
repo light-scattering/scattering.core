@@ -121,7 +121,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct monodisperse")
         void constructMono() {
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(100, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(100, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),
@@ -134,7 +134,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct polydisperse")
         void constructPoly() {
-            FAggregate fAggregate = factory.getFAggregateContext().template().polydisperse(100, 10, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(100, 10, 1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),
@@ -147,7 +147,7 @@ public class FAggregateFactoryTest {
         @Test
         @DisplayName("Construct polydisperse (limited)")
         void constructPolyLimited() {
-            FAggregate fAggregate = factory.getFAggregateContext().template().polydisperse(100, 10, 1, 1, 0.1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(100, 10, 1, 1, 0.1);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(100, fAggregate.getRefParticles().size(),

@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.aggregate;
 
-public interface FAggregateFactoryModuleGeometry {
+public interface FAggregateFactoryContextGeometry {
 
     FAggregate d1(int d1, double radius);
     FAggregate d2(int d1, int d2, double radius);

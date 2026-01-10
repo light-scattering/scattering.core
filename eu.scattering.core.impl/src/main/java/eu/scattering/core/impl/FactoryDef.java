@@ -7,7 +7,7 @@ import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.aspect.rotate.generator.FRotGenerator;
-import eu.scattering.core.design.component.aggregate.FAggregateFactoryModule;
+import eu.scattering.core.design.component.aggregate.FAggregateFactoryContext;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
@@ -65,7 +65,7 @@ import eu.scattering.core.impl.aspect.randomize.FRandGeneratorDef;
 import eu.scattering.core.impl.aspect.rotate.FRotAspectDef;
 import eu.scattering.core.impl.aspect.rotate.FRotProcessorDef;
 import eu.scattering.core.impl.component.aggregate.FAggregateDef;
-import eu.scattering.core.impl.component.aggregate.FAggregateFactoryModuleDef;
+import eu.scattering.core.impl.component.aggregate.FAggregateFactoryContextDef;
 import eu.scattering.core.impl.component.aggregate.model.*;
 import eu.scattering.core.impl.component.aggregate.monitor.FMonitorRadiusOfGyrationDef;
 import eu.scattering.core.impl.component.aggregate.validator.FValidatorFractalDimensionDef;
@@ -425,9 +425,9 @@ public final class FactoryDef implements ScatFactory {
     }
 
     @Override
-    public FAggregateFactoryModule getFAggregateContext() {
+    public FAggregateFactoryContext getFAggregateContext() {
 
-        return FAggregateFactoryModuleDef.create(this);
+        return FAggregateFactoryContextDef.create(this);
     }
 
     @Override

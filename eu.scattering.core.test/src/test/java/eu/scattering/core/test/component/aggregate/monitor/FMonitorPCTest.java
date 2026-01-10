@@ -35,7 +35,7 @@ public class FMonitorPCTest {
             double df = 1.8;
             double kf = 1.6;
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
 
@@ -71,7 +71,7 @@ public class FMonitorPCTest {
             double df = 1.4;
             double kf = 1.8;
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
@@ -104,7 +104,7 @@ public class FMonitorPCTest {
             double df = 1.8;
             double kf = 1.6;
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
@@ -137,7 +137,7 @@ public class FMonitorPCTest {
             double df = 2.2;
             double kf = 1.0;
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
             FModelPCTunable fModel = factory.createFModelFilippov3D(fAggregate, df, kf);
             FMonitorRadiusOfGyration fMonitorA = factory.getFMonitorRadiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
@@ -168,7 +168,7 @@ public class FMonitorPCTest {
             int quantity = 100;
             double delta = 0.25;
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1).addFBuffer(1_000_000);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1).addFBuffer(1_000_000);
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 
@@ -200,7 +200,7 @@ public class FMonitorPCTest {
             int skip = 5;
             double delta = 0.25;
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1).addFBuffer(1_000_000);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1).addFBuffer(1_000_000);
 
             fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
 

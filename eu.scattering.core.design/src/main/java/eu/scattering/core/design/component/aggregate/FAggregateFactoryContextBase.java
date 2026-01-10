@@ -1,6 +1,6 @@
 package eu.scattering.core.design.component.aggregate;
 
-public interface FAggregateFactoryModuleTemplate {
+public interface FAggregateFactoryContextBase {
 
     FAggregate monodisperse(int quantity, double radius);
 

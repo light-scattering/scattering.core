@@ -22,7 +22,7 @@ public interface FAggregateFactory extends FModelFactory, FMonitorFactory, FVali
 
     //--------------------------------------------------
 
-    FAggregateFactoryModule getFAggregateContext();
+    FAggregateFactoryContext getFAggregateContext();
 
     //--------------------------------------------------
 

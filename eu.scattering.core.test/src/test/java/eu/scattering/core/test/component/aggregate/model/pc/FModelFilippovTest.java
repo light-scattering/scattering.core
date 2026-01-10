@@ -30,7 +30,7 @@ public class FModelFilippovTest {
     void aggregate3D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -91,7 +91,7 @@ public class FModelFilippovTest {
     void aggregate2D() {
         int quantity = 10;
 
-        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(quantity, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
         FAssembly<Shape> monitorAssembly = factory.getFAssembly();
         AtomicInteger monitorIndex = new AtomicInteger(0);
@@ -270,7 +270,7 @@ public class FModelFilippovTest {
     @Test
     @DisplayName("Configuration - Aggregate 3D")
     void configuration3D() {
-        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(10, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
         FModelPCTunable model = factory.createFModelFilippov3D(fAggregate);
 
         model.setDf(2.2);
@@ -285,7 +285,7 @@ public class FModelFilippovTest {
     @Test
     @DisplayName("Configuration - Aggregate 2D")
     void configuration2D() {
-        FAggregate fAggregate = factory.getFAggregateContext().template().monodisperse(10, 1);
+        FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
         FModelPCTunable model = factory.createFModelFilippov2D(fAggregate);
 
         model.setDf(2.2);

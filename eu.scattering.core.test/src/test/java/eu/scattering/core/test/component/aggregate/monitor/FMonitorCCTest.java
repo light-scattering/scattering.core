@@ -20,7 +20,7 @@ public class FMonitorCCTest {
         void rogMonodisperseBallistic() {
             int quantity = 1000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().template().polydisperse(quantity, 10, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
 
             FModelCC fModel = factory.createFModelCCBallistic3D(fAggregate);
 
