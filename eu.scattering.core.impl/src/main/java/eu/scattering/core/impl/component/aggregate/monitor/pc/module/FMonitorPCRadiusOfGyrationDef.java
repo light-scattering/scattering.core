@@ -1,20 +1,20 @@
-package eu.scattering.core.impl.component.aggregate.monitor;
+package eu.scattering.core.impl.component.aggregate.monitor.pc.module;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.monitor.common.module.FMonitorRadiusOfGyration;
+import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadiusOfGyration;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.type.RadiusOfGyration;
 
-public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
+public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration {
     private final RadiusOfGyration type;
     private final FPlot fPlot;
 
     private double skip = -1;
 
-    private FMonitorRadiusOfGyrationDef(ScatFactory factory, RadiusOfGyration type) {
+    private FMonitorPCRadiusOfGyrationDef(ScatFactory factory, RadiusOfGyration type) {
 
         this.type = type;
         this.fPlot = factory.getFPlot();
@@ -22,8 +22,8 @@ public class FMonitorRadiusOfGyrationDef implements FMonitorRadiusOfGyration {
         this.fPlot.setName("Radius of gyration");
     }
 
-    public static FMonitorRadiusOfGyration create(ScatFactory factory, int skip, RadiusOfGyration type) {
-        FMonitorRadiusOfGyration results = new FMonitorRadiusOfGyrationDef(factory, type);
+    public static FMonitorPCRadiusOfGyration create(ScatFactory factory, int skip, RadiusOfGyration type) {
+        FMonitorPCRadiusOfGyration results = new FMonitorPCRadiusOfGyrationDef(factory, type);
 
         results.setSkip(skip);
 
