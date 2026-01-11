@@ -1544,9 +1544,9 @@ public class FAggregateTest {
         @DisplayName("Reset center with enum")
         void resetCenterEnum() {
             FAggregate fAggregate = factory.getFAggregate();
-            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+            fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 0, 2, 1));
 
             fAggregate.resetCenter(Center.ORIGIN);
 
@@ -1593,9 +1593,9 @@ public class FAggregateTest {
         @DisplayName("Get center with FPoint")
         void getCenterWithFPoint() {
             FAggregate fAggregate = factory.getFAggregate();
-            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+            fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 0, 2, 1));
 
             FPoint center = factory.getFPoint();
 
@@ -1620,9 +1620,9 @@ public class FAggregateTest {
         @DisplayName("Get center with FPos3D")
         void getCenterWithFPos3D() {
             FAggregate fAggregate = factory.getFAggregate();
-            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+            fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 0, 2, 1));
 
             FPoint center = factory.getFPoint();
 
@@ -1647,9 +1647,9 @@ public class FAggregateTest {
         @DisplayName("Set center with primitives")
         void setCenterWithPrimitives() {
             FAggregate fAggregate = factory.getFAggregate();
-            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+            fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 0, 2, 1));
 
             fAggregate.setCenter(Center.ORIGIN, 1, 2, 3);
 
@@ -1684,9 +1684,9 @@ public class FAggregateTest {
         @DisplayName("Set center with FPoint")
         void setCenterWithFPoint() {
             FAggregate fAggregate = factory.getFAggregate();
-            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+            fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 0, 2, 1));
 
             fAggregate.setCenter(Center.ORIGIN, factory.getFPoint(1, 2, 3));
 
@@ -1721,9 +1721,9 @@ public class FAggregateTest {
         @DisplayName("Set center with FPos3D")
         void setCenterWithFPos3D() {
             FAggregate fAggregate = factory.getFAggregate();
-            fAggregate.addParticle(factory.getFSphere(2, 0, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 2, 0, 1));
-            fAggregate.addParticle(factory.getFSphere(0, 0, 2, 1));
+            fAggregate.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 2, 0, 1));
+            fAggregate.addRefParticle(factory.getFSphere(0, 0, 2, 1));
 
             fAggregate.setCenter(Center.ORIGIN, factory.getFPos3D(1, 2, 3));
 
@@ -2448,9 +2448,9 @@ public class FAggregateTest {
         @DisplayName("Get FStat distance")
         void getFStatDistance() {
             FAggregate fAggregate = factory.getFAggregate();
-            fAggregate.addParticle(factory.getFSphere(-1, 0, 0));
-            fAggregate.addParticle(factory.getFSphere(0, 2, 0));
-            fAggregate.addParticle(factory.getFSphere(0, 0, -3));
+            fAggregate.addRefParticle(factory.getFSphere(-1, 0, 0));
+            fAggregate.addRefParticle(factory.getFSphere(0, 2, 0));
+            fAggregate.addRefParticle(factory.getFSphere(0, 0, -3));
 
             FStat stat = fAggregate.getFStatDistance(Center.ORIGIN);
 
@@ -2585,14 +2585,14 @@ public class FAggregateTest {
         @DisplayName("Touches")
         void touches() {
             FAggregate aggregateA = factory.getFAggregate();
-            aggregateA.addParticle(factory.getFSphere(-2, 0, 0, 1));
-            aggregateA.addParticle(factory.getFSphere(0, 0, 0, 1));
-            aggregateA.addParticle(factory.getFSphere(2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
 
             FAggregate aggregateB = factory.getFAggregate();
-            aggregateB.addParticle(factory.getFSphere(4, -2, 0, 1));
-            aggregateB.addParticle(factory.getFSphere(4, 0, 0, 1));
-            aggregateB.addParticle(factory.getFSphere(4, 2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4, -2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4, 0, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4, 2, 0, 1));
 
             assertTrue(aggregateA.touches(aggregateB));
         }
@@ -2601,14 +2601,14 @@ public class FAggregateTest {
         @DisplayName("Touches (fail) - A")
         void touchesFailA() {
             FAggregate aggregateA = factory.getFAggregate();
-            aggregateA.addParticle(factory.getFSphere(-2, 0, 0, 1));
-            aggregateA.addParticle(factory.getFSphere(0, 0, 0, 1));
-            aggregateA.addParticle(factory.getFSphere(2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
 
             FAggregate aggregateB = factory.getFAggregate();
-            aggregateB.addParticle(factory.getFSphere(3.9, -2, 0, 1));
-            aggregateB.addParticle(factory.getFSphere(3.9, 0, 0, 1));
-            aggregateB.addParticle(factory.getFSphere(3.9, 2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(3.9, -2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(3.9, 0, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(3.9, 2, 0, 1));
 
             assertFalse(aggregateA.touches(aggregateB));
         }
@@ -2617,14 +2617,14 @@ public class FAggregateTest {
         @DisplayName("Touches (fail) - B")
         void touchesFailB() {
             FAggregate aggregateA = factory.getFAggregate();
-            aggregateA.addParticle(factory.getFSphere(-2, 0, 0, 1));
-            aggregateA.addParticle(factory.getFSphere(0, 0, 0, 1));
-            aggregateA.addParticle(factory.getFSphere(2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
 
             FAggregate aggregateB = factory.getFAggregate();
-            aggregateB.addParticle(factory.getFSphere(4.1, -2, 0, 1));
-            aggregateB.addParticle(factory.getFSphere(4.1, 0, 0, 1));
-            aggregateB.addParticle(factory.getFSphere(4.1, 2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4.1, -2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4.1, 0, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4.1, 2, 0, 1));
 
             assertFalse(aggregateA.touches(aggregateB));
         }
@@ -2799,19 +2799,37 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Add particle")
-        void addParticle() {
+        @DisplayName("Add particles")
+        void addParticles() {
+            FAggregate fAggregate = factory.getFAggregate();
+
+            FSphere fSphere = factory.getFSphere(1, 2, 3, 4);
+
+            fAggregate.addParticles(fSphere, 2);
+
+            Assertions.assertAll("Validate FAggregate",
+                    () -> assertEquals(2, fAggregate.size()),
+                    () -> assertNotSame(fSphere, fAggregate.getRefParticles().asList().get(0)),
+                    () -> assertNotSame(fSphere, fAggregate.getRefParticles().asList().get(1)),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(0).isExact(factory.getFSphere(1, 2, 3, 4))),
+                    () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 2, 3, 4)))
+            );
+        }
+
+        @Test
+        @DisplayName("Add ref particle")
+        void addRefParticle() {
             FAggregate fAggregate = factory.getFAggregate();
 
             FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            boolean resultsA = fAggregate.addParticle(fSphereA);
-            boolean resultsB = fAggregate.addParticle(fSphereB);
-            boolean resultsC = fAggregate.addParticle(fSphereC);
+            boolean resultsA = fAggregate.addRefParticle(fSphereA);
+            boolean resultsB = fAggregate.addRefParticle(fSphereB);
+            boolean resultsC = fAggregate.addRefParticle(fSphereC);
 
-            boolean resultsDuplicate = fAggregate.addParticle(fSphereB);
+            boolean resultsDuplicate = fAggregate.addRefParticle(fSphereB);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(3, fAggregate.size()),
@@ -2827,21 +2845,21 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Remove particle")
-        void removeParticle() {
+        @DisplayName("Remove ref particle")
+        void removeRefParticle() {
             FAggregate fAggregate = factory.getFAggregate();
 
             FSphere fSphereA = factory.getFSphere(2, 0, 0, 1);
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            fAggregate.addParticle(fSphereA);
-            fAggregate.addParticle(fSphereB);
-            fAggregate.addParticle(fSphereC);
+            fAggregate.addRefParticle(fSphereA);
+            fAggregate.addRefParticle(fSphereB);
+            fAggregate.addRefParticle(fSphereC);
 
-            boolean resultsA = fAggregate.removeParticle(fSphereA);
+            boolean resultsA = fAggregate.delRefParticle(fSphereA);
 
-            boolean resultsEmpty = fAggregate.removeParticle(fSphereA);
+            boolean resultsEmpty = fAggregate.delRefParticle(fSphereA);
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertEquals(2, fAggregate.size()),
@@ -2859,9 +2877,9 @@ public class FAggregateTest {
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            fAggregate.addParticle(fSphereA);
-            fAggregate.addParticle(fSphereB);
-            fAggregate.addParticle(fSphereC);
+            fAggregate.addRefParticle(fSphereA);
+            fAggregate.addRefParticle(fSphereB);
+            fAggregate.addRefParticle(fSphereC);
 
             fAggregate.translate(1, 2, 3);
 
@@ -2881,9 +2899,9 @@ public class FAggregateTest {
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            fAggregate.addParticle(fSphereA);
-            fAggregate.addParticle(fSphereB);
-            fAggregate.addParticle(fSphereC);
+            fAggregate.addRefParticle(fSphereA);
+            fAggregate.addRefParticle(fSphereB);
+            fAggregate.addRefParticle(fSphereC);
 
             fAggregate.translate(factory.getFPoint(1, 2, 3));
 
@@ -2903,9 +2921,9 @@ public class FAggregateTest {
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            fAggregate.addParticle(fSphereA);
-            fAggregate.addParticle(fSphereB);
-            fAggregate.addParticle(fSphereC);
+            fAggregate.addRefParticle(fSphereA);
+            fAggregate.addRefParticle(fSphereB);
+            fAggregate.addRefParticle(fSphereC);
 
             fAggregate.translate(factory.getFPos3D(1, 2, 3));
 
@@ -2925,9 +2943,9 @@ public class FAggregateTest {
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            fAggregate.addParticle(fSphereA);
-            fAggregate.addParticle(fSphereB);
-            fAggregate.addParticle(fSphereC);
+            fAggregate.addRefParticle(fSphereA);
+            fAggregate.addRefParticle(fSphereB);
+            fAggregate.addRefParticle(fSphereC);
 
             fAggregate.translate(-3, -2, -1, -2, 0, 2);
 
@@ -2947,9 +2965,9 @@ public class FAggregateTest {
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            fAggregate.addParticle(fSphereA);
-            fAggregate.addParticle(fSphereB);
-            fAggregate.addParticle(fSphereC);
+            fAggregate.addRefParticle(fSphereA);
+            fAggregate.addRefParticle(fSphereB);
+            fAggregate.addRefParticle(fSphereC);
 
             fAggregate.translate(factory.getFVector(-3, -2, -1, -2, 0, 2));
 
@@ -2969,9 +2987,9 @@ public class FAggregateTest {
             FSphere fSphereB = factory.getFSphere(0, 2, 0, 1);
             FSphere fSphereC = factory.getFSphere(0, 0, 2, 1);
 
-            fAggregate.addParticle(fSphereA);
-            fAggregate.addParticle(fSphereB);
-            fAggregate.addParticle(fSphereC);
+            fAggregate.addRefParticle(fSphereA);
+            fAggregate.addRefParticle(fSphereB);
+            fAggregate.addRefParticle(fSphereC);
 
             fAggregate.translate(factory.getFPairPos3D(-3, -2, -1, -2, 0, 2));
 

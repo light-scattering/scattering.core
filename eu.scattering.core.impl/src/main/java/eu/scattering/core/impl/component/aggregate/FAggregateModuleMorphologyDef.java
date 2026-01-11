@@ -29,12 +29,19 @@ public class FAggregateModuleMorphologyDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    boolean addParticle(Shape particle) {
+    void addParticles(Shape particle, double quantity) {
+
+        for (int i = 0 ; i < quantity ; i++) {
+            this.aggregate.getRefParticles().register(particle.copy());
+        }
+    }
+
+    boolean addRefParticle(Shape particle) {
 
         return this.aggregate.getRefParticles().registerWithCheck(particle);
     }
 
-    boolean removeParticle(Shape particle) {
+    boolean delRefParticle(Shape particle) {
 
         return this.aggregate.getRefParticles().deregisterWithCheck(particle);
     }

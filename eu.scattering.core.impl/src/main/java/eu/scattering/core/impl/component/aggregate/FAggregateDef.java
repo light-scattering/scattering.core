@@ -319,15 +319,21 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public boolean addParticle(Shape particle) {
+    public void addParticles(Shape particle, double quantity) {
 
-        return this.moduleMorphology.addParticle(particle);
+        this.moduleMorphology.addParticles(particle, quantity);
     }
 
     @Override
-    public boolean removeParticle(Shape particle) {
+    public boolean addRefParticle(Shape particle) {
 
-        return this.moduleMorphology.removeParticle(particle);
+        return this.moduleMorphology.addRefParticle(particle);
+    }
+
+    @Override
+    public boolean delRefParticle(Shape particle) {
+
+        return this.moduleMorphology.delRefParticle(particle);
     }
 
     @Override

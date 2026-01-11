@@ -91,8 +91,7 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     int size();
 
-    boolean addParticle(Shape particle);
-    boolean removeParticle(Shape particle);
+    void addParticles(Shape particle, double quantity);
 
     FStat getTripletAngle();
     FPlot getTripletAngleFunction();
@@ -148,6 +147,10 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     @Modificator
     FAssembly<Shape> getRefParticles();
+    @Modificator
+    boolean addRefParticle(Shape particle);
+    @Modificator
+    boolean delRefParticle(Shape particle);
 
     @Modificator
     FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);

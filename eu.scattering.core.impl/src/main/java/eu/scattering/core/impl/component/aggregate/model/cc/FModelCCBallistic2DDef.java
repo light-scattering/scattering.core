@@ -138,7 +138,7 @@ public class FModelCCBallistic2DDef implements FModelCCBallistic {
         }
 
         for (int i = 0 ; i < this.aggregate.size() ; i++) {
-            this.fragments.get(i % this.fragments.size()).addParticle(this.aggregate.getRefParticles().asList().get(i));
+            this.fragments.get(i % this.fragments.size()).addRefParticle(this.aggregate.getRefParticles().asList().get(i));
         }
     }
 
