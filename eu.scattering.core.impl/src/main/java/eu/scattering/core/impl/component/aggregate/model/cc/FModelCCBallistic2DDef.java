@@ -4,10 +4,6 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
-import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.base.vector.FVector;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.Dimension;
 
 import java.util.ArrayList;
@@ -105,49 +101,27 @@ public class FModelCCBallistic2DDef implements FModelCCBallistic {
     }
 
     private void buildStep() {
-        FVector path = factory.getFVector();
-        FPoint cAggA = factory.getFPoint();
-        FPoint cAggB = factory.getFPoint();
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
             FAggregate aggB = this.fragments.get(i + 1);
 
-            aggA.getCenter(cAggA, Center.SPATIAL);
-            double rAggA = aggA.getRadius(cAggA);
-
             step:
             while (true) {
-                aggB.getCenter(cAggB, Center.SPATIAL);
-                double rAggB = aggB.getRadius(cAggB);
+                this.random.projectOnSurface(aggA, aggB);
 
-                FPos3D dist = factory.getFPos3D(this.random.getFRand().nextDoubleOnCircle((rAggA + rAggB) * 10), 0);
+                for (var acceptor : this.acceptors) {
+                    if (!acceptor.apply(aggA, aggB)) {
 
-                aggB.getRefParticles().translate(cAggB, dist);
-
-                FPos3D posA = factory.getFPos3D(this.random.getFRand().nextDoubleInCircle(rAggA), 0);
-                FPos3D posB = factory.getFPos3D(this.random.getFRand().nextDoubleInCircle(rAggB), 0);
-
-                path.getRefHead().set(posA).add(cAggA);
-                path.getRefBase().set(posB).add(dist);
-
-                double shift = aggB.project(aggA, path);
-
-                if (shift >= 0) {
-
-                    for (var acceptor : this.acceptors) {
-                        if (!acceptor.apply(aggA, aggB)) {
-
-                            continue step;
-                        }
+                        continue step;
                     }
-
-                    this.monitors.forEach(e -> e.accept(aggA, aggB));
-
-                    aggA.merge(aggB, true);
-
-                    break;
                 }
+
+                this.monitors.forEach(e -> e.accept(aggA, aggB));
+
+                aggA.merge(aggB, true);
+
+                break;
             }
         }
 
