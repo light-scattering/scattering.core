@@ -22,9 +22,9 @@ import java.util.function.BiFunction;
 public class FModelPCDLA2DDef implements FModelPCDLA {
     private static final int MIN_SIZE = 5;
 
-    private final List<BiConsumer<FAggregate, Shape>> monitor;
-    private final List<BiFunction<FAggregate, Shape, Boolean>> acceptor;
-    private final List<BiFunction<FAggregate, Integer, Boolean>> validator;
+    private final List<BiConsumer<FAggregate, Shape>> monitors;
+    private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
+    private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
     private TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement;
 
@@ -55,9 +55,9 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
             throw new IllegalArgumentException("The factory is not defined");
         }
 
-        this.monitor = new ArrayList<>();
-        this.acceptor = new ArrayList<>();
-        this.validator = new ArrayList<>();
+        this.monitors = new ArrayList<>();
+        this.acceptors = new ArrayList<>();
+        this.validators = new ArrayList<>();
 
         this.rndEng = factory.getRandAspect();
         this.rndGen = this.rndEng.getFRand();
@@ -107,10 +107,10 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.aggregate, null));
+            this.monitors.forEach(e -> e.accept(this.aggregate, null));
 
-            for (var acceptor : this.validator) {
-                if (acceptor.apply(this.aggregate, iteration)) {
+            for (var validator : this.validators) {
+                if (validator.apply(this.aggregate, iteration)) {
                     continue;
                 }
 
@@ -126,8 +126,6 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     private void init() {
         this.rndGen.shuffle(this.aggregate.getRefParticles().asList());
 
-
-
         this.detached.clear();
         this.detached.addAll(this.attached.asList());
 
@@ -140,7 +138,7 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
 
         particleA.setCenter(0, 0, 0);
 
-        this.monitor.forEach(e -> e.accept(this.aggregate, particleA));
+        this.monitors.forEach(e -> e.accept(this.aggregate, particleA));
 
         this.attached.register(particleA);
 
@@ -151,7 +149,7 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
 
         particleB.setCenter(position.getD0(), position.getD1(), 0);
 
-        this.monitor.forEach(e -> e.accept(this.aggregate, particleB));
+        this.monitors.forEach(e -> e.accept(this.aggregate, particleB));
 
         this.attached.register(particleB);
     }
@@ -200,15 +198,15 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
                     continue;
                 }
 
-                for (var validator : this.acceptor) {
-                    if (!validator.apply(this.aggregate, particle)) {
+                for (var acceptor : this.acceptors) {
+                    if (!acceptor.apply(this.aggregate, particle)) {
                         particle.setCenter(this.dirBase);
 
                         continue step;
                     }
                 }
 
-                this.monitor.forEach(e -> e.accept(this.aggregate, particle));
+                this.monitors.forEach(e -> e.accept(this.aggregate, particle));
 
                 this.attached.register(particle);
 
@@ -249,7 +247,7 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     @Override
     public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
 
-        this.monitor.add(monitor);
+        this.monitors.add(monitor);
     }
 
     @Override
@@ -319,12 +317,12 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     @Override
     public void addStepAcceptor(BiFunction<FAggregate, Shape, Boolean> acceptor) {
 
-        this.acceptor.add(acceptor);
+        this.acceptors.add(acceptor);
     }
 
     @Override
     public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
 
-        this.validator.add(validator);
+        this.validators.add(validator);
     }
 }

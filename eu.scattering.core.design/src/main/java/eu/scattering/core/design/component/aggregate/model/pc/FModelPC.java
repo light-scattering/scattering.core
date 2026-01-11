@@ -13,8 +13,6 @@ public interface FModelPC extends FModel {
     void addStepMonitor(BiConsumer<FAggregate, Shape> monitor);
     void addStepAcceptor(BiFunction<FAggregate, Shape, Boolean> acceptor);
 
-    void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator);
-
     // -------------------------------------------------------------------------------------------------
 
     default void addStepMonitor(Collection<BiConsumer<FAggregate, Shape>> monitors) {
@@ -28,13 +26,6 @@ public interface FModelPC extends FModel {
 
         for (var acceptor : acceptors) {
             addStepAcceptor(acceptor);
-        }
-    }
-
-    default void addCompletionValidator(Collection<BiFunction<FAggregate, Integer, Boolean>> validators) {
-
-        for (var validator : validators) {
-            addCompletionValidator(validator);
         }
     }
 }

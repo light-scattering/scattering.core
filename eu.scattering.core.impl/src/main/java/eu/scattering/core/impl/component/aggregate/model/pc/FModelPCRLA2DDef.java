@@ -18,9 +18,9 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
     private static final int ITERATIONS = 100;
     private static final int MIN_SIZE = 5;
 
-    private final List<BiConsumer<FAggregate, Shape>> monitor;
-    private final List<BiFunction<FAggregate, Shape, Boolean>> acceptor;
-    private final List<BiFunction<FAggregate, Integer, Boolean>> validator;
+    private final List<BiConsumer<FAggregate, Shape>> monitors;
+    private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
+    private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
     private final FRandAspect rndEng;
 
@@ -41,9 +41,9 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
             throw new IllegalArgumentException("The factory is not defined");
         }
 
-        this.monitor = new ArrayList<>();
-        this.acceptor = new ArrayList<>();
-        this.validator = new ArrayList<>();
+        this.monitors = new ArrayList<>();
+        this.acceptors = new ArrayList<>();
+        this.validators = new ArrayList<>();
 
         this.rndEng = factory.getRandAspect();
 
@@ -82,10 +82,10 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.aggregate, null));
+            this.monitors.forEach(e -> e.accept(this.aggregate, null));
 
-            for (var acceptor : this.validator) {
-                if (acceptor.apply(this.aggregate, iteration)) {
+            for (var validator : this.validators) {
+                if (validator.apply(this.aggregate, iteration)) {
                     continue;
                 }
 
@@ -115,7 +115,7 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
 
         particle.setCenter(0, 0, 0);
 
-        this.monitor.forEach(e -> e.accept(this.aggregate, particle));
+        this.monitors.forEach(e -> e.accept(this.aggregate, particle));
 
         this.bases.add(particle);
         this.attached.register(particle);
@@ -137,14 +137,14 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
                 continue;
             }
 
-            for (var validator : this.acceptor) {
-                if (!validator.apply(this.aggregate, particle)) {
+            for (var acceptor : this.acceptors) {
+                if (!acceptor.apply(this.aggregate, particle)) {
 
                     continue step;
                 }
             }
 
-            this.monitor.forEach(e -> e.accept(this.aggregate, particle));
+            this.monitors.forEach(e -> e.accept(this.aggregate, particle));
 
             this.bases.add(particle);
             this.attached.register(particle);
@@ -160,18 +160,18 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
     @Override
     public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
 
-        this.monitor.add(monitor);
+        this.monitors.add(monitor);
     }
 
     @Override
     public void addStepAcceptor(BiFunction<FAggregate, Shape, Boolean> acceptor) {
 
-        this.acceptor.add(acceptor);
+        this.acceptors.add(acceptor);
     }
 
     @Override
     public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
 
-        this.validator.add(validator);
+        this.validators.add(validator);
     }
 }
