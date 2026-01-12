@@ -54,7 +54,7 @@ public class FModelPCFactoryContextDef implements FModelPCFactoryContext {
     //--------------------------------------------------
 
     @Override
-    public FModelPCTunable filippov(Dimension dimension, FAggregate aggregate, double df, double kf) {
+    public FModelPCTunable tunable(Dimension dimension, FAggregate aggregate, double df, double kf) {
 
         return switch (dimension) {
             case D3 -> FModelPCFilippov3DDef.create(aggregate, this.factory, df, kf);

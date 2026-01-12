@@ -80,4 +80,5 @@ module eu.scattering.core.design {
     exports eu.scattering.core.design.component.aggregate.validator.common;
     exports eu.scattering.core.design.component.aggregate.validator;
     exports eu.scattering.core.design.component.aggregate.model.cc.rlca;
+    exports eu.scattering.core.design.component.aggregate.model.cc.tunable;
 }

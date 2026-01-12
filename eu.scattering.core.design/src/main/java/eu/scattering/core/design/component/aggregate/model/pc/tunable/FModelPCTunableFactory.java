@@ -5,12 +5,12 @@ import eu.scattering.core.design.type.Dimension;
 
 public interface FModelPCTunableFactory {
 
-    FModelPCTunable filippov(Dimension dimension, FAggregate fAggregate, double df, double kf);
+    FModelPCTunable tunable(Dimension dimension, FAggregate fAggregate, double df, double kf);
 
     //--------------------------------------------------
 
-    default FModelPCTunable filippov(FAggregate fAggregate, double df, double kf) {
+    default FModelPCTunable tunable(FAggregate fAggregate, double df, double kf) {
 
-        return filippov(Dimension.D3, fAggregate, df, kf);
+        return tunable(Dimension.D3, fAggregate, df, kf);
     }
 }

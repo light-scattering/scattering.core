@@ -5,6 +5,7 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCCFactoryContext;
 import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCCBallistic;
 import eu.scattering.core.design.component.aggregate.model.cc.rlca.FModelCCRLCA;
+import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.type.Dimension;
 
 public class FModelCCFactoryContextDef implements FModelCCFactoryContext {
@@ -37,6 +38,15 @@ public class FModelCCFactoryContextDef implements FModelCCFactoryContext {
         return switch (dimension) {
             case D3 -> FModelCCRLCA3DDef.create(aggregate, this.factory);
             case D2 -> FModelCCRLCA2DDef.create(aggregate, this.factory);
+        };
+    }
+
+    @Override
+    public FModelCCTunable tunable(Dimension dimension, FAggregate aggregate, double df, double kf) {
+
+        return switch (dimension) {
+            case D3 -> FModelCCTunable3DDef.create(aggregate, this.factory, df, kf);
+            case D2 -> FModelCCTunable2DDef.create(aggregate, this.factory, df, kf);
         };
     }
 }

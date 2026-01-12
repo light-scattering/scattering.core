@@ -150,7 +150,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCTunable modelTunable = factory.getFModelContext().pc().filippov(fAggregate, 1.8, 1.4);
+        FModelPCTunable modelTunable = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.4);
         modelTunable.setEarlyStageCorrection(true);
 
         modelTunable.build();
@@ -175,7 +175,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModelPCTunable modelTunable = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregate, 1.3, 1.5);
+        FModelPCTunable modelTunable = factory.getFModelContext().pc().tunable(Dimension.D2, fAggregate, 1.3, 1.5);
         modelTunable.setEarlyStageCorrection(true);
 
         modelTunable.build();

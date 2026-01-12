@@ -24,7 +24,7 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
 
-        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
+        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
         FModelPC modelB = factory.getFModelContext().pc().ballistic(aggB);
 
         modelA.build();
@@ -43,7 +43,7 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
         FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
+        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
         FModelPC modelB = factory.getFModelContext().pc().ballistic(aggB);
 
         modelA.build();
@@ -108,8 +108,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
 
-        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().filippov(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().tunable(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
@@ -127,8 +127,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
         FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().filippov(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().tunable(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
@@ -227,8 +227,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
-        FModelPC modelB = factory.getFModelContext().pc().filippov(aggB, 1.8, 1.6);
+        FModelPC modelA = factory.getFModelContext().pc().tunable(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().tunable(aggB, 1.8, 1.6);
 
         modelA.build();
         modelB.build();
@@ -248,8 +248,8 @@ public class FAggregateRandomizeTest {
         FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
         FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
 
-        FModelPC modelA = factory.getFModelContext().pc().filippov(Dimension.D2, aggA, 1.5, 1.2);
-        FModelPC modelB = factory.getFModelContext().pc().filippov(Dimension.D2, aggB, 1.5, 1.2);
+        FModelPC modelA = factory.getFModelContext().pc().tunable(Dimension.D2, aggA, 1.5, 1.2);
+        FModelPC modelB = factory.getFModelContext().pc().tunable(Dimension.D2, aggB, 1.5, 1.2);
 
         modelA.build();
         modelB.build();

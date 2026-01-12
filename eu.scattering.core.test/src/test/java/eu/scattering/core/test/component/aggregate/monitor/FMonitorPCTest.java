@@ -37,7 +37,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
 
             FStat radius = factory.getFStat();
 
@@ -73,7 +73,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
             FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
@@ -106,7 +106,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
             FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 
@@ -139,7 +139,7 @@ public class FMonitorPCTest {
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCTunable fModel = factory.getFModelContext().pc().filippov(fAggregate, df, kf);
+            FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
             FMonitorPCRadiusOfGyration fMonitorA = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
             FMonitorPCRadiusOfGyration fMonitorB = factory.getFMonitorContext().pc().radiusOfGyration(skip, RadiusOfGyration.SIMPLE_FILIPPOV);
 

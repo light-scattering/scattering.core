@@ -39,7 +39,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
 
     private final double kf, df;
 
-    private boolean correctionEarlyStage;
+    private boolean correction;
 
     private double rp;
 
@@ -155,11 +155,21 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
         Shape particleB = this.detached.poll();
         assert particleB != null;
 
-        FPos2D position = this.rndEng.getFRand().nextDoubleOnCircle(particleA.getRadius() + particleB.getRadius());
+        step:
+        while (true) {
+            particleB.setCenter(this.rndEng.getFRand().nextDoubleOnCircle(particleA.getRadius() + particleB.getRadius()), 0);
+
+            for (var acceptor : this.acceptors) {
+                if (!acceptor.apply(this.aggregate, particleB)) {
+
+                    continue step;
+                }
+            }
+
+            break;
+        }
 
         this.monitors.forEach(e -> e.accept(this.aggregate, particleB));
-
-        particleB.setCenter(position.getD0(), position.getD1(), 0);
 
         this.attached.register(particleB);
     }
@@ -170,7 +180,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
         Shape particle = detached.poll();
         assert particle != null;
 
-        double radius = getExpectedParticleDistance();
+        double radius = getExpectedDistance();
 
         particle.setCenter(radius, 0, 0).translate(this.cMass);
         particle.getCollisionsSpherical(this.bases, this.attached, this.cMass);
@@ -200,7 +210,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
             boolean isPositioned = this.rndEng.attachSpherical2D(particle, target, this.cMass, this.attached, ITERATIONS);
 
             if (!isPositioned) {
-                if (this.correctionEarlyStage && this.attached.size() <= MIN_SIZE) {
+                if (this.correction && this.attached.size() <= MIN_SIZE) {
                    radius *= 1.01;
                 }
 
@@ -231,7 +241,7 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
                 .collect(Collectors.averagingDouble(Double::doubleValue));
     }
 
-    private double getExpectedParticleDistance() {
+    private double getExpectedDistance() {
         int np = this.attached.size();
 
         double stepA = Math.pow(np / kf, 2 / df) * (np * np * rp * rp) / (np - 1);
@@ -275,6 +285,6 @@ public class FModelPCFilippov2DDef implements FModelPCTunable {
     @Override
     public void setEarlyStageCorrection(boolean correction) {
 
-        this.correctionEarlyStage = correction;
+        this.correction = correction;
     }
 }

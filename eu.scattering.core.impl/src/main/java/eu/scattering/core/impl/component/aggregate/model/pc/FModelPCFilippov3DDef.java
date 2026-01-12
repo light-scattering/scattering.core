@@ -38,7 +38,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
     private final double kf, df;
 
-    private boolean correctionEarlyStage;
+    private boolean correction;
 
     private double rp;
 
@@ -152,7 +152,19 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         Shape particleB = this.detached.poll();
         assert particleB != null;
 
-        particleB.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+        step:
+        while (true) {
+            particleB.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+
+            for (var acceptor : this.acceptors) {
+                if (!acceptor.apply(this.aggregate, particleB)) {
+
+                    continue step;
+                }
+            }
+
+            break;
+        }
 
         this.monitors.forEach(e -> e.accept(this.aggregate, particleB));
 
@@ -165,7 +177,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         Shape particle = detached.poll();
         assert particle != null;
 
-        double radius = getExpectedParticleDistance();
+        double radius = getExpectedDistance();
 
         particle.setCenter(radius, 0, 0).translate(this.cMass);
         particle.getCollisionsSpherical(this.bases, this.attached, this.cMass);
@@ -193,7 +205,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
             boolean isPositioned = this.rndEng.attachSpherical(particle, target, this.cMass, this.attached, ITERATIONS);
 
             if (!isPositioned) {
-                if (this.correctionEarlyStage && this.attached.size() <= MIN_SIZE) {
+                if (this.correction && this.attached.size() <= MIN_SIZE) {
                    radius *= 1.01;
                 }
 
@@ -224,7 +236,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 .collect(Collectors.averagingDouble(Double::doubleValue));
     }
 
-    private double getExpectedParticleDistance() {
+    private double getExpectedDistance() {
         int np = this.attached.size() + 1;
 
         double stepA = Math.pow(np / kf, 2 / df) * (np * np * rp * rp) / (np - 1);
@@ -232,7 +244,6 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         double stepC = Math.pow((np - 1) / kf, 2 / df) * (np * rp * rp);
 
         return Math.sqrt(stepA - stepB - stepC);
-
     }
 
     private void resetMassCenter() {
@@ -268,6 +279,6 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     @Override
     public void setEarlyStageCorrection(boolean correction) {
 
-        this.correctionEarlyStage = correction;
+        this.correction = correction;
     }
 }

@@ -3,17 +3,21 @@ package eu.scattering.core.impl.component.aggregate.model.cc;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.cc.rlca.FModelCCRLCA;
+import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
+import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
+import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
 import eu.scattering.core.design.type.Dimension;
+import eu.scattering.core.design.type.RadiusOfGyration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
-public class FModelCCRLCA2DDef implements FModelCCRLCA {
-    private static final int AGGREGATE_SIZE = 6;
-    private static final int FRAGMENT_SIZE = 3;
+public class FModelCCTunable2DDef implements FModelCCTunable {
+    private static final int AGGREGATE_SIZE = 10;
+    private static final int FRAGMENT_SIZE = 5;
 
     private final List<BiConsumer<FAggregate, FAggregate>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
@@ -26,7 +30,13 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
 
     private final List<FAggregate> fragments;
 
-    private FModelCCRLCA2DDef(FAggregate aggregate, ScatFactory factory) {
+    private final double kf, df;
+
+    private boolean correction;
+
+    private double rp;
+
+    private FModelCCTunable2DDef(FAggregate aggregate, ScatFactory factory, double df, double kf) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -34,6 +44,14 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
 
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
+        }
+
+        if (df <= 0) {
+            throw new IllegalArgumentException("The fractal dimension must be greater than zero");
+        }
+
+        if (kf <= 0) {
+            throw new IllegalArgumentException("The fractal prefactor must be greater than zero");
         }
 
         this.monitors = new ArrayList<>();
@@ -46,15 +64,26 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
         this.aggregate = aggregate;
 
         this.fragments = new ArrayList<>();
+
+        this.df = df;
+        this.kf = kf;
     }
 
-    public static FModelCCRLCA create(FAggregate aggregate, ScatFactory factory) {
+    public static FModelCCTunable create(FAggregate aggregate, ScatFactory factory, double df, double kf) {
 
-        return new FModelCCRLCA2DDef(aggregate, factory);
+        return new FModelCCTunable2DDef(aggregate, factory, df, kf);
     }
 
     @Override
     public void build() {
+
+        if (this.df < 0) {
+            throw new IllegalStateException("The fractal dimension is not defined");
+        }
+
+        if (this.kf < 0) {
+            throw new IllegalStateException("The fractal prefactor is not defined");
+        }
 
         if (this.aggregate.getRefParticles().size() < AGGREGATE_SIZE) {
             throw new IllegalStateException("The aggregate should consist of at least " + AGGREGATE_SIZE + " particles");
@@ -89,6 +118,7 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
     }
 
     private void init() {
+        this.rp = getAveragedParticleRadius();
 
         distributeFragments();
         buildFragments();
@@ -108,7 +138,8 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
 
             step:
             while (true) {
-                this.random.attachOnSurface(aggA, aggB);
+                this.random.moveMassCenterOnSurface(aggA, aggB, getExpectedDistance(aggA, aggB));
+                this.random.rotateOnSurface(aggA, aggB);
 
                 for (var acceptor : this.acceptors) {
                     if (!acceptor.apply(aggA, aggB)) {
@@ -144,8 +175,12 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
 
     private void buildFragments() {
 
+        FModelPCTunable model;
         for (FAggregate fragment : this.fragments) {
-            factory.getFModelContext().pc().rla(Dimension.D2, fragment).build();
+            model = factory.getFModelContext().pc().tunable(Dimension.D2, fragment, this.df, this.kf);
+            model.setEarlyStageCorrection(this.correction);
+
+            model.build();
         }
     }
 
@@ -159,6 +194,26 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
 
         this.fragments.clear();
         this.fragments.addAll(elements);
+    }
+
+    private double getAveragedParticleRadius() {
+
+        return this.aggregate.getRefParticles().asList().stream()
+                .map(ShapeModuleDimension::getRadius)
+                .collect(Collectors.averagingDouble(Double::doubleValue));
+    }
+
+    private double getExpectedDistance(FAggregate aggA, FAggregate aggB) {
+        int npA = aggA.size();
+        int npB = aggB.size();
+        double rgA = aggA.getRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+        double rgB = aggB.getRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+
+        double stepA = Math.pow((npA + npB) / kf, 2 / df) * ((npA + npB) * (npA + npB) * rp * rp) / (npA * npB);
+        double stepB = ((npA + npB) * rgA * rgA) / npB;
+        double stepC = ((npA + npB) * rgB * rgB) / npA;
+
+        return Math.sqrt(stepA - stepB - stepC);
     }
 
     //--------------------------------------------------
@@ -179,5 +234,11 @@ public class FModelCCRLCA2DDef implements FModelCCRLCA {
     public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
 
         this.validators.add(validator);
+    }
+
+    @Override
+    public void setEarlyStageCorrection(boolean correction) {
+
+        this.correction = correction;
     }
 }

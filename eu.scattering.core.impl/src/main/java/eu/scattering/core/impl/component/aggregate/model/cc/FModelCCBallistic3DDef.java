@@ -11,7 +11,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public class FModelCCBallistic3DDef implements FModelCCBallistic {
-    private static final int AGGREGATE_SIZE = 5;
+    private static final int AGGREGATE_SIZE = 6;
     private static final int FRAGMENT_SIZE = 3;
 
     private final List<BiConsumer<FAggregate, FAggregate>> monitors;
