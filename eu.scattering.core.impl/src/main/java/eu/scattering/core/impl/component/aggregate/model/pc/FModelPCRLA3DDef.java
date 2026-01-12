@@ -15,8 +15,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public class FModelPCRLA3DDef implements FModelPCRLA {
+    private static final int AGGREGATE_SIZE = 3;
     private static final int ITERATIONS = 100;
-    private static final int MIN_SIZE = 5;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
@@ -63,8 +63,8 @@ public class FModelPCRLA3DDef implements FModelPCRLA {
     @Override
     public void build() {
 
-        if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
-            throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
+        if (this.aggregate.getRefParticles().size() < AGGREGATE_SIZE) {
+            throw new IllegalStateException("The aggregate should consist of at least " + AGGREGATE_SIZE + " particles");
         }
 
         boolean loop;

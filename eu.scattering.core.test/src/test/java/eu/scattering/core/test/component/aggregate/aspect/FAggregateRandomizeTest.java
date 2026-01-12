@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FAggregateRandomizeTest {
 
     @Test
-    @DisplayName("Project 3D")
-    void project3D() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
+    @DisplayName("Project 3D - Monodisperse")
+    void project3DMonodisperse() {
+        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
+        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
 
         FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
         FModelPC modelB = factory.getFModelContext().pc().ballistic(aggB);
@@ -38,10 +38,29 @@ public class FAggregateRandomizeTest {
     }
 
     @Test
-    @DisplayName("Project 2D")
-    void project2D() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
+    @DisplayName("Project 3D - Polydisperse")
+    void project3DPolydisperse() {
+        FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+        FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+
+        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().ballistic(aggB);
+
+        modelA.build();
+        modelB.build();
+
+        factory.getRandAspect().project(aggA, aggB);
+        aggA.merge(aggB, true);
+
+        assertTrue(aggA.isCompact());
+        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+    }
+
+    @Test
+    @DisplayName("Project 2D - Monodisperse")
+    void project2DMonodisperse() {
+        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
+        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
 
         FModelPC modelA = factory.getFModelContext().pc().ballistic(Dimension.D2, aggA);
         FModelPC modelB = factory.getFModelContext().pc().ballistic(Dimension.D2, aggB);
@@ -61,10 +80,52 @@ public class FAggregateRandomizeTest {
     }
 
     @Test
-    @DisplayName("Attach 3D")
-    void attach3D() {
-        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 1);
-        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 1);
+    @DisplayName("Project 2D - Polydisperse")
+    void project2DPolydisperse() {
+        FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+        FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+
+        FModelPC modelA = factory.getFModelContext().pc().ballistic(Dimension.D2, aggA);
+        FModelPC modelB = factory.getFModelContext().pc().ballistic(Dimension.D2, aggB);
+
+        modelA.build();
+        modelB.build();
+
+        factory.getRandAspect().projectOnSurface(aggA, aggB);
+        aggA.merge(aggB, true);
+
+        assertTrue(aggA.isCompact());
+        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+
+        for (Shape shape : aggA) {
+            assertEquals(0, shape.getCenterZ(), 1E-6);
+        }
+    }
+
+    @Test
+    @DisplayName("Attach 3D - Monodisperse")
+    void attach3DMonodisperse() {
+        FAggregate aggA = factory.getFAggregateContext().base().monodisperse(25, 5);
+        FAggregate aggB = factory.getFAggregateContext().base().monodisperse(25, 5);
+
+        FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
+        FModelPC modelB = factory.getFModelContext().pc().filippov(aggB, 1.8, 1.6);
+
+        modelA.build();
+        modelB.build();
+
+        factory.getRandAspect().attach(aggA, aggB);
+        aggA.merge(aggB, true);
+
+        assertTrue(aggA.isCompact());
+        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+    }
+
+    @Test
+    @DisplayName("Attach 3D - Polydisperse")
+    void attach3DPolydisperse() {
+        FAggregate aggA = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
+        FAggregate aggB = factory.getFAggregateContext().base().polydisperse(25, 10, 1);
 
         FModelPC modelA = factory.getFModelContext().pc().filippov(aggA, 1.8, 1.6);
         FModelPC modelB = factory.getFModelContext().pc().filippov(aggB, 1.8, 1.6);

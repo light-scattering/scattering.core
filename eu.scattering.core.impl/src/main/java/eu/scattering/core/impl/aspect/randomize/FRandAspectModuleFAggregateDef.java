@@ -345,7 +345,7 @@ public class FRandAspectModuleFAggregateDef {
 
             shift.moveBase(candidate.getRefCenter());
 
-            dummy.setRadius(particleLoc.getRadius());
+            dummy.setRadius(particleRef.getRadius());
             dummy.setCenter(shift.getRefHead());
 
             if (dummy.overlaps(arg.getRefParticles().asList()) > 0) {
