@@ -215,20 +215,16 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA);
 
-        FModelPCTunable modelA = factory.getFModelContext().pc().filippov(fAggregateA);
+        FModelPCTunable modelA = factory.getFModelContext().pc().filippov(fAggregateA, 2.6, 1.2);
         modelA.setEarlyStageCorrection(true);
-        modelA.setDf(2.6);
-        modelA.setKf(1.2);
         modelA.build();
 
         Producer<FSphere> fProducerB = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB);
 
-        FModelPCTunable modelB = factory.getFModelContext().pc().filippov(fAggregateB);
+        FModelPCTunable modelB = factory.getFModelContext().pc().filippov(fAggregateB, 1.4, 1.8);
         modelB.setEarlyStageCorrection(true);
-        modelB.setDf(1.4);
-        modelB.setKf(1.8);
         modelB.build();
 
         double rangeA = fAggregateA.getRadius(fAggregateA.getMassCenter());
@@ -246,55 +242,21 @@ public class FModelFilippovTest {
         FAssembly<Shape> fAssemblyA = factory.getFAssembly(fProducerA.getListRandomized(quantity));
         FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA);
 
-        FModelPCTunable modelA = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregateA);
+        FModelPCTunable modelA = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregateA, 1.8, 1.2);
         modelA.setEarlyStageCorrection(true);
-        modelA.setDf(1.8);
-        modelA.setKf(1.2);
         modelA.build();
 
         Producer<FSphere> fProducerB = factory.getFSphereProducer(1);
         FAssembly<Shape> fAssemblyB = factory.getFAssembly(fProducerB.getListRandomized(quantity));
         FAggregate fAggregateB = factory.getRefFAggregate(fAssemblyB);
 
-        FModelPCTunable modelB = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregateB);
+        FModelPCTunable modelB = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregateB, 1.2, 1.8);
         modelB.setEarlyStageCorrection(true);
-        modelB.setDf(1.2);
-        modelB.setKf(1.8);
         modelB.build();
 
         double rangeA = fAggregateA.getRadius(fAggregateA.getMassCenter());
         double rangeB = fAggregateB.getRadius(fAggregateB.getMassCenter());
 
         assertTrue(rangeA < rangeB);
-    }
-
-    @Test
-    @DisplayName("Configuration - Aggregate 3D")
-    void configuration3D() {
-        FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-        FModelPCTunable model = factory.getFModelContext().pc().filippov(fAggregate);
-
-        model.setDf(2.2);
-        model.setKf(1.1);
-        model.setEarlyStageCorrection(true);
-
-        assertEquals(2.2, model.getDf());
-        assertEquals(1.1, model.getKf());
-        assertTrue(model.getEarlyStateCorrection());
-    }
-
-    @Test
-    @DisplayName("Configuration - Aggregate 2D")
-    void configuration2D() {
-        FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-        FModelPCTunable model = factory.getFModelContext().pc().filippov(Dimension.D2, fAggregate);
-
-        model.setDf(2.2);
-        model.setKf(1.1);
-        model.setEarlyStageCorrection(true);
-
-        assertEquals(2.2, model.getDf());
-        assertEquals(1.1, model.getKf());
-        assertTrue(model.getEarlyStateCorrection());
     }
 }

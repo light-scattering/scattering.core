@@ -36,11 +36,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
     private final FPoint cMass;
 
+    private final double kf, df;
+
     private boolean correctionEarlyStage;
-    private double df, kf, rp;
 
+    private double rp;
 
-    private FModelPCFilippov3DDef(FAggregate aggregate, ScatFactory factory) {
+    private FModelPCFilippov3DDef(FAggregate aggregate, ScatFactory factory, double df, double kf) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -48,6 +50,14 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
+        }
+
+        if (df <= 0) {
+            throw new IllegalArgumentException("The fractal dimension must be greater than zero");
+        }
+
+        if (kf <= 0) {
+            throw new IllegalArgumentException("The fractal prefactor must be greater than zero");
         }
 
         this.monitors = new ArrayList<>();
@@ -65,22 +75,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
 
         this.cMass = factory.getFPoint();
 
-        this.df = -1;
-        this.kf = -1;
-    }
-
-    public static FModelPCTunable create(FAggregate aggregate, ScatFactory factory) {
-
-        return new FModelPCFilippov3DDef(aggregate, factory);
+        this.df = df;
+        this.kf = kf;
     }
 
     public static FModelPCTunable create(FAggregate aggregate, ScatFactory factory, double df, double kf) {
-        FModelPCTunable model = new FModelPCFilippov3DDef(aggregate, factory);
 
-        model.setDf(df);
-        model.setKf(kf);
-
-        return model;
+        return new FModelPCFilippov3DDef(aggregate, factory, df, kf);
     }
 
     @Override
@@ -265,48 +266,8 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     }
 
     @Override
-    public boolean getEarlyStateCorrection() {
-
-        return this.correctionEarlyStage;
-    }
-
-    @Override
     public void setEarlyStageCorrection(boolean correction) {
 
         this.correctionEarlyStage = correction;
     }
-
-    @Override
-    public double getDf() {
-
-        return this.df;
-    }
-
-    @Override
-    public void setDf(double df) {
-
-        if (df <= 0) {
-            throw new IllegalArgumentException("The fractal dimension must be greater than zero");
-        }
-
-        this.df = df;
-    }
-
-    @Override
-    public double getKf() {
-
-        return this.kf;
-    }
-
-    @Override
-    public void setKf(double kf) {
-
-        if (kf <= 0) {
-            throw new IllegalArgumentException("The fractal prefactor must be greater than zero");
-        }
-
-        this.kf = kf;
-    }
-
-
 }

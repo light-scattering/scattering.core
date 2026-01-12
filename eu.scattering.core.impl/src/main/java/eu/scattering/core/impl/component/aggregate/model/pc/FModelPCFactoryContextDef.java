@@ -51,15 +51,6 @@ public class FModelPCFactoryContextDef implements FModelPCFactoryContext {
         };
     }
 
-    @Override
-    public FModelPCTunable filippov(Dimension dimension, FAggregate aggregate) {
-
-        return switch (dimension) {
-            case D3 -> FModelPCFilippov3DDef.create(aggregate, this.factory);
-            case D2 -> FModelPCFilippov2DDef.create(aggregate, this.factory);
-        };
-    }
-
     //--------------------------------------------------
 
     @Override
