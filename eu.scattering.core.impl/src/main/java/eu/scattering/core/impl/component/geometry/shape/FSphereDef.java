@@ -311,7 +311,6 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
         return true;
     }
 
-    // TODO - Not optimized
     @Override
     public boolean attachSpherical(Shape target, double x, double y, double z) {
 

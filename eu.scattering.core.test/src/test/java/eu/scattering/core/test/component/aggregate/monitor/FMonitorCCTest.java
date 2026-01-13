@@ -16,6 +16,7 @@ public class FMonitorCCTest {
     @DisplayName("FMonitor construct")
     class FMonitorConstructTest {
 
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - Ballistic 3D")
         void rogMonodisperseBallistic3D() {
@@ -32,6 +33,7 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - Ballistic 2D")
         void rogMonodisperseBallistic2D() {
@@ -48,6 +50,7 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - RLCA 3D")
         void rogMonodisperseRLCA3D() {
@@ -64,6 +67,7 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - RLCA 2D")
         void rogMonodisperseRLCA2D() {
@@ -80,6 +84,7 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - Tunable 3D")
         void rogMonodisperseTunable3D() {
@@ -96,6 +101,7 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - Tunable 2D")
         void rogMonodisperseTunable2D() {

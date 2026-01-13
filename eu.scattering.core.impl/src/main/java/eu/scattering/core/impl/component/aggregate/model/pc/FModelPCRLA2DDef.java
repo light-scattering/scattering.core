@@ -1,35 +1,36 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelPCRLA;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.aspect.randomize.FRandAspect;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
+
 public class FModelPCRLA2DDef implements FModelPCRLA {
-    private static final int AGGREGATE_SIZE = 3;
-    private static final int ITERATIONS = 100;
+    private static final int MAX_IT_CORRECTIONS = 100;
+    private static final int MAX_IT_GLOBAL = 10;
+    private static final int MIN_SIZE = 3;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
-    private final FRandAspect rndEng;
+    private final FRandAspect random;
 
     private final FAggregate aggregate;
 
     private final List<Shape> bases;
 
     private final FAssembly<Shape> attached;
-    private final Queue<Shape> detached;
+    private final List<Shape> detached;
 
     private FModelPCRLA2DDef(FAggregate aggregate, ScatFactory factory) {
 
@@ -45,14 +46,14 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
         this.acceptors = new ArrayList<>();
         this.validators = new ArrayList<>();
 
-        this.rndEng = factory.getRandAspect();
+        this.random = factory.getRandAspect();
 
         this.aggregate = aggregate;
 
         this.bases = new ArrayList<>(this.aggregate.getRefParticles().size());
 
         this.attached = this.aggregate.getRefParticles();
-        this.detached = new LinkedList<>();
+        this.detached = new ArrayList<>(this.aggregate.size());
     }
 
     public static FModelPCRLA create(FAggregate aggregate, ScatFactory factory) {
@@ -63,43 +64,48 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
     @Override
     public void build() {
 
-        if (this.aggregate.getRefParticles().size() < AGGREGATE_SIZE) {
-            throw new IllegalStateException("The aggregate should consist of at least " + AGGREGATE_SIZE + " particles");
+        if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
+            throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
-
-        boolean loop;
         int iteration = 0;
+        int validation = 0;
 
-        do {
-            loop = false;
+        generation:
+        while (iteration ++ < MAX_IT_GLOBAL) {
 
             init();
 
             while (this.detached.size() != 0) {
                 if (!buildStep()) {
-                    throw new RuntimeException("The aggregate could not be built");
+                    continue generation;
                 }
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
 
             for (var validator : this.validators) {
-                if (validator.apply(this.aggregate, iteration)) {
+                if (validator.apply(this.aggregate, validation)) {
                     continue;
                 }
 
-                iteration++;
-                loop = true;
+                validation++;
 
-                break;
+                continue generation;
             }
 
-        } while (loop);
+            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
+                continue;
+            }
+
+            return;
+        }
+
+        throw new RuntimeException("The aggregate could not be built");
     }
 
     private void init() {
-        this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
+        this.attached.register(this.detached);
 
         this.bases.clear();
 
@@ -108,28 +114,30 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
 
         this.attached.clear();
 
-        this.detached.forEach(e -> e.setCenterZ(0));
+        initParticleA();
+    }
 
-        Shape particle = detached.poll();
-        assert particle != null;
+    private void initParticleA() {
+        Shape particle = this.random.getFRand().getElement(this.detached, true);
 
         particle.setCenter(0, 0, 0);
 
         this.monitors.forEach(e -> e.accept(this.aggregate, particle));
 
         this.bases.add(particle);
+
         this.attached.register(particle);
     }
 
     private boolean buildStep() {
-        Shape particle = detached.poll();
+        Shape particle = this.random.getFRand().getElement(this.detached, false);
 
         step:
         while (this.bases.size() != 0) {
-            int baseIndex = rndEng.getFRand().nextInteger(0, this.bases.size());
+            int baseIndex = random.getFRand().nextInteger(0, this.bases.size());
             Shape base = this.bases.get(baseIndex);
 
-            boolean isPositioned = rndEng.attachLinear2D(particle, base, this.attached, ITERATIONS);
+            boolean isPositioned = random.attachLinear2D(particle, base, this.attached, MAX_IT_CORRECTIONS);
 
             if (!isPositioned) {
                 this.bases.remove(base);
@@ -147,7 +155,9 @@ public class FModelPCRLA2DDef implements FModelPCRLA {
             this.monitors.forEach(e -> e.accept(this.aggregate, particle));
 
             this.bases.add(particle);
+
             this.attached.register(particle);
+            this.detached.remove(particle);
 
             return true;
         }

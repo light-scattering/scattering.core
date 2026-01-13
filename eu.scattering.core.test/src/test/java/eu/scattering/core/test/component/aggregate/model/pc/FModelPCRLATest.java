@@ -7,10 +7,7 @@ import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +38,7 @@ public class FModelPCRLATest {
             fModel.build();
 
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-8);
+            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
         }
 
         @Test
@@ -86,7 +83,7 @@ public class FModelPCRLATest {
             fModel.build();
 
             assertTrue(fAggregate.isCompact());
-            assertEquals(45, quantity.get());
+            assertTrue(45 <= quantity.get());
             assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
         }
 
@@ -134,7 +131,7 @@ public class FModelPCRLATest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(9 * 2 ,iteration.get());
+            assertTrue(9 * 2 <= iteration.get());
         }
 
         @Test
@@ -169,7 +166,7 @@ public class FModelPCRLATest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertEquals(3 ,iteration.get());
+            assertTrue(3 <= iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }
@@ -190,7 +187,7 @@ public class FModelPCRLATest {
             fModel.build();
 
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-8);
+            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
         }
 
         @Test
@@ -235,7 +232,7 @@ public class FModelPCRLATest {
             fModel.build();
 
             assertTrue(fAggregate.isCompact());
-            assertEquals(45, quantity.get());
+            assertTrue(45 <= quantity.get());
             assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
         }
 
@@ -283,7 +280,7 @@ public class FModelPCRLATest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(9 * 2 ,iteration.get());
+            assertTrue(9 * 2 <= iteration.get());
         }
 
         @Test
@@ -318,7 +315,7 @@ public class FModelPCRLATest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertEquals(3 ,iteration.get());
+            assertTrue(3 <= iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }

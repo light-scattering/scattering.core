@@ -1,24 +1,26 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.aspect.randomize.FRandAspect;
-import eu.scattering.core.design.aspect.randomize.generator.FRandGenerator;
 import eu.scattering.core.design.lambda.TriConsumer;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
+
 public class FModelPCDLA3DDef implements FModelPCDLA {
+    private static final int MAX_IT_INITIAL_ACCEPTOR = 1000;
+    private static final int MAX_IT_GLOBAL = 10;
     private static final int MIN_SIZE = 5;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
@@ -33,9 +35,9 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     private final FAggregate aggregate;
 
     private final FAssembly<Shape> attached;
-    private final Queue<Shape> detached;
+    private final List<Shape> detached;
 
-    private final FPoint cMass;
+    private final FPoint center;
 
     private final FRay dir;
     private final FPoint dirBase, dirHead;
@@ -64,9 +66,9 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         this.aggregate = aggregate;
 
         this.attached = this.aggregate.getRefParticles();
-        this.detached = new LinkedList<>();
+        this.detached = new ArrayList<>(this.aggregate.size());
 
-        this.cMass = factory.getFPoint();
+        this.center = factory.getFPoint();
 
         this.dir = factory.getFRay();
         this.dirBase = this.dir.getRefOrigin().getRefBase();
@@ -92,73 +94,99 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
-        boolean loop;
         int iteration = 0;
+        int validation = 0;
 
-        do {
-            loop = false;
+        generation:
+        while (iteration ++ < MAX_IT_GLOBAL) {
 
             init();
 
             while (this.detached.size() != 0) {
                 if (!buildStep()) {
-                    throw new RuntimeException("The aggregate could not be built");
+                    continue generation;
                 }
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
+
             for (var validator : this.validators) {
-                if (validator.apply(this.aggregate, iteration)) {
+                if (validator.apply(this.aggregate, validation)) {
                     continue;
                 }
 
-                iteration++;
-                loop = true;
+                validation++;
 
-                break;
+                continue generation;
             }
 
-        } while (loop);
+            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
+                continue;
+            }
 
+            return;
+        }
+
+        throw new RuntimeException("The aggregate could not be built");
     }
 
     private void init() {
-        this.rndGen.shuffle(this.attached.asList());
+        this.attached.register(this.detached);
 
         this.detached.clear();
         this.detached.addAll(this.attached.asList());
 
         this.attached.clear();
 
-        Shape particleA = this.detached.poll();
-        assert particleA != null;
+        initParticleA();
+        initParticleB();
+    }
+
+    private void initParticleA() {
+        Shape particleA = this.rndGen.getElement(this.detached, true);
 
         particleA.setCenter(0, 0, 0);
 
         this.monitors.forEach(e -> e.accept(this.aggregate, particleA));
-
         this.attached.register(particleA);
+    }
 
-        Shape particleB = this.detached.poll();
-        assert particleB != null;
+    private void initParticleB() {
+        Shape particleA = this.attached.asList().get(0);
+        Shape particleB = this.rndGen.getElement(this.detached, false);
 
-        particleB.setCenter(this.rndGen.nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+        int iterations = 0;
 
-        this.monitors.forEach(e -> e.accept(this.aggregate, particleB));
+        step:
+        while (iterations++ < MAX_IT_INITIAL_ACCEPTOR) {
+            particleB.setCenter(this.rndGen.nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
 
-        this.attached.register(particleB);
+            for (var acceptor : this.acceptors) {
+                if (!acceptor.apply(this.aggregate, particleB)) {
+
+                    continue step;
+                }
+            }
+
+            this.monitors.forEach(e -> e.accept(this.aggregate, particleB));
+            this.attached.register(particleB);
+            this.detached.remove(particleB);
+
+            return;
+        }
+
+        throw new IllegalStateException("The acceptor prevents the structure from being generated");
     }
 
     private boolean buildStep() {
         resetMassCenter();
         resetDimension();
 
-        Shape particle = detached.poll();
-        assert particle != null;
+        Shape particle = this.rndGen.getElement(this.detached, false);
 
         main:
         while (true) {
-            particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn)).translate(this.cMass);
+            particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn)).translate(this.center);
 
             step:
             while (true) {
@@ -167,13 +195,13 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
                 this.movement.accept(this.attached, this.rndEng, this.dirHead);
 
-                if (this.dirHead.getDistance(this.cMass) > this.rExile + particle.getRadius()) {
+                if (this.dirHead.getDistance(this.center) > this.rExile + particle.getRadius()) {
                     continue main;
                 }
 
                 particle.setCenter(this.dirHead);
 
-                if (this.dirHead.getDistance(this.cMass) > this.rAggregate + particle.getRadius()) {
+                if (this.dirHead.getDistance(this.center) > this.rAggregate + particle.getRadius()) {
                     continue;
                 }
 
@@ -196,8 +224,8 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
                 }
 
                 this.monitors.forEach(e -> e.accept(this.aggregate, particle));
-
                 this.attached.register(particle);
+                this.detached.remove(particle);
 
                 return true;
             }
@@ -213,17 +241,17 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     }
 
     private void resetMassCenter() {
-        this.cMass.set(0, 0, 0);
+        this.center.set(0, 0, 0);
 
         for (Shape shape : this.attached) {
-            this.cMass.add(shape.getRefCenter());
+            this.center.add(shape.getRefCenter());
         }
 
-        this.cMass.divFactor(this.attached.size());
+        this.center.divFactor(this.attached.size());
     }
 
     private void resetDimension() {
-        this.rAggregate = this.aggregate.getRadius(this.cMass);
+        this.rAggregate = this.aggregate.getRadius(this.center);
         this.rExile = this.rAggregate * this.fExile;
         this.rSpawn = this.rAggregate * this.fSpawn;
     }

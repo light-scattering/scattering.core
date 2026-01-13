@@ -1,40 +1,41 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
-import eu.scattering.core.design.aspect.randomize.FRandAspect;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
+
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FModelPCFilippov3DDef implements FModelPCTunable {
-    private static final int ITERATIONS = 100;
+    private static final int MAX_IT_INITIAL_ACCEPTOR = 1000;
+    private static final int MAX_IT_SELECT = 100;
+    private static final int MAX_IT_CORRECTION = 100;
+    private static final int MAX_IT_GLOBAL = 10;
     private static final int MIN_SIZE = 5;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
-    private final FRandAspect rndEng;
+    private final FRandAspect random;
 
     private final FAggregate aggregate;
 
+    private final FAssembly<Shape> attached;
+    private final List<Shape> detached;
+
     private final List<Shape> bases;
 
-    private final FAssembly<Shape> attached;
-    private final Queue<Shape> detached;
-
-    private final FPoint cMass;
+    private final FPoint center;
 
     private final double kf, df;
 
@@ -64,16 +65,16 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
         this.acceptors = new ArrayList<>();
         this.validators = new ArrayList<>();
 
-        this.rndEng = factory.getRandAspect();
+        this.random = factory.getRandAspect();
 
         this.aggregate = aggregate;
 
         this.bases = new ArrayList<>();
 
         this.attached = this.aggregate.getRefParticles();
-        this.detached = new LinkedList<>();
+        this.detached = new ArrayList<>(this.aggregate.size());
 
-        this.cMass = factory.getFPoint();
+        this.center = factory.getFPoint();
 
         this.df = df;
         this.kf = kf;
@@ -87,74 +88,78 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     @Override
     public void build() {
 
-        if (this.df < 0) {
-            throw new IllegalStateException("The fractal dimension is not defined");
-        }
-
-        if (this.kf < 0) {
-            throw new IllegalStateException("The fractal prefactor is not defined");
-        }
-
         if (this.aggregate.getRefParticles().size() < MIN_SIZE) {
             throw new IllegalStateException("The aggregate should consist of at least " + MIN_SIZE + " particles");
         }
 
-
-        boolean loop;
         int iteration = 0;
+        int validation = 0;
 
-        do {
-            loop = false;
+        generation:
+        while (iteration ++ < MAX_IT_GLOBAL) {
 
             init();
 
             while (this.detached.size() != 0) {
                 if (!buildStep()) {
-                    throw new RuntimeException("The aggregate could not be built");
+                    continue generation;
                 }
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
 
             for (var validator : this.validators) {
-                if (validator.apply(this.aggregate, iteration)) {
+                if (validator.apply(this.aggregate, validation)) {
                     continue;
                 }
 
-                iteration++;
-                loop = true;
+                validation++;
 
-                break;
+                continue generation;
             }
 
-        } while (loop);
+            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
+                continue;
+            }
+
+            return;
+        }
+
+        throw new RuntimeException("The aggregate could not be built");
     }
 
     private void init() {
-        this.rp = getAveragedParticleRadius();
+        this.attached.register(this.detached);
 
-        this.rndEng.getFRand().shuffle(this.aggregate.getRefParticles().asList());
+        this.rp = this.aggregate.getFStatParticleRadius().mean();
 
         this.detached.clear();
         this.detached.addAll(this.attached.asList());
 
         this.attached.clear();
 
-        Shape particleA = this.detached.poll();
-        assert particleA != null;
+        initParticleA();
+        initParticleB();
+    }
+
+    private void initParticleA() {
+        Shape particleA = this.random.getFRand().getElement(this.detached, true);
 
         particleA.setCenter(0, 0, 0);
 
         this.monitors.forEach(e -> e.accept(this.aggregate, particleA));
-
         this.attached.register(particleA);
+    }
 
-        Shape particleB = this.detached.poll();
-        assert particleB != null;
+    private void initParticleB() {
+        Shape particleA = this.attached.asList().get(0);
+        Shape particleB = this.random.getFRand().getElement(this.detached, false);
+
+        int iterations = 0;
 
         step:
-        while (true) {
-            particleB.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+        while (iterations++ < MAX_IT_INITIAL_ACCEPTOR) {
+            particleB.setCenter(this.random.getFRand().nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
 
             for (var acceptor : this.acceptors) {
                 if (!acceptor.apply(this.aggregate, particleB)) {
@@ -163,32 +168,33 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 }
             }
 
-            break;
+            this.monitors.forEach(e -> e.accept(this.aggregate, particleB));
+            this.attached.register(particleB);
+            this.detached.remove(particleB);
+
+            return;
         }
 
-        this.monitors.forEach(e -> e.accept(this.aggregate, particleB));
-
-        this.attached.register(particleB);
+        throw new IllegalStateException("The acceptor prevents the structure from being generated");
     }
 
     private boolean buildStep() {
         resetMassCenter();
 
-        Shape particle = detached.poll();
-        assert particle != null;
+        Shape particle = this.random.getFRand().getElement(this.detached, false);
 
         double radius = getExpectedDistance();
 
-        particle.setCenter(radius, 0, 0).translate(this.cMass);
-        particle.getCollisionsSpherical(this.bases, this.attached, this.cMass);
+        particle.setCenter(radius, 0, 0).translate(this.center);
+        particle.getCollisionsSpherical(this.bases, this.attached, this.center);
 
         if (this.bases.size() == 0) {
             throw new IllegalStateException("The particle cannot be attached to the aggregate");
         }
 
         step:
-        for (int i = 0 ; i < ITERATIONS ; i++) {
-            particle.setCenter(this.rndEng.getFRand().nextDoubleOnSphere(radius)).translate(this.cMass);
+        for (int i = 0; i < MAX_IT_SELECT; i++) {
+            particle.setCenter(this.random.getFRand().nextDoubleOnSphere(radius)).translate(this.center);
 
             double distMin = Double.MAX_VALUE;
             Shape target = null;
@@ -202,7 +208,7 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 }
             }
 
-            boolean isPositioned = this.rndEng.attachSpherical(particle, target, this.cMass, this.attached, ITERATIONS);
+            boolean isPositioned = this.random.attachSpherical(particle, target, this.center, this.attached, MAX_IT_CORRECTION);
 
             if (!isPositioned) {
                 if (this.correction && this.attached.size() <= MIN_SIZE) {
@@ -220,20 +226,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, particle));
-
             this.attached.register(particle);
+            this.detached.remove(particle);
 
             return true;
         }
 
         return false;
-    }
-
-    private double getAveragedParticleRadius() {
-
-        return this.aggregate.getRefParticles().asList().stream()
-                .map(ShapeModuleDimension::getRadius)
-                .collect(Collectors.averagingDouble(Double::doubleValue));
     }
 
     private double getExpectedDistance() {
@@ -247,13 +246,13 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
     }
 
     private void resetMassCenter() {
-        this.cMass.set(0, 0, 0);
+        this.center.set(0, 0, 0);
 
         for (Shape shape : this.attached) {
-            this.cMass.add(shape.getRefCenter());
+            this.center.add(shape.getRefCenter());
         }
 
-        this.cMass.divFactor(this.attached.size());
+        this.center.divFactor(this.attached.size());
     }
 
     //--------------------------------------------------

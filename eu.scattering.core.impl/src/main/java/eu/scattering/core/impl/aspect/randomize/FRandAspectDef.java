@@ -423,9 +423,7 @@ public class FRandAspectDef implements FRandAspect {
 
         double dist = in.getDistCenter(x, y, z);
 
-        FPos2D position = this.core.nextDoubleOnCircle(dist);
-
-        in.setCenter(position.getD0(), position.getD1(), 0);
+        in.setCenter(this.core.nextDoubleOnCircle(dist), 0);
         in.translate(x, y, z);
 
         return in.attachSpherical(target, x, y, z);
