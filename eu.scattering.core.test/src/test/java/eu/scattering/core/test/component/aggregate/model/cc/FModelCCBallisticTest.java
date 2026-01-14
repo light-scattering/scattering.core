@@ -14,12 +14,78 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
-import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FModel CC ballistic")
 public class FModelCCBallisticTest {
+
+    @Disabled
+    @Nested
+    @Tag("Heavy")
+    @DisplayName("Aggregation 3D - Heavy")
+    class AggregationHeavyTest {
+
+        @RepeatedTest(100)
+        @DisplayName("Results")
+        void results3DA() {
+            int size = 1000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("Results")
+        void results3DB() {
+            int size = 10000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(100)
+        @DisplayName("Results")
+        void results2DA() {
+            int size = 1000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("Results")
+        void results2DB() {
+            int size = 10000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+    }
 
     @Nested
     @Tag("Aggregation 3D")
@@ -38,7 +104,7 @@ public class FModelCCBallisticTest {
 
             assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
         @Test
@@ -86,8 +152,8 @@ public class FModelCCBallisticTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(size / sizeFragment <= fragments.get());
-            assertTrue(8 <= steps.get());
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(8, steps.get());
         }
 
         @Test
@@ -134,7 +200,7 @@ public class FModelCCBallisticTest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertTrue(8 * 2 <= iteration.get());
+            assertEquals(8 * 2, iteration.get());
         }
 
         @Test
@@ -150,7 +216,7 @@ public class FModelCCBallisticTest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertTrue(3 <= iteration.get());
+            assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }
@@ -176,7 +242,7 @@ public class FModelCCBallisticTest {
 
             assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
         @Test
@@ -224,8 +290,8 @@ public class FModelCCBallisticTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(size / sizeFragment <= fragments.get());
-            assertTrue(8 <= steps.get());
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(8, steps.get());
         }
 
         @Test
@@ -272,7 +338,7 @@ public class FModelCCBallisticTest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertTrue(8 * 2 <= iteration.get());
+            assertEquals(8 * 2, iteration.get());
         }
 
         @Test
@@ -288,7 +354,7 @@ public class FModelCCBallisticTest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertTrue(3 <= iteration.get());
+            assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }

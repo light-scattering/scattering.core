@@ -202,6 +202,10 @@ public class FModelPCFilippov3DDef implements FModelPCTunable {
                 }
             }
 
+            if (target == null) {
+                return false;
+            }
+
             boolean isPositioned = this.random.attachSpherical(particle, target, this.center, this.attached, MAX_IT_CORRECTION);
 
             if (!isPositioned) {

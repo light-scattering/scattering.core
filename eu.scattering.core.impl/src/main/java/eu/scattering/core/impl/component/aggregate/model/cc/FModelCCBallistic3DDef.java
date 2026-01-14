@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
-
 public class FModelCCBallistic3DDef implements FModelCCBallistic {
     private static final int AGGREGATE_SIZE = 6;
     private static final int FRAGMENT_SIZE = 3;
@@ -84,10 +82,6 @@ public class FModelCCBallistic3DDef implements FModelCCBallistic {
                 validation++;
 
                 continue generation;
-            }
-
-            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
-                continue;
             }
 
             return;

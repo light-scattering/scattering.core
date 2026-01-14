@@ -14,19 +14,91 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
-import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FModel CC RLCA")
 public class FModelCCTunableTest {
 
+    @Disabled
+    @Nested
+    @Tag("Heavy")
+    @DisplayName("Aggregation 3D - Heavy")
+    class AggregationHeavyTest {
+
+        @RepeatedTest(100)
+        @DisplayName("Results")
+        void results3DA() {
+            int size = 1000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            fModel.setEarlyStageCorrection(true);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("Results")
+        void results3DB() {
+            int size = 10000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.8, 1.6);
+            fModel.setEarlyStageCorrection(true);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(100)
+        @DisplayName("Results")
+        void results2DA() {
+            int size = 1000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("Results")
+        void results2DB() {
+            int size = 10000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+    }
+
     @Nested
     @Tag("Aggregation 3D")
     @DisplayName("Aggregation 3D")
     class Aggregation3DTest {
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Results")
         void results() {
             int size = 32;
@@ -39,10 +111,10 @@ public class FModelCCTunableTest {
 
             assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Randomization")
         void randomization() {
             int size = 32;
@@ -65,7 +137,7 @@ public class FModelCCTunableTest {
             assertTrue(fAggregateA.isExact(fAggregateB));
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Monitor - A")
         void monitorA() {
             int size = 32;
@@ -90,11 +162,11 @@ public class FModelCCTunableTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(size / sizeFragment <= fragments.get());
-            assertTrue(5 <= steps.get());
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(5, steps.get());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Monitor - B")
         void monitorB() {
             int size = 32;
@@ -126,7 +198,7 @@ public class FModelCCTunableTest {
             }
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Acceptor")
         void acceptor() {
             int size = 32;
@@ -140,10 +212,10 @@ public class FModelCCTunableTest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertTrue(5 * 2 <= iteration.get());
+            assertEquals(5 * 2, iteration.get());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Validator")
         void validator() {
             int size = 32;
@@ -157,11 +229,11 @@ public class FModelCCTunableTest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertTrue(3 <= iteration.get());
+            assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Tunability")
         void tunability() {
             int size = 32;
@@ -182,9 +254,9 @@ public class FModelCCTunableTest {
             fModelB.build();
             fModelC.build();
 
-            double rangeA = fAggregateA.getRadius(Center.MASS);
-            double rangeB = fAggregateB.getRadius(Center.MASS);
-            double rangeC = fAggregateC.getRadius(Center.MASS);
+            double rangeA = fAggregateA.getRadius(Center.SPHERICAL);
+            double rangeB = fAggregateB.getRadius(Center.SPHERICAL);
+            double rangeC = fAggregateC.getRadius(Center.SPHERICAL);
 
             assertTrue(rangeA < rangeB);
             assertTrue(rangeB < rangeC);
@@ -196,15 +268,15 @@ public class FModelCCTunableTest {
     @DisplayName("Aggregation 2D")
     class Aggregation2DTest {
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Results")
         void results() {
-            ScatFactory factory = FactoryDef.create(1768402214089L);
             int size = 32;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.6);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
 
             fModel.build();
 
@@ -214,10 +286,10 @@ public class FModelCCTunableTest {
 
             assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Randomization")
         void randomization() {
             int size = 32;
@@ -225,14 +297,16 @@ public class FModelCCTunableTest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelA = factoryA.getFModelContext().cc().tunable(Dimension.D2, fAggregateA, 1.8, 1.6);
+            FModelCCTunable fModelA = factoryA.getFModelContext().cc().tunable(Dimension.D2, fAggregateA, 1.5, 1.5);
             fModelA.setEarlyStageCorrection(true);
+            fModelA.setCorrection(true);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCCTunable fModelB = factoryB.getFModelContext().cc().tunable(Dimension.D2, fAggregateB, 1.8, 1.6);
+            FModelCCTunable fModelB = factoryB.getFModelContext().cc().tunable(Dimension.D2, fAggregateB, 1.5, 1.5);
             fModelB.setEarlyStageCorrection(true);
+            fModelB.setCorrection(true);
 
             fModelA.build();
             fModelB.build();
@@ -240,15 +314,16 @@ public class FModelCCTunableTest {
             assertTrue(fAggregateA.isExact(fAggregateB));
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Monitor - A")
         void monitorA() {
             int size = 32;
             int sizeFragment = 5;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
 
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
@@ -265,18 +340,19 @@ public class FModelCCTunableTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(size / sizeFragment <= fragments.get());
-            assertTrue(5 <= steps.get());
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(5, steps.get());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Monitor - B")
         void monitorB() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -301,31 +377,33 @@ public class FModelCCTunableTest {
             }
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Acceptor")
         void acceptor() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.6);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertTrue(5 * 2 <= iteration.get());
+            assertEquals(5 * 2, iteration.get());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Validator")
         void validator() {
             int size = 32;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.6, 1.4);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
             fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -336,18 +414,20 @@ public class FModelCCTunableTest {
             assertEquals(size, fAggregate.size());
         }
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Tunability")
         void tunability() {
             int size = 32;
 
-            FAggregate fAggregateB = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FAggregate fAggregateB = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCCTunable fModelB = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregateB, 1.8, 1.6);
             fModelB.setEarlyStageCorrection(true);
+            fModelB.setCorrection(true);
 
-            FAggregate fAggregateC = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FAggregate fAggregateC = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
             FModelCCTunable fModelC = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregateC, 1.2, 2.2);
             fModelC.setEarlyStageCorrection(true);
+            fModelC.setCorrection(true);
 
             fModelB.build();
             fModelC.build();

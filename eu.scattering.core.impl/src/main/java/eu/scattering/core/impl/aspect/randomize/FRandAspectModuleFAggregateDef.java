@@ -49,25 +49,30 @@ public class FRandAspectModuleFAggregateDef {
 
     //--------------------------------------------------
 
-    public boolean rotate(FAggregate ref, FAggregate arg, int corrections) {
+    public boolean rotate(FAggregate ref, FAggregate arg, FPoint cRef, FPoint cArg, int corrections) {
 
-        return rotateUniversal(ref, arg, corrections, true);
+        return rotateUniversal(ref, arg, cRef, cArg, corrections, true);
     }
 
-    public boolean rotateOnSurface(FAggregate ref, FAggregate arg, int corrections) {
+    public boolean rotateOnSurface(FAggregate ref, FAggregate arg, FPoint cRef, FPoint cArg, int corrections) {
         isOnSurface(ref, arg);
 
-        return rotateUniversal(ref, arg, corrections, false);
+        return rotateUniversal(ref, arg, cRef, cArg, corrections, false);
     }
 
-    private boolean rotateUniversal(FAggregate ref, FAggregate arg, int corrections, boolean is3D) {
-        FPoint centerRef = ref.getMassCenter(factory.getFPoint());
-        FPoint centerArg = arg.getMassCenter(factory.getFPoint());
+    private boolean rotateUniversal(FAggregate ref, FAggregate arg, FPoint cRef, FPoint cArg, int corrections, boolean is3D) {
+        double distance = cRef.getDistance(cArg);
 
-        double distance = centerRef.getDistance(centerArg);
+        List<Shape> candidatesRef = getRotRefCandidates(ref, arg, cRef, cArg, distance);
+        List<Shape> candidatesArg = getRotArgCandidates(ref, arg, cRef, cArg, distance);
 
-        List<Shape> candidatesRef = getRotRefCandidates(ref, arg, centerRef, centerArg, distance);
-        List<Shape> candidatesArg = getRotArgCandidates(ref, arg, centerRef, centerArg, distance);
+        if (candidatesRef.size() == 0) {
+            return false;
+        }
+
+        if (candidatesArg.size() == 0) {
+            return false;
+        }
 
         double minRadius = arg.getFStatParticleRadius().min();
 
@@ -93,17 +98,17 @@ public class FRandAspectModuleFAggregateDef {
                 continue;
             }
 
-            progress = valRotation(centerRef, centerArg, particleArg, particleLoc, distance);
+            progress = valRotation(cRef, cArg, particleArg, particleLoc, distance);
 
             if (!progress) {
                 continue;
             }
 
-            double angleRef = getRotRefAngle(axis, centerRef, centerArg, particleArg, particleLoc, distance);
+            double angleRef = getRotRefAngle(axis, cRef, cArg, particleArg, particleLoc, distance);
             factory.getRotAspect().rotRgAround(ref, axis, angleRef);
             factory.getRotAspect().rotRgAround(particleLoc, axis, angleRef);
 
-            double angleArg = getRotArgAngle(axis, centerArg, particleArg, particleLoc);
+            double angleArg = getRotArgAngle(axis, cArg, particleArg, particleLoc);
             factory.getRotAspect().rotRgAround(arg, axis, angleArg);
 
             if (ref.overlaps(arg)) {
@@ -130,10 +135,6 @@ public class FRandAspectModuleFAggregateDef {
             }
         }
 
-        if (candidates.isEmpty()) {
-            throw new IllegalStateException("The aggregate cannot be built");
-        }
-
         factory.getFRand().shuffle(candidates);
 
         return candidates;
@@ -151,10 +152,6 @@ public class FRandAspectModuleFAggregateDef {
                     candidates.add(particle);
                 }
             }
-        }
-
-        if (candidates.isEmpty()) {
-            throw new IllegalStateException("The aggregate cannot be built");
         }
 
         factory.getFRand().shuffle(candidates);

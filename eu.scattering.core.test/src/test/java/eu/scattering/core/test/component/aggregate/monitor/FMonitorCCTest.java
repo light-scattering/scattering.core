@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.aggregate.monitor;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
+import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.type.Dimension;
 import org.junit.jupiter.api.*;
 
@@ -105,11 +106,13 @@ public class FMonitorCCTest {
         @Test
         @DisplayName("Radius of gyration - Tunable 2D")
         void rogMonodisperseTunable2D() {
-            int quantity = 1000;
+            int quantity = 3000;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 0.01);
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 0.5);
 
-            FModelCC fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.4, 1.2);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.4);
+            fModel.setEarlyStageCorrection(true);
+            fModel.setCorrection(true);
 
             fModel.build();
 

@@ -609,9 +609,15 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public boolean rotate(FAggregate ref, FAggregate arg, int corrections) {
+    public void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, double distance) {
 
-        return moduleFAggregate.rotate(ref, arg, corrections);
+        moduleFAggregate.moveMassCenterOnSurface(ref, arg, distance);
+    }
+
+    @Override
+    public boolean rotate(FAggregate ref, FAggregate arg, FPoint cRef, FPoint cArg, int corrections) {
+
+        return moduleFAggregate.rotate(ref, arg, cRef, cArg, corrections);
     }
 
     @Override
@@ -627,15 +633,9 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, double distance) {
+    public boolean rotateOnSurface(FAggregate ref, FAggregate arg, FPoint cRef, FPoint cArg, int corrections) {
 
-        moduleFAggregate.moveMassCenterOnSurface(ref, arg, distance);
-    }
-
-    @Override
-    public boolean rotateOnSurface(FAggregate ref, FAggregate arg, int corrections) {
-
-        return moduleFAggregate.rotateOnSurface(ref, arg, corrections);
+        return moduleFAggregate.rotateOnSurface(ref, arg, cRef, cArg, corrections);
     }
 
     @Override

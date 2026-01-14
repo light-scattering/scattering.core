@@ -281,17 +281,4 @@ public class FAggregateModuleGeometryDef {
             case SPHERICAL -> getRadius(aggregate.getSphericalCenter());
         };
     }
-
-    protected double getRadiusFromOrigin() {
-        double maxRadius = -1;
-
-        for (Shape shape : this.aggregate) {
-            double radius = shape.getDistCenter(0, 0, 0) + shape.getRadius();
-
-            if (radius > maxRadius) {
-                maxRadius = radius;
-            }
-        }
-        return maxRadius;
-    }
 }

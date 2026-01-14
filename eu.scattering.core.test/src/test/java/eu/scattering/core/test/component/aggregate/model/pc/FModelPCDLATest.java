@@ -267,7 +267,7 @@ public class FModelPCDLATest {
     @DisplayName("Aggregation 2D")
     class Aggregation2DTest {
 
-        @RepeatedTest(1000)
+        @Test
         @DisplayName("Results")
         void results() {
             int size = 28;

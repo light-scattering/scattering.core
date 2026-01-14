@@ -5,7 +5,8 @@ import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
-import eu.scattering.core.design.component.geometry.shape.ShapeModuleDimension;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.design.type.RadiusOfGyration;
 
@@ -13,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public class FModelCCTunable2DDef implements FModelCCTunable {
+    private static final int MAX_IT_SELECT = 100;
+    private static final int MAX_IT_CORRECTION = 100;
+    private static final int MAX_IT_GLOBAL = 10;
     private static final int AGGREGATE_SIZE = 10;
     private static final int FRAGMENT_SIZE = 5;
 
@@ -30,9 +33,12 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
 
     private final List<FAggregate> fragments;
 
+    private final FPoint centerTmp, centerA, centerB;
+
     private final double kf, df;
 
     private boolean correction;
+    private boolean correctionEarly;
 
     private double rp;
 
@@ -65,6 +71,10 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
 
         this.fragments = new ArrayList<>();
 
+        this.centerTmp = this.factory.getFPoint();
+        this.centerA = this.factory.getFPoint();
+        this.centerB = this.factory.getFPoint();
+
         this.df = df;
         this.kf = kf;
     }
@@ -89,38 +99,42 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
             throw new IllegalStateException("The aggregate should consist of at least " + AGGREGATE_SIZE + " particles");
         }
 
-        boolean loop;
         int iteration = 0;
+        int validation = 0;
 
-        do {
-            loop = false;
+        generation:
+        while (iteration ++ < MAX_IT_GLOBAL) {
 
             init();
 
             while (this.fragments.size() > 1) {
-                buildStep();
+                if (!buildStep()) {
+                    continue generation;
+                }
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
 
             for (var validator : this.validators) {
-                if (validator.apply(this.aggregate, iteration)) {
+                if (validator.apply(this.aggregate, validation)) {
                     continue;
                 }
 
-                iteration++;
-                loop = true;
+                validation++;
 
-                break;
+                continue generation;
             }
 
-        } while (loop);
+            return;
+        }
+
+        throw new RuntimeException("The aggregate could not be built");
     }
 
     private void init() {
-        this.rp = getAveragedParticleRadius();
+        this.rp = this.aggregate.getFStatParticleRadius().mean();
 
-        distributeFragments();
+        createFragments();
         buildFragments();
 
         for (FAggregate fragment : this.fragments) {
@@ -130,21 +144,55 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
         shuffleFragments();
     }
 
-    private void buildStep() {
+    private boolean buildStep() {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
             FAggregate aggB = this.fragments.get(i + 1);
 
+            double distance = getMassCenterDistance(aggA, aggB);
+
+            int iterations = 0;
+
             step:
             while (true) {
-                this.random.moveMassCenterOnSurface(aggA, aggB, getExpectedDistance(aggA, aggB));
-                this.random.rotateOnSurface(aggA, aggB, 100);
+
+                if (!validateBuildStep(aggA, aggB, distance)) {
+                    if (this.correction) {
+                        distance *= 0.99;
+
+                        continue;
+                    }
+
+                    return false;
+                }
+
+                setCenter(aggA, aggB);
+                moveCenter(aggB, distance);
+
+                boolean isPositioned = this.random.rotateOnSurface(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
+
+                if (!isPositioned) {
+
+                    iterations++;
+
+                    if (iterations++ < MAX_IT_SELECT) {
+                        continue;
+                    }
+
+                    return false;
+                }
 
                 for (var acceptor : this.acceptors) {
                     if (!acceptor.apply(aggA, aggB)) {
 
-                        continue step;
+                        iterations++;
+
+                        if (iterations++ < MAX_IT_SELECT) {
+                            continue step;
+                        }
+
+                        return false;
                     }
                 }
 
@@ -158,9 +206,11 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
 
         removeFragments();
         shuffleFragments();
+
+        return true;
     }
 
-    private void distributeFragments() {
+    private void createFragments() {
 
         this.fragments.clear();
 
@@ -168,25 +218,13 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
             this.fragments.add(this.factory.getFAggregate());
         }
 
-        for (int i = 0 ; i < this.aggregate.size() ; i++) {
-            this.fragments.get(i % this.fragments.size()).addRefParticle(this.aggregate.getRefParticles().asList().get(i));
+        List<Shape> particles = this.aggregate.getRefParticles().asList();
+
+        this.random.getFRand().shuffle(particles);
+
+        for (int i = 0 ; i < particles.size() ; i++) {
+            this.fragments.get(i % this.fragments.size()).addRefParticle(particles.get(i));
         }
-    }
-
-    private void buildFragments() {
-
-        FModelPCTunable model;
-        for (FAggregate fragment : this.fragments) {
-            model = factory.getFModelContext().pc().tunable(Dimension.D2, fragment, this.df, this.kf);
-            model.setEarlyStageCorrection(this.correction);
-
-            model.build();
-        }
-    }
-
-    private void shuffleFragments() {
-
-        this.random.getFRand().shuffle(this.fragments);
     }
 
     private void removeFragments() {
@@ -196,14 +234,23 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
         this.fragments.addAll(elements);
     }
 
-    private double getAveragedParticleRadius() {
+    private void shuffleFragments() {
 
-        return this.aggregate.getRefParticles().asList().stream()
-                .map(ShapeModuleDimension::getRadius)
-                .collect(Collectors.averagingDouble(Double::doubleValue));
+        this.random.getFRand().shuffle(this.fragments);
     }
 
-    private double getExpectedDistance(FAggregate aggA, FAggregate aggB) {
+    private void buildFragments() {
+
+        FModelPCTunable model;
+        for (FAggregate fragment : this.fragments) {
+            model = factory.getFModelContext().pc().tunable(Dimension.D2, fragment, this.df, this.kf);
+            model.setEarlyStageCorrection(this.correctionEarly);
+
+            model.build();
+        }
+    }
+
+    private double getMassCenterDistance(FAggregate aggA, FAggregate aggB) {
         int npA = aggA.size();
         int npB = aggB.size();
         double rgA = aggA.getRadiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
@@ -214,6 +261,37 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
         double stepC = ((npA + npB) * rgB * rgB) / npA;
 
         return Math.sqrt(stepA - stepB - stepC);
+    }
+
+    private void setCenter(FAggregate aggA, FAggregate aggB) {
+        setCenterSingle(aggA, this.centerA);
+        setCenterSingle(aggB, this.centerB);
+    }
+
+    private void setCenterSingle(FAggregate aggregate, FPoint center) {
+        center.set(0, 0, 0);
+
+        for (Shape shape : aggregate) {
+            center.add(shape.getRefCenter());
+        }
+
+        center.divFactor(aggregate.size());
+    }
+
+    private void moveCenter(FAggregate aggB, double distance) {
+        this.centerTmp.set(this.centerA);
+        this.centerTmp.add(this.random.getFRand().nextDoubleOnCircle(distance), 0);
+
+        aggB.getRefParticles().translate(this.centerB, this.centerTmp);
+
+        this.centerB.set(this.centerTmp);
+    }
+
+    private boolean validateBuildStep(FAggregate aggA, FAggregate aggB, double distance) {
+        double radiusA = aggA.getRadius(this.centerA);
+        double radiusB = aggB.getRadius(this.centerB);
+
+        return distance < radiusA + radiusB;
     }
 
     //--------------------------------------------------
@@ -237,8 +315,14 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
     }
 
     @Override
-    public void setEarlyStageCorrection(boolean correction) {
+    public void setCorrection(boolean correction) {
 
         this.correction = correction;
+    }
+
+    @Override
+    public void setEarlyStageCorrection(boolean correction) {
+
+        this.correctionEarly = correction;
     }
 }

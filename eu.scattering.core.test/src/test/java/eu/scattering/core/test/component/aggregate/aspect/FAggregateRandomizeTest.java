@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.aggregate.aspect;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
@@ -182,7 +183,10 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenter(aggA, aggB, 4);
 
-        factory.getRandAspect().rotate(aggA, aggB, 100);
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+
+        factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
 
         aggA.merge(aggB, true);
 
@@ -209,7 +213,10 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, 4);
 
-        factory.getRandAspect().rotateOnSurface(aggA, aggB, 100);
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+
+        factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
 
         aggA.merge(aggB, true);
 
@@ -235,7 +242,10 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadius(Center.MASS));
 
-        factory.getRandAspect().rotate(aggA, aggB, 100);
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+
+        factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isCompact());
@@ -256,7 +266,10 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadius(Center.MASS));
 
-        factory.getRandAspect().rotateOnSurface(aggA, aggB, 100);
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+
+        factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isCompact());
