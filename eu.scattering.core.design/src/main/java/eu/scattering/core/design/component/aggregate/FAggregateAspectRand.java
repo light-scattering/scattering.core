@@ -5,8 +5,8 @@ public interface FAggregateAspectRand {
     void moveMassCenter(FAggregate ref, FAggregate arg, double distance);
     void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, double distance);
 
-    void rotate(FAggregate ref, FAggregate arg);
-    void rotateOnSurface(FAggregate ref, FAggregate arg);
+    boolean rotate(FAggregate ref, FAggregate arg, int corrections);
+    boolean rotateOnSurface(FAggregate ref, FAggregate arg, int corrections);
 
     void attach(FAggregate ref, FAggregate arg);
     void attachOnSurface(FAggregate ref, FAggregate arg);

@@ -14,7 +14,12 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
+
 public class FModelCCTunable3DDef implements FModelCCTunable {
+    private static final int MAX_IT_SELECT = 100;
+    private static final int MAX_IT_CORRECTION = 100;
+    private static final int MAX_IT_GLOBAL = 10;
     private static final int AGGREGATE_SIZE = 10;
     private static final int FRAGMENT_SIZE = 5;
 
@@ -88,32 +93,40 @@ public class FModelCCTunable3DDef implements FModelCCTunable {
             throw new IllegalStateException("The aggregate should consist of at least " + AGGREGATE_SIZE + " particles");
         }
 
-        boolean loop;
         int iteration = 0;
+        int validation = 0;
 
-        do {
-            loop = false;
+        generation:
+        while (iteration ++ < MAX_IT_GLOBAL) {
 
             init();
 
             while (this.fragments.size() > 1) {
-                buildStep();
+                if (!buildStep()) {
+                    continue generation;
+                }
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
 
             for (var validator : this.validators) {
-                if (validator.apply(this.aggregate, iteration)) {
+                if (validator.apply(this.aggregate, validation)) {
                     continue;
                 }
 
-                iteration++;
-                loop = true;
+                validation++;
 
-                break;
+                continue generation;
             }
 
-        } while (loop);
+            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
+                continue;
+            }
+
+            return;
+        }
+
+        throw new RuntimeException("The aggregate could not be built");
     }
 
     private void init() {
@@ -129,23 +142,36 @@ public class FModelCCTunable3DDef implements FModelCCTunable {
         shuffleFragments();
     }
 
-    private void buildStep() {
+    private boolean buildStep() {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
             FAggregate aggB = this.fragments.get(i + 1);
+
+            int iterations = 0;
 
             step:
             while (true) {
                 double distance = getExpectedDistance(aggA, aggB);
 
                 this.random.moveMassCenter(aggA, aggB, distance);
-                this.random.rotate(aggA, aggB);
+
+                boolean isPositioned = this.random.rotate(aggA, aggB, MAX_IT_CORRECTION);
+
+                if (!isPositioned) {
+                    return false;
+                }
 
                 for (var acceptor : this.acceptors) {
                     if (!acceptor.apply(aggA, aggB)) {
 
-                        continue step;
+                        iterations++;
+
+                        if (iterations++ < MAX_IT_SELECT) {
+                            continue step;
+                        }
+
+                        return false;
                     }
                 }
 
@@ -159,6 +185,8 @@ public class FModelCCTunable3DDef implements FModelCCTunable {
 
         removeFragments();
         shuffleFragments();
+
+        return true;
     }
 
     private void distributeFragments() {

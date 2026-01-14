@@ -49,18 +49,18 @@ public class FRandAspectModuleFAggregateDef {
 
     //--------------------------------------------------
 
-    public void rotate(FAggregate ref, FAggregate arg) {
+    public boolean rotate(FAggregate ref, FAggregate arg, int corrections) {
 
-        rotateUniversal(ref, arg, true);
+        return rotateUniversal(ref, arg, corrections, true);
     }
 
-    public void rotateOnSurface(FAggregate ref, FAggregate arg) {
+    public boolean rotateOnSurface(FAggregate ref, FAggregate arg, int corrections) {
         isOnSurface(ref, arg);
 
-        rotateUniversal(ref, arg, false);
+        return rotateUniversal(ref, arg, corrections, false);
     }
 
-    private void rotateUniversal(FAggregate ref, FAggregate arg, boolean is3D) {
+    private boolean rotateUniversal(FAggregate ref, FAggregate arg, int corrections, boolean is3D) {
         FPoint centerRef = ref.getMassCenter(factory.getFPoint());
         FPoint centerArg = arg.getMassCenter(factory.getFPoint());
 
@@ -71,7 +71,9 @@ public class FRandAspectModuleFAggregateDef {
 
         double minRadius = arg.getFStatParticleRadius().min();
 
-        while (true) {
+        int iterations = 0;
+
+        while (iterations++ < (ref.size() + arg.size()) * corrections) {
             FVector axis = factory.getFVector();
             Shape particleRef = factory.getFSphere();
             Shape particleArg = factory.getFSphere();
@@ -108,8 +110,10 @@ public class FRandAspectModuleFAggregateDef {
                 continue;
             }
 
-            return;
+            return true;
         }
+
+        return false;
     }
 
     private List<Shape> getRotRefCandidates(FAggregate ref, FAggregate arg, FPoint centerRef, FPoint centerArg, double dist) {
@@ -369,15 +373,16 @@ public class FRandAspectModuleFAggregateDef {
     }
 
     private boolean setRotArgCorrection(FAggregate ref, List<Shape> particles, Shape particleRef, Shape particleArg, Shape particleLoc) {
+
+        if (particles.size() == 0) {
+            throw new IllegalStateException("The particle argument pool is depleted");
+        }
+
         FPos3D initialParticleLoc = particleLoc.getRefCenter().toFPos3D();
 
-        while (true) {
+        factory.getFRand().shuffle(particles);
 
-            if (particles.size() == 0) {
-                throw new IllegalStateException("The particle argument pool is depleted");
-            }
-
-            Shape candidate = factory.getFRand().getElement(particles, false);
+        for (Shape candidate : particles) {
 
             particleLoc.setRadius(candidate.getRadius());
 
@@ -393,6 +398,8 @@ public class FRandAspectModuleFAggregateDef {
 
             return true;
         }
+
+        return false;
     }
 
     private void isOnSurface(FAggregate ref) {

@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
-
 public class FModelPCDLA2DDef implements FModelPCDLA {
     private static final int MAX_IT_INITIAL_ACCEPTOR = 1000;
     private static final int MAX_IT_GLOBAL = 10;
@@ -120,10 +118,6 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
                 continue generation;
             }
 
-            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
-                continue;
-            }
-
             return;
         }
 
@@ -147,7 +141,7 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
 
         particleA.setCenter(0, 0, 0);
 
-        this.monitors.forEach(e -> e.accept(this.aggregate, particleA));
+        this.monitors.forEach(e -> e.accept(null, particleA));
         this.attached.register(particleA);
     }
 

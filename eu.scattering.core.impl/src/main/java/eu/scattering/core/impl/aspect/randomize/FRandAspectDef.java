@@ -609,9 +609,9 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public void rotate(FAggregate ref, FAggregate arg) {
+    public boolean rotate(FAggregate ref, FAggregate arg, int corrections) {
 
-        moduleFAggregate.rotate(ref, arg);
+        return moduleFAggregate.rotate(ref, arg, corrections);
     }
 
     @Override
@@ -633,9 +633,9 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public void rotateOnSurface(FAggregate ref, FAggregate arg) {
+    public boolean rotateOnSurface(FAggregate ref, FAggregate arg, int corrections) {
 
-        moduleFAggregate.rotateOnSurface(ref, arg);
+        return moduleFAggregate.rotateOnSurface(ref, arg, corrections);
     }
 
     @Override

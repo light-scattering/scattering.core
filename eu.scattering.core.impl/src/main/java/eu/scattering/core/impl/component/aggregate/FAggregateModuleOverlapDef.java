@@ -20,6 +20,23 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
+    protected int getQuantitativeOverlapFactor() {
+        List<Shape> particles = this.aggregate.getRefParticles().asList();
+        int quantity = 0;
+
+        for (int i = 0 ; i < particles.size() - 1 ; i++) {
+            for (int j = i + 1 ; j < particles.size() ; j++) {
+                if (particles.get(i).overlaps(particles.get(j))) {
+                    quantity++;
+                }
+            }
+        }
+
+        return quantity;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
     protected double getVolumetricOverlapFactor() {
         List<Double> layer = new ArrayList<>();
 

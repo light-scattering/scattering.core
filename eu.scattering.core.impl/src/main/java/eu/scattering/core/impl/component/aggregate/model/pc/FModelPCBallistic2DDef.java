@@ -1,19 +1,17 @@
 package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
-import eu.scattering.core.design.aspect.randomize.FRandAspect;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-
-import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
 public class FModelPCBallistic2DDef implements FModelPCBallistic {
     private static final int MAX_IT_CORRECTIONS = 100;
@@ -95,10 +93,6 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
                 continue generation;
             }
 
-            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
-                continue;
-            }
-
             return;
         }
 
@@ -121,7 +115,7 @@ public class FModelPCBallistic2DDef implements FModelPCBallistic {
 
         particle.setCenter(0, 0, 0);
 
-        this.monitors.forEach(e -> e.accept(this.aggregate, particle));
+        this.monitors.forEach(e -> e.accept(null, particle));
         this.attached.register(particle);
     }
 

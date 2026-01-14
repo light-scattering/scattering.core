@@ -301,6 +301,12 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public int getQuantitativeOverlapFactor() {
+
+        return this.moduleOverlap.getQuantitativeOverlapFactor();
+    }
+
+    @Override
     public double getVolumetricOverlapFactor() {
 
         return this.moduleOverlap.getVolumetricOverlapFactor();

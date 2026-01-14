@@ -11,9 +11,12 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+import static eu.scattering.core.impl.ConfigDef.EPSILON;
+
 public class FModelCCBallistic2DDef implements FModelCCBallistic {
     private static final int AGGREGATE_SIZE = 6;
     private static final int FRAGMENT_SIZE = 3;
+    private static final int MAX_IT_GLOBAL = 10;
 
     private final List<BiConsumer<FAggregate, FAggregate>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
@@ -60,11 +63,11 @@ public class FModelCCBallistic2DDef implements FModelCCBallistic {
             throw new IllegalStateException("The aggregate should consist of at least " + AGGREGATE_SIZE + " particles");
         }
 
-        boolean loop;
         int iteration = 0;
+        int validation = 0;
 
-        do {
-            loop = false;
+        generation:
+        while (iteration ++ < MAX_IT_GLOBAL) {
 
             init();
 
@@ -75,17 +78,23 @@ public class FModelCCBallistic2DDef implements FModelCCBallistic {
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
 
             for (var validator : this.validators) {
-                if (validator.apply(this.aggregate, iteration)) {
+                if (validator.apply(this.aggregate, validation)) {
                     continue;
                 }
 
-                iteration++;
-                loop = true;
+                validation++;
 
-                break;
+                continue generation;
             }
 
-        } while (loop);
+            if (this.aggregate.getLinearOverlapFactor() > EPSILON) {
+                continue;
+            }
+
+            return;
+        }
+
+        throw new RuntimeException("The aggregate could not be built");
     }
 
     private void init() {

@@ -139,7 +139,7 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
             step:
             while (true) {
                 this.random.moveMassCenterOnSurface(aggA, aggB, getExpectedDistance(aggA, aggB));
-                this.random.rotateOnSurface(aggA, aggB);
+                this.random.rotateOnSurface(aggA, aggB, 100);
 
                 for (var acceptor : this.acceptors) {
                     if (!acceptor.apply(aggA, aggB)) {

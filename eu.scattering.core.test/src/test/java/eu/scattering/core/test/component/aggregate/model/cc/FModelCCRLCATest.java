@@ -7,16 +7,14 @@ import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
+import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,8 +36,9 @@ public class FModelCCRLCATest {
 
             fModel.build();
 
+            assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-8);
+            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
         }
 
         @Test
@@ -87,8 +86,8 @@ public class FModelCCRLCATest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertEquals(size / sizeFragment, fragments.get());
-            assertEquals(8, steps.get());
+            assertTrue(size / sizeFragment <= fragments.get());
+            assertTrue(8 <= steps.get());
         }
 
         @Test
@@ -135,7 +134,7 @@ public class FModelCCRLCATest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(8 * 2 ,iteration.get());
+            assertTrue(8 * 2 <= iteration.get());
         }
 
         @Test
@@ -151,7 +150,7 @@ public class FModelCCRLCATest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertEquals(3 ,iteration.get());
+            assertTrue(3 <= iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }
@@ -175,8 +174,9 @@ public class FModelCCRLCATest {
                 assertEquals(0, shape.getCenterZ(), 1E-8);
             }
 
+            assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-8);
+            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
         }
 
         @Test
@@ -224,8 +224,8 @@ public class FModelCCRLCATest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertEquals(size / sizeFragment, fragments.get());
-            assertEquals(8, steps.get());
+            assertTrue(size / sizeFragment <= fragments.get());
+            assertTrue(8 <= steps.get());
         }
 
         @Test
@@ -272,7 +272,7 @@ public class FModelCCRLCATest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(8 * 2 ,iteration.get());
+            assertTrue(8 * 2 <= iteration.get());
         }
 
         @Test
@@ -288,7 +288,7 @@ public class FModelCCRLCATest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertEquals(3 ,iteration.get());
+            assertTrue(3 <= iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }

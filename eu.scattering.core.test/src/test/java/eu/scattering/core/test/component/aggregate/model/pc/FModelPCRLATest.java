@@ -15,12 +15,78 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FModel PC RLA")
 public class FModelPCRLATest {
+
+    @Disabled
+    @Nested
+    @Tag("Heavy")
+    @DisplayName("Aggregation 3D - Heavy")
+    class AggregationHeavyTest {
+
+        @RepeatedTest(100)
+        @DisplayName("Results")
+        void results3DA() {
+            int size = 1000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().pc().rla(fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("Results")
+        void results3DB() {
+            int size = 10000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().pc().rla(fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(100)
+        @DisplayName("Results")
+        void results2DA() {
+            int size = 1000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("Results")
+        void results2DB() {
+            int size = 10000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
+            FModel fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+
+            fModel.build();
+
+            assertTrue(fAggregate.isCompact());
+            assertEquals(size, fAggregate.size());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+    }
 
     @Nested
     @Tag("Aggregation 3D")
@@ -37,8 +103,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
+            assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
         @Test
@@ -74,7 +141,7 @@ public class FModelPCRLATest {
 
             BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
 
-                if (shape != null) {
+                if (aggregate != null && shape != null) {
                     quantity.addAndGet(aggregate.getRefParticles().size());
                 }
             };
@@ -83,8 +150,8 @@ public class FModelPCRLATest {
             fModel.build();
 
             assertTrue(fAggregate.isCompact());
-            assertTrue(45 <= quantity.get());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(45, quantity.get());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
         @Test
@@ -131,7 +198,7 @@ public class FModelPCRLATest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertTrue(9 * 2 <= iteration.get());
+            assertEquals(9 * 2, iteration.get());
         }
 
         @Test
@@ -166,7 +233,7 @@ public class FModelPCRLATest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertTrue(3 <= iteration.get());
+            assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }
@@ -186,8 +253,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
+            assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
         @Test
@@ -223,7 +291,7 @@ public class FModelPCRLATest {
 
             BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
 
-                if (shape != null) {
+                if (aggregate != null && shape != null) {
                     quantity.addAndGet(aggregate.getRefParticles().size());
                 }
             };
@@ -232,8 +300,8 @@ public class FModelPCRLATest {
             fModel.build();
 
             assertTrue(fAggregate.isCompact());
-            assertTrue(45 <= quantity.get());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(45, quantity.get());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
 
         @Test
@@ -280,7 +348,7 @@ public class FModelPCRLATest {
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertTrue(9 * 2 <= iteration.get());
+            assertEquals(9 * 2, iteration.get());
         }
 
         @Test
@@ -315,7 +383,7 @@ public class FModelPCRLATest {
             fModel.addCompletionValidator((aggA, aggB) -> iteration.incrementAndGet() > 2);
             fModel.build();
 
-            assertTrue(3 <= iteration.get());
+            assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
         }
     }

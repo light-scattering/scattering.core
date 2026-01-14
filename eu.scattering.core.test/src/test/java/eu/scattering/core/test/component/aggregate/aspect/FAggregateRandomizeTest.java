@@ -182,7 +182,7 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenter(aggA, aggB, 4);
 
-        factory.getRandAspect().rotate(aggA, aggB);
+        factory.getRandAspect().rotate(aggA, aggB, 100);
 
         aggA.merge(aggB, true);
 
@@ -209,7 +209,7 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, 4);
 
-        factory.getRandAspect().rotateOnSurface(aggA, aggB);
+        factory.getRandAspect().rotateOnSurface(aggA, aggB, 100);
 
         aggA.merge(aggB, true);
 
@@ -235,7 +235,7 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadius(Center.MASS));
 
-        factory.getRandAspect().rotate(aggA, aggB);
+        factory.getRandAspect().rotate(aggA, aggB, 100);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isCompact());
@@ -256,7 +256,7 @@ public class FAggregateRandomizeTest {
 
         factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadius(Center.MASS));
 
-        factory.getRandAspect().rotateOnSurface(aggA, aggB);
+        factory.getRandAspect().rotateOnSurface(aggA, aggB, 100);
         aggA.merge(aggB, true);
 
         assertTrue(aggA.isCompact());
