@@ -3,6 +3,8 @@ package eu.scattering.core.test.component.aggregate.monitor;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
+import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
+import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.type.Dimension;
 import org.junit.jupiter.api.*;
 
@@ -51,15 +53,16 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
-        @Disabled
+//        @Disabled
         @Test
         @DisplayName("Radius of gyration - RLCA 3D")
         void rogMonodisperseRLCA3D() {
-            int quantity = 250;
+            int quantity = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 1);
 
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
+//            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -68,15 +71,16 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
-        @Disabled
+//        @Disabled
         @Test
         @DisplayName("Radius of gyration - RLCA 2D")
         void rogMonodisperseRLCA2D() {
-            int quantity = 250;
+            int quantity = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 1);
 
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+//            fModel.setInternalSpawn(true);
 
             fModel.build();
 

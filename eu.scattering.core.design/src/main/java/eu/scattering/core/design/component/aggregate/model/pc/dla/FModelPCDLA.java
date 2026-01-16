@@ -9,8 +9,11 @@ import eu.scattering.core.design.lambda.TriConsumer;
 
 public interface FModelPCDLA extends FModelPC {
 
-    double getStep();
-    void setStep(double step);
+    boolean getInternalSpawn();
+    void setInternalSpawn(boolean internal);
+
+    double getStepFactor();
+    void setStepFactor(double factor);
 
     double getSpawnFactor();
     void setSpawnFactor(double factor);

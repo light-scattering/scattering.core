@@ -41,8 +41,11 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     private final FPoint dirBase, dirHead;
 
     private double rAggregate, rSpawn, rExile;
-    private double fSpawn, fExile;
-    private double step;
+    private double fSpawn, fExile, fStep;
+
+    private boolean internal;
+
+    private double rp;
 
     private FModelPCDLA3DDef(FAggregate aggregate, ScatFactory factory) {
 
@@ -72,10 +75,9 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         this.dirBase = this.dir.getRefOrigin().getRefBase();
         this.dirHead = this.dir.getRefOrigin().getRefHead();
 
-        this.fSpawn = 1.5;
-        this.fExile = 2.0;
-
-        this.step = 1;
+        this.fExile = 4;
+        this.fSpawn = 4;
+        this.fStep = 1;
 
         setMovementDefault();
     }
@@ -125,6 +127,8 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     }
 
     private void init() {
+        this.rp = this.aggregate.getFStatParticleRadius().mean();
+
         this.attached.register(this.detached);
 
         this.detached.clear();
@@ -174,13 +178,22 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
     private boolean buildStep() {
         resetMassCenter();
-        resetDimension();
 
         Shape particle = this.rndGen.getElement(this.detached, false);
 
+        resetDimension(particle);
+
         main:
         while (true) {
-            particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn)).translate(this.center);
+            if (this.internal) {
+                particle.setCenter(this.rndGen.nextDoubleInSphere(this.rSpawn)).translate(this.center);
+
+                if (particle.overlaps(this.attached) > 0) {
+                    continue;
+                }
+            } else {
+                particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn)).translate(this.center);
+            }
 
             step:
             while (true) {
@@ -189,7 +202,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
                 this.movement.accept(this.attached, this.rndEng, this.dirHead);
 
-                if (this.dirHead.getDistance(this.center) > this.rExile + particle.getRadius()) {
+                if (this.dirHead.getDistance(this.center) > this.rExile) {
                     continue main;
                 }
 
@@ -203,7 +216,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
                     continue;
                 }
 
-                double distance = particle.projectFrom(this.attached, this.dir, this.step);
+                double distance = particle.projectFrom(this.attached, this.dir, this.rp * this.fStep);
 
                 if (distance < 0) {
                     continue;
@@ -230,8 +243,8 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
     private void setMovementDefault() {
 
-        this.movement = (aggregate, particles, position) ->
-                position.add(this.rndGen.nextDoubleOnSphere(this.step));
+        this.movement = (aggregate, random, position) ->
+                position.add(this.rndGen.nextDoubleOnSphere(this.rp * this.fStep));
     }
 
     private void resetMassCenter() {
@@ -244,52 +257,40 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         this.center.divFactor(this.attached.size());
     }
 
-    private void resetDimension() {
+    private void resetDimension(Shape particle) {
         this.rAggregate = this.aggregate.getRadius(this.center);
-        this.rExile = this.rAggregate * this.fExile;
-        this.rSpawn = this.rAggregate * this.fSpawn;
+        this.rSpawn = this.rAggregate + (this.rp * this.fSpawn) + particle.getRadius();
+        this.rExile = this.rSpawn + (this.rp * this.fExile) + particle.getRadius();
     }
 
     //--------------------------------------------------
 
     @Override
-    public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
+    public boolean getInternalSpawn() {
 
-        this.monitors.add(monitor);
+        return this.internal;
     }
 
     @Override
-    public void setMovement(TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement) {
+    public void setInternalSpawn(boolean internal) {
 
-        this.movement = movement;
+        this.internal = internal;
     }
 
     @Override
-    public void addStepAcceptor(BiFunction<FAggregate, Shape, Boolean> acceptor) {
+    public double getStepFactor() {
 
-        this.acceptors.add(acceptor);
+        return this.fStep;
     }
 
     @Override
-    public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
+    public void setStepFactor(double factor) {
 
-        this.validators.add(validator);
-    }
-
-    @Override
-    public double getStep() {
-
-        return this.step;
-    }
-
-    @Override
-    public void setStep(double step) {
-
-        if (step <= 0) {
-            throw new IllegalArgumentException("The step must be greater than zero");
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The step factor must be greater than zero");
         }
 
-        this.step = step;
+        this.fStep = factor;
     }
 
     @Override
@@ -301,12 +302,8 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     @Override
     public void setSpawnFactor(double factor) {
 
-        if (factor <= 1) {
-            throw new IllegalArgumentException("The spawn factor must be greater than one");
-        }
-
-        if (factor >= this.fExile) {
-            throw new IllegalArgumentException("The spawn factor must be lower than the exile factor");
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The spawn factor must be greater than zero");
         }
 
         this.fSpawn = factor;
@@ -321,8 +318,8 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     @Override
     public void setExileFactor(double factor) {
 
-        if (factor <= this.fSpawn) {
-            throw new IllegalArgumentException("The exile factor must be greater than the spawn factor");
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The exile factor must be greater than zero");
         }
 
         this.fExile = factor;
@@ -332,5 +329,29 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     public TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> getMovement() {
 
         return this.movement;
+    }
+
+    @Override
+    public void setMovement(TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement) {
+
+        this.movement = movement;
+    }
+
+    @Override
+    public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
+
+        this.monitors.add(monitor);
+    }
+
+    @Override
+    public void addStepAcceptor(BiFunction<FAggregate, Shape, Boolean> acceptor) {
+
+        this.acceptors.add(acceptor);
+    }
+
+    @Override
+    public void addCompletionValidator(BiFunction<FAggregate, Integer, Boolean> validator) {
+
+        this.validators.add(validator);
     }
 }

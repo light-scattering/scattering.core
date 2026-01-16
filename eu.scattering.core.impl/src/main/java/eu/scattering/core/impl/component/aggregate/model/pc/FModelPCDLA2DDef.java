@@ -41,8 +41,11 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     private final FPoint dirBase, dirHead;
 
     private double rAggregate, rSpawn, rExile;
-    private double fSpawn, fExile;
-    private double step;
+    private double fExile, fSpawn, fStep;
+
+    private boolean internal;
+
+    private double rp;
 
     private FModelPCDLA2DDef(FAggregate aggregate, ScatFactory factory) {
 
@@ -72,10 +75,9 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
         this.dirBase = this.dir.getRefOrigin().getRefBase();
         this.dirHead = this.dir.getRefOrigin().getRefHead();
 
-        this.fSpawn = 1.5;
-        this.fExile = 2.0;
-
-        this.step = 1;
+        this.fExile = 4;
+        this.fSpawn = 4;
+        this.fStep = 1;
 
         setMovementDefault();
     }
@@ -125,6 +127,8 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     }
 
     private void init() {
+        this.rp = this.aggregate.getFStatParticleRadius().mean();
+
         this.attached.register(this.detached);
 
         this.detached.clear();
@@ -174,13 +178,22 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
 
     private boolean buildStep() {
         resetMassCenter();
-        resetDimension();
 
         Shape particle = this.rndGen.getElement(this.detached, false);
 
+        resetDimension(particle);
+
         main:
         while (true) {
-            particle.setCenter(this.rndGen.nextDoubleOnCircle(this.rSpawn), 0).translate(this.center);
+            if (this.internal) {
+                particle.setCenter(this.rndGen.nextDoubleInCircle(this.rSpawn), 0).translate(this.center);
+
+                if (particle.overlaps(this.attached) > 0) {
+                    continue;
+                }
+            } else {
+                particle.setCenter(this.rndGen.nextDoubleOnCircle(this.rSpawn), 0).translate(this.center);
+            }
 
             step:
             while (true) {
@@ -193,7 +206,7 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
                     throw new IllegalStateException("The position of at least one particle is not 2D");
                 }
 
-                if (this.dirHead.getDistance(this.center) > this.rExile + particle.getRadius()) {
+                if (this.dirHead.getDistance(this.center) > this.rExile) {
                     continue main;
                 }
 
@@ -207,7 +220,7 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
                     continue;
                 }
 
-                double distance = particle.projectFrom(this.attached, this.dir, this.step);
+                double distance = particle.projectFrom(this.attached, this.dir, this.rp * this.fStep);
 
                 if (distance < 0) {
                     continue;
@@ -234,8 +247,8 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
 
     private void setMovementDefault() {
 
-        this.movement = (aggregate, particles, position) ->
-                position.add(this.rndGen.nextDoubleOnCircle(this.step), 0);
+        this.movement = (aggregate, random, position) ->
+                position.add(this.rndGen.nextDoubleOnCircle(this.rp * this.fStep), 0);
     }
 
     private void resetMassCenter() {
@@ -248,34 +261,40 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
         this.center.divFactor(this.attached.size());
     }
 
-    private void resetDimension() {
+    private void resetDimension(Shape particle) {
         this.rAggregate = this.aggregate.getRadius(this.center);
-        this.rExile = this.rAggregate * this.fExile;
-        this.rSpawn = this.rAggregate * this.fSpawn;
+        this.rSpawn = this.rAggregate + (this.rp * this.fSpawn) + particle.getRadius();
+        this.rExile = this.rSpawn + (this.rp * this.fExile) + particle.getRadius();
     }
 
     //--------------------------------------------------
 
     @Override
-    public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
+    public boolean getInternalSpawn() {
 
-        this.monitors.add(monitor);
+        return this.internal;
     }
 
     @Override
-    public double getStep() {
+    public void setInternalSpawn(boolean internal) {
 
-        return this.step;
+        this.internal = internal;
     }
 
     @Override
-    public void setStep(double step) {
+    public double getStepFactor() {
 
-        if (step <= 0) {
-            throw new IllegalArgumentException("The step must be greater than zero");
+        return this.fStep;
+    }
+
+    @Override
+    public void setStepFactor(double factor) {
+
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The step factor must be greater than zero");
         }
 
-        this.step = step;
+        this.fStep = factor;
     }
 
     @Override
@@ -287,12 +306,8 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     @Override
     public void setSpawnFactor(double factor) {
 
-        if (factor <= 1) {
-            throw new IllegalArgumentException("The spawn factor must be greater than one");
-        }
-
-        if (factor >= this.fExile) {
-            throw new IllegalArgumentException("The spawn factor must be lower than the exile factor");
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The spawn factor must be greater than zero");
         }
 
         this.fSpawn = factor;
@@ -307,8 +322,8 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     @Override
     public void setExileFactor(double factor) {
 
-        if (factor <= this.fSpawn) {
-            throw new IllegalArgumentException("The exile factor must be greater than the spawn factor");
+        if (factor <= 0) {
+            throw new IllegalArgumentException("The exile factor must be greater than zero");
         }
 
         this.fExile = factor;
@@ -324,6 +339,12 @@ public class FModelPCDLA2DDef implements FModelPCDLA {
     public void setMovement(TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement) {
 
         this.movement = movement;
+    }
+
+    @Override
+    public void addStepMonitor(BiConsumer<FAggregate, Shape> monitor) {
+
+        this.monitors.add(monitor);
     }
 
     @Override
