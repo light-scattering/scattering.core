@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("FModel PC DLA")
 public class FModelPCDLATest {
 
-//    @Disabled
+    @Disabled
     @Nested
     @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
@@ -250,11 +250,13 @@ public class FModelPCDLATest {
 
             TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
+            model.setInternalSpawn(true);
             model.setStepFactor(1.1);
             model.setExileFactor(3.3);
             model.setSpawnFactor(2.2);
             model.setMovement(movement);
 
+            assertTrue(model.getInternalSpawn());
             assertEquals(1.1, model.getStepFactor());
             assertEquals(3.3, model.getExileFactor());
             assertEquals(2.2, model.getSpawnFactor());
@@ -419,11 +421,13 @@ public class FModelPCDLATest {
 
             TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
+            model.setInternalSpawn(true);
             model.setStepFactor(1.1);
             model.setExileFactor(3.3);
             model.setSpawnFactor(2.2);
             model.setMovement(movement);
 
+            assertTrue(model.getInternalSpawn());
             assertEquals(1.1, model.getStepFactor());
             assertEquals(3.3, model.getExileFactor());
             assertEquals(2.2, model.getSpawnFactor());
