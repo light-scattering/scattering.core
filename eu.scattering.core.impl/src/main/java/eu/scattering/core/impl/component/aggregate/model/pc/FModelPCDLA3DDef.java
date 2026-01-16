@@ -25,7 +25,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
-    private TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement;
+    private TriConsumer<Shape, FRandAspect, FPoint> movement;
 
     private final FRandGenerator rndGen;
     private final FRandAspect rndEng;
@@ -37,8 +37,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
     private final FPoint center;
 
-    private final FRay dir;
-    private final FPoint dirBase, dirHead;
+    private final FRay path;
 
     private double rAggregate, rSpawn, rExile;
     private double fSpawn, fExile, fStep;
@@ -71,9 +70,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
         this.center = factory.getFPoint();
 
-        this.dir = factory.getFRay();
-        this.dirBase = this.dir.getRefOrigin().getRefBase();
-        this.dirHead = this.dir.getRefOrigin().getRefHead();
+        this.path = factory.getFRay();
 
         this.fExile = 4;
         this.fSpawn = 4;
@@ -177,38 +174,29 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     }
 
     private boolean buildStep() {
-        resetMassCenter();
-
         Shape particle = this.rndGen.getElement(this.detached, false);
 
-        resetDimension(particle);
+        adjustParameters(particle);
 
         main:
         while (true) {
-            if (this.internal) {
-                particle.setCenter(this.rndGen.nextDoubleInSphere(this.rSpawn)).translate(this.center);
 
-                if (particle.overlaps(this.attached) > 0) {
-                    continue;
-                }
-            } else {
-                particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn)).translate(this.center);
-            }
+            position(particle);
 
-            step:
             while (true) {
-                this.dirBase.set(particle.getRefCenter());
-                this.dirHead.set(particle.getRefCenter());
+                this.path.getRefOrigin().set(0, 0, 0, 0, 0, 0);
 
-                this.movement.accept(this.attached, this.rndEng, this.dirHead);
+                this.movement.accept(particle, this.rndEng, this.path.getRefOrigin().getRefHead());
 
-                if (this.dirHead.getDistance(this.center) > this.rExile) {
+                this.path.getRefOrigin().moveBase(particle.getRefCenter());
+
+                particle.getRefCenter().set(this.path.getRefOrigin().getRefHead());
+
+                if (particle.getRefCenter().getDistance(this.center) > this.rExile) {
                     continue main;
                 }
 
-                particle.setCenter(this.dirHead);
-
-                if (this.dirHead.getDistance(this.center) > this.rAggregate + particle.getRadius()) {
+                if (particle.getRefCenter().getDistance(this.center) > this.rAggregate + particle.getRadius()) {
                     continue;
                 }
 
@@ -216,7 +204,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
                     continue;
                 }
 
-                double distance = particle.projectFrom(this.attached, this.dir, this.rp * this.fStep);
+                double distance = particle.projectFrom(this.attached, this.path, this.path.getRefOrigin().getMagnitude());
 
                 if (distance < 0) {
                     continue;
@@ -224,9 +212,8 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
                 for (var acceptor : this.acceptors) {
                     if (!acceptor.apply(this.aggregate, particle)) {
-                        particle.setCenter(this.dirBase);
 
-                        continue step;
+                        continue main;
                     }
                 }
 
@@ -244,10 +231,33 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     private void setMovementDefault() {
 
         this.movement = (aggregate, random, position) ->
-                position.add(this.rndGen.nextDoubleOnSphere(this.rp * this.fStep));
+                position.set(this.rndGen.nextDoubleOnSphere(this.rp * this.fStep));
     }
 
-    private void resetMassCenter() {
+    private void position(Shape particle) {
+
+        if (this.internal) {
+            positionInternal(particle);
+        } else {
+            positionExternal(particle);
+        }
+    }
+
+    private void positionExternal(Shape particle) {
+
+        particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn));
+        particle.getRefCenter().add(this.center);
+    }
+
+    private void positionInternal(Shape particle) {
+
+        do {
+            particle.setCenter(this.rndGen.nextDoubleInSphere(this.rSpawn));
+            particle.getRefCenter().add(this.center);
+        } while (particle.overlaps(this.attached) > 0);
+    }
+
+    private void adjustParameters(Shape particle) {
         this.center.set(0, 0, 0);
 
         for (Shape shape : this.attached) {
@@ -255,10 +265,9 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         }
 
         this.center.divFactor(this.attached.size());
-    }
 
-    private void resetDimension(Shape particle) {
         this.rAggregate = this.aggregate.getRadius(this.center);
+
         this.rSpawn = this.rAggregate + (this.rp * this.fSpawn) + particle.getRadius();
         this.rExile = this.rSpawn + (this.rp * this.fExile) + particle.getRadius();
     }
@@ -326,13 +335,13 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     }
 
     @Override
-    public TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> getMovement() {
+    public TriConsumer<Shape, FRandAspect, FPoint> getMovement() {
 
         return this.movement;
     }
 
     @Override
-    public void setMovement(TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement) {
+    public void setMovement(TriConsumer<Shape, FRandAspect, FPoint> movement) {
 
         this.movement = movement;
     }

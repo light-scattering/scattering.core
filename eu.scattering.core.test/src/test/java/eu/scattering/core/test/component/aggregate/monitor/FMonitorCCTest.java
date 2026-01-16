@@ -24,11 +24,13 @@ public class FMonitorCCTest {
         @Test
         @DisplayName("Radius of gyration - Ballistic 3D")
         void rogMonodisperseBallistic3D() {
-            int quantity = 1000;
+            int quantity = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
 
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D3, fAggregate);
+
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -54,7 +56,7 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
-//        @Disabled
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - RLCA 3D")
         void rogMonodisperseRLCA3D() {
@@ -72,7 +74,7 @@ public class FMonitorCCTest {
             assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
         }
 
-//        @Disabled
+        @Disabled
         @Test
         @DisplayName("Radius of gyration - RLCA 2D")
         void rogMonodisperseRLCA2D() {

@@ -7,7 +7,6 @@ import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
-import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.type.Dimension;
@@ -248,7 +247,7 @@ public class FModelPCDLATest {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
             FModelPCDLA model = factory.getFModelContext().pc().dla(fAggregate);
 
-            TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+            TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
             model.setInternalSpawn(true);
             model.setStepFactor(1.1);
@@ -419,7 +418,7 @@ public class FModelPCDLATest {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
             FModelPCDLA model = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
 
-            TriConsumer<FAssembly<Shape>, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+            TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
             model.setInternalSpawn(true);
             model.setStepFactor(1.1);

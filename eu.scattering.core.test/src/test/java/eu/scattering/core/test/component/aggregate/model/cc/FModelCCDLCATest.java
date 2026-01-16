@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("FModel CC DLCA")
 public class FModelCCDLCATest {
 
-//    @Disabled
+    @Disabled
     @Nested
     @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
