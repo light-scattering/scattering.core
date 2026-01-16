@@ -19,7 +19,7 @@ import java.util.function.BiFunction;
 public class FModelPCDLA3DDef implements FModelPCDLA {
     private static final int MAX_IT_INITIAL_ACCEPTOR = 1000;
     private static final int MAX_IT_GLOBAL = 10;
-    private static final int MIN_SIZE = 5;
+    private static final int MIN_SIZE = 3;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;

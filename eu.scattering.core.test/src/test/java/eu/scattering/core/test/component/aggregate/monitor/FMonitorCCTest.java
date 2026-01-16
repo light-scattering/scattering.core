@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.aggregate.monitor;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
+import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
@@ -57,12 +58,12 @@ public class FMonitorCCTest {
         @Test
         @DisplayName("Radius of gyration - RLCA 3D")
         void rogMonodisperseRLCA3D() {
-            int quantity = 3000;
+            int quantity = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 1);
 
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(fAggregate);
-//            fModel.setInternalSpawn(true);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -75,12 +76,12 @@ public class FMonitorCCTest {
         @Test
         @DisplayName("Radius of gyration - RLCA 2D")
         void rogMonodisperseRLCA2D() {
-            int quantity = 3000;
+            int quantity = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 1);
 
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
-//            fModel.setInternalSpawn(true);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
