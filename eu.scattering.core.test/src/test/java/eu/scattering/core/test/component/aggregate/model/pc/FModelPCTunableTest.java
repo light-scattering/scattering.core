@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
@@ -21,6 +22,49 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FModel PC tunable")
 public class FModelPCTunableTest {
+
+    @Disabled
+    @Nested
+    @Tag("Heavy")
+    @DisplayName("Aggregation 3D - Heavy")
+    class AggregationPredefinedTest {
+
+        @Test
+        @DisplayName("Aggregation 3D - Visual")
+        void results3DA() {
+            int size = 3000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+            fModel.setEarlyStageCorrection(true);
+
+            fModel.build();
+
+            String json = fAggregate.toJSON().toString();
+            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+
+            assertTrue(json.length() > 0);
+            assertTrue(model.length() > 0);
+        }
+
+        @Test
+        @DisplayName("Aggregation 2D - Visual")
+        void results2DA() {
+            int size = 3000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModelPCTunable fModel = factory.getFModelContext().pc().tunable(Dimension.D2, fAggregate, 1.5, 1.5);
+            fModel.setEarlyStageCorrection(true);
+
+            fModel.build();
+
+            String json = fAggregate.toJSON().toString();
+            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+
+            assertTrue(json.length() > 0);
+            assertTrue(model.length() > 0);
+        }
+    }
 
     @Disabled
     @Nested
