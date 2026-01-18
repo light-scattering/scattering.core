@@ -18,7 +18,7 @@ import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.*;
-import eu.scattering.core.mock.aggregate.F3D_N1000_Mono;
+import eu.scattering.core.predefined.aggregate.F3D_N1000_Mono;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 

@@ -1,4 +1,4 @@
-package eu.scattering.core.mock.aggregate;
+package eu.scattering.core.predefined.aggregate;
 
 import java.io.IOException;
 import java.nio.file.Files;

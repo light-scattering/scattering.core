@@ -27,36 +27,24 @@ public class FModelCCFactoryContextDef implements FModelCCFactoryContext {
     @Override
     public FModelCCBallistic ballistic(Dimension dimension, FAggregate aggregate) {
 
-        return switch (dimension) {
-            case D3 -> FModelCCBallistic3DDef.create(aggregate, this.factory);
-            case D2 -> FModelCCBallistic2DDef.create(aggregate, this.factory);
-        };
+        return FModelCCBallisticDef.create(dimension, aggregate, this.factory);
     }
 
     @Override
     public FModelCCRLCA rlca(Dimension dimension, FAggregate aggregate) {
 
-        return switch (dimension) {
-            case D3 -> FModelCCRLCA3DDef.create(aggregate, this.factory);
-            case D2 -> FModelCCRLCA2DDef.create(aggregate, this.factory);
-        };
+        return FModelCCRLCADef.create(dimension, aggregate, this.factory);
     }
 
     @Override
     public FModelCCDLCA dlca(Dimension dimension, FAggregate aggregate) {
 
-        return switch (dimension) {
-            case D3 -> FModelCCDLCA3DDef.create(aggregate, this.factory);
-            case D2 -> FModelCCDLCA2DDef.create(aggregate, this.factory);
-        };
+        return FModelCCDLCADef.create(dimension, aggregate, this.factory);
     }
 
     @Override
     public FModelCCTunable tunable(Dimension dimension, FAggregate aggregate, double df, double kf) {
 
-        return switch (dimension) {
-            case D3 -> FModelCCTunable3DDef.create(aggregate, this.factory, df, kf);
-            case D2 -> FModelCCTunable2DDef.create(aggregate, this.factory, df, kf);
-        };
+        return FModelCCTunableDef.create(dimension, aggregate, this.factory, df, kf);
     }
 }

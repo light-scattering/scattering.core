@@ -15,12 +15,14 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class FModelCCTunable2DDef implements FModelCCTunable {
+public class FModelCCTunableDef implements FModelCCTunable {
     private static final int MAX_IT_SELECT = 100;
     private static final int MAX_IT_CORRECTION = 100;
     private static final int MAX_IT_GLOBAL = 10;
     private static final int AGGREGATE_SIZE = 10;
     private static final int FRAGMENT_SIZE = 5;
+
+    private final Dimension dimension;
 
     private final List<BiConsumer<FAggregate, FAggregate>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
@@ -42,7 +44,7 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
 
     private double rp;
 
-    private FModelCCTunable2DDef(FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    private FModelCCTunableDef(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -59,6 +61,8 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
         if (kf <= 0) {
             throw new IllegalArgumentException("The fractal prefactor must be greater than zero");
         }
+
+        this.dimension = dimension;
 
         this.monitors = new ArrayList<>();
         this.acceptors = new ArrayList<>();
@@ -79,9 +83,9 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
         this.kf = kf;
     }
 
-    public static FModelCCTunable create(FAggregate aggregate, ScatFactory factory, double df, double kf) {
+    public static FModelCCTunable create(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
 
-        return new FModelCCTunable2DDef(aggregate, factory, df, kf);
+        return new FModelCCTunableDef(dimension, aggregate, factory, df, kf);
     }
 
     @Override
@@ -170,7 +174,7 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
                 setCenter(aggA, aggB);
                 moveCenter(aggB, distance);
 
-                boolean isPositioned = this.random.rotateOnSurface(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
+                boolean isPositioned = rotateVariantDimension(aggA, aggB);
 
                 if (!isPositioned) {
 
@@ -210,6 +214,14 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
         return true;
     }
 
+    private boolean rotateVariantDimension(FAggregate aggA, FAggregate aggB) {
+
+        return switch (this.dimension) {
+            case D3 -> this.random.rotate(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
+            case D2 -> this.random.rotateOnSurface(aggA, aggB, this.centerA, this.centerB, MAX_IT_CORRECTION);
+        };
+    }
+
     private void createFragments() {
 
         this.fragments.clear();
@@ -240,10 +252,10 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
     }
 
     private void buildFragments() {
-
         FModelPCTunable model;
+
         for (FAggregate fragment : this.fragments) {
-            model = factory.getFModelContext().pc().tunable(Dimension.D2, fragment, this.df, this.kf);
+            model = factory.getFModelContext().pc().tunable(this.dimension, fragment, this.df, this.kf);
             model.setEarlyStageCorrection(this.correctionEarly);
 
             model.build();
@@ -280,11 +292,20 @@ public class FModelCCTunable2DDef implements FModelCCTunable {
 
     private void moveCenter(FAggregate aggB, double distance) {
         this.centerTmp.set(this.centerA);
-        this.centerTmp.add(this.random.getFRand().nextDoubleOnCircle(distance), 0);
+
+        moveCenterVariantDimension(distance);
 
         aggB.getRefParticles().translate(this.centerB, this.centerTmp);
 
         this.centerB.set(this.centerTmp);
+    }
+
+    private void moveCenterVariantDimension(double distance) {
+
+        switch (this.dimension) {
+            case D3 -> this.centerTmp.add(this.random.getFRand().nextDoubleOnSphere(distance));
+            case D2 -> this.centerTmp.add(this.random.getFRand().nextDoubleOnCircle(distance), 0);
+        }
     }
 
     private boolean validateBuildStep(FAggregate aggA, FAggregate aggB, double distance) {

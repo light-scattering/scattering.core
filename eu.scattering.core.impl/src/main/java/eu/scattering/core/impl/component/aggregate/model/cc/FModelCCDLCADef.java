@@ -18,10 +18,12 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class FModelCCDLCA2DDef implements FModelCCDLCA {
+public class FModelCCDLCADef implements FModelCCDLCA {
     private static final int AGGREGATE_SIZE = 6;
     private static final int FRAGMENT_SIZE = 3;
     private static final int MAX_IT_GLOBAL = 10;
+
+    private final Dimension dimension;
 
     private final List<BiConsumer<FAggregate, FAggregate>> monitors;
     private final List<BiFunction<FAggregate, FAggregate, Boolean>> acceptors;
@@ -52,7 +54,7 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
 
     private double rp;
 
-    private FModelCCDLCA2DDef(FAggregate aggregate, ScatFactory factory) {
+    private FModelCCDLCADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -61,6 +63,8 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
+
+        this.dimension = dimension;
 
         this.monitors = new ArrayList<>();
         this.acceptors = new ArrayList<>();
@@ -85,12 +89,12 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
         this.fSpawn = 4;
         this.fStep = 1;
 
-        setMovementDefault();
+        setMovementVariantDimension();
     }
 
-    public static FModelCCDLCA create(FAggregate aggregate, ScatFactory factory) {
+    public static FModelCCDLCA create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
-        return new FModelCCDLCA2DDef(aggregate, factory);
+        return new FModelCCDLCADef(dimension, aggregate, factory);
     }
 
     @Override
@@ -154,16 +158,14 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
             main:
             while(true) {
 
-                position(aggA, aggB);
+                positionVariantDimension(aggA, aggB);
 
                 while (true) {
                     this.path.getRefOrigin().set(0, 0, 0, 0, 0, 0);
 
                     this.movement.accept(aggB, this.random, this.path.getRefOrigin().getRefHead());
 
-                    if (this.path.getRefOrigin().getRefHead().getZ() < 0 || this.path.getRefOrigin().getRefHead().getZ() > 0) {
-                        throw new IllegalStateException("The position of at least one particle is not 2D");
-                    }
+                    buildStepValidationVersionDimension();
 
                     boolean isPositioned = move(aggA, aggB);
 
@@ -195,6 +197,15 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
         shuffleFragments();
     }
 
+    private void buildStepValidationVersionDimension() {
+
+        if (dimension.equals(Dimension.D2)) {
+            if (this.path.getRefOrigin().getRefHead().getZ() < 0 || this.path.getRefOrigin().getRefHead().getZ() > 0) {
+                throw new IllegalStateException("The position of at least one particle is not 2D");
+            }
+        }
+    }
+
     private void distributeFragments() {
 
         this.fragments.clear();
@@ -211,7 +222,7 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
     private void buildFragments() {
 
         for (FAggregate fragment : this.fragments) {
-            factory.getFModelContext().pc().dla(Dimension.D2, fragment).build();
+            factory.getFModelContext().pc().dla(dimension, fragment).build();
         }
     }
 
@@ -229,22 +240,42 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
 
     //--------------------------------------------------
 
-    private void setMovementDefault() {
+    private void setMovementVariantDimension() {
+
+        switch (this.dimension) {
+            case D3 -> setMovement3D();
+            case D2 -> setMovement2D();
+        }
+    }
+
+    private void setMovement2D() {
 
         this.movement = (aggregate, random, position) ->
                 position.set(this.random.getFRand().nextDoubleOnCircle(this.rp * this.fStep), 0);
     }
 
-    private void position(FAggregate aggA, FAggregate aggB) {
+    private void setMovement3D() {
+
+        this.movement = (aggregate, random, position) ->
+                position.set(this.random.getFRand().nextDoubleOnSphere(this.rp * this.fStep));
+    }
+
+    private void positionVariantDimension(FAggregate aggA, FAggregate aggB) {
 
         if (this.internal) {
-            positionInternal(aggA, aggB);
+            switch (this.dimension) {
+                case D3 -> positionInternal3D(aggA, aggB);
+                case D2 -> positionInternal2D(aggA, aggB);
+            }
         } else {
-            positionExternal(aggB);
+            switch (this.dimension) {
+                case D3 -> positionExternal3D(aggB);
+                case D2 -> positionExternal2D(aggB);
+            }
         }
     }
 
-    private void positionExternal(FAggregate aggB) {
+    private void positionExternal2D(FAggregate aggB) {
 
         tmpFPoint.set(this.random.getFRand().nextDoubleOnCircle(this.rSpawn), 0);
         tmpFPoint.add(this.cAggA);
@@ -254,10 +285,33 @@ public class FModelCCDLCA2DDef implements FModelCCDLCA {
         this.cAggB.set(this.tmpFPoint);
     }
 
-    private void positionInternal(FAggregate aggA, FAggregate aggB) {
+    private void positionExternal3D(FAggregate aggB) {
+
+        tmpFPoint.set(this.random.getFRand().nextDoubleOnSphere(this.rSpawn));
+        tmpFPoint.add(this.cAggA);
+
+        aggB.getRefParticles().translate(this.cAggB, this.tmpFPoint);
+
+        this.cAggB.set(this.tmpFPoint);
+    }
+
+    private void positionInternal2D(FAggregate aggA, FAggregate aggB) {
 
         do {
             tmpFPoint.set(this.random.getFRand().nextDoubleInCircle(this.rSpawn), 0);
+            tmpFPoint.add(this.cAggA);
+
+            aggB.getRefParticles().translate(this.cAggB, this.tmpFPoint);
+
+            this.cAggB.set(this.tmpFPoint);
+
+        } while (aggA.overlaps(aggB));
+    }
+
+    private void positionInternal3D(FAggregate aggA, FAggregate aggB) {
+
+        do {
+            tmpFPoint.set(this.random.getFRand().nextDoubleInSphere(this.rSpawn));
             tmpFPoint.add(this.cAggA);
 
             aggB.getRefParticles().translate(this.cAggB, this.tmpFPoint);

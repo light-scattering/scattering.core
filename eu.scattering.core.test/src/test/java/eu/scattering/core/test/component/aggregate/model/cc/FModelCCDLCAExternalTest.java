@@ -1,10 +1,14 @@
-package eu.scattering.core.test.component.aggregate.model.pc;
+package eu.scattering.core.test.component.aggregate.model.cc;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
-import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
+import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.*;
@@ -13,54 +17,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
-import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("FModel PC ballistic")
-public class FModelPCBallisticTest {
-
-    @Nested
-    @Tag("Heavy")
-    @DisplayName("Aggregation 3D - Heavy")
-    class AggregationPredefinedTest {
-
-        @Test
-        @DisplayName("Aggregation 3D - Visual")
-        void results3DA() {
-            int size = 3000;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-
-            fModel.build();
-
-            String json = fAggregate.toJSON().toString();
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
-
-            assertTrue(json.length() > 0);
-            assertTrue(model.length() > 0);
-        }
-
-        @Test
-        @DisplayName("Aggregation 2D - Visual")
-        void results2DA() {
-            int size = 3000;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
-
-            fModel.build();
-
-            String json = fAggregate.toJSON().toString();
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
-
-            assertTrue(json.length() > 0);
-            assertTrue(model.length() > 0);
-        }
-    }
+@DisplayName("FModel CC DLCA")
+public class FModelCCDLCAExternalTest {
 
     @Disabled
     @Nested
@@ -74,7 +36,7 @@ public class FModelPCBallisticTest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             fModel.build();
 
@@ -89,7 +51,7 @@ public class FModelPCBallisticTest {
             int size = 10000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             fModel.build();
 
@@ -104,7 +66,7 @@ public class FModelPCBallisticTest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -119,7 +81,7 @@ public class FModelPCBallisticTest {
             int size = 10000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -140,7 +102,7 @@ public class FModelPCBallisticTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             fModel.build();
 
@@ -157,12 +119,12 @@ public class FModelPCBallisticTest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().pc().ballistic(fAggregateA);
+            FModel fModelA = factoryA.getFModelContext().cc().dlca(fAggregateA);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().pc().ballistic(fAggregateB);
+            FModel fModelB = factoryB.getFModelContext().cc().dlca(fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -173,26 +135,29 @@ public class FModelPCBallisticTest {
         @Test
         @DisplayName("Monitor - A")
         void monitorA() {
-            int size = 10;
+            int size = 28;
+            int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
-            AtomicInteger quantity = new AtomicInteger(0);
+            AtomicInteger fragments = new AtomicInteger(0);
+            AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (aggregate != null && shape != null) {
-                    quantity.addAndGet(aggregate.getRefParticles().size());
+                if (aggA == null) {
+                    fragments.incrementAndGet();
+                } else if (aggB != null) {
+                    steps.incrementAndGet();
                 }
             };
 
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
-            assertEquals(45,  quantity.get());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(8, steps.get());
         }
 
         @Test
@@ -201,18 +166,18 @@ public class FModelPCBallisticTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, Shape> monitor = (agg, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (agg != null) {
-                    agg.forEach(particles::add);
-                }
+               if (aggA != null) {
+                   aggA.forEach(particles::add);
+               }
 
-                if (shape != null) {
-                    particles.add(shape);
+                if (aggB != null) {
+                    aggB.forEach(particles::add);
                 }
             };
 
@@ -227,38 +192,19 @@ public class FModelPCBallisticTest {
         }
 
         @Test
-        @DisplayName("Acceptor - A")
-        void acceptorA() {
-            int size = 10;
+        @DisplayName("Acceptor")
+        void acceptor() {
+            int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(9 * 2, iteration.get());
-        }
-
-        @Test
-        @DisplayName("Acceptor - B")
-        void acceptorB() {
-            int size = 10;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
-
-            BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
-                    shape.getCenterX() < 2 && shape.getCenterX() > -2;
-
-            fModel.addStepAcceptor(acceptor);
-            fModel.build();
-
-            for (Shape shape : fAggregate.getRefParticles()) {
-                assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2);
-            }
+            assertEquals(8 * 2, iteration.get());
         }
 
         @Test
@@ -267,7 +213,7 @@ public class FModelPCBallisticTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -276,6 +222,27 @@ public class FModelPCBallisticTest {
 
             assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
+        }
+
+        @Test
+        @DisplayName("Configuration - Aggregate 3D")
+        void configuration3D() {
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
+            FModelCCDLCA model = factory.getFModelContext().cc().dlca(fAggregate);
+
+            TriConsumer<FAggregate, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+
+            model.setInternalSpawn(true);
+            model.setStepFactor(1.1);
+            model.setExileFactor(3.3);
+            model.setSpawnFactor(2.2);
+            model.setMovement(movement);
+
+            assertTrue(model.getInternalSpawn());
+            assertEquals(1.1, model.getStepFactor());
+            assertEquals(3.3, model.getExileFactor());
+            assertEquals(2.2, model.getSpawnFactor());
+            assertSame(movement, model.getMovement());
         }
     }
 
@@ -290,9 +257,13 @@ public class FModelPCBallisticTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             fModel.build();
+
+            for (Shape shape : fAggregate) {
+                assertEquals(0, shape.getCenterZ(), 1E-8);
+            }
 
             assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
@@ -307,12 +278,12 @@ public class FModelPCBallisticTest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().pc().ballistic(Dimension.D2, fAggregateA);
+            FModel fModelA = factoryA.getFModelContext().cc().dlca(Dimension.D2, fAggregateA);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().pc().ballistic(Dimension.D2, fAggregateB);
+            FModel fModelB = factoryB.getFModelContext().cc().dlca(Dimension.D2, fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -323,26 +294,29 @@ public class FModelPCBallisticTest {
         @Test
         @DisplayName("Monitor - A")
         void monitorA() {
-            int size = 10;
+            int size = 28;
+            int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
-            AtomicInteger quantity = new AtomicInteger(0);
+            AtomicInteger fragments = new AtomicInteger(0);
+            AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (aggregate != null && shape != null) {
-                    quantity.addAndGet(aggregate.getRefParticles().size());
+                if (aggA == null) {
+                    fragments.incrementAndGet();
+                } else if (aggB != null) {
+                    steps.incrementAndGet();
                 }
             };
 
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
-            assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(8, steps.get());
         }
 
         @Test
@@ -351,18 +325,18 @@ public class FModelPCBallisticTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, Shape> monitor = (agg, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (agg != null) {
-                    agg.forEach(particles::add);
+                if (aggA != null) {
+                    aggA.forEach(particles::add);
                 }
 
-                if (shape != null) {
-                    particles.add(shape);
+                if (aggB != null) {
+                    aggB.forEach(particles::add);
                 }
             };
 
@@ -377,38 +351,19 @@ public class FModelPCBallisticTest {
         }
 
         @Test
-        @DisplayName("Acceptor - A")
-        void acceptorA() {
-            int size = 10;
+        @DisplayName("Acceptor")
+        void acceptor() {
+            int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(9 * 2, iteration.get());
-        }
-
-        @Test
-        @DisplayName("Acceptor - B")
-        void acceptorB() {
-            int size = 10;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
-
-            BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
-                    shape.getCenterX() < 2 && shape.getCenterX() > -2;
-
-            fModel.addStepAcceptor(acceptor);
-            fModel.build();
-
-            for (Shape shape : fAggregate.getRefParticles()) {
-                assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2);
-            }
+            assertEquals(8 * 2, iteration.get());
         }
 
         @Test
@@ -417,7 +372,7 @@ public class FModelPCBallisticTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().ballistic(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -426,6 +381,27 @@ public class FModelPCBallisticTest {
 
             assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
+        }
+
+        @Test
+        @DisplayName("Configuration - Aggregate 2D")
+        void configuration2D() {
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
+            FModelCCDLCA model = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+
+            TriConsumer<FAggregate, FRandAspect, FPoint> movement = (aggregate, random, point) -> point.add(1, 2, 3);
+
+            model.setInternalSpawn(true);
+            model.setStepFactor(1.1);
+            model.setExileFactor(3.3);
+            model.setSpawnFactor(2.2);
+            model.setMovement(movement);
+
+            assertTrue(model.getInternalSpawn());
+            assertEquals(1.1, model.getStepFactor());
+            assertEquals(3.3, model.getExileFactor());
+            assertEquals(2.2, model.getSpawnFactor());
+            assertSame(movement, model.getMovement());
         }
     }
 }
