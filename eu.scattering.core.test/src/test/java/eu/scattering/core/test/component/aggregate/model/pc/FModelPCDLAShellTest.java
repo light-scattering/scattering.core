@@ -23,7 +23,7 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FModel PC DLA")
-public class FModelPCDLAExternalTest {
+public class FModelPCDLAShellTest {
 
     @Disabled
     @Nested

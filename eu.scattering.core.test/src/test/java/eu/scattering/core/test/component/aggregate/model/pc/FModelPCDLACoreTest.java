@@ -3,7 +3,6 @@ package eu.scattering.core.test.component.aggregate.model.pc;
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -22,7 +21,7 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FModel PC DLA")
-public class FModelPCDLAInternalTest {
+public class FModelPCDLACoreTest {
 
     @Disabled
     @Nested
