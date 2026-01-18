@@ -24,6 +24,49 @@ public class FModelCCDLCACoreTest {
 
     @Disabled
     @Nested
+    @Tag("Predefined")
+    @DisplayName("Aggregation 3D - Predefined")
+    class AggregationPredefinedTest {
+
+        @Test
+        @DisplayName("Aggregation 3D - Visual")
+        void results3DA() {
+            int size = 3000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
+
+            fModel.build();
+
+            String json = fAggregate.toJSON().toString();
+            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+
+            assertTrue(json.length() > 0);
+            assertTrue(model.length() > 0);
+        }
+
+        @Test
+        @DisplayName("Aggregation 2D - Visual")
+        void results2DA() {
+            int size = 3000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
+
+            fModel.build();
+
+            String json = fAggregate.toJSON().toString();
+            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+
+            assertTrue(json.length() > 0);
+            assertTrue(model.length() > 0);
+        }
+    }
+
+    @Disabled
+    @Nested
     @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
     class AggregationHeavyTest {
