@@ -25,6 +25,47 @@ public class FModelPCRLATest {
     @Nested
     @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")
+    class AggregationPredefinedTest {
+
+        @Test
+        @DisplayName("Aggregation 3D - Visual")
+        void results3DA() {
+            int size = 3000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModel fModel = factory.getFModelContext().pc().rla(fAggregate);
+
+            fModel.build();
+
+            String json = fAggregate.toJSON().toString();
+            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+
+            assertTrue(json.length() > 0);
+            assertTrue(model.length() > 0);
+        }
+
+        @Test
+        @DisplayName("Aggregation 2D - Visual")
+        void results2DA() {
+            int size = 3000;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModel fModel = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+
+            fModel.build();
+
+            String json = fAggregate.toJSON().toString();
+            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+
+            assertTrue(json.length() > 0);
+            assertTrue(model.length() > 0);
+        }
+    }
+
+    @Disabled
+    @Nested
+    @Tag("Heavy")
+    @DisplayName("Aggregation 3D - Heavy")
     class AggregationHeavyTest {
 
         @RepeatedTest(100)
