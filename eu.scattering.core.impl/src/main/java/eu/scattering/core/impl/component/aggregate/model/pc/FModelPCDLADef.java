@@ -10,16 +10,19 @@ import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.lambda.TriConsumer;
+import eu.scattering.core.design.type.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class FModelPCDLA3DDef implements FModelPCDLA {
+public class FModelPCDLADef implements FModelPCDLA {
     private static final int MAX_IT_INITIAL_ACCEPTOR = 1000;
     private static final int MAX_IT_GLOBAL = 10;
     private static final int MIN_SIZE = 3;
+
+    private final Dimension dimension;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
@@ -46,7 +49,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
     private double rp;
 
-    private FModelPCDLA3DDef(FAggregate aggregate, ScatFactory factory) {
+    private FModelPCDLADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -55,6 +58,8 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
+
+        this.dimension = dimension;
 
         this.monitors = new ArrayList<>();
         this.acceptors = new ArrayList<>();
@@ -76,12 +81,12 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         this.fSpawn = 4;
         this.fStep = 1;
 
-        setMovementDefault();
+        setMovementVariantDimension();
     }
 
-    public static FModelPCDLA create(FAggregate aggregate, ScatFactory factory) {
+    public static FModelPCDLA create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
-        return new FModelPCDLA3DDef(aggregate, factory);
+        return new FModelPCDLADef(dimension, aggregate, factory);
     }
 
     @Override
@@ -154,7 +159,7 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
 
         step:
         while (iterations++ < MAX_IT_INITIAL_ACCEPTOR) {
-            particleB.setCenter(this.rndGen.nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+            initParticleVariantDimension(particleA, particleB);
 
             for (var acceptor : this.acceptors) {
                 if (!acceptor.apply(this.aggregate, particleB)) {
@@ -173,6 +178,14 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         throw new IllegalStateException("The acceptor prevents the structure from being generated");
     }
 
+    private void initParticleVariantDimension(Shape particleA, Shape particleB) {
+
+        switch (this.dimension) {
+            case D3 -> particleB.setCenter(this.rndGen.nextDoubleOnSphere(particleA.getRadius() + particleB.getRadius()));
+            case D2 -> particleB.setCenter(this.rndGen.nextDoubleOnCircle(particleA.getRadius() + particleB.getRadius()), 0);
+        }
+    }
+
     private boolean buildStep() {
         Shape particle = this.rndGen.getElement(this.detached, false);
 
@@ -181,12 +194,14 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         main:
         while (true) {
 
-            position(particle);
+            positionVariantDimension(particle);
 
             while (true) {
                 this.path.getRefOrigin().set(0, 0, 0, 0, 0, 0);
 
                 this.movement.accept(particle, this.rndEng, this.path.getRefOrigin().getRefHead());
+
+                buildStepValidationVersionDimension();
 
                 this.path.getRefOrigin().moveBase(particle.getRefCenter());
 
@@ -226,35 +241,78 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         }
     }
 
+    private void buildStepValidationVersionDimension() {
+
+        if (dimension.equals(Dimension.D2)) {
+            if (this.path.getRefOrigin().getRefHead().getZ() < 0 || this.path.getRefOrigin().getRefHead().getZ() > 0) {
+                throw new IllegalStateException("The position of at least one particle is not 2D");
+            }
+        }
+    }
+
     //--------------------------------------------------
 
-    private void setMovementDefault() {
+    private void setMovementVariantDimension() {
+
+        switch (this.dimension) {
+            case D3 -> setMovement3D();
+            case D2 -> setMovement2D();
+        }
+    }
+
+    private void setMovement2D() {
+
+        this.movement = (aggregate, random, position) ->
+                position.set(this.rndGen.nextDoubleOnCircle(this.rp * this.fStep), 0);
+    }
+
+    private void setMovement3D() {
 
         this.movement = (aggregate, random, position) ->
                 position.set(this.rndGen.nextDoubleOnSphere(this.rp * this.fStep));
     }
 
-    private void position(Shape particle) {
+    private void positionVariantDimension(Shape particle) {
 
         if (this.internal) {
-            positionInternal(particle);
+            switch (this.dimension) {
+                case D3 -> positionInternal3D(particle);
+                case D2 -> positionInternal2D(particle);
+            }
         } else {
-            positionExternal(particle);
+            switch (this.dimension) {
+                case D3 -> positionExternal3D(particle);
+                case D2 -> positionExternal2D(particle);
+            }
         }
     }
 
-    private void positionExternal(Shape particle) {
+    private void positionInternal2D(Shape particle) {
 
-        particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn));
-        particle.getRefCenter().add(this.center);
+        do {
+            particle.setCenter(this.rndGen.nextDoubleOnCircle(this.rSpawn), 0);
+            particle.getRefCenter().add(this.center);
+        } while (particle.overlaps(this.attached) > 0);
     }
 
-    private void positionInternal(Shape particle) {
+    private void positionInternal3D(Shape particle) {
 
         do {
             particle.setCenter(this.rndGen.nextDoubleInSphere(this.rSpawn));
             particle.getRefCenter().add(this.center);
         } while (particle.overlaps(this.attached) > 0);
+    }
+
+    private void positionExternal2D(Shape particle) {
+
+        particle.setCenter(this.rndGen.nextDoubleOnCircle(this.rSpawn), 0);
+        particle.getRefCenter().add(this.center);
+    }
+
+    private void positionExternal3D(Shape particle) {
+
+        particle.setCenter(this.rndGen.nextDoubleOnSphere(this.rSpawn));
+        particle.getRefCenter().add(this.center);
     }
 
     private void adjustParameters(Shape particle) {
@@ -273,6 +331,18 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public TriConsumer<Shape, FRandAspect, FPoint> getMovement() {
+
+        return this.movement;
+    }
+
+    @Override
+    public void setMovement(TriConsumer<Shape, FRandAspect, FPoint> movement) {
+
+        this.movement = movement;
+    }
 
     @Override
     public boolean getInternalSpawn() {
@@ -332,18 +402,6 @@ public class FModelPCDLA3DDef implements FModelPCDLA {
         }
 
         this.fExile = factor;
-    }
-
-    @Override
-    public TriConsumer<Shape, FRandAspect, FPoint> getMovement() {
-
-        return this.movement;
-    }
-
-    @Override
-    public void setMovement(TriConsumer<Shape, FRandAspect, FPoint> movement) {
-
-        this.movement = movement;
     }
 
     @Override

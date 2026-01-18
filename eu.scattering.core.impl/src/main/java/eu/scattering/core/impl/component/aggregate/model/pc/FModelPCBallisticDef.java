@@ -7,16 +7,19 @@ import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPC
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.type.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class FModelPCBallistic3DDef implements FModelPCBallistic {
+public class FModelPCBallisticDef implements FModelPCBallistic {
     private static final int MAX_IT_CORRECTIONS = 100;
     private static final int MAX_IT_GLOBAL = 10;
     private static final int MIN_SIZE = 3;
+
+    private final Dimension dimension;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
@@ -31,7 +34,7 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
     private final FAssembly<Shape> attached;
     private final List<Shape> detached;
 
-    private FModelPCBallistic3DDef(FAggregate aggregate, ScatFactory factory) {
+    private FModelPCBallisticDef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -40,6 +43,8 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
+
+        this.dimension = dimension;
 
         this.monitors = new ArrayList<>();
         this.acceptors = new ArrayList<>();
@@ -55,9 +60,9 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
         this.detached = new ArrayList<>(this.aggregate.size());
     }
 
-    public static FModelPCBallistic create(FAggregate aggregate, ScatFactory factory) {
+    public static FModelPCBallistic create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
-        return new FModelPCBallistic3DDef(aggregate, factory);
+        return new FModelPCBallisticDef(dimension, aggregate, factory);
     }
 
     @Override
@@ -130,7 +135,7 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
             this.range.setCenter(target.getRefCenter());
             this.range.setRadius(this.aggregate.getRadius(target.getRefCenter()));
 
-            double distance = random.project(particle, this.range, this.attached, MAX_IT_CORRECTIONS);
+            double distance = projectVariantDimension(particle);
 
             if (distance < 0) {
                 continue;
@@ -149,6 +154,14 @@ public class FModelPCBallistic3DDef implements FModelPCBallistic {
 
             return true;
         }
+    }
+
+    private double projectVariantDimension(Shape particle) {
+
+        return switch (this.dimension) {
+            case D3 -> random.project(particle, this.range, this.attached, MAX_IT_CORRECTIONS);
+            case D2 -> random.project2D(particle, this.range, this.attached, MAX_IT_CORRECTIONS);
+        };
     }
 
     //--------------------------------------------------

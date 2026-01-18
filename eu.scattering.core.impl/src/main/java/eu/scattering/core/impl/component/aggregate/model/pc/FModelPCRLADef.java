@@ -6,16 +6,19 @@ import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.rla.FModelPCRLA;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.type.Dimension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-public class FModelPCRLA3DDef implements FModelPCRLA {
+public class FModelPCRLADef implements FModelPCRLA {
     private static final int MAX_IT_CORRECTIONS = 100;
     private static final int MAX_IT_GLOBAL = 10;
     private static final int MIN_SIZE = 3;
+
+    private final Dimension dimension;
 
     private final List<BiConsumer<FAggregate, Shape>> monitors;
     private final List<BiFunction<FAggregate, Shape, Boolean>> acceptors;
@@ -30,7 +33,7 @@ public class FModelPCRLA3DDef implements FModelPCRLA {
     private final FAssembly<Shape> attached;
     private final List<Shape> detached;
 
-    private FModelPCRLA3DDef(FAggregate aggregate, ScatFactory factory) {
+    private FModelPCRLADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
             throw new IllegalArgumentException("The base aggregate is not defined");
@@ -39,6 +42,8 @@ public class FModelPCRLA3DDef implements FModelPCRLA {
         if (factory == null) {
             throw new IllegalArgumentException("The factory is not defined");
         }
+
+        this.dimension = dimension;
 
         this.monitors = new ArrayList<>();
         this.acceptors = new ArrayList<>();
@@ -54,9 +59,9 @@ public class FModelPCRLA3DDef implements FModelPCRLA {
         this.detached = new ArrayList<>(this.aggregate.size());
     }
 
-    public static FModelPCRLA create(FAggregate aggregate, ScatFactory random) {
+    public static FModelPCRLA create(Dimension dimension, FAggregate aggregate, ScatFactory random) {
 
-        return new FModelPCRLA3DDef(aggregate, random);
+        return new FModelPCRLADef(dimension, aggregate, random);
     }
 
     @Override
@@ -131,7 +136,7 @@ public class FModelPCRLA3DDef implements FModelPCRLA {
             int baseIndex = random.getFRand().nextInteger(0, this.bases.size());
             Shape base = this.bases.get(baseIndex);
 
-            boolean isPositioned = random.attachLinear(particle, base, this.attached, MAX_IT_CORRECTIONS);
+            boolean isPositioned = attachVariantDimension(particle, base);
 
             if (!isPositioned) {
                 this.bases.remove(base);
@@ -157,6 +162,14 @@ public class FModelPCRLA3DDef implements FModelPCRLA {
         }
 
         return false;
+    }
+
+    private boolean attachVariantDimension(Shape particle, Shape base) {
+
+        return switch (this.dimension) {
+            case D3 -> random.attachLinear(particle, base, this.attached, MAX_IT_CORRECTIONS);
+            case D2 -> random.attachLinear2D(particle, base, this.attached, MAX_IT_CORRECTIONS);
+        };
     }
 
     //--------------------------------------------------
