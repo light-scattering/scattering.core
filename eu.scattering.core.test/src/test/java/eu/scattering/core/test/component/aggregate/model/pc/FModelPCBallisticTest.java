@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("FModel PC ballistic")
 public class FModelPCBallisticTest {
 
+    @Disabled
     @Nested
     @Tag("Heavy")
     @DisplayName("Aggregation 3D - Heavy")

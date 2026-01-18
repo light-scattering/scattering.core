@@ -547,22 +547,30 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public double project(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
-        FPoint base = factory.getFPoint();
-        FPoint head = factory.getFPoint();
-        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
+    public double project(Shape in, FPos3D center, double radius, Iterable<? extends Shape> field, int corrections) {
+        FRay pathRnd = this.factory.getFRay();
+        FRay pathDir = this.factory.getFRay();
 
-        int iterations = 0;
+        FVector vectorRnd = pathRnd.getRefOrigin();
+        FPoint baseRnd = vectorRnd.getRefBase();
+        FPoint headRnd = vectorRnd.getRefHead();
+        FVector vectorDir = pathDir.getRefOrigin();
+        FPoint baseDir = vectorDir.getRefBase();
+        FPoint headDir = vectorDir.getRefHead();
 
-        while (iterations++ <= corrections) {
-            base.set(core.nextDoubleOnSphere(10 * range.getRadius()));
-            head.set(core.nextDoubleInCircle(range.getRadius()), 0);
+        for (int i = 0 ; i < corrections ; i++) {
+            FPos3D pos3D = this.factory.getFRand().nextDoubleOnSphere(4 * radius);
 
-            factory.getRotAspect().setRgAngle(head, base, Math.PI * 0.5);
+            baseRnd.set(0, 0, 0);
+            headRnd.set(pos3D);
 
-            ray.getRefOrigin().translate(range.getCenter());
+            vectorRnd.moveBase(center);
 
-            double distance = in.projectFrom(field, ray);
+            this.factory.getRandAspect().ortToBaseInCircle(headDir, pathRnd, radius);
+
+            baseDir.set(headRnd);
+
+            double distance = in.projectFrom(field, pathDir);
 
             if (distance >= 0) {
                 return distance;
@@ -573,24 +581,29 @@ public class FRandAspectDef implements FRandAspect {
     }
 
     @Override
-    public double project2D(Shape in, Shape range, Iterable<? extends Shape> field, int corrections) {
-        FPoint base = factory.getFPoint();
-        FPoint head = factory.getFPoint();
-        FRay ray = factory.getRefFRay(factory.getRefFVector(base, head));
+    public double project2D(Shape in, FPos3D center, double radius, Iterable<? extends Shape> field, int corrections) {
 
-        int iterations = 0;
+        if (center.getD2() > EPSILON || center.getD2() < -EPSILON) {
+            throw new IllegalArgumentException("The center should be two dimensional");
+        }
+        FRay pathDir = this.factory.getFRay();
 
-        while (iterations++ <= corrections) {
-            double radius = range.getRadius();
+        FVector vectorDir = pathDir.getRefOrigin();
+        FPoint baseDir = vectorDir.getRefBase();
+        FPoint headDir = vectorDir.getRefHead();
 
-            base.set(core.nextDoubleOnCircle(10 * radius), 0);
-            head.set(core.nextDouble(-radius, radius), 0, 0);
+        for (int i = 0 ; i < corrections ; i++) {
+            FPos2D pos2D = this.factory.getFRand().nextDoubleOnCircle(4 * radius);
+            double pos1D = this.factory.getFRand().nextDouble(-radius, radius);
 
-            factory.getRotAspect().setRgAngle(head, base, Math.PI * 0.5);
+            baseDir.set(pos2D, 0);
+            headDir.set(pos1D, 0, 0);
 
-            ray.getRefOrigin().translate(range.getCenter());
+            this.factory.getRotAspect().setRgAngle(headDir, baseDir, Math.PI * 0.5);
 
-            double distance = in.projectFrom(field, ray);
+            vectorDir.translate(center);
+
+            double distance = in.projectFrom(field, pathDir);
 
             if (distance >= 0) {
                 return distance;

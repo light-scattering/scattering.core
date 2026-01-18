@@ -13,11 +13,11 @@ public class F3D_N1000_Mono {
     static {
         try {
             mono_22_10 = new String(Files.readAllBytes(
-                    Paths.get("src/test/java/eu/scattering/core/mock/aggregate/F3D_N1000_D22_K10_R1.json")));
+                    Paths.get("src/test/java/eu/scattering/core/predefined/aggregate/F3D_N1000_D22_K10_R1.json")));
             mono_18_14 = new String(Files.readAllBytes(
-                    Paths.get("src/test/java/eu/scattering/core/mock/aggregate/F3D_N1000_D18_K14_R1.json")));
+                    Paths.get("src/test/java/eu/scattering/core/predefined/aggregate/F3D_N1000_D18_K14_R1.json")));
             mono_14_18 = new String(Files.readAllBytes(
-                    Paths.get("src/test/java/eu/scattering/core/mock/aggregate/F3D_N1000_D14_K18_R1.json")));
+                    Paths.get("src/test/java/eu/scattering/core/predefined/aggregate/F3D_N1000_D14_K18_R1.json")));
 
         } catch (IOException e) {
             e.printStackTrace();

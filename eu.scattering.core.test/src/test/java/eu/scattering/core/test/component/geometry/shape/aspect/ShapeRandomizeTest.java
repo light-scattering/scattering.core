@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
+import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -275,9 +276,36 @@ public class ShapeRandomizeTest {
         fAssembly.translate(offset);
 
         double distance = factory.getRandAspect()
-                .project(fSphereRef, factory.getFSphere(offset, 10), fAssembly, 100);
+                .project(fSphereRef, offset, 10, fAssembly, 100);
 
         Assertions.assertAll("Validate position",
+                () -> assertTrue(distance >= 0),
+                () -> assertTrue(fSphereRef.touches(fAssembly) >= 1),
+                () -> assertEquals(0, fSphereRef.overlaps(fAssembly))
+        );
+    }
+
+    @Test
+    @DisplayName("Project 2D")
+    void project2D() {
+        FSphere fSphereRef = factory.getFSphere();
+
+        Producer<FPoint> fPointProducer = factory.getFPointProducer().withInSphere(10);
+        Producer<FSphere> fSphereProducer = factory.getFSphereProducer()
+                .withProdCenterAndFixRadius(fPointProducer, 1)
+                .validateNoOverlap();
+
+        FAssembly<Shape> fAssembly = factory.getFAssembly(fSphereProducer.getListFixed(50));
+
+        fAssembly.register(fSphereRef);
+
+        FPos3D offset = factory.getFPos3D(factory.getFRand().nextDoubleInCircle(100), 0);
+
+        double distance = factory.getRandAspect()
+                .project2D(fSphereRef, offset, 10, fAssembly, 100);
+
+        Assertions.assertAll("Validate position",
+                () -> assertEquals(0, fSphereRef.getRefCenter().getZ(), epsilon),
                 () -> assertTrue(distance >= 0),
                 () -> assertTrue(fSphereRef.touches(fAssembly) >= 1),
                 () -> assertEquals(0, fSphereRef.overlaps(fAssembly))

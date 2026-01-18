@@ -2,11 +2,17 @@ package eu.scattering.core.impl.component.aggregate.model.pc;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
+import eu.scattering.core.design.aspect.rotate.FRotAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.ballistic.FModelPCBallistic;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
+import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.transfer.primitive.FPos2D;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
+import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.Dimension;
 
 import java.util.ArrayList;
@@ -15,7 +21,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 public class FModelPCBallisticDef implements FModelPCBallistic {
-    private static final int MAX_IT_CORRECTIONS = 100;
     private static final int MAX_IT_GLOBAL = 10;
     private static final int MIN_SIZE = 3;
 
@@ -26,13 +31,17 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
     private final List<BiFunction<FAggregate, Integer, Boolean>> validators;
 
     private final FRandAspect random;
+    private final FRotAspect rotation;
 
     private final FAggregate aggregate;
 
-    private final FSphere range;
+    private final FPoint center;
+    private final FRay pathRnd, pathDir;
 
     private final FAssembly<Shape> attached;
     private final List<Shape> detached;
+
+    private double distance;
 
     private FModelPCBallisticDef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
@@ -51,10 +60,13 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
         this.validators = new ArrayList<>();
 
         this.random = factory.getRandAspect();
+        this.rotation = factory.getRotAspect();
 
         this.aggregate = aggregate;
 
-        this.range = factory.getFSphere();
+        this.center = factory.getFPoint();
+        this.pathRnd = factory.getFRay();
+        this.pathDir = factory.getFRay();
 
         this.attached = this.aggregate.getRefParticles();
         this.detached = new ArrayList<>(this.aggregate.size());
@@ -125,21 +137,14 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
     }
 
     private boolean buildStep() {
-        Shape particle = this.random.getFRand().getElement(this.detached, false);
+
+        adjustParameters();
 
         step:
         while (true) {
-            int targetIndex = random.getFRand().nextInteger(0, this.attached.size());
-            Shape target = this.attached.asList().get(targetIndex);
+            Shape particle = this.random.getFRand().getElement(this.detached, false);
 
-            this.range.setCenter(target.getRefCenter());
-            this.range.setRadius(this.aggregate.getRadius(target.getRefCenter()));
-
-            double distance = projectVariantDimension(particle);
-
-            if (distance < 0) {
-                continue;
-            }
+            projectVariantDimension(particle);
 
             for (var acceptor : this.acceptors) {
                 if (!acceptor.apply(this.aggregate, particle)) {
@@ -156,12 +161,69 @@ public class FModelPCBallisticDef implements FModelPCBallistic {
         }
     }
 
-    private double projectVariantDimension(Shape particle) {
+    private void projectVariantDimension(Shape particle) {
 
-        return switch (this.dimension) {
-            case D3 -> random.project(particle, this.range, this.attached, MAX_IT_CORRECTIONS);
-            case D2 -> random.project2D(particle, this.range, this.attached, MAX_IT_CORRECTIONS);
-        };
+        switch (this.dimension) {
+            case D3 -> project3D(particle);
+            case D2 -> project2D(particle);
+        }
+    }
+
+    private void project3D(Shape particle) {
+        FVector vectorRnd = this.pathRnd.getRefOrigin();
+        FPoint baseRnd = vectorRnd.getRefBase();
+        FPoint headRnd = vectorRnd.getRefHead();
+        FVector vectorDir = this.pathDir.getRefOrigin();
+        FPoint baseDir = vectorDir.getRefBase();
+        FPoint headDir = vectorDir.getRefHead();
+
+        while (true) {
+            FPos3D pos3D = this.random.getFRand().nextDoubleOnSphere(4 * this.distance);
+
+            baseRnd.set(0, 0, 0);
+            headRnd.set(pos3D);
+
+            vectorRnd.moveBase(this.center);
+
+            this.random.ortToBaseInCircle(headDir, this.pathRnd, this.distance);
+
+            baseDir.set(headRnd);
+
+            double distance = particle.projectFrom(this.attached, this.pathDir);
+
+            if (distance >= 0) {
+                break;
+            }
+        }
+    }
+
+    private void project2D(Shape particle) {
+        FVector vectorDir = this.pathDir.getRefOrigin();
+        FPoint baseDir = vectorDir.getRefBase();
+        FPoint headDir = vectorDir.getRefHead();
+
+        while (true) {
+            FPos2D pos2D = this.random.getFRand().nextDoubleOnCircle(4 * this.distance);
+            double pos1D = this.random.getFRand().nextDouble(-this.distance, this.distance);
+
+            baseDir.set(pos2D, 0);
+            headDir.set(pos1D, 0, 0);
+
+            this.rotation.setRgAngle(headDir, baseDir, Math.PI * 0.5);
+
+            vectorDir.translate(this.center);
+
+            double distance = particle.projectFrom(this.attached, this.pathDir);
+
+            if (distance >= 0) {
+                break;
+            }
+        }
+    }
+
+    private void adjustParameters() {
+        this.aggregate.getCenter(this.center, Center.SPATIAL);
+        this.distance = this.aggregate.getRadius(this.center);
     }
 
     //--------------------------------------------------
