@@ -24,8 +24,8 @@ public class FModelPCBallisticTest {
 
     @Disabled
     @Nested
-    @Tag("Heavy")
-    @DisplayName("Aggregation 3D - Heavy")
+    @Tag("Predefined")
+    @DisplayName("Aggregation 3D - Predefined")
     class AggregationPredefinedTest {
 
         @Test
