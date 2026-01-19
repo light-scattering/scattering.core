@@ -1,14 +1,9 @@
-package eu.scattering.core.test.component.aggregate.model.pc;
+package eu.scattering.core.test.component.aggregate.model.cc.random;
 
 import eu.scattering.core.design.ScatFactory;
-import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.FModel;
-import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
-import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
-import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.*;
@@ -17,13 +12,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("FModel PC DLA")
-public class FModelPCDLAShellTest {
+@DisplayName("FModel CC RLCA")
+public class FModelCCRLCATest {
 
     @Disabled
     @Nested
@@ -37,7 +31,8 @@ public class FModelPCDLAShellTest {
             int size = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
 
@@ -54,7 +49,8 @@ public class FModelPCDLAShellTest {
             int size = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
 
@@ -78,7 +74,8 @@ public class FModelPCDLAShellTest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
 
@@ -90,10 +87,11 @@ public class FModelPCDLAShellTest {
         @RepeatedTest(10)
         @DisplayName("Results")
         void results3DB() {
-            int size = 10000;
+            int size = 6000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
 
@@ -108,7 +106,8 @@ public class FModelPCDLAShellTest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
 
@@ -120,10 +119,11 @@ public class FModelPCDLAShellTest {
         @RepeatedTest(10)
         @DisplayName("Results")
         void results2DB() {
-            int size = 10000;
+            int size = 6000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
 
@@ -144,7 +144,8 @@ public class FModelPCDLAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
 
@@ -161,12 +162,14 @@ public class FModelPCDLAShellTest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().pc().dla(fAggregateA);
+            FModelCC fModelA = factoryA.getFModelContext().cc().rlca(fAggregateA);
+            fModelA.setSymmetry(false);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().pc().dla(fAggregateB);
+            FModelCC fModelB = factoryB.getFModelContext().cc().rlca(fAggregateB);
+            fModelB.setSymmetry(false);
 
             fModelA.build();
             fModelB.build();
@@ -177,26 +180,30 @@ public class FModelPCDLAShellTest {
         @Test
         @DisplayName("Monitor - A")
         void monitorA() {
-            int size = 10;
+            int size = 28;
+            int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
-            AtomicInteger quantity = new AtomicInteger(0);
+            AtomicInteger fragments = new AtomicInteger(0);
+            AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (aggregate != null && shape != null) {
-                    quantity.addAndGet(aggregate.getRefParticles().size());
+                if (aggA == null) {
+                    fragments.incrementAndGet();
+                } else if (aggB != null) {
+                    steps.incrementAndGet();
                 }
             };
 
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
-            assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(8, steps.get());
         }
 
         @Test
@@ -205,18 +212,19 @@ public class FModelPCDLAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, Shape> monitor = (agg, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (agg != null) {
-                    agg.forEach(particles::add);
-                }
+               if (aggA != null) {
+                   aggA.forEach(particles::add);
+               }
 
-                if (shape != null) {
-                    particles.add(shape);
+                if (aggB != null) {
+                    aggB.forEach(particles::add);
                 }
             };
 
@@ -231,38 +239,20 @@ public class FModelPCDLAShellTest {
         }
 
         @Test
-        @DisplayName("Acceptor - A")
-        void acceptorA() {
-            int size = 10;
+        @DisplayName("Acceptor")
+        void acceptor() {
+            int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(9 * 2, iteration.get());
-        }
-
-        @Test
-        @DisplayName("Acceptor - B")
-        void acceptorB() {
-            int size = 10;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(fAggregate);
-
-            BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
-                    shape.getCenterX() < 2 && shape.getCenterX() > -2;
-
-            fModel.addStepAcceptor(acceptor);
-            fModel.build();
-
-            for (Shape shape : fAggregate.getRefParticles()) {
-                assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2);
-            }
+            assertEquals(8 * 2, iteration.get());
         }
 
         @Test
@@ -271,7 +261,8 @@ public class FModelPCDLAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -285,22 +276,16 @@ public class FModelPCDLAShellTest {
         @Test
         @DisplayName("Configuration")
         void configuration() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-            FModelPCDLA model = factory.getFModelContext().pc().dla(fAggregate);
+            int size = 32;
 
-            TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
 
-            model.setInternalSpawn(false);
-            model.setStepFactor(1.1);
-            model.setExileFactor(3.3);
-            model.setSpawnFactor(2.2);
-            model.setMovement(movement);
+            assertTrue(fModel.getSymmetry());
 
-            assertFalse(model.getInternalSpawn());
-            assertEquals(1.1, model.getStepFactor());
-            assertEquals(3.3, model.getExileFactor());
-            assertEquals(2.2, model.getSpawnFactor());
-            assertSame(movement, model.getMovement());
+            fModel.setSymmetry(false);
+
+            assertFalse(fModel.getSymmetry());
         }
     }
 
@@ -315,9 +300,14 @@ public class FModelPCDLAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
             fModel.build();
+
+            for (Shape shape : fAggregate) {
+                assertEquals(0, shape.getCenterZ(), 1E-8);
+            }
 
             assertTrue(fAggregate.isCompact());
             assertEquals(size, fAggregate.size());
@@ -332,12 +322,14 @@ public class FModelPCDLAShellTest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().pc().dla(Dimension.D2, fAggregateA);
+            FModelCC fModelA = factoryA.getFModelContext().cc().rlca(Dimension.D2, fAggregateA);
+            fModelA.setSymmetry(false);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().pc().dla(Dimension.D2, fAggregateB);
+            FModelCC fModelB = factoryB.getFModelContext().cc().rlca(Dimension.D2, fAggregateB);
+            fModelB.setSymmetry(false);
 
             fModelA.build();
             fModelB.build();
@@ -348,26 +340,30 @@ public class FModelPCDLAShellTest {
         @Test
         @DisplayName("Monitor - A")
         void monitorA() {
-            int size = 10;
+            int size = 28;
+            int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
-            AtomicInteger quantity = new AtomicInteger(0);
+            AtomicInteger fragments = new AtomicInteger(0);
+            AtomicInteger steps = new AtomicInteger(0);
 
-            BiConsumer<FAggregate, Shape> monitor = (aggregate, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (aggregate != null && shape != null) {
-                    quantity.addAndGet(aggregate.getRefParticles().size());
+                if (aggA == null) {
+                    fragments.incrementAndGet();
+                } else if (aggB != null) {
+                    steps.incrementAndGet();
                 }
             };
 
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
-            assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertEquals(size / sizeFragment, fragments.get());
+            assertEquals(8, steps.get());
         }
 
         @Test
@@ -376,18 +372,19 @@ public class FModelPCDLAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
-            BiConsumer<FAggregate, Shape> monitor = (agg, shape) -> {
+            BiConsumer<FAggregate, FAggregate> monitor = (aggA, aggB) -> {
 
-                if (agg != null) {
-                    agg.forEach(particles::add);
+                if (aggA != null) {
+                    aggA.forEach(particles::add);
                 }
 
-                if (shape != null) {
-                    particles.add(shape);
+                if (aggB != null) {
+                    aggB.forEach(particles::add);
                 }
             };
 
@@ -402,38 +399,20 @@ public class FModelPCDLAShellTest {
         }
 
         @Test
-        @DisplayName("Acceptor - A")
-        void acceptorA() {
-            int size = 10;
+        @DisplayName("Acceptor")
+        void acceptor() {
+            int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
             fModel.addStepAcceptor((aggA, aggB) -> iteration.incrementAndGet() % 2 == 0);
             fModel.build();
 
-            assertEquals(9 * 2, iteration.get());
-        }
-
-        @Test
-        @DisplayName("Acceptor - B")
-        void acceptorB() {
-            int size = 10;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
-
-            BiFunction<FAggregate, Shape, Boolean> acceptor = (aggregate, shape) ->
-                    shape.getCenterX() < 2 && shape.getCenterX() > -2;
-
-            fModel.addStepAcceptor(acceptor);
-            fModel.build();
-
-            for (Shape shape : fAggregate.getRefParticles()) {
-                assertTrue(shape.getCenterX() < 2 && shape.getCenterX() > -2);
-            }
+            assertEquals(8 * 2, iteration.get());
         }
 
         @Test
@@ -442,7 +421,8 @@ public class FModelPCDLAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelPC fModel = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            fModel.setSymmetry(false);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -456,22 +436,16 @@ public class FModelPCDLAShellTest {
         @Test
         @DisplayName("Configuration")
         void configuration() {
-            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
-            FModelPCDLA model = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
+            int size = 32;
 
-            TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
+            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
 
-            model.setInternalSpawn(false);
-            model.setStepFactor(1.1);
-            model.setExileFactor(3.3);
-            model.setSpawnFactor(2.2);
-            model.setMovement(movement);
+            assertTrue(fModel.getSymmetry());
 
-            assertFalse(model.getInternalSpawn());
-            assertEquals(1.1, model.getStepFactor());
-            assertEquals(3.3, model.getExileFactor());
-            assertEquals(2.2, model.getSpawnFactor());
-            assertSame(movement, model.getMovement());
+            fModel.setSymmetry(false);
+
+            assertFalse(fModel.getSymmetry());
         }
     }
 }

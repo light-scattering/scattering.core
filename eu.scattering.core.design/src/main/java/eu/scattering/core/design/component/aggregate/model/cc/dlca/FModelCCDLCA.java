@@ -11,6 +11,8 @@ public interface FModelCCDLCA extends FModelCC {
     boolean getInternalSpawn();
     void setInternalSpawn(boolean internal);
 
+    // -------------------------------------------------------------------------------------------------
+
     double getStepFactor();
     void setStepFactor(double factor);
 

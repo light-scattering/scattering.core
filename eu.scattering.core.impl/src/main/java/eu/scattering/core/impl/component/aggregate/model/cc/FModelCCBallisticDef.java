@@ -39,6 +39,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
     private final List<FAggregate> fragments;
 
+    private boolean symmetry;
+
     private FModelCCBallisticDef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
@@ -69,6 +71,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         this.aggregate = aggregate;
 
         this.fragments = new ArrayList<>();
+
+        this.symmetry = true;
     }
 
     public static FModelCCBallistic create(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
@@ -92,7 +96,7 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             init();
 
             while (this.fragments.size() > 1) {
-                buildStep();
+                buildStepVariantSymmetry();
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
@@ -125,30 +129,63 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
         shuffleFragments();
     }
 
-    private void buildStep() {
+    private void buildStepVariantSymmetry() {
+
+        if (this.symmetry) {
+            buildStepSymmetric();
+        } else {
+            buildStepRandom();
+        }
+    }
+
+    private void buildStepSymmetric() {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
             FAggregate aggB = this.fragments.get(i + 1);
 
-            step:
-            while (true) {
-                projectVariantDimension(aggA, aggB);
-
-                for (var acceptor : this.acceptors) {
-                    if (!acceptor.apply(aggA, aggB)) {
-
-                        continue step;
-                    }
-                }
-
-                this.monitors.forEach(e -> e.accept(aggA, aggB));
-
-                aggA.merge(aggB, true);
-
-                break;
-            }
+            buildStepCore(aggA, aggB);
         }
+
+        buildStepCleanup();
+    }
+
+    private void buildStepRandom() {
+        FAggregate aggA;
+        FAggregate aggB;
+
+        do {
+            aggA = this.random.getFRand().getElement(this.fragments, false);
+            aggB = this.random.getFRand().getElement(this.fragments, false);
+        } while (aggA == aggB);
+
+        buildStepCore(aggA, aggB);
+
+        buildStepCleanup();
+    }
+
+    private void buildStepCore(FAggregate aggA, FAggregate aggB) {
+
+        step:
+        while (true) {
+            projectVariantDimension(aggA, aggB);
+
+            for (var acceptor : this.acceptors) {
+                if (!acceptor.apply(aggA, aggB)) {
+
+                    continue step;
+                }
+            }
+
+            this.monitors.forEach(e -> e.accept(aggA, aggB));
+
+            aggA.merge(aggB, true);
+
+            break;
+        }
+    }
+
+    private void buildStepCleanup() {
 
         removeFragments();
         shuffleFragments();
@@ -271,6 +308,18 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public boolean getSymmetry() {
+
+        return this.symmetry;
+    }
+
+    @Override
+    public void setSymmetry(boolean symmetry) {
+
+        this.symmetry = symmetry;
+    }
 
     @Override
     public void addStepMonitor(BiConsumer<FAggregate, FAggregate> monitor) {

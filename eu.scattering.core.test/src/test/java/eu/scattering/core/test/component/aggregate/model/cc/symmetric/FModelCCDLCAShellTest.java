@@ -1,10 +1,14 @@
-package eu.scattering.core.test.component.aggregate.model.cc;
+package eu.scattering.core.test.component.aggregate.model.cc.symmetric;
 
 import eu.scattering.core.design.ScatFactory;
+import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
+import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
+import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.lambda.TriConsumer;
 import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.impl.FactoryDef;
 import org.junit.jupiter.api.*;
@@ -17,8 +21,8 @@ import java.util.function.BiConsumer;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("FModel CC RLCA")
-public class FModelCCRLCATest {
+@DisplayName("FModel CC DLCA")
+public class FModelCCDLCAShellTest {
 
     @Disabled
     @Nested
@@ -32,7 +36,7 @@ public class FModelCCRLCATest {
             int size = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             fModel.build();
 
@@ -49,7 +53,7 @@ public class FModelCCRLCATest {
             int size = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -73,7 +77,7 @@ public class FModelCCRLCATest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             fModel.build();
 
@@ -85,10 +89,10 @@ public class FModelCCRLCATest {
         @RepeatedTest(10)
         @DisplayName("Results")
         void results3DB() {
-            int size = 10000;
+            int size = 6000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             fModel.build();
 
@@ -103,7 +107,7 @@ public class FModelCCRLCATest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -115,10 +119,10 @@ public class FModelCCRLCATest {
         @RepeatedTest(10)
         @DisplayName("Results")
         void results2DB() {
-            int size = 10000;
+            int size = 6000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -139,7 +143,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             fModel.build();
 
@@ -156,12 +160,12 @@ public class FModelCCRLCATest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().cc().rlca(fAggregateA);
+            FModel fModelA = factoryA.getFModelContext().cc().dlca(fAggregateA);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().cc().rlca(fAggregateB);
+            FModel fModelB = factoryB.getFModelContext().cc().dlca(fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -176,7 +180,7 @@ public class FModelCCRLCATest {
             int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
@@ -203,7 +207,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -234,7 +238,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -250,7 +254,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -259,6 +263,29 @@ public class FModelCCRLCATest {
 
             assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
+        }
+
+        @Test
+        @DisplayName("Configuration")
+        void configuration() {
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
+            FModelCCDLCA model = factory.getFModelContext().cc().dlca(fAggregate);
+
+            TriConsumer<FAggregate, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
+
+            model.setSymmetry(true);
+            model.setInternalSpawn(false);
+            model.setStepFactor(1.1);
+            model.setExileFactor(3.3);
+            model.setSpawnFactor(2.2);
+            model.setMovement(movement);
+
+            assertTrue(model.getSymmetry());
+            assertFalse(model.getInternalSpawn());
+            assertEquals(1.1, model.getStepFactor());
+            assertEquals(3.3, model.getExileFactor());
+            assertEquals(2.2, model.getSpawnFactor());
+            assertSame(movement, model.getMovement());
         }
     }
 
@@ -273,7 +300,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             fModel.build();
 
@@ -294,12 +321,12 @@ public class FModelCCRLCATest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().cc().rlca(Dimension.D2, fAggregateA);
+            FModel fModelA = factoryA.getFModelContext().cc().dlca(Dimension.D2, fAggregateA);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().cc().rlca(Dimension.D2, fAggregateB);
+            FModel fModelB = factoryB.getFModelContext().cc().dlca(Dimension.D2, fAggregateB);
 
             fModelA.build();
             fModelB.build();
@@ -314,7 +341,7 @@ public class FModelCCRLCATest {
             int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
@@ -341,7 +368,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -372,7 +399,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -388,7 +415,7 @@ public class FModelCCRLCATest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().rlca(Dimension.D2, fAggregate);
+            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -397,6 +424,29 @@ public class FModelCCRLCATest {
 
             assertEquals(3, iteration.get());
             assertEquals(size, fAggregate.size());
+        }
+
+        @Test
+        @DisplayName("Configuration")
+        void configuration2D() {
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
+            FModelCCDLCA model = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+
+            TriConsumer<FAggregate, FRandAspect, FPoint> movement = (aggregate, random, point) -> point.add(1, 2, 3);
+
+            model.setSymmetry(true);
+            model.setInternalSpawn(false);
+            model.setStepFactor(1.1);
+            model.setExileFactor(3.3);
+            model.setSpawnFactor(2.2);
+            model.setMovement(movement);
+
+            assertTrue(model.getSymmetry());
+            assertFalse(model.getInternalSpawn());
+            assertEquals(1.1, model.getStepFactor());
+            assertEquals(3.3, model.getExileFactor());
+            assertEquals(2.2, model.getSpawnFactor());
+            assertSame(movement, model.getMovement());
         }
     }
 }

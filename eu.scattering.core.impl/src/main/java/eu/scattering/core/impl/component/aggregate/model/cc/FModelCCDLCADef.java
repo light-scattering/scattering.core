@@ -54,6 +54,8 @@ public class FModelCCDLCADef implements FModelCCDLCA {
 
     private double rp;
 
+    private boolean symmetry;
+
     private FModelCCDLCADef(Dimension dimension, FAggregate aggregate, ScatFactory factory) {
 
         if (aggregate == null) {
@@ -89,6 +91,8 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         this.fSpawn = 4;
         this.fStep = 1;
 
+        this.symmetry = true;
+
         setMovementVariantDimension();
     }
 
@@ -113,7 +117,7 @@ public class FModelCCDLCADef implements FModelCCDLCA {
             init();
 
             while (this.fragments.size() > 1) {
-                buildStep();
+                buildStepVariantSymmetry();
             }
 
             this.monitors.forEach(e -> e.accept(this.aggregate, null));
@@ -147,7 +151,16 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         shuffleFragments();
     }
 
-    private void buildStep() {
+    private void buildStepVariantSymmetry() {
+
+        if (this.symmetry) {
+            buildStepSymmetric();
+        } else {
+            buildStepRandom();
+        }
+    }
+
+    private void buildStepSymmetric() {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
@@ -192,6 +205,67 @@ public class FModelCCDLCADef implements FModelCCDLCA {
                 }
             }
         }
+
+        buildStepCleanup();
+    }
+
+    private void buildStepRandom() {
+        FAggregate aggA;
+        FAggregate aggB;
+
+        do {
+            aggA = this.random.getFRand().getElement(this.fragments, false);
+            aggB = this.random.getFRand().getElement(this.fragments, false);
+        } while (aggA == aggB);
+
+        buildStepCore(aggA, aggB);
+
+        buildStepCleanup();
+    }
+
+    private void buildStepCore(FAggregate aggA, FAggregate aggB) {
+
+        adjustParameters(aggA, aggB);
+
+        main:
+        while(true) {
+
+            positionVariantDimension(aggA, aggB);
+
+            while (true) {
+                this.path.getRefOrigin().set(0, 0, 0, 0, 0, 0);
+
+                this.movement.accept(aggB, this.random, this.path.getRefOrigin().getRefHead());
+
+                buildStepValidationVersionDimension();
+
+                boolean isPositioned = move(aggA, aggB);
+
+                if (this.cAggA.getDistance(this.cAggB) > this.rExile) {
+                    continue main;
+                }
+
+                if (!isPositioned) {
+                    continue;
+                }
+
+                for (var acceptor : this.acceptors) {
+                    if (!acceptor.apply(aggA, aggB)) {
+
+                        continue main;
+                    }
+                }
+
+                this.monitors.forEach(e -> e.accept(aggA, aggB));
+
+                aggA.merge(aggB, true);
+
+                break main;
+            }
+        }
+    }
+
+    private void buildStepCleanup() {
 
         removeFragments();
         shuffleFragments();
@@ -390,6 +464,18 @@ public class FModelCCDLCADef implements FModelCCDLCA {
     }
 
     //--------------------------------------------------
+
+    @Override
+    public boolean getSymmetry() {
+
+        return this.symmetry;
+    }
+
+    @Override
+    public void setSymmetry(boolean symmetry) {
+
+        this.symmetry = symmetry;
+    }
 
     @Override
     public boolean getInternalSpawn() {

@@ -11,6 +11,8 @@ public interface FModelPCDLA extends FModelPC {
     boolean getInternalSpawn();
     void setInternalSpawn(boolean internal);
 
+    // -------------------------------------------------------------------------------------------------
+
     double getStepFactor();
     void setStepFactor(double factor);
 

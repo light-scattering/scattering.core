@@ -295,11 +295,10 @@ public class FModelPCDLACoreTest {
         }
 
         @Test
-        @DisplayName("Configuration - Aggregate 3D")
-        void configuration3D() {
+        @DisplayName("Configuration")
+        void configuration() {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
             FModelPCDLA model = factory.getFModelContext().pc().dla(fAggregate);
-            model.setInternalSpawn(true);
 
             TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
@@ -475,11 +474,10 @@ public class FModelPCDLACoreTest {
         }
 
         @Test
-        @DisplayName("Configuration - Aggregate 2D")
-        void configuration2D() {
+        @DisplayName("Configuration")
+        void configuration() {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
             FModelPCDLA model = factory.getFModelContext().pc().dla(Dimension.D2, fAggregate);
-            model.setInternalSpawn(true);
 
             TriConsumer<Shape, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 

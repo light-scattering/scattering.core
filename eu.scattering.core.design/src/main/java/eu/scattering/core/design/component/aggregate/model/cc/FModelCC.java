@@ -9,6 +9,11 @@ import java.util.function.BiFunction;
 
 public interface FModelCC extends FModel {
 
+    boolean getSymmetry();
+    void setSymmetry(boolean asymmetry);
+
+    // -------------------------------------------------------------------------------------------------
+
     void addStepMonitor(BiConsumer<FAggregate, FAggregate> monitor);
     void addStepAcceptor(BiFunction<FAggregate, FAggregate, Boolean> acceptor);
 

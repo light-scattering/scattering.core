@@ -1,10 +1,8 @@
-package eu.scattering.core.test.component.aggregate.model.cc;
+package eu.scattering.core.test.component.aggregate.model.cc.symmetric;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.randomize.FRandAspect;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.aggregate.model.FModel;
-import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -22,7 +20,7 @@ import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("FModel CC DLCA")
-public class FModelCCDLCAShellTest {
+public class FModelCCDLCACoreTest {
 
     @Disabled
     @Nested
@@ -36,7 +34,8 @@ public class FModelCCDLCAShellTest {
             int size = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -53,7 +52,8 @@ public class FModelCCDLCAShellTest {
             int size = 3000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(size, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -77,7 +77,8 @@ public class FModelCCDLCAShellTest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -89,10 +90,11 @@ public class FModelCCDLCAShellTest {
         @RepeatedTest(10)
         @DisplayName("Results")
         void results3DB() {
-            int size = 10000;
+            int size = 6000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -107,7 +109,8 @@ public class FModelCCDLCAShellTest {
             int size = 1000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -119,10 +122,11 @@ public class FModelCCDLCAShellTest {
         @RepeatedTest(10)
         @DisplayName("Results")
         void results2DB() {
-            int size = 10000;
+            int size = 6000;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -143,7 +147,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -160,12 +165,14 @@ public class FModelCCDLCAShellTest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().cc().dlca(fAggregateA);
+            FModelCCDLCA fModelA = factoryA.getFModelContext().cc().dlca(fAggregateA);
+            fModelA.setInternalSpawn(true);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().cc().dlca(fAggregateB);
+            FModelCCDLCA fModelB = factoryB.getFModelContext().cc().dlca(fAggregateB);
+            fModelB.setInternalSpawn(true);
 
             fModelA.build();
             fModelB.build();
@@ -180,7 +187,8 @@ public class FModelCCDLCAShellTest {
             int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
@@ -207,7 +215,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -238,7 +247,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -254,7 +264,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
+            fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -266,19 +277,21 @@ public class FModelCCDLCAShellTest {
         }
 
         @Test
-        @DisplayName("Configuration - Aggregate 3D")
-        void configuration3D() {
+        @DisplayName("Configuration")
+        void configuration() {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
             FModelCCDLCA model = factory.getFModelContext().cc().dlca(fAggregate);
 
             TriConsumer<FAggregate, FRandAspect, FPoint> movement = (assembly, random, point) -> point.add(1, 2, 3);
 
+            model.setSymmetry(true);
             model.setInternalSpawn(true);
             model.setStepFactor(1.1);
             model.setExileFactor(3.3);
             model.setSpawnFactor(2.2);
             model.setMovement(movement);
 
+            assertTrue(model.getSymmetry());
             assertTrue(model.getInternalSpawn());
             assertEquals(1.1, model.getStepFactor());
             assertEquals(3.3, model.getExileFactor());
@@ -298,7 +311,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             fModel.build();
 
@@ -319,12 +333,14 @@ public class FModelCCDLCAShellTest {
             ScatFactory factoryA = FactoryDef.create(123);
 
             FAggregate fAggregateA = factoryA.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelA = factoryA.getFModelContext().cc().dlca(Dimension.D2, fAggregateA);
+            FModelCCDLCA fModelA = factoryA.getFModelContext().cc().dlca(Dimension.D2, fAggregateA);
+            fModelA.setInternalSpawn(true);
 
             ScatFactory factoryB = FactoryDef.create(123);
 
             FAggregate fAggregateB = factoryB.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModel fModelB = factoryB.getFModelContext().cc().dlca(Dimension.D2, fAggregateB);
+            FModelCCDLCA fModelB = factoryB.getFModelContext().cc().dlca(Dimension.D2, fAggregateB);
+            fModelB.setInternalSpawn(true);
 
             fModelA.build();
             fModelB.build();
@@ -339,7 +355,8 @@ public class FModelCCDLCAShellTest {
             int sizeFragment = 3;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             AtomicInteger fragments = new AtomicInteger(0);
             AtomicInteger steps = new AtomicInteger(0);
@@ -366,7 +383,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             Set<Shape> particles = new HashSet<>(fAggregate.size());
 
@@ -397,7 +415,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -413,7 +432,8 @@ public class FModelCCDLCAShellTest {
             int size = 28;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(size, 10, 1);
-            FModelCC fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
+            fModel.setInternalSpawn(true);
 
             AtomicInteger iteration = new AtomicInteger(0);
 
@@ -425,19 +445,21 @@ public class FModelCCDLCAShellTest {
         }
 
         @Test
-        @DisplayName("Configuration - Aggregate 2D")
-        void configuration2D() {
+        @DisplayName("Configuration")
+        void configuration() {
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(10, 1);
             FModelCCDLCA model = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
 
             TriConsumer<FAggregate, FRandAspect, FPoint> movement = (aggregate, random, point) -> point.add(1, 2, 3);
 
+            model.setSymmetry(true);
             model.setInternalSpawn(true);
             model.setStepFactor(1.1);
             model.setExileFactor(3.3);
             model.setSpawnFactor(2.2);
             model.setMovement(movement);
 
+            assertTrue(model.getSymmetry());
             assertTrue(model.getInternalSpawn());
             assertEquals(1.1, model.getStepFactor());
             assertEquals(3.3, model.getExileFactor());

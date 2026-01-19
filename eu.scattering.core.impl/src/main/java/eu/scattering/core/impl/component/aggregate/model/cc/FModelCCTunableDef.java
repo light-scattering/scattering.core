@@ -44,6 +44,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
     private double rp;
 
+    private boolean symmetry;
+
     private FModelCCTunableDef(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
 
         if (aggregate == null) {
@@ -81,6 +83,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
 
         this.df = df;
         this.kf = kf;
+
+        this.symmetry = true;
     }
 
     public static FModelCCTunable create(Dimension dimension, FAggregate aggregate, ScatFactory factory, double df, double kf) {
@@ -112,7 +116,7 @@ public class FModelCCTunableDef implements FModelCCTunable {
             init();
 
             while (this.fragments.size() > 1) {
-                if (!buildStep()) {
+                if (!buildStepVariantSymmetry()) {
                     continue generation;
                 }
             }
@@ -148,63 +152,25 @@ public class FModelCCTunableDef implements FModelCCTunable {
         shuffleFragments();
     }
 
-    private boolean buildStep() {
+    private boolean buildStepVariantSymmetry() {
+
+        if (this.symmetry) {
+            return buildStepSymmetric();
+        } else {
+            return buildStepRandom();
+        }
+    }
+
+    private boolean buildStepSymmetric() {
 
         for (int i = 0 ; i < this.fragments.size() - 1 ; i += 2) {
             FAggregate aggA = this.fragments.get(i);
             FAggregate aggB = this.fragments.get(i + 1);
 
-            double distance = getMassCenterDistance(aggA, aggB);
+            boolean proceed = buildStepCore(aggA, aggB);
 
-            int iterations = 0;
-
-            step:
-            while (true) {
-
-                if (!validateBuildStep(aggA, aggB, distance)) {
-                    if (this.correction) {
-                        distance *= 0.99;
-
-                        continue;
-                    }
-
-                    return false;
-                }
-
-                setCenter(aggA, aggB);
-                moveCenter(aggB, distance);
-
-                boolean isPositioned = rotateVariantDimension(aggA, aggB);
-
-                if (!isPositioned) {
-
-                    iterations++;
-
-                    if (iterations++ < MAX_IT_SELECT) {
-                        continue;
-                    }
-
-                    return false;
-                }
-
-                for (var acceptor : this.acceptors) {
-                    if (!acceptor.apply(aggA, aggB)) {
-
-                        iterations++;
-
-                        if (iterations++ < MAX_IT_SELECT) {
-                            continue step;
-                        }
-
-                        return false;
-                    }
-                }
-
-                this.monitors.forEach(e -> e.accept(aggA, aggB));
-
-                aggA.merge(aggB, true);
-
-                break;
+            if (!proceed) {
+                return false;
             }
         }
 
@@ -212,6 +178,89 @@ public class FModelCCTunableDef implements FModelCCTunable {
         shuffleFragments();
 
         return true;
+    }
+
+    private boolean buildStepRandom() {
+        FAggregate aggA;
+        FAggregate aggB;
+
+        do {
+            aggA = this.random.getFRand().getElement(this.fragments, false);
+            aggB = this.random.getFRand().getElement(this.fragments, false);
+        } while (aggA == aggB);
+
+        boolean proceed = buildStepCore(aggA, aggB);
+
+        if (!proceed) {
+            return false;
+        }
+
+        buildStepCleanup();
+
+        return true;
+    }
+
+    private boolean buildStepCore(FAggregate aggA, FAggregate aggB) {
+        double distance = getMassCenterDistance(aggA, aggB);
+
+        int iterations = 0;
+
+        step:
+        while (true) {
+
+            if (!validateBuildStep(aggA, aggB, distance)) {
+                if (this.correction) {
+                    distance *= 0.99;
+
+                    continue;
+                }
+
+                return false;
+            }
+
+            setCenter(aggA, aggB);
+            moveCenter(aggB, distance);
+
+            boolean isPositioned = rotateVariantDimension(aggA, aggB);
+
+            if (!isPositioned) {
+
+                iterations++;
+
+                if (iterations++ < MAX_IT_SELECT) {
+                    continue;
+                }
+
+                return false;
+            }
+
+            for (var acceptor : this.acceptors) {
+                if (!acceptor.apply(aggA, aggB)) {
+
+                    iterations++;
+
+                    if (iterations++ < MAX_IT_SELECT) {
+                        continue step;
+                    }
+
+                    return false;
+                }
+            }
+
+            this.monitors.forEach(e -> e.accept(aggA, aggB));
+
+            aggA.merge(aggB, true);
+
+            break;
+        }
+
+        return true;
+    }
+
+    private void buildStepCleanup() {
+
+        removeFragments();
+        shuffleFragments();
     }
 
     private boolean rotateVariantDimension(FAggregate aggA, FAggregate aggB) {
@@ -318,6 +367,18 @@ public class FModelCCTunableDef implements FModelCCTunable {
     //--------------------------------------------------
 
     @Override
+    public boolean getSymmetry() {
+
+        return this.symmetry;
+    }
+
+    @Override
+    public void setSymmetry(boolean symmetry) {
+
+        this.symmetry = symmetry;
+    }
+
+    @Override
     public void addStepMonitor(BiConsumer<FAggregate, FAggregate> monitor) {
 
         this.monitors.add(monitor);
@@ -336,9 +397,21 @@ public class FModelCCTunableDef implements FModelCCTunable {
     }
 
     @Override
+    public boolean getCorrection() {
+
+        return this.correction;
+    }
+
+    @Override
     public void setCorrection(boolean correction) {
 
         this.correction = correction;
+    }
+
+    @Override
+    public boolean getEarlyStageCorrection() {
+
+        return this.correctionEarly;
     }
 
     @Override
