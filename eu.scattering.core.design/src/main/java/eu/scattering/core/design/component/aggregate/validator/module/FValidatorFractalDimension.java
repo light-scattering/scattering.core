@@ -1,10 +1,10 @@
-package eu.scattering.core.design.component.aggregate.validator.common.module;
+package eu.scattering.core.design.component.aggregate.validator.module;
 
 import eu.scattering.core.design.annotation.Modificator;
 import eu.scattering.core.design.component.aggregate.validator.FValidator;
 import eu.scattering.core.design.statistics.base.FStat;
 
-public interface FValidatorCommonFractalDimension extends FValidator {
+public interface FValidatorFractalDimension extends FValidator {
 
     @Modificator
     FStat getRefFStat();

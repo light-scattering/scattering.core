@@ -43,7 +43,7 @@ public class StatisticsAspectExportTest {
         fPlotInterpolated.setName("Interpolated");
         fPlotSimpleLinearRegression.setName("Linear regression");
 
-        String script = fPlotExporter.toPythonPlotlyLinear(fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
+        String script = fPlotExporter.toPythonPlotly(fPlot, fPlotInterpolated, fPlotSimpleLinearRegression);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))
@@ -144,7 +144,7 @@ public class StatisticsAspectExportTest {
         fPlotBar.addRef(6, factory.getFStat(0, 1, 2));
         fPlotBar.addRef(8, factory.getFStat(-6, -5, -4));
 
-        String script = fPlotExporter.toPythonPlotlyComplex(fPlotBar);
+        String script = fPlotExporter.toPythonPlotly(fPlotBar);
 
         Assertions.assertAll("Test values",
                 () -> assertTrue(script.contains("plotly.graph_objects"))

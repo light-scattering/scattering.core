@@ -3,6 +3,7 @@ package eu.scattering.core.test.component.aggregate.monitor;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
+import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadius;
 import eu.scattering.core.design.component.aggregate.monitor.pc.module.FMonitorPCRadiusOfGyration;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -48,6 +49,34 @@ public class FMonitorPCTest {
 
             fModel.setEarlyStageCorrection(true);
             fModel.build();
+
+            for (int i = 0 ; i < radius.size() - 1 ; i++) {
+                assertTrue(radius.get(i) <= radius.get(i + 1));
+            }
+        }
+    }
+
+    @Nested
+    @Tag("Radius")
+    @DisplayName("FMonitor radius")
+    class FMonitorRadiusTest {
+
+        @Test
+        @DisplayName("Origin")
+        void radiusOrigin() {
+            int quantity = 100;
+            int skip = 3;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
+
+            FModelPC fModel = factory.getFModelContext().pc().ballistic(fAggregate);
+            FMonitorPCRadius fMonitor = factory.getFMonitorContext().pc().radius(skip, Center.ORIGIN);
+
+            fModel.addStepMonitor(fMonitor);
+
+            fModel.build();
+
+            FStat radius = fMonitor.getRefFPlot().getRefCoreY();
 
             for (int i = 0 ; i < radius.size() - 1 ; i++) {
                 assertTrue(radius.get(i) <= radius.get(i + 1));

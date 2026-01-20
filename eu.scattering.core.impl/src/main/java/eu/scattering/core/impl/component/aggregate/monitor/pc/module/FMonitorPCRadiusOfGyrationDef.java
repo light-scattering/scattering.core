@@ -39,6 +39,8 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
     @Override
     public FPlot getRefFPlot() {
 
+        this.fPlot.sortX(true);
+
         return this.fPlot;
     }
 
@@ -56,6 +58,9 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
 
     @Override
     public double getPowerLawDimension() {
+
+        this.fPlot.sortX(true);
+
         FPlot regression = this.fPlot.copy();
 
         regression.swapXY();

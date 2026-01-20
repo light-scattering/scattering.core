@@ -251,7 +251,7 @@ public class FAggregateModuleTopologyDef {
 
         String plot = factory.getExportAspect().getStatisticsContext()
                 .setAnnotation("Test data")
-                .toPythonPlotlyLinear(data, fit);
+                .toPythonPlotly(data, fit);
 
         return regression.at(1);
     }
@@ -270,7 +270,7 @@ public class FAggregateModuleTopologyDef {
 
         String plot = factory.getExportAspect().getStatisticsContext()
                 .setAnnotation("Test data")
-                .toPythonPlotlyLinear(data, fit);
+                .toPythonPlotly(data, fit);
 
         return 3 + regression.at(1);
     }

@@ -2,5 +2,5 @@ package eu.scattering.core.design.statistics.construct.plotbar;
 
 public interface FPlotBarAspectExport {
 
-    String toPythonPlotlyComplex(FPlotBar fPlotBar);
+    String toPythonPlotly(FPlotBar fPlotBar);
 }

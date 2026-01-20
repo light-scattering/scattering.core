@@ -2,8 +2,11 @@ package eu.scattering.core.impl.component.aggregate.validator;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.validator.FValidatorFactoryContext;
-import eu.scattering.core.design.component.aggregate.validator.common.FValidatorCommonFactoryContext;
-import eu.scattering.core.impl.component.aggregate.validator.common.FValidatorCommonFactoryContextDef;
+import eu.scattering.core.design.component.aggregate.validator.module.FValidatorFractalDimension;
+import eu.scattering.core.design.component.aggregate.validator.module.FValidatorNoOverlap;
+import eu.scattering.core.design.type.FractalDimension;
+import eu.scattering.core.impl.component.aggregate.validator.module.FValidatorFractalDimensionDef;
+import eu.scattering.core.impl.component.aggregate.validator.module.FValidatorNoOverlapDef;
 
 public class FValidatorFactoryContextDef implements FValidatorFactoryContext {
     private final ScatFactory factory;
@@ -21,8 +24,14 @@ public class FValidatorFactoryContextDef implements FValidatorFactoryContext {
     //--------------------------------------------------
 
     @Override
-    public FValidatorCommonFactoryContext pc() {
+    public FValidatorFractalDimension fractalDimension(FractalDimension type, double expected, double error) {
 
-        return FValidatorCommonFactoryContextDef.create(this.factory);
+        return FValidatorFractalDimensionDef.create(this.factory, type, expected, error);
+    }
+
+    @Override
+    public FValidatorNoOverlap noOverlap() {
+
+        return FValidatorNoOverlapDef.create();
     }
 }

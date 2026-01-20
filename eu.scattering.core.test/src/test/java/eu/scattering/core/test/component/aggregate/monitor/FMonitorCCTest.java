@@ -3,11 +3,13 @@ package eu.scattering.core.test.component.aggregate.monitor;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
+import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadius;
 import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadiusOfGyration;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
 import eu.scattering.core.design.transfer.primitive.FPoly;
+import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.RadiusOfGyration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,6 +24,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("FMonitor CC")
 public class FMonitorCCTest {
+
+    @Nested
+    @Tag("Radius")
+    @DisplayName("FMonitor radius")
+    class FMonitorRadiusTest {
+
+        @Test
+        @DisplayName("Spherical")
+        void radiusSpherical() {
+            int quantity = 100;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
+
+            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FMonitorCCRadius fMonitor = factory.getFMonitorContext().cc().radius(Center.SPHERICAL);
+
+            fModel.addStepMonitor(fMonitor);
+
+            fModel.build();
+
+            FPlotBar radius = fMonitor.getRefFPlotBar();
+
+            double radiusFinal = radius.getRefCoreY().get(radius.size() - 1).mean();
+
+            double radiusFinalManual = fAggregate.getRadius(fAggregate.getCenter(Center.SPHERICAL));
+
+            assertEquals(radiusFinalManual, radiusFinal, radiusFinalManual * 0.01);
+        }
+    }
 
     @Nested
     @Tag("Radius of gyration")

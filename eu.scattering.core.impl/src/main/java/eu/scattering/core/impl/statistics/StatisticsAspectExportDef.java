@@ -86,7 +86,7 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public String toPythonPlotlyLinear(FPlot... plot) {
+    public String toPythonPlotly(FPlot... plot) {
         StringBuilder builder = new StringBuilder();
         String nameAnnotation = getAnnotation().isEmpty() ? "" : getAnnotation();
         String namePlot = getName().isEmpty() ? "" : getName();
@@ -210,7 +210,7 @@ public class StatisticsAspectExportDef implements StatisticsAspectExport {
     // -------------------------------------------------------------------------------------------------
 
     @Override
-    public String toPythonPlotlyComplex(FPlotBar fPlotBar) {
+    public String toPythonPlotly(FPlotBar fPlotBar) {
         StringBuilder builder = new StringBuilder();
         String nameAnnotation = getAnnotation().isEmpty() ? "" : getAnnotation();
         String namePlot = getName().isEmpty() ? "" : getName();
