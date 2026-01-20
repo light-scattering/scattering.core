@@ -14,7 +14,7 @@ public class FMonitorPCFactoryContextDef implements FMonitorPCFactoryContext {
         this.factory = factory;
     }
 
-    public static FMonitorPCFactoryContextDef create(ScatFactory factory) {
+    public static FMonitorPCFactoryContext create(ScatFactory factory) {
 
         return new FMonitorPCFactoryContextDef(factory);
     }

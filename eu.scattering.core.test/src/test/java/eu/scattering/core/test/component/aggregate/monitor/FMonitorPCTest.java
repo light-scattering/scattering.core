@@ -9,10 +9,7 @@ import eu.scattering.core.design.statistics.construct.plot.FPlot;
 import eu.scattering.core.design.transfer.primitive.FPoly;
 import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.RadiusOfGyration;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
@@ -36,19 +33,19 @@ public class FMonitorPCTest {
             double kf = 1.6;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
-
             FModelPCTunable fModel = factory.getFModelContext().pc().tunable(fAggregate, df, kf);
 
             FStat radius = factory.getFStat();
 
             fModel.addStepMonitor((aggregate, particle) -> {
 
-                if (aggregate.size() < 3) {
+                if (aggregate == null || aggregate.size() < 3) {
                     return;
                 }
 
                 radius.add(aggregate.getRadius(Center.ORIGIN));
             });
+
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
@@ -59,9 +56,9 @@ public class FMonitorPCTest {
     }
 
     @Nested
-    @Tag("Construct")
-    @DisplayName("FMonitor construct")
-    class FMonitorConstructTest {
+    @Tag("Radius of gyration")
+    @DisplayName("FMonitor radius of gyration")
+    class FMonitorRadiusOfGyrationTest {
 
         @Test
         @DisplayName("Radius of gyration - Df = 1.4")
@@ -81,19 +78,18 @@ public class FMonitorPCTest {
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot resultsMono = fMonitorA.getRefFPlot();
+            FPlot fPlot = fMonitorA.getRefFPlot();
 
-            resultsMono.swapXY();
-            resultsMono.mutateX(FStat::ln);
-            resultsMono.mutateY(FStat::ln);
+            fPlot.swapXY();
+            fPlot.mutateX(FStat::ln);
+            fPlot.mutateY(FStat::ln);
 
-            FPlot regression = resultsMono.copy();
-            FPoly slope = regression.reg().poly(1);
+            FPoly slope = fPlot.copy().reg().poly(1);
 
             assertEquals(df, slope.at(1), 0.05);
             assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
 
-            assertEquals(quantity, resultsMono.size() + skip);
+            assertEquals(quantity, fPlot.size() + skip);
         }
 
         @Test
@@ -114,19 +110,18 @@ public class FMonitorPCTest {
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot resultsMono = fMonitorA.getRefFPlot();
+            FPlot fPlot = fMonitorA.getRefFPlot();
 
-            resultsMono.swapXY();
-            resultsMono.mutateX(FStat::ln);
-            resultsMono.mutateY(FStat::ln);
+            fPlot.swapXY();
+            fPlot.mutateX(FStat::ln);
+            fPlot.mutateY(FStat::ln);
 
-            FPlot regression = resultsMono.copy();
-            FPoly slope = regression.reg().poly(1);
+            FPoly slope = fPlot.reg().poly(1);
 
             assertEquals(df, slope.at(1), 0.05);
             assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
 
-            assertEquals(quantity, resultsMono.size() + skip);
+            assertEquals(quantity, fPlot.size() + skip);
         }
 
         @Test
@@ -147,19 +142,19 @@ public class FMonitorPCTest {
             fModel.setEarlyStageCorrection(true);
             fModel.build();
 
-            FPlot resultsMono = fMonitorA.getRefFPlot();
+            FPlot fPlot = fMonitorA.getRefFPlot();
 
-            resultsMono.swapXY();
-            resultsMono.mutateX(FStat::ln);
-            resultsMono.mutateY(FStat::ln);
+            fPlot.swapXY();
+            fPlot.mutateX(FStat::ln);
+            fPlot.mutateY(FStat::ln);
 
-            FPlot regression = resultsMono.copy();
+            FPlot regression = fPlot.copy();
             FPoly slope = regression.reg().poly(1);
 
             assertEquals(df, slope.at(1), 0.05);
             assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
 
-            assertEquals(quantity, resultsMono.size() + skip);
+            assertEquals(quantity, fPlot.size() + skip);
         }
 
         @Test
@@ -182,6 +177,7 @@ public class FMonitorPCTest {
             fModel.addStepMonitor(fMonitorMono);
             fModel.addStepMonitor(fMonitorPoly);
             fModel.addStepMonitor(fMonitorFilippov);
+
             fModel.build();
 
             FPlot results = fMonitor.getRefFPlot();
@@ -197,8 +193,8 @@ public class FMonitorPCTest {
         @DisplayName("Radius of gyration - Ballistic (skip)")
         void rogMonodisperseBallisticSkip() {
             int quantity = 100;
-            int skip = 5;
             double delta = 0.25;
+            int skip = 5;
 
             FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1).addFBuffer(1_000_000);
 
@@ -214,6 +210,7 @@ public class FMonitorPCTest {
             fModel.addStepMonitor(fMonitorMono);
             fModel.addStepMonitor(fMonitorPoly);
             fModel.addStepMonitor(fMonitorFilippov);
+
             fModel.build();
 
             FPlot results = fMonitor.getRefFPlot();

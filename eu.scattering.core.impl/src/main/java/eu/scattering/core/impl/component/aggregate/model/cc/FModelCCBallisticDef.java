@@ -8,6 +8,8 @@ import eu.scattering.core.design.component.aggregate.model.cc.ballistic.FModelCC
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.Dimension;
 
@@ -292,6 +294,14 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
 
         for (FAggregate fragment : this.fragments) {
             factory.getFModelContext().pc().ballistic(this.dimension, fragment).build();
+        }
+
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+
+        if (buffer != null) {
+            for (FAggregate fragment : this.fragments) {
+                fragment.setRefFBuffer(buffer);
+            }
         }
     }
 

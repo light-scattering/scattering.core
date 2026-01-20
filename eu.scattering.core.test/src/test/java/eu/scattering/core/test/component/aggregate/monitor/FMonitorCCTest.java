@@ -2,130 +2,160 @@ package eu.scattering.core.test.component.aggregate.monitor;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.cc.FModelCC;
-import eu.scattering.core.design.component.aggregate.model.cc.dlca.FModelCCDLCA;
 import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTunable;
-import eu.scattering.core.design.component.aggregate.model.pc.FModelPC;
-import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
-import eu.scattering.core.design.type.Dimension;
-import org.junit.jupiter.api.*;
+import eu.scattering.core.design.component.aggregate.monitor.cc.module.FMonitorCCRadiusOfGyration;
+import eu.scattering.core.design.statistics.base.FStat;
+import eu.scattering.core.design.statistics.construct.plot.FPlot;
+import eu.scattering.core.design.statistics.construct.plotbar.FPlotBar;
+import eu.scattering.core.design.transfer.primitive.FPoly;
+import eu.scattering.core.design.type.RadiusOfGyration;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("FMonitor PC")
+@DisplayName("FMonitor CC")
 public class FMonitorCCTest {
 
     @Nested
-    @Tag("Construct")
-    @DisplayName("FMonitor construct")
-    class FMonitorConstructTest {
+    @Tag("Radius of gyration")
+    @DisplayName("FMonitor radius of gyration")
+    class FMonitorRadiusOfGyrationTest {
 
-        @Disabled
         @Test
-        @DisplayName("Radius of gyration - Ballistic 3D")
-        void rogMonodisperseBallistic3D() {
-            int quantity = 3000;
+        @DisplayName("Radius of gyration - Df = 1.4")
+        void rogMonodisperseDf14() {
+            int quantity = 100;
+            double df = 1.4;
+            double kf = 1.8;
 
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
 
-            FModelPCDLA fModel = factory.getFModelContext().pc().dla(Dimension.D3, fAggregate);
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
 
-            fModel.setInternalSpawn(true);
+            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
 
-            fModel.build();
-
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
-
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
-        }
-
-        @Disabled
-        @Test
-        @DisplayName("Radius of gyration - Ballistic 2D")
-        void rogMonodisperseBallistic2D() {
-            int quantity = 1000;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity, 10, 1);
-
-            FModelCC fModel = factory.getFModelContext().cc().ballistic(Dimension.D2, fAggregate);
-
-            fModel.build();
-
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
-
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
-        }
-
-        @Disabled
-        @Test
-        @DisplayName("Radius of gyration - RLCA 3D")
-        void rogMonodisperseRLCA3D() {
-            int quantity = 1000;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 1);
-
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(fAggregate);
-            fModel.setInternalSpawn(true);
-
-            fModel.build();
-
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
-
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
-        }
-
-        @Disabled
-        @Test
-        @DisplayName("Radius of gyration - RLCA 2D")
-        void rogMonodisperseRLCA2D() {
-            int quantity = 1000;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 1);
-
-            FModelCCDLCA fModel = factory.getFModelContext().cc().dlca(Dimension.D2, fAggregate);
-            fModel.setInternalSpawn(true);
-
-            fModel.build();
-
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
-
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
-        }
-
-        @Disabled
-        @Test
-        @DisplayName("Radius of gyration - Tunable 3D")
-        void rogMonodisperseTunable3D() {
-            int quantity = 1000;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 0.01);
-
-            FModelCC fModel = factory.getFModelContext().cc().tunable(fAggregate, 1.2, 2);
-
-            fModel.build();
-
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
-
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
-        }
-
-        @Disabled
-        @Test
-        @DisplayName("Radius of gyration - Tunable 2D")
-        void rogMonodisperseTunable2D() {
-            int quantity = 3000;
-
-            FAggregate fAggregate = factory.getFAggregateContext().base().polydisperse(quantity,  10, 0.5);
-
-            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(Dimension.D2, fAggregate, 1.8, 1.4);
+            fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
             fModel.setEarlyStageCorrection(true);
-            fModel.setCorrection(true);
+            fModel.build();
+
+            FPlotBar fPlotBar = fMonitorA.getRefFPlotBar();
+            FPlot fPlot = fPlotBar.toFPlot(FStat::mean);
+
+            fPlot.swapXY();
+            fPlot.mutateX(FStat::ln);
+            fPlot.mutateY(FStat::ln);
+
+            FPoly slope = fPlot.reg().poly(1);
+
+            assertEquals(df, slope.at(1), 0.05);
+            assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
+        }
+
+        @Test
+        @DisplayName("Radius of gyration - Df = 1.8")
+        void rogMonodisperseDf18() {
+            int quantity = 100;
+            double df = 1.8;
+            double kf = 1.6;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
+
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+
+            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+
+            fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
+            fModel.setEarlyStageCorrection(true);
+            fModel.build();
+
+            FPlotBar fPlotBar = fMonitorA.getRefFPlotBar();
+            FPlot fPlot = fPlotBar.toFPlot(FStat::mean);
+
+            fPlot.swapXY();
+            fPlot.mutateX(FStat::ln);
+            fPlot.mutateY(FStat::ln);
+
+            FPoly slope = fPlot.reg().poly(1);
+
+            assertEquals(df, slope.at(1), 0.05);
+            assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
+        }
+
+        @Test
+        @DisplayName("Radius of gyration - Df = 2.2")
+        void rogMonodisperseDf22() {
+            int quantity = 100;
+            double df = 2.2;
+            double kf = 1.0;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1);
+
+            FModelCCTunable fModel = factory.getFModelContext().cc().tunable(fAggregate, df, kf);
+
+            FMonitorCCRadiusOfGyration fMonitorA = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+            FMonitorCCRadiusOfGyration fMonitorB = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+
+            fModel.addStepMonitor(List.of(fMonitorA, fMonitorB));
+            fModel.setEarlyStageCorrection(true);
+            fModel.build();
+
+            FPlotBar fPlotBar = fMonitorA.getRefFPlotBar();
+            FPlot fPlot = fPlotBar.toFPlot(FStat::mean);
+
+            fPlot.swapXY();
+            fPlot.mutateX(FStat::ln);
+            fPlot.mutateY(FStat::ln);
+
+            FPoly slope = fPlot.reg().poly(1);
+
+            assertEquals(df, slope.at(1), 0.05);
+            assertEquals(df, fMonitorB.getPowerLawDimension(), 0.05);
+        }
+
+        @Test
+        @DisplayName("Radius of gyration - Ballistic")
+        void rogMonodisperseBallistic() {
+            int quantity = 100;
+            double delta = 0.25;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 1).addFBuffer(1_000_000);
+
+            fAggregate.getRefParticles().forEach(e -> e.setDelta(delta));
+
+            FModelCC fModel = factory.getFModelContext().cc().ballistic(fAggregate);
+            FMonitorCCRadiusOfGyration fMonitor = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.COMPLEX);
+            FMonitorCCRadiusOfGyration fMonitorMono = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_MONO);
+            FMonitorCCRadiusOfGyration fMonitorPoly = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_POLY);
+            FMonitorCCRadiusOfGyration fMonitorFilippov = factory.getFMonitorContext().cc().radiusOfGyration(RadiusOfGyration.SIMPLE_FILIPPOV);
+
+            fModel.addStepMonitor(fMonitor);
+            fModel.addStepMonitor(fMonitorMono);
+            fModel.addStepMonitor(fMonitorPoly);
+            fModel.addStepMonitor(fMonitorFilippov);
 
             fModel.build();
 
-            String model = factory.getExportAspect().getFAggregateContext().toNGSolve(fAggregate);
+            FPlotBar results = fMonitor.getRefFPlotBar();
+            FPlotBar resultsMono = fMonitorMono.getRefFPlotBar();
+            FPlotBar resultsPoly = fMonitorPoly.getRefFPlotBar();
+            FPlotBar resultsFilippov = fMonitorFilippov.getRefFPlotBar();
 
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), 1E-4);
+            FPlot resultsPlot = results.toFPlot(FStat::mean);
+            FPlot resultsMonoPlot = resultsMono.toFPlot(FStat::mean);
+            FPlot resultsPolyPlot = resultsPoly.toFPlot(FStat::mean);
+            FPlot resultsFilippovPlot = resultsFilippov.toFPlot(FStat::mean);
+
+            assertTrue(resultsPlot.getRefCoreY().isSimilarAbs(0.25,
+                    resultsMonoPlot.getRefCoreY(), resultsPolyPlot.getRefCoreY(), resultsFilippovPlot.getRefCoreY()));
         }
     }
 }

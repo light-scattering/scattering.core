@@ -7,6 +7,8 @@ import eu.scattering.core.design.component.aggregate.model.cc.tunable.FModelCCTu
 import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTunable;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.storage.buffer.FBuffer;
+import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.type.Dimension;
 import eu.scattering.core.design.type.RadiusOfGyration;
 
@@ -301,13 +303,20 @@ public class FModelCCTunableDef implements FModelCCTunable {
     }
 
     private void buildFragments() {
-        FModelPCTunable model;
 
         for (FAggregate fragment : this.fragments) {
-            model = factory.getFModelContext().pc().tunable(this.dimension, fragment, this.df, this.kf);
+            FModelPCTunable model = factory.getFModelContext().pc().tunable(this.dimension, fragment, this.df, this.kf);
             model.setEarlyStageCorrection(this.correctionEarly);
 
             model.build();
+        }
+
+        FBuffer<FBufferData> buffer = this.aggregate.getRefFBuffer();
+
+        if (buffer != null) {
+            for (FAggregate fragment : this.fragments) {
+                fragment.setRefFBuffer(buffer);
+            }
         }
     }
 

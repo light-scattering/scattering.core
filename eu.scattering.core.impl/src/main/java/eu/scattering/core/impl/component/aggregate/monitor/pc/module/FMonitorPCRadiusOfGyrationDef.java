@@ -45,23 +45,23 @@ public class FMonitorPCRadiusOfGyrationDef implements FMonitorPCRadiusOfGyration
     @Override
     public void accept(FAggregate fAggregate, Shape shape) {
 
-        if (fAggregate.getRefParticles().size() == 0) {
-            fPlot.clear();
+        if (fAggregate == null || fAggregate.getRefParticles().size() == 0) {
+            this.fPlot.clear();
         } else {
             if (fAggregate.getRefParticles().size() > this.skip) {
-                fPlot.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyration(type));
+                this.fPlot.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusOfGyration(type));
             }
         }
     }
 
     @Override
     public double getPowerLawDimension() {
-        FPlot reg = this.fPlot.copy();
+        FPlot regression = this.fPlot.copy();
 
-        reg.swapXY();
-        reg.mutateX(FStat::ln);
-        reg.mutateY(FStat::ln);
+        regression.swapXY();
+        regression.mutateX(FStat::ln);
+        regression.mutateY(FStat::ln);
 
-        return reg.reg().fitSlope((int) (reg.size() * 0.9)).at(1);
+        return regression.reg().fitSlope((int) (regression.size() * 0.9)).at(1);
     }
 }
