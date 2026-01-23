@@ -82,9 +82,9 @@ public class FModelPCDLAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -97,9 +97,9 @@ public class FModelPCDLAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(100)
@@ -112,9 +112,9 @@ public class FModelPCDLAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -127,9 +127,9 @@ public class FModelPCDLAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
     }
 
@@ -148,9 +148,9 @@ public class FModelPCDLAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -194,9 +194,9 @@ public class FModelPCDLAShellTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -319,9 +319,9 @@ public class FModelPCDLAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -365,9 +365,9 @@ public class FModelPCDLAShellTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test

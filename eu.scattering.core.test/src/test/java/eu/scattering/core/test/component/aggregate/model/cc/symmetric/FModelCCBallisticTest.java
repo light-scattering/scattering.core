@@ -77,9 +77,9 @@ public class FModelCCBallisticTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -92,9 +92,9 @@ public class FModelCCBallisticTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(100)
@@ -107,9 +107,9 @@ public class FModelCCBallisticTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -122,9 +122,9 @@ public class FModelCCBallisticTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
     }
 
@@ -143,9 +143,9 @@ public class FModelCCBallisticTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -294,9 +294,9 @@ public class FModelCCBallisticTest {
                 assertEquals(0, shape.getCenterZ(), 1E-8);
             }
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test

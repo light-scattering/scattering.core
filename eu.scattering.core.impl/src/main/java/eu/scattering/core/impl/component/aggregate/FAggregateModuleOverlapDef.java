@@ -2,13 +2,18 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.layer.FLayer;
+import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.OverlapFactor;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class FAggregateModuleOverlapDef {
     private final ScatFactory factory;
@@ -22,18 +27,214 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getOverlapFactor(OverlapFactor type) {
-        return 0;
+    protected boolean isNonOverlapping() {
+        Queue<Shape> queue = new LinkedList<>(this.aggregate.getRefParticles().asList());
+
+        while (!queue.isEmpty()) {
+            if (queue.poll().overlaps(queue) != 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getQuantitativeOverlapFactor() {
+    protected boolean isPointConnected() {
 
-        return getQuantitativeOverlapFactorData().mean();
+        return isNonOverlapping() && isContactConnected();
     }
 
-    protected FStat getQuantitativeOverlapFactorData() {
+    protected boolean isContactConnected() {
+        List<Shape> processed = new ArrayList<>();
+
+        isContactConnectedRecurrence(this.aggregate.getRefParticles().asList().get(0), processed);
+
+        return this.aggregate.getRefParticles().asList().size() == processed.size();
+    }
+
+    private void isContactConnectedRecurrence(Shape shape, List<Shape> processed) {
+
+        if (processed.contains(shape)) {
+            return;
+        }
+
+        processed.add(shape);
+
+        List<Shape> candidates = new ArrayList<>();
+        shape.touchesOrOverlaps(this.aggregate.getRefParticles().asList(), candidates);
+
+        for (Shape candidate : candidates) {
+            isContactConnectedRecurrence(candidate, processed);
+        }
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected boolean touches(FAggregate arg) {
+        FPos3D centerRef = this.aggregate.getSpatialCenter();
+        FPos3D centerArg = arg.getSpatialCenter();
+
+        double radiusRef = this.aggregate.getRadius(centerRef);
+        double radiusArg = arg.getRadius(centerArg);
+
+        List<Shape> particlesRef = new ArrayList<>(this.aggregate.size());
+        List<Shape> particlesArg = new ArrayList<>(arg.size());
+
+        for (Shape shape : this.aggregate) {
+            if (shape.getDistCenter(centerArg) <= radiusArg + shape.getRadius()) {
+                particlesRef.add(shape);
+            }
+        }
+
+        for (Shape shape : arg.getRefParticles()) {
+            if (shape.getDistCenter(centerRef) <= radiusRef + shape.getRadius()) {
+                particlesArg.add(shape);
+            }
+        }
+
+        boolean touches = false;
+        for (Shape shapeRef : particlesRef) {
+            for (Shape shapeArg : particlesArg) {
+                if (shapeRef.touches(shapeArg)) {
+                    touches = true;
+                }
+
+                if (shapeRef.overlaps(shapeArg)) {
+                    return false;
+                }
+            }
+        }
+
+        return touches;
+    }
+
+    protected boolean overlaps(FAggregate arg) {
+        FPos3D centerRef = this.aggregate.getSpatialCenter();
+        FPos3D centerArg = arg.getSpatialCenter();
+
+        double radiusRef = this.aggregate.getRadius(centerRef);
+        double radiusArg = arg.getRadius(centerArg);
+
+        List<Shape> particlesRef = new ArrayList<>(this.aggregate.size());
+        List<Shape> particlesArg = new ArrayList<>(arg.size());
+
+        for (Shape shape : this.aggregate) {
+            if (shape.getDistCenter(centerArg) < radiusArg + shape.getRadius()) {
+                particlesRef.add(shape);
+            }
+        }
+
+        for (Shape shape : arg.getRefParticles()) {
+            if (shape.getDistCenter(centerRef) < radiusRef + shape.getRadius()) {
+                particlesArg.add(shape);
+            }
+        }
+
+        for (Shape shapeRef : particlesRef) {
+            for (Shape shapeArg : particlesArg) {
+                if (shapeRef.overlaps(shapeArg)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean overlapsWithShift(FAggregate arg, FVector shift) {
+        FPos3D centerRef = this.aggregate.getSpatialCenter();
+        FPos3D centerArg = arg.getSpatialCenter();
+
+        double radiusRef = this.aggregate.getRadius(centerRef);
+        double radiusArg = arg.getRadius(centerArg);
+
+        List<Shape> particlesRef = new ArrayList<>(this.aggregate.size());
+        List<Shape> particlesArg = new ArrayList<>(arg.size());
+
+        FVector translator = shift.copy();
+
+        for (Shape shape : this.aggregate) {
+            translator.moveBase(shape.getRefCenter());
+
+            if (translator.getRefHead().getDistance(centerArg) < radiusArg + shape.getRadius()) {
+                particlesRef.add(shape);
+            }
+        }
+
+        for (Shape shape : arg.getRefParticles()) {
+            translator.moveBase(centerRef);
+
+            if (shape.getDistCenter(translator.getRefHead()) < radiusRef + shape.getRadius()) {
+                particlesArg.add(shape);
+            }
+        }
+
+        double memoX, memoY, memoZ;
+        for (Shape shapeRef : particlesRef) {
+            memoX = shapeRef.getCenterX();
+            memoY = shapeRef.getCenterY();
+            memoZ = shapeRef.getCenterZ();
+
+            translator.moveBase(memoX, memoY, memoZ);
+
+            shapeRef.setCenter(translator.getRefHead());
+
+            boolean stop = false;
+
+            for (Shape shapeArg : particlesArg) {
+                if (shapeRef.overlaps(shapeArg)) {
+                    stop = true;
+
+                    break;
+                }
+            }
+
+            shapeRef.setCenter(memoX, memoY, memoZ);
+
+            if (stop) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean overlapsWithRotation(FAggregate arg, FVector axis, double angle) {
+        FSphere dummy = this.factory.getFSphere();
+
+        for (Shape shapeRef : this.aggregate) {
+            dummy.setRadius(shapeRef.getRadius());
+            dummy.setCenter(shapeRef.getRefCenter());
+
+            factory.getRotAspect().rotRgAround(dummy.getRefCenter(), axis, angle);
+
+            for (Shape shapeArg : arg.getRefParticles()) {
+                if (dummy.overlaps(shapeArg)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected FStat getOverlapFactor(OverlapFactor type) {
+
+        return switch (type) {
+            case PARTICLE_LINEAR -> getParticleLinearOF();
+            case PARTICLE_VOLUMETRIC -> getParticleVolumetricOF();
+            case PARTICLE_QUANTITATIVE -> getParticleQuantitativeOF();
+            case MATERIAL_VOLUMETRIC -> getMaterialVolumetricOF();
+        };
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    private FStat getParticleQuantitativeOF() {
         FStat results = this.factory.getFStat();
 
         for (int i = 0 ; i < this.aggregate.size() ; i++) {
@@ -56,12 +257,7 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getLinearOverlapFactor() {
-
-        return getLinearOverlapFactorData().mean();
-    }
-
-    protected FStat getLinearOverlapFactorData() {
+    private FStat getParticleLinearOF() {
         FStat results = this.factory.getFStat();
 
         for (int i = 0 ; i < this.aggregate.size() ; i++) {
@@ -82,7 +278,7 @@ public class FAggregateModuleOverlapDef {
                     continue;
                 }
 
-                double overlap = getLinearOverlapFactorSingle(shapeA, shapeB);
+                double overlap = getParticleLinearSingle(shapeA, shapeB);
 
                 if (overlap > results.get(i)) {
                     results.set(i, overlap);
@@ -97,7 +293,7 @@ public class FAggregateModuleOverlapDef {
         return results;
     }
 
-    private double getLinearOverlapFactorSingle(Shape shapeA, Shape shapeB) {
+    private double getParticleLinearSingle(Shape shapeA, Shape shapeB) {
         double distance = shapeA.getDistCenter(shapeB);
         double overlap = 1 - (distance / (shapeA.getRadius() + shapeB.getRadius()));
 
@@ -114,41 +310,26 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getTotalVolumetricOverlapFactor() {
-        List<Double> volume = new ArrayList<>();
-
-        for (Shape shape : this.aggregate.getRefParticles()) {
-            getVolumetricMethod(shape, volume);
-        }
-
-        return getVolumetricProcess(volume);
-    }
-
-    protected double getVolumetricOverlapFactor() {
-
-        return getVolumetricOverlapFactorData().mean();
-    }
-
-    protected FStat getVolumetricOverlapFactorData() {
+    private FStat getParticleVolumetricOF() {
         FStat results = this.factory.getFStat();
 
         for (Shape shape : this.aggregate.getRefParticles()) {
-            getVolumetricMethodData(shape, results);
+            getParticleVolumetricMethod(shape, results);
         }
 
         return results;
     }
 
-    private void getVolumetricMethodData(Shape shape, FStat results) {
+    private void getParticleVolumetricMethod(Shape shape, FStat results) {
 
         if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
             results.add(0);
         } else {
-            getVolumetricMethodApproxData(shape, results);
+            getParticleVolumetricMethodApprox(shape, results);
         }
     }
 
-    private void getVolumetricMethodApproxData(Shape shape, FStat results) {
+    private void getParticleVolumetricMethodApprox(Shape shape, FStat results) {
         FLayer fLayer = this.factory.getFLayer();
 
         shape.fillVolumeLayerOverlap(fLayer, this.aggregate.getRefParticles());
@@ -156,16 +337,28 @@ public class FAggregateModuleOverlapDef {
         results.add(1 - (fLayer.get() / fLayer.addSelf()));
     }
 
-    private void getVolumetricMethod(Shape shape, List<Double> volume) {
+    // -------------------------------------------------------------------------------------------------
+
+    private FStat getMaterialVolumetricOF() {
+        List<Double> volume = new ArrayList<>();
+
+        for (Shape shape : this.aggregate.getRefParticles()) {
+            getMaterialVolumetricMethod(shape, volume);
+        }
+
+        return getMaterialTotalVolumetricProcess(volume);
+    }
+
+    private void getMaterialVolumetricMethod(Shape shape, List<Double> volume) {
 
         if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
-            getVolumetricMethodPrecise(shape, volume);
+            getMaterialVolumetricMethodPrecise(shape, volume);
         } else {
-            getVolumetricMethodApprox(shape, volume);
+            getMaterialVolumetricMethodApprox(shape, volume);
         }
     }
 
-    private void getVolumetricMethodPrecise(Shape shape, List<Double> volume) {
+    private void getMaterialVolumetricMethodPrecise(Shape shape, List<Double> volume) {
 
         if (volume.size() < 1) {
             volume.add(0d);
@@ -174,7 +367,7 @@ public class FAggregateModuleOverlapDef {
         volume.set(0, volume.get(0) + shape.getVolumeAlgebraic());
     }
 
-    private void getVolumetricMethodApprox(Shape shape, List<Double> volume) {
+    private void getMaterialVolumetricMethodApprox(Shape shape, List<Double> volume) {
         FLayer fLayer = this.factory.getFLayer();
 
         shape.fillVolumeLayerOverlap(fLayer, this.aggregate.getRefParticles());
@@ -190,10 +383,15 @@ public class FAggregateModuleOverlapDef {
         }
     }
 
-    private double getVolumetricProcess(List<Double> volume) {
+    private FStat getMaterialTotalVolumetricProcess(List<Double> volume) {
+        FStat results = this.factory.getFStat();
+
         double volTmp;
         double volTotal = 0;
-        double volOverlap = 0;
+
+        for (int i = 0 ; i < volume.size() ; i++) {
+            results.add(0);
+        }
 
         for (int i = 0 ; i < volume.size() ; i++) {
             volTmp = volume.get(i) / (i + 1);
@@ -201,10 +399,14 @@ public class FAggregateModuleOverlapDef {
             volTotal += volTmp;
 
             if (i > 0) {
-                volOverlap += volTmp;
+                results.set(i - 1, results.get(i - 1) + volTmp);
             }
         }
 
-        return volOverlap / volTotal;
+        for (int i = 0 ; i < results.size() ; i++) {
+            results.set(i, results.get(i) / volTotal);
+        }
+
+        return results;
     }
 }

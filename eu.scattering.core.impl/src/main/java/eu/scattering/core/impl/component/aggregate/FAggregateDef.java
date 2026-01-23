@@ -7,7 +7,6 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.construct.ray.FRay;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
-import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
 import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
@@ -16,13 +15,13 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.type.Center;
-import eu.scattering.core.design.type.FractalDimension;
-import eu.scattering.core.design.type.LinearDimension;
-import eu.scattering.core.design.type.RadiusOfGyration;
+import eu.scattering.core.design.type.*;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -324,47 +323,40 @@ public class FAggregateDef implements FAggregate {
         return this.moduleTopology.getDensityCorrelationFunction(log);
     }
 
-
     @Override
-    public double getLinearOverlapFactor() {
+    public boolean isNonOverlapping() {
 
-        return this.moduleOverlap.getLinearOverlapFactor();
+        return this.moduleOverlap.isNonOverlapping();
     }
 
     @Override
-    public FStat getLinearOverlapFactorData() {
+    public boolean isPointConnected() {
 
-        return this.moduleOverlap.getLinearOverlapFactorData();
+        return this.moduleOverlap.isPointConnected();
     }
 
     @Override
-    public double getQuantitativeOverlapFactor() {
+    public boolean isContactConnected() {
 
-        return this.moduleOverlap.getQuantitativeOverlapFactor();
+        return this.moduleOverlap.isContactConnected();
     }
 
     @Override
-    public FStat getQuantitativeOverlapFactorData() {
+    public FStat getOverlapFactor(OverlapFactor type) {
 
-        return this.moduleOverlap.getQuantitativeOverlapFactorData();
+        return this.moduleOverlap.getOverlapFactor(type);
     }
 
     @Override
-    public double getTotalVolumetricOverlapFactor() {
+    public boolean overlaps(FAggregate arg) {
 
-        return this.moduleOverlap.getTotalVolumetricOverlapFactor();
+        return this.moduleOverlap.overlaps(arg);
     }
 
     @Override
-    public double getVolumetricOverlapFactor() {
+    public boolean touches(FAggregate arg) {
 
-        return this.moduleOverlap.getVolumetricOverlapFactor();
-    }
-
-    @Override
-    public FStat getVolumetricOverlapFactorData() {
-
-        return this.moduleOverlap.getVolumetricOverlapFactorData();
+        return this.moduleOverlap.touches(arg);
     }
 
     @Override
@@ -452,173 +444,21 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public boolean isSparse() {
-
-        return this.moduleMorphology.isSparse();
-    }
-
-    @Override
-    public boolean isCompact() {
-
-        return this.moduleMorphology.isCompact();
-    }
-
-    @Override
     public void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
 
         this.moduleMorphology.forEachPairInContact(consumer);
     }
 
     @Override
-    public boolean overlaps(FAggregate arg) {
-        FPos3D centerRef = getSpatialCenter();
-        FPos3D centerArg = arg.getSpatialCenter();
-
-        double radiusRef = getRadius(centerRef);
-        double radiusArg = arg.getRadius(centerArg);
-
-        List<Shape> particlesRef = new ArrayList<>(size());
-        List<Shape> particlesArg = new ArrayList<>(arg.size());
-
-        for (Shape shape : getRefParticles()) {
-            if (shape.getDistCenter(centerArg) < radiusArg + shape.getRadius()) {
-                particlesRef.add(shape);
-            }
-        }
-
-        for (Shape shape : arg.getRefParticles()) {
-            if (shape.getDistCenter(centerRef) < radiusRef + shape.getRadius()) {
-                particlesArg.add(shape);
-            }
-        }
-
-        for (Shape shapeRef : particlesRef) {
-            for (Shape shapeArg : particlesArg) {
-                if (shapeRef.overlaps(shapeArg)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean touches(FAggregate arg) {
-        FPos3D centerRef = getSpatialCenter();
-        FPos3D centerArg = arg.getSpatialCenter();
-
-        double radiusRef = getRadius(centerRef);
-        double radiusArg = arg.getRadius(centerArg);
-
-        List<Shape> particlesRef = new ArrayList<>(size());
-        List<Shape> particlesArg = new ArrayList<>(arg.size());
-
-        for (Shape shape : getRefParticles()) {
-            if (shape.getDistCenter(centerArg) <= radiusArg + shape.getRadius()) {
-                particlesRef.add(shape);
-            }
-        }
-
-        for (Shape shape : arg.getRefParticles()) {
-            if (shape.getDistCenter(centerRef) <= radiusRef + shape.getRadius()) {
-                particlesArg.add(shape);
-            }
-        }
-
-        boolean touches = false;
-        for (Shape shapeRef : particlesRef) {
-            for (Shape shapeArg : particlesArg) {
-                if (shapeRef.touches(shapeArg)) {
-                    touches = true;
-                }
-
-                if (shapeRef.overlaps(shapeArg)) {
-                    return false;
-                }
-            }
-        }
-
-        return touches;
-    }
-
-    @Override
     public boolean overlapsWithShift(FAggregate arg, FVector shift) {
-        FPos3D centerRef = getSpatialCenter();
-        FPos3D centerArg = arg.getSpatialCenter();
 
-        double radiusRef = getRadius(centerRef);
-        double radiusArg = arg.getRadius(centerArg);
-
-        List<Shape> particlesRef = new ArrayList<>(size());
-        List<Shape> particlesArg = new ArrayList<>(arg.size());
-
-        FVector translator = shift.copy();
-
-        for (Shape shape : getRefParticles()) {
-            translator.moveBase(shape.getRefCenter());
-
-            if (translator.getRefHead().getDistance(centerArg) < radiusArg + shape.getRadius()) {
-                particlesRef.add(shape);
-            }
-        }
-
-        for (Shape shape : arg.getRefParticles()) {
-            translator.moveBase(centerRef);
-
-            if (shape.getDistCenter(translator.getRefHead()) < radiusRef + shape.getRadius()) {
-                particlesArg.add(shape);
-            }
-        }
-
-        double memoX, memoY, memoZ;
-        for (Shape shapeRef : particlesRef) {
-            memoX = shapeRef.getCenterX();
-            memoY = shapeRef.getCenterY();
-            memoZ = shapeRef.getCenterZ();
-
-            translator.moveBase(memoX, memoY, memoZ);
-
-            shapeRef.setCenter(translator.getRefHead());
-
-            boolean stop = false;
-
-            for (Shape shapeArg : particlesArg) {
-                if (shapeRef.overlaps(shapeArg)) {
-                    stop = true;
-
-                    break;
-                }
-            }
-
-            shapeRef.setCenter(memoX, memoY, memoZ);
-
-            if (stop) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.moduleOverlap.overlapsWithShift(arg, shift);
     }
 
     @Override
     public boolean overlapsWithRotation(FAggregate arg, FVector axis, double angle) {
-        FSphere dummy = supplyFSphere();
 
-        for (Shape shapeRef : getRefParticles()) {
-            dummy.setRadius(shapeRef.getRadius());
-            dummy.setCenter(shapeRef.getRefCenter());
-
-            factory.getRotAspect().rotRgAround(dummy.getRefCenter(), axis, angle);
-
-            for (Shape shapeArg : arg.getRefParticles()) {
-                if (dummy.overlaps(shapeArg)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return this.moduleOverlap.overlapsWithRotation(arg, axis, angle);
     }
 
     @Override
@@ -699,11 +539,6 @@ public class FAggregateDef implements FAggregate {
     private FRay supplyFRay() {
 
         return factory.getFRay();
-    }
-
-    private FSphere supplyFSphere() {
-
-        return factory.getFSphere();
     }
 
     //--------------------------------------------------

@@ -934,8 +934,249 @@ public class FAggregateTest {
             );
         }
 
+        @Test
+        @DisplayName("Overlaps")
+        void overlaps() {
+            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
 
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
 
+            Shape shapeB1 = factory.getFSphere(2.5, 0.5, 0.5, 1);
+            Shape shapeB2 = factory.getFSphere(4.5, 0.5, 0.5, 1);
+            Shape shapeB3 = factory.getFSphere(6.5, 0.5, 0.5, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertTrue(aggregateA.overlaps(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Overlaps (fail)")
+        void overlapsFail() {
+            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(4, -2, 0, 1);
+            Shape shapeB2 = factory.getFSphere(4, 0, 0, 1);
+            Shape shapeB3 = factory.getFSphere(4, 2, 0, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertFalse(aggregateA.overlaps(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Overlaps with shift")
+        void overlapsWithShift() {
+            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(2.5, 4.5, -3.5, 1);
+            Shape shapeB2 = factory.getFSphere(4.5, 4.5, -3.5, 1);
+            Shape shapeB3 = factory.getFSphere(6.5, 4.5, -3.5, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertFalse(aggregateA.overlaps(aggregateB));
+
+            assertFalse(aggregateA.overlapsWithShift(aggregateB, factory.getFVector()));
+            assertTrue(aggregateA.overlapsWithShift(aggregateB, factory.getFVector(0, 4, -4)));
+        }
+
+        @Test
+        @DisplayName("Overlaps with rotation")
+        void overlapsWithRotation() {
+            Shape shapeA1 = factory.getFSphere(-6, 0, 0, 1);
+            Shape shapeA2 = factory.getFSphere(-4, 0, 0, 1);
+            Shape shapeA3 = factory.getFSphere(-2, 0, 0, 1);
+
+            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
+            FAggregate aggregateA = factory.getRefFAggregate(coreA);
+
+            Shape shapeB1 = factory.getFSphere(2, 0, 0, 1);
+            Shape shapeB2 = factory.getFSphere(4, 0, 0, 1);
+            Shape shapeB3 = factory.getFSphere(6, 0, 0, 1);
+
+            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
+            FAggregate aggregateB = factory.getRefFAggregate(coreB);
+
+            assertFalse(aggregateA.overlaps(aggregateB));
+
+            assertFalse(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 1, 0), 0));
+            assertFalse(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 0, 1), 0));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 1, 0), Math.PI));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 0, 1), Math.PI));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(-2, 0, 0, -2, 1, 0), Math.PI));
+            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(-2, 0, 0, -2, 0, 1), Math.PI));
+        }
+
+        @Test
+        @DisplayName("Touches")
+        void touches() {
+            FAggregate aggregateA = factory.getFAggregate();
+            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+
+            FAggregate aggregateB = factory.getFAggregate();
+            aggregateB.addRefParticle(factory.getFSphere(4, -2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4, 0, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4, 2, 0, 1));
+
+            assertTrue(aggregateA.touches(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Touches (fail) - A")
+        void touchesFailA() {
+            FAggregate aggregateA = factory.getFAggregate();
+            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+
+            FAggregate aggregateB = factory.getFAggregate();
+            aggregateB.addRefParticle(factory.getFSphere(3.9, -2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(3.9, 0, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(3.9, 2, 0, 1));
+
+            assertFalse(aggregateA.touches(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Touches (fail) - B")
+        void touchesFailB() {
+            FAggregate aggregateA = factory.getFAggregate();
+            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
+            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
+
+            FAggregate aggregateB = factory.getFAggregate();
+            aggregateB.addRefParticle(factory.getFSphere(4.1, -2, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4.1, 0, 0, 1));
+            aggregateB.addRefParticle(factory.getFSphere(4.1, 2, 0, 1));
+
+            assertFalse(aggregateA.touches(aggregateB));
+        }
+
+        @Test
+        @DisplayName("Is contact-connected")
+        void isContactConnected() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertTrue(fAggregate.isContactConnected());
+        }
+
+        @Test
+        @DisplayName("Is contact-connected - Fail")
+        void isContactConnectedFail() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+            FSphere fSphereE = factory.getFSphere(5, 5, 5);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isContactConnected());
+        }
+
+        @Test
+        @DisplayName("Is point-connected")
+        void isPointConnected() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertTrue(fAggregate.isPointConnected());
+        }
+
+        @Test
+        @DisplayName("Is point-connected - Fail A")
+        void isPointConnectedFailA() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 3);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isPointConnected());
+        }
+
+        @Test
+        @DisplayName("Is point-connected - Fail B")
+        void isPointConnectedFailB() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isPointConnected());
+        }
+
+        @Test
+        @DisplayName("Is non-overlapping")
+        void isNonOverlapping() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 4);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertTrue(fAggregate.isNonOverlapping());
+        }
+
+        @Test
+        @DisplayName("Is non-overlapping - Fail")
+        void isNonOverlappingFail() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 2, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 1);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            assertFalse(fAggregate.isNonOverlapping());
+        }
 
         @Test
         @DisplayName("Get total overlap factor volumetric - Same position - Double")
@@ -947,9 +1188,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
 
-            assertEquals(1, overlap, epsilon);
+            assertEquals(1, overlap.sum(), epsilon);
         }
 
         @Test
@@ -963,9 +1204,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
 
-            assertEquals(1, overlap, epsilon);
+            assertEquals(1, overlap.sum(), epsilon);
         }
 
         @Test
@@ -978,9 +1219,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
 
-            assertEquals(0, overlap, epsilon);
+            assertEquals(0, overlap.sum(), epsilon);
         }
 
         @Test
@@ -993,12 +1234,12 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
 
             double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
             double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
-            double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+            double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap.sum());
 
             assertTrue(relError < 0.01);
         }
@@ -1016,7 +1257,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
+            FStat overlap = fAggregate.getOverlapFactor(OverlapFactor.MATERIAL_VOLUMETRIC);
 
             double volAlgOverlap = (4  * Math.PI / 3) +
                     2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -1024,7 +1265,7 @@ public class FAggregateTest {
                     3 * (4  * Math.PI / 3) -
                     2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
 
-            double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
+            double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap.sum());
 
             assertTrue(relError < 0.01);
         }
@@ -1039,10 +1280,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getVolumetricOverlapFactor();
-            FStat data = fAggregate.getVolumetricOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC);
 
-            assertEquals(1, value, epsilon);
+            assertEquals(1, data.mean(), epsilon);
             assertEquals(2, data.size());
             assertEquals(2, data.sum(), epsilon);
         }
@@ -1058,10 +1298,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getVolumetricOverlapFactor();
-            FStat data = fAggregate.getVolumetricOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC);
 
-            assertEquals(1, value, epsilon);
+            assertEquals(1, data.mean(), epsilon);
             assertEquals(3, data.size());
             assertEquals(3, data.sum(), epsilon);
         }
@@ -1076,10 +1315,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getVolumetricOverlapFactor();
-            FStat data = fAggregate.getVolumetricOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC);
 
-            assertEquals(0, value, epsilon);
+            assertEquals(0, data.mean(), epsilon);
             assertEquals(2, data.size());
             assertEquals(0, data.sum(), epsilon);
         }
@@ -1094,16 +1332,13 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getVolumetricOverlapFactor();
-            FStat data = fAggregate.getVolumetricOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC);
 
             double ovAlg = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5) / fSphereA.getVolumeAlgebraic();
 
-            double relErrorValue = factory.getStatisticsHelper().getRelErr(ovAlg, value);
-            double relErrorData = factory.getStatisticsHelper().getRelErr(ovAlg, data.mean());
+            double relError = factory.getStatisticsHelper().getRelErr(ovAlg, data.mean());
 
-            assertTrue(relErrorValue < 0.01);
-            assertTrue(relErrorData < 0.01);
+            assertTrue(relError < 0.01);
             assertEquals(2, data.size());
             assertEquals(data.get(0), data.get(1), 1E-4);
         }
@@ -1121,8 +1356,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getVolumetricOverlapFactor();
-            FStat data = fAggregate.getVolumetricOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_VOLUMETRIC);
 
             double ovAlgA = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5) / fSphereA.getVolumeAlgebraic();
             double ovAlgB = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5) / fSphereB.getVolumeAlgebraic();
@@ -1132,11 +1366,9 @@ public class FAggregateTest {
 
             double ovAlg = (ovAlgA + ovAlgB + ovAlgC + ovAlgD + ovAlgE) / 5;
 
-            double relErrorValue = factory.getStatisticsHelper().getRelErr(ovAlg, value);
-            double relErrorData = factory.getStatisticsHelper().getRelErr(ovAlg, value);
+            double relError = factory.getStatisticsHelper().getRelErr(ovAlg, data.mean());
 
-            assertTrue(relErrorValue < 0.01);
-            assertTrue(relErrorData < 0.01);
+            assertTrue(relError < 0.01);
             assertEquals(5, data.size());
             assertEquals(data.get(0), ovAlgA, 1E-3);
             assertEquals(data.get(1), ovAlgB, 1E-3);
@@ -1155,10 +1387,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getQuantitativeOverlapFactor();
-            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE);
 
-            assertEquals(1, value);
+            assertEquals(1, data.mean());
             assertEquals(2, data.size());
             assertEquals(2, data.sum());
         }
@@ -1173,10 +1404,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getQuantitativeOverlapFactor();
-            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE);
 
-            assertEquals(0, value);
+            assertEquals(0, data.mean());
             assertEquals(2, data.size());
             assertEquals(0, data.sum());
         }
@@ -1191,10 +1421,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getQuantitativeOverlapFactor();
-            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE);
 
-            assertEquals(1, value);
+            assertEquals(1, data.mean());
             assertEquals(2, data.size());
             assertEquals(2, data.sum());
         }
@@ -1212,10 +1441,9 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getQuantitativeOverlapFactor();
-            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_QUANTITATIVE);
 
-            assertEquals(1.2, value, epsilon);
+            assertEquals(1.2, data.mean(), epsilon);
             assertEquals(5, data.size());
             assertEquals(6, data.sum());
             assertEquals(1, data.get(0));
@@ -1235,10 +1463,8 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getLinearOverlapFactor();
-            FStat data = fAggregate.getLinearOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR);
 
-            assertEquals(1, value, epsilon);
             assertEquals(2, data.size(), epsilon);
             assertEquals(1, data.mean(), epsilon);
         }
@@ -1253,10 +1479,8 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getLinearOverlapFactor();
-            FStat data = fAggregate.getLinearOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR);
 
-            assertEquals(0, value, epsilon);
             assertEquals(2, data.size(), epsilon);
             assertEquals(0, data.mean(), epsilon);
         }
@@ -1271,10 +1495,8 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getLinearOverlapFactor();
-            FStat data = fAggregate.getLinearOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR);
 
-            assertEquals(0.5, value, epsilon);
             assertEquals(2, data.size(), epsilon);
             assertEquals(0.5, data.mean(), epsilon);
         }
@@ -1292,97 +1514,15 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double value = fAggregate.getLinearOverlapFactor();
-            FStat data = fAggregate.getLinearOverlapFactorData();
+            FStat data = fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR);
 
-            assertEquals(0.2, value, epsilon);
+            assertEquals(0.2, data.mean(), epsilon);
             assertEquals(5, data.size(), epsilon);
             assertEquals(0.5, data.get(0), epsilon);
             assertEquals(0.5, data.get(1), epsilon);
             assertEquals(0, data.get(2), epsilon);
             assertEquals(0, data.get(3), epsilon);
             assertEquals(0, data.get(4), epsilon);
-        }
-
-        @Test
-        @DisplayName("Is compact")
-        void isCompact() {
-            FSphere fSphereA = factory.getFSphere(0, 0, 0);
-            FSphere fSphereB = factory.getFSphere(2, 0, 0);
-            FSphere fSphereC = factory.getFSphere(0, 2, 0);
-            FSphere fSphereD = factory.getFSphere(0, 0, 2);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-            assertTrue(fAggregate.isCompact());
-        }
-
-        @Test
-        @DisplayName("Is compact - Fail")
-        void isCompactFail() {
-            FSphere fSphereA = factory.getFSphere(0, 0, 0);
-            FSphere fSphereB = factory.getFSphere(2, 0, 0);
-            FSphere fSphereC = factory.getFSphere(0, 2, 0);
-            FSphere fSphereD = factory.getFSphere(0, 0, 2);
-            FSphere fSphereE = factory.getFSphere(5, 5, 5);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-            assertFalse(fAggregate.isCompact());
-        }
-
-        @Test
-        @DisplayName("Is compact - Empty")
-        void isCompactEmpty() {
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-            assertFalse(fAggregate.isCompact());
-        }
-
-        @Test
-        @DisplayName("Is sparse")
-        void isSparse() {
-            FSphere fSphereA = factory.getFSphere(0, 0, 0);
-            FSphere fSphereB = factory.getFSphere(2, 0, 0);
-            FSphere fSphereC = factory.getFSphere(0, 2, 0);
-            FSphere fSphereD = factory.getFSphere(0, 0, 4);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-            assertTrue(fAggregate.isSparse());
-        }
-
-        @Test
-        @DisplayName("Is sparse - Fail")
-        void isSparseFail() {
-            FSphere fSphereA = factory.getFSphere(0, 0, 0);
-            FSphere fSphereB = factory.getFSphere(2, 0, 0);
-            FSphere fSphereC = factory.getFSphere(0, 2, 0);
-            FSphere fSphereD = factory.getFSphere(0, 0, 1);
-
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD));
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-            assertFalse(fAggregate.isSparse());
-        }
-
-        @Test
-        @DisplayName("Is sparse - Empty")
-        void isSparseEmpty() {
-            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of());
-
-            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
-
-            assertFalse(fAggregate.isSparse());
         }
 
         @Test
@@ -2727,144 +2867,6 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Overlaps")
-        void overlaps() {
-            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
-            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
-            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
-
-            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
-            FAggregate aggregateA = factory.getRefFAggregate(coreA);
-
-            Shape shapeB1 = factory.getFSphere(2.5, 0.5, 0.5, 1);
-            Shape shapeB2 = factory.getFSphere(4.5, 0.5, 0.5, 1);
-            Shape shapeB3 = factory.getFSphere(6.5, 0.5, 0.5, 1);
-
-            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
-            FAggregate aggregateB = factory.getRefFAggregate(coreB);
-
-            assertTrue(aggregateA.overlaps(aggregateB));
-        }
-
-        @Test
-        @DisplayName("Overlaps (fail)")
-        void overlapsFail() {
-            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
-            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
-            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
-
-            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
-            FAggregate aggregateA = factory.getRefFAggregate(coreA);
-
-            Shape shapeB1 = factory.getFSphere(4, -2, 0, 1);
-            Shape shapeB2 = factory.getFSphere(4, 0, 0, 1);
-            Shape shapeB3 = factory.getFSphere(4, 2, 0, 1);
-
-            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
-            FAggregate aggregateB = factory.getRefFAggregate(coreB);
-
-            assertFalse(aggregateA.overlaps(aggregateB));
-        }
-
-        @Test
-        @DisplayName("Overlaps with shift")
-        void overlapsWithShift() {
-            Shape shapeA1 = factory.getFSphere(-2, 0, 0, 1);
-            Shape shapeA2 = factory.getFSphere(0, 0, 0, 1);
-            Shape shapeA3 = factory.getFSphere(2, 0, 0, 1);
-
-            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
-            FAggregate aggregateA = factory.getRefFAggregate(coreA);
-
-            Shape shapeB1 = factory.getFSphere(2.5, 4.5, -3.5, 1);
-            Shape shapeB2 = factory.getFSphere(4.5, 4.5, -3.5, 1);
-            Shape shapeB3 = factory.getFSphere(6.5, 4.5, -3.5, 1);
-
-            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
-            FAggregate aggregateB = factory.getRefFAggregate(coreB);
-
-            assertFalse(aggregateA.overlaps(aggregateB));
-
-            assertFalse(aggregateA.overlapsWithShift(aggregateB, factory.getFVector()));
-            assertTrue(aggregateA.overlapsWithShift(aggregateB, factory.getFVector(0, 4, -4)));
-        }
-
-        @Test
-        @DisplayName("Overlaps with rotation")
-        void overlapsWithRotation() {
-            Shape shapeA1 = factory.getFSphere(-6, 0, 0, 1);
-            Shape shapeA2 = factory.getFSphere(-4, 0, 0, 1);
-            Shape shapeA3 = factory.getFSphere(-2, 0, 0, 1);
-
-            FAssembly<Shape> coreA = factory.getFAssembly(List.of(shapeA1, shapeA2, shapeA3));
-            FAggregate aggregateA = factory.getRefFAggregate(coreA);
-
-            Shape shapeB1 = factory.getFSphere(2, 0, 0, 1);
-            Shape shapeB2 = factory.getFSphere(4, 0, 0, 1);
-            Shape shapeB3 = factory.getFSphere(6, 0, 0, 1);
-
-            FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
-            FAggregate aggregateB = factory.getRefFAggregate(coreB);
-
-            assertFalse(aggregateA.overlaps(aggregateB));
-
-            assertFalse(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 1, 0), 0));
-            assertFalse(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 0, 1), 0));
-            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 1, 0), Math.PI));
-            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(0, 0, 1), Math.PI));
-            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(-2, 0, 0, -2, 1, 0), Math.PI));
-            assertTrue(aggregateA.overlapsWithRotation(aggregateB, factory.getFVector(-2, 0, 0, -2, 0, 1), Math.PI));
-        }
-
-        @Test
-        @DisplayName("Touches")
-        void touches() {
-            FAggregate aggregateA = factory.getFAggregate();
-            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
-            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
-            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
-
-            FAggregate aggregateB = factory.getFAggregate();
-            aggregateB.addRefParticle(factory.getFSphere(4, -2, 0, 1));
-            aggregateB.addRefParticle(factory.getFSphere(4, 0, 0, 1));
-            aggregateB.addRefParticle(factory.getFSphere(4, 2, 0, 1));
-
-            assertTrue(aggregateA.touches(aggregateB));
-        }
-
-        @Test
-        @DisplayName("Touches (fail) - A")
-        void touchesFailA() {
-            FAggregate aggregateA = factory.getFAggregate();
-            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
-            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
-            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
-
-            FAggregate aggregateB = factory.getFAggregate();
-            aggregateB.addRefParticle(factory.getFSphere(3.9, -2, 0, 1));
-            aggregateB.addRefParticle(factory.getFSphere(3.9, 0, 0, 1));
-            aggregateB.addRefParticle(factory.getFSphere(3.9, 2, 0, 1));
-
-            assertFalse(aggregateA.touches(aggregateB));
-        }
-
-        @Test
-        @DisplayName("Touches (fail) - B")
-        void touchesFailB() {
-            FAggregate aggregateA = factory.getFAggregate();
-            aggregateA.addRefParticle(factory.getFSphere(-2, 0, 0, 1));
-            aggregateA.addRefParticle(factory.getFSphere(0, 0, 0, 1));
-            aggregateA.addRefParticle(factory.getFSphere(2, 0, 0, 1));
-
-            FAggregate aggregateB = factory.getFAggregate();
-            aggregateB.addRefParticle(factory.getFSphere(4.1, -2, 0, 1));
-            aggregateB.addRefParticle(factory.getFSphere(4.1, 0, 0, 1));
-            aggregateB.addRefParticle(factory.getFSphere(4.1, 2, 0, 1));
-
-            assertFalse(aggregateA.touches(aggregateB));
-        }
-
-        @Test
         @DisplayName("Project A")
         void projectA() {
             Shape shapeA1 = factory.getFSphere(5, 0, 0, 1);
@@ -2884,7 +2886,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isCompact());
+            assertTrue(aggregateA.isContactConnected());
         }
 
         @Test
@@ -2907,7 +2909,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isCompact());
+            assertTrue(aggregateA.isContactConnected());
         }
 
         @Test
@@ -2930,7 +2932,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isCompact());
+            assertTrue(aggregateA.isContactConnected());
         }
 
         @Test
@@ -2953,7 +2955,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isCompact());
+            assertTrue(aggregateA.isContactConnected());
         }
 
         @Test
@@ -2974,7 +2976,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isCompact());
+            assertTrue(aggregateA.isContactConnected());
         }
 
         @Test
@@ -3003,7 +3005,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isCompact());
+            assertTrue(aggregateA.isContactConnected());
         }
 
         @Test
@@ -3030,7 +3032,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isCompact());
+            assertTrue(aggregateA.isContactConnected());
         }
 
         @Test
@@ -3263,8 +3265,8 @@ public class FAggregateTest {
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isCompact());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -3295,8 +3297,8 @@ public class FAggregateTest {
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isCompact());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -3327,8 +3329,8 @@ public class FAggregateTest {
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isCompact());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -3359,8 +3361,8 @@ public class FAggregateTest {
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isCompact());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isNonOverlapping());
         }
     }
 

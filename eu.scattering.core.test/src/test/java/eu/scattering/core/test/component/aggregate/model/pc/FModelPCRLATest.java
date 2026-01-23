@@ -78,9 +78,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -93,9 +93,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(100)
@@ -108,9 +108,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -123,9 +123,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
     }
 
@@ -144,9 +144,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -190,9 +190,9 @@ public class FModelPCRLATest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -294,9 +294,9 @@ public class FModelPCRLATest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -340,9 +340,9 @@ public class FModelPCRLATest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test

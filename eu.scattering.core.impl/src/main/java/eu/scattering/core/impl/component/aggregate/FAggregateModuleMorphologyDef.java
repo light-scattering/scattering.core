@@ -166,52 +166,6 @@ public class FAggregateModuleMorphologyDef {
         this.aggregate.getRefParticles().forEach(e -> e.setDelta(delta));
     }
 
-    protected boolean isSparse() {
-
-        if (this.aggregate.size() == 0) {
-            return false;
-        }
-
-        Queue<Shape> queue = new LinkedList<>(this.aggregate.getRefParticles().asList());
-
-        while (!queue.isEmpty()) {
-            if (queue.poll().overlaps(queue) != 0) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    protected boolean isCompact() {
-
-        if (this.aggregate.getRefParticles().size() == 0) {
-            return false;
-        }
-
-        List<Shape> processed = new ArrayList<>();
-
-        isCompactRecurrence(this.aggregate.getRefParticles().asList().get(0), processed);
-
-        return this.aggregate.getRefParticles().asList().size() == processed.size();
-    }
-
-    private void isCompactRecurrence(Shape shape, List<Shape> processed) {
-
-        if (processed.contains(shape)) {
-            return;
-        }
-
-        processed.add(shape);
-
-        List<Shape> candidates = new ArrayList<>();
-        shape.touchesOrOverlaps(this.aggregate.getRefParticles().asList(), candidates);
-
-        for (Shape candidate : candidates) {
-            isCompactRecurrence(candidate, processed);
-        }
-    }
-
     // -------------------------------------------------------------------------------------------------
 
     protected void translate(double x, double y, double z) {

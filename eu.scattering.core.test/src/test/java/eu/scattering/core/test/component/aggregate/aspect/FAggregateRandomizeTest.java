@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.Dimension;
+import eu.scattering.core.design.type.OverlapFactor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -34,8 +35,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().project(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
     @Test
@@ -53,8 +54,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().project(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
     @Test
@@ -72,8 +73,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().projectOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
             assertEquals(0, shape.getCenterZ(), 1E-6);
@@ -95,8 +96,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().projectOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
             assertEquals(0, shape.getCenterZ(), 1E-6);
@@ -118,8 +119,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().attach(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
     @Test
@@ -137,8 +138,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().attach(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
     @Test
@@ -156,8 +157,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().attachOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
             assertEquals(0, shape.getCenterZ(), 1E-6);
@@ -190,8 +191,8 @@ public class FAggregateRandomizeTest {
 
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
     @Test
@@ -220,8 +221,8 @@ public class FAggregateRandomizeTest {
 
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
             assertEquals(0, shape.getCenterZ(), 1E-6);
@@ -248,8 +249,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
     @Test
@@ -272,8 +273,8 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isCompact());
-        assertEquals(0, aggA.getLinearOverlapFactor(), 1E-4);
+        assertTrue(aggA.isContactConnected());
+        assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
             assertEquals(0, shape.getCenterZ(), 1E-6);

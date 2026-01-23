@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.aggregate.validator.module.FValidator
 import eu.scattering.core.design.component.aggregate.validator.module.FValidatorNoOverlap;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.type.FractalDimension;
+import eu.scattering.core.design.type.OverlapFactor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -38,7 +39,7 @@ public class FValidatorTest {
             fModel.addCompletionValidator(fValidator);
             fModel.build();
 
-            assertTrue(fAggregate.getLinearOverlapFactor() < epsilon);
+            assertTrue(fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max() < epsilon);
         }
 
         @Test
@@ -54,7 +55,7 @@ public class FValidatorTest {
             fModel.addCompletionValidator(fValidator);
             fModel.build();
 
-            assertTrue(fAggregate.getLinearOverlapFactor() < epsilon);
+            assertTrue(fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max() < epsilon);
         }
 
         @Test

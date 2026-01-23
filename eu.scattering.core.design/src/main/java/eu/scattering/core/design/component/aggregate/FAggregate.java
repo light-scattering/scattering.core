@@ -86,21 +86,20 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     //--------------------------------------------------
 
-//    FStat getOverlapFactor(OverlapFactor type);
+    FStat getOverlapFactor(OverlapFactor type);
 
-    double getQuantitativeOverlapFactor();
-    FStat getQuantitativeOverlapFactorData();
+    boolean isNonOverlapping();
 
+    boolean isPointConnected();
+    boolean isContactConnected();
 
+    boolean touches(FAggregate arg);
+    boolean overlaps(FAggregate arg);
 
-    double getLinearOverlapFactor();
-    FStat getLinearOverlapFactorData();
-
-    double getTotalVolumetricOverlapFactor();
-
-
-    double getVolumetricOverlapFactor();
-    FStat getVolumetricOverlapFactorData();
+    @Fragment
+    boolean overlapsWithShift(FAggregate arg, FVector shift);
+    @Fragment
+    boolean overlapsWithRotation(FAggregate arg, FVector axis, double degree);
 
     //--------------------------------------------------
 
@@ -122,12 +121,6 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     void setParticleDelta(double delta);
     void setParticleEpsilon(double epsilon);
-
-    boolean isSparse();
-    boolean isCompact();
-
-    boolean touches(FAggregate arg);
-    boolean overlaps(FAggregate arg);
 
     void merge(FAggregate arg, boolean removeParticles);
 
@@ -154,11 +147,6 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     FAggregate addFBuffer(int capacity);
     FAggregate addFMaterial();
-
-    @Fragment
-    boolean overlapsWithShift(FAggregate arg, FVector shift);
-    @Fragment
-    boolean overlapsWithRotation(FAggregate arg, FVector axis, double degree);
 
     @Modificator
     FAssembly<Shape> getRefParticles();

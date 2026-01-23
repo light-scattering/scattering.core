@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,9 +81,9 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -98,9 +97,9 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(100)
@@ -114,9 +113,9 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @RepeatedTest(10)
@@ -130,9 +129,9 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
     }
 
@@ -152,9 +151,9 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -201,9 +200,9 @@ public class FModelPCTunableTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -354,9 +353,9 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(size, fAggregate.size());
-            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test
@@ -403,9 +402,9 @@ public class FModelPCTunableTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isCompact());
+            assertTrue(fAggregate.isContactConnected());
             assertEquals(45, quantity.get());
-            assertEquals(0, fAggregate.getLinearOverlapFactor(), epsilon);
+            assertTrue(fAggregate.isNonOverlapping());
         }
 
         @Test

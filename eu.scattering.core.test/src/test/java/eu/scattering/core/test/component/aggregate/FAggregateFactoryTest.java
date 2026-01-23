@@ -2,6 +2,7 @@ package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
+import eu.scattering.core.design.type.OverlapFactor;
 import org.junit.jupiter.api.*;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
@@ -81,7 +82,7 @@ public class FAggregateFactoryTest {
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertTrue(fAggregate.getRefParticles().size() > 1000),
-                    () -> assertTrue(fAggregate.getLinearOverlapFactor() < EPSILON)
+                    () -> assertTrue(fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max() < EPSILON)
             );
         }
 
@@ -100,7 +101,7 @@ public class FAggregateFactoryTest {
 
             Assertions.assertAll("Validate FAggregate",
                     () -> assertTrue(fAggregate.getRefParticles().size() > 1000),
-                    () -> assertTrue(fAggregate.getLinearOverlapFactor() < EPSILON)
+                    () -> assertTrue(fAggregate.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max() < EPSILON)
             );
         }
 
