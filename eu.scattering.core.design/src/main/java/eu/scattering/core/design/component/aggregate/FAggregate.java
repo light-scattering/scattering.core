@@ -15,10 +15,7 @@ import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
 import eu.scattering.core.design.transfer.primitive.FPairPos3D;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.type.Center;
-import eu.scattering.core.design.type.FractalDimension;
-import eu.scattering.core.design.type.LinearDimension;
-import eu.scattering.core.design.type.RadiusOfGyration;
+import eu.scattering.core.design.type.*;
 
 import java.util.function.BiConsumer;
 
@@ -47,6 +44,11 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     double getRadius(FPoint center);
     double getRadius(FPos3D center);
     double getRadius(Center type);
+
+    void setRadius(double x, double y, double z, double radius);
+    void setRadius(FPoint center, double radius);
+    void setRadius(FPos3D center, double radius);
+    void setRadius(Center type, double radius);
 
     //--------------------------------------------------
 
@@ -84,10 +86,15 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     //--------------------------------------------------
 
-    int getQuantitativeOverlapFactor();
+//    FStat getOverlapFactor(OverlapFactor type);
+
+    double getQuantitativeOverlapFactor();
+    FStat getQuantitativeOverlapFactorData();
 
     double getVolumetricOverlapFactor();
+
     double getLinearOverlapFactor();
+    FStat getLinearOverlapFactorData();
 
     //--------------------------------------------------
 
@@ -132,7 +139,7 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     //--------------------------------------------------
 
-    FAggregate copy();
+    FAggregate copy(boolean deep);
 
     boolean isExact(FAggregate aggregate);
     boolean isExactData(FAggregate aggregate);
@@ -160,7 +167,7 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     FAggregate setRefFMaterial(FMaterial refMaterial);
 
     @Modificator
-    FBuffer<FBufferData> getRefFBuffer();
-    @Modificator
     FMaterial getRefFMaterial();
+    @Modificator
+    FBuffer<FBufferData> getRefFBuffer();
 }

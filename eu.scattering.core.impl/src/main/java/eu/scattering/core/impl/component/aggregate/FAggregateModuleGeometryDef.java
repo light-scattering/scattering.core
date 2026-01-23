@@ -281,4 +281,35 @@ public class FAggregateModuleGeometryDef {
             case SPHERICAL -> getRadius(aggregate.getSphericalCenter());
         };
     }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected void setRadius(double x, double y, double z, double radius) {
+
+        this.aggregate.translate(-x, -y, -z);
+
+        double radiusCurrent = this.aggregate.getRadius(0, 0, 0);
+
+        double factor = radius / radiusCurrent;
+
+        this.aggregate.getRefParticles().scale(factor);
+        this.aggregate.getRefParticles().forEach(p -> p.setRadius(p.getRadius() * factor));
+
+        this.aggregate.translate(x, y, z);
+    }
+
+    protected void setRadius(FPoint center, double radius) {
+
+        setRadius(center.getX(), center.getY(), center.getZ(), radius);
+    }
+
+    protected void setRadius(FPos3D center, double radius) {
+
+        setRadius(center.getD0(), center.getD1(), center.getD2(), radius);
+    }
+
+    protected void setRadius(Center type, double radius) {
+
+        setRadius(this.aggregate.getCenter(type), radius);
+    }
 }

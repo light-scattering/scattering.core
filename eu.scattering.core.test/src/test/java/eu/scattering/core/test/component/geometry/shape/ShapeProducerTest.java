@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static eu.scattering.core.test.Config.epsilon;
 import static eu.scattering.core.test.Config.factory;
@@ -239,7 +238,7 @@ public class ShapeProducerTest {
                 .withProducer(fSphereProducer2, 20)
                 .withProducer(fSphereProducer3, 20);
 
-        List<Shape> results = producer.stream().limit(60).collect(Collectors.toList());
+        List<Shape> results = producer.stream().limit(60).toList();
 
         boolean sequence = true;
         for (int i = 0 ; i < 20 ; i++) {

@@ -132,6 +132,8 @@ public class FSphereDef extends ShapePresetDef implements FSphere {
             this.addCoatInternal(arg.getCoatWidth(i));
         }
 
+        setMeta(arg.getMeta());
+
         return this;
     }
 

@@ -185,6 +185,30 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public void setRadius(double x, double y, double z, double radius) {
+
+        this.moduleGeometry.setRadius(x, y, z, radius);
+    }
+
+    @Override
+    public void setRadius(FPoint center, double radius) {
+
+        this.moduleGeometry.setRadius(center, radius);
+    }
+
+    @Override
+    public void setRadius(FPos3D center, double radius) {
+
+        this.moduleGeometry.setRadius(center, radius);
+    }
+
+    @Override
+    public void setRadius(Center type, double radius) {
+
+        this.moduleGeometry.setRadius(type, radius);
+    }
+
+    @Override
     public FPoint getCenter(FPoint in, Center type) {
 
         this.moduleCenter.getCenter(in, type);
@@ -301,9 +325,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public int getQuantitativeOverlapFactor() {
+    public double getQuantitativeOverlapFactor() {
 
         return this.moduleOverlap.getQuantitativeOverlapFactor();
+    }
+
+    @Override
+    public FStat getQuantitativeOverlapFactorData() {
+
+        return this.moduleOverlap.getQuantitativeOverlapFactorData();
     }
 
     @Override
@@ -679,11 +709,13 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FAggregate copy() {
+    public FAggregate copy(boolean deep) {
         FAggregate copy = FAggregateDef.create(this.factory, getRefParticles().copy());
 
-        copy.setRefFMaterial(getRefFMaterial().copy());
-        copy.setRefFBuffer(supplyFBuffer(getRefFBuffer().capacity()));
+        if (deep) {
+            copy.setRefFMaterial(getRefFMaterial().copy());
+            copy.setRefFBuffer(supplyFBuffer(getRefFBuffer().capacity()));
+        }
 
         return copy;
     }

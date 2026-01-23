@@ -4,7 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.aspect.export.FExportAspect;
 import eu.scattering.core.design.component.aggregate.FAggregateAspectExport;
 import eu.scattering.core.design.statistics.StatisticsAspectExport;
-import eu.scattering.core.impl.component.FAggregateAspectExportDef;
+import eu.scattering.core.impl.component.aggregate.FAggregateAspectExportDef;
 import eu.scattering.core.impl.statistics.StatisticsAspectExportDef;
 
 public class FExportAspectDef implements FExportAspect {

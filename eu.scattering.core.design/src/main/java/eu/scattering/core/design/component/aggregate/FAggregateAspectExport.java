@@ -1,6 +1,7 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.annotation.Legacy;
+import eu.scattering.core.design.type.PovRayPreset;
 
 public interface FAggregateAspectExport {
 
@@ -8,6 +9,8 @@ public interface FAggregateAspectExport {
     void toFLAGE(FAggregate aggregate, StringBuilder builder);
 
     void toNGSolve(FAggregate aggregate, StringBuilder builder);
+
+    void toPovRay(FAggregate aggregate, PovRayPreset preset, StringBuilder builder);
 
     //--------------------------------------------------
 
@@ -24,6 +27,14 @@ public interface FAggregateAspectExport {
         StringBuilder builder = new StringBuilder();
 
         toNGSolve(aggregate, builder);
+
+        return builder.toString();
+    }
+
+    default String toPovRay(FAggregate aggregate, PovRayPreset preset) {
+        StringBuilder builder = new StringBuilder();
+
+        toPovRay(aggregate, preset, builder);
 
         return builder.toString();
     }

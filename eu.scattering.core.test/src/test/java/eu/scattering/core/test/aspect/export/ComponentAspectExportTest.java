@@ -1,5 +1,6 @@
 package eu.scattering.core.test.aspect.export;
 
+import eu.scattering.core.design.aspect.randomize.generator.module.dist1d.FDist1D;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.aggregate.model.pc.dla.FModelPCDLA;
@@ -7,8 +8,10 @@ import eu.scattering.core.design.component.aggregate.model.pc.tunable.FModelPCTu
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.component.geometry.shape.sphere.FSphereProducer;
 import eu.scattering.core.design.extension.Producer;
 import eu.scattering.core.design.type.Dimension;
+import eu.scattering.core.design.type.PovRayPreset;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +31,7 @@ public class ComponentAspectExportTest {
         FAssembly<Shape> fAssembly = factory.getFAssembly(fProducer.getListRandomized(quantity));
         FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-        FModel modelRLA = factory.getFModelContext().pc().rla(Dimension.D2, fAggregate);
+        FModel modelRLA = factory.getFModelContext().pc().rla(fAggregate);
 
         modelRLA.build();
 
@@ -44,6 +47,108 @@ public class ComponentAspectExportTest {
     }
 
     //--------------------------------------------------
+
+    @Test
+    @DisplayName("Export PovRay RLCA 3D - Plain")
+    void exportPovRayRLCA3DPlain() {
+        int quantity = 100;
+
+        FDist1D setDist1 = factory.getFRand().getFDist1DNormal(5, 0.5);
+        FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
+
+        FDist1D setDist2 = factory.getFRand().getFDist1DNormal(10, 1);
+        FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
+
+        FAssembly<Shape> core = factory.getFAssembly();
+
+        core.register(set1.getListRandomized((int) (0.75 * quantity)));
+        core.register(set2.getListRandomized((int) (0.25 * quantity)));
+
+        FAggregate fAggregate = factory.getRefFAggregate(core);
+
+        FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+
+        fModel.build();
+
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRayPreset.BOX);
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("sphere"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    @Test
+    @DisplayName("Export PovRay RLCA 3D - Box")
+    void exportPovRayRLCA3DBox() {
+        int quantity = 100;
+
+        FDist1D setDist1 = factory.getFRand().getFDist1DNormal(5, 0.5);
+        FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
+
+        FDist1D setDist2 = factory.getFRand().getFDist1DNormal(10, 1);
+        FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
+
+        FAssembly<Shape> core = factory.getFAssembly();
+
+        core.register(set1.getListRandomized((int) (0.75 * quantity)));
+        core.register(set2.getListRandomized((int) (0.25 * quantity)));
+
+        FAggregate fAggregate = factory.getRefFAggregate(core);
+
+        FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+
+        fModel.build();
+
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRayPreset.BOX);
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("sphere"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    @Test
+    @DisplayName("Export PovRay RLCA 3D - Radius")
+    void exportPovRayRLCA3DRadius() {
+        int quantity = 100;
+
+        FDist1D setDist1 = factory.getFRand().getFDist1DNormal(5, 0.5);
+        FSphereProducer set1 = factory.getFSphereProducer(setDist1).setMeta("Tag 1");
+
+        FDist1D setDist2 = factory.getFRand().getFDist1DNormal(10, 1);
+        FSphereProducer set2 = factory.getFSphereProducer(setDist2).setMeta("Tag 2");
+
+        FAssembly<Shape> core = factory.getFAssembly();
+
+        core.register(set1.getListRandomized((int) (0.75 * quantity)));
+        core.register(set2.getListRandomized((int) (0.25 * quantity)));
+
+        FAggregate fAggregate = factory.getRefFAggregate(core);
+
+        FModel fModel = factory.getFModelContext().cc().rlca(fAggregate);
+
+        fModel.build();
+
+        String model = factory.getExportAspect().getFAggregateContext().toPovRay(fAggregate, PovRayPreset.RADIUS);
+        String[] modelSplit = model.split("\n");
+
+        Assertions.assertAll("Validate model",
+                () -> assertTrue(modelSplit.length > quantity,
+                        "The number of lines is incorrect"),
+                () -> assertTrue(model.contains("sphere"),
+                        "The model doesn't contain required shapes")
+        );
+    }
+
+    //--------------------------------------------------
+
 
     @Test
     @DisplayName("Export NGSolve RLA 3D")

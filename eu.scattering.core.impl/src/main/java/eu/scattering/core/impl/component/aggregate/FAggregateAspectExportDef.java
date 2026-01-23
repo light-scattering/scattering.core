@@ -1,8 +1,10 @@
-package eu.scattering.core.impl.component;
+package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.aggregate.FAggregateAspectExport;
 import eu.scattering.core.design.component.geometry.shape.sphere.FSphere;
+import eu.scattering.core.design.type.PovRayPreset;
+import eu.scattering.core.impl.component.aggregate.export.PovRayDef;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,12 @@ public class FAggregateAspectExportDef implements FAggregateAspectExport {
         builder.append(";\n\n");
         builder.append("solid aggregate = structure;\n");
         builder.append("tlo aggregate;");
+    }
+
+    @Override
+    public void toPovRay(FAggregate aggregate, PovRayPreset preset, StringBuilder builder) {
+
+        PovRayDef.core(aggregate, preset, builder);
     }
 
     //--------------------------------------------------

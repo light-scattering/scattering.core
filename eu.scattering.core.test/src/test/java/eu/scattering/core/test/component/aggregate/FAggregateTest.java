@@ -1,6 +1,7 @@
 package eu.scattering.core.test.component.aggregate;
 
 import eu.scattering.core.design.component.aggregate.FAggregate;
+import eu.scattering.core.design.component.aggregate.model.FModel;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.container.assembly.FAssembly;
 import eu.scattering.core.design.component.geometry.shape.Shape;
@@ -236,8 +237,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Copy")
-        void copy() {
+        @DisplayName("Copy - Deep")
+        void copyDeep() {
             Shape fSphereAA = factory.getFSphere(0, 0, 0, 1);
             Shape fSphereAB = factory.getFSphere(2, 0, 0, 1);
             Shape fSphereAC = factory.getFSphere(0, 2, 0, 1);
@@ -249,10 +250,31 @@ public class FAggregateTest {
 
             fAggregateA.getRefFMaterial().setDensity("X", 5);
 
-            FAggregate fAggregateB = fAggregateA.copy();
+            FAggregate fAggregateB = fAggregateA.copy(true);
 
             assertNotSame(fAggregateA, fAggregateB);
             assertTrue(fAggregateA.isExact(fAggregateB));
+        }
+
+        @Test
+        @DisplayName("Copy - Shallow")
+        void copyShallow() {
+            Shape fSphereAA = factory.getFSphere(0, 0, 0, 1);
+            Shape fSphereAB = factory.getFSphere(2, 0, 0, 1);
+            Shape fSphereAC = factory.getFSphere(0, 2, 0, 1);
+            Shape fSphereAD = factory.getFSphere(0, 0, 2, 1);
+
+            FAssembly<Shape> fAssemblyA = factory.getFAssembly(List.of(fSphereAA, fSphereAB, fSphereAC, fSphereAD));
+
+            FAggregate fAggregateA = factory.getRefFAggregate(fAssemblyA).addFBuffer(10).addFMaterial();
+
+            fAggregateA.getRefFMaterial().setDensity("X", 5);
+
+            FAggregate fAggregateB = fAggregateA.copy(false);
+
+            assertNotSame(fAggregateA, fAggregateB);
+            assertFalse(fAggregateA.isExact(fAggregateB));
+            assertTrue(fAggregateA.isExactData(fAggregateB));
         }
     }
 
@@ -1002,6 +1024,86 @@ public class FAggregateTest {
             double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
 
             assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Get overlap factory quantitative - Same position")
+        void getOverlapFactorQuantitativeSamePosition() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getQuantitativeOverlapFactor();
+            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+
+            assertEquals(1, value);
+            assertEquals(2, data.size());
+            assertEquals(2, data.sum());
+        }
+
+        @Test
+        @DisplayName("Get overlap factory quantitative - Distant")
+        void getOverlapFactorQuantitativeDistant() {
+            FSphere fSphereA = factory.getFSphere(-2, 0, 0);
+            FSphere fSphereB = factory.getFSphere(2, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getQuantitativeOverlapFactor();
+            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+
+            assertEquals(0, value);
+            assertEquals(2, data.size());
+            assertEquals(0, data.sum());
+        }
+
+        @Test
+        @DisplayName("Get overlap factory quantitative - Intersecting")
+        void getOverlapFactorQuantitativeIntersecting() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getQuantitativeOverlapFactor();
+            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+
+            assertEquals(1, value);
+            assertEquals(2, data.size());
+            assertEquals(2, data.sum());
+        }
+
+        @Test
+        @DisplayName("Get overlap factory quantitative - Field")
+        void getOverlapFactorQuantitativeField() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0, 1);
+            FSphere fSphereB = factory.getFSphere(5, 5, 5, 1);
+            FSphere fSphereC = factory.getFSphere(0, 1.5, 0, 1);
+            FSphere fSphereD = factory.getFSphere(0, 3, 0, 1);
+            FSphere fSphereE = factory.getFSphere(0, 1.5, 1, 0.5);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getQuantitativeOverlapFactor();
+            FStat data = fAggregate.getQuantitativeOverlapFactorData();
+
+            assertEquals(3, value);
+            assertEquals(5, data.size());
+            assertEquals(6, data.sum());
+            assertEquals(1, data.get(0));
+            assertEquals(0, data.get(1));
+            assertEquals(3, data.get(2));
+            assertEquals(1, data.get(3));
+            assertEquals(1, data.get(4));
         }
 
         @Test
@@ -2998,6 +3100,134 @@ public class FAggregateTest {
                     () -> assertTrue(fAggregate.getRefParticles().asList().get(1).isExact(factory.getFSphere(1, 4, 3))),
                     () -> assertTrue(fAggregate.getRefParticles().asList().get(2).isExact(factory.getFSphere(1, 2, 5)))
             );
+        }
+
+        @Test
+        @DisplayName("Set radius with primitives")
+        void setRadiusWithPrimitives() {
+            int quantity = 100;
+            double size = 10;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
+            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+
+            fModel.build();
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerA = center.copy();
+            double radiusA = fAggregate.getRadius(centerA);
+
+            fAggregate.setRadius(center.getX(), center.getY(), center.getZ(), size);
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerB = center.copy();
+            double radiusB = fAggregate.getRadius(centerB);
+
+            assertTrue(centerA.isSimilar(centerB));
+            assertTrue(radiusA > radiusB);
+            assertEquals(size, radiusB, epsilon);
+            assertTrue(fAggregate.isCompact());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @Test
+        @DisplayName("Set radius with FPoint")
+        void setRadiusWithFPoint() {
+            int quantity = 100;
+            double size = 10;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
+            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+
+            fModel.build();
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerA = center.copy();
+            double radiusA = fAggregate.getRadius(centerA);
+
+            fAggregate.setRadius(center, size);
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerB = center.copy();
+            double radiusB = fAggregate.getRadius(centerB);
+
+            assertTrue(centerA.isSimilar(centerB));
+            assertTrue(radiusA > radiusB);
+            assertEquals(size, radiusB, epsilon);
+            assertTrue(fAggregate.isCompact());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @Test
+        @DisplayName("Set radius with FPos3D")
+        void setRadiusWithFPos3D() {
+            int quantity = 100;
+            double size = 10;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
+            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+
+            fModel.build();
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerA = center.copy();
+            double radiusA = fAggregate.getRadius(centerA);
+
+            fAggregate.setRadius(center.toFPos3D(), size);
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerB = center.copy();
+            double radiusB = fAggregate.getRadius(centerB);
+
+            assertTrue(centerA.isSimilar(centerB));
+            assertTrue(radiusA > radiusB);
+            assertEquals(size, radiusB, epsilon);
+            assertTrue(fAggregate.isCompact());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
+        }
+
+        @Test
+        @DisplayName("Set radius with center type")
+        void setRadiusWithCenterType() {
+            int quantity = 100;
+            double size = 10;
+
+            FAggregate fAggregate = factory.getFAggregateContext().base().monodisperse(quantity, 10);
+            FModel fModel = factory.getFModelContext().pc().tunable(fAggregate, 1.8, 1.6);
+
+            fModel.build();
+
+            FPoint center = factory.getFPoint();
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerA = center.copy();
+            double radiusA = fAggregate.getRadius(centerA);
+
+            fAggregate.setRadius(Center.SPATIAL, size);
+
+            fAggregate.getCenter(center, Center.SPATIAL);
+
+            FPoint centerB = center.copy();
+            double radiusB = fAggregate.getRadius(centerB);
+
+            assertTrue(centerA.isSimilar(centerB));
+            assertTrue(radiusA > radiusB);
+            assertEquals(size, radiusB, epsilon);
+            assertTrue(fAggregate.isCompact());
+            assertEquals(0, fAggregate.getQuantitativeOverlapFactor());
         }
     }
 
