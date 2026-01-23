@@ -934,9 +934,12 @@ public class FAggregateTest {
             );
         }
 
+
+
+
         @Test
-        @DisplayName("Get overlap factor - Same position - Double")
-        void getOverlapFactorSamePositionDouble() {
+        @DisplayName("Get total overlap factor volumetric - Same position - Double")
+        void getTotalOverlapFactorVolumetricSamePositionDouble() {
             FSphere fSphereA = factory.getFSphere();
             FSphere fSphereB = factory.getFSphere();
 
@@ -944,14 +947,14 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getVolumetricOverlapFactor();
+            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
 
             assertEquals(1, overlap, epsilon);
         }
 
         @Test
-        @DisplayName("Get overlap factor - Same position - Triple")
-        void getOverlapFactorSamePositionTriple() {
+        @DisplayName("Get total overlap factor volumetric - Same position - Triple")
+        void getTotalOverlapFactorVolumetricSamePositionTriple() {
             FSphere fSphereA = factory.getFSphere();
             FSphere fSphereB = factory.getFSphere();
             FSphere fSphereC = factory.getFSphere();
@@ -960,14 +963,14 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getVolumetricOverlapFactor();
+            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
 
             assertEquals(1, overlap, epsilon);
         }
 
         @Test
-        @DisplayName("Get overlap factor - Distant")
-        void getOverlapFactorDistant() {
+        @DisplayName("Get total overlap factor volumetric - Distant")
+        void getTotalOverlapFactorVolumetricDistant() {
             FSphere fSphereA = factory.getFSphere(-1, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
 
@@ -975,14 +978,14 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getVolumetricOverlapFactor();
+            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
 
             assertEquals(0, overlap, epsilon);
         }
 
         @Test
-        @DisplayName("Get overlap factor - Intersecting")
-        void getOverlapFactorIntersecting() {
+        @DisplayName("Get total overlap factor volumetric - Intersecting")
+        void getTotalOverlapFactorVolumetricIntersecting() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
 
@@ -990,7 +993,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getVolumetricOverlapFactor();
+            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
 
             double volAlgOverlap = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
             double volAlgTotal = 2 * (4  * Math.PI / 3) - 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -1001,8 +1004,8 @@ public class FAggregateTest {
         }
 
         @Test
-        @DisplayName("Get overlap factor - Field")
-        void getOverlapFactorField() {
+        @DisplayName("Get total overlap factor volumetric - Field")
+        void getTotalOverlapFactorVolumetricField() {
             FSphere fSphereA = factory.getFSphere(0, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
             FSphere fSphereC = factory.getFSphere(0, 5, 0);
@@ -1013,7 +1016,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getVolumetricOverlapFactor();
+            double overlap = fAggregate.getTotalVolumetricOverlapFactor();
 
             double volAlgOverlap = (4  * Math.PI / 3) +
                     2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5);
@@ -1024,6 +1027,122 @@ public class FAggregateTest {
             double relError = factory.getStatisticsHelper().getRelErr(volAlgOverlap / volAlgTotal, overlap);
 
             assertTrue(relError < 0.01);
+        }
+
+        @Test
+        @DisplayName("Get overlap factor volumetric - Same position - Double")
+        void getOverlapFactorVolumetricSamePositionDouble() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getVolumetricOverlapFactor();
+            FStat data = fAggregate.getVolumetricOverlapFactorData();
+
+            assertEquals(1, value, epsilon);
+            assertEquals(2, data.size());
+            assertEquals(2, data.sum(), epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factor volumetric - Same position - Triple")
+        void getOverlapFactorVolumetricSamePositionTriple() {
+            FSphere fSphereA = factory.getFSphere();
+            FSphere fSphereB = factory.getFSphere();
+            FSphere fSphereC = factory.getFSphere();
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getVolumetricOverlapFactor();
+            FStat data = fAggregate.getVolumetricOverlapFactorData();
+
+            assertEquals(1, value, epsilon);
+            assertEquals(3, data.size());
+            assertEquals(3, data.sum(), epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factor volumetric - Distant")
+        void getOverlapFactorVolumetricDistant() {
+            FSphere fSphereA = factory.getFSphere(-1, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getVolumetricOverlapFactor();
+            FStat data = fAggregate.getVolumetricOverlapFactorData();
+
+            assertEquals(0, value, epsilon);
+            assertEquals(2, data.size());
+            assertEquals(0, data.sum(), epsilon);
+        }
+
+        @Test
+        @DisplayName("Get overlap factor volumetric - Intersecting")
+        void getOverlapFactorVolumetricIntersecting() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getVolumetricOverlapFactor();
+            FStat data = fAggregate.getVolumetricOverlapFactorData();
+
+            double ovAlg = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5) / fSphereA.getVolumeAlgebraic();
+
+            double relErrorValue = factory.getStatisticsHelper().getRelErr(ovAlg, value);
+            double relErrorData = factory.getStatisticsHelper().getRelErr(ovAlg, data.mean());
+
+            assertTrue(relErrorValue < 0.01);
+            assertTrue(relErrorData < 0.01);
+            assertEquals(2, data.size());
+            assertEquals(data.get(0), data.get(1), 1E-4);
+        }
+
+        @Test
+        @DisplayName("Get overlap factor volumetric - Field")
+        void getOverlapFactorVolumetricField() {
+            FSphere fSphereA = factory.getFSphere(0, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 5, 0);
+            FSphere fSphereD = factory.getFSphere(0, 0, 5);
+            FSphere fSphereE = factory.getFSphere(0, 0, 5, 2);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
+
+            FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
+
+            double value = fAggregate.getVolumetricOverlapFactor();
+            FStat data = fAggregate.getVolumetricOverlapFactorData();
+
+            double ovAlgA = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5) / fSphereA.getVolumeAlgebraic();
+            double ovAlgB = 2 * (Math.PI * (0.5 * 0.5) / 3) * (3 - 0.5) / fSphereB.getVolumeAlgebraic();
+            double ovAlgC = 0;
+            double ovAlgD = (4  * Math.PI / 3) / fSphereD.getVolumeAlgebraic();
+            double ovAlgE = (4  * Math.PI / 3) / fSphereE.getVolumeAlgebraic();
+
+            double ovAlg = (ovAlgA + ovAlgB + ovAlgC + ovAlgD + ovAlgE) / 5;
+
+            double relErrorValue = factory.getStatisticsHelper().getRelErr(ovAlg, value);
+            double relErrorData = factory.getStatisticsHelper().getRelErr(ovAlg, value);
+
+            assertTrue(relErrorValue < 0.01);
+            assertTrue(relErrorData < 0.01);
+            assertEquals(5, data.size());
+            assertEquals(data.get(0), ovAlgA, 1E-3);
+            assertEquals(data.get(1), ovAlgB, 1E-3);
+            assertEquals(data.get(2), ovAlgC, 1E-3);
+            assertEquals(data.get(3), ovAlgD, 1E-3);
+            assertEquals(data.get(4), ovAlgE, 1E-3);
         }
 
         @Test

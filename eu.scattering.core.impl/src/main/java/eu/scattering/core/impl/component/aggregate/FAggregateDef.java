@@ -324,6 +324,19 @@ public class FAggregateDef implements FAggregate {
         return this.moduleTopology.getDensityCorrelationFunction(log);
     }
 
+
+    @Override
+    public double getLinearOverlapFactor() {
+
+        return this.moduleOverlap.getLinearOverlapFactor();
+    }
+
+    @Override
+    public FStat getLinearOverlapFactorData() {
+
+        return this.moduleOverlap.getLinearOverlapFactorData();
+    }
+
     @Override
     public double getQuantitativeOverlapFactor() {
 
@@ -337,21 +350,21 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public double getTotalVolumetricOverlapFactor() {
+
+        return this.moduleOverlap.getTotalVolumetricOverlapFactor();
+    }
+
+    @Override
     public double getVolumetricOverlapFactor() {
 
         return this.moduleOverlap.getVolumetricOverlapFactor();
     }
 
     @Override
-    public double getLinearOverlapFactor() {
+    public FStat getVolumetricOverlapFactorData() {
 
-        return this.moduleOverlap.getLinearOverlapFactor();
-    }
-
-    @Override
-    public FStat getLinearOverlapFactorData() {
-
-        return this.moduleOverlap.getLinearOverlapFactorData();
+        return this.moduleOverlap.getVolumetricOverlapFactorData();
     }
 
     @Override

@@ -114,14 +114,46 @@ public class FAggregateModuleOverlapDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected double getVolumetricOverlapFactor() {
-        List<Double> layer = new ArrayList<>();
+    protected double getTotalVolumetricOverlapFactor() {
+        List<Double> volume = new ArrayList<>();
 
         for (Shape shape : this.aggregate.getRefParticles()) {
-            getVolumetricMethod(shape, layer);
+            getVolumetricMethod(shape, volume);
         }
 
-        return getVolumetricProcess(layer);
+        return getVolumetricProcess(volume);
+    }
+
+    protected double getVolumetricOverlapFactor() {
+
+        return getVolumetricOverlapFactorData().mean();
+    }
+
+    protected FStat getVolumetricOverlapFactorData() {
+        FStat results = this.factory.getFStat();
+
+        for (Shape shape : this.aggregate.getRefParticles()) {
+            getVolumetricMethodData(shape, results);
+        }
+
+        return results;
+    }
+
+    private void getVolumetricMethodData(Shape shape, FStat results) {
+
+        if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
+            results.add(0);
+        } else {
+            getVolumetricMethodApproxData(shape, results);
+        }
+    }
+
+    private void getVolumetricMethodApproxData(Shape shape, FStat results) {
+        FLayer fLayer = this.factory.getFLayer();
+
+        shape.fillVolumeLayerOverlap(fLayer, this.aggregate.getRefParticles());
+
+        results.add(1 - (fLayer.get() / fLayer.addSelf()));
     }
 
     private void getVolumetricMethod(Shape shape, List<Double> volume) {
@@ -175,6 +207,4 @@ public class FAggregateModuleOverlapDef {
 
         return volOverlap / volTotal;
     }
-
-
 }

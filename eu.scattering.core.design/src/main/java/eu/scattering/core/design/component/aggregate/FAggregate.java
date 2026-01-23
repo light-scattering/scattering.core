@@ -91,10 +91,16 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     double getQuantitativeOverlapFactor();
     FStat getQuantitativeOverlapFactorData();
 
-    double getVolumetricOverlapFactor();
+
 
     double getLinearOverlapFactor();
     FStat getLinearOverlapFactorData();
+
+    double getTotalVolumetricOverlapFactor();
+
+
+    double getVolumetricOverlapFactor();
+    FStat getVolumetricOverlapFactorData();
 
     //--------------------------------------------------
 
