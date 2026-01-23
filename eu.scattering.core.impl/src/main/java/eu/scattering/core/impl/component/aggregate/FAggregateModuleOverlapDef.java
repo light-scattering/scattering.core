@@ -29,18 +29,8 @@ public class FAggregateModuleOverlapDef {
     // -------------------------------------------------------------------------------------------------
 
     protected double getQuantitativeOverlapFactor() {
-        List<Shape> particles = this.aggregate.getRefParticles().asList();
 
-        int quantity = 0;
-        for (int i = 0 ; i < particles.size() - 1 ; i++) {
-            for (int j = i + 1 ; j < particles.size() ; j++) {
-                if (particles.get(i).overlaps(particles.get(j))) {
-                    quantity++;
-                }
-            }
-        }
-
-        return quantity;
+        return getQuantitativeOverlapFactorData().mean();
     }
 
     protected FStat getQuantitativeOverlapFactorData() {
@@ -67,14 +57,22 @@ public class FAggregateModuleOverlapDef {
     // -------------------------------------------------------------------------------------------------
 
     protected double getLinearOverlapFactor() {
-        int oFacCount = 0;
-        double oFacTotal = 0;
-        Shape shapeA, shapeB;
+
+        return getLinearOverlapFactorData().mean();
+    }
+
+    protected FStat getLinearOverlapFactorData() {
+        FStat results = this.factory.getFStat();
+
         for (int i = 0 ; i < this.aggregate.size() ; i++) {
-            shapeA = this.aggregate.getRefParticles().asList().get(i);
+            results.add(0);
+        }
+
+        for (int i = 0 ; i < this.aggregate.size() - 1 ; i++) {
+            Shape shapeA = this.aggregate.getRefParticles().asList().get(i);
 
             for (int j = i + 1 ; j < this.aggregate.size() ; j++) {
-                shapeB = this.aggregate.getRefParticles().asList().get(j);
+                Shape shapeB = this.aggregate.getRefParticles().asList().get(j);
 
                 if (shapeA == shapeB) {
                     continue;
@@ -84,32 +82,34 @@ public class FAggregateModuleOverlapDef {
                     continue;
                 }
 
-                oFacTotal += geLinearSinglePair(shapeA, shapeB);
-                oFacCount += 1;
+                double overlap = getLinearOverlapFactorSingle(shapeA, shapeB);
+
+                if (overlap > results.get(i)) {
+                    results.set(i, overlap);
+                }
+
+                if (overlap > results.get(j)) {
+                    results.set(j, overlap);
+                }
             }
         }
 
-        if (oFacCount == 0) {
-            return 0;
-        }
-
-        return oFacTotal / oFacCount;
+        return results;
     }
 
-    private double geLinearSinglePair(Shape shapeA, Shape shapeB) {
+    private double getLinearOverlapFactorSingle(Shape shapeA, Shape shapeB) {
+        double distance = shapeA.getDistCenter(shapeB);
+        double overlap = 1 - (distance / (shapeA.getRadius() + shapeB.getRadius()));
 
-        double dist = shapeA.getDistCenter(shapeB);
-        double oFacRaw = 1 - (dist / (shapeA.getRadius() + shapeB.getRadius()));
-
-        if (oFacRaw > 1) {
+        if (overlap > 1) {
             return 1;
         }
 
-        if (oFacRaw < 0) {
+        if (overlap < 0) {
             return 0;
         }
 
-        return oFacRaw;
+        return overlap;
     }
 
     // -------------------------------------------------------------------------------------------------

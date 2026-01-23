@@ -1096,7 +1096,7 @@ public class FAggregateTest {
             double value = fAggregate.getQuantitativeOverlapFactor();
             FStat data = fAggregate.getQuantitativeOverlapFactorData();
 
-            assertEquals(3, value);
+            assertEquals(1.2, value, epsilon);
             assertEquals(5, data.size());
             assertEquals(6, data.sum());
             assertEquals(1, data.get(0));
@@ -1116,9 +1116,12 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getLinearOverlapFactor();
+            double value = fAggregate.getLinearOverlapFactor();
+            FStat data = fAggregate.getLinearOverlapFactorData();
 
-            assertEquals(1, overlap, epsilon);
+            assertEquals(1, value, epsilon);
+            assertEquals(2, data.size(), epsilon);
+            assertEquals(1, data.mean(), epsilon);
         }
 
         @Test
@@ -1131,9 +1134,12 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getLinearOverlapFactor();
+            double value = fAggregate.getLinearOverlapFactor();
+            FStat data = fAggregate.getLinearOverlapFactorData();
 
-            assertEquals(0, overlap, epsilon);
+            assertEquals(0, value, epsilon);
+            assertEquals(2, data.size(), epsilon);
+            assertEquals(0, data.mean(), epsilon);
         }
 
         @Test
@@ -1146,9 +1152,12 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getLinearOverlapFactor();
+            double value = fAggregate.getLinearOverlapFactor();
+            FStat data = fAggregate.getLinearOverlapFactorData();
 
-            assertEquals(0.5, overlap, epsilon);
+            assertEquals(0.5, value, epsilon);
+            assertEquals(2, data.size(), epsilon);
+            assertEquals(0.5, data.mean(), epsilon);
         }
 
         @Test
@@ -1157,18 +1166,23 @@ public class FAggregateTest {
             FSphere fSphereA = factory.getFSphere(0, 0, 0);
             FSphere fSphereB = factory.getFSphere(1, 0, 0);
             FSphere fSphereC = factory.getFSphere(0, 3, 0);
-            FSphere fSphereD = factory.getFSphere(0, 4, 0);
+            FSphere fSphereD = factory.getFSphere(0, 5, 0);
             FSphere fSphereE = factory.getFSphere(5, 5, 5);
 
             FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC, fSphereD, fSphereE));
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            double overlap = fAggregate.getLinearOverlapFactor();
+            double value = fAggregate.getLinearOverlapFactor();
+            FStat data = fAggregate.getLinearOverlapFactorData();
 
-            double relError = factory.getStatisticsHelper().getRelErr(0.5, overlap);
-
-            assertTrue(relError < 0.01);
+            assertEquals(0.2, value, epsilon);
+            assertEquals(5, data.size(), epsilon);
+            assertEquals(0.5, data.get(0), epsilon);
+            assertEquals(0.5, data.get(1), epsilon);
+            assertEquals(0, data.get(2), epsilon);
+            assertEquals(0, data.get(3), epsilon);
+            assertEquals(0, data.get(4), epsilon);
         }
 
         @Test

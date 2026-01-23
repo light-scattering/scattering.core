@@ -349,6 +349,12 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
+    public FStat getLinearOverlapFactorData() {
+
+        return this.moduleOverlap.getLinearOverlapFactorData();
+    }
+
+    @Override
     public int size() {
 
         return this.moduleMorphology.size();
