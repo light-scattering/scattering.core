@@ -4,9 +4,11 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.physics.material.FMaterial;
 import eu.scattering.core.design.transfer.box.FBoxDouble;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.Center;
+import eu.scattering.core.design.type.MassCenter;
 
 public class FAggregateModuleCenterDef {
     private final ScatFactory factory;
@@ -24,9 +26,9 @@ public class FAggregateModuleCenterDef {
 
         switch (type) {
             case ORIGIN -> in.set(0, 0, 0);
-            case MASS -> getMassCenter(in);
+            case MASS -> getMassCenter(in, MassCenter.ADAPTIVE);
             case SPATIAL -> getSpatialCenter(in);
-            case SPHERICAL -> getSphericalCenter(in);
+            case SPHERICAL -> getSphericalCenter(in, 100);
         }
     }
 
@@ -51,60 +53,157 @@ public class FAggregateModuleCenterDef {
         return center.toFPos3D();
     }
 
-    protected void getSphericalCenter(FPoint in) {
+    protected void getSphericalCenter(FPoint in, int steps) {
 
-        this.aggregate.getRefParticles().getSphericalCenter(in);
+        this.aggregate.getRefParticles().getSphericalCenter(in, steps);
     }
 
-    protected FPos3D getSphericalCenter() {
+    protected FPos3D getSphericalCenter(int steps) {
         FPoint center = this.factory.getFPoint();
 
-        getSphericalCenter(center);
+        getSphericalCenter(center, steps);
 
         return center.toFPos3D();
     }
 
-    protected void getMassCenter(FPoint in) {
+    protected void getMassCenter(FPoint in, MassCenter type) {
+
+        switch (type) {
+            case SIMPLE_MONO -> getMassCenterMethodSimpleMono(in);
+            case SIMPLE_POLY -> getMassCenterMethodSimplePoly(in);
+            case COMPLEX -> getMassCenterMethodComplex(in);
+            case ADAPTIVE -> getMassCenterMethodAdaptive(in);
+        }
+    }
+
+    protected FPos3D getMassCenter(MassCenter type) {
+        FPoint center = this.factory.getFPoint();
+
+        getMassCenter(center, type);
+
+        return center.toFPos3D();
+    }
+
+    private void getMassCenterMethodSimpleMono(FPoint in) {
+        double radius = this.aggregate.getFStatParticleRadius().mean();
+
         double volume = 0;
 
         in.set(0, 0, 0);
 
         for (Shape shape : this.aggregate) {
-            volume += getMassCenterMethod(in, shape);
+            volume += getMassCenterMethodSimpleMonoStep(in, shape, radius);
         }
 
-        in.setX(in.getX() / volume);
-        in.setY(in.getY() / volume);
-        in.setZ(in.getZ() / volume);
+        in.divFactor(volume);
     }
 
-    protected FPos3D getMassCenter() {
-        FPoint center = this.factory.getFPoint();
+    private void getMassCenterMethodSimplePoly(FPoint in) {
+        double volume = 0;
 
-        getMassCenter(center);
+        in.set(0, 0, 0);
 
-        return center.toFPos3D();
-    }
-
-    private double getMassCenterMethod(FPoint center, Shape shape) {
-
-        if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
-            return getMassCenterMethodPrecise(center, shape);
+        for (Shape shape : this.aggregate) {
+            volume += getMassCenterMethodSimplePolyStep(in, shape);
         }
 
-        return getMassCenterMethodApprox(center, shape);
+        in.divFactor(volume);
     }
 
-    private double getMassCenterMethodPrecise(FPoint center, Shape shape) {
+    private void getMassCenterMethodAdaptive(FPoint in) {
+        double volume = 0;
+
+        in.set(0, 0, 0);
+
+        for (Shape shape : this.aggregate) {
+            volume += getMassCenterMethodAdaptiveStep(in, shape);
+        }
+
+        in.divFactor(volume);
+    }
+
+    private void getMassCenterMethodComplex(FPoint in) {
+        double volume = 0;
+
+        in.set(0, 0, 0);
+
+        for (Shape shape : this.aggregate) {
+            volume += getMassCenterMethodComplexStep(in, shape);
+        }
+
+        in.divFactor(volume);
+    }
+
+    private double getMassCenterMethodSimpleMonoStep(FPoint center, Shape shape, double radius) {
+
+        if (shape.getCoatCount() > 0) {
+            throw new IllegalArgumentException("Coated particles cannot be used with the SIMPLE_MONO procedure");
+        }
+
+        return getMassCenterMethodSimpleMonoPrecise(center, shape, radius);
+    }
+
+    private double getMassCenterMethodSimpleMonoPrecise(FPoint center, Shape shape, double radius) {
 
         if (this.aggregate.getRefFMaterial() == null) {
-            return getMassCenterMethodPreciseMath(center, shape);
+            return getMassCenterMethodSimpleMonoPreciseMath(center, shape, radius);
         }
 
-        return getMassCenterMethodPrecisePhys(center, shape);
+        return getMassCenterMethodSimpleMonoPrecisePhys(center, shape, radius);
     }
 
-    private double getMassCenterMethodPreciseMath(FPoint center, Shape shape) {
+    private double getMassCenterMethodSimpleMonoPreciseMath(FPoint center, Shape shape, double radius) {
+        double volume = this.factory.getFSphereHelper().getVolume(radius);
+
+        center.setX(center.getX() + (shape.getCenterX() * volume));
+        center.setY(center.getY() + (shape.getCenterY() * volume));
+        center.setZ(center.getZ() + (shape.getCenterZ() * volume));
+
+        return volume;
+    }
+
+    private double getMassCenterMethodSimpleMonoPrecisePhys(FPoint center, Shape shape, double radius) {
+        FMaterial material = this.aggregate.getRefFMaterial();
+
+        double volume = this.factory.getFSphereHelper().getVolume(radius);
+        double mass = volume * material.getDensity(shape.getMeta());
+
+        center.setX(center.getX() + (shape.getCenterX() * mass));
+        center.setY(center.getY() + (shape.getCenterY() * mass));
+        center.setZ(center.getZ() + (shape.getCenterZ() * mass));
+
+        return mass;
+    }
+
+    private double getMassCenterMethodSimplePolyStep(FPoint center, Shape shape) {
+
+        return getMassCenterMethodAdaptivePrecise(center, shape);
+    }
+
+    private double getMassCenterMethodComplexStep(FPoint center, Shape shape) {
+
+        return getMassCenterMethodAdaptivePrecise(center, shape);
+    }
+
+    private double getMassCenterMethodAdaptiveStep(FPoint center, Shape shape) {
+
+        if (shape.overlaps(this.aggregate.getRefParticles()) == 0) {
+            return getMassCenterMethodAdaptivePrecise(center, shape);
+        }
+
+        return getMassCenterMethodAdaptiveApprox(center, shape);
+    }
+
+    private double getMassCenterMethodAdaptivePrecise(FPoint center, Shape shape) {
+
+        if (this.aggregate.getRefFMaterial() == null) {
+            return getMassCenterMethodAdaptivePreciseMath(center, shape);
+        }
+
+        return getMassCenterMethodAdaptivePrecisePhys(center, shape);
+    }
+
+    private double getMassCenterMethodAdaptivePreciseMath(FPoint center, Shape shape) {
         double volume = 0;
 
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
@@ -118,13 +217,15 @@ public class FAggregateModuleCenterDef {
         return volume;
     }
 
-    private double getMassCenterMethodPrecisePhys(FPoint center, Shape shape) {
+    private double getMassCenterMethodAdaptivePrecisePhys(FPoint center, Shape shape) {
+        FMaterial material = this.aggregate.getRefFMaterial();
+
         double mass = 0;
 
         for (int i = 0 ; i < shape.getLayerCount() ; i++) {
             String meta = shape.getMetaData().get(i).getMeta();
 
-            mass += shape.getLayerVolume(i) * this.aggregate.getRefFMaterial().getDensity(meta);
+            mass += shape.getLayerVolume(i) * material.getDensity(meta);
         }
 
         center.setX(center.getX() + (shape.getCenterX() * mass));
@@ -134,16 +235,21 @@ public class FAggregateModuleCenterDef {
         return mass;
     }
 
-    private double getMassCenterMethodApprox(FPoint center, Shape shape) {
+    private double getMassCenterMethodAdaptiveApprox(FPoint center, Shape shape) {
 
         if (this.aggregate.getRefFMaterial() == null) {
-            return getMassCenterMethodApproxMath(center, shape);
+            return getMassCenterMethodAdaptiveApproxMath(center, shape);
         }
 
-        return getMassCenterMethodApproxPhys(center, shape);
+        return getMassCenterMethodAdaptiveApproxPhys(center, shape);
     }
 
-    private double getMassCenterMethodApproxMath(FPoint center, Shape shape) {
+    private double getMassCenterMethodAdaptiveApproxMath(FPoint center, Shape shape) {
+
+        if (this.aggregate.getRefFBuffer() == null) {
+            throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
+        }
+
         this.aggregate.getRefFBuffer().clear();
 
         double unitVolume = shape.fillVolumeArray(this.aggregate.getRefFBuffer(), this.aggregate.getRefParticles().asList());
@@ -161,7 +267,14 @@ public class FAggregateModuleCenterDef {
         return volume.getValue();
     }
 
-    private double getMassCenterMethodApproxPhys(FPoint center, Shape shape) {
+    private double getMassCenterMethodAdaptiveApproxPhys(FPoint center, Shape shape) {
+
+        if (this.aggregate.getRefFBuffer() == null) {
+            throw new IllegalStateException("To perform this operation a FBuffer object must be added to the structure");
+        }
+
+        FMaterial material = this.aggregate.getRefFMaterial();
+
         this.aggregate.getRefFBuffer().clear();
 
         double unitVolume = shape.fillVolumeArray(this.aggregate.getRefFBuffer(), this.aggregate.getRefParticles().asList());
@@ -169,7 +282,7 @@ public class FAggregateModuleCenterDef {
         FBoxDouble mass = this.factory.getFBoxDouble();
 
         this.aggregate.getRefFBuffer().forEach((index, d0, d1, d2, data, meta) -> {
-            double unitMass = unitVolume * this.aggregate.getRefFMaterial().getDensity(meta.getMeta());
+            double unitMass = unitVolume * material.getDensity(meta.getMeta());
 
             center.setX(center.getX() + (d0 * unitMass));
             center.setY(center.getY() + (d1 * unitMass));
@@ -183,51 +296,48 @@ public class FAggregateModuleCenterDef {
 
     // -------------------------------------------------------------------------------------------------
 
-    protected void positionCenter(FPoint center) {
+    protected void setPositionAsZero(FPoint center) {
 
         this.aggregate.getRefParticles().translate(-center.getX(), -center.getY(), -center.getZ());
     }
 
-    protected void positionCenter(FPos3D center) {
+    protected void setPositionAsZero(FPos3D center) {
 
         this.aggregate.getRefParticles().translate(-center.getD0(), -center.getD1(), -center.getD2());
     }
 
-    protected void resetCenter(Center type) {
+    protected void setCenterAsZero(Center type) {
 
         switch (type) {
-            case ORIGIN -> resetCenterOrigin();
-            case MASS -> resetCenterMass();
-            case SPATIAL -> resetCenterSpatial();
-            case SPHERICAL -> resetCenterSpherical();
+            case ORIGIN -> {}
+            case MASS -> setMassCenterAsZero(MassCenter.ADAPTIVE);
+            case SPATIAL -> setSpatialCenterAsZero();
+            case SPHERICAL -> setSphericalCenterAsZero(100);
         }
     }
 
-    private void resetCenterOrigin() {
-    }
-
-    private void resetCenterMass() {
+    protected void setMassCenterAsZero(MassCenter type) {
         FPoint center = this.factory.getFPoint();
 
-        getMassCenter(center);
+        getMassCenter(center, type);
 
-        positionCenter(center);
+        setPositionAsZero(center);
     }
 
-    private void resetCenterSpatial() {
+    protected void setSpatialCenterAsZero() {
         FPoint center = this.factory.getFPoint();
 
         getSpatialCenter(center);
 
-        positionCenter(center);
+        setPositionAsZero(center);
     }
 
-    private void resetCenterSpherical() {
+    protected void setSphericalCenterAsZero(int steps) {
         FPoint center = this.factory.getFPoint();
 
-        getSphericalCenter(center);
+        getSphericalCenter(center, steps);
 
-        positionCenter(center);
+        setPositionAsZero(center);
     }
 
     protected void setCenter(Center type, double x, double y, double z) {
@@ -243,5 +353,50 @@ public class FAggregateModuleCenterDef {
     protected void setCenter(Center type, FPos3D position) {
 
         setCenter(type, position.getD0(), position.getD1(), position.getD2());
+    }
+
+    protected void setMassCenter(double x, double y, double z, MassCenter type) {
+
+        this.aggregate.getRefParticles().translate(getMassCenter(type), x, y, z);
+    }
+
+    protected void setMassCenter(FPoint position, MassCenter type) {
+
+        setMassCenter(position.getX(), position.getY(), position.getZ(), type);
+    }
+
+    protected void setMassCenter(FPos3D position, MassCenter type) {
+
+        setMassCenter(position.getD0(), position.getD1(), position.getD2(), type);
+    }
+
+    protected void setSpatialCenter(double x, double y, double z) {
+
+        this.aggregate.getRefParticles().translate(getSpatialCenter(), x, y, z);
+    }
+
+    protected void setSpatialCenter(FPoint position) {
+
+        setSpatialCenter(position.getX(), position.getY(), position.getZ());
+    }
+
+    protected void setSpatialCenter(FPos3D position) {
+
+        setSpatialCenter(position.getD0(), position.getD1(), position.getD2());
+    }
+
+    protected void setSphericalCenter(double x, double y, double z, int steps) {
+
+        this.aggregate.getRefParticles().translate(getSphericalCenter(steps), x, y, z);
+    }
+
+    protected void setSphericalCenter(FPoint position, int steps) {
+
+        setSphericalCenter(position.getX(), position.getY(), position.getZ(), steps);
+    }
+
+    protected void setSphericalCenter(FPos3D position, int steps) {
+
+        setSphericalCenter(position.getD0(), position.getD1(), position.getD2(), steps);
     }
 }

@@ -1690,7 +1690,7 @@ public class FAssemblyTest {
             fAssembly.translate(offset);
 
             FPoint center = factory.getFPoint();
-            fAssembly.getSphericalCenter(center);
+            fAssembly.getSphericalCenter(center, 100);
 
             double relErrX = factory.getStatisticsHelper().getRelErr(offset.getD0(), center.getX());
             double relErrY = factory.getStatisticsHelper().getRelErr(offset.getD1(), center.getY());
@@ -1717,7 +1717,7 @@ public class FAssemblyTest {
             fAssembly.translate(offset);
 
             FPoint center = factory.getFPoint();
-            fAssembly.getSphericalCenter(center);
+            fAssembly.getSphericalCenter(center, 100);
 
             double relErrX = factory.getStatisticsHelper().getRelErr(offset.getD0(), center.getX());
             double relErrY = factory.getStatisticsHelper().getRelErr(offset.getD1() + (0.5 * Math.sqrt(3)), center.getY());
@@ -1728,6 +1728,20 @@ public class FAssemblyTest {
                     () -> assertTrue(relErrY < 0.01),
                     () -> assertTrue(relErrZ < 0.01)
             );
+        }
+
+        @Test
+        @DisplayName("Get spherical center - Exception")
+        void getSphericalCenterException() {
+            FSphere fSphereA = factory.getFSphere(-1.5, 0, 0);
+            FSphere fSphereB = factory.getFSphere(1.5, 0, 0);
+            FSphere fSphereC = factory.getFSphere(0, 1.5 * Math.sqrt(3), 0);
+
+            FAssembly<Shape> fAssembly = factory.getFAssembly(List.of(fSphereA, fSphereB, fSphereC));
+
+            FPoint center = factory.getFPoint();
+
+            assertThrows(IllegalArgumentException.class, () -> fAssembly.getSphericalCenter(center, 0));
         }
     }
 }

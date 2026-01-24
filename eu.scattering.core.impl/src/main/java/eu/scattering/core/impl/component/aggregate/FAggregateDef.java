@@ -222,17 +222,17 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPoint getMassCenter(FPoint in) {
+    public FPoint getMassCenter(FPoint in, MassCenter type) {
 
-        this.moduleCenter.getMassCenter(in);
+        this.moduleCenter.getMassCenter(in, type);
 
         return in;
     }
 
     @Override
-    public FPos3D getMassCenter() {
+    public FPos3D getMassCenter(MassCenter type) {
 
-        return this.moduleCenter.getMassCenter();
+        return this.moduleCenter.getMassCenter(type);
     }
 
     @Override
@@ -250,29 +250,29 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FPoint getSphericalCenter(FPoint in) {
+    public FPoint getSphericalCenter(FPoint in, int steps) {
 
-        this.moduleCenter.getSphericalCenter(in);
+        this.moduleCenter.getSphericalCenter(in, steps);
 
         return in;
     }
 
     @Override
-    public FPos3D getSphericalCenter() {
+    public FPos3D getSphericalCenter(int steps) {
 
-        return this.moduleCenter.getSphericalCenter();
+        return this.moduleCenter.getSphericalCenter(steps);
     }
 
     @Override
-    public void resetPosition(FPoint center) {
+    public void setPositionAsZero(FPoint center) {
 
-        this.moduleCenter.positionCenter(center);
+        this.moduleCenter.setPositionAsZero(center);
     }
 
     @Override
-    public void resetPosition(FPos3D center) {
+    public void setPositionAsZero(FPos3D center) {
 
-        this.moduleCenter.positionCenter(center);
+        this.moduleCenter.setPositionAsZero(center);
     }
 
     @Override
@@ -294,9 +294,81 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public void resetCenter(Center type) {
+    public void setMassCenter(double x, double y, double z, MassCenter type) {
 
-        this.moduleCenter.resetCenter(type);
+        this.moduleCenter.setMassCenter(x, y, z, type);
+    }
+
+    @Override
+    public void setMassCenter(FPoint position, MassCenter type) {
+
+        this.moduleCenter.setMassCenter(position, type);
+    }
+
+    @Override
+    public void setMassCenter(FPos3D position, MassCenter type) {
+
+        this.moduleCenter.setMassCenter(position, type);
+    }
+
+    @Override
+    public void setSpatialCenter(double x, double y, double z) {
+
+        this.moduleCenter.setSpatialCenter(x, y, z);
+    }
+
+    @Override
+    public void setSpatialCenter(FPoint position) {
+
+        this.moduleCenter.setSpatialCenter(position);
+    }
+
+    @Override
+    public void setSpatialCenter(FPos3D position) {
+
+        this.moduleCenter.setSpatialCenter(position);
+    }
+
+    @Override
+    public void setSphericalCenter(double x, double y, double z, int steps) {
+
+        this.moduleCenter.setSphericalCenter(x, y, z, steps);
+    }
+
+    @Override
+    public void setSphericalCenter(FPoint position, int steps) {
+
+        this.moduleCenter.setSphericalCenter(position, steps);
+    }
+
+    @Override
+    public void setSphericalCenter(FPos3D position, int steps) {
+
+        this.moduleCenter.setSphericalCenter(position, steps);
+    }
+
+    @Override
+    public void setCenterAsZero(Center type) {
+
+        this.moduleCenter.setCenterAsZero(type);
+    }
+
+    @Override
+    public void setMassCenterAsZero(MassCenter type) {
+
+        this.moduleCenter.setMassCenterAsZero(type);
+    }
+
+    @Override
+    public void setSpatialCenterAsZero() {
+
+        this.moduleCenter.setSpatialCenterAsZero();
+    }
+
+    @Override
+    public void setSphericalCenterAsZero(int steps) {
+
+        this.moduleCenter.setSphericalCenterAsZero(steps);
     }
 
     @Override

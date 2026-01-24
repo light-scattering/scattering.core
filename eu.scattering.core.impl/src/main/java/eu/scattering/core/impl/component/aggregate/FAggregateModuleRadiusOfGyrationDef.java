@@ -6,6 +6,7 @@ import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.box.FBoxDouble;
 import eu.scattering.core.design.transfer.complex.FBufferData;
+import eu.scattering.core.design.type.MassCenter;
 import eu.scattering.core.design.type.RadiusOfGyration;
 
 public class FAggregateModuleRadiusOfGyrationDef {
@@ -41,7 +42,7 @@ public class FAggregateModuleRadiusOfGyrationDef {
 
         FPoint center = this.factory.getFPoint();
 
-        this.aggregate.getMassCenter(center);
+        this.aggregate.getMassCenter(center, MassCenter.ADAPTIVE);
 
         if (this.aggregate.getRefFMaterial() == null) {
             for (Shape shape : this.aggregate) {

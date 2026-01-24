@@ -604,14 +604,18 @@ public class FAssemblyDef<T extends Geometry> implements FAssembly<T> {
     }
 
     @Override
-    public void getSphericalCenter(FPoint center) {
-        getSpatialCenter(center);
+    public void getSphericalCenter(FPoint center, int steps) {
+
+        if (steps <= 0) {
+            throw new IllegalArgumentException("The number of steps must be greater than zero");
+        }
 
         double learningRate = 0.1;
         double learningRateChange = 0.9;
-        int stepMax = 100;
 
-        for (int step = 0; step < stepMax; step++) {
+        getSpatialCenter(center);
+
+        for (int step = 0; step < steps + 1; step++) {
             FPoint candidate = null;
             double distMax = 0;
             double radius = 0;

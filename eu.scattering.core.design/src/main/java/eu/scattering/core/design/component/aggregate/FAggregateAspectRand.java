@@ -1,11 +1,12 @@
 package eu.scattering.core.design.component.aggregate;
 
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
+import eu.scattering.core.design.type.MassCenter;
 
 public interface FAggregateAspectRand {
 
-    void moveMassCenter(FAggregate ref, FAggregate arg, double distance);
-    void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, double distance);
+    void moveMassCenter(FAggregate ref, FAggregate arg, MassCenter type, double distance);
+    void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, MassCenter type, double distance);
 
     boolean rotate(FAggregate ref, FAggregate arg, FPoint cRef, FPoint cArg, int corrections);
     boolean rotateOnSurface(FAggregate ref, FAggregate arg, FPoint cRef, FPoint cArg, int corrections);

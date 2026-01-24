@@ -55,23 +55,37 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     FPoint getCenter(FPoint in, Center type);
     FPos3D getCenter(Center type);
 
-    FPoint getMassCenter(FPoint in);
-    FPos3D getMassCenter();
+    FPoint getMassCenter(FPoint in, MassCenter type);
+    FPos3D getMassCenter(MassCenter type);
 
     FPoint getSpatialCenter(FPoint in);
     FPos3D getSpatialCenter();
 
-    FPoint getSphericalCenter(FPoint in);
-    FPos3D getSphericalCenter();
+    FPoint getSphericalCenter(FPoint in, int steps);
+    FPos3D getSphericalCenter(int steps);
 
     void setCenter(Center type, double x, double y, double z);
     void setCenter(Center type, FPoint position);
     void setCenter(Center type, FPos3D position);
+    void setCenterAsZero(Center type);
 
-    void resetCenter(Center type);
+    void setMassCenter(double x, double y, double z, MassCenter type);
+    void setMassCenter(FPoint position, MassCenter type);
+    void setMassCenter(FPos3D position, MassCenter type);
+    void setMassCenterAsZero(MassCenter type);
 
-    void resetPosition(FPoint center);
-    void resetPosition(FPos3D center);
+    void setSpatialCenter(double x, double y, double z);
+    void setSpatialCenter(FPoint position);
+    void setSpatialCenter(FPos3D position);
+    void setSpatialCenterAsZero();
+
+    void setSphericalCenter(double x, double y, double z, int steps);
+    void setSphericalCenter(FPoint position, int steps);
+    void setSphericalCenter(FPos3D position, int steps);
+    void setSphericalCenterAsZero(int steps);
+
+    void setPositionAsZero(FPoint center);
+    void setPositionAsZero(FPos3D center);
 
     //--------------------------------------------------
 

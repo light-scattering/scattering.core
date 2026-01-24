@@ -12,6 +12,7 @@ import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.component.number.complex.FComplex;
 import eu.scattering.core.design.component.number.quaternion.FQuaternion;
 import eu.scattering.core.design.transfer.primitive.*;
+import eu.scattering.core.design.type.MassCenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -616,15 +617,15 @@ public class FRandAspectDef implements FRandAspect {
     //--------------------------------------------------
 
     @Override
-    public void moveMassCenter(FAggregate ref, FAggregate arg, double distance) {
+    public void moveMassCenter(FAggregate ref, FAggregate arg, MassCenter type, double distance) {
 
-        moduleFAggregate.moveMassCenter(ref, arg, distance);
+        moduleFAggregate.moveMassCenter(ref, arg, type, distance);
     }
 
     @Override
-    public void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, double distance) {
+    public void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, MassCenter type, double distance) {
 
-        moduleFAggregate.moveMassCenterOnSurface(ref, arg, distance);
+        moduleFAggregate.moveMassCenterOnSurface(ref, arg, type, distance);
     }
 
     @Override

@@ -130,7 +130,7 @@ public class FAggregateModuleTopologyDef {
     private FStat getCorePairDistance(double rangeFactor) {
         FStat results = this.factory.getFStat();
 
-        FPos3D center = this.aggregate.getSphericalCenter();
+        FPos3D center = this.aggregate.getSphericalCenter(100);
 
         double radius = this.aggregate.getRadius(center);
         double range = radius * rangeFactor;

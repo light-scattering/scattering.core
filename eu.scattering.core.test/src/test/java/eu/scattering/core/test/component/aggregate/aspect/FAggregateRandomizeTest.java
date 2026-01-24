@@ -7,6 +7,7 @@ import eu.scattering.core.design.component.geometry.container.assembly.FAssembly
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.type.Center;
 import eu.scattering.core.design.type.Dimension;
+import eu.scattering.core.design.type.MassCenter;
 import eu.scattering.core.design.type.OverlapFactor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -182,10 +183,10 @@ public class FAggregateRandomizeTest {
         FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
         FAggregate aggB = factory.getRefFAggregate(coreB);
 
-        factory.getRandAspect().moveMassCenter(aggA, aggB, 4);
+        factory.getRandAspect().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
 
-        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
-        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
         factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
 
@@ -212,10 +213,10 @@ public class FAggregateRandomizeTest {
         FAssembly<Shape> coreB = factory.getFAssembly(List.of(shapeB1, shapeB2, shapeB3));
         FAggregate aggB = factory.getRefFAggregate(coreB);
 
-        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, 4);
+        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, 4);
 
-        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
-        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
         factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
 
@@ -241,10 +242,10 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenter(aggA, aggB, aggA.getRadius(Center.MASS));
+        factory.getRandAspect().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadius(Center.MASS));
 
-        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
-        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
         factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
@@ -265,10 +266,10 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, aggA.getRadius(Center.MASS));
+        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadius(Center.MASS));
 
-        FPoint cAggA = aggA.getMassCenter(factory.getFPoint());
-        FPoint cAggB = aggB.getMassCenter(factory.getFPoint());
+        FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
+        FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
 
         factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);

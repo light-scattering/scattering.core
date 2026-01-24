@@ -49,7 +49,7 @@ background {
         """);
 
         FAggregate aggregateResized = aggregate.copy(false);
-        aggregateResized.resetCenter(Center.MASS);
+        aggregateResized.setCenterAsZero(Center.MASS);
         aggregateResized.setRadius(Center.ORIGIN, 100);
 
         if (preset.equals(PovRayPreset.RADIUS)) {

@@ -8,6 +8,7 @@ import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.transfer.primitive.FPos3D;
 import eu.scattering.core.design.type.Center;
+import eu.scattering.core.design.type.MassCenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +32,20 @@ public class FRandAspectModuleFAggregateDef {
 
     //--------------------------------------------------
 
-    public void moveMassCenter(FAggregate ref, FAggregate arg, double dist) {
-        FPoint position = ref.getMassCenter(factory.getFPoint())
+    public void moveMassCenter(FAggregate ref, FAggregate arg, MassCenter type, double dist) {
+        FPoint position = ref.getMassCenter(factory.getFPoint(), type)
                 .add(core.nextDoubleOnSphere(dist));
 
-        arg.getRefParticles().translate(arg.getMassCenter(), position);
+        arg.getRefParticles().translate(arg.getMassCenter(type), position);
     }
 
-    public void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, double dist) {
+    public void moveMassCenterOnSurface(FAggregate ref, FAggregate arg, MassCenter type, double dist) {
         isOnSurface(ref, arg);
 
-        FPoint position = ref.getMassCenter(factory.getFPoint())
+        FPoint position = ref.getMassCenter(factory.getFPoint(), type)
                 .add(core.nextDoubleOnCircle(dist), 0);
 
-        arg.getRefParticles().translate(arg.getMassCenter(), position);
+        arg.getRefParticles().translate(arg.getMassCenter(type), position);
     }
 
     //--------------------------------------------------
@@ -254,8 +255,8 @@ public class FRandAspectModuleFAggregateDef {
         FVector dir = factory.getRefFVector(base, head);
 
         while (true) {
-            ref.resetPosition(ref.getSpatialCenter());
-            arg.resetPosition(arg.getSpatialCenter());
+            ref.setPositionAsZero(ref.getSpatialCenter());
+            arg.setPositionAsZero(arg.getSpatialCenter());
 
             double radiusRef = ref.getRadius(Center.ORIGIN);
             double radiusArg = arg.getRadius(Center.ORIGIN);
