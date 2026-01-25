@@ -173,7 +173,6 @@ background {
     }
 
     private static void particles(FAggregate aggregate, StringBuilder builder) {
-
         Map<String, String> material;
 
         if (MONOCHROMATIC) {
