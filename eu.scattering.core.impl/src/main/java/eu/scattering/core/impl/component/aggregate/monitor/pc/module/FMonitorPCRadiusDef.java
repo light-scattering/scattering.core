@@ -57,7 +57,7 @@ public class FMonitorPCRadiusDef implements FMonitorPCRadius {
             if (fAggregate.getRefParticles().size() > this.skip) {
                 fAggregate.getCenter(this.center, type);
 
-                this.fPlot.add(fAggregate.getRefParticles().size(), fAggregate.getRadius(this.center));
+                this.fPlot.add(fAggregate.getRefParticles().size(), fAggregate.getRadiusFrom(this.center));
             }
         }
     }

@@ -43,18 +43,18 @@ public class FAggregateModuleOverlapDef {
 
     protected boolean isPointConnected() {
 
-        return isNonOverlapping() && isContactConnected();
+        return isNonOverlapping() && isConnected();
     }
 
-    protected boolean isContactConnected() {
+    protected boolean isConnected() {
         List<Shape> processed = new ArrayList<>();
 
-        isContactConnectedRecurrence(this.aggregate.getRefParticles().asList().get(0), processed);
+        isConnectedRecurrence(this.aggregate.getRefParticles().asList().get(0), processed);
 
         return this.aggregate.getRefParticles().asList().size() == processed.size();
     }
 
-    private void isContactConnectedRecurrence(Shape shape, List<Shape> processed) {
+    private void isConnectedRecurrence(Shape shape, List<Shape> processed) {
 
         if (processed.contains(shape)) {
             return;
@@ -66,7 +66,7 @@ public class FAggregateModuleOverlapDef {
         shape.touchesOrOverlaps(this.aggregate.getRefParticles().asList(), candidates);
 
         for (Shape candidate : candidates) {
-            isContactConnectedRecurrence(candidate, processed);
+            isConnectedRecurrence(candidate, processed);
         }
     }
 
@@ -76,8 +76,8 @@ public class FAggregateModuleOverlapDef {
         FPos3D centerRef = this.aggregate.getSpatialCenter();
         FPos3D centerArg = arg.getSpatialCenter();
 
-        double radiusRef = this.aggregate.getRadius(centerRef);
-        double radiusArg = arg.getRadius(centerArg);
+        double radiusRef = this.aggregate.getRadiusFrom(centerRef);
+        double radiusArg = arg.getRadiusFrom(centerArg);
 
         List<Shape> particlesRef = new ArrayList<>(this.aggregate.size());
         List<Shape> particlesArg = new ArrayList<>(arg.size());
@@ -114,8 +114,8 @@ public class FAggregateModuleOverlapDef {
         FPos3D centerRef = this.aggregate.getSpatialCenter();
         FPos3D centerArg = arg.getSpatialCenter();
 
-        double radiusRef = this.aggregate.getRadius(centerRef);
-        double radiusArg = arg.getRadius(centerArg);
+        double radiusRef = this.aggregate.getRadiusFrom(centerRef);
+        double radiusArg = arg.getRadiusFrom(centerArg);
 
         List<Shape> particlesRef = new ArrayList<>(this.aggregate.size());
         List<Shape> particlesArg = new ArrayList<>(arg.size());
@@ -147,8 +147,8 @@ public class FAggregateModuleOverlapDef {
         FPos3D centerRef = this.aggregate.getSpatialCenter();
         FPos3D centerArg = arg.getSpatialCenter();
 
-        double radiusRef = this.aggregate.getRadius(centerRef);
-        double radiusArg = arg.getRadius(centerArg);
+        double radiusRef = this.aggregate.getRadiusFrom(centerRef);
+        double radiusArg = arg.getRadiusFrom(centerArg);
 
         List<Shape> particlesRef = new ArrayList<>(this.aggregate.size());
         List<Shape> particlesArg = new ArrayList<>(arg.size());

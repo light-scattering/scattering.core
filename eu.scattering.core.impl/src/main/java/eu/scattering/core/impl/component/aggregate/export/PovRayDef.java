@@ -50,7 +50,7 @@ background {
 
         FAggregate aggregateResized = aggregate.copy(false);
         aggregateResized.setCenterAsZero(Center.MASS);
-        aggregateResized.setRadius(Center.ORIGIN, 100);
+        aggregateResized.setRadiusFrom(Center.ORIGIN, 100);
 
         if (preset.equals(PovRayPreset.RADIUS)) {
             radiusVolume(aggregate, aggregateResized, builder);

@@ -15,11 +15,11 @@ import java.util.*;
 
 import static eu.scattering.core.impl.ConfigDef.EPSILON;
 
-public class FAggregateModuleTopologyDef {
+public class FAggregateModuleFractalDimensionDef {
     private final ScatFactory factory;
     private final FAggregate aggregate;
 
-    protected FAggregateModuleTopologyDef(ScatFactory factory, FAggregate aggregate) {
+    protected FAggregateModuleFractalDimensionDef(ScatFactory factory, FAggregate aggregate) {
 
         this.factory = factory;
         this.aggregate = aggregate;
@@ -132,7 +132,7 @@ public class FAggregateModuleTopologyDef {
 
         FPos3D center = this.aggregate.getSphericalCenter(100);
 
-        double radius = this.aggregate.getRadius(center);
+        double radius = this.aggregate.getRadiusFrom(center);
         double range = radius * rangeFactor;
 
         List<Shape> internal = new ArrayList<>();

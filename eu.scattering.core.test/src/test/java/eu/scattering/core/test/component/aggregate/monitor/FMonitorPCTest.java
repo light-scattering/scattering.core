@@ -44,7 +44,7 @@ public class FMonitorPCTest {
                     return;
                 }
 
-                radius.add(aggregate.getRadius(Center.ORIGIN));
+                radius.add(aggregate.getRadiusFrom(Center.ORIGIN));
             });
 
             fModel.setEarlyStageCorrection(true);

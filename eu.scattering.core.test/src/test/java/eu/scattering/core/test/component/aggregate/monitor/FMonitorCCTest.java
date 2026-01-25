@@ -48,7 +48,7 @@ public class FMonitorCCTest {
 
             double radiusFinal = radius.getRefCoreY().get(radius.size() - 1).mean();
 
-            double radiusFinalManual = fAggregate.getRadius(fAggregate.getCenter(Center.SPHERICAL));
+            double radiusFinalManual = fAggregate.getRadiusFrom(fAggregate.getCenter(Center.SPHERICAL));
 
             assertEquals(radiusFinalManual, radiusFinal, radiusFinalManual * 0.01);
         }

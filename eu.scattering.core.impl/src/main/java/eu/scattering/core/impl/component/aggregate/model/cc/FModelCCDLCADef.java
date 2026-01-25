@@ -409,8 +409,8 @@ public class FModelCCDLCADef implements FModelCCDLCA {
         aggA.getCenter(this.cAggA, Center.SPATIAL);
         aggB.getCenter(this.cAggB, Center.SPATIAL);
 
-        this.rAggA = this.aggregate.getRadius(this.cAggA);
-        this.rAggB = this.aggregate.getRadius(this.cAggB);
+        this.rAggA = this.aggregate.getRadiusFrom(this.cAggA);
+        this.rAggB = this.aggregate.getRadiusFrom(this.cAggB);
 
         this.rSpawn = this.rAggA + (this.rp * this.fSpawn) + this.rAggB;
         this.rExile = this.rSpawn + (this.rp * this.fExile) + this.rAggB;

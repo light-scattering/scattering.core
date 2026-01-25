@@ -2,20 +2,13 @@ package eu.scattering.core.impl.component.aggregate;
 
 import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
-import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.base.vector.FVector;
 import eu.scattering.core.design.component.geometry.shape.Shape;
 import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.statistics.construct.plot.FPlot;
-import eu.scattering.core.design.transfer.primitive.FPairPos3D;
-import eu.scattering.core.design.transfer.primitive.FPos3D;
-import eu.scattering.core.design.type.Center;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.function.BiConsumer;
 
 public class FAggregateModuleMorphologyDef {
     private final ScatFactory factory;
@@ -25,25 +18,6 @@ public class FAggregateModuleMorphologyDef {
 
         this.factory = factory;
         this.aggregate = aggregate;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    void addParticles(Shape particle, double quantity) {
-
-        for (int i = 0 ; i < quantity ; i++) {
-            this.aggregate.getRefParticles().register(particle.copy());
-        }
-    }
-
-    boolean addRefParticle(Shape particle) {
-
-        return this.aggregate.getRefParticles().registerWithCheck(particle);
-    }
-
-    boolean delRefParticle(Shape particle) {
-
-        return this.aggregate.getRefParticles().deregisterWithCheck(particle);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -64,7 +38,7 @@ public class FAggregateModuleMorphologyDef {
 
     protected FPlot getPairDistanceFunction() {
         FStat distance = getPairDistance();
-        FStat radius = getFStatParticleRadius();
+        FStat radius = this.aggregate.getFStatParticleRadius();
 
         double max = distance.max();
         int steps = (int) (max / radius.min());
@@ -127,94 +101,5 @@ public class FAggregateModuleMorphologyDef {
     protected FPlot getTripletAngleFunction() {
 
         return getTripletAngle().toFPlotHistogram(0, Math.PI, 180);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    protected int size() {
-
-        return this.aggregate.getRefParticles().size();
-    }
-
-    protected FStat getFStatParticleRadius() {
-        FStat particles = this.factory.getFStat();
-
-        this.aggregate.getRefParticles().forEach(e -> particles.add(e.getRadius()));
-
-        return particles;
-    }
-
-    protected FStat getFStatDistance(Center type) {
-        FStat distances = this.factory.getFStat();
-
-        FPos3D center = this.aggregate.getCenter(type);
-
-        for (Shape particle : this.aggregate) {
-            distances.add(particle.getDistCenter(center));
-        }
-
-        return distances;
-    }
-
-    protected void setEpsilon(double epsilon) {
-
-        this.aggregate.getRefParticles().forEach(e -> e.setEpsilon(epsilon));
-    }
-
-    protected void setDelta(double delta) {
-
-        this.aggregate.getRefParticles().forEach(e -> e.setDelta(delta));
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    protected void translate(double x, double y, double z) {
-
-        this.aggregate.getRefParticles().translate(x, y, z);
-    }
-
-    protected void translate(FPoint offset) {
-
-        this.aggregate.getRefParticles().translate(offset);
-    }
-
-    protected void translate(FPos3D offset) {
-
-        this.aggregate.getRefParticles().translate(offset);
-    }
-
-    protected void translate(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-
-        this.aggregate.getRefParticles().translate(bX, bY, bZ, hX, hY, hZ);
-    }
-
-    protected void translate(FVector offset) {
-
-        this.aggregate.getRefParticles().translate(offset);
-    }
-
-    protected void translate(FPairPos3D offset) {
-
-        this.aggregate.getRefParticles().translate(offset);
-    }
-
-    // -------------------------------------------------------------------------------------------------
-
-    protected void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
-        List<Shape> candidates = new ArrayList<>();
-
-        Queue<Shape> queue = new LinkedList<>(this.aggregate.getRefParticles().asList());
-
-        queue.poll();
-
-        for (Shape shape : this.aggregate) {
-            candidates.clear();
-
-            shape.touchesOrOverlaps(queue, candidates);
-
-            candidates.forEach(e -> consumer.accept(shape, e));
-
-            queue.poll();
-        }
     }
 }

@@ -1084,7 +1084,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
         }
 
         @Test
@@ -1100,7 +1100,7 @@ public class FAggregateTest {
 
             FAggregate fAggregate = factory.getRefFAggregate(fAssembly);
 
-            assertFalse(fAggregate.isContactConnected());
+            assertFalse(fAggregate.isConnected());
         }
 
         @Test
@@ -2318,8 +2318,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(3, 3, 3));
 
-            double radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
-            double radiusB = fAggregate.getRadius(Center.ORIGIN);
+            double radiusA = fAggregate.getRadiusFrom(massCenter.getX(), massCenter.getY(), massCenter.getZ());
+            double radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
@@ -2329,8 +2329,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
-            radiusA = fAggregate.getRadius(massCenter.getX(), massCenter.getY(), massCenter.getZ());
-            radiusB = fAggregate.getRadius(Center.ORIGIN);
+            radiusA = fAggregate.getRadiusFrom(massCenter.getX(), massCenter.getY(), massCenter.getZ());
+            radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertEquals(radiusA, radiusB, 1E-6);
@@ -2353,8 +2353,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(3, 3, 3));
 
-            double radiusA = fAggregate.getRadius(massCenter);
-            double radiusB = fAggregate.getRadius(Center.ORIGIN);
+            double radiusA = fAggregate.getRadiusFrom(massCenter);
+            double radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
@@ -2364,8 +2364,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
-            radiusA = fAggregate.getRadius(massCenter);
-            radiusB = fAggregate.getRadius(Center.ORIGIN);
+            radiusA = fAggregate.getRadiusFrom(massCenter);
+            radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertEquals(radiusA, radiusB, 1E-6);
@@ -2388,8 +2388,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(3, 3, 3));
 
-            double radiusA = fAggregate.getRadius(massCenter.toFPos3D());
-            double radiusB = fAggregate.getRadius(Center.ORIGIN);
+            double radiusA = fAggregate.getRadiusFrom(massCenter.toFPos3D());
+            double radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
@@ -2399,8 +2399,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
-            radiusA = fAggregate.getRadius(massCenter.toFPos3D());
-            radiusB = fAggregate.getRadius(Center.ORIGIN);
+            radiusA = fAggregate.getRadiusFrom(massCenter.toFPos3D());
+            radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertEquals(radiusA, radiusB, 1E-6);
@@ -2423,8 +2423,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(3, 3, 3));
 
-            double radiusA = fAggregate.getRadius(Center.MASS);
-            double radiusB = fAggregate.getRadius(Center.ORIGIN);
+            double radiusA = fAggregate.getRadiusFrom(Center.MASS);
+            double radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertNotEquals(radiusA, radiusB);
@@ -2434,8 +2434,8 @@ public class FAggregateTest {
 
             assertTrue(massCenter.isSimilar(0, 0, 0));
 
-            radiusA = fAggregate.getRadius(Center.MASS);
-            radiusB = fAggregate.getRadius(Center.ORIGIN);
+            radiusA = fAggregate.getRadiusFrom(Center.MASS);
+            radiusB = fAggregate.getRadiusFrom(Center.ORIGIN);
 
             assertEquals(2 * Math.sqrt(3) + 1, radiusA, 1E-6);
             assertEquals(radiusA, radiusB, 1E-6);
@@ -3058,7 +3058,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isContactConnected());
+            assertTrue(aggregateA.isConnected());
         }
 
         @Test
@@ -3081,7 +3081,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isContactConnected());
+            assertTrue(aggregateA.isConnected());
         }
 
         @Test
@@ -3104,7 +3104,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isContactConnected());
+            assertTrue(aggregateA.isConnected());
         }
 
         @Test
@@ -3127,7 +3127,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isContactConnected());
+            assertTrue(aggregateA.isConnected());
         }
 
         @Test
@@ -3148,7 +3148,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isContactConnected());
+            assertTrue(aggregateA.isConnected());
         }
 
         @Test
@@ -3177,7 +3177,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isContactConnected());
+            assertTrue(aggregateA.isConnected());
         }
 
         @Test
@@ -3204,7 +3204,7 @@ public class FAggregateTest {
 
             aggregateA.merge(aggregateB, true);
 
-            assertTrue(aggregateA.isContactConnected());
+            assertTrue(aggregateA.isConnected());
         }
 
         @Test
@@ -3425,19 +3425,19 @@ public class FAggregateTest {
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerA = center.copy();
-            double radiusA = fAggregate.getRadius(centerA);
+            double radiusA = fAggregate.getRadiusFrom(centerA);
 
-            fAggregate.setRadius(center.getX(), center.getY(), center.getZ(), size);
+            fAggregate.setRadiusFrom(center.getX(), center.getY(), center.getZ(), size);
 
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerB = center.copy();
-            double radiusB = fAggregate.getRadius(centerB);
+            double radiusB = fAggregate.getRadiusFrom(centerB);
 
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertTrue(fAggregate.isNonOverlapping());
         }
 
@@ -3457,19 +3457,19 @@ public class FAggregateTest {
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerA = center.copy();
-            double radiusA = fAggregate.getRadius(centerA);
+            double radiusA = fAggregate.getRadiusFrom(centerA);
 
-            fAggregate.setRadius(center, size);
+            fAggregate.setRadiusFrom(center, size);
 
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerB = center.copy();
-            double radiusB = fAggregate.getRadius(centerB);
+            double radiusB = fAggregate.getRadiusFrom(centerB);
 
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertTrue(fAggregate.isNonOverlapping());
         }
 
@@ -3489,19 +3489,19 @@ public class FAggregateTest {
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerA = center.copy();
-            double radiusA = fAggregate.getRadius(centerA);
+            double radiusA = fAggregate.getRadiusFrom(centerA);
 
-            fAggregate.setRadius(center.toFPos3D(), size);
+            fAggregate.setRadiusFrom(center.toFPos3D(), size);
 
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerB = center.copy();
-            double radiusB = fAggregate.getRadius(centerB);
+            double radiusB = fAggregate.getRadiusFrom(centerB);
 
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertTrue(fAggregate.isNonOverlapping());
         }
 
@@ -3521,19 +3521,19 @@ public class FAggregateTest {
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerA = center.copy();
-            double radiusA = fAggregate.getRadius(centerA);
+            double radiusA = fAggregate.getRadiusFrom(centerA);
 
-            fAggregate.setRadius(Center.SPATIAL, size);
+            fAggregate.setRadiusFrom(Center.SPATIAL, size);
 
             fAggregate.getCenter(center, Center.SPATIAL);
 
             FPoint centerB = center.copy();
-            double radiusB = fAggregate.getRadius(centerB);
+            double radiusB = fAggregate.getRadiusFrom(centerB);
 
             assertTrue(centerA.isSimilar(centerB));
             assertTrue(radiusA > radiusB);
             assertEquals(size, radiusB, epsilon);
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertTrue(fAggregate.isNonOverlapping());
         }
     }

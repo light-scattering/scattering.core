@@ -21,6 +21,8 @@ import java.util.function.BiConsumer;
 
 public interface FAggregate extends FAggregateModuleInteraction, Component, Iterable<Shape> {
 
+    int size();
+
     double getSurface();
     double getSurface(double[] layers);
 
@@ -40,15 +42,18 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     FPos3D getLength();
     double getLength(LinearDimension type);
 
-    double getRadius(double x, double y, double z);
-    double getRadius(FPoint center);
-    double getRadius(FPos3D center);
-    double getRadius(Center type);
+    double getRadiusFrom(double x, double y, double z);
+    double getRadiusFrom(FPoint center);
+    double getRadiusFrom(FPos3D center);
+    double getRadiusFrom(Center type);
 
-    void setRadius(double x, double y, double z, double radius);
-    void setRadius(FPoint center, double radius);
-    void setRadius(FPos3D center, double radius);
-    void setRadius(Center type, double radius);
+    void setRadiusFrom(double x, double y, double z, double radius);
+    void setRadiusFrom(FPoint center, double radius);
+    void setRadiusFrom(FPos3D center, double radius);
+    void setRadiusFrom(Center type, double radius);
+
+    FStat getFStatParticleRadius();
+    FStat getFStatDistance(Center type);
 
     //--------------------------------------------------
 
@@ -104,8 +109,8 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     boolean isNonOverlapping();
 
+    boolean isConnected();
     boolean isPointConnected();
-    boolean isContactConnected();
 
     boolean touches(FAggregate arg);
     boolean overlaps(FAggregate arg);
@@ -117,10 +122,6 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     //--------------------------------------------------
 
-    int size();
-
-    void addParticles(Shape particle, double quantity);
-
     FStat getTripletAngle();
     FPlot getTripletAngleFunction();
 
@@ -130,11 +131,14 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     FStat getCoordinationNumber();
     FPlot getCoordinationNumberFunction();
 
-    FStat getFStatParticleRadius();
-    FStat getFStatDistance(Center type);
+    //--------------------------------------------------
+
+    void addParticles(Shape particle, double quantity);
 
     void setParticleDelta(double delta);
     void setParticleEpsilon(double epsilon);
+
+    void index();
 
     void merge(FAggregate arg, boolean removeParticles);
 
@@ -146,9 +150,12 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     void translate(FVector offset);
     void translate(FPairPos3D offset);
 
-    void index();
-
     void forEachPairInContact(BiConsumer<Shape, Shape> consumer);
+
+    @Modificator
+    boolean addRefParticle(Shape particle);
+    @Modificator
+    boolean delRefParticle(Shape particle);
 
     //--------------------------------------------------
 
@@ -164,10 +171,6 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
 
     @Modificator
     FAssembly<Shape> getRefParticles();
-    @Modificator
-    boolean addRefParticle(Shape particle);
-    @Modificator
-    boolean delRefParticle(Shape particle);
 
     @Modificator
     FAggregate setRefFBuffer(FBuffer<FBufferData> refFBuffer);
@@ -175,7 +178,7 @@ public interface FAggregate extends FAggregateModuleInteraction, Component, Iter
     FAggregate setRefFMaterial(FMaterial refMaterial);
 
     @Modificator
-    FMaterial getRefFMaterial();
-    @Modificator
     FBuffer<FBufferData> getRefFBuffer();
+    @Modificator
+    FMaterial getRefFMaterial();
 }

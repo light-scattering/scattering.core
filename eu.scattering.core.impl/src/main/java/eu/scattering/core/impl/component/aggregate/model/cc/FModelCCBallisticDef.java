@@ -213,8 +213,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             aggA.getCenter(this.cAggA, Center.SPATIAL);
             aggB.getCenter(this.cAggB, Center.SPATIAL);
 
-            double rAggA = aggA.getRadius(this.cAggA) * 0.5;
-            double rAggB = aggB.getRadius(this.cAggB) * 0.5;
+            double rAggA = aggA.getRadiusFrom(this.cAggA) * 0.5;
+            double rAggB = aggB.getRadiusFrom(this.cAggB) * 0.5;
 
             double distance = 10 * (rAggA + rAggB);
 
@@ -250,8 +250,8 @@ public class FModelCCBallisticDef implements FModelCCBallistic {
             aggA.getCenter(this.cAggA, Center.SPATIAL);
             aggB.getCenter(this.cAggB, Center.SPATIAL);
 
-            double rAggA = aggA.getRadius(this.cAggA) * 0.5;
-            double rAggB = aggB.getRadius(this.cAggB) * 0.5;
+            double rAggA = aggA.getRadiusFrom(this.cAggA) * 0.5;
+            double rAggB = aggB.getRadiusFrom(this.cAggB) * 0.5;
 
             double distance = 10 * (rAggA + rAggB);
 

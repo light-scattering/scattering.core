@@ -84,7 +84,7 @@ public class FModelCCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -101,7 +101,7 @@ public class FModelCCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -119,7 +119,7 @@ public class FModelCCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -137,7 +137,7 @@ public class FModelCCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -160,7 +160,7 @@ public class FModelCCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -314,9 +314,9 @@ public class FModelCCTunableTest {
             fModelB.build();
             fModelC.build();
 
-            double rangeA = fAggregateA.getRadius(Center.SPHERICAL);
-            double rangeB = fAggregateB.getRadius(Center.SPHERICAL);
-            double rangeC = fAggregateC.getRadius(Center.SPHERICAL);
+            double rangeA = fAggregateA.getRadiusFrom(Center.SPHERICAL);
+            double rangeB = fAggregateB.getRadiusFrom(Center.SPHERICAL);
+            double rangeC = fAggregateC.getRadiusFrom(Center.SPHERICAL);
 
             assertTrue(rangeA < rangeB);
             assertTrue(rangeB < rangeC);
@@ -366,7 +366,7 @@ public class FModelCCTunableTest {
                 assertEquals(0, shape.getCenterZ(), 1E-8);
             }
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -522,8 +522,8 @@ public class FModelCCTunableTest {
             fModelB.build();
             fModelC.build();
 
-            double rangeB = fAggregateB.getRadius(Center.MASS);
-            double rangeC = fAggregateC.getRadius(Center.MASS);
+            double rangeB = fAggregateB.getRadiusFrom(Center.MASS);
+            double rangeC = fAggregateC.getRadiusFrom(Center.MASS);
 
             assertTrue(rangeB < rangeC);
         }

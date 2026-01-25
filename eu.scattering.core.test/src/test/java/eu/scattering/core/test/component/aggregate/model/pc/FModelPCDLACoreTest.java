@@ -83,7 +83,7 @@ public class FModelPCDLACoreTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -99,7 +99,7 @@ public class FModelPCDLACoreTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -115,7 +115,7 @@ public class FModelPCDLACoreTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -131,7 +131,7 @@ public class FModelPCDLACoreTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -153,7 +153,7 @@ public class FModelPCDLACoreTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -202,7 +202,7 @@ public class FModelPCDLACoreTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(45, quantity.get());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -332,7 +332,7 @@ public class FModelPCDLACoreTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -381,7 +381,7 @@ public class FModelPCDLACoreTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(45, quantity.get());
             assertTrue(fAggregate.isNonOverlapping());
         }

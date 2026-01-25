@@ -324,7 +324,7 @@ public class FModelPCDLADef implements FModelPCDLA {
 
         this.center.divFactor(this.attached.size());
 
-        this.rAggregate = this.aggregate.getRadius(this.center);
+        this.rAggregate = this.aggregate.getRadiusFrom(this.center);
 
         this.rSpawn = this.rAggregate + (this.rp * this.fSpawn) + particle.getRadius();
         this.rExile = this.rSpawn + (this.rp * this.fExile) + particle.getRadius();

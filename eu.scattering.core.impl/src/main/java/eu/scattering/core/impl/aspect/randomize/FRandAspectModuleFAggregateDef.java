@@ -125,7 +125,7 @@ public class FRandAspectModuleFAggregateDef {
     private List<Shape> getRotRefCandidates(FAggregate ref, FAggregate arg, FPoint centerRef, FPoint centerArg, double dist) {
         List<Shape> candidates = new ArrayList<>(ref.size());
 
-        double radiusArg = arg.getRadius(centerArg);
+        double radiusArg = arg.getRadiusFrom(centerArg);
         double offset = dist - radiusArg;
 
         for (Shape particle : ref) {
@@ -144,7 +144,7 @@ public class FRandAspectModuleFAggregateDef {
     private List<Shape> getRotArgCandidates(FAggregate ref, FAggregate arg, FPoint centerRef, FPoint centerArg, double dist) {
         List<Shape> candidates = new ArrayList<>(arg.size());
 
-        double radiusRef = ref.getRadius(centerRef);
+        double radiusRef = ref.getRadiusFrom(centerRef);
         double offset = dist - radiusRef;
 
         for (Shape particle : arg) {
@@ -258,8 +258,8 @@ public class FRandAspectModuleFAggregateDef {
             ref.setPositionAsZero(ref.getSpatialCenter());
             arg.setPositionAsZero(arg.getSpatialCenter());
 
-            double radiusRef = ref.getRadius(Center.ORIGIN);
-            double radiusArg = arg.getRadius(Center.ORIGIN);
+            double radiusRef = ref.getRadiusFrom(Center.ORIGIN);
+            double radiusArg = arg.getRadiusFrom(Center.ORIGIN);
 
             if (is3D) {
                 base.set(core.nextDoubleOnSphere(10 * (radiusRef + radiusArg)));

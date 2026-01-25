@@ -81,7 +81,7 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -97,7 +97,7 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -113,7 +113,7 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -129,7 +129,7 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -151,7 +151,7 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -200,7 +200,7 @@ public class FModelPCTunableTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(45, quantity.get());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -313,9 +313,9 @@ public class FModelPCTunableTest {
             fModelB.build();
             fModelC.build();
 
-            double rangeA = fAggregateA.getRadius(Center.MASS);
-            double rangeB = fAggregateB.getRadius(Center.MASS);
-            double rangeC = fAggregateC.getRadius(Center.MASS);
+            double rangeA = fAggregateA.getRadiusFrom(Center.MASS);
+            double rangeB = fAggregateB.getRadiusFrom(Center.MASS);
+            double rangeC = fAggregateC.getRadiusFrom(Center.MASS);
 
             assertTrue(rangeA < rangeB);
             assertTrue(rangeB < rangeC);
@@ -353,7 +353,7 @@ public class FModelPCTunableTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -402,7 +402,7 @@ public class FModelPCTunableTest {
             fModel.addStepMonitor(monitor);
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(45, quantity.get());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -510,8 +510,8 @@ public class FModelPCTunableTest {
             fModelB.build();
             fModelC.build();
 
-            double rangeB = fAggregateB.getRadius(Center.MASS);
-            double rangeC = fAggregateC.getRadius(Center.MASS);
+            double rangeB = fAggregateB.getRadiusFrom(Center.MASS);
+            double rangeC = fAggregateC.getRadiusFrom(Center.MASS);
 
             assertTrue(rangeB < rangeC);
         }

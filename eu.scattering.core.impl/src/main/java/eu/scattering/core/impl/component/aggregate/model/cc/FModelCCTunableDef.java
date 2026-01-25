@@ -367,8 +367,8 @@ public class FModelCCTunableDef implements FModelCCTunable {
     }
 
     private boolean validateBuildStep(FAggregate aggA, FAggregate aggB, double distance) {
-        double radiusA = aggA.getRadius(this.centerA);
-        double radiusB = aggB.getRadius(this.centerB);
+        double radiusA = aggA.getRadiusFrom(this.centerA);
+        double radiusB = aggB.getRadiusFrom(this.centerB);
 
         return distance < radiusA + radiusB;
     }

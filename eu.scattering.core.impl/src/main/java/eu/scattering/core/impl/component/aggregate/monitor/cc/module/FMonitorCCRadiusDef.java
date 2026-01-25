@@ -44,7 +44,7 @@ public class FMonitorCCRadiusDef implements FMonitorCCRadius {
         } else {
             aggA.getCenter(this.center, type);
 
-            this.fPlotBar.add(aggA.size(), aggA.getRadius(this.center));
+            this.fPlotBar.add(aggA.size(), aggA.getRadiusFrom(this.center));
         }
     }
 }

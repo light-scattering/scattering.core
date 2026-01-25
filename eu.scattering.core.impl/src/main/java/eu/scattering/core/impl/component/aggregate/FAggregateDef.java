@@ -36,11 +36,12 @@ public class FAggregateDef implements FAggregate {
     private final FAssembly<Shape> particles;
 
     private final FAggregateModuleRadiusOfGyrationDef moduleRadiusOfGyration;
-    private final FAggregateModuleTopologyDef moduleTopology;
+    private final FAggregateModuleFractalDimensionDef moduleFractalDimension;
     private final FAggregateModuleCenterDef moduleCenter;
     private final FAggregateModuleOverlapDef moduleOverlap;
     private final FAggregateModuleGeometryDef moduleGeometry;
     private final FAggregateModuleMorphologyDef moduleMorphology;
+    private final FAggregateModuleSupportDef moduleSupport;
 
     private FMaterial material;
     private FBuffer<FBufferData> buffer;
@@ -51,11 +52,12 @@ public class FAggregateDef implements FAggregate {
         this.particles = refParticles;
 
         this.moduleRadiusOfGyration = new FAggregateModuleRadiusOfGyrationDef(this.factory, this);
-        this.moduleTopology = new FAggregateModuleTopologyDef(this.factory, this);
+        this.moduleFractalDimension = new FAggregateModuleFractalDimensionDef(this.factory, this);
         this.moduleCenter = new FAggregateModuleCenterDef(this.factory, this);
         this.moduleOverlap = new FAggregateModuleOverlapDef(this.factory, this);
         this.moduleGeometry = new FAggregateModuleGeometryDef(this.factory, this);
         this.moduleMorphology = new FAggregateModuleMorphologyDef(this.factory, this);
+        this.moduleSupport = new FAggregateModuleSupportDef(this.factory, this);
     }
 
     public static FAggregate create(ScatFactory factory, FAssembly<Shape> refParticles) {
@@ -85,6 +87,12 @@ public class FAggregateDef implements FAggregate {
         }
 
         return fAggregate;
+    }
+
+    @Override
+    public int size() {
+
+        return this.moduleGeometry.size();
     }
 
     @Override
@@ -160,51 +168,63 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public double getRadius(double x, double y, double z) {
+    public double getRadiusFrom(double x, double y, double z) {
 
-        return this.moduleGeometry.getRadius(x, y, z);
+        return this.moduleGeometry.getRadiusFrom(x, y, z);
     }
 
     @Override
-    public double getRadius(FPoint center) {
+    public double getRadiusFrom(FPoint center) {
 
-        return this.moduleGeometry.getRadius(center);
+        return this.moduleGeometry.getRadiusFrom(center);
     }
 
     @Override
-    public double getRadius(FPos3D center) {
+    public double getRadiusFrom(FPos3D center) {
 
-        return this.moduleGeometry.getRadius(center);
+        return this.moduleGeometry.getRadiusFrom(center);
     }
 
     @Override
-    public double getRadius(Center type) {
+    public double getRadiusFrom(Center type) {
 
-        return this.moduleGeometry.getRadius(type);
+        return this.moduleGeometry.getRadiusFrom(type);
     }
 
     @Override
-    public void setRadius(double x, double y, double z, double radius) {
+    public void setRadiusFrom(double x, double y, double z, double radius) {
 
-        this.moduleGeometry.setRadius(x, y, z, radius);
+        this.moduleGeometry.getRadiusFrom(x, y, z, radius);
     }
 
     @Override
-    public void setRadius(FPoint center, double radius) {
+    public void setRadiusFrom(FPoint center, double radius) {
 
-        this.moduleGeometry.setRadius(center, radius);
+        this.moduleGeometry.getRadiusFrom(center, radius);
     }
 
     @Override
-    public void setRadius(FPos3D center, double radius) {
+    public void setRadiusFrom(FPos3D center, double radius) {
 
-        this.moduleGeometry.setRadius(center, radius);
+        this.moduleGeometry.getRadiusFrom(center, radius);
     }
 
     @Override
-    public void setRadius(Center type, double radius) {
+    public void setRadiusFrom(Center type, double radius) {
 
-        this.moduleGeometry.setRadius(type, radius);
+        this.moduleGeometry.getRadiusFrom(type, radius);
+    }
+
+    @Override
+    public FStat getFStatParticleRadius() {
+
+        return this.moduleGeometry.getFStatParticleRadius();
+    }
+
+    @Override
+    public FStat getFStatDistance(Center type) {
+
+        return this.moduleGeometry.getFStatDistance(type);
     }
 
     @Override
@@ -380,19 +400,19 @@ public class FAggregateDef implements FAggregate {
     @Override
     public double getFractalDimension(FractalDimension type) {
 
-        return this.moduleTopology.getFractalDimension(type);
+        return this.moduleFractalDimension.getFractalDimension(type);
     }
 
     @Override
     public FPlot getBoxCoverageFunction(boolean log) {
 
-        return this.moduleTopology.getBoxCoverageFunction(log);
+        return this.moduleFractalDimension.getBoxCoverageFunction(log);
     }
 
     @Override
     public FPlot getDensityCorrelationFunction(boolean log) {
 
-        return this.moduleTopology.getDensityCorrelationFunction(log);
+        return this.moduleFractalDimension.getDensityCorrelationFunction(log);
     }
 
     @Override
@@ -408,9 +428,9 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public boolean isContactConnected() {
+    public boolean isConnected() {
 
-        return this.moduleOverlap.isContactConnected();
+        return this.moduleOverlap.isConnected();
     }
 
     @Override
@@ -432,27 +452,15 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public int size() {
+    public boolean overlapsWithShift(FAggregate arg, FVector shift) {
 
-        return this.moduleMorphology.size();
+        return this.moduleOverlap.overlapsWithShift(arg, shift);
     }
 
     @Override
-    public void addParticles(Shape particle, double quantity) {
+    public boolean overlapsWithRotation(FAggregate arg, FVector axis, double angle) {
 
-        this.moduleMorphology.addParticles(particle, quantity);
-    }
-
-    @Override
-    public boolean addRefParticle(Shape particle) {
-
-        return this.moduleMorphology.addRefParticle(particle);
-    }
-
-    @Override
-    public boolean delRefParticle(Shape particle) {
-
-        return this.moduleMorphology.delRefParticle(particle);
+        return this.moduleOverlap.overlapsWithRotation(arg, axis, angle);
     }
 
     @Override
@@ -492,103 +500,87 @@ public class FAggregateDef implements FAggregate {
     }
 
     @Override
-    public FStat getFStatParticleRadius() {
+    public void addParticles(Shape particle, double quantity) {
 
-        return this.moduleMorphology.getFStatParticleRadius();
+        this.moduleSupport.addParticles(particle, quantity);
     }
 
     @Override
-    public FStat getFStatDistance(Center type) {
+    public boolean addRefParticle(Shape particle) {
 
-        return this.moduleMorphology.getFStatDistance(type);
+        return this.moduleSupport.addRefParticle(particle);
     }
 
     @Override
-    public void setParticleDelta(double delta) {
+    public boolean delRefParticle(Shape particle) {
 
-        this.moduleMorphology.setDelta(delta);
-    }
-
-    @Override
-    public void setParticleEpsilon(double epsilon) {
-
-        this.moduleMorphology.setEpsilon(epsilon);
-    }
-
-    @Override
-    public void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
-
-        this.moduleMorphology.forEachPairInContact(consumer);
-    }
-
-    @Override
-    public boolean overlapsWithShift(FAggregate arg, FVector shift) {
-
-        return this.moduleOverlap.overlapsWithShift(arg, shift);
-    }
-
-    @Override
-    public boolean overlapsWithRotation(FAggregate arg, FVector axis, double angle) {
-
-        return this.moduleOverlap.overlapsWithRotation(arg, axis, angle);
-    }
-
-    @Override
-    public void merge(FAggregate arg, boolean removeParticles) {
-
-        for (Shape shape : arg.getRefParticles()) {
-            getRefParticles().register(shape);
-        }
-
-        if (removeParticles) {
-            arg.getRefParticles().clear();
-        }
-    }
-
-    @Override
-    public void translate(double x, double y, double z) {
-
-        this.moduleMorphology.translate(x, y, z);
-    }
-
-    @Override
-    public void translate(FPoint offset) {
-
-        this.moduleMorphology.translate(offset);
-
-    }
-
-    @Override
-    public void translate(FPos3D offset) {
-
-        this.moduleMorphology.translate(offset);
-    }
-
-    @Override
-    public void translate(double bX, double bY, double bZ, double hX, double hY, double hZ) {
-
-        this.moduleMorphology.translate(bX, bY, bZ, hX, hY, hZ);
-    }
-
-    @Override
-    public void translate(FVector offset) {
-
-        this.moduleMorphology.translate(offset);
-    }
-
-    @Override
-    public void translate(FPairPos3D offset) {
-
-        this.moduleMorphology.translate(offset);
+        return this.moduleSupport.delRefParticle(particle);
     }
 
     @Override
     public void index() {
 
-        int i = 0;
-        for (Shape shape : getRefParticles()) {
-            shape.setIndex(i++);
-        }
+        this.moduleSupport.index();
+    }
+
+    @Override
+    public void merge(FAggregate arg, boolean removeParticles) {
+
+        this.moduleSupport.merge(arg, removeParticles);
+    }
+
+    @Override
+    public void setParticleDelta(double delta) {
+
+        this.moduleSupport.setParticleDelta(delta);
+    }
+
+    @Override
+    public void setParticleEpsilon(double epsilon) {
+
+        this.moduleSupport.setParticleEpsilon(epsilon);
+    }
+
+    @Override
+    public void translate(double x, double y, double z) {
+
+        this.moduleSupport.translate(x, y, z);
+    }
+
+    @Override
+    public void translate(FPoint offset) {
+
+        this.moduleSupport.translate(offset);
+    }
+
+    @Override
+    public void translate(FPos3D offset) {
+
+        this.moduleSupport.translate(offset);
+    }
+
+    @Override
+    public void translate(double bX, double bY, double bZ, double hX, double hY, double hZ) {
+
+        this.moduleSupport.translate(bX, bY, bZ, hX, hY, hZ);
+    }
+
+    @Override
+    public void translate(FVector offset) {
+
+        this.moduleSupport.translate(offset);
+    }
+
+    @Override
+    public void translate(FPairPos3D offset) {
+
+        this.moduleSupport.translate(offset);
+    }
+
+    @Override
+    public void forEachPairInContact(BiConsumer<Shape, Shape> consumer) {
+
+        this.moduleSupport.forEachPairInContact(consumer);
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -796,7 +788,7 @@ public class FAggregateDef implements FAggregate {
         FPoint centerRef = getCenter(supplyFPoint(), Center.SPATIAL);
         FPoint centerArg = target.getCenter(supplyFPoint(), Center.SPATIAL);
 
-        if (centerRef.getDistance(centerArg) > getRadius(centerRef) + getRadius(centerArg) + distLimit) {
+        if (centerRef.getDistance(centerArg) > getRadiusFrom(centerRef) + getRadiusFrom(centerArg) + distLimit) {
             return -1;
         }
 

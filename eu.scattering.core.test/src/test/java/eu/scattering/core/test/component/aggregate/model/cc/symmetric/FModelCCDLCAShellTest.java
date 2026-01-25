@@ -81,7 +81,7 @@ public class FModelCCDLCAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -96,7 +96,7 @@ public class FModelCCDLCAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -111,7 +111,7 @@ public class FModelCCDLCAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -126,7 +126,7 @@ public class FModelCCDLCAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -147,7 +147,7 @@ public class FModelCCDLCAShellTest {
 
             fModel.build();
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }
@@ -308,7 +308,7 @@ public class FModelCCDLCAShellTest {
                 assertEquals(0, shape.getCenterZ(), 1E-8);
             }
 
-            assertTrue(fAggregate.isContactConnected());
+            assertTrue(fAggregate.isConnected());
             assertEquals(size, fAggregate.size());
             assertTrue(fAggregate.isNonOverlapping());
         }

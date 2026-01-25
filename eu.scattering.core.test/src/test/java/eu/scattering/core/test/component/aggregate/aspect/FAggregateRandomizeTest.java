@@ -36,7 +36,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().project(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
@@ -55,7 +55,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().project(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
@@ -74,7 +74,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().projectOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
@@ -97,7 +97,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().projectOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
@@ -120,7 +120,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().attach(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
@@ -139,7 +139,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().attach(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
@@ -158,7 +158,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().attachOnSurface(aggA, aggB);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
@@ -192,7 +192,7 @@ public class FAggregateRandomizeTest {
 
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
@@ -222,7 +222,7 @@ public class FAggregateRandomizeTest {
 
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {
@@ -242,7 +242,7 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadius(Center.MASS));
+        factory.getRandAspect().moveMassCenter(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
@@ -250,7 +250,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().rotate(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
     }
 
@@ -266,7 +266,7 @@ public class FAggregateRandomizeTest {
         modelA.build();
         modelB.build();
 
-        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadius(Center.MASS));
+        factory.getRandAspect().moveMassCenterOnSurface(aggA, aggB, MassCenter.SIMPLE_POLY, aggA.getRadiusFrom(Center.MASS));
 
         FPoint cAggA = aggA.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
         FPoint cAggB = aggB.getMassCenter(factory.getFPoint(), MassCenter.SIMPLE_POLY);
@@ -274,7 +274,7 @@ public class FAggregateRandomizeTest {
         factory.getRandAspect().rotateOnSurface(aggA, aggB, cAggA, cAggB, 100);
         aggA.merge(aggB, true);
 
-        assertTrue(aggA.isContactConnected());
+        assertTrue(aggA.isConnected());
         assertEquals(0, aggA.getOverlapFactor(OverlapFactor.PARTICLE_LINEAR).max(), 1E-4);
 
         for (Shape shape : aggA) {

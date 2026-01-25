@@ -4,6 +4,7 @@ import eu.scattering.core.design.ScatFactory;
 import eu.scattering.core.design.component.aggregate.FAggregate;
 import eu.scattering.core.design.component.geometry.base.point.FPoint;
 import eu.scattering.core.design.component.geometry.shape.Shape;
+import eu.scattering.core.design.statistics.base.FStat;
 import eu.scattering.core.design.storage.layer.FLayer;
 import eu.scattering.core.design.storage.mesh.FMesh;
 import eu.scattering.core.design.transfer.complex.FBufferData;
@@ -23,6 +24,13 @@ public class FAggregateModuleGeometryDef {
 
         this.factory = factory;
         this.aggregate = aggregate;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected int size() {
+
+        return this.aggregate.getRefParticles().size();
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -249,7 +257,7 @@ public class FAggregateModuleGeometryDef {
         };
     }
 
-    protected double getRadius(double x, double y, double z) {
+    protected double getRadiusFrom(double x, double y, double z) {
         double maxRadius = -1;
 
         for (Shape shape : this.aggregate) {
@@ -263,33 +271,33 @@ public class FAggregateModuleGeometryDef {
         return maxRadius;
     }
 
-    protected double getRadius(FPoint center) {
+    protected double getRadiusFrom(FPoint center) {
 
-        return getRadius(center.getX(), center.getY(), center.getZ());
+        return getRadiusFrom(center.getX(), center.getY(), center.getZ());
     }
 
-    protected double getRadius(FPos3D center) {
+    protected double getRadiusFrom(FPos3D center) {
 
-        return getRadius(center.getD0(), center.getD1(), center.getD2());
+        return getRadiusFrom(center.getD0(), center.getD1(), center.getD2());
     }
 
-    protected double getRadius(Center type) {
+    protected double getRadiusFrom(Center type) {
 
         return switch(type) {
-            case ORIGIN -> getRadius(0, 0, 0);
-            case MASS -> getRadius(aggregate.getMassCenter(MassCenter.ADAPTIVE));
-            case SPATIAL -> getRadius(aggregate.getSpatialCenter());
-            case SPHERICAL -> getRadius(aggregate.getSphericalCenter(100));
+            case ORIGIN -> getRadiusFrom(0, 0, 0);
+            case MASS -> getRadiusFrom(aggregate.getMassCenter(MassCenter.ADAPTIVE));
+            case SPATIAL -> getRadiusFrom(aggregate.getSpatialCenter());
+            case SPHERICAL -> getRadiusFrom(aggregate.getSphericalCenter(100));
         };
     }
 
     // -------------------------------------------------------------------------------------------------
 
-    protected void setRadius(double x, double y, double z, double radius) {
+    protected void getRadiusFrom(double x, double y, double z, double radius) {
 
         this.aggregate.translate(-x, -y, -z);
 
-        double radiusCurrent = this.aggregate.getRadius(0, 0, 0);
+        double radiusCurrent = this.aggregate.getRadiusFrom(0, 0, 0);
 
         double factor = radius / radiusCurrent;
 
@@ -299,18 +307,40 @@ public class FAggregateModuleGeometryDef {
         this.aggregate.translate(x, y, z);
     }
 
-    protected void setRadius(FPoint center, double radius) {
+    protected void getRadiusFrom(FPoint center, double radius) {
 
-        setRadius(center.getX(), center.getY(), center.getZ(), radius);
+        getRadiusFrom(center.getX(), center.getY(), center.getZ(), radius);
     }
 
-    protected void setRadius(FPos3D center, double radius) {
+    protected void getRadiusFrom(FPos3D center, double radius) {
 
-        setRadius(center.getD0(), center.getD1(), center.getD2(), radius);
+        getRadiusFrom(center.getD0(), center.getD1(), center.getD2(), radius);
     }
 
-    protected void setRadius(Center type, double radius) {
+    protected void getRadiusFrom(Center type, double radius) {
 
-        setRadius(this.aggregate.getCenter(type), radius);
+        getRadiusFrom(this.aggregate.getCenter(type), radius);
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    protected FStat getFStatParticleRadius() {
+        FStat particles = this.factory.getFStat();
+
+        this.aggregate.getRefParticles().forEach(e -> particles.add(e.getRadius()));
+
+        return particles;
+    }
+
+    protected FStat getFStatDistance(Center type) {
+        FStat distances = this.factory.getFStat();
+
+        FPos3D center = this.aggregate.getCenter(type);
+
+        for (Shape particle : this.aggregate) {
+            distances.add(particle.getDistCenter(center));
+        }
+
+        return distances;
     }
 }
